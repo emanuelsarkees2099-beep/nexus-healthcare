@@ -132,7 +132,7 @@ function ClinicCard({ clinic, index, isSaved, saving, onBookmark }: {
               </a>
             )}
             <a
-              href={clinic.url ? (clinic.url.startsWith('http') ? clinic.url : `https://${clinic.url}`) : clinic.mapsUrl ?? `https://www.google.com/maps/search/${encodeURIComponent(clinic.name)}`}
+              href={clinic.url ? (clinic.url.startsWith('http') ? clinic.url : `https://${clinic.url}`) : `https://www.google.com/maps/search/${encodeURIComponent(clinic.name)}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{ background: 'rgba(255,255,255,0.92)', color: '#08081a', borderRadius: '9px', padding: '8px 16px', fontSize: '12.5px', fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '5px' }}
