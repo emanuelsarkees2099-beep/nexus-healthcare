@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Allow: /search
+Allow: /pathways
+Allow: /outcomes
+Allow: /impact
+Allow: /stories
+Allow: /programs
+
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /api/
+Disallow: /dashboard/profile
+Disallow: /login
+Disallow: /signup
+
+Sitemap: https://nexus-health.app/sitemap.xml

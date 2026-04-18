@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Features Layout Options</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #07070F; color: #e8f0f1; font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; }
+
+  .page { display: none; padding: 60px 40px; max-width: 1100px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* Tab switcher */
+  .tabs { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(7,7,15,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; gap: 0; justify-content: center; padding: 0; }
+  .tab { padding: 16px 36px; cursor: pointer; font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.4); border-bottom: 2px solid transparent; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; letter-spacing: 0.01em; }
+  .tab:hover { color: rgba(255,255,255,0.7); }
+  .tab.active { color: #e8f0f1; border-bottom-color: #6d9197; }
+
+  /* Shared */
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #6d9197; display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+  .section-label::before { content: ''; display: block; width: 16px; height: 1px; background: #6d9197; }
+  h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 14px; }
+  .sub { font-size: 15px; color: rgba(232,240,241,0.5); max-width: 480px; line-height: 1.7; margin-bottom: 56px; }
+
+  /* ── OPTION A: Categorized Groups ── */
+  .cat-section { margin-bottom: 48px; }
+  .cat-label { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(232,240,241,0.28); margin-bottom: 12px; padding-left: 2px; }
+  .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px; }
+  .cat-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 18px 20px; cursor: pointer; transition: all 0.2s; display: flex; align-items: flex-start; gap: 14px; }
+  .cat-card:hover { background: rgba(109,145,151,0.06); border-color: rgba(109,145,151,0.2); }
+  .cat-card .icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(109,145,151,0.08); border: 1px solid rgba(109,145,151,0.12); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .cat-card .info { flex: 1; }
+  .cat-card .title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+  .cat-card .desc { font-size: 11.5px; color: rgba(232,240,241,0.42); line-height: 1.5; }
+  .divider { height: 1px; background: rgba(255,255,255,0.05); margin-bottom: 48px; }
+
+  /* ── OPTION B: List ── */
+  .list-table { width: 100%; border-collapse: collapse; }
+  .list-row { display: grid; grid-template-columns: 36px 1fr 1fr auto; align-items: center; gap: 20px; padding: 16px 4px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: all 0.18s; border-radius: 8px; }
+  .list-row:last-child { border-bottom: none; }
+  .list-row:hover { background: rgba(109,145,151,0.05); padding-left: 12px; padding-right: 12px; margin: 0 -8px; }
+  .list-row:hover .list-arrow { opacity: 1; transform: translateX(0); }
+  .list-icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(109,145,151,0.07); border: 1px solid rgba(109,145,151,0.12); display: flex; align-items: center; justify-content: center; font-size: 13px; }
+  .list-title { font-size: 14px; font-weight: 500; }
+  .list-desc { font-size: 13px; color: rgba(232,240,241,0.42); }
+  .list-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(109,145,151,0.7); background: rgba(109,145,151,0.06); border: 1px solid rgba(109,145,151,0.12); border-radius: 4px; padding: 3px 8px; white-space: nowrap; }
+  .list-arrow { font-size: 14px; color: rgba(232,240,241,0.25); opacity: 0; transform: translateX(-4px); transition: all 0.18s; }
+  .list-header { display: grid; grid-template-columns: 36px 1fr 1fr auto; gap: 20px; padding: 0 4px 12px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 4px; }
+  .list-header span { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(232,240,241,0.2); }
+
+  /* ── OPTION C: Tab switcher ── */
+  .feature-tabs { display: flex; gap: 4px; margin-bottom: 40px; background: rgba(255,255,255,0.03); border-radius: 10px; padding: 4px; width: fit-content; }
+  .feature-tab { padding: 8px 20px; border-radius: 7px; cursor: pointer; font-size: 13px; font-weight: 500; color: rgba(232,240,241,0.45); transition: all 0.2s; border: none; background: none; }
+  .feature-tab:hover { color: rgba(232,240,241,0.7); }
+  .feature-tab.active { background: rgba(109,145,151,0.12); color: #e8f0f1; border: 1px solid rgba(109,145,151,0.2); }
+  .feature-panel { display: none; }
+  .feature-panel.active { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+  .f-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 22px; cursor: pointer; transition: all 0.2s; }
+  .f-card:hover { background: rgba(109,145,151,0.06); border-color: rgba(109,145,151,0.2); transform: translateY(-1px); }
+  .f-card .f-icon { width: 36px; height: 36px; border-radius: 9px; background: rgba(109,145,151,0.08); border: 1px solid rgba(109,145,151,0.13); display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 14px; }
+  .f-card .f-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .f-card .f-desc { font-size: 12px; color: rgba(232,240,241,0.45); line-height: 1.6; margin-bottom: 14px; }
+  .f-card .f-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(109,145,151,0.65); background: rgba(109,145,151,0.07); border-radius: 4px; padding: 3px 8px; display: inline-block; }
+</style>
+</head>
+<body>
+
+<!-- Tab bar -->
+<div class="tabs">
+  <button class="tab active" onclick="show('a', this)">Option A — Grouped</button>
+  <button class="tab" onclick="show('b', this)">Option B — List</button>
+  <button class="tab" onclick="show('c', this)">Option C — Tab Switcher</button>
+</div>
+
+<!-- ── OPTION A ── -->
+<div class="page active" id="page-a" style="padding-top: 100px">
+  <div class="section-label">What NEXUS offers</div>
+  <h2>Built for people the system <span style="color:#8ab5bc">overlooked</span></h2>
+  <p class="sub">Every feature was designed around one question: what does an uninsured adult actually need to get care today?</p>
+
+  <div class="cat-section">
+    <div class="cat-label">Find Care</div>
+    <div class="cat-grid">
+      <div class="cat-card"><div class="icon">📍</div><div class="info"><div class="title">Clinic Finder</div><div class="desc">12,000+ free clinics searchable by zip, language, specialty</div></div></div>
+      <div class="cat-card"><div class="icon">🧠</div><div class="info"><div class="title">AI Care Pathways</div><div class="desc">Routes you to the right clinic instantly</div></div></div>
+      <div class="cat-card"><div class="icon">📋</div><div class="info"><div class="title">Programs & Benefits</div><div class="desc">40+ programs scanned — Medicaid, ACA, HRSA</div></div></div>
+      <div class="cat-card"><div class="icon">📅</div><div class="info"><div class="title">Preventive Calendar</div><div class="desc">Free clinic events, dental days, vaccine drives</div></div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="cat-section">
+    <div class="cat-label">Community</div>
+    <div class="cat-grid">
+      <div class="cat-card"><div class="icon">👥</div><div class="info"><div class="title">CHW Network</div><div class="desc">340+ native-speaking community health workers</div></div></div>
+      <div class="cat-card"><div class="icon">📖</div><div class="info"><div class="title">Stories & Community</div><div class="desc">47K+ patient stories and peer support</div></div></div>
+      <div class="cat-card"><div class="icon">⚖️</div><div class="info"><div class="title">Rights & Legal Aid</div><div class="desc">Know your federal rights, dispute bills</div></div></div>
+      <div class="cat-card"><div class="icon">📢</div><div class="info"><div class="title">Policy & Advocacy</div><div class="desc">Track legislation, contact reps, join campaigns</div></div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="cat-section">
+    <div class="cat-label">Platform</div>
+    <div class="cat-grid">
+      <div class="cat-card"><div class="icon">🏥</div><div class="info"><div class="title">Provider Dashboard</div><div class="desc">For clinics — track volume, outcomes, revenue</div></div></div>
+      <div class="cat-card"><div class="icon">📊</div><div class="info"><div class="title">Impact Dashboard</div><div class="desc">Every metric public and audited</div></div></div>
+      <div class="cat-card"><div class="icon">📡</div><div class="info"><div class="title">Offline-First</div><div class="desc">Full functionality without internet</div></div></div>
+      <div class="cat-card"><div class="icon">♿</div><div class="info"><div class="title">Accessibility (WCAG AAA)</div><div class="desc">Voice control, screen reader, dyslexia mode</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── OPTION B ── -->
+<div class="page" id="page-b" style="padding-top: 100px">
+  <div class="section-label">What NEXUS offers</div>
+  <h2>Built for people the system <span style="color:#8ab5bc">overlooked</span></h2>
+  <p class="sub">Every feature was designed around one question: what does an uninsured adult actually need to get care today?</p>
+
+  <div class="list-header">
+    <span></span>
+    <span>Feature</span>
+    <span>Description</span>
+    <span>Category</span>
+  </div>
+
+  <div id="list-rows">
+    <div class="list-row"><div class="list-icon">📍</div><div class="list-title">Clinic Finder</div><div class="list-desc">12,000+ free clinics searchable by zip, language & specialty</div><div class="list-tag">Core</div><div class="list-arrow">→</div></div>
+    <div class="list-row"><div class="list-icon">🧠</div><div class="list-title">AI Care Pathways</div><div class="list-desc">Predicts which clinic will actually see you, instantly</div><div class="list-tag">AI</div><div class="list-arrow">→</div></div>
+    <div class="list-row"><div class="list-icon">📋</div><div class="list-title">Programs & Benefits</div><div class="list-desc">40+ programs scanned — Medicaid, ACA, HRSA, and more</div><div class="list-tag">Eligibility</div><div class="list-arrow">→</div></div>
+    <div class="list-row"><div class="list-icon">📅</div><div class="list-title">Preventive Calendar</div><div class="list-desc">Free clinic events, dental days, mammography vans near you</div><div class="list-tag">Events</div><div class="list-arrow">→</div></div>
+    <div class="list-row"><div class="list-icon">👥</div><div class="list-title">CHW Network</div><div class="list-desc">340+ native-speaking community health workers</div><div class="list-tag">Community</div><div class="list-arrow">→</div></div>
+    <div class="list-row"><div class="list-icon">📖</div><div class="list-title">Stories & Community</div><div class="list-desc">47K+ patient stories and peer support network</div><div class="list-tag">Community</div><div class="list-arrow">→</div></div>
+    <div class="list-row"><div class="list-icon">⚖️</div><div class="list-title">Rights & Legal Aid</div><div class="list-desc">Know your federal rights, dispute billing errors</div><div class="list-tag">Legal</div><div class="list-arrow">→</div></div>
+    <div class="list-row"><div class="list-icon">📢</div><div class="list-title">Policy & Advocacy</div><div class="list-desc">Track legislation, contact reps, join 84K+ advocates</div><div class="list-tag">Advocacy</div><div class="list-arrow">→</div></div>
+    <div class="list-row"><div class="list-icon">🏥</div><div class="list-title">Provider Dashboard</div><div class="list-desc">For clinics — track patient volume, outcomes, revenue</div><div class="list-tag">For Clinics</div><div class="list-arrow">→</div></div>
+    <div class="list-row"><div class="list-icon">📊</div><div class="list-title">Impact Dashboard</div><div class="list-desc">Every metric is public and independently audited</div><div class="list-tag">Transparency</div><div class="list-arrow">→</div></div>
+    <div class="list-row"><div class="list-icon">📡</div><div class="list-title">Offline-First</div><div class="list-desc">Full functionality without internet on any device</div><div class="list-tag">Resilience</div><div class="list-arrow">→</div></div>
+    <div class="list-row"><div class="list-icon">♿</div><div class="list-title">Accessibility</div><div class="list-desc">WCAG AAA — voice control, screen reader, dyslexia mode</div><div class="list-tag">Universal</div><div class="list-arrow">→</div></div>
+  </div>
+</div>
+
+<!-- ── OPTION C ── -->
+<div class="page" id="page-c" style="padding-top: 100px">
+  <div class="section-label">What NEXUS offers</div>
+  <h2>Built for people the system <span style="color:#8ab5bc">overlooked</span></h2>
+  <p class="sub">Every feature was designed around one question: what does an uninsured adult actually need to get care today?</p>
+
+  <div class="feature-tabs">
+    <button class="feature-tab active" onclick="showPanel('find-care', this)">Find Care</button>
+    <button class="feature-tab" onclick="showPanel('community', this)">Community</button>
+    <button class="feature-tab" onclick="showPanel('platform', this)">Platform</button>
+    <button class="feature-tab" onclick="showPanel('providers', this)">For Providers</button>
+  </div>
+
+  <div class="feature-panel active" id="panel-find-care">
+    <div class="f-card"><div class="f-icon">📍</div><div class="f-title">Clinic Finder</div><div class="f-desc">12,000+ free clinics searchable by zip, language, and specialty. Open now filter included.</div><div class="f-tag">Core</div></div>
+    <div class="f-card"><div class="f-icon">🧠</div><div class="f-title">AI Care Pathways</div><div class="f-desc">Our model predicts which clinic will actually see you based on your symptoms and zip code.</div><div class="f-tag">AI-Powered</div></div>
+    <div class="f-card"><div class="f-icon">📋</div><div class="f-title">Programs & Benefits</div><div class="f-desc">40+ programs scanned instantly — Medicaid, ACA, HRSA, and state-level programs.</div><div class="f-tag">Eligibility</div></div>
+    <div class="f-card"><div class="f-icon">📅</div><div class="f-title">Preventive Calendar</div><div class="f-desc">Live free clinic events near you — dental days, mammography vans, vaccine drives.</div><div class="f-tag">Events</div></div>
+  </div>
+
+  <div class="feature-panel" id="panel-community">
+    <div class="f-card"><div class="f-icon">👥</div><div class="f-title">CHW Network</div><div class="f-desc">340+ verified community health workers. Speak your language, know your neighborhood.</div><div class="f-tag">Community</div></div>
+    <div class="f-card"><div class="f-icon">📖</div><div class="f-title">Stories & Community</div><div class="f-desc">47K+ patient stories. Peer support from people who have been through the same thing.</div><div class="f-tag">Support</div></div>
+    <div class="f-card"><div class="f-icon">⚖️</div><div class="f-title">Rights & Legal Aid</div><div class="f-desc">Know your federal rights. Connect with legal aid for billing disputes.</div><div class="f-tag">Legal</div></div>
+    <div class="f-card"><div class="f-icon">📢</div><div class="f-title">Policy & Advocacy</div><div class="f-desc">Track legislation, contact your reps, and join 84K+ advocates.</div><div class="f-tag">Advocacy</div></div>
+  </div>
+
+  <div class="feature-panel" id="panel-platform">
+    <div class="f-card"><div class="f-icon">📊</div><div class="f-title">Impact Dashboard</div><div class="f-desc">284K+ patients helped. Every metric is public and independently audited.</div><div class="f-tag">Transparency</div></div>
+    <div class="f-card"><div class="f-icon">📡</div><div class="f-title">Offline-First</div><div class="f-desc">Full functionality without internet. SMS fallback on any phone.</div><div class="f-tag">Resilience</div></div>
+    <div class="f-card"><div class="f-icon">♿</div><div class="f-title">Accessibility</div><div class="f-desc">WCAG AAA — voice control, screen reader optimized, dyslexia mode.</div><div class="f-tag">Universal</div></div>
+  </div>
+
+  <div class="feature-panel" id="panel-providers">
+    <div class="f-card"><div class="f-icon">🏥</div><div class="f-title">Provider Dashboard</div><div class="f-desc">Clinics track patient volume, outcomes, and revenue recovery in one place.</div><div class="f-tag">For Clinics</div></div>
+    <div class="f-card"><div class="f-icon">📈</div><div class="f-title">Outcomes Tracker</div><div class="f-desc">47K+ visits powering publishable research and quality improvement.</div><div class="f-tag">Research</div></div>
+  </div>
+</div>
+
+<script>
+  function show(id, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
+    document.getElementById('page-' + id).classList.add('active')
+    el.classList.add('active')
+  }
+
+  function showPanel(id, el) {
+    document.querySelectorAll('.feature-panel').forEach(p => p.classList.remove('active'))
+    document.querySelectorAll('.feature-tab').forEach(t => t.classList.remove('active'))
+    document.getElementById('panel-' + id).classList.add('active')
+    el.classList.add('active')
+  }
+</script>
+</body>
+</html>

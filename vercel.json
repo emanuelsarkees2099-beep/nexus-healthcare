@@ -1,0 +1,33 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/refresh-clinics",
+      "schedule": "0 2 * * 0"
+    },
+    {
+      "path": "/api/cron/broken-links",
+      "schedule": "0 3 * * 1"
+    },
+    {
+      "path": "/api/cron/weekly-digest",
+      "schedule": "0 8 * * 1"
+    }
+  ],
+  "functions": {
+    "app/api/clinics/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/chat/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/cron/refresh-clinics/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/cron/broken-links/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/cron/weekly-digest/route.ts": {
+      "maxDuration": 30
+    }
+  }
+}
