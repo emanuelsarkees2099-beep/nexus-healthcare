@@ -9,9 +9,9 @@ import { createClient } from '@supabase/supabase-js'
 // To invoke manually: GET /api/cron/refresh-clinics
 // Authorization: Bearer $CRON_SECRET
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const getSupabaseClient = () => createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 )
 
 async function verifyHRSAEndpoint(zip: string): Promise<{ ok: boolean; count: number }> {
@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
     // Try to get top searched ZIPs from Supabase search_logs (if table exists)
     let targetZips = majorZips
     try {
-      const { data: loggedZips } = await supabase
+      const { data: loggedZips } = await getSupabaseClient()
         .from('search_logs')
         .select('zip_code')
         .not('zip_code', 'is', null)
@@ -121,7 +121,7 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-      await supabase.from('cron_logs').insert({
+      await getSupabaseClient().from('cron_logs').insert({
         job_name: 'refresh-clinics',
         ran_at: summary.ran_at,
         result: summary,
@@ -138,7 +138,7 @@ export async function GET(req: NextRequest) {
     console.error('[CronRefresh] Error:', errMsg)
 
     try {
-      await supabase.from('cron_logs').insert({
+      await getSupabaseClient().from('cron_logs').insert({
         job_name: 'refresh-clinics',
         ran_at: new Date().toISOString(),
         result: { error: errMsg, duration_ms: Date.now() - startTime },

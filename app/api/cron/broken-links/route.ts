@@ -6,9 +6,9 @@ import { createClient } from '@supabase/supabase-js'
 // (program links, resource pages, external references) for 404s or errors.
 // Schedule: every other Monday at 3 AM UTC (see vercel.json)
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const getSupabaseClient = () => createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 )
 
 // All critical external URLs used in the NEXUS app
@@ -96,7 +96,7 @@ export async function GET(req: NextRequest) {
 
     // Log to Supabase
     try {
-      await supabase.from('cron_logs').insert({
+      await getSupabaseClient().from('cron_logs').insert({
         job_name: 'broken-links',
         ran_at: summary.ran_at,
         result: summary,
@@ -117,7 +117,7 @@ export async function GET(req: NextRequest) {
     console.error('[BrokenLinks] Error:', errMsg)
 
     try {
-      await supabase.from('cron_logs').insert({
+      await getSupabaseClient().from('cron_logs').insert({
         job_name: 'broken-links',
         ran_at: new Date().toISOString(),
         result: { error: errMsg, duration_ms: Date.now() - startTime },

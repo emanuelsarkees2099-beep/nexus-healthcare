@@ -6,9 +6,9 @@ import { createClient } from '@supabase/supabase-js'
 // Compiles platform-wide impact stats and optionally emails them via Resend.
 // Schedule: every Monday at 8 AM UTC (see vercel.json)
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const getSupabaseClient = () => createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 )
 
 interface WeeklyStats {
@@ -40,7 +40,7 @@ async function compileWeeklyStats(): Promise<WeeklyStats> {
 
   // New users this week
   try {
-    const { count } = await supabase
+    const { count } = await getSupabaseClient()
       .from('user_profiles')
       .select('*', { count: 'exact', head: true })
       .gte('created_at', since)
@@ -49,7 +49,7 @@ async function compileWeeklyStats(): Promise<WeeklyStats> {
 
   // Clinic searches this week
   try {
-    const { count } = await supabase
+    const { count } = await getSupabaseClient()
       .from('search_logs')
       .select('*', { count: 'exact', head: true })
       .gte('created_at', since)
@@ -58,7 +58,7 @@ async function compileWeeklyStats(): Promise<WeeklyStats> {
 
   // Outcomes logged this week
   try {
-    const { data: outcomes } = await supabase
+    const { data: outcomes } = await getSupabaseClient()
       .from('outcomes')
       .select('event_type, zip_code')
       .gte('created_at', since)
@@ -199,7 +199,7 @@ export async function GET(req: NextRequest) {
 
     // Log to Supabase
     try {
-      await supabase.from('cron_logs').insert({
+      await getSupabaseClient().from('cron_logs').insert({
         job_name: 'weekly-digest',
         ran_at: new Date().toISOString(),
         result,
@@ -214,7 +214,7 @@ export async function GET(req: NextRequest) {
     console.error('[WeeklyDigest] Error:', errMsg)
 
     try {
-      await supabase.from('cron_logs').insert({
+      await getSupabaseClient().from('cron_logs').insert({
         job_name: 'weekly-digest',
         ran_at: new Date().toISOString(),
         result: { error: errMsg, duration_ms: Date.now() - startTime },
