@@ -1,4 +1,5 @@
 'use client'
+export const dynamic = 'force-dynamic'
 import { useEffect, useRef, useState, Suspense, useCallback } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import AppShell from '@/components/AppShell'

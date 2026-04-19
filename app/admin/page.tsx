@@ -4,6 +4,8 @@ import { createClientClient } from '@/lib/auth-client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
 type Submission = {
   id: string
   type: string
