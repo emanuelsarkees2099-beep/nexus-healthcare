@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClientClient } from '@/lib/auth-client'
 import Link from 'next/link'
 
@@ -8,7 +8,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const supabase = createClientClient()
+  const [supabase, setSupabase] = useState<ReturnType<typeof createClientClient> | null>(null)
+
+  useEffect(() => {
+    setSupabase(createClientClient())
+  }, [])
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault()

@@ -10,7 +10,11 @@ export default function ResetPasswordPage() {
   const [done, setDone] = useState(false)
   const [error, setError] = useState('')
   const [ready, setReady] = useState(false)
-  const supabase = createClientClient()
+  const [supabase, setSupabase] = useState<ReturnType<typeof createClientClient> | null>(null)
+
+  useEffect(() => {
+    setSupabase(createClientClient())
+  }, [])
   const router = useRouter()
 
   useEffect(() => {
@@ -25,6 +29,7 @@ export default function ResetPasswordPage() {
   }, [supabase])
 
   const handleSubmit = async (e: React.FormEvent) => {
+    if (!supabase) { setError('Not initialized'); return }
     e.preventDefault()
     if (!password) { setError('Please enter a new password'); return }
     if (password.length < 8) { setError('Password must be at least 8 characters'); return }

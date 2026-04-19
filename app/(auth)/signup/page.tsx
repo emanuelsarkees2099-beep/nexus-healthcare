@@ -20,7 +20,11 @@ export default function SignupPage() {
   const [success, setSuccess] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
-  const supabase = createClientClient()
+  const [supabase, setSupabase] = useState<ReturnType<typeof createClientClient> | null>(null)
+
+  useEffect(() => {
+    setSupabase(createClientClient())
+  }, [])
 
   useEffect(() => {
     setMounted(true)

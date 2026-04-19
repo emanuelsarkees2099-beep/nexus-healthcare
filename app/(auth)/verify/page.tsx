@@ -6,7 +6,11 @@ import Link from 'next/link'
 
 export default function VerifyPage() {
   const [status, setStatus] = useState<'pending' | 'verified' | 'error'>('pending')
-  const supabase = createClientClient()
+  const [supabase, setSupabase] = useState<ReturnType<typeof createClientClient> | null>(null)
+
+  useEffect(() => {
+    setSupabase(createClientClient())
+  }, [])
   const router = useRouter()
 
   useEffect(() => {
