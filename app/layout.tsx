@@ -4,7 +4,6 @@ import './globals.css'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import LanguageSelector from '@/components/LanguageSelector'
 import SettingsSidebar from '@/components/SettingsSidebar'
-import ChatWidget from '@/components/ChatWidget'
 
 const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
@@ -50,7 +49,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <LanguageSelector />
         <SettingsSidebar />
-        <ChatWidget />
         <SpeedInsights />
       </body>
     </html>
