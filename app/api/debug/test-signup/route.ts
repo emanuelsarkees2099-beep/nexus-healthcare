@@ -8,10 +8,10 @@ export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json()
 
-    const supabase = createClient(url, anonKey)
+    const getSupabaseClient = () => createClient(url, anonKey)
 
     // Try to sign up
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await getSupabaseClient().auth.signUp({
       email,
       password,
       options: {

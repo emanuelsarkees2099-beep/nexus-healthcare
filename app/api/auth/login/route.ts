@@ -12,9 +12,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Email and password required' }, { status: 400 })
     }
 
-    const supabase = createClient(url, anonKey)
+    const getSupabaseClient = () => createClient(url, anonKey)
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    const { data, error } = await getSupabaseClient().auth.signInWithPassword({ email, password })
 
     if (error || !data.session) {
       return NextResponse.json({ error: error?.message || 'Login failed' }, { status: 401 })

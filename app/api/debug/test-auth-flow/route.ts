@@ -13,12 +13,12 @@ export async function POST(request: NextRequest) {
     console.log('Password length:', password?.length)
     console.log('Full name:', fullName)
 
-    const supabase = createClient(url, anonKey)
+    const getSupabaseClient = () => createClient(url, anonKey)
     console.log('Supabase client created')
 
     // Try signup
     console.log('Attempting signup...')
-    const { data: authData, error: signupError } = await supabase.auth.signUp({
+    const { data: authData, error: signupError } = await getSupabaseClient().auth.signUp({
       email,
       password,
       options: { data: { full_name: fullName } }

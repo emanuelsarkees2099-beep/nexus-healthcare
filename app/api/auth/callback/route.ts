@@ -21,10 +21,10 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const supabase = createClient(url, anonKey)
+    const getSupabaseClient = () => createClient(url, anonKey)
 
     // Exchange code for session
-    const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+    const { data, error: exchangeError } = await getSupabaseClient().auth.exchangeCodeForSession(code)
 
     if (exchangeError || !data.session) {
       return NextResponse.redirect(

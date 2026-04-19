@@ -137,7 +137,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: validationError }, { status: 422 })
     }
 
-    const supabase = createClient(url, anonKey)
+    const getSupabaseClient = () => createClient(url, anonKey)
 
     // Stories go to 'pending_review' so admin can approve before publishing
     const status = type === 'story' ? 'pending_review' : 'new'

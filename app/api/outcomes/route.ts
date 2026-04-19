@@ -5,9 +5,9 @@ import { createClient } from '@supabase/supabase-js'
 // POST /api/outcomes — log a health outcome event
 // GET  /api/outcomes — aggregate stats (public summary only)
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const getSupabaseClient = () => createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 )
 
 interface OutcomePayload {
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     const authHeader = req.headers.get('Authorization')
     if (authHeader?.startsWith('Bearer ')) {
       const token = authHeader.slice(7)
-      const { data } = await supabase.auth.getUser(token)
+      const { data } = await getSupabaseClient().auth.getUser(token)
       userId = data.user?.id ?? null
     }
 
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Try to insert — gracefully fail if table doesn't exist yet
-    const { error } = await supabase.from('outcomes').insert(payload)
+    const { error } = await getSupabaseClient().from('outcomes').insert(payload)
 
     if (error) {
       // Table may not exist yet — log to console but don't fail the request

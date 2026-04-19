@@ -6,7 +6,7 @@ const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
 
 export async function GET() {
   try {
-    const supabase = createClient(url, anonKey)
+    const getSupabaseClient = () => createClient(url, anonKey)
 
     // Check user_profiles table
     const { data: profiles, error: profileError } = await supabase
@@ -14,7 +14,7 @@ export async function GET() {
       .select('*')
 
     // Try to get current session (if any)
-    const { data: sessionData } = await supabase.auth.getSession()
+    const { data: sessionData } = await getSupabaseClient().auth.getSession()
 
     return NextResponse.json({
       profiles: profiles || [],

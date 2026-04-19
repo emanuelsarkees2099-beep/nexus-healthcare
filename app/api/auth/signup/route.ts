@@ -12,10 +12,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    const supabase = createClient(url, anonKey)
+    const getSupabaseClient = () => createClient(url, anonKey)
 
     // 1. Sign up user
-    const { data, error: authError } = await supabase.auth.signUp({
+    const { data, error: authError } = await getSupabaseClient().auth.signUp({
       email,
       password,
     })
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     const userId = data.user.id
 
     // 2. Create profile (upsert to avoid duplicates)
-    await supabase.from('user_profiles').upsert({
+    await getSupabaseClient().from('user_profiles').upsert({
       id: userId,
       email,
       full_name: fullName,

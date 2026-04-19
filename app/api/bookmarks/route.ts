@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   const user = await getUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const supabase = createClient(url, anonKey)
+  const getSupabaseClient = () => createClient(url, anonKey)
   const { data, error } = await supabase
     .from('saved_resources')
     .select('*')
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'resource_type and resource_id required' }, { status: 400 })
   }
 
-  const supabase = createClient(url, anonKey)
+  const getSupabaseClient = () => createClient(url, anonKey)
   const { data, error } = await supabase
     .from('saved_resources')
     .upsert({
@@ -69,7 +69,7 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: 'resource_id and resource_type required' }, { status: 400 })
   }
 
-  const supabase = createClient(url, anonKey)
+  const getSupabaseClient = () => createClient(url, anonKey)
   const { error } = await supabase
     .from('saved_resources')
     .delete()
