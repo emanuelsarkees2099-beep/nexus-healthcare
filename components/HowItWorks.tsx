@@ -32,7 +32,7 @@ function Panel0() {
       </div>
       <div style={{
         display: 'flex', alignItems: 'center', gap: '10px',
-        background: 'var(--bg3)', border: '1px solid rgba(109,145,151,0.18)',
+        background: 'var(--bg3)', border: '1px solid rgba(110,231,183,0.18)',
         borderRadius: '12px', padding: '12px 16px', marginBottom: '1rem',
       }}>
         <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.7, flexShrink: 0 }}>
@@ -45,7 +45,7 @@ function Panel0() {
       </div>
       <div style={{
         display: 'inline-flex', alignItems: 'center', gap: '6px',
-        background: 'rgba(109,145,151,0.07)', border: '1px solid rgba(109,145,151,0.16)',
+        background: 'rgba(110,231,183,0.07)', border: '1px solid rgba(110,231,183,0.16)',
         borderRadius: '8px', padding: '8px 12px',
         fontSize: '12px', color: 'var(--accent)', fontFamily: 'var(--font-inter)',
       }}>
@@ -62,7 +62,7 @@ function Panel1() {
   return (
     <div style={{ padding: '1.5rem' }}>
       <div style={{
-        background: 'var(--bg3)', border: '1px solid rgba(109,145,151,0.14)',
+        background: 'var(--bg3)', border: '1px solid rgba(110,231,183,0.14)',
         borderRadius: '12px', padding: '1rem', marginBottom: '1rem',
         fontSize: '13px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)',
         fontStyle: 'italic', lineHeight: 1.7,
@@ -70,7 +70,7 @@ function Panel1() {
         &ldquo;I&apos;ve had a persistent cough for two weeks and mild fever...&rdquo;
       </div>
       <div style={{
-        background: 'rgba(109,145,151,0.06)', border: '1px solid rgba(109,145,151,0.16)',
+        background: 'rgba(110,231,183,0.06)', border: '1px solid rgba(110,231,183,0.16)',
         borderRadius: '12px', padding: '1rem',
       }}>
         <div style={{
@@ -97,7 +97,7 @@ function Panel2() {
     <div style={{ padding: '1.5rem' }}>
       <div style={{
         display: 'flex', alignItems: 'center', gap: '14px',
-        background: 'rgba(109,145,151,0.04)', border: '1px solid rgba(109,145,151,0.16)',
+        background: 'rgba(110,231,183,0.04)', border: '1px solid rgba(110,231,183,0.16)',
         borderRadius: '12px', padding: '14px', marginBottom: '1rem',
       }}>
         <div style={{
@@ -117,7 +117,7 @@ function Panel2() {
         </div>
         <div style={{
           marginLeft: 'auto', fontSize: '10px', fontWeight: 500,
-          background: 'rgba(109,145,151,0.12)', color: 'var(--accent)',
+          background: 'rgba(110,231,183,0.12)', color: 'var(--accent)',
           borderRadius: '5px', padding: '3px 9px', fontFamily: 'var(--font-inter)',
           flexShrink: 0,
         }}>Open</div>
@@ -129,7 +129,7 @@ function Panel2() {
           border: 'none', borderRadius: '10px', padding: '12px',
           fontSize: '13px', fontWeight: 600, cursor: 'pointer',
           fontFamily: 'var(--font-inter)', marginBottom: '10px',
-          boxShadow: '0 4px 16px rgba(109,145,151,0.25)',
+          boxShadow: '0 4px 16px rgba(110,231,183,0.25)',
         }}>
         Book appointment →
       </button>
@@ -318,7 +318,7 @@ export default function HowItWorks() {
               height: '100%',
               background: 'linear-gradient(90deg, var(--accent), var(--accent2))',
               borderRadius: '2px', width: '0%',
-              boxShadow: '0 0 6px rgba(109,145,151,0.5)',
+              boxShadow: '0 0 6px rgba(110,231,183,0.5)',
             }} />
           </div>
         </div>
@@ -330,13 +330,13 @@ export default function HowItWorks() {
             position: 'absolute', top: '50%', left: '50%',
             transform: 'translate(-50%,-50%)',
             width: '300px', height: '300px',
-            background: 'radial-gradient(circle, rgba(109,145,151,0.08) 0%, transparent 65%)',
+            background: 'radial-gradient(circle, rgba(110,231,183,0.08) 0%, transparent 65%)',
             filter: 'blur(40px)', pointerEvents: 'none',
           }} />
 
           <div style={{
             background: 'var(--bg2)',
-            border: '1px solid rgba(109,145,151,0.14)',
+            border: '1px solid rgba(110,231,183,0.14)',
             borderRadius: '24px', overflow: 'hidden',
             position: 'relative',
             boxShadow: '0 20px 60px rgba(0,0,0,0.35)',
@@ -344,7 +344,7 @@ export default function HowItWorks() {
             {/* Top accent line */}
             <div aria-hidden="true" style={{
               position: 'absolute', top: 0, left: '10%', right: '10%', height: '1px',
-              background: 'linear-gradient(90deg, transparent, rgba(109,145,151,0.35), transparent)',
+              background: 'linear-gradient(90deg, transparent, rgba(110,231,183,0.35), transparent)',
             }} />
 
             <div style={{
@@ -366,7 +366,7 @@ export default function HowItWorks() {
                     background: i === active ? 'var(--accent)' : 'var(--bg4)',
                     border: '1px solid var(--border)',
                     transition: 'background 0.3s',
-                    boxShadow: i === active ? '0 0 6px rgba(109,145,151,0.5)' : 'none',
+                    boxShadow: i === active ? '0 0 6px rgba(110,231,183,0.5)' : 'none',
                   }} />
                 ))}
               </div>

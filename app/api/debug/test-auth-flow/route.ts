@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
 
     // Try profile insert
     console.log('Creating profile...')
-    const { error: profileError, data: profileData } = await supabase
+    const { error: profileError, data: profileData } = await getSupabaseClient()
       .from('user_profiles')
       .insert({
         id: authData.user!.id,

@@ -61,7 +61,7 @@ export default function BackgroundCanvas() {
         const finalAlpha = Math.min(d.alpha + glow * 0.32, 0.65)
         ctx.beginPath()
         ctx.arc(d.x, d.y, 1.2, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(109,145,151,${finalAlpha})`
+        ctx.fillStyle = `rgba(110,231,183,${finalAlpha})`
         ctx.fill()
       }
       rafRef.current = requestAnimationFrame(draw)

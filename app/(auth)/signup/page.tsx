@@ -43,7 +43,7 @@ export default function SignupPage() {
 
   const handleGoogleSignup = async () => {
     try {
-      const { error: err } = await supabase.auth.signInWithOAuth({
+      const { error: err } = await supabase!.auth.signInWithOAuth({
         provider: 'google',
         options: { redirectTo: `${window.location.origin}/auth/callback` },
       })
@@ -76,12 +76,12 @@ export default function SignupPage() {
     setError('')
 
     try {
-      const { data: authData, error: authError } = await supabase.auth.signUp({ email, password })
+      const { data: authData, error: authError } = await supabase!.auth.signUp({ email, password })
       if (authError) throw authError
       if (!authData.user) throw new Error('Signup failed')
 
       // Create profile
-      await supabase.from('user_profiles').upsert({
+      await supabase!.from('user_profiles').upsert({
         id: authData.user.id,
         email,
         full_name: fullName,

@@ -9,7 +9,7 @@ export async function GET() {
     const getSupabaseClient = () => createClient(url, anonKey)
 
     // Check user_profiles table
-    const { data: profiles, error: profileError } = await supabase
+    const { data: profiles, error: profileError } = await getSupabaseClient()
       .from('user_profiles')
       .select('*')
 

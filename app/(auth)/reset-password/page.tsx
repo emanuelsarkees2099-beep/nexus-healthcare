@@ -19,6 +19,7 @@ export default function ResetPasswordPage() {
   const router = useRouter()
 
   useEffect(() => {
+    if (!supabase) return
     // Supabase sends the user back with a hash fragment containing the tokens.
     // The client-side SDK picks these up automatically via onAuthStateChange.
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
@@ -37,7 +38,7 @@ export default function ResetPasswordPage() {
     if (password !== confirm) { setError('Passwords do not match'); return }
     setLoading(true); setError('')
     try {
-      const { error: err } = await supabase.auth.updateUser({ password })
+      const { error: err } = await supabase!.auth.updateUser({ password })
       if (err) throw err
       setDone(true)
       setTimeout(() => router.push('/login'), 2500)

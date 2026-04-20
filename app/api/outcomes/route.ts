@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
     const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString()
 
     // Aggregate counts (no PII)
-    let query = supabase
+    let query = getSupabaseClient()
       .from('outcomes')
       .select('event_type, zip_code, clinic_name, program_name, created_at')
       .gte('created_at', since)

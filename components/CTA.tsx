@@ -81,7 +81,7 @@ export default function CTA() {
         {/* Top border line */}
         <div aria-hidden="true" style={{
           height: '1px',
-          background: 'linear-gradient(90deg, transparent, rgba(109,145,151,0.4) 30%, rgba(109,145,151,0.4) 70%, transparent)',
+          background: 'linear-gradient(90deg, transparent, rgba(110,231,183,0.4) 30%, rgba(110,231,183,0.4) 70%, transparent)',
           marginBottom: '80px',
         }} />
 
@@ -99,8 +99,8 @@ export default function CTA() {
             {/* Live pill */}
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
-              background: 'rgba(109,145,151,0.07)',
-              border: '1px solid rgba(109,145,151,0.16)',
+              background: 'rgba(110,231,183,0.07)',
+              border: '1px solid rgba(110,231,183,0.16)',
               borderRadius: '100px',
               padding: '5px 14px',
               fontSize: '12px', fontWeight: 400,
@@ -173,16 +173,16 @@ export default function CTA() {
                   fontFamily: 'var(--font-sora)',
                   cursor: 'pointer',
                   letterSpacing: '-0.01em',
-                  boxShadow: '0 4px 24px rgba(109,145,151,0.30)',
+                  boxShadow: '0 4px 24px rgba(110,231,183,0.30)',
                   transition: 'transform 0.2s var(--ease-spring), box-shadow 0.2s ease',
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.transform = 'translateY(-3px)'
-                  e.currentTarget.style.boxShadow = '0 8px 36px rgba(109,145,151,0.45)'
+                  e.currentTarget.style.boxShadow = '0 8px 36px rgba(110,231,183,0.45)'
                 }}
                 onMouseLeave={e => {
                   e.currentTarget.style.transform = ''
-                  e.currentTarget.style.boxShadow = '0 4px 24px rgba(109,145,151,0.30)'
+                  e.currentTarget.style.boxShadow = '0 4px 24px rgba(110,231,183,0.30)'
                 }}
                 onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.97)' }}
                 onMouseUp={e => { e.currentTarget.style.transform = 'translateY(-3px)' }}
@@ -206,7 +206,7 @@ export default function CTA() {
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.color = 'var(--text)'
-                  e.currentTarget.style.borderColor = 'rgba(109,145,151,0.35)'
+                  e.currentTarget.style.borderColor = 'rgba(110,231,183,0.35)'
                   e.currentTarget.style.transform = 'translateY(-2px)'
                 }}
                 onMouseLeave={e => {
@@ -245,7 +245,7 @@ export default function CTA() {
               position: 'absolute', top: '50%', left: '50%',
               transform: 'translate(-50%,-50%)',
               width: '400px', height: '400px',
-              background: 'radial-gradient(circle, rgba(109,145,151,0.08) 0%, transparent 65%)',
+              background: 'radial-gradient(circle, rgba(110,231,183,0.08) 0%, transparent 65%)',
               filter: 'blur(50px)',
               pointerEvents: 'none',
             }} />
@@ -269,7 +269,7 @@ export default function CTA() {
               }}>
                 <div aria-hidden="true" style={{
                   position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
-                  background: 'linear-gradient(90deg, transparent, rgba(109,145,151,0.35), transparent)',
+                  background: 'linear-gradient(90deg, transparent, rgba(110,231,183,0.35), transparent)',
                 }} />
                 <div style={{
                   fontSize: 'clamp(2.8rem, 5vw, 4rem)',
@@ -301,7 +301,7 @@ export default function CTA() {
               }}>
                 <div aria-hidden="true" style={{
                   position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
-                  background: 'linear-gradient(90deg, transparent, rgba(109,145,151,0.25), transparent)',
+                  background: 'linear-gradient(90deg, transparent, rgba(110,231,183,0.25), transparent)',
                 }} />
                 <div style={{
                   fontSize: '1.9rem',
@@ -328,7 +328,7 @@ export default function CTA() {
               }}>
                 <div aria-hidden="true" style={{
                   position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
-                  background: 'linear-gradient(90deg, transparent, rgba(109,145,151,0.25), transparent)',
+                  background: 'linear-gradient(90deg, transparent, rgba(110,231,183,0.25), transparent)',
                 }} />
                 <div style={{
                   fontSize: '1.9rem',
@@ -348,8 +348,8 @@ export default function CTA() {
               {/* Third stat — full width bottom */}
               <div className="cta-stat" style={{
                 gridColumn: '1 / -1',
-                background: 'rgba(109,145,151,0.05)',
-                border: '1px solid rgba(109,145,151,0.14)',
+                background: 'rgba(110,231,183,0.05)',
+                border: '1px solid rgba(110,231,183,0.14)',
                 borderRadius: '16px',
                 padding: '1.25rem 1.5rem',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',

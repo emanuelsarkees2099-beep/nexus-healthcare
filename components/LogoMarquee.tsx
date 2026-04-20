@@ -39,7 +39,7 @@ function MarqueeRow({ items, reverse = false }: { items: string[]; reverse?: boo
             }}
             onMouseEnter={e => {
               e.currentTarget.style.color = 'var(--accent)'
-              e.currentTarget.style.borderColor = 'rgba(109,145,151,0.2)'
+              e.currentTarget.style.borderColor = 'rgba(110,231,183,0.2)'
             }}
             onMouseLeave={e => {
               e.currentTarget.style.color = 'var(--text-3)'

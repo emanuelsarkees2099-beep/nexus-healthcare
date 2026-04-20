@@ -223,36 +223,36 @@ export default function Hero() {
       {/* Primary top glow — stronger, larger */}
       <div ref={orb1Ref} aria-hidden="true" style={{
         position: 'absolute', width: '1100px', height: '700px', borderRadius: '50%',
-        background: 'radial-gradient(ellipse, rgba(109,145,151,0.18) 0%, rgba(109,145,151,0.06) 40%, transparent 70%)',
+        background: 'radial-gradient(ellipse, rgba(110,231,183,0.18) 0%, rgba(110,231,183,0.06) 40%, transparent 70%)',
         top: '-220px', left: '50%', transform: 'translateX(-50%)',
         filter: 'blur(80px)', pointerEvents: 'none', zIndex: 0,
       }} />
       {/* Secondary — cool accent top-left */}
       <div aria-hidden="true" style={{
         position: 'absolute', width: '600px', height: '400px', borderRadius: '50%',
-        background: 'radial-gradient(ellipse, rgba(138,181,188,0.10) 0%, transparent 65%)',
+        background: 'radial-gradient(ellipse, rgba(167,210,190,0.10) 0%, transparent 65%)',
         top: '5%', left: '-100px',
         filter: 'blur(70px)', pointerEvents: 'none', zIndex: 0,
       }} />
       <div ref={orb2Ref} aria-hidden="true" style={{
         position: 'absolute', width: '500px', height: '500px', borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(138,181,188,0.08) 0%, transparent 65%)',
+        background: 'radial-gradient(circle, rgba(167,210,190,0.08) 0%, transparent 65%)',
         top: '25%', right: '-140px',
         filter: 'blur(65px)', pointerEvents: 'none', zIndex: 0,
       }} />
       <div ref={orb3Ref} aria-hidden="true" style={{
         position: 'absolute', width: '400px', height: '400px', borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(109,145,151,0.08) 0%, transparent 65%)',
+        background: 'radial-gradient(circle, rgba(110,231,183,0.08) 0%, transparent 65%)',
         bottom: '8%', left: '-100px',
         filter: 'blur(58px)', pointerEvents: 'none', zIndex: 0,
       }} />
 
       {/* ── GRID LINES ── */}
       <div ref={gridRef} aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
-        <div style={{ position: 'absolute', width: '100%', height: '1px', background: 'rgba(109,145,151,0.07)', top: '28%',    animation: 'grid-fade 4s ease-in-out infinite' }} />
-        <div style={{ position: 'absolute', width: '100%', height: '1px', background: 'rgba(109,145,151,0.05)', bottom: '32%', animation: 'grid-fade 5s ease-in-out infinite 1s' }} />
-        <div style={{ position: 'absolute', width: '1px', height: '100%', background: 'rgba(109,145,151,0.05)', left: '18%',   animation: 'grid-fade 4.5s ease-in-out infinite 0.5s' }} />
-        <div style={{ position: 'absolute', width: '1px', height: '100%', background: 'rgba(109,145,151,0.04)', right: '18%',  animation: 'grid-fade 4s ease-in-out infinite 2s' }} />
+        <div style={{ position: 'absolute', width: '100%', height: '1px', background: 'rgba(110,231,183,0.07)', top: '28%',    animation: 'grid-fade 4s ease-in-out infinite' }} />
+        <div style={{ position: 'absolute', width: '100%', height: '1px', background: 'rgba(110,231,183,0.05)', bottom: '32%', animation: 'grid-fade 5s ease-in-out infinite 1s' }} />
+        <div style={{ position: 'absolute', width: '1px', height: '100%', background: 'rgba(110,231,183,0.05)', left: '18%',   animation: 'grid-fade 4.5s ease-in-out infinite 0.5s' }} />
+        <div style={{ position: 'absolute', width: '1px', height: '100%', background: 'rgba(110,231,183,0.04)', right: '18%',  animation: 'grid-fade 4s ease-in-out infinite 2s' }} />
       </div>
 
       {/* ── HERO CONTENT ── */}
@@ -261,8 +261,8 @@ export default function Hero() {
         {/* Eyebrow */}
         <div ref={eyebrowRef} style={{
           display: 'inline-flex', alignItems: 'center', gap: '8px',
-          background: 'rgba(109,145,151,0.06)',
-          border: '1px solid rgba(109,145,151,0.22)',
+          background: 'rgba(110,231,183,0.06)',
+          border: '1px solid rgba(110,231,183,0.22)',
           borderRadius: '100px',
           padding: '7px 18px 7px 12px',
           fontSize: '11px', color: 'var(--accent2)',
@@ -270,13 +270,13 @@ export default function Hero() {
           textTransform: 'uppercase',
           marginBottom: '1rem',
           fontFamily: 'var(--font-inter)',
-          boxShadow: '0 0 20px rgba(109,145,151,0.10)',
+          boxShadow: '0 0 20px rgba(110,231,183,0.10)',
         }}>
           <span style={{
             width: '5px', height: '5px',
-            background: '#6d9197', borderRadius: '50%',
+            background: 'var(--accent)', borderRadius: '50%',
             animation: 'pulse-dot 2s ease-in-out infinite',
-            boxShadow: '0 0 6px rgba(109,145,151,0.8)',
+            boxShadow: '0 0 6px rgba(110,231,183,0.8)',
           }} aria-hidden="true" />
           Free. Private. No insurance required.
         </div>
@@ -288,7 +288,7 @@ export default function Hero() {
         }}>
           {/* Avatar stack */}
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            {['#6d9197','#4a7c84','#8ab5bc','#5a9099','#3d717a'].map((bg, i) => (
+            {['var(--accent)','#4a7c84','var(--accent2)','#5a9099','#3d717a'].map((bg, i) => (
               <div key={i} aria-hidden="true" style={{
                 width: '26px', height: '26px', borderRadius: '50%',
                 background: `linear-gradient(135deg, ${bg}, ${bg}99)`,
@@ -330,7 +330,7 @@ export default function Hero() {
           id="hero-h1"
           style={{
             fontFamily: 'var(--font-sora)',
-            fontSize: 'clamp(2rem, 5vw, 5rem)',
+            fontSize: 'clamp(2.8rem, 6.5vw, 6.5rem)',
             fontWeight: 800,
             lineHeight: 1.05,
             letterSpacing: '-0.035em',
@@ -404,7 +404,7 @@ export default function Hero() {
           <div className="search-glow-ring" style={{
             position: 'absolute', inset: '-2px',
             borderRadius: '17px',
-            background: 'linear-gradient(135deg, rgba(109,145,151,0.40), rgba(138,181,188,0.14))',
+            background: 'linear-gradient(135deg, rgba(110,231,183,0.40), rgba(167,210,190,0.14))',
             opacity: 0, transition: 'opacity 0.4s',
             zIndex: 0, pointerEvents: 'none', filter: 'blur(1px)',
           }} />
@@ -414,7 +414,7 @@ export default function Hero() {
               position: 'relative', zIndex: 1,
               display: 'flex', alignItems: 'center',
               background: 'rgba(13,11,30,0.92)',
-              border: '1px solid rgba(109,145,151,0.22)',
+              border: '1px solid rgba(110,231,183,0.22)',
               borderRadius: '16px',
               padding: '7px 7px 7px 18px', gap: '10px',
               backdropFilter: 'blur(20px)',
@@ -423,8 +423,8 @@ export default function Hero() {
             }}
             onFocusCapture={e => {
               const w = e.currentTarget
-              w.style.borderColor = 'rgba(109,145,151,0.55)'
-              w.style.boxShadow = '0 0 0 1px rgba(109,145,151,0.22), 0 8px 36px rgba(0,0,0,0.40)'
+              w.style.borderColor = 'rgba(110,231,183,0.55)'
+              w.style.boxShadow = '0 0 0 1px rgba(110,231,183,0.22), 0 8px 36px rgba(0,0,0,0.40)'
               // Glow ring pulse
               const glow = w.previousElementSibling as HTMLElement
               glow.style.opacity = '1'
@@ -434,7 +434,7 @@ export default function Hero() {
             }}
             onBlurCapture={e => {
               const w = e.currentTarget
-              w.style.borderColor = 'rgba(109,145,151,0.22)'
+              w.style.borderColor = 'rgba(110,231,183,0.22)'
               w.style.boxShadow = '0 4px 24px rgba(0,0,0,0.30)'
               const glow = w.previousElementSibling as HTMLElement
               glow.style.opacity = '0'
@@ -501,15 +501,15 @@ export default function Hero() {
                 fontFamily: 'var(--font-inter)', fontSize: '14px', fontWeight: 500,
                 cursor: 'none', whiteSpace: 'nowrap', flexShrink: 0,
                 transition: 'transform 0.15s, box-shadow 0.25s',
-                boxShadow: '0 4px 20px rgba(109,145,151,0.32)',
+                boxShadow: '0 4px 20px rgba(110,231,183,0.32)',
               }}
               onMouseEnter={e => {
                 e.currentTarget.style.transform = 'translateY(-1px)'
-                e.currentTarget.style.boxShadow = '0 8px 32px rgba(109,145,151,0.48)'
+                e.currentTarget.style.boxShadow = '0 8px 32px rgba(110,231,183,0.48)'
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.transform = ''
-                e.currentTarget.style.boxShadow = '0 4px 20px rgba(109,145,151,0.32)'
+                e.currentTarget.style.boxShadow = '0 4px 20px rgba(110,231,183,0.32)'
               }}
             >
               Find care →
@@ -535,9 +535,9 @@ export default function Hero() {
               }}
               onMouseEnter={e => {
                 const t = e.currentTarget
-                t.style.color = 'var(--accent)'; t.style.borderColor = 'rgba(109,145,151,0.30)'
+                t.style.color = 'var(--accent)'; t.style.borderColor = 'rgba(110,231,183,0.30)'
                 t.style.background = 'var(--accent-dim)'; t.style.transform = 'translateY(-1px)'
-                t.style.boxShadow = '0 4px 12px rgba(109,145,151,0.12)'
+                t.style.boxShadow = '0 4px 12px rgba(110,231,183,0.12)'
               }}
               onMouseLeave={e => {
                 const t = e.currentTarget
@@ -553,7 +553,7 @@ export default function Hero() {
         <div style={{ display: 'none' }}>
           {/* Avatar stack */}
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            {['#6d9197','#4a7c84','#8ab5bc','#5a9099','#3d717a'].map((bg, i) => (
+            {['var(--accent)','#4a7c84','var(--accent2)','#5a9099','#3d717a'].map((bg, i) => (
               <div key={i} aria-hidden="true" style={{
                 width: '26px', height: '26px', borderRadius: '50%',
                 background: `linear-gradient(135deg, ${bg}, ${bg}99)`,
@@ -620,7 +620,7 @@ export default function Hero() {
                   }}
                   onMouseEnter={e => {
                     e.currentTarget.style.color = 'var(--accent)'
-                    e.currentTarget.style.borderColor = 'rgba(109,145,151,0.25)'
+                    e.currentTarget.style.borderColor = 'rgba(110,231,183,0.25)'
                     e.currentTarget.style.background = 'var(--accent-dim)'
                   }}
                   onMouseLeave={e => {
@@ -643,21 +643,21 @@ export default function Hero() {
         <div aria-hidden="true" style={{
           position: 'absolute', top: '0%', left: '50%', transform: 'translate(-50%, -30%)',
           width: '90%', height: '240px',
-          background: 'radial-gradient(ellipse, rgba(109,145,151,0.22) 0%, rgba(109,145,151,0.08) 40%, transparent 70%)',
+          background: 'radial-gradient(ellipse, rgba(110,231,183,0.22) 0%, rgba(110,231,183,0.08) 40%, transparent 70%)',
           filter: 'blur(50px)', pointerEvents: 'none', zIndex: 0,
         }} />
 
         {/* Frame */}
         <div className="mockup-inner" style={{
           background: 'linear-gradient(145deg, var(--bg2), var(--bg3))',
-          border: '1px solid rgba(109,145,151,0.20)',
+          border: '1px solid rgba(110,231,183,0.20)',
           borderRadius: '16px', overflow: 'hidden',
           transform: 'rotateX(5deg) scale(0.97)',
           transformStyle: 'preserve-3d',
           boxShadow: `
             0 50px 120px rgba(0,0,0,0.72),
-            0 0 0 1px rgba(109,145,151,0.10),
-            0 0 80px rgba(109,145,151,0.07),
+            0 0 0 1px rgba(110,231,183,0.10),
+            0 0 80px rgba(110,231,183,0.07),
             inset 0 1px 0 rgba(255,255,255,0.05)
           `,
           transition: 'box-shadow 0.6s ease',
@@ -705,7 +705,7 @@ export default function Hero() {
                   padding: '7px 10px', borderRadius: '8px',
                   fontSize: '12px', fontFamily: 'var(--font-inter)', fontWeight: 300,
                   color: item.active ? 'var(--accent)' : 'var(--text-3)',
-                  background: item.active ? 'rgba(109,145,151,0.10)' : 'transparent',
+                  background: item.active ? 'rgba(110,231,183,0.10)' : 'transparent',
                   cursor: 'default',
                 }}>
                   <span style={{ opacity: item.active ? 1 : 0.5, color: item.active ? 'var(--accent)' : 'inherit' }}>
@@ -765,8 +765,8 @@ export default function Hero() {
               {MOCKUP_RESULTS.map((r, i) => (
                 <div key={r.name} style={{
                   display: 'flex', alignItems: 'center', gap: '10px',
-                  background: i === 0 ? 'rgba(109,145,151,0.05)' : 'var(--bg4)',
-                  border: `1px solid ${i === 0 ? 'rgba(109,145,151,0.18)' : 'var(--border2)'}`,
+                  background: i === 0 ? 'rgba(110,231,183,0.05)' : 'var(--bg4)',
+                  border: `1px solid ${i === 0 ? 'rgba(110,231,183,0.18)' : 'var(--border2)'}`,
                   borderRadius: '9px', padding: '9px 12px',
                   marginBottom: i < MOCKUP_RESULTS.length - 1 ? '6px' : 0,
                 }}>

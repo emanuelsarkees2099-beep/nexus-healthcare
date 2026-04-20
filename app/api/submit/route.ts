@@ -142,7 +142,7 @@ export async function POST(req: NextRequest) {
     // Stories go to 'pending_review' so admin can approve before publishing
     const status = type === 'story' ? 'pending_review' : 'new'
 
-    const { data: row, error } = await supabase
+    const { data: row, error } = await getSupabaseClient()
       .from('submissions')
       .insert({ type, data, status, user_id: userId || null })
       .select('id')

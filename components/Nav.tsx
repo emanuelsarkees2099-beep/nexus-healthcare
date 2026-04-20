@@ -286,16 +286,16 @@ export default function Nav() {
               style={{
                 position: 'relative',
                 width: '34px', height: '34px', borderRadius: '9px',
-                background: savedCount > 0 ? 'rgba(109,145,151,0.12)' : 'rgba(255,255,255,0.06)',
-                border: `1px solid ${savedCount > 0 ? 'rgba(109,145,151,0.28)' : 'rgba(255,255,255,0.08)'}`,
+                background: savedCount > 0 ? 'rgba(110,231,183,0.12)' : 'rgba(255,255,255,0.06)',
+                border: `1px solid ${savedCount > 0 ? 'rgba(110,231,183,0.28)' : 'rgba(255,255,255,0.08)'}`,
                 cursor: 'pointer',
-                color: savedCount > 0 ? '#6d9197' : 'rgba(255,255,255,0.4)',
+                color: savedCount > 0 ? 'var(--accent)' : 'rgba(255,255,255,0.4)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 transition: 'background 0.2s, color 0.2s, border-color 0.2s',
                 flexShrink: 0,
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(109,145,151,0.2)'; e.currentTarget.style.color = '#6d9197' }}
-              onMouseLeave={e => { e.currentTarget.style.background = savedCount > 0 ? 'rgba(109,145,151,0.12)' : 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = savedCount > 0 ? '#6d9197' : 'rgba(255,255,255,0.4)' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(110,231,183,0.2)'; e.currentTarget.style.color = 'var(--accent)' }}
+              onMouseLeave={e => { e.currentTarget.style.background = savedCount > 0 ? 'rgba(110,231,183,0.12)' : 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = savedCount > 0 ? 'var(--accent)' : 'rgba(255,255,255,0.4)' }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill={savedCount > 0 ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
@@ -303,7 +303,7 @@ export default function Nav() {
               {savedCount > 0 && (
                 <span style={{
                   position: 'absolute', top: '-5px', right: '-5px',
-                  background: '#6d9197', color: '#07070F',
+                  background: 'var(--accent)', color: '#07070F',
                   borderRadius: '50%', minWidth: '16px', height: '16px',
                   fontSize: '9px', fontWeight: 700,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -362,19 +362,19 @@ export default function Nav() {
                 onClick={() => setShowUserMenu(v => !v)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '8px',
-                  background: 'rgba(109,145,151,0.12)',
-                  border: '1px solid rgba(109,145,151,0.25)',
+                  background: 'rgba(110,231,183,0.12)',
+                  border: '1px solid rgba(110,231,183,0.25)',
                   borderRadius: '9px', padding: '6px 12px 6px 8px',
                   cursor: 'pointer', color: '#eef4f5',
                   fontFamily: 'var(--font-inter)', fontSize: '12.5px', fontWeight: 500,
                   transition: 'background 0.2s',
                 }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(109,145,151,0.2)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'rgba(109,145,151,0.12)'}
+                onMouseEnter={e => e.currentTarget.style.background = 'rgba(110,231,183,0.2)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'rgba(110,231,183,0.12)'}
               >
                 <div style={{
                   width: '22px', height: '22px', borderRadius: '50%',
-                  background: '#6d9197', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '10px', fontWeight: 700, color: '#07070F', flexShrink: 0,
                 }}>
                   {(user.full_name || user.email || 'U')[0].toUpperCase()}
@@ -553,7 +553,7 @@ export default function Nav() {
         }}>
           {user ? (
             <>
-              <div style={{ padding: '8px 12px', borderRadius: '9px', background: 'rgba(109,145,151,0.08)', marginBottom: '2px' }}>
+              <div style={{ padding: '8px 12px', borderRadius: '9px', background: 'rgba(110,231,183,0.08)', marginBottom: '2px' }}>
                 <div style={{ fontSize: '12px', fontWeight: 600, color: '#eef4f5' }}>{user.full_name || 'User'}</div>
                 <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>{user.email}</div>
               </div>

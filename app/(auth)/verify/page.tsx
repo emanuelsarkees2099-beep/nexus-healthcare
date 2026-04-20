@@ -15,6 +15,7 @@ export default function VerifyPage() {
   const router = useRouter()
 
   useEffect(() => {
+    if (!supabase) return
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session) {
         setStatus('verified')

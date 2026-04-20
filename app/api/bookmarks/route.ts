@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const getSupabaseClient = () => createClient(url, anonKey)
-  const { data, error } = await supabase
+  const { data, error } = await getSupabaseClient()
     .from('saved_resources')
     .select('*')
     .eq('user_id', user.id)
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
   }
 
   const getSupabaseClient = () => createClient(url, anonKey)
-  const { data, error } = await supabase
+  const { data, error } = await getSupabaseClient()
     .from('saved_resources')
     .upsert({
       user_id: user.id,
@@ -70,7 +70,7 @@ export async function DELETE(req: NextRequest) {
   }
 
   const getSupabaseClient = () => createClient(url, anonKey)
-  const { error } = await supabase
+  const { error } = await getSupabaseClient()
     .from('saved_resources')
     .delete()
     .eq('user_id', user.id)

@@ -51,7 +51,7 @@ export default function ScrollProgress() {
           position: 'relative',
           height: '100%', width: '0%',
           background: 'linear-gradient(90deg, var(--accent), var(--accent2))',
-          boxShadow: '0 0 6px rgba(109,145,151,0.7)',
+          boxShadow: '0 0 6px rgba(110,231,183,0.7)',
           transition: 'width 0.1s linear',
         }}
       />

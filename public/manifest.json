@@ -1,0 +1,57 @@
+{
+  "name": "NEXUS — Free Healthcare, Found in Seconds",
+  "short_name": "NEXUS",
+  "description": "Find free clinics, sliding-scale care, and eligibility programs near you. No insurance required.",
+  "start_url": "/search",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#020409",
+  "theme_color": "#6EE7B7",
+  "lang": "en",
+  "categories": ["health", "medical", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/search.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Clinic search results"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Find a Clinic",
+      "short_name": "Search",
+      "description": "Search for free clinics near you",
+      "url": "/search",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Check Programs",
+      "short_name": "Programs",
+      "description": "See programs you qualify for",
+      "url": "/programs",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Emergency Help",
+      "short_name": "Help Now",
+      "description": "Immediate care resources",
+      "url": "/search?urgent=true",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

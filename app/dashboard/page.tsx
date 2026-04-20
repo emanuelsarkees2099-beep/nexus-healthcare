@@ -3,60 +3,107 @@ export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { createClientClient } from '@/lib/auth-client'
 import Link from 'next/link'
-import { ArrowRight, User, Settings } from 'lucide-react'
-import RecentSubmissions from '@/components/RecentSubmissions'
+import AppShell from '@/components/AppShell'
+import {
+  ArrowRight, User, Settings, MapPin, ReceiptText, Users,
+  CalendarDays, BookOpen, Scale, Megaphone, Accessibility,
+  Bookmark, Heart, Phone, Loader2, CheckCircle2, Clock,
+  TrendingUp, Shield, Star,
+} from 'lucide-react'
 
-const DASHBOARD_LINKS = [
-  { title: 'Share Your Story', description: 'Tell us about your healthcare journey', href: '/stories', icon: '📖' },
-  { title: 'Connect with CHWs', description: 'Find community health workers near you', href: '/chw', icon: '🤝' },
-  { title: 'Get Legal Help', description: 'Access free legal aid for healthcare issues', href: '/rights', icon: '⚖️' },
-  { title: 'Advocate for Change', description: 'Participate in policy campaigns', href: '/advocacy', icon: '📢' },
-  { title: 'Find Programs', description: 'Discover eligibility programs you may qualify for', href: '/programs', icon: '🎯' },
-  { title: 'Report Issues', description: 'Help us improve accessibility', href: '/accessibility', icon: '♿' },
+const WALLET_SECTIONS = [
+  {
+    id: 'clinics',
+    label: 'Saved Clinics',
+    count: 0,
+    icon: <MapPin size={16} strokeWidth={2} />,
+    href: '/search',
+    color: 'var(--accent)',
+    bg: 'rgba(110,231,183,0.08)',
+    border: 'rgba(110,231,183,0.18)',
+    hint: 'Bookmark clinics to find them fast later',
+  },
+  {
+    id: 'programs',
+    label: 'Programs Matched',
+    count: 0,
+    icon: <ReceiptText size={16} strokeWidth={2} />,
+    href: '/programs',
+    color: 'var(--amber)',
+    bg: 'rgba(252,211,77,0.08)',
+    border: 'rgba(252,211,77,0.18)',
+    hint: 'Programs you may qualify for',
+  },
+  {
+    id: 'appointments',
+    label: 'Upcoming Visits',
+    count: 0,
+    icon: <CalendarDays size={16} strokeWidth={2} />,
+    href: '/calendar',
+    color: 'var(--violet)',
+    bg: 'rgba(167,139,250,0.08)',
+    border: 'rgba(167,139,250,0.18)',
+    hint: 'Track your scheduled appointments',
+  },
+  {
+    id: 'chw',
+    label: 'CHW Connection',
+    count: 0,
+    icon: <Users size={16} strokeWidth={2} />,
+    href: '/chw',
+    color: 'var(--green-pulse)',
+    bg: 'rgba(52,211,153,0.08)',
+    border: 'rgba(52,211,153,0.18)',
+    hint: 'Connect with a community health worker',
+  },
+]
+
+const QUICK_ACTIONS = [
+  { title: 'Share Your Story',     description: 'Your experience helps others find care',      href: '/stories',     icon: <BookOpen size={16} strokeWidth={2} />,     color: 'var(--accent)'  },
+  { title: 'Connect with CHWs',    description: 'Find workers who speak your language',        href: '/chw',         icon: <Users size={16} strokeWidth={2} />,        color: 'var(--violet)'  },
+  { title: 'Know Your Rights',     description: 'Legal protections and EMTALA explained',      href: '/rights',      icon: <Scale size={16} strokeWidth={2} />,        color: 'var(--amber)'   },
+  { title: 'Advocate for Change',  description: 'Campaigns and letters to representatives',   href: '/advocacy',    icon: <Megaphone size={16} strokeWidth={2} />,    color: 'var(--coral)'   },
+  { title: 'Find Programs',        description: 'Medicaid, ACA, HRSA and 40+ programs',       href: '/programs',    icon: <ReceiptText size={16} strokeWidth={2} />,  color: 'var(--amber)'   },
+  { title: 'Accessibility Help',   description: 'ADA info and reporting barriers',             href: '/accessibility', icon: <Accessibility size={16} strokeWidth={2} />, color: 'var(--green-pulse)' },
+]
+
+const CARE_TEAM = [
+  { role: 'Primary Care',   status: 'None assigned', icon: <Heart size={14} strokeWidth={2} />,  filled: false },
+  { role: 'Dental',         status: 'None assigned', icon: <Star size={14} strokeWidth={2} />,   filled: false },
+  { role: 'Mental Health',  status: 'None assigned', icon: <Shield size={14} strokeWidth={2} />, filled: false },
+  { role: 'CHW Navigator',  status: 'None assigned', icon: <Users size={14} strokeWidth={2} />,  filled: false },
 ]
 
 type Profile = {
-  id: string
-  email: string | null
-  full_name: string | null
-  phone: string | null
-  user_type: string | null
+  id: string; email: string | null; full_name: string | null;
+  phone: string | null; user_type: string | null
 }
 
 export default function DashboardPage() {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
+  const [savedCount, setSavedCount] = useState(0)
 
   useEffect(() => {
     const supabase = createClientClient()
-
     supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (!session) {
-        window.location.href = '/login'
-        return
-      }
+      if (!session) { window.location.href = '/login'; return }
 
-      // Load profile
       const { data } = await supabase
-        .from('user_profiles')
-        .select('*')
-        .eq('id', session.user.id)
-        .single()
+        .from('user_profiles').select('*').eq('id', session.user.id).single()
 
       if (data) {
         setProfile(data)
       } else {
-        // Profile doesn't exist yet — create it from session data
-        const newProfile = {
-          id: session.user.id,
-          email: session.user.email ?? '',
-          full_name: session.user.user_metadata?.full_name || 'User',
-          phone: null,
-          user_type: 'patient',
-        }
-        await supabase.from('user_profiles').upsert(newProfile)
-        setProfile(newProfile)
+        const np = { id: session.user.id, email: session.user.email ?? '', full_name: session.user.user_metadata?.full_name || 'User', phone: null, user_type: 'patient' }
+        await supabase.from('user_profiles').upsert(np)
+        setProfile(np)
       }
+
+      /* Count bookmarks */
+      const { count } = await supabase
+        .from('bookmarks').select('*', { count: 'exact', head: true }).eq('user_id', session.user.id)
+      setSavedCount(count ?? 0)
 
       setLoading(false)
     })
@@ -64,86 +111,285 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#07070F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px' }}>Loading...</div>
-      </div>
+      <AppShell>
+        <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+            <Loader2 size={24} color="var(--accent)" style={{ animation: 'spin-slow 1s linear infinite' }} />
+            <span style={{ color: 'var(--text-3)', fontSize: '13px', fontFamily: 'var(--font-inter)' }}>
+              Loading your health wallet...
+            </span>
+          </div>
+        </div>
+      </AppShell>
     )
   }
 
   if (!profile) return null
 
   const firstName = profile.full_name?.split(' ')[0] || 'User'
+  const initials  = (profile.full_name ?? 'U').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+
+  const walletSections = WALLET_SECTIONS.map(s => ({
+    ...s,
+    count: s.id === 'clinics' ? savedCount : s.count,
+  }))
 
   return (
-    <div style={{ minHeight: '100vh', background: '#07070F', paddingTop: '120px', paddingBottom: '60px' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
-        {/* Header */}
-        <div style={{ marginBottom: '60px' }}>
-          <h1 style={{ fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 700, marginBottom: '8px', color: '#ffffff' }}>
-            Welcome back, {firstName}
-          </h1>
-          <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.5)', marginBottom: '24px' }}>
-            {profile.user_type === 'provider'
-              ? 'Manage your provider profile and track your clinic'
-              : profile.user_type === 'admin'
-                ? 'Admin dashboard'
-                : 'Explore resources and help improve healthcare access'}
-          </p>
+    <AppShell>
+      <div style={{ minHeight: '100vh', paddingTop: '80px', paddingBottom: '80px' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px' }}>
 
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            <Link href="/dashboard/profile" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 16px', background: '#6d9197', color: '#07070F', borderRadius: '9px', textDecoration: 'none', fontWeight: 600, fontSize: '14px' }}>
-              <User size={16} />
-              Edit Profile
-            </Link>
-            {profile.user_type === 'admin' && (
-              <Link href="/admin" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 16px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#eef4f5', borderRadius: '9px', textDecoration: 'none', fontWeight: 600, fontSize: '14px' }}>
-                <Settings size={16} />
-                Admin Panel
-              </Link>
-            )}
-          </div>
-        </div>
-
-        {/* Quick Stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '60px' }}>
-          {[
-            { label: 'Account Type', value: profile.user_type === 'patient' ? 'Patient' : profile.user_type === 'provider' ? 'Provider' : 'Admin' },
-            { label: 'Email', value: profile.email },
-            { label: 'Phone', value: profile.phone || 'Not provided' },
-          ].map((stat, i) => (
-            <div key={i} style={{ padding: '20px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px' }}>
-              <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', fontWeight: 600, marginBottom: '8px' }}>{stat.label}</p>
-              <p style={{ fontSize: '16px', color: '#eef4f5', fontWeight: 600 }}>{stat.value}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Recent Submissions */}
-        <div style={{ marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '20px', color: '#ffffff' }}>Recent submissions</h2>
-          <RecentSubmissions />
-        </div>
-
-        {/* Action Links */}
-        <div>
-          <h2 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '20px', color: '#ffffff' }}>Explore</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-            {DASHBOARD_LINKS.map((link, i) => (
-              <Link key={i} href={link.href} style={{ display: 'flex', flexDirection: 'column', padding: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', textDecoration: 'none', transition: 'all 0.25s', cursor: 'pointer' }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(109,145,151,0.3)'; e.currentTarget.style.background = 'rgba(255,255,255,0.04)' }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.background = 'rgba(255,255,255,0.02)' }}
-              >
-                <span style={{ fontSize: '32px', marginBottom: '12px' }}>{link.icon}</span>
-                <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#eef4f5', marginBottom: '6px' }}>{link.title}</h3>
-                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', marginBottom: '12px', flex: 1 }}>{link.description}</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#6d9197', fontSize: '13px', fontWeight: 600 }}>
-                  Explore <ArrowRight size={14} />
+          {/* ── Profile header ── */}
+          <div style={{
+            display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',
+            gap: '24px', marginBottom: '48px', flexWrap: 'wrap',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+              {/* Avatar */}
+              <div style={{
+                width: '64px', height: '64px', borderRadius: '16px',
+                background: 'linear-gradient(135deg, rgba(110,231,183,0.20), rgba(110,231,183,0.08))',
+                border: '1px solid rgba(110,231,183,0.22)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontFamily: 'var(--font-sora)', fontSize: '20px', fontWeight: 700,
+                color: 'var(--accent)', flexShrink: 0,
+              }}>
+                {initials}
+              </div>
+              <div>
+                <div style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '5px',
+                  background: 'rgba(110,231,183,0.07)', border: '1px solid rgba(110,231,183,0.14)',
+                  borderRadius: '100px', padding: '3px 10px', marginBottom: '8px',
+                }}>
+                  <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--accent)', animation: 'blink 2s ease-in-out infinite' }} />
+                  <span style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--accent)', fontFamily: 'var(--font-inter)' }}>
+                    {profile.user_type === 'admin' ? 'Admin' : profile.user_type === 'provider' ? 'Provider' : 'Patient'} Account
+                  </span>
                 </div>
+                <h1 style={{
+                  fontFamily: 'var(--font-sora)',
+                  fontSize: 'clamp(1.6rem, 4vw, 2.25rem)',
+                  fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1,
+                  color: 'var(--text)', marginBottom: '4px',
+                }}>
+                  Welcome back, {firstName}
+                </h1>
+                <p style={{ fontSize: '14px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)' }}>
+                  {profile.email}
+                </p>
+              </div>
+            </div>
+
+            {/* Action buttons */}
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              <Link href="/dashboard/profile" style={{
+                display: 'inline-flex', alignItems: 'center', gap: '8px',
+                padding: '10px 16px',
+                background: 'rgba(110,231,183,0.10)', border: '1px solid rgba(110,231,183,0.22)',
+                color: 'var(--accent)', borderRadius: '10px', textDecoration: 'none',
+                fontWeight: 600, fontSize: '13px', fontFamily: 'var(--font-inter)',
+                transition: 'background 0.2s',
+              }}>
+                <User size={14} /> Edit Profile
               </Link>
-            ))}
+              {profile.user_type === 'admin' && (
+                <Link href="/admin" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '8px',
+                  padding: '10px 16px',
+                  background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
+                  color: 'var(--text-2)', borderRadius: '10px', textDecoration: 'none',
+                  fontWeight: 600, fontSize: '13px', fontFamily: 'var(--font-inter)',
+                }}>
+                  <Settings size={14} /> Admin Panel
+                </Link>
+              )}
+            </div>
           </div>
+
+          {/* ── Health Wallet ── */}
+          <div style={{ marginBottom: '48px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+              <Heart size={16} color="var(--accent)" strokeWidth={2} />
+              <h2 style={{ fontFamily: 'var(--font-sora)', fontSize: '18px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>
+                My Health Wallet
+              </h2>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
+              {walletSections.map(s => (
+                <Link key={s.id} href={s.href} style={{ textDecoration: 'none' }}>
+                  <div className="wallet-card" style={{
+                    cursor: 'pointer',
+                    transition: 'border-color 0.25s, box-shadow 0.25s, transform 0.2s',
+                  }}
+                    onMouseEnter={e => {
+                      const el = e.currentTarget
+                      el.style.borderColor = s.border
+                      el.style.transform = 'translateY(-2px)'
+                    }}
+                    onMouseLeave={e => {
+                      const el = e.currentTarget
+                      el.style.borderColor = 'var(--border2)'
+                      el.style.transform = 'translateY(0)'
+                    }}
+                  >
+                    <div style={{
+                      width: '36px', height: '36px', borderRadius: '9px',
+                      background: s.bg, border: `1px solid ${s.border}`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      color: s.color, marginBottom: '12px',
+                    }}>
+                      {s.icon}
+                    </div>
+                    <div style={{
+                      fontFamily: 'var(--font-mono),monospace',
+                      fontSize: '28px', fontWeight: 600, color: s.count > 0 ? s.color : 'var(--text)',
+                      letterSpacing: '-0.02em', lineHeight: 1, marginBottom: '4px',
+                    }}>
+                      {s.count}
+                    </div>
+                    <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '3px' }}>
+                      {s.label}
+                    </div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>
+                      {s.count === 0 ? s.hint : `${s.count} item${s.count !== 1 ? 's' : ''}`}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* ── My Care Team ── */}
+          <div style={{ marginBottom: '48px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+              <Shield size={16} color="var(--violet)" strokeWidth={2} />
+              <h2 style={{ fontFamily: 'var(--font-sora)', fontSize: '18px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>
+                My Care Team
+              </h2>
+              <div style={{
+                marginLeft: '8px', fontSize: '10px', fontWeight: 600, letterSpacing: '0.08em',
+                textTransform: 'uppercase', color: 'var(--text-3)',
+                background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)',
+                borderRadius: '100px', padding: '2px 8px', fontFamily: 'var(--font-inter)',
+              }}>
+                Coming Soon
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
+              {CARE_TEAM.map(ct => (
+                <div key={ct.role} style={{
+                  background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.05)',
+                  borderRadius: '12px', padding: '16px',
+                  display: 'flex', alignItems: 'center', gap: '12px',
+                }}>
+                  <div style={{
+                    width: '32px', height: '32px', borderRadius: '8px',
+                    background: 'rgba(167,139,250,0.07)', border: '1px solid rgba(167,139,250,0.12)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: 'var(--violet)',
+                  }}>
+                    {ct.icon}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '1px' }}>
+                      {ct.role}
+                    </div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>
+                      {ct.status}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Account snapshot ── */}
+          <div style={{ marginBottom: '48px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+              <TrendingUp size={16} color="var(--amber)" strokeWidth={2} />
+              <h2 style={{ fontFamily: 'var(--font-sora)', fontSize: '18px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>
+                Account Details
+              </h2>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
+              {[
+                { label: 'Account Type', value: profile.user_type === 'patient' ? 'Patient' : profile.user_type === 'provider' ? 'Provider' : 'Admin' },
+                { label: 'Email',        value: profile.email || '—' },
+                { label: 'Phone',        value: profile.phone || 'Not provided' },
+              ].map(stat => (
+                <div key={stat.label} style={{
+                  padding: '18px 20px',
+                  background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px',
+                }}>
+                  <p style={{ fontSize: '10px', color: 'var(--text-3)', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '6px', fontFamily: 'var(--font-inter)' }}>
+                    {stat.label}
+                  </p>
+                  <p style={{ fontSize: '15px', color: 'var(--text)', fontWeight: 500, fontFamily: 'var(--font-inter)' }}>
+                    {stat.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Quick Actions ── */}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+              <CheckCircle2 size={16} color="var(--accent)" strokeWidth={2} />
+              <h2 style={{ fontFamily: 'var(--font-sora)', fontSize: '18px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>
+                Explore
+              </h2>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
+              {QUICK_ACTIONS.map(action => (
+                <Link
+                  key={action.href}
+                  href={action.href}
+                  style={{
+                    display: 'flex', alignItems: 'flex-start', gap: '14px',
+                    padding: '20px 22px',
+                    background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)',
+                    borderRadius: '14px', textDecoration: 'none',
+                    transition: 'border-color 0.2s, background 0.2s, transform 0.2s',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.borderColor = 'rgba(110,231,183,0.18)'
+                    e.currentTarget.style.background = 'rgba(110,231,183,0.03)'
+                    e.currentTarget.style.transform = 'translateY(-2px)'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)'
+                    e.currentTarget.style.background = 'rgba(255,255,255,0.02)'
+                    e.currentTarget.style.transform = 'translateY(0)'
+                  }}
+                >
+                  <div style={{
+                    width: '36px', height: '36px', borderRadius: '9px',
+                    background: `${action.color}12`, border: `1px solid ${action.color}28`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: action.color, flexShrink: 0,
+                  }}>
+                    {action.icon}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '4px' }}>
+                      {action.title}
+                    </h3>
+                    <p style={{ fontSize: '12px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', lineHeight: 1.5 }}>
+                      {action.description}
+                    </p>
+                  </div>
+                  <ArrowRight size={14} color="var(--text-3)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                </Link>
+              ))}
+            </div>
+          </div>
+
         </div>
       </div>
-    </div>
+    </AppShell>
   )
 }

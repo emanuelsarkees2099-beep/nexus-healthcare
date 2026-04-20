@@ -9,12 +9,12 @@ export async function GET() {
     const getSupabaseClient = () => createClient(url, anonKey)
 
     // Total submissions
-    const { count: total } = await supabase
+    const { count: total } = await getSupabaseClient()
       .from('submissions')
       .select('*', { count: 'exact', head: true })
 
     // By type
-    const { data: byType } = await supabase
+    const { data: byType } = await getSupabaseClient()
       .from('submissions')
       .select('type')
 
@@ -26,7 +26,7 @@ export async function GET() {
     }
 
     // By status
-    const { data: byStatus } = await supabase
+    const { data: byStatus } = await getSupabaseClient()
       .from('submissions')
       .select('status')
 
@@ -38,7 +38,7 @@ export async function GET() {
     }
 
     // Users count
-    const { count: userCount } = await supabase
+    const { count: userCount } = await getSupabaseClient()
       .from('user_profiles')
       .select('*', { count: 'exact', head: true })
 
@@ -46,7 +46,7 @@ export async function GET() {
     const thirtyDaysAgo = new Date()
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
-    const { count: recentCount } = await supabase
+    const { count: recentCount } = await getSupabaseClient()
       .from('submissions')
       .select('*', { count: 'exact', head: true })
       .gte('created_at', thirtyDaysAgo.toISOString())

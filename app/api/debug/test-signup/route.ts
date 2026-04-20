@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Try to insert profile
-    const { error: profileError, data: profileData } = await supabase
+    const { error: profileError, data: profileData } = await getSupabaseClient()
       .from('user_profiles')
       .insert({
         id: data.user?.id,
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Check what's in the table now
-    const { data: allProfiles } = await supabase
+    const { data: allProfiles } = await getSupabaseClient()
       .from('user_profiles')
       .select('*')
 

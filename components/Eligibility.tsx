@@ -47,7 +47,7 @@ export default function Eligibility() {
         {/* Top gradient line */}
         <div aria-hidden="true" style={{
           position: 'absolute', top: '-1px', left: '15%', right: '15%', height: '1px',
-          background: 'linear-gradient(90deg, transparent, rgba(109,145,151,0.5), transparent)',
+          background: 'linear-gradient(90deg, transparent, rgba(110,231,183,0.5), transparent)',
         }} />
 
         {/* Depth overlay */}
@@ -82,7 +82,7 @@ export default function Eligibility() {
             }}
             onMouseEnter={e => {
               e.currentTarget.style.transform = 'translateY(-2px)'
-              e.currentTarget.style.boxShadow = '0 14px 36px rgba(109,145,151,0.35)'
+              e.currentTarget.style.boxShadow = '0 14px 36px rgba(110,231,183,0.35)'
             }}
             onMouseLeave={e => {
               e.currentTarget.style.transform = ''
@@ -111,9 +111,9 @@ export default function Eligibility() {
                 textDecoration: 'none', color: 'inherit',
               }}
               onMouseEnter={e => {
-                e.currentTarget.style.borderColor = 'rgba(109,145,151,0.22)'
+                e.currentTarget.style.borderColor = 'rgba(110,231,183,0.22)'
                 e.currentTarget.style.transform = 'translateX(4px)'
-                e.currentTarget.style.background = 'rgba(109,145,151,0.04)'
+                e.currentTarget.style.background = 'rgba(110,231,183,0.04)'
                 const arrow = e.currentTarget.querySelector<HTMLElement>('[data-arrow]')
                 if (arrow) { arrow.style.color = 'var(--accent)'; arrow.style.transform = 'translateX(3px)' }
               }}

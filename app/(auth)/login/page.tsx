@@ -26,7 +26,7 @@ export default function LoginPage() {
     setError('')
 
     try {
-      const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+      const { error: authError } = await supabase!.auth.signInWithPassword({ email, password })
       if (authError) throw authError
       window.location.href = '/dashboard'
     } catch (err) {
@@ -40,7 +40,7 @@ export default function LoginPage() {
     setError('')
 
     try {
-      const { data, error: authError } = await supabase.auth.signInWithOAuth({
+      const { data, error: authError } = await supabase!.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,

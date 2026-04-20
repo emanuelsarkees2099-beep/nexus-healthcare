@@ -79,7 +79,7 @@ export default function MissionFreeze() {
           const wave = Math.sin(t + c * 0.3 + r * 0.4) * 0.5 + 0.5
           ctx.beginPath()
           ctx.arc(x, y, 1, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(109,145,151,${0.035 + wave * 0.04})`
+          ctx.fillStyle = `rgba(110,231,183,${0.035 + wave * 0.04})`
           ctx.fill()
         }
       }
@@ -96,9 +96,9 @@ export default function MissionFreeze() {
         const gy    = g.y * canvas.height
         const pulse = Math.sin(t * 0.8) * 0.15 + 0.85
         const grad  = ctx.createRadialGradient(gx, gy, 0, gx, gy, g.r * pulse)
-        grad.addColorStop(0,   'rgba(109,145,151,0.06)')
-        grad.addColorStop(0.5, 'rgba(109,145,151,0.02)')
-        grad.addColorStop(1,   'rgba(109,145,151,0)')
+        grad.addColorStop(0,   'rgba(110,231,183,0.06)')
+        grad.addColorStop(0.5, 'rgba(110,231,183,0.02)')
+        grad.addColorStop(1,   'rgba(110,231,183,0)')
         ctx.fillStyle = grad
         ctx.beginPath()
         ctx.arc(gx, gy, g.r * pulse, 0, Math.PI * 2)
@@ -151,7 +151,7 @@ export default function MissionFreeze() {
       <div aria-hidden="true" style={{
         position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)',
         width: '800px', height: '500px', borderRadius: '50%',
-        background: 'radial-gradient(ellipse, rgba(109,145,151,0.05) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse, rgba(110,231,183,0.05) 0%, transparent 70%)',
         filter: 'blur(80px)', pointerEvents: 'none',
       }} />
 
@@ -197,7 +197,7 @@ export default function MissionFreeze() {
             borderRadius: '24px', overflow: 'hidden',
             boxShadow: `
               0 40px 100px rgba(0,0,0,0.55),
-              0 0 0 1px rgba(109,145,151,0.06),
+              0 0 0 1px rgba(110,231,183,0.06),
               inset 0 1px 0 rgba(255,255,255,0.03)
             `,
           }}
@@ -218,10 +218,10 @@ export default function MissionFreeze() {
           >
             <defs>
               <linearGradient id="conn-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%"   stopColor="rgba(109,145,151,0)"   />
-                <stop offset="40%"  stopColor="rgba(109,145,151,0.22)" />
-                <stop offset="60%"  stopColor="rgba(109,145,151,0.22)" />
-                <stop offset="100%" stopColor="rgba(109,145,151,0)"   />
+                <stop offset="0%"   stopColor="rgba(110,231,183,0)"   />
+                <stop offset="40%"  stopColor="rgba(110,231,183,0.22)" />
+                <stop offset="60%"  stopColor="rgba(110,231,183,0.22)" />
+                <stop offset="100%" stopColor="rgba(110,231,183,0)"   />
               </linearGradient>
             </defs>
             {CONNECTIONS.map(([a, b], i) => {
@@ -254,8 +254,8 @@ export default function MissionFreeze() {
               left: `${c.x}%`, top: `${c.y}%`,
               transform: 'translate(-50%,-50%)',
               width: '4px', height: '4px', borderRadius: '50%',
-              background: 'rgba(109,145,151,0.30)',
-              boxShadow: '0 0 4px rgba(109,145,151,0.15)',
+              background: 'rgba(110,231,183,0.30)',
+              boxShadow: '0 0 4px rgba(110,231,183,0.15)',
               zIndex: 2,
             }} />
           ))}
@@ -298,7 +298,7 @@ export default function MissionFreeze() {
               <div aria-hidden="true" style={{
                 width: '10px', height: '10px', borderRadius: '50%',
                 background: hoveredCity === city.id ? 'var(--accent2)' : 'var(--accent)',
-                boxShadow: `0 0 ${hoveredCity === city.id ? 16 : 8}px rgba(109,145,151,${hoveredCity === city.id ? 0.9 : 0.6})`,
+                boxShadow: `0 0 ${hoveredCity === city.id ? 16 : 8}px rgba(110,231,183,${hoveredCity === city.id ? 0.9 : 0.6})`,
                 transition: 'all 0.2s ease',
                 position: 'relative', zIndex: 3,
                 animation: 'map-dot-pulse 2.5s ease-in-out infinite',
@@ -311,10 +311,10 @@ export default function MissionFreeze() {
                   position: 'absolute',
                   bottom: '20px', left: '50%', transform: 'translateX(-50%)',
                   background: 'rgba(7,7,15,0.95)',
-                  border: '1px solid rgba(109,145,151,0.28)',
+                  border: '1px solid rgba(110,231,183,0.28)',
                   borderRadius: '10px', padding: '8px 14px',
                   whiteSpace: 'nowrap',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.55), 0 0 20px rgba(109,145,151,0.14)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.55), 0 0 20px rgba(110,231,183,0.14)',
                   backdropFilter: 'blur(16px)', zIndex: 10,
                   animation: 'fadeUp 0.18s var(--ease-out-expo) forwards',
                 }}>
@@ -338,10 +338,10 @@ export default function MissionFreeze() {
             {[{ n: '12K+', label: 'Clinics indexed' }, { n: '50', label: 'States covered' }].map(s => (
               <div key={s.label} style={{
                 background: 'rgba(7,7,15,0.88)',
-                border: '1px solid rgba(109,145,151,0.18)',
+                border: '1px solid rgba(110,231,183,0.18)',
                 borderRadius: '12px', padding: '12px 16px',
                 backdropFilter: 'blur(16px)', minWidth: '150px',
-                boxShadow: '0 8px 30px rgba(0,0,0,0.4), 0 0 20px rgba(109,145,151,0.07)',
+                boxShadow: '0 8px 30px rgba(0,0,0,0.4), 0 0 20px rgba(110,231,183,0.07)',
               }}>
                 <div style={{ fontFamily: 'var(--font-sora)', fontSize: '1.5rem', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.02em', lineHeight: 1, marginBottom: '3px' }}>{s.n}</div>
                 <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>{s.label}</div>
@@ -353,11 +353,11 @@ export default function MissionFreeze() {
           <div style={{
             position: 'absolute', bottom: '20px', right: '20px',
             background: 'rgba(7,7,15,0.92)',
-            border: '1px solid rgba(109,145,151,0.22)',
+            border: '1px solid rgba(110,231,183,0.22)',
             borderRadius: '14px', padding: '14px',
             backdropFilter: 'blur(20px)', width: '240px',
             zIndex: 5,
-            boxShadow: '0 12px 40px rgba(0,0,0,0.55), 0 0 24px rgba(109,145,151,0.08)',
+            boxShadow: '0 12px 40px rgba(0,0,0,0.55), 0 0 24px rgba(110,231,183,0.08)',
             animation: 'map-card-float 5s ease-in-out infinite 1s',
           }}>
             <div style={{
@@ -397,7 +397,7 @@ export default function MissionFreeze() {
               marginTop: '10px', background: 'var(--accent)', borderRadius: '8px',
               padding: '9px', textAlign: 'center',
               fontSize: '11px', color: 'var(--bg)', fontWeight: 500, fontFamily: 'var(--font-inter)',
-              boxShadow: '0 4px 16px rgba(109,145,151,0.30)', cursor: 'default',
+              boxShadow: '0 4px 16px rgba(110,231,183,0.30)', cursor: 'default',
             }}>
               Find care near me →
             </div>

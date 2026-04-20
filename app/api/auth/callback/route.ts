@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     const { user, session } = data
 
     // Check if user profile already exists
-    const { data: existingProfile } = await supabase
+    const { data: existingProfile } = await getSupabaseClient()
       .from('user_profiles')
       .select('id')
       .eq('id', user.id)
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
 
     // Create user profile if it doesn't exist (first-time OAuth login)
     if (!existingProfile) {
-      const { error: profileError } = await supabase
+      const { error: profileError } = await getSupabaseClient()
         .from('user_profiles')
         .insert({
           id: user.id,
