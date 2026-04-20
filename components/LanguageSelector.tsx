@@ -75,10 +75,10 @@ export default function LanguageSelector() {
           maxHeight: '90vh',
           overflowY: 'auto',
           background: 'linear-gradient(160deg, #0d1315, #0a0d10)',
-          border: '1px solid rgba(109,145,151,0.18)',
+          border: '1px solid rgba(110,231,183,0.18)',
           borderRadius: '24px',
           padding: '2.5rem',
-          boxShadow: '0 48px 96px rgba(0,0,0,0.7), 0 0 0 1px rgba(109,145,151,0.06)',
+          boxShadow: '0 48px 96px rgba(0,0,0,0.7), 0 0 0 1px rgba(110,231,183,0.06)',
           animation: closing
             ? 'lang-slide-out 0.38s cubic-bezier(0.4,0,1,1) forwards'
             : 'lang-slide-in 0.5s cubic-bezier(0.16,1,0.3,1) forwards',
@@ -87,7 +87,7 @@ export default function LanguageSelector() {
         {/* Top glow line */}
         <div aria-hidden="true" style={{
           position: 'absolute', top: 0, left: '20%', right: '20%', height: '1px',
-          background: 'linear-gradient(90deg, transparent, rgba(109,145,151,0.55), transparent)',
+          background: 'linear-gradient(90deg, transparent, rgba(110,231,183,0.55), transparent)',
         }} />
 
         {/* Close */}
@@ -113,14 +113,14 @@ export default function LanguageSelector() {
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: '6px',
             padding: '4px 12px', borderRadius: '100px',
-            background: 'rgba(109,145,151,0.08)',
-            border: '1px solid rgba(109,145,151,0.14)',
+            background: 'rgba(110,231,183,0.08)',
+            border: '1px solid rgba(110,231,183,0.14)',
             marginBottom: '16px',
           }}>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#6d9197" strokeWidth="2" strokeLinecap="round">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round">
               <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
             </svg>
-            <span style={{ fontSize: '11px', color: '#6d9197', letterSpacing: '0.08em', fontFamily: 'var(--font-inter)' }}>NEXUS · 12 languages</span>
+            <span style={{ fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.08em', fontFamily: 'var(--font-inter)' }}>NEXUS · 12 languages</span>
           </div>
 
           <h2 style={{
@@ -218,12 +218,12 @@ function LangButton({
         padding: '10px 12px',
         borderRadius: '12px',
         border: selected
-          ? '1px solid rgba(109,145,151,0.55)'
+          ? '1px solid rgba(110,231,183,0.55)'
           : hovered
-            ? '1px solid rgba(109,145,151,0.25)'
+            ? '1px solid rgba(110,231,183,0.25)'
             : '1px solid rgba(255,255,255,0.07)',
         background: selected
-          ? 'rgba(109,145,151,0.12)'
+          ? 'rgba(110,231,183,0.12)'
           : hovered
             ? 'rgba(255,255,255,0.04)'
             : 'rgba(255,255,255,0.02)',
@@ -231,7 +231,7 @@ function LangButton({
         textAlign: 'left',
         transition: 'all 0.18s ease',
         animation: `lang-btn-in 0.4s ${delay}ms both`,
-        boxShadow: selected ? '0 0 0 3px rgba(109,145,151,0.08)' : 'none',
+        boxShadow: selected ? '0 0 0 3px rgba(110,231,183,0.08)' : 'none',
       }}
     >
       <span style={{ fontSize: '18px', lineHeight: 1, flexShrink: 0 }}>{lang.flag}</span>
