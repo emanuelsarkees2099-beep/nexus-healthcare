@@ -62,8 +62,8 @@ const pill: React.CSSProperties = {
   display: 'inline-flex', alignItems: 'center', gap: '6px',
   padding: '4px 12px', borderRadius: '100px',
   fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-  background: 'rgba(109,145,151,0.08)', color: 'var(--accent)',
-  border: '1px solid rgba(109,145,151,0.18)',
+  background: 'rgba(110,231,183,0.08)', color: 'var(--accent)',
+  border: '1px solid rgba(110,231,183,0.18)',
 }
 
 /* ─── sub-components ──────────────────────────────── */
@@ -90,7 +90,7 @@ function InputField({ label, placeholder, value, onChange, type = 'text' }: {
       <div style={{
         borderRadius: '12px',
         padding: '1.5px',
-        background: focused ? 'linear-gradient(135deg, rgba(109,145,151,0.5), rgba(138,181,188,0.2))' : 'rgba(255,255,255,0.07)',
+        background: focused ? 'linear-gradient(135deg, rgba(110,231,183,0.5), rgba(167,210,190,0.2))' : 'rgba(255,255,255,0.07)',
         transition: 'background 0.3s cubic-bezier(0.16,1,0.3,1)',
       }}>
         <input
@@ -135,13 +135,13 @@ function FAQSection() {
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
           {FAQ_ITEMS.map((item, i) => (
-            <div key={i} style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid', borderColor: open === i ? 'rgba(109,145,151,0.25)' : 'rgba(255,255,255,0.06)', transition: 'border-color 0.25s, background 0.25s', background: open === i ? 'rgba(109,145,151,0.04)' : 'transparent', marginBottom: '4px' }}>
+            <div key={i} style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid', borderColor: open === i ? 'rgba(110,231,183,0.25)' : 'rgba(255,255,255,0.06)', transition: 'border-color 0.25s, background 0.25s', background: open === i ? 'rgba(110,231,183,0.04)' : 'transparent', marginBottom: '4px' }}>
               <button
                 onClick={() => setOpen(open === i ? null : i)}
                 style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 24px', background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontFamily: 'inherit', textAlign: 'left', gap: '16px' }}
               >
                 <span style={{ fontSize: '15px', fontWeight: 500, lineHeight: 1.4 }}>{item.q}</span>
-                <span style={{ flexShrink: 0, width: '20px', height: '20px', borderRadius: '50%', background: open === i ? 'rgba(109,145,151,0.15)' : 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.3s, background 0.25s', transform: open === i ? 'rotate(45deg)' : 'none', color: open === i ? 'var(--accent)' : 'rgba(255,255,255,0.4)', fontSize: '16px', lineHeight: 1 }}>+</span>
+                <span style={{ flexShrink: 0, width: '20px', height: '20px', borderRadius: '50%', background: open === i ? 'rgba(110,231,183,0.15)' : 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.3s, background 0.25s', transform: open === i ? 'rotate(45deg)' : 'none', color: open === i ? 'var(--accent)' : 'rgba(255,255,255,0.4)', fontSize: '16px', lineHeight: 1 }}>+</span>
               </button>
               <div style={{ maxHeight: open === i ? '300px' : '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.16,1,0.3,1)' }}>
                 <p style={{ padding: '0 24px 20px', fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.75, margin: 0 }}>{item.a}</p>
@@ -247,7 +247,7 @@ export default function PathwaysPage() {
       {/* ── HERO ─────────────────────────────────────── */}
       <section style={{ minHeight: '92dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '80px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         {/* ambient glow */}
-        <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: '600px', height: '400px', background: 'radial-gradient(ellipse, rgba(109,145,151,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: '600px', height: '400px', background: 'radial-gradient(ellipse, rgba(110,231,183,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
         <div style={{ maxWidth: '760px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}>
@@ -278,10 +278,10 @@ export default function PathwaysPage() {
               background: 'rgba(255,255,255,0.95)', color: '#07070F',
               border: 'none', cursor: 'pointer', fontSize: '15px', fontWeight: 600,
               transition: 'all 0.4s cubic-bezier(0.16,1,0.3,1)',
-              boxShadow: '0 0 40px rgba(109,145,151,0.2)',
+              boxShadow: '0 0 40px rgba(110,231,183,0.2)',
             }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.03)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 40px rgba(109,145,151,0.35)' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 0 40px rgba(109,145,151,0.2)' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.03)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 40px rgba(110,231,183,0.35)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 0 40px rgba(110,231,183,0.2)' }}
           >
             Find my clinic
             <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '100%', background: 'rgba(0,0,0,0.08)', transition: 'transform 0.3s cubic-bezier(0.16,1,0.3,1)' }}>
@@ -320,7 +320,7 @@ export default function PathwaysPage() {
                 <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '24px', padding: '4px' }}>
                   <div style={{ background: 'rgba(13,11,30,0.8)', borderRadius: '21px', padding: '28px', height: '100%', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.06)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                      <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(109,145,151,0.1)', border: '1px solid rgba(109,145,151,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}>{s.icon}</div>
+                      <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}>{s.icon}</div>
                       <span style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.2)', letterSpacing: '0.1em' }}>{s.n}</span>
                     </div>
                     <h3 style={{ fontSize: '17px', fontWeight: 600, marginBottom: '10px', color: 'var(--text)' }}>{s.title}</h3>
@@ -360,9 +360,9 @@ export default function PathwaysPage() {
                     <button key={s} onClick={() => setSymptom(symptom === s ? '' : s)}
                       style={{
                         padding: '10px 18px', borderRadius: '100px', fontSize: '14px',
-                        background: symptom === s ? 'rgba(109,145,151,0.18)' : 'rgba(255,255,255,0.04)',
+                        background: symptom === s ? 'rgba(110,231,183,0.18)' : 'rgba(255,255,255,0.04)',
                         color: symptom === s ? 'var(--accent2)' : 'rgba(255,255,255,0.6)',
-                        border: `1px solid ${symptom === s ? 'rgba(109,145,151,0.4)' : 'rgba(255,255,255,0.08)'}`,
+                        border: `1px solid ${symptom === s ? 'rgba(110,231,183,0.4)' : 'rgba(255,255,255,0.08)'}`,
                         cursor: 'pointer', fontFamily: 'inherit',
                         transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
                       }}
@@ -401,8 +401,8 @@ export default function PathwaysPage() {
                         <button key={opt.id} onClick={() => setInsurance(opt.id)}
                           style={{
                             padding: '14px 16px', borderRadius: '14px', textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit',
-                            background: insurance === opt.id ? 'rgba(109,145,151,0.12)' : 'rgba(255,255,255,0.03)',
-                            border: `1px solid ${insurance === opt.id ? 'rgba(109,145,151,0.35)' : 'rgba(255,255,255,0.07)'}`,
+                            background: insurance === opt.id ? 'rgba(110,231,183,0.12)' : 'rgba(255,255,255,0.03)',
+                            border: `1px solid ${insurance === opt.id ? 'rgba(110,231,183,0.35)' : 'rgba(255,255,255,0.07)'}`,
                             transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
                           }}
                         >
@@ -432,7 +432,7 @@ export default function PathwaysPage() {
             {/* Loading */}
             {loading && (
               <div style={{ textAlign: 'center', padding: '60px 0', animation: 'fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both' }}>
-                <div style={{ width: '52px', height: '52px', borderRadius: '50%', border: '2px solid rgba(109,145,151,0.15)', borderTopColor: 'var(--accent)', margin: '0 auto 24px', animation: 'spin 0.9s linear infinite' }} />
+                <div style={{ width: '52px', height: '52px', borderRadius: '50%', border: '2px solid rgba(110,231,183,0.15)', borderTopColor: 'var(--accent)', margin: '0 auto 24px', animation: 'spin 0.9s linear infinite' }} />
                 <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.55)' }}>Matching across 47,000+ outcomes…</p>
                 <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.25)', marginTop: '8px' }}>Checking languages · wait times · specialty match</p>
               </div>
@@ -480,7 +480,7 @@ export default function PathwaysPage() {
                     <div style={{ fontSize: '32px', marginBottom: '12px' }}>🔍</div>
                     <div style={{ fontSize: '16px', fontWeight: 600, marginBottom: '8px' }}>No clinics found near {location}</div>
                     <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', marginBottom: '20px' }}>Try a broader location (e.g. city name) or check the telehealth tab for virtual care options.</div>
-                    <button onClick={() => setTab('telehealth')} style={{ padding: '10px 22px', borderRadius: '100px', background: 'rgba(109,145,151,0.1)', border: '1px solid rgba(109,145,151,0.25)', color: 'var(--accent)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>
+                    <button onClick={() => setTab('telehealth')} style={{ padding: '10px 22px', borderRadius: '100px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.25)', color: 'var(--accent)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>
                       See telehealth options instead
                     </button>
                   </div>
@@ -494,7 +494,7 @@ export default function PathwaysPage() {
                       )}
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px', flexWrap: 'wrap' }}>
                         <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', flex: 1, minWidth: 0 }}>
-                          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(109,145,151,0.1)', border: '1px solid rgba(109,145,151,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '13px', color: 'var(--accent2)', flexShrink: 0 }}>
+                          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '13px', color: 'var(--accent2)', flexShrink: 0 }}>
                             {c.name.split(' ').map((w: string) => w[0]).slice(0, 2).join('')}
                           </div>
                           <div style={{ minWidth: 0 }}>
@@ -557,13 +557,13 @@ export default function PathwaysPage() {
                         style={{
                           display: 'inline-flex', alignItems: 'center', gap: '8px',
                           padding: '12px 26px', borderRadius: '100px',
-                          background: 'rgba(109,145,151,0.08)', border: '1px solid rgba(109,145,151,0.22)',
+                          background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.22)',
                           color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
                           cursor: 'pointer', fontFamily: 'inherit',
                           transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
                         }}
-                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(109,145,151,0.16)'; (e.currentTarget as HTMLElement).style.transform = 'scale(1.02)' }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(109,145,151,0.08)'; (e.currentTarget as HTMLElement).style.transform = 'scale(1)' }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(110,231,183,0.16)'; (e.currentTarget as HTMLElement).style.transform = 'scale(1.02)' }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(110,231,183,0.08)'; (e.currentTarget as HTMLElement).style.transform = 'scale(1)' }}
                       >
                         See all {clinicResults.length} verified clinics
                         <ArrowRight size={13} strokeWidth={2} />
@@ -616,9 +616,9 @@ export default function PathwaysPage() {
                 <div style={{ textAlign: 'center', marginTop: '8px' }}>
                   <button
                     onClick={() => router.push('/telehealth')}
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px', borderRadius: '100px', background: 'rgba(109,145,151,0.1)', border: '1px solid rgba(109,145,151,0.25)', color: 'var(--accent)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(109,145,151,0.18)' }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(109,145,151,0.1)' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px', borderRadius: '100px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.25)', color: 'var(--accent)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(110,231,183,0.18)' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(110,231,183,0.1)' }}
                   >
                     See all verified telehealth providers <ArrowRight size={13} strokeWidth={2} />
                   </button>
@@ -661,7 +661,7 @@ export default function PathwaysPage() {
       <section style={{ padding: '0 24px 120px' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ borderRadius: '28px', padding: '4px', background: 'linear-gradient(135deg, rgba(109,145,151,0.2), rgba(138,181,188,0.05))' }}>
+            <div style={{ borderRadius: '28px', padding: '4px', background: 'linear-gradient(135deg, rgba(110,231,183,0.2), rgba(167,210,190,0.05))' }}>
               <div style={{ borderRadius: '25px', padding: '60px 52px', background: 'rgba(13,11,30,0.95)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '32px', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05)' }}>
                 <div>
                   <div style={{ ...pill, marginBottom: '16px' }}><Stethoscope size={10} strokeWidth={1.5} /> Can't travel?</div>
@@ -699,8 +699,8 @@ export default function PathwaysPage() {
               { name: 'Anh N.', city: 'San Jose, CA', quote: 'My mother only speaks Vietnamese. The CHW we were connected to spoke her dialect. For the first time in years, she understood her own diagnosis.', care: 'Primary care', time: 'Language matched' },
             ].map((s, i) => (
               <RevealBlock key={s.name} delay={i * 100}>
-                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(109,145,151,0.15), rgba(109,145,151,0.04))', borderRadius: '20px', height: '100%' }}>
-                  <div style={{ background: '#0d1618', borderRadius: '18px', padding: '28px', height: '100%', boxSizing: 'border-box', borderLeft: '3px solid rgba(109,145,151,0.35)' }}>
+                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(110,231,183,0.15), rgba(110,231,183,0.04))', borderRadius: '20px', height: '100%' }}>
+                  <div style={{ background: '#080D1A', borderRadius: '18px', padding: '28px', height: '100%', boxSizing: 'border-box', borderLeft: '3px solid rgba(110,231,183,0.35)' }}>
                     <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, marginBottom: '20px', fontStyle: 'italic' }}>&ldquo;{s.quote}&rdquo;</p>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '8px' }}>
                       <div>
@@ -708,7 +708,7 @@ export default function PathwaysPage() {
                         <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', marginTop: '2px' }}>{s.city}</div>
                       </div>
                       <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(109,145,151,0.08)', border: '1px solid rgba(109,145,151,0.18)', color: 'var(--accent)' }}>{s.care}</span>
+                        <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.18)', color: 'var(--accent)' }}>{s.care}</span>
                         <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(74,222,128,0.06)', border: '1px solid rgba(74,222,128,0.15)', color: '#4ade80' }}>{s.time}</span>
                       </div>
                     </div>
@@ -742,7 +742,7 @@ export default function PathwaysPage() {
             ].map((n, i) => (
               <RevealBlock key={n.name} delay={i * 60}>
                 <div style={{ padding: '20px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', transition: 'border-color 0.25s' }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(109,145,151,0.2)')}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.2)')}
                   onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)')}
                 >
                   <div style={{ fontSize: '22px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.02em', marginBottom: '4px' }}>{n.count}</div>

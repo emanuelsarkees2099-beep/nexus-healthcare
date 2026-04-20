@@ -39,11 +39,11 @@ const QUIZ = [
 ]
 
 const PROGRAMS_BASE = [
-  { name: 'Medicaid', tag: 'Federal', color: '#4ade80', colorBg: 'rgba(74,222,128,0.08)', desc: 'Full health coverage for qualifying low-income adults and families. Covers doctor visits, hospital stays, prescriptions, and more.', savings: '$0 premium · $0–$3 copays', icon: <ShieldCheck size={16} strokeWidth={1.5} />, url: 'https://www.healthcare.gov/medicaid-chip/getting-medicaid-chip/' },
-  { name: 'HRSA Free Clinic Program', tag: 'Federal', color: '#6d9197', colorBg: 'rgba(109,145,151,0.08)', desc: 'Federally funded community health centers required to serve everyone regardless of ability to pay — primary care, dental, mental health.', savings: 'Up to $400/visit covered', icon: <TrendingUp size={16} strokeWidth={1.5} />, url: '/pathways' },
-  { name: 'ACA Marketplace Subsidy', tag: 'Federal', color: '#60a5fa', colorBg: 'rgba(96,165,250,0.08)', desc: 'Premium tax credits that may reduce your health insurance cost to $0–$50/month based on your income.', savings: 'Avg $340/month subsidy', icon: <DollarSign size={16} strokeWidth={1.5} />, url: 'https://www.healthcare.gov/apply-and-enroll/start-enrollment/' },
-  { name: 'NeedyMeds PAP', tag: 'Rx', color: '#f472b6', colorBg: 'rgba(244,114,182,0.08)', desc: 'Manufacturer patient assistance programs that provide brand-name medications at no or low cost for uninsured and low-income patients.', savings: 'Avg $200–$400/month in Rx', icon: <Zap size={16} strokeWidth={1.5} />, url: 'https://www.needymeds.org/pap' },
-  { name: 'State 340B Program', tag: 'State', color: '#fbbf24', colorBg: 'rgba(251,191,36,0.08)', desc: 'Discounted prescription drugs at HRSA-participating clinics for low-income patients — often 25–50% below retail prices.', savings: '25–50% off all medications', icon: <RefreshCw size={16} strokeWidth={1.5} />, url: '/pathways' },
+  { name: 'Medicaid', tag: 'Federal', color: '#4ade80', colorBg: 'rgba(74,222,128,0.08)', desc: 'Full health coverage for qualifying low-income adults and families. Covers doctor visits, hospital stays, prescriptions, and more.', savings: '$0 premium · $0–$3 copays', annualValue: 8400, icon: <ShieldCheck size={16} strokeWidth={1.5} />, url: 'https://www.healthcare.gov/medicaid-chip/getting-medicaid-chip/' },
+  { name: 'HRSA Free Clinic Program', tag: 'Federal', color: 'var(--accent)', colorBg: 'rgba(110,231,183,0.08)', desc: 'Federally funded community health centers required to serve everyone regardless of ability to pay — primary care, dental, mental health.', savings: 'Up to $400/visit covered', annualValue: 1800, icon: <TrendingUp size={16} strokeWidth={1.5} />, url: '/pathways' },
+  { name: 'ACA Marketplace Subsidy', tag: 'Federal', color: '#60a5fa', colorBg: 'rgba(96,165,250,0.08)', desc: 'Premium tax credits that may reduce your health insurance cost to $0–$50/month based on your income.', savings: 'Avg $340/month subsidy', annualValue: 4080, icon: <DollarSign size={16} strokeWidth={1.5} />, url: 'https://www.healthcare.gov/apply-and-enroll/start-enrollment/' },
+  { name: 'NeedyMeds PAP', tag: 'Rx', color: '#f472b6', colorBg: 'rgba(244,114,182,0.08)', desc: 'Manufacturer patient assistance programs that provide brand-name medications at no or low cost for uninsured and low-income patients.', savings: 'Avg $200–$400/month in Rx', annualValue: 3600, icon: <Zap size={16} strokeWidth={1.5} />, url: 'https://www.needymeds.org/pap' },
+  { name: 'State 340B Program', tag: 'State', color: '#fbbf24', colorBg: 'rgba(251,191,36,0.08)', desc: 'Discounted prescription drugs at HRSA-participating clinics for low-income patients — often 25–50% below retail prices.', savings: '25–50% off all medications', annualValue: 600, icon: <RefreshCw size={16} strokeWidth={1.5} />, url: '/pathways' },
 ]
 
 // Real 2024 Federal Poverty Level thresholds
@@ -131,6 +131,89 @@ const HOW_STEPS = [
   { n: '03', title: 'Apply with guided help', body: 'Each match comes with a direct link and pre-filled form instructions to reduce friction.' },
 ]
 
+/* ─── savings reveal ──────────────────────────────── */
+function SavingsReveal({ programs }: { programs: Array<{ name: string; color: string; annualValue: number; match: number }> }) {
+  const [revealed, setRevealed] = useState(false)
+  const [barWidths, setBarWidths] = useState<number[]>([])
+  const [totalCount, setTotalCount] = useState(0)
+  const ref = useRef<HTMLDivElement>(null)
+
+  const total = programs.reduce((sum, p) => sum + Math.round((p.annualValue * p.match) / 100), 0)
+  const maxVal = Math.max(...programs.map(p => Math.round((p.annualValue * p.match) / 100)), 1)
+
+  useEffect(() => {
+    const el = ref.current; if (!el) return
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setRevealed(true); obs.disconnect() }
+    }, { threshold: 0.3 })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!revealed) return
+    // stagger bar widths
+    programs.forEach((p, i) => {
+      setTimeout(() => {
+        const val = Math.round((p.annualValue * p.match) / 100)
+        setBarWidths(prev => { const n = [...prev]; n[i] = (val / maxVal) * 100; return n })
+      }, 200 + i * 120)
+    })
+    // animate total counter
+    const dur = 2000
+    const start = performance.now()
+    const step = (now: number) => {
+      const progress = Math.min((now - start) / dur, 1)
+      const ease = 1 - Math.pow(1 - progress, 4)
+      setTotalCount(Math.floor(ease * total))
+      if (progress < 1) requestAnimationFrame(step)
+    }
+    setTimeout(() => requestAnimationFrame(step), 600)
+  }, [revealed, total, maxVal, programs])
+
+  return (
+    <div ref={ref} style={{ borderRadius: '24px', padding: '3px', background: 'linear-gradient(135deg, rgba(110,231,183,0.3), rgba(251,191,36,0.15), transparent)', marginBottom: '40px', opacity: revealed ? 1 : 0, transform: revealed ? 'none' : 'translateY(24px)', transition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)' }}>
+      <div style={{ borderRadius: '22px', padding: '36px 32px', background: 'rgba(8,10,20,0.98)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.04)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+          <TrendingUp size={14} strokeWidth={1.5} style={{ color: 'var(--accent)' }} />
+          <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)' }}>Based on your answers…</span>
+        </div>
+        <h3 style={{ fontSize: 'clamp(16px, 2.5vw, 20px)', fontWeight: 700, marginBottom: '28px', color: 'rgba(255,255,255,0.75)', lineHeight: 1.3 }}>You likely qualify for:</h3>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '32px' }}>
+          {programs.map((p, i) => {
+            const val = Math.round((p.annualValue * p.match) / 100)
+            return (
+              <div key={p.name}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>{p.name}</span>
+                  <span style={{ fontSize: '14px', fontWeight: 700, color: p.color, fontVariantNumeric: 'tabular-nums', fontFamily: 'var(--font-mono, monospace)' }}>
+                    ${val.toLocaleString()}/yr
+                  </span>
+                </div>
+                <div style={{ height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: `${barWidths[i] ?? 0}%`, background: `linear-gradient(90deg, ${p.color}cc, ${p.color})`, borderRadius: '6px', transition: 'width 1.1s cubic-bezier(0.16,1,0.3,1)', boxShadow: `0 0 8px ${p.color}40` }} />
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Total reveal box */}
+        <div style={{ borderRadius: '16px', padding: '28px', background: 'rgba(110,231,183,0.04)', border: '1px solid rgba(110,231,183,0.15)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '200px', height: '60px', background: 'radial-gradient(ellipse, rgba(110,231,183,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
+          <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: '12px' }}>Total Unclaimed Savings</div>
+          <div style={{ fontSize: 'clamp(44px, 8vw, 72px)', fontWeight: 800, letterSpacing: '-0.04em', color: 'var(--accent)', lineHeight: 1, fontVariantNumeric: 'tabular-nums', fontFamily: 'var(--font-mono, monospace)', marginBottom: '8px' }}>
+            ${totalCount.toLocaleString()}
+          </div>
+          <div style={{ fontSize: '15px', color: 'rgba(255,255,255,0.4)', marginBottom: '4px' }}>per year</div>
+          <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.28)', fontStyle: 'italic' }}>you're leaving on the table</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /* ─── match bar ───────────────────────────────────── */
 function MatchBar({ pct, color }: { pct: number; color: string }) {
   const [w, setW] = useState(0)
@@ -157,18 +240,18 @@ function ProgramsFAQ() {
     <section ref={ref} style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)', opacity: visible ? 1 : 0, transform: visible ? 'none' : 'translateY(28px)', transition: 'opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1)' }}>
       <div style={{ maxWidth: '700px', margin: '0 auto' }}>
         <div style={{ marginBottom: '48px' }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(109,145,151,0.08)', color: 'var(--accent)', border: '1px solid rgba(109,145,151,0.18)', marginBottom: '20px' }}>Common questions</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(110,231,183,0.08)', color: 'var(--accent)', border: '1px solid rgba(110,231,183,0.18)', marginBottom: '20px' }}>Common questions</span>
           <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.15 }}>Program & eligibility FAQs</h2>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           {PROG_FAQ.map((item, i) => (
-            <div key={i} style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid', borderColor: open === i ? 'rgba(109,145,151,0.25)' : 'rgba(255,255,255,0.06)', background: open === i ? 'rgba(109,145,151,0.04)' : 'transparent', transition: 'border-color 0.25s, background 0.25s', marginBottom: '4px' }}>
+            <div key={i} style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid', borderColor: open === i ? 'rgba(110,231,183,0.25)' : 'rgba(255,255,255,0.06)', background: open === i ? 'rgba(110,231,183,0.04)' : 'transparent', transition: 'border-color 0.25s, background 0.25s', marginBottom: '4px' }}>
               <button
                 onClick={() => setOpen(open === i ? null : i)}
                 style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 24px', background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontFamily: 'inherit', textAlign: 'left', gap: '16px' }}
               >
                 <span style={{ fontSize: '15px', fontWeight: 500, lineHeight: 1.4 }}>{item.q}</span>
-                <span style={{ flexShrink: 0, width: '20px', height: '20px', borderRadius: '50%', background: open === i ? 'rgba(109,145,151,0.15)' : 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.3s, background 0.25s', transform: open === i ? 'rotate(45deg)' : 'none', color: open === i ? 'var(--accent)' : 'rgba(255,255,255,0.4)', fontSize: '16px', lineHeight: 1 }}>+</span>
+                <span style={{ flexShrink: 0, width: '20px', height: '20px', borderRadius: '50%', background: open === i ? 'rgba(110,231,183,0.15)' : 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.3s, background 0.25s', transform: open === i ? 'rotate(45deg)' : 'none', color: open === i ? 'var(--accent)' : 'rgba(255,255,255,0.4)', fontSize: '16px', lineHeight: 1 }}>+</span>
               </button>
               <div style={{ maxHeight: open === i ? '300px' : '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.16,1,0.3,1)' }}>
                 <p style={{ padding: '0 24px 20px', fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.75, margin: 0 }}>{item.a}</p>
@@ -189,14 +272,14 @@ export default function ProgramsPage() {
   const [answers, setAnswers]   = useState<string[]>([])
   const [selected, setSelected] = useState('')
   const [running, setRunning]   = useState(false)
-  const [matchedPrograms, setMatchedPrograms] = useState(PROGRAMS_BASE.map(p => ({ ...p, match: 0 })))
+  const [matchedPrograms, setMatchedPrograms] = useState<Array<typeof PROGRAMS_BASE[0] & { match: number }>>(PROGRAMS_BASE.map(p => ({ ...p, match: 0 })))
   const resultsRef = useRef<HTMLDivElement>(null)
 
   const pill: React.CSSProperties = {
     display: 'inline-flex', alignItems: 'center', gap: '6px',
     padding: '4px 12px', borderRadius: '100px',
     fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-    background: 'rgba(109,145,151,0.08)', color: 'var(--accent)', border: '1px solid rgba(109,145,151,0.18)',
+    background: 'rgba(110,231,183,0.08)', color: 'var(--accent)', border: '1px solid rgba(110,231,183,0.18)',
   }
 
   const card: React.CSSProperties = {
@@ -398,11 +481,14 @@ export default function ProgramsPage() {
               ))}
             </div>
 
+            {/* savings reveal */}
+            <SavingsReveal programs={matchedPrograms.filter(p => p.match >= 20).map(p => ({ name: p.name, color: p.color, annualValue: p.annualValue, match: p.match }))} />
+
             {/* cost estimator */}
             <RevealBlock>
               <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '20px', padding: '32px', marginBottom: '40px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
-                  <div style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'rgba(109,145,151,0.1)', border: '1px solid rgba(109,145,151,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}><DollarSign size={15} strokeWidth={1.5} /></div>
+                  <div style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}><DollarSign size={15} strokeWidth={1.5} /></div>
                   <div>
                     <h3 style={{ fontWeight: 600, fontSize: '16px' }}>Cost estimator</h3>
                     <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>What you'd pay vs. what you'd pay with your top programs</p>
@@ -525,16 +611,16 @@ export default function ProgramsPage() {
                 </div>
 
                 {/* Immediate access */}
-                <div style={{ padding: '20px', background: 'rgba(109,145,151,0.06)', border: '1px solid rgba(109,145,151,0.2)', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+                <div style={{ padding: '20px', background: 'rgba(110,231,183,0.06)', border: '1px solid rgba(110,231,183,0.2)', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>Need care right now?</div>
                     <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.6 }}>FQHCs cannot turn you away regardless of insurance status or ability to pay. Walk in today.</div>
                   </div>
                   <button
                     onClick={() => router.push('/search')}
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '100px', background: 'rgba(109,145,151,0.15)', border: '1px solid rgba(109,145,151,0.3)', color: '#6d9197', fontSize: '13px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' as const, transition: 'background 0.2s' }}
-                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(109,145,151,0.25)')}
-                    onMouseLeave={e => (e.currentTarget.style.background = 'rgba(109,145,151,0.15)')}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '100px', background: 'rgba(110,231,183,0.15)', border: '1px solid rgba(110,231,183,0.3)', color: 'var(--accent)', fontSize: '13px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' as const, transition: 'background 0.2s' }}
+                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(110,231,183,0.25)')}
+                    onMouseLeave={e => (e.currentTarget.style.background = 'rgba(110,231,183,0.15)')}
                   >
                     Find free clinic <ArrowRight size={12} strokeWidth={2} />
                   </button>
@@ -549,7 +635,7 @@ export default function ProgramsPage() {
       <section style={{ padding: '60px 24px 120px' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ borderRadius: '28px', padding: '3px', background: 'linear-gradient(135deg, rgba(74,222,128,0.25), rgba(109,145,151,0.1))' }}>
+            <div style={{ borderRadius: '28px', padding: '3px', background: 'linear-gradient(135deg, rgba(74,222,128,0.25), rgba(110,231,183,0.1))' }}>
               <div style={{ borderRadius: '26px', padding: '56px 52px', background: 'rgba(10,9,22,0.97)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '28px', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.04)' }}>
                 <div>
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(74,222,128,0.08)', color: '#4ade80', border: '1px solid rgba(74,222,128,0.18)', marginBottom: '16px' }}><Sparkles size={10} strokeWidth={1.5} /> Free & private</span>
@@ -575,7 +661,7 @@ export default function ProgramsPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(109,145,151,0.08)', color: 'var(--accent)', border: '1px solid rgba(109,145,151,0.18)', marginBottom: '20px' }}><ReceiptText size={10} strokeWidth={1.5} /> Application guide</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(110,231,183,0.08)', color: 'var(--accent)', border: '1px solid rgba(110,231,183,0.18)', marginBottom: '20px' }}><ReceiptText size={10} strokeWidth={1.5} /> Application guide</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.15, maxWidth: '520px' }}>How to apply for each program</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', marginTop: '16px', maxWidth: '440px', lineHeight: 1.65 }}>Every program has a different process. Here's what to expect — and what to bring.</p>
             </div>
@@ -603,7 +689,7 @@ export default function ProgramsPage() {
               },
             ].map((prog, idx) => (
               <RevealBlock key={prog.name} delay={idx * 80}>
-                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(109,145,151,0.15), rgba(109,145,151,0.04))', borderRadius: '20px' }}>
+                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(110,231,183,0.15), rgba(110,231,183,0.04))', borderRadius: '20px' }}>
                   <div style={{ background: '#0d1618', borderRadius: '18px', padding: '28px 32px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
                       <div>
@@ -617,12 +703,12 @@ export default function ProgramsPage() {
                     <ol style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                       {prog.steps.map((step, si) => (
                         <li key={si} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                          <span style={{ flexShrink: 0, width: '22px', height: '22px', borderRadius: '50%', background: 'rgba(109,145,151,0.1)', border: '1px solid rgba(109,145,151,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 600, color: 'var(--accent)', marginTop: '1px' }}>{si + 1}</span>
+                          <span style={{ flexShrink: 0, width: '22px', height: '22px', borderRadius: '50%', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 600, color: 'var(--accent)', marginTop: '1px' }}>{si + 1}</span>
                           <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.6 }}>{step}</span>
                         </li>
                       ))}
                     </ol>
-                    <div style={{ padding: '14px 16px', background: 'rgba(109,145,151,0.04)', borderRadius: '10px', borderLeft: '2px solid rgba(109,145,151,0.3)', fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>
+                    <div style={{ padding: '14px 16px', background: 'rgba(110,231,183,0.04)', borderRadius: '10px', borderLeft: '2px solid rgba(110,231,183,0.3)', fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>
                       <span style={{ color: 'var(--accent)', fontWeight: 600 }}>Tip: </span>{prog.tip}
                     </div>
                   </div>
@@ -638,7 +724,7 @@ export default function ProgramsPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(109,145,151,0.08)', color: 'var(--accent)', border: '1px solid rgba(109,145,151,0.18)', marginBottom: '20px' }}><Sparkles size={10} strokeWidth={1.5} /> Results</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(110,231,183,0.08)', color: 'var(--accent)', border: '1px solid rgba(110,231,183,0.18)', marginBottom: '20px' }}><Sparkles size={10} strokeWidth={1.5} /> Results</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.15, maxWidth: '520px' }}>Programs that actually changed things</h2>
             </div>
           </RevealBlock>
@@ -650,10 +736,10 @@ export default function ProgramsPage() {
               { name: 'Lin C.',  city: 'Los Angeles, CA', program: 'ACA Subsidy', saved: '$290/month', quote: 'I thought healthcare.gov was too complicated. The NEXUS guide walked me through every step and now I have coverage for $0 a month.' },
             ].map((t, i) => (
               <RevealBlock key={t.name} delay={i * 100}>
-                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(109,145,151,0.15), rgba(109,145,151,0.04))', borderRadius: '20px', height: '100%' }}>
+                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(110,231,183,0.15), rgba(110,231,183,0.04))', borderRadius: '20px', height: '100%' }}>
                   <div style={{ background: '#0d1618', borderRadius: '18px', padding: '28px', height: '100%', boxSizing: 'border-box' }}>
                     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
-                      <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(109,145,151,0.08)', border: '1px solid rgba(109,145,151,0.18)', color: 'var(--accent)' }}>{t.program}</span>
+                      <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.18)', color: 'var(--accent)' }}>{t.program}</span>
                       <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(74,222,128,0.06)', border: '1px solid rgba(74,222,128,0.15)', color: '#4ade80' }}>Saved {t.saved}</span>
                     </div>
                     <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, marginBottom: '20px', fontStyle: 'italic' }}>&ldquo;{t.quote}&rdquo;</p>

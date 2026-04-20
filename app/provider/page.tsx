@@ -47,18 +47,18 @@ const pill: React.CSSProperties = {
   display: 'inline-flex', alignItems: 'center', gap: '6px',
   padding: '4px 12px', borderRadius: '100px',
   fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-  background: 'rgba(109,145,151,0.08)', color: '#6d9197',
-  border: '1px solid rgba(109,145,151,0.18)',
+  background: 'rgba(110,231,183,0.08)', color: 'var(--accent)',
+  border: '1px solid rgba(110,231,183,0.18)',
 }
 
 const card: React.CSSProperties = {
   padding: '2px',
-  background: 'linear-gradient(135deg, rgba(109,145,151,0.2), rgba(109,145,151,0.04))',
+  background: 'linear-gradient(135deg, rgba(110,231,183,0.2), rgba(110,231,183,0.04))',
   borderRadius: '20px',
 }
 
 const cardInner: React.CSSProperties = {
-  background: '#0d1618',
+  background: '#080D1A',
   borderRadius: '18px',
   padding: '28px',
   height: '100%',
@@ -140,13 +140,13 @@ export default function ProviderPage() {
     <AppShell>
       {/* ── HERO ── */}
       <section style={{ minHeight: '88dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '100px 24px 60px', position: 'relative', overflow: 'hidden' }}>
-        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(109,145,151,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(110,231,183,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
         <div style={{ ...pill, marginBottom: '24px' }}><Stethoscope size={10} strokeWidth={1.5} /> For Healthcare Providers</div>
 
         <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.08, marginBottom: '24px', maxWidth: '800px' }}>
           {TITLE.map((w, i) => (
-            <span key={i} style={{ display: 'inline-block', marginRight: w === 'meet' || w === 'the' || w === 'community' || w === 'they' ? '0.25em' : '0.25em', opacity: words[i] ? 1 : 0, transform: words[i] ? 'translateY(0)' : 'translateY(18px)', transition: 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)', color: w === 'community' ? '#6d9197' : 'inherit' }}>{w}</span>
+            <span key={i} style={{ display: 'inline-block', marginRight: w === 'meet' || w === 'the' || w === 'community' || w === 'they' ? '0.25em' : '0.25em', opacity: words[i] ? 1 : 0, transform: words[i] ? 'translateY(0)' : 'translateY(18px)', transition: 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)', color: w === 'community' ? 'var(--accent)' : 'inherit' }}>{w}</span>
           ))}
         </h1>
 
@@ -156,8 +156,8 @@ export default function ProviderPage() {
 
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '56px' }}>
           {[['2,400+', 'partner clinics'], ['$18M', 'revenue recovered'], ['94%', 'patient retention']].map(([v, l]) => (
-            <div key={l} style={{ padding: '10px 20px', background: 'rgba(109,145,151,0.07)', border: '1px solid rgba(109,145,151,0.18)', borderRadius: '100px', textAlign: 'center' }}>
-              <div style={{ fontSize: '18px', fontWeight: 700, color: '#6d9197', letterSpacing: '-0.02em' }}>{v}</div>
+            <div key={l} style={{ padding: '10px 20px', background: 'rgba(110,231,183,0.07)', border: '1px solid rgba(110,231,183,0.18)', borderRadius: '100px', textAlign: 'center' }}>
+              <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.02em' }}>{v}</div>
               <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '2px' }}>{l}</div>
             </div>
           ))}
@@ -179,7 +179,7 @@ export default function ProviderPage() {
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '56px' }}>
               <div style={{ ...pill, marginBottom: '20px' }}><BarChart2 size={10} strokeWidth={1.5} /> Live dashboard</div>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Your clinic's performance,<br /><em style={{ fontStyle: 'normal', color: '#6d9197' }}>at a glance</em></h2>
+              <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Your clinic's performance,<br /><em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>at a glance</em></h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', marginTop: '16px', maxWidth: '400px', margin: '16px auto 0', lineHeight: 1.65 }}>Every metric your team needs — from patient volume to revenue recovery — in one real-time dashboard.</p>
             </div>
           </RevealBlock>
@@ -189,7 +189,7 @@ export default function ProviderPage() {
               <RevealBlock key={m.label} delay={i * 80}>
                 <div style={card}>
                   <div style={cardInner}>
-                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(109,145,151,0.1)', border: '1px solid rgba(109,145,151,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6d9197', marginBottom: '16px' }}>{m.icon}</div>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', marginBottom: '16px' }}>{m.icon}</div>
                     <div style={{ fontSize: '36px', fontWeight: 800, color: '#eef4f5', letterSpacing: '-0.03em', lineHeight: 1, marginBottom: '8px' }}>
                       <Counter target={m.value} suffix={m.suffix} />
                     </div>
@@ -216,10 +216,10 @@ export default function ProviderPage() {
             {STEPS.map((s, i) => (
               <RevealBlock key={s.n} delay={i * 80}>
                 <div style={{ padding: '28px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '18px', height: '100%', boxSizing: 'border-box', transition: 'border-color 0.25s' }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(109,145,151,0.22)')}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.22)')}
                   onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)')}
                 >
-                  <div style={{ fontSize: '11px', fontWeight: 700, color: '#6d9197', letterSpacing: '0.12em', marginBottom: '16px' }}>{s.n}</div>
+                  <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.12em', marginBottom: '16px' }}>{s.n}</div>
                   <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '10px', lineHeight: 1.35 }}>{s.title}</h3>
                   <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.7, margin: 0 }}>{s.body}</p>
                 </div>
@@ -244,7 +244,7 @@ export default function ProviderPage() {
               <RevealBlock key={f.title} delay={i * 80}>
                 <div style={card}>
                   <div style={{ ...cardInner, minHeight: '220px' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '11px', background: 'rgba(109,145,151,0.1)', border: '1px solid rgba(109,145,151,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6d9197', marginBottom: '20px' }}>{f.icon}</div>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '11px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', marginBottom: '20px' }}>{f.icon}</div>
                     <h3 style={{ fontSize: '17px', fontWeight: 700, marginBottom: '10px', lineHeight: 1.3 }}>{f.title}</h3>
                     <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.75, marginBottom: '16px' }}>{f.desc}</p>
                     <span style={{ ...pill, fontSize: '10px', padding: '3px 10px' }}>{f.tag}</span>
@@ -289,7 +289,7 @@ export default function ProviderPage() {
                   <label style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.5)' }}>Clinic Type</label>
                   <select value={form.clinicType} onChange={e => setForm(prev => ({ ...prev, clinicType: e.target.value }))}
                     style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '9px', padding: '11px 14px', color: form.clinicType ? '#eef4f5' : 'rgba(255,255,255,0.3)', fontSize: '14px', fontFamily: 'inherit', cursor: 'pointer', outline: 'none', transition: 'border-color 0.2s, box-shadow 0.2s' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(109,145,151,0.45)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(109,145,151,0.08)' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(110,231,183,0.45)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(110,231,183,0.08)' }}
                     onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'none' }}
                   >
                     <option value="">Select clinic type…</option>
@@ -300,9 +300,9 @@ export default function ProviderPage() {
                 {submitError && (
                   <p style={{ fontSize: '13px', color: '#f87171', background: 'rgba(248,113,113,0.08)', border: '1px solid rgba(248,113,113,0.2)', borderRadius: '8px', padding: '10px 14px', margin: 0 }}>{submitError}</p>
                 )}
-                <button type="submit" disabled={submitting} style={{ marginTop: '8px', padding: '15px 28px', borderRadius: '12px', background: submitting ? 'rgba(109,145,151,0.5)' : '#6d9197', color: '#07070F', border: 'none', cursor: submitting ? 'not-allowed' : 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', transition: 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s', boxShadow: '0 4px 20px rgba(109,145,151,0.3)' }}
-                  onMouseEnter={e => { if (!submitting) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(109,145,151,0.45)' } }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(109,145,151,0.3)' }}
+                <button type="submit" disabled={submitting} style={{ marginTop: '8px', padding: '15px 28px', borderRadius: '12px', background: submitting ? 'rgba(110,231,183,0.5)' : 'var(--accent)', color: '#07070F', border: 'none', cursor: submitting ? 'not-allowed' : 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', transition: 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s', boxShadow: '0 4px 20px rgba(110,231,183,0.3)' }}
+                  onMouseEnter={e => { if (!submitting) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(110,231,183,0.45)' } }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(110,231,183,0.3)' }}
                 >
                   {submitting ? 'Submitting…' : 'Submit application →'}
                 </button>
@@ -328,11 +328,11 @@ function ProviderField({ label, placeholder, value, onChange }: { label: string;
         onBlur={() => setFocused(false)}
         style={{
           width: '100%', background: 'rgba(255,255,255,0.03)',
-          border: `1px solid ${focused ? 'rgba(109,145,151,0.45)' : 'rgba(255,255,255,0.08)'}`,
-          boxShadow: focused ? '0 0 0 3px rgba(109,145,151,0.08)' : 'none',
+          border: `1px solid ${focused ? 'rgba(110,231,183,0.45)' : 'rgba(255,255,255,0.08)'}`,
+          boxShadow: focused ? '0 0 0 3px rgba(110,231,183,0.08)' : 'none',
           borderRadius: '9px', padding: '11px 14px',
           color: '#eef4f5', fontSize: '14px', fontFamily: 'inherit',
-          outline: 'none', boxSizing: 'border-box', caretColor: '#6d9197',
+          outline: 'none', boxSizing: 'border-box', caretColor: 'var(--accent)',
           transition: 'border-color 0.2s, box-shadow 0.2s',
         }}
       />

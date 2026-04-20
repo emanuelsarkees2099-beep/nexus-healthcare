@@ -75,7 +75,7 @@ function BarChart({ data }: { data: { month: string; value: number; max: number 
             <div style={{
               width: '100%',
               height: visible ? `${(d.value / d.max) * 100}%` : '0%',
-              background: `linear-gradient(180deg, var(--accent) 0%, rgba(109,145,151,0.4) 100%)`,
+              background: `linear-gradient(180deg, var(--accent) 0%, rgba(110,231,183,0.4) 100%)`,
               borderRadius: '4px 4px 0 0',
               transition: `height 0.9s cubic-bezier(0.16,1,0.3,1) ${i * 80}ms`,
             }} />
@@ -118,7 +118,7 @@ const RESEARCH = [
     date: 'March 2025',
     headline: 'Free clinic routing prevents $15M in preventable ER costs annually',
     method: 'Retrospective analysis of 12,400 NEXUS user outcomes over 18 months, matched against regional ER admission data.',
-    color: '#6d9197',
+    color: 'var(--accent)',
   },
   {
     institution: 'Harvard School of Public Health',
@@ -143,7 +143,7 @@ const TESTIMONIALS = [
 ]
 
 const CARE_BREAKDOWN = [
-  { label: 'Primary care',   pct: 38, color: '#6d9197' },
+  { label: 'Primary care',   pct: 38, color: 'var(--accent)' },
   { label: 'Mental health',  pct: 22, color: '#5a8a90' },
   { label: 'Dental',         pct: 16, color: '#8ab5bc' },
   { label: 'Prescriptions',  pct: 13, color: '#3d7a82' },
@@ -181,9 +181,9 @@ function OutcomeForm() {
             <button key={c} onClick={() => setCare(c)}
               style={{
                 padding: '8px 16px', borderRadius: '100px', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit',
-                background: care === c ? 'rgba(109,145,151,0.15)' : 'rgba(255,255,255,0.04)',
+                background: care === c ? 'rgba(110,231,183,0.15)' : 'rgba(255,255,255,0.04)',
                 color: care === c ? 'var(--accent2)' : 'rgba(255,255,255,0.5)',
-                border: `1px solid ${care === c ? 'rgba(109,145,151,0.35)' : 'rgba(255,255,255,0.07)'}`,
+                border: `1px solid ${care === c ? 'rgba(110,231,183,0.35)' : 'rgba(255,255,255,0.07)'}`,
                 transition: 'all 0.22s cubic-bezier(0.16,1,0.3,1)',
               }}
             >{c}</button>
@@ -211,7 +211,7 @@ function OutcomeForm() {
         <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.38)', marginBottom: '10px' }}>What resolved or didn't resolve?</label>
         <div style={{
           borderRadius: '12px', padding: '1.5px',
-          background: focused ? 'linear-gradient(135deg, rgba(109,145,151,0.5), rgba(138,181,188,0.15))' : 'rgba(255,255,255,0.07)',
+          background: focused ? 'linear-gradient(135deg, rgba(110,231,183,0.5), rgba(167,210,190,0.15))' : 'rgba(255,255,255,0.07)',
           transition: 'background 0.3s',
         }}>
           <textarea
@@ -265,7 +265,7 @@ export default function OutcomesPage() {
     display: 'inline-flex', alignItems: 'center', gap: '6px',
     padding: '4px 12px', borderRadius: '100px',
     fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-    background: 'rgba(109,145,151,0.08)', color: 'var(--accent)', border: '1px solid rgba(109,145,151,0.18)',
+    background: 'rgba(110,231,183,0.08)', color: 'var(--accent)', border: '1px solid rgba(110,231,183,0.18)',
   }
 
   const card: React.CSSProperties = {
@@ -277,7 +277,7 @@ export default function OutcomesPage() {
 
       {/* ── HERO ─────────────────────────────────────── */}
       <section style={{ minHeight: '85dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '80px 24px 60px', position: 'relative' }}>
-        <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: '700px', height: '400px', background: 'radial-gradient(ellipse, rgba(109,145,151,0.10) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: '700px', height: '400px', background: 'radial-gradient(ellipse, rgba(110,231,183,0.10) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
         <div style={{ maxWidth: '740px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}>
@@ -431,7 +431,7 @@ export default function OutcomesPage() {
             {TESTIMONIALS.map((t, i) => (
               <RevealBlock key={t.name} delay={i * 90}>
                 <div style={{ ...card, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <div style={{ fontSize: '13px', color: 'rgba(109,145,151,0.6)', marginBottom: '14px' }}>
+                  <div style={{ fontSize: '13px', color: 'rgba(110,231,183,0.6)', marginBottom: '14px' }}>
                     {'★'.repeat(5)}
                   </div>
                   <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, flexGrow: 1, marginBottom: '20px' }}>"{t.quote}"</p>
@@ -440,7 +440,7 @@ export default function OutcomesPage() {
                       <div style={{ fontSize: '14px', fontWeight: 600 }}>{t.name}</div>
                       <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)' }}>{t.loc}</div>
                     </div>
-                    <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(109,145,151,0.08)', color: 'var(--accent)', border: '1px solid rgba(109,145,151,0.18)' }}>{t.care}</span>
+                    <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(110,231,183,0.08)', color: 'var(--accent)', border: '1px solid rgba(110,231,183,0.18)' }}>{t.care}</span>
                   </div>
                 </div>
               </RevealBlock>

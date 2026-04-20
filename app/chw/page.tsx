@@ -192,7 +192,7 @@ function FormField({ label, value, onChange, placeholder }: { label: string; val
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
       <label style={{ fontSize: '12px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.38)' }}>{label}</label>
-      <div style={{ borderRadius: '11px', padding: '1.5px', background: focused ? 'linear-gradient(135deg, rgba(109,145,151,0.45), rgba(138,181,188,0.15))' : 'rgba(255,255,255,0.07)', transition: 'background 0.3s' }}>
+      <div style={{ borderRadius: '11px', padding: '1.5px', background: focused ? 'linear-gradient(135deg, rgba(110,231,183,0.45), rgba(167,210,190,0.15))' : 'rgba(255,255,255,0.07)', transition: 'background 0.3s' }}>
         <input
           value={value}
           onChange={e => onChange(e.target.value)}
@@ -231,11 +231,12 @@ export default function CHWPage() {
     display: 'inline-flex', alignItems: 'center', gap: '6px',
     padding: '4px 12px', borderRadius: '100px',
     fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-    background: 'rgba(109,145,151,0.08)', color: 'var(--accent)', border: '1px solid rgba(109,145,151,0.18)',
+    background: 'rgba(110,231,183,0.08)', color: 'var(--accent)', border: '1px solid rgba(110,231,183,0.18)',
   }
 
   const card: React.CSSProperties = {
-    background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '28px',
+    background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', padding: '28px',
+    transition: 'border-color 0.2s, background 0.2s',
   }
 
   return (
@@ -243,7 +244,8 @@ export default function CHWPage() {
 
       {/* ── HERO ─────────────────────────────────────── */}
       <section style={{ minHeight: '85dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '80px 24px 60px', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)', width: '600px', height: '400px', background: 'radial-gradient(ellipse, rgba(109,145,151,0.11) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)', width: '800px', height: '500px', background: 'radial-gradient(ellipse, rgba(110,231,183,0.13) 0%, rgba(167,139,250,0.05) 50%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '40%', left: '20%', width: '300px', height: '300px', background: 'radial-gradient(ellipse, rgba(251,191,36,0.06) 0%, transparent 60%)', pointerEvents: 'none' }} />
 
         <div style={{ maxWidth: '740px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}>
@@ -290,7 +292,7 @@ export default function CHWPage() {
                     </div>
                   )}
                   <div style={{ ...card, padding: '24px' }}>
-                    <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(109,145,151,0.1)', border: '1px solid rgba(109,145,151,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', marginBottom: '16px' }}>{s.icon}</div>
+                    <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', marginBottom: '16px' }}>{s.icon}</div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.2)', fontWeight: 600, letterSpacing: '0.1em', marginBottom: '8px' }}>{s.n}</div>
                     <h3 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '8px', lineHeight: 1.3 }}>{s.title}</h3>
                     <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.6 }}>{s.body}</p>
@@ -313,7 +315,7 @@ export default function CHWPage() {
                 <div style={{
                   display: 'flex', alignItems: 'center', gap: '10px',
                   borderRadius: '12px', padding: '1.5px', maxWidth: '480px',
-                  background: searchFocused ? 'linear-gradient(135deg, rgba(109,145,151,0.4), rgba(138,181,188,0.1))' : 'rgba(255,255,255,0.07)',
+                  background: searchFocused ? 'linear-gradient(135deg, rgba(110,231,183,0.4), rgba(167,210,190,0.1))' : 'rgba(255,255,255,0.07)',
                   transition: 'background 0.3s',
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: searchFocused ? 'rgba(13,11,30,0.97)' : 'rgba(13,11,30,0.85)', borderRadius: '10.5px', padding: '10px 14px', width: '100%', transition: 'background 0.3s' }}>
@@ -335,9 +337,9 @@ export default function CHWPage() {
                   <button key={l} onClick={() => setLangFilter(l)}
                     style={{
                       padding: '7px 14px', borderRadius: '100px', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit',
-                      background: langFilter === l ? 'rgba(109,145,151,0.15)' : 'rgba(255,255,255,0.04)',
+                      background: langFilter === l ? 'rgba(110,231,183,0.15)' : 'rgba(255,255,255,0.04)',
                       color: langFilter === l ? 'var(--accent2)' : 'rgba(255,255,255,0.5)',
-                      border: `1px solid ${langFilter === l ? 'rgba(109,145,151,0.35)' : 'rgba(255,255,255,0.07)'}`,
+                      border: `1px solid ${langFilter === l ? 'rgba(110,231,183,0.35)' : 'rgba(255,255,255,0.07)'}`,
                       transition: 'all 0.22s cubic-bezier(0.16,1,0.3,1)',
                     }}
                   >{l}</button>
@@ -356,11 +358,12 @@ export default function CHWPage() {
                 <RevealBlock key={chw.name} delay={i * 60}>
                   <div style={{ ...card, display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                      <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'rgba(109,145,151,0.12)', border: '1px solid rgba(109,145,151,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '14px', color: 'var(--accent2)', flexShrink: 0 }}>{chw.init}</div>
+                      <div style={{ width: '46px', height: '46px', borderRadius: '50%', background: `linear-gradient(135deg, ${['rgba(110,231,183,0.25)','rgba(167,139,250,0.25)','rgba(251,191,36,0.25)','rgba(248,113,113,0.25)'][i % 4]}, ${['rgba(110,231,183,0.08)','rgba(167,139,250,0.08)','rgba(251,191,36,0.08)','rgba(248,113,113,0.08)'][i % 4]})`, border: `1px solid ${['rgba(110,231,183,0.3)','rgba(167,139,250,0.3)','rgba(251,191,36,0.3)','rgba(248,113,113,0.3)'][i % 4]}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '14px', color: ['var(--accent)','#a78bfa','#fbbf24','#f87171'][i % 4], flexShrink: 0 }}>{chw.init}</div>
                       <div style={{ flex: 1 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
                           <span style={{ fontWeight: 600, fontSize: '15px' }}>{chw.name}</span>
-                          <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '100px', background: chw.available ? 'rgba(74,222,128,0.1)' : 'rgba(255,255,255,0.05)', color: chw.available ? '#4ade80' : 'rgba(255,255,255,0.3)', border: `1px solid ${chw.available ? 'rgba(74,222,128,0.25)' : 'rgba(255,255,255,0.08)'}` }}>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', padding: '3px 9px', borderRadius: '100px', background: chw.available ? 'rgba(110,231,183,0.1)' : 'rgba(255,255,255,0.05)', color: chw.available ? 'var(--accent)' : 'rgba(255,255,255,0.3)', border: `1px solid ${chw.available ? 'rgba(110,231,183,0.25)' : 'rgba(255,255,255,0.08)'}` }}>
+                            {chw.available && <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--accent)', animation: 'open-pulse 2s ease-in-out infinite', display: 'inline-block' }} />}
                             {chw.available ? 'Available' : 'Busy'}
                           </span>
                         </div>
@@ -375,7 +378,7 @@ export default function CHWPage() {
                     </div>
 
                     <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                      {chw.languages.map(l => <span key={l} style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '100px', background: 'rgba(109,145,151,0.06)', border: '1px solid rgba(109,145,151,0.14)', color: 'rgba(109,145,151,0.7)' }}>{l}</span>)}
+                      {chw.languages.map(l => <span key={l} style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '100px', background: 'rgba(110,231,183,0.06)', border: '1px solid rgba(110,231,183,0.14)', color: 'rgba(110,231,183,0.7)' }}>{l}</span>)}
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
@@ -397,8 +400,8 @@ export default function CHWPage() {
                         }}
                         style={{
                           display: 'flex', alignItems: 'center', gap: '6px', padding: '7px 14px', borderRadius: '100px',
-                          background: contactIdx === i ? 'var(--accent)' : 'rgba(109,145,151,0.1)',
-                          border: `1px solid ${contactIdx === i ? 'transparent' : 'rgba(109,145,151,0.2)'}`,
+                          background: contactIdx === i ? 'var(--accent)' : 'rgba(110,231,183,0.1)',
+                          border: `1px solid ${contactIdx === i ? 'transparent' : 'rgba(110,231,183,0.2)'}`,
                           color: contactIdx === i ? '#07070F' : 'var(--accent)',
                           fontSize: '12px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit',
                           transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
@@ -407,9 +410,9 @@ export default function CHWPage() {
                     </div>
 
                     {contactIdx === i && (
-                      <div style={{ padding: '14px', background: 'rgba(109,145,151,0.06)', borderRadius: '12px', animation: 'fadeUp 0.35s cubic-bezier(0.16,1,0.3,1) both', borderLeft: '2px solid rgba(109,145,151,0.3)' }}>
+                      <div style={{ padding: '14px', background: 'rgba(110,231,183,0.06)', borderRadius: '12px', animation: 'fadeUp 0.35s cubic-bezier(0.16,1,0.3,1) both', borderLeft: '2px solid rgba(110,231,183,0.3)' }}>
                         <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginBottom: '10px' }}>Contact {chw.org} directly:</div>
-                        <a href={`tel:${chw.phone}`} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#6d9197', fontSize: '14px', fontWeight: 600, textDecoration: 'none', marginBottom: '6px' }}>
+                        <a href={`tel:${chw.phone}`} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent)', fontSize: '14px', fontWeight: 600, textDecoration: 'none', marginBottom: '6px' }}>
                           <Phone size={13} /> {chw.phone}
                         </a>
                         <a href={chw.orgUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255,255,255,0.5)', fontSize: '13px', textDecoration: 'none', marginBottom: '8px' }}>
@@ -444,7 +447,9 @@ export default function CHWPage() {
             {TESTIMONIALS.map((t, i) => (
               <RevealBlock key={t.name} delay={i * 80}>
                 <div style={{ ...card, height: '100%', display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ fontSize: '13px', color: 'rgba(109,145,151,0.6)', marginBottom: '14px' }}>{'★'.repeat(5)}</div>
+                  <div style={{ display: 'flex', gap: '2px', marginBottom: '14px' }}>
+                    {[1,2,3,4,5].map(n => <Star key={n} size={12} strokeWidth={0} fill="#fbbf24" />)}
+                  </div>
                   <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.62)', lineHeight: 1.7, flexGrow: 1, marginBottom: '20px' }}>"{t.quote}"</p>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
                     <div>
@@ -467,7 +472,7 @@ export default function CHWPage() {
       <section style={{ padding: '80px 24px 120px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ borderRadius: '28px', padding: '3px', background: 'linear-gradient(135deg, rgba(109,145,151,0.25), rgba(138,181,188,0.08))' }}>
+            <div style={{ borderRadius: '28px', padding: '3px', background: 'linear-gradient(135deg, rgba(110,231,183,0.25), rgba(167,210,190,0.08))' }}>
               <div style={{ borderRadius: '26px', padding: '56px 52px', background: 'rgba(10,9,22,0.97)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.04)' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '48px', alignItems: 'start' }}>
                   <div>
@@ -479,7 +484,7 @@ export default function CHWPage() {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                       {BECOME_STEPS.map((s, i) => (
                         <div key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>
-                          <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(109,145,151,0.1)', border: '1px solid rgba(109,145,151,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700, color: 'var(--accent)', flexShrink: 0, marginTop: '1px' }}>{i + 1}</span>
+                          <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700, color: 'var(--accent)', flexShrink: 0, marginTop: '1px' }}>{i + 1}</span>
                           {s}
                         </div>
                       ))}
@@ -523,7 +528,7 @@ export default function CHWPage() {
                       </div>
                     ) : (
                       <div style={{ textAlign: 'center', padding: '32px 0', animation: 'fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both' }}>
-                        <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(109,145,151,0.1)', border: '1px solid rgba(109,145,151,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: 'var(--accent)' }}>
+                        <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: 'var(--accent)' }}>
                           <CheckCircle size={20} strokeWidth={1.5} />
                         </div>
                         <p style={{ fontSize: '16px', fontWeight: 600, marginBottom: '6px' }}>We'll be in touch</p>

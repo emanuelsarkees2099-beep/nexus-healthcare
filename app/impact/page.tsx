@@ -63,8 +63,8 @@ const pill: React.CSSProperties = {
   display: 'inline-flex', alignItems: 'center', gap: '6px',
   padding: '4px 12px', borderRadius: '100px',
   fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-  background: 'rgba(109,145,151,0.08)', color: '#6d9197',
-  border: '1px solid rgba(109,145,151,0.18)',
+  background: 'rgba(110,231,183,0.08)', color: 'var(--accent)',
+  border: '1px solid rgba(110,231,183,0.18)',
 }
 
 // Realistic estimates based on Arizona FQHC data (185+ free clinics, ~750k patients/yr)
@@ -157,7 +157,7 @@ export default function ImpactPage() {
     <AppShell>
       {/* Toast */}
       {toastMsg && (
-        <div style={{ position: 'fixed', bottom: '32px', left: '50%', transform: 'translateX(-50%)', zIndex: 999, background: 'rgba(109,145,151,0.15)', border: '1px solid rgba(109,145,151,0.3)', borderRadius: '100px', padding: '12px 24px', fontSize: '13px', color: '#eef4f5', backdropFilter: 'blur(20px)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ position: 'fixed', bottom: '32px', left: '50%', transform: 'translateX(-50%)', zIndex: 999, background: 'rgba(110,231,183,0.15)', border: '1px solid rgba(110,231,183,0.3)', borderRadius: '100px', padding: '12px 24px', fontSize: '13px', color: '#eef4f5', backdropFilter: 'blur(20px)', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <CheckCircle size={14} strokeWidth={1.5} style={{ color: '#4ade80' }} />
           {toastMsg}
         </div>
@@ -165,20 +165,20 @@ export default function ImpactPage() {
 
       {/* ── HERO ── */}
       <section style={{ minHeight: '80dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '100px 24px 60px', position: 'relative', overflow: 'hidden' }}>
-        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(109,145,151,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(110,231,183,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
         <div style={{ ...pill, marginBottom: '24px' }}><TrendingUp size={10} strokeWidth={1.5} /> Impact Dashboard</div>
 
         <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.08, marginBottom: '24px', maxWidth: '700px' }}>
           {TITLE.map((w, i) => (
-            <span key={i} style={{ display: 'inline-block', marginRight: '0.25em', opacity: words[i] ? 1 : 0, transform: words[i] ? 'translateY(0)' : 'translateY(18px)', transition: 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)', color: w === 'person' ? '#6d9197' : 'inherit' }}>{w}</span>
+            <span key={i} style={{ display: 'inline-block', marginRight: '0.25em', opacity: words[i] ? 1 : 0, transform: words[i] ? 'translateY(0)' : 'translateY(18px)', transition: 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)', color: w === 'person' ? 'var(--accent)' : 'inherit' }}>{w}</span>
           ))}
         </h1>
 
         <p style={{ fontSize: '17px', color: 'rgba(255,255,255,0.5)', maxWidth: '480px', lineHeight: 1.7, marginBottom: '16px' }}>
           We publish everything. No hidden metrics, no cherry-picked data, no spin. If something isn't working, you'll see it here.
         </p>
-        <p style={{ fontSize: '13px', color: 'rgba(109,145,151,0.6)', letterSpacing: '0.04em' }}>Data updated every 4 hours · Last updated 2 hours ago</p>
+        <p style={{ fontSize: '13px', color: 'rgba(110,231,183,0.6)', letterSpacing: '0.04em' }}>Data updated every 4 hours · Last updated 2 hours ago</p>
       </section>
 
       {/* ── LIVE COUNTERS ── */}
@@ -187,7 +187,7 @@ export default function ImpactPage() {
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '56px' }}>
               <div style={{ ...pill, marginBottom: '20px' }}><BarChart2 size={10} strokeWidth={1.5} /> Live data</div>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>The numbers as they stand <em style={{ fontStyle: 'normal', color: '#6d9197' }}>today</em></h2>
+              <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>The numbers as they stand <em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>today</em></h2>
             </div>
           </RevealBlock>
 
@@ -197,8 +197,8 @@ export default function ImpactPage() {
               const liveTarget = c.baseline + live
               return (
               <RevealBlock key={c.label} delay={i * 70}>
-                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(109,145,151,0.2), rgba(109,145,151,0.04))', borderRadius: '20px' }}>
-                  <div style={{ background: '#0d1618', borderRadius: '18px', padding: '32px 28px' }}>
+                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(110,231,183,0.2), rgba(110,231,183,0.04))', borderRadius: '20px' }}>
+                  <div style={{ background: '#080D1A', borderRadius: '18px', padding: '32px 28px' }}>
                     <div style={{ fontSize: '42px', fontWeight: 800, color: '#eef4f5', letterSpacing: '-0.04em', lineHeight: 1, marginBottom: '10px' }}>
                       <Counter target={liveTarget} suffix={c.suffix} />
                     </div>
@@ -206,7 +206,7 @@ export default function ImpactPage() {
                     {/* Sparkline placeholder */}
                     <div style={{ marginTop: '16px', height: '28px', display: 'flex', alignItems: 'flex-end', gap: '3px' }}>
                       {Array.from({ length: 12 }, (_, j) => (
-                        <div key={j} style={{ flex: 1, borderRadius: '2px', background: 'rgba(109,145,151,0.2)', height: `${30 + Math.sin(j * 0.8 + i) * 20}%`, transition: `height 0.8s cubic-bezier(0.16,1,0.3,1) ${j * 40}ms` }} />
+                        <div key={j} style={{ flex: 1, borderRadius: '2px', background: 'rgba(110,231,183,0.2)', height: `${30 + Math.sin(j * 0.8 + i) * 20}%`, transition: `height 0.8s cubic-bezier(0.16,1,0.3,1) ${j * 40}ms` }} />
                       ))}
                     </div>
                   </div>
@@ -232,26 +232,26 @@ export default function ImpactPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
             <RevealBlock>
               <div style={{ padding: '28px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '18px' }}>
-                <h3 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '24px', color: '#6d9197' }}>Income Level</h3>
-                <AnimBar pct={67} color='#6d9197' label='Below 200% FPL ($29,160/yr)' />
-                <AnimBar pct={23} color='#8ab5bc' label='200–400% FPL' />
-                <AnimBar pct={10} color='rgba(138,181,188,0.5)' label='Above 400% FPL' />
+                <h3 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '24px', color: 'var(--accent)' }}>Income Level</h3>
+                <AnimBar pct={67} color='var(--accent)' label='Below 200% FPL ($29,160/yr)' />
+                <AnimBar pct={23} color='var(--accent2)' label='200–400% FPL' />
+                <AnimBar pct={10} color='rgba(167,210,190,0.5)' label='Above 400% FPL' />
               </div>
             </RevealBlock>
             <RevealBlock delay={100}>
               <div style={{ padding: '28px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '18px' }}>
-                <h3 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '24px', color: '#6d9197' }}>Insurance Status at First Visit</h3>
-                <AnimBar pct={61} color='#6d9197' label='Uninsured' />
-                <AnimBar pct={28} color='#8ab5bc' label='Medicaid / CHIP' />
-                <AnimBar pct={11} color='rgba(138,181,188,0.5)' label='ACA marketplace plan' />
+                <h3 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '24px', color: 'var(--accent)' }}>Insurance Status at First Visit</h3>
+                <AnimBar pct={61} color='var(--accent)' label='Uninsured' />
+                <AnimBar pct={28} color='var(--accent2)' label='Medicaid / CHIP' />
+                <AnimBar pct={11} color='rgba(167,210,190,0.5)' label='ACA marketplace plan' />
               </div>
             </RevealBlock>
             <RevealBlock delay={200}>
               <div style={{ padding: '28px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '18px' }}>
-                <h3 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '24px', color: '#6d9197' }}>Care Access Outcome</h3>
+                <h3 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '24px', color: 'var(--accent)' }}>Care Access Outcome</h3>
                 <AnimBar pct={94} color='#4ade80' label='Received care within 7 days' />
-                <AnimBar pct={81} color='#6d9197' label='Returned for follow-up' />
-                <AnimBar pct={73} color='#8ab5bc' label='Enrolled in a benefit program' />
+                <AnimBar pct={81} color='var(--accent)' label='Returned for follow-up' />
+                <AnimBar pct={73} color='var(--accent2)' label='Enrolled in a benefit program' />
               </div>
             </RevealBlock>
           </div>
@@ -272,10 +272,10 @@ export default function ImpactPage() {
             {REGIONS.map((r, i) => (
               <RevealBlock key={r.region} delay={i * 70}>
                 <div style={{ padding: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', transition: 'border-color 0.25s, background 0.25s' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(109,145,151,0.22)'; (e.currentTarget as HTMLElement).style.background = 'rgba(109,145,151,0.04)' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(110,231,183,0.22)'; (e.currentTarget as HTMLElement).style.background = 'rgba(110,231,183,0.04)' }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.06)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)' }}
                 >
-                  <div style={{ fontSize: '11px', fontWeight: 600, color: '#6d9197', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '10px' }}>{r.region}</div>
+                  <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '10px' }}>{r.region}</div>
                   <div style={{ fontSize: '26px', fontWeight: 800, color: '#eef4f5', letterSpacing: '-0.03em', marginBottom: '4px' }}>{r.patients}</div>
                   <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginBottom: '10px' }}>patients helped</div>
                   <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.5, paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>{r.states}</div>
@@ -300,7 +300,7 @@ export default function ImpactPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             {METHODOLOGY.map((m, i) => (
               <RevealBlock key={i} delay={i * 60}>
-                <div style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid', borderColor: openMethod === i ? 'rgba(109,145,151,0.25)' : 'rgba(255,255,255,0.06)', background: openMethod === i ? 'rgba(109,145,151,0.04)' : 'transparent', transition: 'all 0.25s', marginBottom: '4px' }}>
+                <div style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid', borderColor: openMethod === i ? 'rgba(110,231,183,0.25)' : 'rgba(255,255,255,0.06)', background: openMethod === i ? 'rgba(110,231,183,0.04)' : 'transparent', transition: 'all 0.25s', marginBottom: '4px' }}>
                   <button
                     onClick={() => setOpenMethod(openMethod === i ? null : i)}
                     style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 24px', background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontFamily: 'inherit', textAlign: 'left', gap: '16px' }}
@@ -336,10 +336,10 @@ export default function ImpactPage() {
               { name: 'Outcomes Research',       format: 'PDF', size: '1.2 MB', desc: 'Full methodology and findings report, peer-reviewed', updated: 'Quarterly report' },
             ].map((d, i) => (
               <RevealBlock key={d.name} delay={i * 80}>
-                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(109,145,151,0.15), rgba(109,145,151,0.04))', borderRadius: '18px' }}>
-                  <div style={{ background: '#0d1618', borderRadius: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(110,231,183,0.15), rgba(110,231,183,0.04))', borderRadius: '18px' }}>
+                  <div style={{ background: '#080D1A', borderRadius: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '100px', background: 'rgba(109,145,151,0.08)', border: '1px solid rgba(109,145,151,0.18)', color: '#6d9197', fontWeight: 500 }}>{d.format}</span>
+                      <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '100px', background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.18)', color: 'var(--accent)', fontWeight: 500 }}>{d.format}</span>
                       <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>{d.size}</span>
                     </div>
                     <h3 style={{ fontSize: '15px', fontWeight: 700, lineHeight: 1.3 }}>{d.name}</h3>
@@ -348,9 +348,9 @@ export default function ImpactPage() {
                       <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>{d.updated}</span>
                       <button
                         onClick={() => handleDownload(d.name, d.format)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '7px 14px', borderRadius: '100px', background: 'rgba(109,145,151,0.1)', border: '1px solid rgba(109,145,151,0.2)', color: '#6d9197', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'background 0.2s' }}
-                        onMouseEnter={e => (e.currentTarget.style.background = 'rgba(109,145,151,0.2)')}
-                        onMouseLeave={e => (e.currentTarget.style.background = 'rgba(109,145,151,0.1)')}
+                        style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '7px 14px', borderRadius: '100px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', color: 'var(--accent)', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'background 0.2s' }}
+                        onMouseEnter={e => (e.currentTarget.style.background = 'rgba(110,231,183,0.2)')}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'rgba(110,231,183,0.1)')}
                       >
                         <Download size={12} strokeWidth={2} /> Download
                       </button>

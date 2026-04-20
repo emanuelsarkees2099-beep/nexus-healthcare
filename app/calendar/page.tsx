@@ -41,7 +41,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 function InputField({ value, onChange, placeholder, type = 'text' }: { value: string; onChange: (v: string) => void; placeholder: string; type?: string }) {
   const [focused, setFocused] = useState(false)
   return (
-    <div style={{ borderRadius: '12px', padding: '1.5px', background: focused ? 'linear-gradient(135deg, rgba(109,145,151,0.5), rgba(138,181,188,0.2))' : 'rgba(255,255,255,0.07)', transition: 'background 0.3s' }}>
+    <div style={{ borderRadius: '12px', padding: '1.5px', background: focused ? 'linear-gradient(135deg, rgba(110,231,183,0.5), rgba(167,210,190,0.2))' : 'rgba(255,255,255,0.07)', transition: 'background 0.3s' }}>
       <input
         type={type}
         value={value}
@@ -58,7 +58,7 @@ function InputField({ value, onChange, placeholder, type = 'text' }: { value: st
 function SelectField({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: string[] }) {
   const [focused, setFocused] = useState(false)
   return (
-    <div style={{ borderRadius: '12px', padding: '1.5px', background: focused ? 'linear-gradient(135deg, rgba(109,145,151,0.5), rgba(138,181,188,0.2))' : 'rgba(255,255,255,0.07)', transition: 'background 0.3s' }}>
+    <div style={{ borderRadius: '12px', padding: '1.5px', background: focused ? 'linear-gradient(135deg, rgba(110,231,183,0.5), rgba(167,210,190,0.2))' : 'rgba(255,255,255,0.07)', transition: 'background 0.3s' }}>
       <select
         value={value}
         onChange={e => onChange(e.target.value)}
@@ -185,7 +185,7 @@ export default function CalendarPage() {
     display: 'inline-flex', alignItems: 'center', gap: '6px',
     padding: '4px 12px', borderRadius: '100px',
     fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-    background: 'rgba(109,145,151,0.08)', color: 'var(--accent)', border: '1px solid rgba(109,145,151,0.18)',
+    background: 'rgba(110,231,183,0.08)', color: 'var(--accent)', border: '1px solid rgba(110,231,183,0.18)',
   }
 
   const card: React.CSSProperties = {
@@ -203,7 +203,7 @@ export default function CalendarPage() {
 
       {/* ── HERO ─────────────────────────────────────── */}
       <section style={{ minHeight: '85dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '80px 24px 60px', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)', width: '600px', height: '400px', background: 'radial-gradient(ellipse, rgba(109,145,151,0.11) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)', width: '600px', height: '400px', background: 'radial-gradient(ellipse, rgba(110,231,183,0.11) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
         <div style={{ maxWidth: '720px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}>
@@ -280,9 +280,9 @@ export default function CalendarPage() {
                     <button key={c} onClick={() => toggleCondition(c)}
                       style={{
                         padding: '8px 16px', borderRadius: '100px', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit',
-                        background: conditions.includes(c) ? 'rgba(109,145,151,0.14)' : 'rgba(255,255,255,0.04)',
+                        background: conditions.includes(c) ? 'rgba(110,231,183,0.14)' : 'rgba(255,255,255,0.04)',
                         color: conditions.includes(c) ? 'var(--accent2)' : 'rgba(255,255,255,0.5)',
-                        border: `1px solid ${conditions.includes(c) ? 'rgba(109,145,151,0.35)' : 'rgba(255,255,255,0.07)'}`,
+                        border: `1px solid ${conditions.includes(c) ? 'rgba(110,231,183,0.35)' : 'rgba(255,255,255,0.07)'}`,
                         transition: 'all 0.22s cubic-bezier(0.16,1,0.3,1)',
                       }}
                     >{c}</button>
@@ -367,9 +367,9 @@ export default function CalendarPage() {
 
             {/* reminder setup */}
             <RevealBlock>
-              <div style={{ ...card, background: 'rgba(109,145,151,0.04)', border: '1px solid rgba(109,145,151,0.14)' }}>
+              <div style={{ ...card, background: 'rgba(110,231,183,0.04)', border: '1px solid rgba(110,231,183,0.14)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-                  <div style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'rgba(109,145,151,0.1)', border: '1px solid rgba(109,145,151,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}>
+                  <div style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}>
                     <Bell size={15} strokeWidth={1.5} />
                   </div>
                   <div>
@@ -394,7 +394,7 @@ export default function CalendarPage() {
                       style={{
                         padding: '13px', borderRadius: '12px', border: 'none', fontFamily: 'inherit', fontSize: '14px', fontWeight: 600,
                         cursor: remEmail ? 'pointer' : 'not-allowed',
-                        background: remEmail ? 'rgba(109,145,151,0.9)' : 'rgba(255,255,255,0.05)',
+                        background: remEmail ? 'rgba(110,231,183,0.9)' : 'rgba(255,255,255,0.05)',
                         color: remEmail ? '#07070F' : 'rgba(255,255,255,0.25)',
                         transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
                       }}
@@ -460,7 +460,7 @@ export default function CalendarPage() {
       <section style={{ padding: '0 24px 120px' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ borderRadius: '28px', padding: '3px', background: 'linear-gradient(135deg, rgba(109,145,151,0.22), rgba(138,181,188,0.06))' }}>
+            <div style={{ borderRadius: '28px', padding: '3px', background: 'linear-gradient(135deg, rgba(110,231,183,0.22), rgba(167,210,190,0.06))' }}>
               <div style={{ borderRadius: '26px', padding: '56px 52px', background: 'rgba(10,9,22,0.97)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '28px', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.04)' }}>
                 <div>
                   <span style={pill}><Sparkles size={10} strokeWidth={1.5} /> Stay ahead</span>

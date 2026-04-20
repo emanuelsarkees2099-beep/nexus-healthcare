@@ -43,9 +43,9 @@ export default function MethodologyPage() {
     fontWeight: 500,
     letterSpacing: '0.08em',
     textTransform: 'uppercase' as const,
-    background: 'rgba(109,145,151,0.08)',
+    background: 'rgba(110,231,183,0.08)',
     color: 'var(--accent)',
-    border: '1px solid rgba(109,145,151,0.18)',
+    border: '1px solid rgba(110,231,183,0.18)',
     marginBottom: '20px',
   }
   const table: React.CSSProperties = {
@@ -71,9 +71,9 @@ export default function MethodologyPage() {
     verticalAlign: 'top' as const,
   }
   const callout: React.CSSProperties = {
-    background: 'rgba(109,145,151,0.05)',
-    border: '1px solid rgba(109,145,151,0.2)',
-    borderLeft: '3px solid rgba(109,145,151,0.5)',
+    background: 'rgba(110,231,183,0.05)',
+    border: '1px solid rgba(110,231,183,0.2)',
+    borderLeft: '3px solid rgba(110,231,183,0.5)',
     borderRadius: '10px',
     padding: '16px 20px',
     fontSize: '14px',
@@ -87,7 +87,7 @@ export default function MethodologyPage() {
     padding: '2px 7px',
     borderRadius: '5px',
     fontSize: '13px',
-    color: '#6d9197',
+    color: 'var(--accent)',
   }
 
   return (
@@ -120,7 +120,7 @@ export default function MethodologyPage() {
               ['9', 'Citing NEXUS'],
             ].map(([n, title]) => (
               <li key={n} style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)' }}>
-                <a href={`#section-${n}`} style={{ color: '#6d9197', textDecoration: 'none' }}>
+                <a href={`#section-${n}`} style={{ color: 'var(--accent)', textDecoration: 'none' }}>
                   {n}. {title}
                 </a>
               </li>
@@ -394,7 +394,7 @@ export default function MethodologyPage() {
         <p style={p}>
           The <strong style={{ color: 'rgba(255,255,255,0.75)' }}>Haversine formula</strong> is used for all distance calculations. It computes the great-circle distance between two points on a sphere (Earth radius = 3,958.8 miles):
         </p>
-        <div style={{ ...callout, fontFamily: 'monospace', fontSize: '13px', color: '#6d9197' }}>
+        <div style={{ ...callout, fontFamily: 'monospace', fontSize: '13px', color: 'var(--accent)' }}>
           d = 2R · arctan2(√a, √(1−a))<br/>
           where a = sin²(Δlat/2) + cos(lat₁)·cos(lat₂)·sin²(Δlng/2)
         </div>
