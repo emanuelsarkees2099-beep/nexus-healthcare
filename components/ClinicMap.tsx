@@ -40,7 +40,6 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
     await import('leaflet/dist/leaflet.css')
 
     // Fix default marker icon paths broken by webpack
-    // @ts-expect-error — _getIconUrl is internal Leaflet
     delete (L.Icon.Default.prototype as any)._getIconUrl
     L.Icon.Default.mergeOptions({
       iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
@@ -317,7 +316,7 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
 
 /* ── Helper: add clinic markers to map ─────────────────────────── */
 function addMarkers(
-  L: typeof import('leaflet').default,
+  L: typeof import('leaflet'),
   map: LeafletMap,
   clinics: Clinic[],
   onSelect: (c: Clinic) => void
