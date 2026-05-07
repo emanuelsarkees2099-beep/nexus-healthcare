@@ -1,14 +1,14 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Search, Bookmark, Users, ReceiptText, AlertTriangle } from 'lucide-react'
+import { Search, Bookmark, Users, AlertTriangle } from 'lucide-react'
 
+/* Programs removed — accessible via Search; 4 items is the sweet spot for mobile */
 const DOCK_ITEMS = [
-  { href: '/search',    icon: <Search size={20} strokeWidth={2} />,      label: 'Search'    },
-  { href: '/dashboard', icon: <Bookmark size={20} strokeWidth={2} />,    label: 'Saved'     },
-  { href: '/chw',       icon: <Users size={20} strokeWidth={2} />,       label: 'CHW'       },
-  { href: '/programs',  icon: <ReceiptText size={20} strokeWidth={2} />, label: 'Programs'  },
-  { href: '/rights',    icon: <AlertTriangle size={20} strokeWidth={2} />, label: 'Rights'  },
+  { href: '/search',    icon: <Search size={20} strokeWidth={2} />,        label: 'Search' },
+  { href: '/chw',       icon: <Users size={20} strokeWidth={2} />,         label: 'CHW'    },
+  { href: '/rights',    icon: <AlertTriangle size={20} strokeWidth={2} />, label: 'Rights' },
+  { href: '/dashboard', icon: <Bookmark size={20} strokeWidth={2} />,      label: 'Saved'  },
 ]
 
 export default function MobileDock() {

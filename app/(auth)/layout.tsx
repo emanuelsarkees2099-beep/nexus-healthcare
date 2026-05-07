@@ -1,8 +1,14 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'NEXUS — Sign In',
-  description: 'Access your NEXUS account to find free healthcare resources',
+  title: 'Sign In — NEXUS',
+  description: 'Sign in to your NEXUS account to access saved clinics, your health passport, and personalized care guidance.',
+  robots: { index: false, follow: false }, // Auth pages should not be indexed
+  openGraph: {
+    title: 'Sign In — NEXUS',
+    description: 'Sign in to your NEXUS account.',
+    type: 'website',
+  },
 }
 
 export default function AuthLayout({

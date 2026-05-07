@@ -75,16 +75,24 @@ export default function AffordabilityBar({ score, label, reasons, compact = fals
   if (compact) {
     return (
       <div ref={ref} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        {/* Label pill */}
-        <div style={{
-          display: 'inline-flex', alignItems: 'center', gap: '5px',
-          background: cfg.bg, border: `1px solid ${cfg.border}`,
-          borderRadius: '100px', padding: '3px 10px',
-        }}>
-          <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: cfg.color }} />
-          <span style={{ fontSize: '11px', fontWeight: 600, color: cfg.color, fontFamily: 'var(--font-inter),sans-serif', whiteSpace: 'nowrap' }}>
-            {cfg.text}
-          </span>
+        {/* Label pill with tooltip */}
+        <div className="aff-tooltip-wrap">
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '5px',
+            background: cfg.bg, border: `1px solid ${cfg.border}`,
+            borderRadius: '100px', padding: '3px 10px', cursor: 'default',
+          }}>
+            <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: cfg.color }} />
+            <span style={{ fontSize: '11px', fontWeight: 600, color: cfg.color, fontFamily: 'var(--font-inter),sans-serif', whiteSpace: 'nowrap' }}>
+              {cfg.text}
+            </span>
+          </div>
+          <div className="aff-tooltip">
+            <strong style={{ color: cfg.color }}>{cfg.text}</strong> — affordability score {score}/100.
+            {label === 'likely-free' && ' This clinic uses a sliding-scale fee based on income. Most uninsured patients pay $0–$20.'}
+            {label === 'low-cost'    && ' Reduced-cost visits available. Sliding-scale fees apply based on household income.'}
+            {label === 'standard'    && ' Standard billing applies. Ask about payment plans or financial assistance programs.'}
+          </div>
         </div>
         {/* Score mono */}
         <span style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-mono),monospace', whiteSpace: 'nowrap' }}>
@@ -99,15 +107,23 @@ export default function AffordabilityBar({ score, label, reasons, compact = fals
       {/* Score header row */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '5px',
-            background: cfg.bg, border: `1px solid ${cfg.border}`,
-            borderRadius: '100px', padding: '4px 12px',
-          }}>
-            <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: cfg.color, boxShadow: `0 0 6px ${cfg.color}` }} />
-            <span style={{ fontSize: '12px', fontWeight: 600, color: cfg.color, fontFamily: 'var(--font-inter),sans-serif' }}>
-              {cfg.text}
-            </span>
+          <div className="aff-tooltip-wrap">
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '5px',
+              background: cfg.bg, border: `1px solid ${cfg.border}`,
+              borderRadius: '100px', padding: '4px 12px', cursor: 'default',
+            }}>
+              <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: cfg.color, boxShadow: `0 0 6px ${cfg.color}` }} />
+              <span style={{ fontSize: '12px', fontWeight: 600, color: cfg.color, fontFamily: 'var(--font-inter),sans-serif' }}>
+                {cfg.text}
+              </span>
+            </div>
+            <div className="aff-tooltip">
+              <strong style={{ color: cfg.color }}>{cfg.text}</strong> — affordability score {score}/100.
+              {label === 'likely-free' && ' Sliding-scale fees based on income. Most uninsured patients pay $0–$20 per visit.'}
+              {label === 'low-cost'    && ' Reduced-cost visits available on a sliding scale based on household income.'}
+              {label === 'standard'    && ' Standard billing applies. Ask staff about payment plans or financial assistance.'}
+            </div>
           </div>
           <span style={{
             fontFamily: 'var(--font-mono),monospace',

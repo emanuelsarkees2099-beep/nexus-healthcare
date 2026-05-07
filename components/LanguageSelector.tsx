@@ -36,6 +36,7 @@ export default function LanguageSelector() {
   const choose = (code: string) => {
     setSelected(code)
     localStorage.setItem(STORAGE_KEY, code)
+    window.dispatchEvent(new CustomEvent('nexus:lang-changed'))
     close()
   }
 
@@ -124,7 +125,7 @@ export default function LanguageSelector() {
           </div>
 
           <h2 style={{
-            fontFamily: 'var(--font-sora)',
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(1.4rem, 3vw, 1.9rem)',
             fontWeight: 700,
             letterSpacing: '-0.02em',
@@ -240,7 +241,7 @@ function LangButton({
           fontSize: '13px',
           fontWeight: 600,
           color: selected ? '#8ab5bc' : hovered ? 'rgba(232,240,241,0.9)' : 'rgba(232,240,241,0.75)',
-          fontFamily: 'var(--font-sora)',
+          fontFamily: 'var(--font-display)',
           lineHeight: 1.2,
           whiteSpace: 'nowrap',
           overflow: 'hidden',

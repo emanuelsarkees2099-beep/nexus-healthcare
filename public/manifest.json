@@ -1,7 +1,7 @@
 {
   "name": "NEXUS — Free Healthcare, Found in Seconds",
   "short_name": "NEXUS",
-  "description": "Find free clinics, sliding-scale care, and eligibility programs near you. No insurance required.",
+  "description": "Find free clinics, sliding-scale care, AI triage, and crisis support. No insurance required.",
   "start_url": "/search",
   "display": "standalone",
   "orientation": "portrait-primary",
@@ -40,18 +40,47 @@
       "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     },
     {
+      "name": "AI Triage",
+      "short_name": "Triage",
+      "description": "Describe your symptoms — AI finds the right care",
+      "url": "/triage",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Crisis Help",
+      "short_name": "Crisis",
+      "description": "988 lifeline and emergency resources",
+      "url": "/crisis",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Healthcare GPS",
+      "short_name": "GPS",
+      "description": "Step-by-step guide to getting care",
+      "url": "/gps",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Health Passport",
+      "short_name": "Passport",
+      "description": "Your encrypted health record and QR code",
+      "url": "/passport",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
       "name": "Check Programs",
       "short_name": "Programs",
       "description": "See programs you qualify for",
       "url": "/programs",
       "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
-    },
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "protocol_handlers": [
     {
-      "name": "Emergency Help",
-      "short_name": "Help Now",
-      "description": "Immediate care resources",
-      "url": "/search?urgent=true",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+      "protocol": "web+nexus",
+      "url": "/search?q=%s"
     }
   ]
 }

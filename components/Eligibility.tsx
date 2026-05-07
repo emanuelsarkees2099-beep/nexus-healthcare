@@ -2,9 +2,8 @@
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger)
+import { registerGSAP } from '@/lib/gsap-st'
+registerGSAP()
 
 const PROGRAMS = [
   { name: 'Medicaid / AHCCCS', sub: 'Free coverage for low-income individuals' },
@@ -61,7 +60,7 @@ export default function Eligibility() {
           <h2
             id="eligibility-title"
             style={{
-              fontFamily: 'var(--font-sora)', fontSize: '2.2rem', fontWeight: 600,
+              fontFamily: 'var(--font-display)', fontSize: '2.2rem', fontWeight: 600,
               lineHeight: 1.2, marginBottom: '1rem', letterSpacing: '-0.02em',
             }}
           >

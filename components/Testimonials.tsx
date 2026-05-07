@@ -1,9 +1,8 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger)
+import { registerGSAP } from '@/lib/gsap-st'
+registerGSAP()
 
 const ROW_1 = [
   { quote: "I hadn't seen a doctor in three years because I couldn't afford it. NEXUS found me a free clinic six blocks away. I had no idea it existed.", name: 'Maria R.', location: 'Phoenix, AZ', initials: 'MR', stars: 5 },
@@ -28,6 +27,23 @@ const ROW_2 = [
 ]
 
 type CardData = typeof ROW_1[0]
+
+/* ── Deterministic avatar color from initials (#20) ─────────────── */
+function avatarColor(initials: string) {
+  let hash = 0
+  for (let i = 0; i < initials.length; i++) {
+    hash = (hash * 31 + initials.charCodeAt(i)) & 0xffffffff
+  }
+  const palette = [
+    { bg: 'rgba(110,231,183,0.12)', border: 'rgba(110,231,183,0.35)', text: '#6EE7B7' }, // mint
+    { bg: 'rgba(167,139,250,0.12)', border: 'rgba(167,139,250,0.35)', text: '#A78BFA' }, // violet
+    { bg: 'rgba(252,211,77,0.12)',  border: 'rgba(252,211,77,0.35)',  text: '#FCD34D' }, // amber
+    { bg: 'rgba(248,113,113,0.12)', border: 'rgba(248,113,113,0.35)', text: '#F87171' }, // coral
+    { bg: 'rgba(52,211,153,0.12)',  border: 'rgba(52,211,153,0.35)',  text: '#34D399' }, // emerald
+    { bg: 'rgba(96,165,250,0.12)',  border: 'rgba(96,165,250,0.35)',  text: '#60A5FA' }, // blue
+  ]
+  return palette[Math.abs(hash) % palette.length]
+}
 
 function StarRow({ count }: { count: number }) {
   return (
@@ -78,13 +94,19 @@ function TestimonialCard({ card }: { card: CardData }) {
         &ldquo;{card.quote}&rdquo;
       </p>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', position: 'relative', zIndex: 1 }}>
-        <div style={{
-          width: '32px', height: '32px', borderRadius: '50%',
-          background: 'var(--accent-dim)', border: '1px solid var(--border)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '10px', fontWeight: 600, color: 'var(--accent)',
-          fontFamily: 'var(--font-sora)', flexShrink: 0,
-        }}>{card.initials}</div>
+        {(() => {
+          const av = avatarColor(card.initials)
+          return (
+            <div style={{
+              width: '32px', height: '32px', borderRadius: '50%',
+              background: av.bg, border: `1.5px solid ${av.border}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '10px', fontWeight: 700, color: av.text,
+              fontFamily: 'var(--font-display)', flexShrink: 0,
+              boxShadow: `0 0 10px ${av.border}`,
+            }}>{card.initials}</div>
+          )
+        })()}
         <div>
           <div style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>{card.name}</div>
           <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>{card.location}</div>
@@ -140,10 +162,12 @@ export default function Testimonials() {
       ref={sectionRef}
       id="testimonials"
       aria-labelledby="stories-title"
+      className="section-depth-coral cv-auto"
       style={{ position: 'relative', zIndex: 2, padding: '100px 0 120px', overflow: 'hidden' }}
     >
-      <div aria-hidden="true" className="section-glow-left" style={{ top: '20%' }} />
+      <div aria-hidden="true" className="section-glow-left"  style={{ top: '20%' }} />
       <div aria-hidden="true" className="section-glow-right" style={{ top: '60%' }} />
+      <div aria-hidden="true" className="section-glow-coral" style={{ top: '40%', left: '50%', transform: 'translateX(-50%)' }} />
 
       {/* Header */}
       <div ref={headerRef} style={{ maxWidth: '1200px', margin: '0 auto 4rem', padding: '0 3rem' }}>
@@ -157,7 +181,7 @@ export default function Testimonials() {
           Real stories
         </div>
         <h2 id="stories-title" style={{
-          fontFamily: 'var(--font-sora)',
+          fontFamily: 'var(--font-display)',
           fontSize: 'clamp(2.4rem, 4vw, 3.5rem)',
           fontWeight: 700, lineHeight: 1.05,
           letterSpacing: '-0.03em', marginBottom: '0.75rem',

@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
 import { smoothScrollTo } from '@/utils/smoothScroll'
 import { submitForm } from '@/utils/submitForm'
-import { Stethoscope, TrendingUp, Users, BarChart2, ArrowRight, CheckCircle, ShieldCheck, DollarSign, Zap, Star, ChevronDown } from 'lucide-react'
+import { Stethoscope, TrendingUp, Users, BarChart2, ArrowRight, CheckCircle, ShieldCheck, DollarSign, Zap, Star, ChevronDown, Phone, Mail, Clock, Globe, Camera, Calendar, Edit3, MapPin, AlertCircle } from 'lucide-react'
 
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
@@ -100,13 +100,41 @@ const STEPS = [
   { n: '04', title: 'Track outcomes and revenue', body: 'Your provider dashboard shows visit volume, outcomes, revenue recovery, and community impact in real time.' },
 ]
 
+/* ── Verification + listing management types ── */
+type ClaimStep = 'idle' | 'verify-email' | 'verify-phone' | 'code' | 'verified'
+type ManageTab = 'claim' | 'edit' | 'analytics' | 'appointments'
+
 export default function ProviderPage() {
-  const formRef = useRef<HTMLDivElement>(null)
+  const formRef    = useRef<HTMLDivElement>(null)
+  const manageRef  = useRef<HTMLDivElement>(null)
   const [form, setForm] = useState({ clinic: '', contact: '', email: '', clinicType: '' })
-  const [submitted, setSubmitted] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
+  const [submitted,   setSubmitted]   = useState(false)
+  const [submitting,  setSubmitting]  = useState(false)
   const [submitError, setSubmitError] = useState('')
-  const [words, setWords] = useState<boolean[]>([])
+  const [words,       setWords]       = useState<boolean[]>([])
+
+  /* ── Manage portal state ── */
+  const [manageTab,     setManageTab]     = useState<ManageTab>('claim')
+  const [claimStep,     setClaimStep]     = useState<ClaimStep>('idle')
+  const [claimMethod,   setClaimMethod]   = useState<'email' | 'phone'>('email')
+  const [claimInput,    setClaimInput]    = useState('')
+  const [claimCode,     setClaimCode]     = useState('')
+  const [claimSending,  setClaimSending]  = useState(false)
+  const [claimError,    setClaimError]    = useState('')
+
+  /* ── Listing edit state ── */
+  const [listing, setListing] = useState({
+    clinicName: '', phone: '', website: '', address: '',
+    languages: 'English, Spanish',
+    services: 'Primary care, Mental health, Dental',
+    slidingScale: true, freeVisits: true,
+    monOpen: '8:00 AM', monClose: '5:00 PM',
+    satOpen: '9:00 AM', satClose: '1:00 PM',
+    sunClosed: true,
+    photos: [] as string[],
+    acceptingAppts: true,
+  })
+  const [listingSaved, setListingSaved] = useState(false)
 
   const TITLE = 'Where clinics meet the community they serve'.split(' ')
 
@@ -134,6 +162,31 @@ export default function ProviderPage() {
     } finally {
       setSubmitting(false)
     }
+  }
+
+  const handleSendCode = async () => {
+    if (!claimInput.trim()) { setClaimError('Please enter your ' + (claimMethod === 'email' ? 'email' : 'phone number')); return }
+    setClaimSending(true); setClaimError('')
+    await new Promise(r => setTimeout(r, 1200)) // simulate API
+    setClaimStep('code')
+    setClaimSending(false)
+  }
+
+  const handleVerifyCode = async () => {
+    if (claimCode.length < 4) { setClaimError('Enter the 6-digit code'); return }
+    setClaimSending(true); setClaimError('')
+    await new Promise(r => setTimeout(r, 900))
+    if (claimCode === '000000') { setClaimError('Incorrect code. Please try again.'); setClaimSending(false); return }
+    setClaimStep('verified')
+    setManageTab('edit')
+    setClaimSending(false)
+  }
+
+  const handleSaveListing = async () => {
+    setListingSaved(false)
+    await new Promise(r => setTimeout(r, 800))
+    setListingSaved(true)
+    setTimeout(() => setListingSaved(false), 3000)
   }
 
   return (
@@ -171,6 +224,346 @@ export default function ProviderPage() {
         >
           Join as a Provider <ArrowRight size={14} strokeWidth={2} />
         </button>
+      </section>
+
+      {/* ── MANAGE YOUR LISTING PORTAL ── */}
+      <section ref={manageRef} style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(110,231,183,0.015)' }}>
+        <div style={{ maxWidth: '860px', margin: '0 auto' }}>
+          <RevealBlock>
+            <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+              <div style={{ ...pill, marginBottom: '20px' }}><Edit3 size={10} strokeWidth={1.5} /> Already a partner?</div>
+              <h2 style={{ fontSize: 'clamp(24px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '12px' }}>
+                Manage your NEXUS listing
+              </h2>
+              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', maxWidth: '400px', margin: '0 auto', lineHeight: 1.65 }}>
+                Claim your clinic, update hours and services, view patient analytics, and manage appointment requests.
+              </p>
+            </div>
+          </RevealBlock>
+
+          {/* Tabs */}
+          <div style={{ display: 'flex', gap: '4px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', padding: '4px', marginBottom: '24px' }}>
+            {([
+              { id: 'claim',        label: 'Claim listing',     icon: <ShieldCheck size={13} /> },
+              { id: 'edit',         label: 'Edit listing',      icon: <Edit3 size={13} />,        disabled: claimStep !== 'verified' },
+              { id: 'analytics',   label: 'Analytics',         icon: <BarChart2 size={13} />,    disabled: claimStep !== 'verified' },
+              { id: 'appointments', label: 'Appointments',      icon: <Calendar size={13} />,     disabled: claimStep !== 'verified' },
+            ] as { id: ManageTab; label: string; icon: React.ReactNode; disabled?: boolean }[]).map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => !tab.disabled && setManageTab(tab.id)}
+                style={{
+                  flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                  padding: '9px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 500,
+                  fontFamily: 'var(--font-inter)', cursor: tab.disabled ? 'not-allowed' : 'pointer', border: 'none',
+                  background: manageTab === tab.id ? 'rgba(110,231,183,0.12)' : 'transparent',
+                  color: tab.disabled ? 'rgba(255,255,255,0.2)' : manageTab === tab.id ? 'var(--accent)' : 'rgba(255,255,255,0.5)',
+                  transition: 'all 0.2s',
+                }}
+              >
+                {tab.icon} <span style={{ display: 'none' }}>{/* label hidden on small screens */}</span>
+                <span className="tab-label">{tab.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* ── Claim tab ── */}
+          {manageTab === 'claim' && (
+            <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', padding: '32px' }}>
+              {claimStep === 'verified' ? (
+                <div style={{ textAlign: 'center', padding: '24px 0' }}>
+                  <CheckCircle size={40} color="#4ade80" strokeWidth={1.5} style={{ marginBottom: '16px' }} />
+                  <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Listing claimed</h3>
+                  <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)' }}>You now have full control. Use the tabs above to update your listing.</p>
+                  <button onClick={() => setManageTab('edit')} style={{ marginTop: '20px', padding: '10px 24px', borderRadius: '100px', background: 'var(--accent)', color: '#07070F', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 700, fontFamily: 'inherit' }}>
+                    Edit my listing →
+                  </button>
+                </div>
+              ) : claimStep === 'code' ? (
+                <div style={{ maxWidth: '400px', margin: '0 auto' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '8px' }}>Enter the 6-digit code</h3>
+                  <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginBottom: '24px', lineHeight: 1.6 }}>
+                    We sent a code to <strong style={{ color: '#eef4f5' }}>{claimInput}</strong>. It expires in 10 minutes.
+                  </p>
+                  <input
+                    value={claimCode} onChange={e => setClaimCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    placeholder="000000" maxLength={6}
+                    style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', padding: '14px 16px', color: '#eef4f5', fontSize: '22px', fontFamily: 'var(--font-mono, monospace)', textAlign: 'center', letterSpacing: '0.3em', outline: 'none', caretColor: 'var(--accent)', marginBottom: '8px', boxSizing: 'border-box' }}
+                  />
+                  <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginBottom: '16px', textAlign: 'center' }}>
+                    For demo purposes, enter any 6 digits (not 000000)
+                  </p>
+                  {claimError && <p style={{ fontSize: '13px', color: '#f87171', marginBottom: '12px' }}>{claimError}</p>}
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button onClick={() => { setClaimStep('idle'); setClaimCode('') }} style={{ flex: 1, padding: '12px', borderRadius: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', color: 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: '13px', fontFamily: 'inherit' }}>Back</button>
+                    <button onClick={handleVerifyCode} disabled={claimSending} style={{ flex: 2, padding: '12px', borderRadius: '10px', background: 'var(--accent)', color: '#07070F', border: 'none', cursor: claimSending ? 'wait' : 'pointer', fontSize: '13px', fontWeight: 700, fontFamily: 'inherit' }}>
+                      {claimSending ? 'Verifying…' : 'Verify code'}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ maxWidth: '440px', margin: '0 auto' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '8px' }}>Verify ownership</h3>
+                  <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginBottom: '28px', lineHeight: 1.6 }}>
+                    We'll send a one-time code to your clinic's registered contact. This confirms you're authorized to manage this listing.
+                  </p>
+
+                  {/* Method toggle */}
+                  <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
+                    {(['email', 'phone'] as const).map(m => (
+                      <button
+                        key={m} onClick={() => setClaimMethod(m)}
+                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px', padding: '10px', borderRadius: '9px', fontSize: '13px', fontFamily: 'inherit', cursor: 'pointer', transition: 'all 0.2s', border: `1px solid ${claimMethod === m ? 'rgba(110,231,183,0.35)' : 'rgba(255,255,255,0.09)'}`, background: claimMethod === m ? 'rgba(110,231,183,0.10)' : 'rgba(255,255,255,0.03)', color: claimMethod === m ? 'var(--accent)' : 'rgba(255,255,255,0.55)' }}
+                      >
+                        {m === 'email' ? <Mail size={13} /> : <Phone size={13} />}
+                        {m === 'email' ? 'Email' : 'Phone'}
+                      </button>
+                    ))}
+                  </div>
+
+                  <input
+                    value={claimInput}
+                    onChange={e => { setClaimInput(e.target.value); setClaimError('') }}
+                    placeholder={claimMethod === 'email' ? 'clinic@example.org' : '+1 (602) 555-0100'}
+                    type={claimMethod === 'email' ? 'email' : 'tel'}
+                    style={{ width: '100%', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '12px 14px', color: '#eef4f5', fontSize: '14px', fontFamily: 'inherit', outline: 'none', caretColor: 'var(--accent)', marginBottom: '8px', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+                    onFocus={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.40)')}
+                    onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.10)')}
+                  />
+                  {claimError && <p style={{ fontSize: '12px', color: '#f87171', marginBottom: '8px' }}>{claimError}</p>}
+                  <button onClick={handleSendCode} disabled={claimSending} style={{ width: '100%', marginTop: '8px', padding: '13px', borderRadius: '10px', background: claimSending ? 'rgba(110,231,183,0.5)' : 'var(--accent)', color: '#07070F', border: 'none', cursor: claimSending ? 'wait' : 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', boxShadow: '0 4px 18px rgba(110,231,183,0.28)', transition: 'opacity 0.2s' }}>
+                    {claimSending ? 'Sending code…' : `Send verification code via ${claimMethod}`}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── Edit listing tab ── */}
+          {manageTab === 'edit' && (
+            <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', padding: '32px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <div className="grid-2" style={{ gap: '16px' }}>
+                {[
+                  { label: 'Clinic name',  key: 'clinicName', placeholder: 'Clinica Adelante' },
+                  { label: 'Phone number', key: 'phone',       placeholder: '+1 (602) 555-0100' },
+                  { label: 'Website',      key: 'website',     placeholder: 'https://clinicaadelante.org' },
+                  { label: 'Address',      key: 'address',     placeholder: '1234 S Central Ave, Phoenix, AZ 85004' },
+                ].map(f => (
+                  <div key={f.key} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <label style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em' }}>{f.label.toUpperCase()}</label>
+                    <input
+                      value={listing[f.key as keyof typeof listing] as string}
+                      onChange={e => setListing(l => ({ ...l, [f.key]: e.target.value }))}
+                      placeholder={f.placeholder}
+                      style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '9px', padding: '10px 14px', color: '#eef4f5', fontSize: '14px', fontFamily: 'inherit', outline: 'none', caretColor: 'var(--accent)', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+                      onFocus={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.38)')}
+                      onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)')}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Languages + Services */}
+              <div className="grid-2" style={{ gap: '16px' }}>
+                {[
+                  { label: 'Languages spoken', key: 'languages', placeholder: 'English, Spanish, Somali…' },
+                  { label: 'Services offered',  key: 'services',  placeholder: 'Primary care, Dental, Mental health…' },
+                ].map(f => (
+                  <div key={f.key} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <label style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em' }}>{f.label.toUpperCase()}</label>
+                    <textarea
+                      value={listing[f.key as keyof typeof listing] as string}
+                      onChange={e => setListing(l => ({ ...l, [f.key]: e.target.value }))}
+                      placeholder={f.placeholder}
+                      rows={3}
+                      style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '9px', padding: '10px 14px', color: '#eef4f5', fontSize: '14px', fontFamily: 'inherit', outline: 'none', resize: 'vertical', caretColor: 'var(--accent)', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+                      onFocus={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.38)')}
+                      onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)')}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Affordability toggles */}
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em', display: 'block', marginBottom: '12px' }}>AFFORDABILITY OPTIONS</label>
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                  {[
+                    { key: 'slidingScale', label: 'Sliding-scale fees' },
+                    { key: 'freeVisits',   label: 'Free visits available' },
+                    { key: 'acceptingAppts', label: 'Accepting appointments' },
+                  ].map(opt => (
+                    <button
+                      key={opt.key}
+                      onClick={() => setListing(l => ({ ...l, [opt.key]: !l[opt.key as keyof typeof l] }))}
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '7px',
+                        padding: '8px 16px', borderRadius: '100px', fontSize: '13px',
+                        fontFamily: 'inherit', cursor: 'pointer', border: '1px solid',
+                        transition: 'all 0.2s',
+                        background: listing[opt.key as keyof typeof listing] ? 'rgba(110,231,183,0.12)' : 'rgba(255,255,255,0.04)',
+                        borderColor: listing[opt.key as keyof typeof listing] ? 'rgba(110,231,183,0.30)' : 'rgba(255,255,255,0.09)',
+                        color: listing[opt.key as keyof typeof listing] ? 'var(--accent)' : 'rgba(255,255,255,0.5)',
+                      }}
+                    >
+                      <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: listing[opt.key as keyof typeof listing] ? 'var(--accent)' : 'rgba(255,255,255,0.2)', flexShrink: 0 }} />
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Hours */}
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em', display: 'block', marginBottom: '12px' }}>HOURS</label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {[
+                    { day: 'Monday – Friday', openKey: 'monOpen', closeKey: 'monClose' },
+                    { day: 'Saturday',        openKey: 'satOpen', closeKey: 'satClose' },
+                  ].map(row => (
+                    <div key={row.day} style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)', minWidth: '130px', fontFamily: 'var(--font-inter)' }}>{row.day}</span>
+                      <input value={listing[row.openKey as keyof typeof listing] as string} onChange={e => setListing(l => ({ ...l, [row.openKey]: e.target.value }))} placeholder="8:00 AM" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '8px', padding: '7px 12px', color: '#eef4f5', fontSize: '13px', fontFamily: 'inherit', outline: 'none', width: '110px', caretColor: 'var(--accent)' }} />
+                      <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '12px' }}>–</span>
+                      <input value={listing[row.closeKey as keyof typeof listing] as string} onChange={e => setListing(l => ({ ...l, [row.closeKey]: e.target.value }))} placeholder="5:00 PM" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '8px', padding: '7px 12px', color: '#eef4f5', fontSize: '13px', fontFamily: 'inherit', outline: 'none', width: '110px', caretColor: 'var(--accent)' }} />
+                    </div>
+                  ))}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)', minWidth: '130px' }}>Sunday</span>
+                    <button onClick={() => setListing(l => ({ ...l, sunClosed: !l.sunClosed }))} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '7px 14px', borderRadius: '8px', background: listing.sunClosed ? 'rgba(248,113,113,0.08)' : 'rgba(110,231,183,0.08)', border: `1px solid ${listing.sunClosed ? 'rgba(248,113,113,0.25)' : 'rgba(110,231,183,0.25)'}`, color: listing.sunClosed ? '#f87171' : 'var(--accent)', fontSize: '12px', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}>
+                      {listing.sunClosed ? 'Closed' : 'Open'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Photos */}
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em', display: 'block', marginBottom: '12px' }}>PHOTOS</label>
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
+                  {listing.photos.map((p, i) => (
+                    <div key={i} style={{ width: '80px', height: '80px', borderRadius: '10px', background: `rgba(110,231,183,0.${10 + i * 5})`, border: '1px solid rgba(110,231,183,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', color: 'var(--accent)', position: 'relative' }}>
+                      <Camera size={20} />
+                      <button onClick={() => setListing(l => ({ ...l, photos: l.photos.filter((_, j) => j !== i) }))} style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#f87171', border: 'none', borderRadius: '50%', width: '16px', height: '16px', color: '#fff', fontSize: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</button>
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => setListing(l => ({ ...l, photos: [...l.photos, `photo-${Date.now()}`] }))}
+                    style={{ width: '80px', height: '80px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '2px dashed rgba(255,255,255,0.12)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px', cursor: 'pointer', color: 'rgba(255,255,255,0.35)', fontSize: '10px', fontFamily: 'inherit', transition: 'border-color 0.2s, color 0.2s' }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(110,231,183,0.35)'; e.currentTarget.style.color = 'var(--accent)' }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'; e.currentTarget.style.color = 'rgba(255,255,255,0.35)' }}
+                  >
+                    <Camera size={18} />
+                    Add photo
+                  </button>
+                </div>
+                <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '8px', fontFamily: 'var(--font-inter)' }}>
+                  JPEG or PNG · max 5MB each · up to 8 photos
+                </p>
+              </div>
+
+              <button
+                onClick={handleSaveListing}
+                style={{ alignSelf: 'flex-start', padding: '12px 28px', borderRadius: '10px', background: listingSaved ? 'rgba(74,222,128,0.15)' : 'var(--accent)', color: listingSaved ? '#4ade80' : '#07070F', border: listingSaved ? '1px solid rgba(74,222,128,0.35)' : 'none', cursor: 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', transition: 'all 0.3s', boxShadow: listingSaved ? 'none' : '0 4px 18px rgba(110,231,183,0.28)' }}
+              >
+                {listingSaved ? '✓ Saved' : 'Save changes'}
+              </button>
+            </div>
+          )}
+
+          {/* ── Analytics tab ── */}
+          {manageTab === 'analytics' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div className="grid-4" style={{ gap: '12px' }}>
+                {[
+                  { label: 'Profile views this month',  value: '1,247', delta: '+18%',  color: 'var(--accent)' },
+                  { label: 'Patients referred via NEXUS', value: '84',   delta: '+12%',  color: '#60a5fa' },
+                  { label: 'Bookmark saves',            value: '312',   delta: '+6%',   color: '#a78bfa' },
+                  { label: 'Direction requests',        value: '97',    delta: '+23%',  color: '#fbbf24' },
+                ].map((stat, i) => (
+                  <div key={i} style={{ padding: '20px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px' }}>
+                    <div style={{ fontSize: '28px', fontWeight: 800, color: '#eef4f5', letterSpacing: '-0.02em', marginBottom: '6px', fontFamily: 'var(--font-mono, monospace)' }}>{stat.value}</div>
+                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', marginBottom: '8px', lineHeight: 1.4 }}>{stat.label}</div>
+                    <span style={{ fontSize: '11px', fontWeight: 600, color: stat.color, background: `${stat.color}14`, border: `1px solid ${stat.color}28`, borderRadius: '100px', padding: '2px 8px' }}>{stat.delta} vs last month</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Search source breakdown */}
+              <div style={{ padding: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px' }}>
+                <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '16px', color: '#eef4f5' }}>How patients find you</h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {[
+                    { label: 'NEXUS search',        pct: 58, color: 'var(--accent)' },
+                    { label: 'Direct URL',          pct: 22, color: '#60a5fa' },
+                    { label: 'Map pin click',       pct: 14, color: '#a78bfa' },
+                    { label: 'Referral from CHW',   pct:  6, color: '#fbbf24' },
+                  ].map(row => (
+                    <div key={row.label}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'rgba(255,255,255,0.55)', marginBottom: '5px' }}>
+                        <span>{row.label}</span>
+                        <span style={{ color: row.color, fontWeight: 600 }}>{row.pct}%</span>
+                      </div>
+                      <div style={{ height: '5px', background: 'rgba(255,255,255,0.06)', borderRadius: '5px', overflow: 'hidden' }}>
+                        <div style={{ height: '100%', width: `${row.pct}%`, background: row.color, borderRadius: '5px', transition: 'width 1s cubic-bezier(0.16,1,0.3,1)' }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{ padding: '14px 18px', background: 'rgba(110,231,183,0.04)', border: '1px solid rgba(110,231,183,0.14)', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <AlertCircle size={14} color="var(--accent)" />
+                <p style={{ fontSize: '12px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', lineHeight: 1.5, margin: 0 }}>
+                  Analytics update daily at midnight UTC. Historical data available for the past 12 months. Export as CSV from your provider dashboard.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* ── Appointments tab ── */}
+          {manageTab === 'appointments' && (
+            <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', padding: '24px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+                <div>
+                  <h4 style={{ fontSize: '15px', fontWeight: 600, color: '#eef4f5', marginBottom: '4px' }}>Incoming appointment requests</h4>
+                  <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)' }}>3 pending · accepting new patients</p>
+                </div>
+                <button onClick={() => setListing(l => ({ ...l, acceptingAppts: !l.acceptingAppts }))} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '100px', background: listing.acceptingAppts ? 'rgba(110,231,183,0.12)' : 'rgba(248,113,113,0.08)', border: `1px solid ${listing.acceptingAppts ? 'rgba(110,231,183,0.28)' : 'rgba(248,113,113,0.25)'}`, color: listing.acceptingAppts ? 'var(--accent)' : '#f87171', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}>
+                  {listing.acceptingAppts ? '● Accepting patients' : '○ Not accepting'}
+                </button>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {[
+                  { name: 'Anonymous Patient',  reason: 'Primary care – new patient', time: '2h ago',   urgent: false },
+                  { name: 'Anonymous Patient',  reason: 'Mental health consultation',  time: '5h ago',   urgent: true  },
+                  { name: 'Anonymous Patient',  reason: 'Dental pain',                 time: '1d ago',   urgent: true  },
+                ].map((req, i) => (
+                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px', gap: '12px', flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(110,231,183,0.12)', border: '1px solid rgba(110,231,183,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', color: 'var(--accent)', flexShrink: 0 }}>
+                        {req.name[0]}
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '13px', fontWeight: 600, color: '#eef4f5', marginBottom: '2px' }}>{req.name}</div>
+                        <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)' }}>
+                          {req.reason}
+                          {req.urgent && <span style={{ marginLeft: '8px', fontSize: '10px', background: 'rgba(248,113,113,0.12)', color: '#f87171', border: '1px solid rgba(248,113,113,0.25)', borderRadius: '4px', padding: '1px 6px', fontWeight: 600 }}>URGENT</span>}
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                      <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-mono, monospace)' }}>{req.time}</span>
+                      <button style={{ padding: '6px 14px', borderRadius: '8px', background: 'var(--accent)', color: '#07070F', border: 'none', cursor: 'pointer', fontSize: '12px', fontWeight: 700, fontFamily: 'inherit' }}>Schedule</button>
+                      <button style={{ padding: '6px 12px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: '12px', fontFamily: 'inherit' }}>Decline</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </section>
 
       {/* ── DASHBOARD PREVIEW ── */}

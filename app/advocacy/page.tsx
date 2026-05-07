@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
 import { submitForm } from '@/utils/submitForm'
-import { Megaphone, Users, FileText, CheckCircle, ArrowRight, MapPin, TrendingUp, Globe, Mail, ChevronDown, ExternalLink, Heart } from 'lucide-react'
+import { Megaphone, Users, FileText, CheckCircle, ArrowRight, MapPin, TrendingUp, Globe, Mail, ChevronDown, ExternalLink, Heart, Share2, Copy, X as XIcon, Search, Bell, AlertCircle, ChevronRight, Zap, BookOpen, Link2 } from 'lucide-react'
 
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
@@ -68,6 +68,75 @@ const PARTNERS = [
   { name: 'CMS Innovation Center', url: 'https://innovation.cms.gov', desc: 'Testing new payment & care delivery models' },
 ]
 
+/* ─── legislation tracker data ──────────────────── */
+const LEGISLATION = [
+  {
+    id: 'medicare-negotiation',
+    title: 'Medicare Drug Negotiation Expansion Act',
+    status: 'In Committee',
+    statusColor: '#fbbf24',
+    chamber: 'Senate',
+    lastAction: 'Referred to Senate Finance Committee',
+    lastDate: 'Mar 2025',
+    summary: "Expands Medicare’s drug negotiation authority beyond the 10 drugs currently covered by the Inflation Reduction Act to all 200+ top-selling medications.",
+    urgency: 'high',
+    url: 'https://www.congress.gov/search?q=%7B%22source%22%3A%22legislation%22%2C%22search%22%3A%22medicare+drug+negotiation%22%7D',
+    tags: ['Rx Pricing', 'Medicare', 'Bipartisan'],
+  },
+  {
+    id: 'medicaid-expansion-act',
+    title: 'Closing the Coverage Gap Act',
+    status: 'Floor Vote Pending',
+    statusColor: '#f87171',
+    chamber: 'House',
+    lastAction: 'Passed Energy & Commerce Committee 24-18',
+    lastDate: 'Apr 2025',
+    summary: 'Would provide Medicaid-equivalent coverage to the ~2.2 million adults in the "coverage gap" in states that have not adopted ACA Medicaid expansion.',
+    urgency: 'urgent',
+    url: 'https://www.congress.gov/search?q=%7B%22source%22%3A%22legislation%22%2C%22search%22%3A%22closing+coverage+gap%22%7D',
+    tags: ['Medicaid', 'Non-Expansion States', 'Coverage Gap'],
+  },
+  {
+    id: 'chw-medicare',
+    title: 'Community Health Workers Medicare Act',
+    status: 'Signed into Law',
+    statusColor: '#4ade80',
+    chamber: 'Signed',
+    lastAction: 'Signed by President — effective Jan 1, 2025',
+    lastDate: 'Dec 2024',
+    summary: 'Makes Community Health Worker services a covered Medicare and Medicaid benefit, enabling 47% better health outcomes for enrolled patients.',
+    urgency: 'passed',
+    url: 'https://www.congress.gov/search?q=%7B%22source%22%3A%22legislation%22%2C%22search%22%3A%22community+health+worker+medicare%22%7D',
+    tags: ['CHW', 'Medicare', 'Enacted'],
+  },
+  {
+    id: 'fqhc-funding',
+    title: 'HRSA Community Health Center Expansion Act',
+    status: 'Subcommittee',
+    statusColor: '#60a5fa',
+    chamber: 'House',
+    lastAction: 'Subcommittee hearing scheduled',
+    lastDate: 'May 2025',
+    summary: 'Increases mandatory HRSA Health Center Fund appropriations by $3.6 billion over 5 years to expand clinic capacity in underserved communities.',
+    urgency: 'normal',
+    url: 'https://www.congress.gov/search?q=%7B%22source%22%3A%22legislation%22%2C%22search%22%3A%22community+health+center+expansion%22%7D',
+    tags: ['FQHC', 'HRSA', 'Underserved'],
+  },
+  {
+    id: 'no-surprises-protect',
+    title: 'No Surprises Act Protection Reauthorization',
+    status: 'Senate Floor',
+    statusColor: '#f472b6',
+    chamber: 'Senate',
+    lastAction: 'Motion to proceed adopted 56-44',
+    lastDate: 'Apr 2025',
+    summary: 'Reauthorizes and strengthens existing protections against surprise medical billing, closing loopholes that have allowed some providers to circumvent the 2022 original act.',
+    urgency: 'high',
+    url: 'https://www.congress.gov/search?q=%7B%22source%22%3A%22legislation%22%2C%22search%22%3A%22no+surprises+act%22%7D',
+    tags: ['Patient Protection', 'Billing', 'Bipartisan'],
+  },
+]
+
 const LETTER_TEMPLATE = `Dear [Representative Name],
 
 I am a constituent writing to urge your support for expanded access to free and affordable healthcare in our state.
@@ -99,6 +168,13 @@ export default function AdvocacyPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [signEmail, setSignEmail] = useState('')
   const [signingId, setSigningId] = useState<string | null>(null)
+  /* Rep finder */
+  const [repZip, setRepZip] = useState('')
+  /* Social share */
+  const [copiedId, setCopiedId] = useState<string | null>(null)
+  /* Legislation */
+  const [expandedBill, setExpandedBill] = useState<string | null>(null)
+  const [billAlert, setBillAlert] = useState<string | null>(null)
 
   const pill: React.CSSProperties = {
     display: 'inline-flex', alignItems: 'center', gap: '6px',
@@ -127,6 +203,34 @@ export default function AdvocacyPage() {
       await submitForm('advocacy', { type: 'letter', letter: filledLetter, rep: repName, name: yourName, city: yourCity })
     } catch (_) { /* silent */ }
     setLetterState('sent')
+  }
+
+  function handleCopyLink(petitionId: string, title: string) {
+    const url = typeof window !== 'undefined' ? `${window.location.origin}/advocacy#${petitionId}` : `/advocacy#${petitionId}`
+    navigator.clipboard?.writeText(url).catch(() => {})
+    setCopiedId(petitionId)
+    setTimeout(() => setCopiedId(null), 2000)
+  }
+
+  function shareOnTwitter(title: string, petitionId: string) {
+    const text = encodeURIComponent(`I just signed: "${title}" — join me in demanding better healthcare access for all Americans`)
+    const url  = encodeURIComponent(`${typeof window !== 'undefined' ? window.location.origin : 'https://nexus-health.app'}/advocacy#${petitionId}`)
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'noopener,noreferrer')
+  }
+
+  function shareOnFacebook(petitionId: string) {
+    const url = encodeURIComponent(`${typeof window !== 'undefined' ? window.location.origin : 'https://nexus-health.app'}/advocacy#${petitionId}`)
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'noopener,noreferrer')
+  }
+
+  function handleRepLookup() {
+    if (!repZip.trim()) return
+    window.open(`https://www.congress.gov/members/find-your-member?zip5=${repZip.trim()}`, '_blank', 'noopener,noreferrer')
+  }
+
+  function handleBillAlert(billId: string) {
+    setBillAlert(billId)
+    setTimeout(() => setBillAlert(null), 3000)
   }
 
   return (
@@ -198,21 +302,47 @@ export default function AdvocacyPage() {
 
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
                         <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)' }}>{pct.toFixed(0)}% to goal · {(pet.goal - pet.signatures).toLocaleString()} more needed</span>
-                        {signed ? (
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: pet.color, fontWeight: 600 }}>
-                            <CheckCircle size={14} strokeWidth={2} /> Signed — thank you
-                          </span>
-                        ) : (
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                          {/* Social share buttons */}
                           <button
-                            onClick={() => handleSign(pet.id)}
-                            disabled={signingId === pet.id}
-                            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '9px 18px', borderRadius: '100px', background: `${pet.color}15`, border: `1px solid ${pet.color}30`, color: pet.color, fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'background 0.2s', opacity: signingId === pet.id ? 0.6 : 1 }}
-                            onMouseEnter={e => (e.currentTarget.style.background = `${pet.color}25`)}
-                            onMouseLeave={e => (e.currentTarget.style.background = `${pet.color}15`)}
-                          >
-                            {signingId === pet.id ? 'Signing…' : <><Heart size={12} strokeWidth={2} /> Sign this petition</>}
+                            onClick={() => shareOnTwitter(pet.title, pet.id)}
+                            title="Share on X (Twitter)"
+                            style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', fontFamily: 'inherit' }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.18)'; (e.currentTarget as HTMLElement).style.color = '#fff' }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.4)' }}>
+                            <XIcon size={13} strokeWidth={2.5} />
                           </button>
-                        )}
+                          <button
+                            onClick={() => shareOnFacebook(pet.id)}
+                            title="Share on Facebook"
+                            style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', fontFamily: 'inherit' }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(96,165,250,0.3)'; (e.currentTarget as HTMLElement).style.color = '#60a5fa' }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.4)' }}>
+                            <Share2 size={13} strokeWidth={2} />
+                          </button>
+                          <button
+                            onClick={() => handleCopyLink(pet.id, pet.title)}
+                            title="Copy link"
+                            style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid', background: copiedId === pet.id ? 'rgba(110,231,183,0.1)' : 'rgba(255,255,255,0.03)', color: copiedId === pet.id ? 'var(--accent)' : 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', borderColor: copiedId === pet.id ? 'rgba(110,231,183,0.3)' : 'rgba(255,255,255,0.08)', fontFamily: 'inherit' }}>
+                            {copiedId === pet.id ? <CheckCircle size={13} strokeWidth={2} /> : <Link2 size={13} strokeWidth={2} />}
+                          </button>
+                          {/* Sign button */}
+                          {signed ? (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: pet.color, fontWeight: 600 }}>
+                              <CheckCircle size={14} strokeWidth={2} /> Signed — thank you
+                            </span>
+                          ) : (
+                            <button
+                              onClick={() => handleSign(pet.id)}
+                              disabled={signingId === pet.id}
+                              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '9px 18px', borderRadius: '100px', background: `${pet.color}15`, border: `1px solid ${pet.color}30`, color: pet.color, fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'background 0.2s', opacity: signingId === pet.id ? 0.6 : 1 }}
+                              onMouseEnter={e => (e.currentTarget.style.background = `${pet.color}25`)}
+                              onMouseLeave={e => (e.currentTarget.style.background = `${pet.color}15`)}
+                            >
+                              {signingId === pet.id ? 'Signing…' : <><Heart size={12} strokeWidth={2} /> Sign this petition</>}
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -309,6 +439,157 @@ export default function AdvocacyPage() {
               </div>
             </RevealBlock>
           )}
+        </div>
+      </section>
+
+      {/* ── REP FINDER BY ZIP ────────────────────────── */}
+      <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <RevealBlock>
+            <div style={{ marginBottom: '36px' }}>
+              <span style={pill}><Search size={10} strokeWidth={1.5} /> Find your representatives</span>
+              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Know who represents you</h2>
+              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '460px', lineHeight: 1.6 }}>
+                Enter your ZIP code to find your House representative and two senators — the exact people whose votes decide your healthcare coverage.
+              </p>
+            </div>
+          </RevealBlock>
+          <RevealBlock delay={80}>
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]{5}"
+                maxLength={5}
+                value={repZip}
+                onChange={e => setRepZip(e.target.value.replace(/\D/g, '').slice(0, 5))}
+                onKeyDown={e => { if (e.key === 'Enter') handleRepLookup() }}
+                placeholder="Enter ZIP code (e.g. 90210)"
+                style={{ flex: 1, minWidth: '200px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '14px 18px', color: '#fff', fontSize: '16px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box', letterSpacing: '0.08em' }}
+                onFocus={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.4)')}
+                onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)')}
+              />
+              <button
+                onClick={handleRepLookup}
+                disabled={repZip.length < 5}
+                style={{ padding: '14px 24px', borderRadius: '12px', border: 'none', background: repZip.length >= 5 ? 'var(--accent)' : 'rgba(255,255,255,0.06)', color: repZip.length >= 5 ? '#07070F' : 'rgba(255,255,255,0.2)', fontSize: '14px', fontWeight: 700, cursor: repZip.length >= 5 ? 'pointer' : 'not-allowed', fontFamily: 'inherit', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Search size={14} /> Find my reps
+              </button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
+              {[
+                { label: 'Find on Congress.gov', desc: 'Official congressional rep lookup by address', url: 'https://www.congress.gov/members/find-your-member', color: '#60a5fa', icon: <BookOpen size={14} strokeWidth={1.5} /> },
+                { label: 'Find on OpenStates', desc: 'State legislators — governor, state senate & house', url: 'https://openstates.org/find_your_legislator/', color: '#a78bfa', icon: <MapPin size={14} strokeWidth={1.5} /> },
+                { label: 'USA.gov Rep Finder', desc: 'All elected officials at federal, state, and local level', url: 'https://www.usa.gov/elected-officials', color: 'var(--accent)', icon: <Globe size={14} strokeWidth={1.5} /> },
+              ].map(link => (
+                <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer"
+                  style={{ padding: '16px 18px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px', textDecoration: 'none', display: 'flex', flexDirection: 'column', gap: '6px', transition: 'all 0.2s' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = `${link.color}30`; (e.currentTarget as HTMLElement).style.background = `${link.color}06` }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.07)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ color: link.color }}>{link.icon}</span>
+                    <span style={{ fontSize: '14px', fontWeight: 700, color: '#eef4f5' }}>{link.label}</span>
+                    <ExternalLink size={11} style={{ color: 'rgba(255,255,255,0.25)', marginLeft: 'auto' }} />
+                  </div>
+                  <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.38)', lineHeight: 1.5 }}>{link.desc}</span>
+                </a>
+              ))}
+            </div>
+          </RevealBlock>
+        </div>
+      </section>
+
+      {/* ── LEGISLATION TRACKER ──────────────────────── */}
+      <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+          <RevealBlock>
+            <div style={{ marginBottom: '48px' }}>
+              <span style={pill}><Zap size={10} strokeWidth={1.5} /> Legislation tracker</span>
+              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Bills that affect you right now</h2>
+              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '480px', lineHeight: 1.6 }}>
+                Real legislation moving through Congress — or just passed — that directly affects free clinic funding, Medicaid, drug pricing, and patient protections.
+              </p>
+            </div>
+          </RevealBlock>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {LEGISLATION.map((bill, i) => (
+              <RevealBlock key={bill.id} delay={i * 70}>
+                <div id={bill.id} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '18px', overflow: 'hidden', transition: 'border-color 0.2s' }}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = `${bill.statusColor}25`)}
+                  onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)')}>
+
+                  {/* Bill header */}
+                  <div style={{ padding: '20px 24px', display: 'flex', alignItems: 'flex-start', gap: '16px', cursor: 'pointer' }}
+                    onClick={() => setExpandedBill(expandedBill === bill.id ? null : bill.id)}>
+                    {/* Urgency indicator */}
+                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: bill.statusColor, marginTop: '6px', flexShrink: 0, boxShadow: bill.urgency === 'urgent' || bill.urgency === 'high' ? `0 0 8px ${bill.statusColor}` : 'none', animation: bill.urgency === 'urgent' ? 'pulseDot 1.5s ease-in-out infinite' : 'none' }} />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '8px', alignItems: 'center' }}>
+                        <span style={{ fontSize: '11px', padding: '3px 9px', borderRadius: '100px', background: `${bill.statusColor}15`, color: bill.statusColor, border: `1px solid ${bill.statusColor}30`, fontWeight: 700, letterSpacing: '0.04em' }}>
+                          {bill.status}
+                        </span>
+                        <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', padding: '3px 8px', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}>
+                          {bill.chamber}
+                        </span>
+                        {bill.tags.map(tag => (
+                          <span key={tag} style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)', padding: '2px 7px', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.06)' }}>{tag}</span>
+                        ))}
+                      </div>
+                      <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#eef4f5', marginBottom: '4px', lineHeight: 1.35 }}>{bill.title}</h3>
+                      <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', margin: 0 }}>Last action: {bill.lastAction} — <span style={{ color: bill.statusColor }}>{bill.lastDate}</span></p>
+                    </div>
+                    <ChevronRight size={15} style={{ color: 'rgba(255,255,255,0.25)', transform: expandedBill === bill.id ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s', flexShrink: 0, marginTop: '2px' }} />
+                  </div>
+
+                  {/* Expanded details */}
+                  {expandedBill === bill.id && (
+                    <div style={{ padding: '0 24px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                      <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, margin: '16px 0 18px' }}>{bill.summary}</p>
+                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <a href={bill.url} target="_blank" rel="noopener noreferrer"
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '9px 16px', background: `${bill.statusColor}15`, border: `1px solid ${bill.statusColor}30`, borderRadius: '10px', color: bill.statusColor, fontSize: '13px', fontWeight: 600, textDecoration: 'none', transition: 'opacity 0.15s' }}
+                          onMouseEnter={e => (e.currentTarget.style.opacity = '0.8')}
+                          onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
+                          <BookOpen size={12} /> View on Congress.gov <ExternalLink size={11} />
+                        </a>
+                        <button
+                          onClick={() => handleBillAlert(bill.id)}
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '9px 16px', background: billAlert === bill.id ? 'rgba(110,231,183,0.15)' : 'rgba(255,255,255,0.03)', border: `1px solid ${billAlert === bill.id ? 'rgba(110,231,183,0.3)' : 'rgba(255,255,255,0.08)'}`, borderRadius: '10px', color: billAlert === bill.id ? 'var(--accent)' : 'rgba(255,255,255,0.45)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}>
+                          {billAlert === bill.id ? <><CheckCircle size={12} /> Alert set!</> : <><Bell size={12} /> Get action alerts</>}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </RevealBlock>
+            ))}
+          </div>
+
+          <RevealBlock delay={200}>
+            <div style={{ marginTop: '24px', padding: '18px 22px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px', display: 'flex', gap: '14px', alignItems: 'center', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flex: 1, flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', fontSize: '12px' }}>
+                  {[
+                    { color: '#f87171', label: 'Urgent' },
+                    { color: '#fbbf24', label: 'In Committee' },
+                    { color: '#60a5fa', label: 'Floor Vote' },
+                    { color: '#4ade80', label: 'Enacted' },
+                  ].map(s => (
+                    <span key={s.label} style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'rgba(255,255,255,0.4)' }}>
+                      <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: s.color, display: 'inline-block' }} /> {s.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <a href="https://www.congress.gov" target="_blank" rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: 'rgba(255,255,255,0.35)', textDecoration: 'none', transition: 'color 0.15s' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.35)')}>
+                Full tracker at Congress.gov <ExternalLink size={10} />
+              </a>
+            </div>
+          </RevealBlock>
         </div>
       </section>
 
@@ -434,6 +715,7 @@ export default function AdvocacyPage() {
 
       <style>{`
         @keyframes fadeUp { from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:translateY(0) } }
+        @keyframes pulseDot { 0%,100% { opacity:1; transform:scale(1) } 50% { opacity:0.5; transform:scale(0.8) } }
       `}</style>
     </AppShell>
   )

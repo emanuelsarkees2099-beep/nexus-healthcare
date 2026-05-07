@@ -3,6 +3,13 @@ import { useEffect, useState } from 'react'
 
 const LANG_KEY   = 'nexus_language'
 const A11Y_KEY   = 'nexus_a11y'
+const THEME_KEY  = 'nexus_theme'
+
+function applyTheme(t: 'dark' | 'light') {
+  if (t === 'light') document.documentElement.setAttribute('data-theme', 'light')
+  else document.documentElement.removeAttribute('data-theme')
+  localStorage.setItem(THEME_KEY, t)
+}
 
 const LANGUAGES = [
   { code: 'en', native: 'English',    flag: '🇺🇸' },
@@ -51,12 +58,17 @@ export default function SettingsSidebar() {
   const [lang, setLang] = useState('en')
   const [a11y, setA11y] = useState<A11ySettings>(DEFAULT_A11Y)
   const [activeSection, setActiveSection] = useState<'language' | 'accessibility' | 'display'>('language')
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
 
   useEffect(() => {
     setLang(localStorage.getItem(LANG_KEY) ?? 'en')
     const saved = loadA11y()
     setA11y(saved)
     applyA11y(saved)
+    // Restore saved theme
+    const savedTheme = (localStorage.getItem(THEME_KEY) ?? 'dark') as 'dark' | 'light'
+    setTheme(savedTheme)
+    applyTheme(savedTheme)
   }, [])
 
   useEffect(() => {
@@ -79,6 +91,7 @@ export default function SettingsSidebar() {
   const setLanguage = (code: string) => {
     setLang(code)
     localStorage.setItem(LANG_KEY, code)
+    window.dispatchEvent(new CustomEvent('nexus:lang-changed'))
   }
 
   const updateA11y = (patch: Partial<A11ySettings>) => {
@@ -162,7 +175,7 @@ export default function SettingsSidebar() {
           flexShrink: 0,
         }}>
           <div>
-            <h2 style={{ fontFamily: 'var(--font-sora)', fontSize: '16px', fontWeight: 700, margin: 0, letterSpacing: '-0.01em' }}>Settings</h2>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '16px', fontWeight: 700, margin: 0, letterSpacing: '-0.01em' }}>Settings</h2>
             <p style={{ fontSize: '11px', color: 'rgba(232,240,241,0.35)', fontFamily: 'var(--font-inter)', margin: '3px 0 0' }}>Preferences saved automatically</p>
           </div>
           <button
@@ -235,7 +248,7 @@ export default function SettingsSidebar() {
                     <span style={{
                       fontSize: '12px', fontWeight: lang === l.code ? 600 : 400,
                       color: lang === l.code ? '#8ab5bc' : 'rgba(232,240,241,0.7)',
-                      fontFamily: 'var(--font-sora)', whiteSpace: 'nowrap',
+                      fontFamily: 'var(--font-display)', whiteSpace: 'nowrap',
                       overflow: 'hidden', textOverflow: 'ellipsis',
                     }}>{l.native}</span>
                     {lang === l.code && (
@@ -255,7 +268,7 @@ export default function SettingsSidebar() {
 
               {/* Font size */}
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'rgba(232,240,241,0.8)', fontFamily: 'var(--font-sora)', marginBottom: '4px' }}>Text size</label>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'rgba(232,240,241,0.8)', fontFamily: 'var(--font-display)', marginBottom: '4px' }}>Text size</label>
                 <p style={{ fontSize: '11px', color: 'rgba(232,240,241,0.35)', fontFamily: 'var(--font-inter)', marginBottom: '12px' }}>Adjusts the base font size across the app</p>
                 <div style={{ display: 'flex', gap: '6px' }}>
                   {(['Default', 'Large', 'Larger'] as const).map((label, i) => (
@@ -280,7 +293,7 @@ export default function SettingsSidebar() {
               {/* High contrast */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
                 <div>
-                  <div style={{ fontSize: '13px', fontWeight: 600, color: 'rgba(232,240,241,0.8)', fontFamily: 'var(--font-sora)', marginBottom: '2px' }}>High contrast</div>
+                  <div style={{ fontSize: '13px', fontWeight: 600, color: 'rgba(232,240,241,0.8)', fontFamily: 'var(--font-display)', marginBottom: '2px' }}>High contrast</div>
                   <div style={{ fontSize: '11px', color: 'rgba(232,240,241,0.35)', fontFamily: 'var(--font-inter)' }}>Increases text and border contrast</div>
                 </div>
                 <Toggle checked={a11y.highContrast} onChange={v => updateA11y({ highContrast: v })} />
@@ -289,7 +302,7 @@ export default function SettingsSidebar() {
               {/* Reduce motion */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
                 <div>
-                  <div style={{ fontSize: '13px', fontWeight: 600, color: 'rgba(232,240,241,0.8)', fontFamily: 'var(--font-sora)', marginBottom: '2px' }}>Reduce motion</div>
+                  <div style={{ fontSize: '13px', fontWeight: 600, color: 'rgba(232,240,241,0.8)', fontFamily: 'var(--font-display)', marginBottom: '2px' }}>Reduce motion</div>
                   <div style={{ fontSize: '11px', color: 'rgba(232,240,241,0.35)', fontFamily: 'var(--font-inter)' }}>Minimizes animations and transitions</div>
                 </div>
                 <Toggle checked={a11y.reduceMotion} onChange={v => updateA11y({ reduceMotion: v })} />
@@ -307,23 +320,35 @@ export default function SettingsSidebar() {
           {activeSection === 'display' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ padding: '14px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: 'rgba(232,240,241,0.8)', fontFamily: 'var(--font-sora)', marginBottom: '4px' }}>Theme</div>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: 'rgba(232,240,241,0.8)', fontFamily: 'var(--font-display)', marginBottom: '4px' }}>Theme</div>
                 <div style={{ fontSize: '11px', color: 'rgba(232,240,241,0.35)', fontFamily: 'var(--font-inter)', marginBottom: '12px' }}>Color scheme preference</div>
                 <div style={{ display: 'flex', gap: '6px' }}>
-                  <button style={{ flex: 1, padding: '8px', borderRadius: '9px', border: '1px solid rgba(109,145,151,0.5)', background: 'rgba(109,145,151,0.12)', color: '#8ab5bc', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-inter)', cursor: 'pointer' }}>
-                    Dark
-                  </button>
-                  <button style={{ flex: 1, padding: '8px', borderRadius: '9px', border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.03)', color: 'rgba(232,240,241,0.4)', fontSize: '12px', fontFamily: 'var(--font-inter)', cursor: 'not-allowed', opacity: 0.5 }} disabled>
-                    Light
-                  </button>
-                  <button style={{ flex: 1, padding: '8px', borderRadius: '9px', border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.03)', color: 'rgba(232,240,241,0.4)', fontSize: '12px', fontFamily: 'var(--font-inter)', cursor: 'not-allowed', opacity: 0.5 }} disabled>
-                    System
-                  </button>
+                  {(['dark', 'light'] as const).map(t => {
+                    const active = theme === t
+                    return (
+                      <button
+                        key={t}
+                        onClick={() => { setTheme(t); applyTheme(t) }}
+                        style={{
+                          flex: 1, padding: '8px', borderRadius: '9px', cursor: 'pointer',
+                          border: active ? '1px solid rgba(109,145,151,0.5)' : '1px solid rgba(255,255,255,0.07)',
+                          background: active ? 'rgba(109,145,151,0.12)' : 'rgba(255,255,255,0.03)',
+                          color: active ? '#8ab5bc' : 'rgba(232,240,241,0.45)',
+                          fontSize: '12px', fontWeight: active ? 600 : 400,
+                          fontFamily: 'var(--font-inter)',
+                          transition: 'all 0.2s',
+                          textTransform: 'capitalize',
+                        }}
+                      >
+                        {t === 'dark' ? '🌙 Dark' : '☀️ Light'}
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
 
               <div style={{ padding: '14px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: 'rgba(232,240,241,0.8)', fontFamily: 'var(--font-sora)', marginBottom: '2px' }}>App version</div>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: 'rgba(232,240,241,0.8)', fontFamily: 'var(--font-display)', marginBottom: '2px' }}>App version</div>
                 <div style={{ fontSize: '11px', color: 'rgba(232,240,241,0.35)', fontFamily: 'var(--font-inter)', marginTop: '4px' }}>NEXUS Beta · v0.1.0</div>
               </div>
 

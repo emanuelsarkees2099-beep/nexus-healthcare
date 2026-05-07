@@ -148,7 +148,7 @@ export default function ClinicDetailPage() {
       <AppShell>
         <div style={{ maxWidth: '600px', margin: '80px auto', padding: '0 24px', textAlign: 'center' }}>
           <AlertCircle size={40} color="var(--coral)" style={{ marginBottom: '16px' }} />
-          <h1 style={{ fontFamily: 'var(--font-sora)', fontSize: '1.5rem', fontWeight: 700, marginBottom: '12px', color: 'var(--text)' }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 700, marginBottom: '12px', color: 'var(--text)' }}>
             Clinic not found
           </h1>
           <p style={{ color: 'var(--text-2)', fontFamily: 'var(--font-inter)', marginBottom: '24px' }}>
@@ -256,7 +256,7 @@ export default function ClinicDetailPage() {
 
           {/* Name + affordability */}
           <h1 style={{
-            fontFamily: 'var(--font-sora)',
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(1.5rem, 4vw, 2rem)',
             fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1,
             color: 'var(--text)', marginBottom: '8px',

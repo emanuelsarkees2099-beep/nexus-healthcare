@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect, useRef } from 'react'
 import AppShell from '@/components/AppShell'
+import JsonLd, { PROGRAMS_FAQ_SCHEMA, breadcrumbSchema } from '@/components/JsonLd'
 import { useRouter } from 'next/navigation'
 import { smoothScrollTo } from '@/utils/smoothScroll'
 import { CheckCircle2, ChevronRight, ChevronLeft, DollarSign, AlertCircle, TrendingUp, ShieldCheck, Zap, ArrowRight, Sparkles, ReceiptText, RefreshCw } from 'lucide-react'
@@ -319,6 +320,15 @@ export default function ProgramsPage() {
 
   return (
     <AppShell>
+      {/* 5.9 — Structured Data */}
+      <JsonLd schema={PROGRAMS_FAQ_SCHEMA} id="schema-faq-programs" />
+      <JsonLd
+        schema={breadcrumbSchema([
+          { name: 'Home',     url: 'https://nexus.health' },
+          { name: 'Programs', url: 'https://nexus.health/programs' },
+        ])}
+        id="schema-breadcrumb-programs"
+      />
       {/* ── HERO ─────────────────────────────────────── */}
       <section style={{ minHeight: '80dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '80px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)', width: '700px', height: '350px', background: 'radial-gradient(ellipse, rgba(74,222,128,0.07) 0%, transparent 70%)', pointerEvents: 'none' }} />

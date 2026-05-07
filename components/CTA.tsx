@@ -2,9 +2,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger)
+import { registerGSAP } from '@/lib/gsap-st'
+registerGSAP()
 
 const STATS = [
   { value: '12,400+', label: 'Free clinics mapped' },
@@ -125,7 +124,7 @@ export default function CTA() {
             <h2
               id="cta-title"
               style={{
-                fontFamily: 'var(--font-sora)',
+                fontFamily: 'var(--font-display)',
                 fontSize: 'clamp(2.4rem, 3.8vw, 3.8rem)',
                 fontWeight: 700,
                 lineHeight: 1.04,
@@ -164,13 +163,13 @@ export default function CTA() {
                 className="btn-shimmer"
                 style={{
                   background: 'var(--accent)',
-                  color: '#07070F',
+                  color: 'var(--bg)',
                   border: 'none',
                   borderRadius: '12px',
                   padding: '14px 30px',
                   fontSize: '15px',
                   fontWeight: 600,
-                  fontFamily: 'var(--font-sora)',
+                  fontFamily: 'var(--font-display)',
                   cursor: 'pointer',
                   letterSpacing: '-0.01em',
                   boxShadow: '0 4px 24px rgba(110,231,183,0.30)',
@@ -273,7 +272,7 @@ export default function CTA() {
                 }} />
                 <div style={{
                   fontSize: 'clamp(2.8rem, 5vw, 4rem)',
-                  fontFamily: 'var(--font-sora)',
+                  fontFamily: 'var(--font-display)',
                   fontWeight: 800,
                   letterSpacing: '-0.04em',
                   color: 'var(--text)',
@@ -305,7 +304,7 @@ export default function CTA() {
                 }} />
                 <div style={{
                   fontSize: '1.9rem',
-                  fontFamily: 'var(--font-sora)',
+                  fontFamily: 'var(--font-display)',
                   fontWeight: 700,
                   letterSpacing: '-0.03em',
                   color: 'var(--accent)',
@@ -332,7 +331,7 @@ export default function CTA() {
                 }} />
                 <div style={{
                   fontSize: '1.9rem',
-                  fontFamily: 'var(--font-sora)',
+                  fontFamily: 'var(--font-display)',
                   fontWeight: 700,
                   letterSpacing: '-0.03em',
                   color: 'var(--accent)',
@@ -357,7 +356,7 @@ export default function CTA() {
                 <div>
                   <div style={{
                     fontSize: '1.6rem',
-                    fontFamily: 'var(--font-sora)',
+                    fontFamily: 'var(--font-display)',
                     fontWeight: 700,
                     letterSpacing: '-0.03em',
                     color: 'var(--text)',

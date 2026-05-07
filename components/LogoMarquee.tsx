@@ -1,9 +1,90 @@
 'use client'
 
-const ROW1 = ['HRSA', 'Federally Qualified Health Centers', 'University of Arizona', 'NeedyMeds', 'Open Door Health', 'GoodRx', 'National Association of CHWs', '340B Health']
-const ROW2 = ['Phoenix Children\'s Hospital', 'Maricopa County Health', 'Community Health Center', 'Free Clinic Network', 'AZ Health Department', 'Banner Health Foundation', 'Dignity Health', 'Valle del Sol Health']
+interface Logo { name: string; url: string; svg: React.ReactNode }
 
-function MarqueeRow({ items, reverse = false }: { items: string[]; reverse?: boolean }) {
+const LOGOS: Logo[] = [
+  { name: 'HRSA', url: 'https://www.hrsa.gov', svg: (
+    <svg viewBox="0 0 64 20" fill="currentColor" style={{ height: 14, width: 'auto' }} aria-hidden="true">
+      <text x="0" y="15" fontFamily="Georgia,serif" fontWeight="700" fontSize="16" letterSpacing="2">HRSA</text>
+    </svg>
+  )},
+  { name: 'FQHC', url: 'https://findahealthcenter.hrsa.gov', svg: (
+    <svg viewBox="0 0 64 20" fill="currentColor" style={{ height: 14, width: 'auto' }} aria-hidden="true">
+      <text x="0" y="15" fontFamily="Georgia,serif" fontWeight="700" fontSize="15" letterSpacing="1">FQHC</text>
+    </svg>
+  )},
+  { name: 'NeedyMeds', url: 'https://www.needymeds.org', svg: (
+    <svg viewBox="0 0 110 20" fill="currentColor" style={{ height: 14, width: 'auto' }} aria-hidden="true">
+      <circle cx="9" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="1.4"/>
+      <path d="M5 7h3l2.5 4.5L13 7h3v6h-1.5V9.5l-2 3.5h-1l-2-3.5V13H5z"/>
+      <text x="22" y="14" fontFamily="system-ui,sans-serif" fontWeight="600" fontSize="12">NeedyMeds</text>
+    </svg>
+  )},
+  { name: 'GoodRx', url: 'https://www.goodrx.com', svg: (
+    <svg viewBox="0 0 72 20" fill="currentColor" style={{ height: 14, width: 'auto' }} aria-hidden="true">
+      <path d="M3 10a7 7 0 1 1 7.5 7" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round"/>
+      <text x="18" y="14" fontFamily="system-ui,sans-serif" fontWeight="700" fontSize="13">GoodRx</text>
+    </svg>
+  )},
+  { name: 'NACHW', url: 'https://nachw.org', svg: (
+    <svg viewBox="0 0 72 20" fill="currentColor" style={{ height: 14, width: 'auto' }} aria-hidden="true">
+      <path d="M2 18V2l4 7 4-7v16" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+      <text x="18" y="14" fontFamily="system-ui,sans-serif" fontWeight="600" fontSize="13">NACHW</text>
+    </svg>
+  )},
+  { name: '340B Health', url: 'https://www.340bhealth.org', svg: (
+    <svg viewBox="0 0 92 20" fill="currentColor" style={{ height: 14, width: 'auto' }} aria-hidden="true">
+      <rect x="0" y="2" width="14" height="14" rx="2.5" fill="none" stroke="currentColor" strokeWidth="1.4"/>
+      <text x="2" y="13" fontFamily="system-ui,sans-serif" fontWeight="700" fontSize="9">Rx</text>
+      <text x="18" y="14" fontFamily="system-ui,sans-serif" fontWeight="600" fontSize="13">340B Health</text>
+    </svg>
+  )},
+  { name: 'Open Door Health', url: 'https://www.opendoorhealth.com', svg: (
+    <svg viewBox="0 0 128 20" fill="currentColor" style={{ height: 14, width: 'auto' }} aria-hidden="true">
+      <path d="M3 8v10h10V8" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+      <path d="M1 8l7-6 7 6" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+      <text x="20" y="14" fontFamily="system-ui,sans-serif" fontWeight="600" fontSize="12">Open Door Health</text>
+    </svg>
+  )},
+  { name: 'Banner Health', url: 'https://www.bannerhealth.com', svg: (
+    <svg viewBox="0 0 105 20" fill="currentColor" style={{ height: 14, width: 'auto' }} aria-hidden="true">
+      <rect x="0" y="3" width="13" height="13" rx="2" fill="currentColor" opacity="0.8"/>
+      <path d="M2.5 9.5h8M6.5 5.5v8" stroke="var(--bg)" strokeWidth="1.5" strokeLinecap="round"/>
+      <text x="18" y="14" fontFamily="system-ui,sans-serif" fontWeight="600" fontSize="13">Banner Health</text>
+    </svg>
+  )},
+  { name: 'Dignity Health', url: 'https://www.commonspirit.org', svg: (
+    <svg viewBox="0 0 105 20" fill="currentColor" style={{ height: 14, width: 'auto' }} aria-hidden="true">
+      <circle cx="8" cy="10" r="7" fill="none" stroke="currentColor" strokeWidth="1.4"/>
+      <path d="M5 10l2.5 2.5 4-4" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+      <text x="19" y="14" fontFamily="system-ui,sans-serif" fontWeight="600" fontSize="13">Dignity Health</text>
+    </svg>
+  )},
+  { name: 'Valle del Sol', url: 'https://www.valledelsol.com', svg: (
+    <svg viewBox="0 0 105 20" fill="currentColor" style={{ height: 14, width: 'auto' }} aria-hidden="true">
+      <circle cx="8" cy="7" r="4" fill="none" stroke="currentColor" strokeWidth="1.4"/>
+      <path d="M2 14c1-4 12-4 12 0" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+      <text x="19" y="14" fontFamily="system-ui,sans-serif" fontWeight="600" fontSize="12">Valle del Sol</text>
+    </svg>
+  )},
+  { name: 'Free Clinic Network', url: 'https://www.nafcclinics.org', svg: (
+    <svg viewBox="0 0 135 20" fill="currentColor" style={{ height: 14, width: 'auto' }} aria-hidden="true">
+      <path d="M5 5h8M9 5v10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+      <text x="19" y="14" fontFamily="system-ui,sans-serif" fontWeight="600" fontSize="12">Free Clinic Network</text>
+    </svg>
+  )},
+  { name: 'Maricopa Health', url: 'https://www.mihs.org', svg: (
+    <svg viewBox="0 0 120 20" fill="currentColor" style={{ height: 14, width: 'auto' }} aria-hidden="true">
+      <path d="M3 18V4l5 6 5-6v14" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+      <text x="18" y="14" fontFamily="system-ui,sans-serif" fontWeight="600" fontSize="12">Maricopa Health</text>
+    </svg>
+  )},
+]
+
+const ROW1 = LOGOS.slice(0, 6)
+const ROW2 = LOGOS.slice(6)
+
+function MarqueeRow({ items, reverse = false }: { items: Logo[]; reverse?: boolean }) {
   const all = [...items, ...items]
   return (
     <div style={{
@@ -15,7 +96,7 @@ function MarqueeRow({ items, reverse = false }: { items: string[]; reverse?: boo
         aria-hidden="true"
         style={{
           display: 'flex', alignItems: 'center', gap: '0.75rem',
-          animation: `scroll-logos${reverse ? '-rev' : ''} ${reverse ? '34s' : '28s'} linear infinite`,
+          animation: `scroll-logos${reverse ? '-rev' : ''} ${reverse ? '36s' : '28s'} linear infinite`,
           width: 'max-content',
         }}
         onMouseEnter={e => (e.currentTarget.style.animationPlayState = 'paused')}
@@ -23,31 +104,38 @@ function MarqueeRow({ items, reverse = false }: { items: string[]; reverse?: boo
       >
         {all.map((logo, i) => (
           <div
-            key={`${logo}-${i}`}
-            style={{
-              fontSize: '12px', fontWeight: 500,
-              color: 'var(--text-3)', whiteSpace: 'nowrap',
-              letterSpacing: '0.01em',
-              padding: '0 1rem',
-              border: '1px solid var(--border2)',
-              borderRadius: '8px',
-              height: '34px',
-              display: 'flex', alignItems: 'center', gap: '7px',
-              fontFamily: 'var(--font-inter)',
-              transition: 'color 0.2s, border-color 0.2s',
-              cursor: 'default',
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.color = 'var(--accent)'
-              e.currentTarget.style.borderColor = 'rgba(110,231,183,0.2)'
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.color = 'var(--text-3)'
-              e.currentTarget.style.borderColor = 'var(--border2)'
-            }}
+            key={`${logo.name}-${i}`}
+            className="logo-tile"
           >
-            <span aria-hidden="true" style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'currentColor', opacity: 0.5, flexShrink: 0 }} />
-            {logo}
+            <div
+              style={{
+                color: 'var(--text-3)', padding: '0 1.25rem',
+                border: '1px solid var(--border2)', borderRadius: '8px',
+                height: '36px', display: 'flex', alignItems: 'center',
+                whiteSpace: 'nowrap', transition: 'color 0.2s, border-color 0.2s',
+                cursor: 'default', flexShrink: 0,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.borderColor = 'rgba(110,231,183,0.2)' }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-3)'; e.currentTarget.style.borderColor = 'var(--border2)' }}
+            >
+              {logo.svg}
+            </div>
+            <div className="logo-tile-tooltip">
+              <span style={{ fontWeight: 600, color: 'var(--text)' }}>{logo.name}</span>
+              <a
+                href={logo.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '3px',
+                  marginLeft: '8px', color: 'var(--accent)', fontSize: '10px',
+                  textDecoration: 'none', fontWeight: 500,
+                }}
+                onClick={e => e.stopPropagation()}
+              >
+                Visit →
+              </a>
+            </div>
           </div>
         ))}
       </div>
@@ -59,37 +147,18 @@ export default function LogoMarquee() {
   return (
     <div
       aria-label="Trusted partners and health networks"
-      style={{
-        position: 'relative', zIndex: 2,
-        borderTop: '1px solid var(--border2)',
-        borderBottom: '1px solid var(--border2)',
-        padding: '2.5rem 0',
-        overflow: 'hidden',
-      }}
+      style={{ position: 'relative', zIndex: 2, borderTop: '1px solid var(--border2)', borderBottom: '1px solid var(--border2)', padding: '2.5rem 0', overflow: 'hidden' }}
     >
-      <div style={{
-        textAlign: 'center', fontSize: '11px',
-        color: 'var(--text-3)', fontWeight: 400,
-        letterSpacing: '0.12em', textTransform: 'uppercase',
-        marginBottom: '1.75rem', fontFamily: 'var(--font-inter)',
-      }}>
+      <div style={{ textAlign: 'center', fontSize: '11px', color: 'var(--text-3)', fontWeight: 400, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '1.75rem', fontFamily: 'var(--font-inter)' }}>
         Trusted by clinics, CHWs, and health systems nationwide
       </div>
-
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
         <MarqueeRow items={ROW1} />
         <MarqueeRow items={ROW2} reverse />
       </div>
-
       <style>{`
-        @keyframes scroll-logos {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        @keyframes scroll-logos-rev {
-          0% { transform: translateX(-50%); }
-          100% { transform: translateX(0); }
-        }
+        @keyframes scroll-logos     { 0% { transform: translateX(0); }    100% { transform: translateX(-50%); } }
+        @keyframes scroll-logos-rev { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
       `}</style>
     </div>
   )

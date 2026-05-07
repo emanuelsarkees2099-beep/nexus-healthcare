@@ -2,9 +2,9 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger)
+import { registerGSAP } from '@/lib/gsap-st'
+import { useI18n } from '@/components/I18nContext'
+registerGSAP()
 
 /* ── 21st.dev animated-hero: cycling words ── */
 const CYCLE_WORDS = ['unlocked', 'possible', 'deserved', 'waiting']
@@ -32,16 +32,16 @@ const PLACEHOLDERS = [
 ]
 
 const SIDEBAR_ITEMS = [
-  { label: 'Home',     active: true,
+  { label: 'Home',        active: true,
     icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> },
-  { label: 'Store',    active: false,
+  { label: 'Clinic Search', active: false,
     icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> },
-  { label: 'Team',     active: false,
+  { label: 'Care Team',   active: false,
     icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> },
-  { label: 'Settings', active: false,
+  { label: 'Settings',    active: false,
     icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> },
-  { label: 'Filters',  active: false,
-    icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg> },
+  { label: 'Programs',    active: false,
+    icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> },
 ]
 
 const MOCKUP_RESULTS = [
@@ -51,6 +51,7 @@ const MOCKUP_RESULTS = [
 ]
 
 export default function Hero() {
+  const { t } = useI18n()
   const sectionRef = useRef<HTMLElement>(null)
   const h1Ref      = useRef<HTMLHeadingElement>(null)
   const subRef     = useRef<HTMLParagraphElement>(null)
@@ -190,6 +191,34 @@ export default function Hero() {
     return () => ctx.revert()
   }, [])
 
+  /* ── Magnetic CTA button (#12) ── */
+  const ctaBtnRef = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    const btn = ctaBtnRef.current
+    if (!btn) return
+    const parent = btn.closest('[role="search"]') as HTMLElement || btn.parentElement!
+    const onMove = (e: MouseEvent) => {
+      const r = btn.getBoundingClientRect()
+      const dx = e.clientX - (r.left + r.width  / 2)
+      const dy = e.clientY - (r.top  + r.height / 2)
+      const dist = Math.sqrt(dx * dx + dy * dy)
+      const maxDist = 90
+      if (dist < maxDist) {
+        const force = (1 - dist / maxDist) * 0.32
+        btn.style.transform = `translate(${dx * force}px, ${dy * force}px) translateY(-1px)`
+      } else {
+        btn.style.transform = ''
+      }
+    }
+    const onLeave = () => { btn.style.transform = '' }
+    parent.addEventListener('mousemove', onMove, { passive: true })
+    parent.addEventListener('mouseleave', onLeave)
+    return () => {
+      parent.removeEventListener('mousemove', onMove)
+      parent.removeEventListener('mouseleave', onLeave)
+    }
+  }, [])
+
   const handleSearch = useCallback(() => {
     const query = searchVal.trim()
     if (!query) return
@@ -305,8 +334,8 @@ export default function Hero() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span style={{ fontSize: '13px', fontWeight: 600, color: 'rgba(255,255,255,0.85)', fontFamily: 'var(--font-sora)' }}>284,000+</span>
-              <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>patients helped this year</span>
+              <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-display)' }}>284,000+</span>
+              <span style={{ fontSize: '13px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>patients helped this year</span>
             </div>
             <div style={{ display: 'flex', gap: '2px' }}>
               {[1,2,3,4,5].map(s => (
@@ -314,13 +343,13 @@ export default function Hero() {
                   <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                 </svg>
               ))}
-              <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', marginLeft: '4px', lineHeight: '11px' }}>4.9/5 from 12K+ reviews</span>
+              <span style={{ fontSize: '10px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', marginLeft: '4px', lineHeight: '11px' }}>4.9/5 from 12K+ reviews</span>
             </div>
           </div>
-          <div style={{ width: '1px', height: '30px', background: 'rgba(255,255,255,0.08)' }} aria-hidden="true" />
+          <div style={{ width: '1px', height: '30px', background: 'rgba(0,0,0,0.07)' }} aria-hidden="true" />
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 8px rgba(74,222,128,0.6)', display: 'inline-block', animation: 'pulse-dot 2s ease-in-out infinite' }} aria-hidden="true" />
-            <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>Free · Always</span>
+            <span style={{ fontSize: '12px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>Free · Always</span>
           </div>
         </div>
 
@@ -329,7 +358,7 @@ export default function Hero() {
           ref={h1Ref}
           id="hero-h1"
           style={{
-            fontFamily: 'var(--font-sora)',
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(2.8rem, 6.5vw, 6.5rem)',
             fontWeight: 800,
             lineHeight: 1.05,
@@ -339,9 +368,19 @@ export default function Hero() {
             perspective: '600px',
           }}
         >
+          {/* First line: char-by-char glow sweep after GSAP entrance (#9) */}
           <span className="h1-line" style={{ display: 'block', overflow: 'hidden' }}>
             <span className="h1-word" style={{ display: 'inline-block' }}>
-              Free healthcare,
+              {'Free healthcare,'.split('').map((ch, i) => (
+                <span
+                  key={i}
+                  className="h1-char"
+                  style={{ animationDelay: `${0.95 + i * 0.028}s` }}
+                  aria-hidden={ch === ' ' ? 'true' : undefined}
+                >
+                  {ch === ' ' ? ' ' : ch}
+                </span>
+              ))}
             </span>
           </span>
           <span className="h1-line" style={{ display: 'block', overflow: 'hidden' }}>
@@ -395,8 +434,7 @@ export default function Hero() {
           margin: '0 auto 1.25rem',
           fontFamily: 'var(--font-inter)',
         }}>
-          Find free clinics, sliding-scale care, and hidden federal programs
-          in seconds — for the 30 million Americans without insurance.
+          {t('home.hero.subheadline')}
         </p>
 
         {/* ── SEARCH BAR (fades on scroll) ── */}
@@ -413,7 +451,7 @@ export default function Hero() {
             style={{
               position: 'relative', zIndex: 1,
               display: 'flex', alignItems: 'center',
-              background: 'rgba(13,11,30,0.92)',
+              background: 'rgba(7,7,15,0.95)',
               border: '1px solid rgba(110,231,183,0.22)',
               borderRadius: '16px',
               padding: '7px 7px 7px 18px', gap: '10px',
@@ -479,7 +517,7 @@ export default function Hero() {
                 onFocus={() => setEditingLoc(true)}
                 onBlur={() => setEditingLoc(false)}
                 onKeyDown={e => { if (e.key === 'Enter') handleSearch() }}
-                placeholder="City or zip"
+                placeholder={t('home.hero.zipPlaceholder')}
                 style={{
                   background: 'none', border: 'none', outline: 'none',
                   color: editingLoc ? 'var(--text)' : 'var(--text-2)',
@@ -489,9 +527,54 @@ export default function Hero() {
                   whiteSpace: 'nowrap',
                 }}
               />
+              {/* Geolocation button */}
+              <button
+                aria-label="Use my current location"
+                title="Use my location"
+                onClick={e => {
+                  e.stopPropagation()
+                  if (!navigator.geolocation) return
+                  const btn = e.currentTarget
+                  btn.style.opacity = '0.4'
+                  navigator.geolocation.getCurrentPosition(
+                    async pos => {
+                      try {
+                        const r = await fetch(
+                          `/api/geocode?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`
+                        )
+                        const d = await r.json()
+                        const { city = '', state = '', zip = '' } = d
+                        if (zip) setLocationVal(zip)
+                        else if (city && state) setLocationVal(`${city}, ${state}`)
+                      } catch { /* ignore */ }
+                      btn.style.opacity = '1'
+                    },
+                    () => { btn.style.opacity = '1' },
+                    { timeout: 6000 }
+                  )
+                }}
+                style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  padding: '2px', display: 'flex', alignItems: 'center',
+                  color: 'var(--accent)', opacity: 0.55,
+                  transition: 'opacity 0.2s',
+                  flexShrink: 0,
+                }}
+                onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+                onMouseLeave={e => (e.currentTarget.style.opacity = '0.55')}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+                  <path d="M12 8a4 4 0 1 0 4 4" strokeOpacity="0"/>
+                  <circle cx="12" cy="12" r="9" strokeOpacity="0.25"/>
+                </svg>
+              </button>
             </div>
+            {/* Magnetic CTA button (#12) */}
             <button
-              className="search-submit btn-shimmer"
+              ref={ctaBtnRef}
+              className="search-submit btn-shimmer magnetic-btn"
               onClick={handleSearch}
               aria-label="Search for free care"
               style={{
@@ -500,19 +583,16 @@ export default function Hero() {
                 padding: '13px 22px',
                 fontFamily: 'var(--font-inter)', fontSize: '14px', fontWeight: 500,
                 cursor: 'none', whiteSpace: 'nowrap', flexShrink: 0,
-                transition: 'transform 0.15s, box-shadow 0.25s',
                 boxShadow: '0 4px 20px rgba(110,231,183,0.32)',
               }}
               onMouseEnter={e => {
-                e.currentTarget.style.transform = 'translateY(-1px)'
                 e.currentTarget.style.boxShadow = '0 8px 32px rgba(110,231,183,0.48)'
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.transform = ''
                 e.currentTarget.style.boxShadow = '0 4px 20px rgba(110,231,183,0.32)'
               }}
             >
-              Find care →
+              {t('home.hero.cta')} →
             </button>
           </div>
         </div>
@@ -547,46 +627,6 @@ export default function Hero() {
               }}
             >{c}</a>
           ))}
-        </div>
-
-        {/* ── SOCIAL PROOF (moved above headline) ── */}
-        <div style={{ display: 'none' }}>
-          {/* Avatar stack */}
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            {['var(--accent)','#4a7c84','var(--accent2)','#5a9099','#3d717a'].map((bg, i) => (
-              <div key={i} aria-hidden="true" style={{
-                width: '26px', height: '26px', borderRadius: '50%',
-                background: `linear-gradient(135deg, ${bg}, ${bg}99)`,
-                border: '2px solid #07070F',
-                marginLeft: i === 0 ? 0 : '-8px',
-                zIndex: 5 - i,
-                position: 'relative',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '10px', fontWeight: 600, color: '#fff',
-              }}>
-                {['J','M','A','S','R'][i]}
-              </div>
-            ))}
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span style={{ fontSize: '13px', fontWeight: 600, color: 'rgba(255,255,255,0.85)', fontFamily: 'var(--font-sora)' }}>284,000+</span>
-              <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>patients helped this year</span>
-            </div>
-            <div style={{ display: 'flex', gap: '2px' }}>
-              {[1,2,3,4,5].map(s => (
-                <svg key={s} width="11" height="11" viewBox="0 0 24 24" fill="#fbbf24" stroke="none">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                </svg>
-              ))}
-              <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', marginLeft: '4px', lineHeight: '11px' }}>4.9/5 from 12K+ reviews</span>
-            </div>
-          </div>
-          <div style={{ width: '1px', height: '30px', background: 'rgba(255,255,255,0.08)' }} aria-hidden="true" />
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 8px rgba(74,222,128,0.6)', display: 'inline-block', animation: 'pulse-dot 2s ease-in-out infinite' }} aria-hidden="true" />
-            <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>Free · Always</span>
-          </div>
         </div>
 
         {/* ── TRENDING CAROUSEL ── */}
@@ -694,7 +734,7 @@ export default function Hero() {
               padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '2px',
             }}>
               <div style={{
-                fontFamily: 'var(--font-sora)', fontSize: '13px', fontWeight: 700,
+                fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 700,
                 letterSpacing: '0.12em', color: 'var(--text)', textTransform: 'uppercase',
                 marginBottom: '1.25rem', paddingBottom: '0.9rem', borderBottom: '1px solid var(--border2)',
               }}>NEXUS</div>
@@ -715,8 +755,8 @@ export default function Hero() {
                 </div>
               ))}
 
-              <div style={{ marginTop: '1rem', fontSize: '9px', letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', paddingLeft: '10px', paddingBottom: '4px' }}>Table of Rates</div>
-              {[{ dot: 'var(--accent)', label: 'Table UI HTML' }, { dot: '#4ADE80', label: 'Table UI Themes' }].map(x => (
+              <div style={{ marginTop: '1rem', fontSize: '9px', letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', paddingLeft: '10px', paddingBottom: '4px' }}>My Resources</div>
+              {[{ dot: 'var(--accent)', label: 'Saved Clinics' }, { dot: '#4ADE80', label: 'My Care Plan' }].map(x => (
                 <div key={x.label} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '5px 10px', fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>
                   <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: x.dot, flexShrink: 0 }} />
                   {x.label}
@@ -728,8 +768,8 @@ export default function Hero() {
             <div style={{ padding: '1.5rem 1.75rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.1rem' }}>
                 <div>
-                  <div style={{ fontFamily: 'var(--font-sora)', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '2px', letterSpacing: '-0.01em' }}>Dashboard</div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>Overview — Visualize your main activities data.</div>
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '2px', letterSpacing: '-0.01em' }}>Dashboard</div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>Free care near you · Phoenix, AZ</div>
                 </div>
                 <div style={{ display: 'flex', gap: '6px' }}>
                   <div style={{ fontSize: '10px', color: 'var(--text-3)', background: 'var(--bg4)', border: '1px solid var(--border2)', borderRadius: '6px', padding: '4px 10px', fontFamily: 'var(--font-inter)' }}>Apr 8 – Apr 15</div>
@@ -741,8 +781,8 @@ export default function Hero() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '1.25rem' }}>
                 {[
                   { n: '63,405', label: 'Searches this week', delta: '+12%' },
-                  { n: 'K170/G',  label: 'Clinics matched',    delta: '+8%'  },
-                  { n: 'K190/G',  label: 'Users helped',       delta: '+21%' },
+                  { n: '8,432',   label: 'Clinics matched',    delta: '+8%'  },
+                  { n: '1,247',   label: 'Users helped',       delta: '+21%' },
                 ].map(s => (
                   <div key={s.label} style={{
                     background: 'var(--bg4)', border: '1px solid var(--border2)',
@@ -750,7 +790,7 @@ export default function Hero() {
                     position: 'relative', overflow: 'hidden',
                   }}>
                     <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '2px', background: 'linear-gradient(90deg, var(--accent), transparent)', opacity: 0.35 }} />
-                    <div style={{ fontFamily: 'var(--font-sora)', fontSize: '18px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1 }}>{s.n}</div>
+                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1 }}>{s.n}</div>
                     <div style={{ fontSize: '9px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300, marginTop: '3px' }}>{s.label}</div>
                     <div style={{ fontSize: '9px', color: '#4ADE80', fontFamily: 'var(--font-inter)', fontWeight: 500, marginTop: '4px' }}>{s.delta}</div>
                   </div>
@@ -758,8 +798,8 @@ export default function Hero() {
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>New Orders — Top clinics this week</div>
-                <div style={{ fontSize: '10px', color: 'var(--accent)', fontFamily: 'var(--font-inter)' }}>Website Traffic ↗</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>Clinics Near You</div>
+                <div style={{ fontSize: '10px', color: 'var(--accent)', fontFamily: 'var(--font-inter)' }}>See all →</div>
               </div>
 
               {MOCKUP_RESULTS.map((r, i) => (
@@ -775,7 +815,7 @@ export default function Hero() {
                     background: 'var(--accent-dim)', border: '1px solid var(--border)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontSize: '10px', fontWeight: 600, color: 'var(--accent)',
-                    fontFamily: 'var(--font-sora)', flexShrink: 0,
+                    fontFamily: 'var(--font-display)', flexShrink: 0,
                   }}>{r.initials}</div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: '12px', fontWeight: 400, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>{r.name}</div>
@@ -799,6 +839,46 @@ export default function Hero() {
           background: 'linear-gradient(to bottom, transparent 0%, var(--bg) 100%)',
           pointerEvents: 'none', zIndex: 2,
         }} />
+      </div>
+
+      {/* ── Mobile Hero Card Stack (replaces hidden mockup on ≤768px) ── */}
+      <div className="hero-mobile-cards" aria-hidden="true">
+        <div style={{
+          fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)',
+          fontWeight: 400, letterSpacing: '0.05em', textTransform: 'uppercase',
+          marginBottom: '12px', paddingLeft: '2px',
+        }}>
+          Clinics Near You
+        </div>
+
+        {MOCKUP_RESULTS.map((r, i) => (
+          <div key={r.name} className="hero-mobile-card" style={{ animationDelay: `${0.3 + i * 0.12}s` }}>
+            <div className="hero-mobile-card-avatar">{r.initials}</div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div className="hero-mobile-card-name">{r.name}</div>
+              <div className="hero-mobile-card-meta">{r.dist} · {r.wait}</div>
+            </div>
+            <div className="hero-mobile-card-badge" style={{
+              background: r.green ? 'rgba(74,222,128,0.12)' : 'rgba(250,204,21,0.12)',
+              color: r.green ? '#4ADE80' : '#FCD34D',
+            }}>
+              <span style={{
+                display: 'inline-block', width: '5px', height: '5px', borderRadius: '50%',
+                background: r.green ? '#4ADE80' : '#FCD34D', marginRight: '5px',
+                verticalAlign: 'middle', marginTop: '-1px',
+              }} />
+              {r.status}
+            </div>
+          </div>
+        ))}
+
+        <div style={{
+          textAlign: 'center', marginTop: '14px',
+          fontSize: '11px', color: 'var(--accent)', fontFamily: 'var(--font-inter)',
+          opacity: 0.8, animationDelay: '0.7s',
+        }}>
+          + 47 more clinics found →
+        </div>
       </div>
 
       <style>{`

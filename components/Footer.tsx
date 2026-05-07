@@ -1,5 +1,8 @@
 'use client'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
+
+const GlobalDot = dynamic(() => import('@/components/GlobalDot'), { ssr: false })
 
 export default function Footer() {
   return (
@@ -24,7 +27,7 @@ export default function Footer() {
         {/* Main grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '1.4fr auto auto auto',
+          gridTemplateColumns: '1.2fr auto auto auto auto',
           gap: '3rem', alignItems: 'start',
           marginBottom: '3rem',
         }}>
@@ -113,11 +116,24 @@ export default function Footer() {
               ],
             },
             {
+              title: 'Tools',
+              links: [
+                { label: 'AI Triage Co-Pilot', href: '/triage' },
+                { label: 'Healthcare GPS',     href: '/gps' },
+                { label: 'Health Passport',    href: '/passport' },
+                { label: 'Care Wrapped',       href: '/wrapped' },
+                { label: 'Crisis Support',     href: '/crisis' },
+                { label: 'Community Network',  href: '/community' },
+              ],
+            },
+            {
               title: 'Platform',
               links: [
                 { label: 'Impact Dashboard', href: '/impact' },
+                { label: 'Equity Lab',       href: '/equity' },
+                { label: 'Editorial',        href: '/editorial' },
+                { label: 'Open Roadmap',     href: '/open' },
                 { label: 'Accessibility',    href: '/accessibility' },
-                { label: 'Languages',        href: '/languages' },
                 { label: 'For Providers',    href: '/provider' },
               ],
             },
@@ -151,6 +167,15 @@ export default function Footer() {
               </ul>
             </div>
           ))}
+        </div>
+
+        {/* Live globe visualization */}
+        <div style={{
+          paddingTop: '2rem', paddingBottom: '1.5rem',
+          borderTop: '1px solid var(--border2)',
+          display: 'flex', justifyContent: 'center',
+        }}>
+          <GlobalDot />
         </div>
 
         {/* Bottom bar */}
@@ -187,11 +212,26 @@ export default function Footer() {
       </div>
 
       <style>{`
-        @media (max-width: 768px) {
+        /* Tablet: 900px — 5-column squishes to unreadable; go 2-up */
+        @media (max-width: 900px) {
+          footer > div > div:first-child {
+            grid-template-columns: 1.2fr 1fr !important;
+            gap: 2rem !important;
+          }
+          /* Brand column spans full width on its own row */
+          footer > div > div:first-child > div:first-child {
+            grid-column: 1 / -1 !important;
+          }
+        }
+        /* Mobile: go fully single-column */
+        @media (max-width: 600px) {
           footer { padding: 2.5rem 1.25rem 2rem !important; }
           footer > div > div:first-child {
             grid-template-columns: 1fr !important;
             gap: 2rem !important;
+          }
+          footer > div > div:first-child > div:first-child {
+            grid-column: unset !important;
           }
         }
         @media (max-width: 480px) {

@@ -6,9 +6,8 @@ import {
   ArrowRight, CheckCircle2, Clock, Wifi, Activity,
 } from 'lucide-react'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger)
+import { registerGSAP } from '@/lib/gsap-st'
+registerGSAP()
 
 /* ── Reusable bento pieces ───────────────────────────────────────── */
 
@@ -105,7 +104,7 @@ function ProgramsCounterMini() {
   return (
     <div style={{ marginTop: '1rem' }}>
       <div style={{
-        fontFamily: 'var(--font-sora)',
+        fontFamily: 'var(--font-display)',
         fontSize: 'clamp(2.8rem,6vw,4.5rem)',
         fontWeight: 700, color: 'var(--amber)',
         letterSpacing: '-0.04em', lineHeight: 1, marginBottom: '4px',
@@ -113,7 +112,7 @@ function ProgramsCounterMini() {
       }}>
         40+
       </div>
-      <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text)', marginBottom: '3px', fontFamily: 'var(--font-sora)' }}>
+      <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text)', marginBottom: '3px', fontFamily: 'var(--font-display)' }}>
         Programs checked
       </div>
       <div style={{ fontSize: '12px', color: 'var(--text-2)', lineHeight: 1.7, fontFamily: 'var(--font-inter)' }}>
@@ -148,7 +147,7 @@ function OutcomesSparkline() {
   return (
     <div style={{ marginTop: '12px' }}>
       <div style={{
-        fontFamily: 'var(--font-sora)',
+        fontFamily: 'var(--font-display)',
         fontSize: 'clamp(2.2rem,5vw,3.5rem)',
         fontWeight: 700, letterSpacing: '-0.04em', lineHeight: 1,
         color: 'var(--text)', marginBottom: '4px',
@@ -281,6 +280,7 @@ const cardBase: React.CSSProperties = {
   overflow: 'hidden',
   height: '100%',
   boxSizing: 'border-box',
+  cursor: 'pointer',
   transition: 'border-color 0.35s cubic-bezier(0.32,0.72,0,1), transform 0.4s cubic-bezier(0.34,1.56,0.64,1)',
 }
 
@@ -337,7 +337,7 @@ export default function Features() {
       ref={sectionRef}
       id="features"
       aria-labelledby="features-title"
-      className="dot-grid-bg"
+      className="cv-auto dot-grid-bg section-depth-violet"
       style={{ position: 'relative', zIndex: 2, maxWidth: '1200px', margin: '0 auto', padding: '120px 3rem', overflow: 'visible' }}
     >
       {/* Three-source light system */}
@@ -361,7 +361,7 @@ export default function Features() {
         <h2
           id="features-title"
           style={{
-            fontFamily: 'var(--font-sora)',
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(2.2rem,4vw,3.5rem)',
             fontWeight: 700, lineHeight: 0.98, letterSpacing: '-0.03em',
             marginBottom: '1.25rem',
@@ -383,35 +383,41 @@ export default function Features() {
       >
 
         {/* BC-1: Clinic Finder — large hero card, mint */}
-        <div
-          className="bento-card card-mint bc-1"
-          role="listitem"
-          style={{ ...cardBase, gridColumn: 'span 5', gridRow: 'span 2', minHeight: '380px' }}
+        <Link
+          href="/search"
+          className="bc-1"
+          style={{ gridColumn: 'span 5', gridRow: 'span 2', minHeight: '380px', textDecoration: 'none', color: 'inherit', display: 'block' }}
         >
-          <div className="card-depth-overlay" aria-hidden="true" />
-          <BentoIcon
-            icon={<MapPin size={18} strokeWidth={1.5} />}
-            color="var(--accent)"
-            bg="rgba(110,231,183,0.10)"
-            border="rgba(110,231,183,0.18)"
-          />
-          <div style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.5rem', fontFamily: 'var(--font-sora)' }}>
-            Clinic Finder
+          <div
+            className="bento-card nexus-card card-mint"
+            role="listitem"
+            style={{ ...cardBase }}
+          >
+            <div className="card-depth-overlay" aria-hidden="true" />
+            <BentoIcon
+              icon={<MapPin size={18} strokeWidth={1.5} />}
+              color="var(--accent)"
+              bg="rgba(110,231,183,0.10)"
+              border="rgba(110,231,183,0.18)"
+            />
+            <div style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.5rem', fontFamily: 'var(--font-display)' }}>
+              Clinic Finder
+            </div>
+            <div style={{ fontSize: '13px', color: 'var(--text-2)', lineHeight: 1.75, fontFamily: 'var(--font-inter)', maxWidth: '280px' }}>
+              12,000+ federally qualified health centers, free clinics, and sliding-scale providers — searchable by specialty, language, and wait time.
+            </div>
+            <Tag color="var(--accent)" bg="rgba(110,231,183,0.07)">Core feature</Tag>
+            <ClinicMapMini />
           </div>
-          <div style={{ fontSize: '13px', color: 'var(--text-2)', lineHeight: 1.75, fontFamily: 'var(--font-inter)', maxWidth: '280px' }}>
-            12,000+ federally qualified health centers, free clinics, and sliding-scale providers — searchable by specialty, language, and wait time.
-          </div>
-          <Tag color="var(--accent)" bg="rgba(110,231,183,0.07)">Core feature</Tag>
-          <ClinicMapMini />
-        </div>
+        </Link>
 
         {/* BC-2: Pathways — violet */}
         <Link
           href="/pathways"
           className="bc-2"
-          style={{ gridColumn: 'span 7', minHeight: '178px', textDecoration: 'none', color: 'inherit', display: 'block' }}
+          style={{ gridColumn: 'span 7', minHeight: '178px', textDecoration: 'none', color: 'inherit', display: 'block', cursor: 'pointer' }}
         >
-          <div className="bento-card card-violet" role="listitem" style={{ ...cardBase }}>
+          <div className="bento-card nexus-card card-violet" role="listitem" style={{ ...cardBase }}>
             <div className="card-depth-overlay" aria-hidden="true" />
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem' }}>
               <BentoIcon
@@ -421,7 +427,7 @@ export default function Features() {
                 border="rgba(167,139,250,0.18)"
               />
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.35rem', fontFamily: 'var(--font-sora)' }}>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.35rem', fontFamily: 'var(--font-display)' }}>
                   Smart Care Pathways
                 </div>
                 <div style={{ fontSize: '13px', color: 'var(--text-2)', lineHeight: 1.75, fontFamily: 'var(--font-inter)' }}>
@@ -441,9 +447,9 @@ export default function Features() {
         <Link
           href="/programs"
           className="bc-3"
-          style={{ gridColumn: 'span 4', minHeight: '178px', textDecoration: 'none', color: 'inherit', display: 'block' }}
+          style={{ gridColumn: 'span 4', minHeight: '178px', textDecoration: 'none', color: 'inherit', display: 'block', cursor: 'pointer' }}
         >
-          <div className="bento-card card-amber" role="listitem" style={{ ...cardBase }}>
+          <div className="bento-card nexus-card card-amber" role="listitem" style={{ ...cardBase }}>
             <div className="card-depth-overlay" aria-hidden="true" />
             <BentoIcon
               icon={<ReceiptText size={18} strokeWidth={1.5} />}
@@ -463,12 +469,12 @@ export default function Features() {
         <Link
           href="/outcomes"
           className="bc-4"
-          style={{ gridColumn: 'span 3', minHeight: '178px', textDecoration: 'none', color: 'inherit', display: 'block' }}
+          style={{ gridColumn: 'span 3', minHeight: '178px', textDecoration: 'none', color: 'inherit', display: 'block', cursor: 'pointer' }}
         >
-          <div className="bento-card" role="listitem" style={{ ...cardBase }}>
+          <div className="bento-card nexus-card" role="listitem" style={{ ...cardBase }}>
             <div className="card-depth-overlay" aria-hidden="true" />
             <BentoIcon icon={<BarChart2 size={18} strokeWidth={1.5} />} />
-            <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.3rem', fontFamily: 'var(--font-sora)' }}>
+            <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.3rem', fontFamily: 'var(--font-display)' }}>
               Outcomes Tracker
             </div>
             <OutcomesSparkline />
@@ -483,9 +489,9 @@ export default function Features() {
         <Link
           href="/chw"
           className="bc-5"
-          style={{ gridColumn: 'span 5', minHeight: '178px', textDecoration: 'none', color: 'inherit', display: 'block' }}
+          style={{ gridColumn: 'span 5', minHeight: '178px', textDecoration: 'none', color: 'inherit', display: 'block', cursor: 'pointer' }}
         >
-          <div className="bento-card card-violet" role="listitem" style={{ ...cardBase }}>
+          <div className="bento-card nexus-card card-violet" role="listitem" style={{ ...cardBase }}>
             <div className="card-depth-overlay" aria-hidden="true" />
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem' }}>
               <BentoIcon
@@ -495,7 +501,7 @@ export default function Features() {
                 border="rgba(167,139,250,0.18)"
               />
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.35rem', fontFamily: 'var(--font-sora)' }}>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.35rem', fontFamily: 'var(--font-display)' }}>
                   CHW Network
                 </div>
                 <div style={{ fontSize: '13px', color: 'var(--text-2)', lineHeight: 1.75, fontFamily: 'var(--font-inter)' }}>
@@ -515,9 +521,9 @@ export default function Features() {
         <Link
           href="/calendar"
           className="bc-6"
-          style={{ gridColumn: 'span 7', minHeight: '178px', textDecoration: 'none', color: 'inherit', display: 'block' }}
+          style={{ gridColumn: 'span 7', minHeight: '178px', textDecoration: 'none', color: 'inherit', display: 'block', cursor: 'pointer' }}
         >
-          <div className="bento-card card-mint" role="listitem" style={{ ...cardBase }}>
+          <div className="bento-card nexus-card card-mint" role="listitem" style={{ ...cardBase }}>
             <div className="card-depth-overlay" aria-hidden="true" />
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem' }}>
               <BentoIcon
@@ -527,7 +533,7 @@ export default function Features() {
                 border="rgba(110,231,183,0.18)"
               />
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.35rem', fontFamily: 'var(--font-sora)' }}>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.35rem', fontFamily: 'var(--font-display)' }}>
                   Preventive Care Calendar
                 </div>
                 <div style={{ fontSize: '13px', color: 'var(--text-2)', lineHeight: 1.75, fontFamily: 'var(--font-inter)' }}>
@@ -564,7 +570,7 @@ export default function Features() {
             href={item.href}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '5px',
-              fontSize: '12px', color: 'rgba(255,255,255,0.45)',
+              fontSize: '12px', color: 'var(--text-2)',
               fontFamily: 'var(--font-inter)',
               textDecoration: 'none', padding: '5px 12px',
               borderRadius: '100px', border: '1px solid rgba(255,255,255,0.07)',

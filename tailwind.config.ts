@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sora:  ['var(--font-sora)',  'sans-serif'],
+        sora:  ['var(--font-display)',  'sans-serif'],
         inter: ['var(--font-inter)', 'sans-serif'],
         mono:  ['var(--font-mono)',  'JetBrains Mono', 'Fira Code', 'monospace'],
       },

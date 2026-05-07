@@ -86,7 +86,7 @@ export default function OnboardingOverlay() {
               </span>
             </div>
             <h2 style={{
-              fontFamily: 'var(--font-sora),sans-serif',
+              fontFamily: 'var(--font-display),sans-serif',
               fontSize: 'clamp(1.4rem,4vw,1.75rem)',
               fontWeight: 700, lineHeight: 1.15,
               letterSpacing: '-0.02em', color: 'var(--text)',

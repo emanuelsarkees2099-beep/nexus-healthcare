@@ -2,9 +2,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger)
+import { registerGSAP } from '@/lib/gsap-st'
+registerGSAP()
 
 const STEPS = [
   {
@@ -105,7 +104,7 @@ function Panel2() {
           background: 'var(--accent-dim)', border: '1px solid var(--border)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: '11px', fontWeight: 600, color: 'var(--accent)',
-          fontFamily: 'var(--font-sora)', flexShrink: 0,
+          fontFamily: 'var(--font-display)', flexShrink: 0,
         }} aria-hidden="true">CA</div>
         <div>
           <div style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '2px' }}>
@@ -125,7 +124,7 @@ function Panel2() {
       <button
         onClick={() => router.push('/pathways')}
         style={{
-          width: '100%', background: 'var(--accent)', color: '#07070F',
+          width: '100%', background: 'var(--accent)', color: 'var(--bg)',
           border: 'none', borderRadius: '10px', padding: '12px',
           fontSize: '13px', fontWeight: 600, cursor: 'pointer',
           fontFamily: 'var(--font-inter)', marginBottom: '10px',
@@ -205,6 +204,7 @@ export default function HowItWorks() {
       ref={sectionRef}
       id="how"
       aria-labelledby="how-title"
+      className="cv-auto"
       style={{
         position: 'relative', zIndex: 2,
         maxWidth: '1200px', margin: '0 auto',
@@ -231,7 +231,7 @@ export default function HowItWorks() {
               How it works
             </div>
             <h2 id="how-title" style={{
-              fontFamily: 'var(--font-sora)',
+              fontFamily: 'var(--font-display)',
               fontSize: 'clamp(2rem, 3.8vw, 3.2rem)',
               fontWeight: 600, lineHeight: 1.1, letterSpacing: '-0.02em',
               marginBottom: '1rem',

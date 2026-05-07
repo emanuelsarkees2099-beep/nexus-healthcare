@@ -11,6 +11,10 @@ export default function Cursor() {
   const frameSkip = useRef(0)
 
   useEffect(() => {
+    // Gate cursor: none behind this attribute so it only hides the system
+    // cursor after the custom cursor is actually rendered (no flash on SSR).
+    document.documentElement.setAttribute('data-custom-cursor', 'true')
+
     mouseRef.current = { x: window.innerWidth / 2, y: window.innerHeight / 2 }
     ringPos.current  = { x: window.innerWidth / 2, y: window.innerHeight / 2 }
 
@@ -76,6 +80,7 @@ export default function Cursor() {
       cancelAnimationFrame(rafRef.current)
       window.removeEventListener('mousemove', onMove)
       observer.disconnect()
+      document.documentElement.removeAttribute('data-custom-cursor')
     }
   }, [])
 

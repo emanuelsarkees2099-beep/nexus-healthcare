@@ -1,9 +1,8 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger)
+import { registerGSAP } from '@/lib/gsap-st'
+registerGSAP()
 
 const CLINICS = [
   {
@@ -122,7 +121,7 @@ export default function Mockup() {
           The experience
         </div>
         <h2 style={{
-          fontFamily: 'var(--font-sora)', fontSize: 'clamp(2.2rem, 4vw, 3.5rem)',
+          fontFamily: 'var(--font-display)', fontSize: 'clamp(2.2rem, 4vw, 3.5rem)',
           fontWeight: 600, lineHeight: 1.1, letterSpacing: '-0.02em', textAlign: 'center',
         }}>
           Care found in{' '}
@@ -274,7 +273,7 @@ export default function Mockup() {
                   background: 'var(--accent-dim)', border: '1px solid var(--border)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '12px', fontWeight: 600, color: 'var(--accent)',
-                  fontFamily: 'var(--font-sora)', flexShrink: 0,
+                  fontFamily: 'var(--font-display)', flexShrink: 0,
                 }}>
                   {c.init}
                 </div>

@@ -3,37 +3,53 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClientClient } from '@/lib/auth-client'
+import { useI18n } from '@/components/I18nContext'
+import NotificationBell from '@/components/NotificationBell'
 
-const HOME_LINKS = [
-  { label: 'Features',     href: '#features' },
-  { label: 'How it works', href: '#how' },
-  { label: 'Eligibility',  href: '#eligibility' },
-  { label: 'Stories',      href: '#testimonials' },
+/* Static hrefs + fallback labels. Labels are overridden with t() inside the component. */
+const HOME_LINK_DEFS = [
+  { labelKey: 'nav.features' as const,    href: '#features',     fallback: 'Features' },
+  { labelKey: 'nav.howItWorks' as const,  href: '#how',          fallback: 'How it works' },
+  { labelKey: 'nav.eligibility' as const, href: '#eligibility',  fallback: 'Eligibility' },
+  { labelKey: 'nav.stories' as const,     href: '#testimonials', fallback: 'Stories' },
 ]
 
-const APP_LINKS = [
-  { label: 'Pathways',  href: '/pathways' },
-  { label: 'Programs',  href: '/programs' },
-  { label: 'Impact',    href: '/impact' },
-  { label: 'Stories',   href: '/stories' },
-  { label: 'CHW',       href: '/chw' },
+const APP_LINK_DEFS = [
+  { labelKey: 'nav.pathways' as const,  href: '/pathways',  fallback: 'Pathways' },
+  { labelKey: 'nav.programs' as const,  href: '/programs',  fallback: 'Programs' },
+  { labelKey: 'nav.impact' as const,    href: '/impact',    fallback: 'Impact' },
+  { labelKey: 'nav.stories' as const,   href: '/stories',   fallback: 'Stories' },
+  { labelKey: null,                     href: '/editorial', fallback: 'Editorial' },
+  { labelKey: null,                     href: '/equity',    fallback: 'Equity' },
 ]
 
-const ALL_APP_LINKS = [
-  { label: 'Pathways',     href: '/pathways' },
-  { label: 'Programs',     href: '/programs' },
-  { label: 'Outcomes',     href: '/outcomes' },
-  { label: 'CHW',          href: '/chw' },
-  { label: 'Calendar',     href: '/calendar' },
-  { label: 'Impact',       href: '/impact' },
-  { label: 'Stories',      href: '/stories' },
-  { label: 'Provider',     href: '/provider' },
-  { label: 'Rights',       href: '/rights' },
-  { label: 'Methodology',  href: '/methodology' },
+const ALL_APP_LINK_DEFS = [
+  { labelKey: 'nav.pathways' as const,    href: '/pathways',  fallback: 'Pathways' },
+  { labelKey: 'nav.programs' as const,    href: '/programs',  fallback: 'Programs' },
+  { labelKey: 'nav.outcomes' as const,    href: '/outcomes',  fallback: 'Outcomes' },
+  { labelKey: 'nav.chw' as const,         href: '/chw',       fallback: 'CHW' },
+  { labelKey: 'nav.calendar' as const,    href: '/calendar',  fallback: 'Calendar' },
+  { labelKey: 'nav.impact' as const,      href: '/impact',    fallback: 'Impact' },
+  { labelKey: 'nav.stories' as const,     href: '/stories',   fallback: 'Stories' },
+  { labelKey: null,                        href: '/editorial', fallback: 'Editorial' },
+  { labelKey: null,                        href: '/equity',    fallback: 'Equity Lab' },
+  { labelKey: 'nav.provider' as const,    href: '/provider',  fallback: 'Provider' },
+  { labelKey: 'nav.rights' as const,      href: '/rights',    fallback: 'Rights' },
+  { labelKey: null,                        href: '/open',      fallback: 'Open' },
+  { labelKey: 'nav.methodology' as const, href: '/methodology', fallback: 'Methodology' },
+  { labelKey: null,                        href: '/triage',    fallback: 'AI Triage' },
+  { labelKey: null,                        href: '/gps',       fallback: 'Healthcare GPS' },
+  { labelKey: null,                        href: '/passport',  fallback: 'Health Passport' },
+  { labelKey: null,                        href: '/community', fallback: 'Community' },
+  { labelKey: null,                        href: '/crisis',    fallback: 'Crisis Help' },
+  { labelKey: null,                        href: '/wrapped',   fallback: 'Wrapped' },
 ]
 
 export default function Nav() {
-  const navRef    = useRef<HTMLElement>(null)
+  const { t } = useI18n()
+  const navRef      = useRef<HTMLElement>(null)
+  const drawerRef   = useRef<HTMLDivElement>(null)
+  const touchStartX = useRef(0)
   const [open, setOpen]       = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [user, setUser]       = useState<{ full_name?: string | null; email?: string | null; user_type?: string | null } | null>(null)
@@ -42,9 +58,18 @@ export default function Nav() {
   const pathname  = usePathname()
   const router    = useRouter()
   const isHome       = pathname === '/'
-  const links        = isHome ? HOME_LINKS : APP_LINKS
-  const drawerLinks  = isHome ? HOME_LINKS : ALL_APP_LINKS
   const supabase = createClientClient()
+
+  /* Build translated link arrays from defs */
+  const resolveLabel = (def: { labelKey: Parameters<typeof t>[0] | null; fallback: string }) =>
+    def.labelKey ? t(def.labelKey) : def.fallback
+
+  const links       = isHome
+    ? HOME_LINK_DEFS.map(d => ({ label: resolveLabel(d), href: d.href }))
+    : APP_LINK_DEFS.map(d  => ({ label: resolveLabel(d), href: d.href }))
+  const drawerLinks = isHome
+    ? HOME_LINK_DEFS.map(d      => ({ label: resolveLabel(d), href: d.href }))
+    : ALL_APP_LINK_DEFS.map(d   => ({ label: resolveLabel(d), href: d.href }))
 
   /* ── Load current user ── */
   useEffect(() => {
@@ -95,6 +120,11 @@ export default function Nav() {
   /* ── Lock body when open ── */
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
+    // Restore focus to hamburger when drawer closes
+    if (!open) {
+      const btn = document.getElementById('nav-hamburger')
+      if (btn && document.activeElement !== btn) btn.focus()
+    }
     return () => { document.body.style.overflow = '' }
   }, [open])
 
@@ -103,6 +133,56 @@ export default function Nav() {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false) }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
+  /* ── Focus trap: keyboard users cannot Tab out of the open drawer ── */
+  useEffect(() => {
+    if (!open) return
+    const drawer = drawerRef.current
+    if (!drawer) return
+
+    // Collect all focusable elements inside the drawer
+    const focusable = Array.from(
+      drawer.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter(el => el.offsetParent !== null) // visible only
+
+    if (!focusable.length) return
+    const first = focusable[0]
+    const last  = focusable[focusable.length - 1]
+
+    // Move initial focus into the drawer
+    first.focus()
+
+    const trap = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus() }
+      } else {
+        if (document.activeElement === last)  { e.preventDefault(); first.focus() }
+      }
+    }
+
+    drawer.addEventListener('keydown', trap)
+    return () => drawer.removeEventListener('keydown', trap)
+  }, [open])
+
+  /* ── Swipe-to-dismiss drawer (#25) ── */
+  useEffect(() => {
+    const el = drawerRef.current
+    if (!el) return
+    const onTouchStart = (e: TouchEvent) => { touchStartX.current = e.touches[0].clientX }
+    const onTouchEnd   = (e: TouchEvent) => {
+      const delta = e.changedTouches[0].clientX - touchStartX.current
+      if (delta > 64) setOpen(false)           // right-swipe → close
+    }
+    el.addEventListener('touchstart', onTouchStart, { passive: true })
+    el.addEventListener('touchend',   onTouchEnd,   { passive: true })
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart)
+      el.removeEventListener('touchend',   onTouchEnd)
+    }
   }, [])
 
   /* ── Saved clinics count (from localStorage + live events) ── */
@@ -187,21 +267,39 @@ export default function Nav() {
           transition: 'background 0.4s cubic-bezier(0.32,0.72,0,1), border-color 0.4s cubic-bezier(0.32,0.72,0,1), box-shadow 0.4s cubic-bezier(0.32,0.72,0,1)',
         }}
       >
-        {/* Left — Wordmark */}
+        {/* Left — Logomark + Wordmark (#18) */}
         <a
           href={isHome ? '#' : '/'}
           onClick={e => { if (isHome) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) } }}
           aria-label="NEXUS — home"
-          style={{ textDecoration: 'none', flexShrink: 0 }}
+          className="nav-logo"
         >
+          {/* Abstract N-hexagon glyph */}
+          <svg
+            className="nav-logo-glyph"
+            width="20" height="20" viewBox="0 0 20 20"
+            fill="none" aria-hidden="true"
+          >
+            <polygon
+              points="10,1 18,5.5 18,14.5 10,19 2,14.5 2,5.5"
+              stroke="var(--accent)" strokeWidth="1.4"
+              fill="rgba(110,231,183,0.08)"
+            />
+            <path
+              d="M6.5 13.5V6.5L10 13l3.5-6.5V13.5"
+              stroke="var(--accent)" strokeWidth="1.5"
+              strokeLinecap="round" strokeLinejoin="round"
+              fill="none"
+            />
+          </svg>
           <span style={{
             fontFamily: 'var(--font-orbitron)',
             fontSize: '11px',
             fontWeight: 400,
-            letterSpacing: '0.48em',
+            letterSpacing: '0.42em',
             textTransform: 'uppercase',
             color: 'rgba(255,255,255,0.90)',
-            paddingRight: '0.48em',
+            paddingRight: '0.42em',
             userSelect: 'none',
           }}>
             NEXUS
@@ -214,61 +312,30 @@ export default function Nav() {
           role="list"
           style={{ display: 'flex', gap: '4px', listStyle: 'none', alignItems: 'center', margin: '0 auto', padding: 0 }}
         >
-          {links.map((l, i) => {
+          {links.map((l) => {
             const isActive = !l.href.startsWith('#') && pathname === l.href
             return (
-              <li key={l.href}>
+              <li key={l.href} style={{ position: 'relative' }}>
                 {l.href.startsWith('#') ? (
                   <a
                     href={l.href}
                     onClick={e => handleAnchor(e, l.href)}
-                    style={{
-                      color: 'rgba(255,255,255,0.5)',
-                      fontSize: '13px',
-                      fontWeight: 400,
-                      fontFamily: 'var(--font-inter)',
-                      textDecoration: 'none',
-                      padding: '6px 12px',
-                      borderRadius: '8px',
-                      display: 'block',
-                      transition: 'color 0.2s cubic-bezier(0.32,0.72,0,1), background 0.2s cubic-bezier(0.32,0.72,0,1)',
-                    }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.color = 'rgba(255,255,255,0.92)'
-                      e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.color = 'rgba(255,255,255,0.5)'
-                      e.currentTarget.style.background = 'transparent'
-                    }}
+                    className="nav-link-pill"
+                    style={{ color: 'rgba(255,255,255,0.5)' }}
+                    onMouseEnter={e => { e.currentTarget.style.color = 'var(--text)'; e.currentTarget.style.background = 'rgba(255,255,255,0.06)' }}
+                    onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; e.currentTarget.style.background = 'transparent' }}
                   >{l.label}</a>
                 ) : (
                   <Link
                     href={l.href}
+                    className={`nav-link-pill${isActive ? ' active' : ''}`}
                     style={{
                       color: isActive ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.5)',
-                      fontSize: '13px',
                       fontWeight: isActive ? 500 : 400,
-                      fontFamily: 'var(--font-inter)',
-                      textDecoration: 'none',
-                      padding: '6px 12px',
-                      borderRadius: '8px',
-                      display: 'block',
                       background: isActive ? 'rgba(255,255,255,0.07)' : 'transparent',
-                      transition: 'color 0.2s cubic-bezier(0.32,0.72,0,1), background 0.2s cubic-bezier(0.32,0.72,0,1)',
                     }}
-                    onMouseEnter={e => {
-                      if (!isActive) {
-                        e.currentTarget.style.color = 'rgba(255,255,255,0.92)'
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
-                      }
-                    }}
-                    onMouseLeave={e => {
-                      if (!isActive) {
-                        e.currentTarget.style.color = 'rgba(255,255,255,0.5)'
-                        e.currentTarget.style.background = 'transparent'
-                      }
-                    }}
+                    onMouseEnter={e => { if (!isActive) { e.currentTarget.style.color = 'var(--text)'; e.currentTarget.style.background = 'rgba(255,255,255,0.06)' } }}
+                    onMouseLeave={e => { if (!isActive) { e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; e.currentTarget.style.background = 'transparent' } }}
                   >{l.label}</Link>
                 )}
               </li>
@@ -314,14 +381,17 @@ export default function Nav() {
             </button>
           )}
 
+          {/* Notification bell */}
+          <NotificationBell />
+
           {/* Beta pill */}
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: '6px',
             background: 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(255,255,255,0.1)',
+            border: '1px solid rgba(255,255,255,0.09)',
             borderRadius: '100px',
             padding: '4px 10px 4px 8px',
-            fontSize: '11px', color: 'rgba(255,255,255,0.55)',
+            fontSize: '11px', color: 'rgba(255,255,255,0.5)',
             fontFamily: 'var(--font-inter)',
           }}>
             <span style={{
@@ -340,13 +410,13 @@ export default function Nav() {
             style={{
               width: '34px', height: '34px', borderRadius: '9px',
               background: 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,255,255,0.08)',
+              border: '1px solid var(--border2)',
               cursor: 'pointer', color: 'rgba(255,255,255,0.5)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'background 0.2s, color 0.2s, border-color 0.2s',
               flexShrink: 0,
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(255,255,255,0.9)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'var(--text)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)' }}
             onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -387,7 +457,7 @@ export default function Nav() {
               {showUserMenu && (
                 <div style={{
                   position: 'absolute', top: 'calc(100% + 8px)', right: 0,
-                  background: 'rgba(10,10,22,0.97)', border: '1px solid rgba(255,255,255,0.09)',
+                  background: 'rgba(10,10,22,0.97)', border: '1px solid rgba(0,0,0,0.09)',
                   borderRadius: '12px', padding: '6px', minWidth: '180px',
                   boxShadow: '0 16px 40px rgba(0,0,0,0.5)',
                   zIndex: 600,
@@ -397,7 +467,7 @@ export default function Nav() {
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', marginTop: '1px' }}>{user.email}</div>
                   </div>
                   {[
-                    { label: 'Dashboard', href: '/dashboard' },
+                    { label: t('nav.dashboard'), href: '/dashboard' },
                     { label: 'Profile', href: '/dashboard/profile' },
                   ].map(item => (
                     <button key={item.href}
@@ -413,7 +483,7 @@ export default function Nav() {
                     style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', background: 'none', border: 'none', borderRadius: '7px', color: 'rgba(255,107,107,0.8)', fontSize: '13px', cursor: 'pointer', fontFamily: 'var(--font-inter)', transition: 'background 0.15s' }}
                     onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,107,107,0.08)'}
                     onMouseLeave={e => e.currentTarget.style.background = 'none'}
-                  >Sign out</button>
+                  >{t('nav.signOut')}</button>
                 </div>
               )}
             </div>
@@ -425,13 +495,13 @@ export default function Nav() {
                 style={{ background: 'none', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '9px', padding: '7px 14px', fontFamily: 'var(--font-inter)', fontSize: '12.5px', fontWeight: 500, cursor: 'pointer', color: 'rgba(255,255,255,0.7)', transition: 'border-color 0.2s, color 0.2s' }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'; e.currentTarget.style.color = '#fff' }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)' }}
-              >Sign in</button>
+              >{t('nav.signIn')}</button>
               <button
                 style={{ background: 'rgba(255,255,255,0.94)', color: '#08081a', border: 'none', borderRadius: '9px', padding: '8px 18px', fontFamily: 'var(--font-inter)', fontSize: '12.5px', fontWeight: 600, cursor: 'pointer', letterSpacing: '0.01em', transition: 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s', boxShadow: '0 1px 3px rgba(0,0,0,0.25)' }}
                 onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.3)' }}
                 onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.25)' }}
                 onClick={() => router.push('/signup')}
-              >Get started</button>
+              >{t('nav.getStarted')}</button>
             </div>
           )}
 
@@ -481,27 +551,32 @@ export default function Nav() {
         }}
       />
 
-      {/* ── Mobile drawer ── */}
+      {/* ── Mobile drawer — spring-physics slide (#19) + swipe ref (#25) ── */}
       <div
+        ref={drawerRef}
         role="dialog"
         aria-label="Navigation menu"
         aria-hidden={!open}
         style={{
           position: 'fixed', top: '10px', right: '10px',
-          width: '280px',
+          width: '290px',
           zIndex: 499,
-          background: 'rgba(10,10,22,0.96)',
-          backdropFilter: 'blur(40px)',
-          WebkitBackdropFilter: 'blur(40px)',
-          border: '1px solid rgba(255,255,255,0.09)',
-          borderRadius: '18px',
+          background: 'rgba(8,10,22,0.97)',
+          backdropFilter: 'blur(48px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(48px) saturate(180%)',
+          border: '1px solid rgba(110,231,183,0.08)',
+          borderRadius: '20px',
           padding: '20px',
-          boxShadow: '0 24px 64px rgba(0,0,0,0.6)',
-          transform: open ? 'scale(1) translateY(0)' : 'scale(0.94) translateY(-12px)',
+          boxShadow: '0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04) inset',
+          transform: open
+            ? 'scale(1) translateX(0) translateY(0)'
+            : 'scale(0.92) translateX(24px) translateY(-8px)',
           opacity: open ? 1 : 0,
           pointerEvents: open ? 'auto' : 'none',
           transformOrigin: 'top right',
-          transition: 'transform 0.35s cubic-bezier(0.32,0.72,0,1), opacity 0.3s cubic-bezier(0.32,0.72,0,1)',
+          transition: open
+            ? 'transform 0.5s cubic-bezier(0.34,1.3,0.64,1), opacity 0.3s ease'
+            : 'transform 0.3s cubic-bezier(0.4,0,1,1), opacity 0.2s ease',
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
@@ -524,8 +599,10 @@ export default function Nav() {
             return (
               <li key={l.href} style={{
                 opacity: open ? 1 : 0,
-                transform: open ? 'translateY(0)' : 'translateY(8px)',
-                transition: `opacity 0.3s ${0.05 + i * 0.04}s cubic-bezier(0.32,0.72,0,1), transform 0.3s ${0.05 + i * 0.04}s cubic-bezier(0.32,0.72,0,1)`,
+                transform: open ? 'translateX(0)' : 'translateX(18px)',
+                transition: open
+                  ? `opacity 0.45s ${0.08 + i * 0.04}s cubic-bezier(0.16,1,0.3,1), transform 0.45s ${0.08 + i * 0.04}s cubic-bezier(0.34,1.3,0.64,1)`
+                  : `opacity 0.15s ease, transform 0.15s ease`,
               }}>
                 {l.href.startsWith('#') ? (
                   <a href={l.href} onClick={e => handleAnchor(e, l.href)}
@@ -557,13 +634,13 @@ export default function Nav() {
                 <div style={{ fontSize: '12px', fontWeight: 600, color: '#eef4f5' }}>{user.full_name || 'User'}</div>
                 <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>{user.email}</div>
               </div>
-              <button onClick={() => { setOpen(false); router.push('/dashboard') }} style={{ width: '100%', background: 'rgba(255,255,255,0.93)', color: '#08081a', border: 'none', borderRadius: '10px', padding: '12px', fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>Dashboard</button>
-              <button onClick={() => { setOpen(false); handleLogout() }} style={{ width: '100%', background: 'rgba(255,107,107,0.1)', color: '#ff6b6b', border: '1px solid rgba(255,107,107,0.25)', borderRadius: '10px', padding: '11px', fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>Sign out</button>
+              <button onClick={() => { setOpen(false); router.push('/dashboard') }} style={{ width: '100%', background: 'rgba(255,255,255,0.93)', color: '#08081a', border: 'none', borderRadius: '10px', padding: '12px', fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>{t('nav.dashboard')}</button>
+              <button onClick={() => { setOpen(false); handleLogout() }} style={{ width: '100%', background: 'rgba(255,107,107,0.1)', color: '#ff6b6b', border: '1px solid rgba(255,107,107,0.25)', borderRadius: '10px', padding: '11px', fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>{t('nav.signOut')}</button>
             </>
           ) : (
             <>
-              <button onClick={() => { setOpen(false); router.push('/login') }} style={{ width: '100%', background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.8)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '11px', fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 500, cursor: 'pointer' }}>Sign in</button>
-              <button onClick={() => { setOpen(false); router.push('/signup') }} style={{ width: '100%', background: 'rgba(255,255,255,0.93)', color: '#08081a', border: 'none', borderRadius: '10px', padding: '12px', fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>Get started free</button>
+              <button onClick={() => { setOpen(false); router.push('/login') }} style={{ width: '100%', background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.8)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '10px', padding: '11px', fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 500, cursor: 'pointer' }}>{t('nav.signIn')}</button>
+              <button onClick={() => { setOpen(false); router.push('/signup') }} style={{ width: '100%', background: 'rgba(255,255,255,0.93)', color: '#08081a', border: 'none', borderRadius: '10px', padding: '12px', fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>{t('nav.getStarted')}</button>
             </>
           )}
         </div>

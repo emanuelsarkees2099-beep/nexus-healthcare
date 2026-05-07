@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import AppShell from '@/components/AppShell'
-import { Video, Phone, MessageCircle, Clock, Shield, Globe, ChevronRight, ExternalLink, CheckCircle, AlertCircle, Hospital, Pill, Landmark, Brain, PhoneCall, HeartPulse } from 'lucide-react'
+import { Video, Phone, MessageCircle, Clock, Shield, Globe, ChevronRight, ExternalLink, CheckCircle, AlertCircle, Hospital, Pill, Landmark, Brain, PhoneCall, HeartPulse, Calendar, Copy, ChevronDown, Sparkles, BookOpen, Users } from 'lucide-react'
 
 const PROVIDERS = [
   {
@@ -12,8 +12,10 @@ const PROVIDERS = [
     available: '24/7',
     accepts: ['Uninsured', 'Medicaid', 'Medicare', 'Most insurance'],
     specialties: ['Primary care', 'Mental health', 'Dermatology', 'Nutrition'],
+    specialtyTags: ['primary', 'mental', 'dermatology'],
     languages: ['English', 'Español', 'French'],
     url: 'https://www.teladoc.com',
+    bookingUrl: 'https://member.teladoc.com/registrations/get_started',
     note: 'Sliding scale available for uninsured patients',
     verified: true,
   },
@@ -25,9 +27,11 @@ const PROVIDERS = [
     available: '24/7',
     accepts: ['Uninsured', 'Medicaid', 'Most insurance'],
     specialties: ['Urgent care', 'Mental health', 'Dermatology'],
+    specialtyTags: ['urgent', 'mental', 'dermatology'],
     languages: ['English', 'Español'],
     url: 'https://www.mdlive.com',
-    note: 'MDLIVE Cares program offers reduced fees',
+    bookingUrl: 'https://patient.mdlive.com/create_account',
+    note: 'MDLIVE Cares program offers reduced fees for uninsured patients',
     verified: true,
   },
   {
@@ -38,9 +42,11 @@ const PROVIDERS = [
     available: 'By appointment',
     accepts: ['Uninsured', 'Medicaid', 'Medicare', 'CHIP'],
     specialties: ['Primary care', 'Behavioral health', 'OB/GYN', 'Dental', 'Pediatrics'],
+    specialtyTags: ['primary', 'mental', 'dental', 'ob-gyn', 'pediatric'],
     languages: ['English', 'Español', '+ 40 languages'],
     url: 'https://findahealthcenter.hrsa.gov',
-    note: 'Required by law to serve everyone regardless of ability to pay',
+    bookingUrl: 'https://findahealthcenter.hrsa.gov',
+    note: 'Required by law to serve everyone regardless of ability to pay. Call your nearest FQHC to book.',
     verified: true,
   },
   {
@@ -51,9 +57,26 @@ const PROVIDERS = [
     available: 'By appointment',
     accepts: ['Uninsured', 'Self-pay'],
     specialties: ['Mental health', 'Therapy', 'Couples counseling', 'Teen support'],
+    specialtyTags: ['mental', 'therapy'],
     languages: ['English', 'Español', 'Mandarin', 'Arabic'],
     url: 'https://openpathcollective.org',
-    note: 'Licensed therapists at below-market rates',
+    bookingUrl: 'https://openpathcollective.org/get-started/',
+    note: 'Licensed therapists at below-market rates. One-time $65 membership, then $30–$80/session.',
+    verified: true,
+  },
+  {
+    name: 'Planned Parenthood Telehealth',
+    logo: <Users size={22} strokeWidth={1.5} />,
+    cost: 'Free – sliding scale',
+    wait: 'Same day – 1 day',
+    available: 'Mon–Sat',
+    accepts: ['Uninsured', 'Medicaid', 'Most insurance', 'Self-pay'],
+    specialties: ['OB/GYN', 'Reproductive health', 'STI testing', 'Birth control', 'Prenatal referrals'],
+    specialtyTags: ['ob-gyn', 'women', 'reproductive'],
+    languages: ['English', 'Español'],
+    url: 'https://www.plannedparenthood.org/get-care/telehealth',
+    bookingUrl: 'https://www.plannedparenthood.org/get-care/telehealth',
+    note: 'Accepts most Medicaid plans. Sliding scale fees for uninsured patients. Visit online for your state.',
     verified: true,
   },
   {
@@ -64,9 +87,11 @@ const PROVIDERS = [
     available: '24/7',
     accepts: ['Everyone'],
     specialties: ['Mental health crisis', 'Suicide prevention', 'Anxiety', 'Depression'],
+    specialtyTags: ['mental', 'crisis'],
     languages: ['English', 'Español'],
     url: 'https://www.crisistextline.org',
-    note: 'Text HOME to 741741 — free, confidential, 24/7',
+    bookingUrl: null,
+    note: 'Text HOME to 741741 — free, confidential, 24/7. No account needed.',
     verified: true,
   },
   {
@@ -77,10 +102,61 @@ const PROVIDERS = [
     available: '24/7 365 days',
     accepts: ['Everyone'],
     specialties: ['Substance use', 'Mental health', 'Treatment referrals'],
+    specialtyTags: ['substance', 'mental', 'crisis'],
     languages: ['English', 'Español'],
     url: 'https://www.samhsa.gov/find-help/national-helpline',
-    note: 'Call 1-800-662-4357 — confidential, free, no insurance needed',
+    bookingUrl: null,
+    note: 'Call 1-800-662-4357 — confidential, free, no insurance or ID required.',
     verified: true,
+  },
+]
+
+/* ── Specialty filter definitions ───────────────── */
+const SPECIALTY_FILTERS = [
+  { value: 'all',        label: 'All providers'    },
+  { value: 'free',       label: 'Free / $0'        },
+  { value: 'mental',     label: 'Mental health'    },
+  { value: 'crisis',     label: '24/7 Crisis'      },
+  { value: 'primary',    label: 'Primary care'     },
+  { value: 'dental',     label: 'Dental'           },
+  { value: 'ob-gyn',     label: 'OB/GYN'           },
+  { value: 'pediatric',  label: 'Pediatric'        },
+  { value: 'substance',  label: 'Substance use'    },
+]
+
+/* ── "What to say" insurance scripts ─────────────── */
+const SCRIPTS = [
+  {
+    id: 'uninsured',
+    title: 'When you have no insurance',
+    badge: 'Most common',
+    badgeColor: 'var(--accent)',
+    steps: [
+      { prompt: 'When asked about insurance, say:', script: '"I don\'t currently have insurance. Do you have a sliding-scale fee program or can you tell me the self-pay rate?"' },
+      { prompt: 'If they say self-pay rates are high, ask:', script: '"Are you a Federally Qualified Health Center? I understand you\'re required to offer sliding-scale fees based on income."' },
+      { prompt: 'To unlock Medicaid fast-track, ask:', script: '"I may qualify for Medicaid. Can you help me apply or connect me with a navigator while I wait for my appointment?"' },
+    ],
+  },
+  {
+    id: 'cobra',
+    title: 'When you\'re on COBRA (too expensive)',
+    badge: 'Recently uninsured',
+    badgeColor: '#60a5fa',
+    steps: [
+      { prompt: 'Mention your recent coverage loss:', script: '"I recently lost my employer coverage and I\'m on COBRA, but I can\'t afford the premiums. I have a 60-day Special Enrollment Period — can you see me as self-pay while I sort out a marketplace plan?"' },
+      { prompt: 'Ask about ACA options:', script: '"Can you refer me to an enrollment navigator who can help me find a marketplace plan with premium tax credits? My income may qualify me for subsidized coverage."' },
+    ],
+  },
+  {
+    id: 'medicaid-gap',
+    title: 'If you\'re in the Medicaid coverage gap',
+    badge: 'Non-expansion states',
+    badgeColor: '#fbbf24',
+    steps: [
+      { prompt: 'Explain your situation:', script: '"I earn too much for Medicaid in my state, but not enough for an ACA subsidy. I\'m in what\'s called the \'coverage gap.\' What options do I have for affordable care?"' },
+      { prompt: 'Ask about FQHC sliding scale:', script: '"Do you operate on a sliding-scale fee schedule? I understand federally funded health centers are required to serve patients at reduced rates based on income."' },
+      { prompt: 'Ask about free care programs:', script: '"Are there any charity care programs or state-funded programs you can connect me with? Even a one-time visit credit would help."' },
+    ],
   },
 ]
 
@@ -98,15 +174,23 @@ const EMERGENCY = {
 }
 
 export default function TelehealthPage() {
-  const [filter, setFilter] = useState<'all' | 'free' | 'mental' | 'crisis'>('all')
+  const [filter, setFilter] = useState('all')
   const [expanded, setExpanded] = useState<number | null>(null)
+  const [copiedScript, setCopiedScript] = useState<string | null>(null)
+  const [expandedScript, setExpandedScript] = useState<string | null>(null)
 
   const filtered = PROVIDERS.filter(p => {
+    if (filter === 'all') return true
     if (filter === 'free') return p.cost.startsWith('Free') || p.cost.startsWith('$0')
-    if (filter === 'mental') return p.specialties.some(s => s.toLowerCase().includes('mental') || s.toLowerCase().includes('ther') || s.toLowerCase().includes('crisis'))
     if (filter === 'crisis') return p.available === '24/7' || p.available.includes('24/7')
-    return true
+    return p.specialtyTags.includes(filter)
   })
+
+  function copyScript(id: string, text: string) {
+    navigator.clipboard?.writeText(text).catch(() => {})
+    setCopiedScript(id)
+    setTimeout(() => setCopiedScript(null), 2000)
+  }
 
   return (
     <AppShell>
@@ -161,10 +245,10 @@ export default function TelehealthPage() {
           <div style={{ maxWidth: '960px', margin: '0 auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '28px' }}>
               <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#fff' }}>Verified providers</h2>
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                {(['all', 'free', 'mental', 'crisis'] as const).map(f => (
-                  <button key={f} onClick={() => setFilter(f)} style={{ padding: '7px 14px', borderRadius: '100px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', border: '1px solid', transition: 'all 0.2s', background: filter === f ? 'var(--accent)' : 'transparent', color: filter === f ? '#07070F' : 'rgba(255,255,255,0.5)', borderColor: filter === f ? 'var(--accent)' : 'rgba(255,255,255,0.1)' }}>
-                    {f === 'all' ? 'All' : f === 'free' ? 'Free / $0' : f === 'mental' ? 'Mental health' : '24/7 Crisis'}
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                {SPECIALTY_FILTERS.map(f => (
+                  <button key={f.value} onClick={() => setFilter(f.value)} style={{ padding: '7px 13px', borderRadius: '100px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', border: '1px solid', transition: 'all 0.18s', background: filter === f.value ? 'var(--accent)' : 'transparent', color: filter === f.value ? '#07070F' : 'rgba(255,255,255,0.5)', borderColor: filter === f.value ? 'var(--accent)' : 'rgba(255,255,255,0.1)' }}>
+                    {f.label}
                   </button>
                 ))}
               </div>
@@ -218,10 +302,87 @@ export default function TelehealthPage() {
                         </div>
                       )}
 
-                      <a href={p.url} target="_blank" rel="noopener noreferrer"
-                        style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '11px 20px', background: 'var(--accent)', color: '#07070F', borderRadius: '9px', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>
-                        Access {p.name} <ExternalLink size={13} />
-                      </a>
+                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        {p.bookingUrl && (
+                          <a href={p.bookingUrl} target="_blank" rel="noopener noreferrer"
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '11px 20px', background: 'var(--accent)', color: '#07070F', borderRadius: '9px', textDecoration: 'none', fontWeight: 700, fontSize: '14px', transition: 'opacity 0.15s' }}
+                            onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+                            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
+                            <Calendar size={14} strokeWidth={2} /> Book a visit <ExternalLink size={12} />
+                          </a>
+                        )}
+                        <a href={p.url} target="_blank" rel="noopener noreferrer"
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '11px 18px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.6)', borderRadius: '9px', textDecoration: 'none', fontWeight: 600, fontSize: '14px', transition: 'all 0.15s' }}
+                          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.2)'; (e.currentTarget as HTMLElement).style.color = '#fff' }}
+                          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.6)' }}>
+                          Learn more <ExternalLink size={12} />
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── WHAT TO SAY SCRIPTS ──────────────── */}
+        <section style={{ padding: '60px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+          <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+            <div style={{ marginBottom: '36px' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.2)', borderRadius: '100px', fontSize: '11px', color: '#fbbf24', letterSpacing: '0.06em', marginBottom: '20px' }}>
+                <Sparkles size={10} strokeWidth={1.5} /> WHAT TO SAY
+              </span>
+              <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#fff', marginBottom: '8px' }}>
+                Calling without insurance? Use these scripts.
+              </h2>
+              <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.38)', lineHeight: 1.65, maxWidth: '520px' }}>
+                The right words unlock sliding-scale fees, charity care, and Medicaid fast-tracks that aren't advertised. Copy these scripts and read them word-for-word.
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {SCRIPTS.map(script => (
+                <div key={script.id} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '18px', overflow: 'hidden', transition: 'border-color 0.2s' }}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(251,191,36,0.2)')}
+                  onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)')}>
+                  <div style={{ padding: '20px 24px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}
+                    onClick={() => setExpandedScript(expandedScript === script.id ? null : script.id)}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                        <span style={{ fontSize: '15px', fontWeight: 700, color: '#eef4f5' }}>{script.title}</span>
+                        <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '100px', background: `${script.badgeColor}15`, border: `1px solid ${script.badgeColor}30`, color: script.badgeColor, fontWeight: 600 }}>{script.badge}</span>
+                      </div>
+                      <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)' }}>{script.steps.length} talking points</span>
+                    </div>
+                    <ChevronDown size={15} style={{ color: 'rgba(255,255,255,0.3)', transform: expandedScript === script.id ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s', flexShrink: 0 }} />
+                  </div>
+
+                  {expandedScript === script.id && (
+                    <div style={{ padding: '0 24px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '20px' }}>
+                        {script.steps.map((step, si) => (
+                          <div key={si} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px', overflow: 'hidden' }}>
+                            <div style={{ padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(251,191,36,0.15)', border: '1px solid rgba(251,191,36,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, color: '#fbbf24', flexShrink: 0 }}>{si + 1}</span>
+                              <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.5 }}>{step.prompt}</span>
+                            </div>
+                            <div style={{ padding: '14px 16px', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                              <p style={{ flex: 1, fontSize: '14px', color: 'rgba(255,255,255,0.75)', lineHeight: 1.7, margin: 0, fontStyle: 'italic' }}>{step.script}</p>
+                              <button
+                                onClick={() => copyScript(`${script.id}-${si}`, step.script)}
+                                title="Copy to clipboard"
+                                style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid', background: copiedScript === `${script.id}-${si}` ? 'rgba(110,231,183,0.1)' : 'rgba(255,255,255,0.03)', color: copiedScript === `${script.id}-${si}` ? 'var(--accent)' : 'rgba(255,255,255,0.35)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', borderColor: copiedScript === `${script.id}-${si}` ? 'rgba(110,231,183,0.3)' : 'rgba(255,255,255,0.08)', flexShrink: 0, fontFamily: 'inherit' }}>
+                                {copiedScript === `${script.id}-${si}` ? <CheckCircle size={13} strokeWidth={2} /> : <Copy size={13} strokeWidth={2} />}
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ marginTop: '14px', padding: '10px 14px', background: 'rgba(251,191,36,0.04)', border: '1px solid rgba(251,191,36,0.12)', borderRadius: '10px', fontSize: '12px', color: 'rgba(255,255,255,0.4)', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                        <BookOpen size={13} style={{ color: '#fbbf24', marginTop: '1px', flexShrink: 0 }} strokeWidth={1.5} />
+                        <span>These scripts are based on patient rights under federal law. FQHCs are required to offer sliding-scale fees under Section 330 of the Public Health Service Act.</span>
+                      </div>
                     </div>
                   )}
                 </div>

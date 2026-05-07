@@ -14,7 +14,7 @@ export default function ExitIntent() {
     // Only show once per session
     if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem(SESSION_KEY)) return
 
-    // Wait 8s before enabling — don't fire immediately
+    // Wait 30s before enabling — user must be genuinely engaged — don't fire immediately
     const enableTimeout = setTimeout(() => {
       const onMouseLeave = (e: MouseEvent) => {
         if (e.clientY <= 4 && !shownRef.current) {
@@ -26,7 +26,7 @@ export default function ExitIntent() {
       }
       document.addEventListener('mouseleave', onMouseLeave)
       return () => document.removeEventListener('mouseleave', onMouseLeave)
-    }, 8000)
+    }, 30000)
 
     return () => clearTimeout(enableTimeout)
   }, [])
@@ -62,11 +62,13 @@ export default function ExitIntent() {
           zIndex: 9991,
           width: 'calc(100% - 2rem)',
           maxWidth: '520px',
-          background: 'linear-gradient(160deg, var(--bg2), var(--bg3))',
-          border: '1px solid rgba(110,231,183,0.20)',
+          background: 'rgba(8,13,26,0.82)',
+          backdropFilter: 'blur(32px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(32px) saturate(180%)',
+          border: '1px solid rgba(110,231,183,0.12)',
           borderRadius: '24px',
           padding: '2.25rem 2.5rem',
-          boxShadow: '0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(110,231,183,0.08)',
+          boxShadow: '0 40px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(110,231,183,0.06), inset 0 1px 0 rgba(255,255,255,0.04)',
           animation: 'exit-slide-up 0.45s cubic-bezier(0.16,1,0.3,1) forwards',
         }}
       >
@@ -82,7 +84,7 @@ export default function ExitIntent() {
           aria-label="Close"
           style={{
             position: 'absolute', top: '1rem', right: '1rem',
-            background: 'none', border: 'none', cursor: 'none',
+            background: 'none', border: 'none', cursor: 'pointer',
             color: 'var(--text-3)', padding: '6px',
             transition: 'color 0.2s',
           }}
@@ -109,7 +111,7 @@ export default function ExitIntent() {
 
         {/* Content */}
         <h2 id="exit-title" style={{
-          fontFamily: 'var(--font-sora)', fontSize: '1.5rem', fontWeight: 700,
+          fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 700,
           letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '0.75rem',
         }}>
           Wait — free care is{' '}
@@ -133,7 +135,7 @@ export default function ExitIntent() {
               flex: 1,
               background: 'var(--accent)', color: '#07070F',
               border: 'none', borderRadius: '12px', padding: '13px 20px',
-              fontFamily: 'var(--font-sora)', fontSize: '14px', fontWeight: 600,
+              fontFamily: 'var(--font-display)', fontSize: '14px', fontWeight: 600,
               cursor: 'pointer', minWidth: '160px',
               boxShadow: '0 4px 20px rgba(110,231,183,0.30)',
               transition: 'transform 0.2s var(--ease-spring), box-shadow 0.2s',
@@ -158,7 +160,7 @@ export default function ExitIntent() {
               background: 'transparent', color: 'var(--text-3)',
               border: '1px solid var(--border)', borderRadius: '12px', padding: '13px 20px',
               fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 400,
-              cursor: 'none',
+              cursor: 'pointer',
               transition: 'color 0.2s, border-color 0.2s',
             }}
             onMouseEnter={e => {

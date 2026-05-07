@@ -4,8 +4,19 @@ import { useRouter } from 'next/navigation'
 import {
   Search, MapPin, Users, ReceiptText, BarChart2, CalendarDays,
   BookOpen, Scale, Megaphone, Accessibility, Zap, ArrowRight,
-  BrainCircuit, Phone, Heart, X,
+  BrainCircuit, Phone, Heart, X, Mic, MicOff, Globe, TrendingUp,
+  Navigation, Shield, Sparkles, AlertTriangle,
 } from 'lucide-react'
+
+/* ── SpeechRecognition types ── */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnySpeechRecognition = any
+declare global {
+  interface Window {
+    SpeechRecognition: AnySpeechRecognition
+    webkitSpeechRecognition: AnySpeechRecognition
+  }
+}
 
 type CmdItem = {
   id: string
@@ -135,6 +146,96 @@ const CMD_ITEMS: CmdItem[] = [
     category: 'Account',
     keywords: ['dashboard', 'wallet', 'saved', 'bookmarks', 'appointments', 'profile'],
   },
+  {
+    id: 'equity',
+    label: 'Healthcare Equity Lab',
+    description: 'Interactive maps, equity data, and healthcare disparities',
+    href: '/equity',
+    icon: <Globe size={15} />,
+    category: 'Info',
+    keywords: ['equity', 'data', 'map', 'disparities', 'race', 'income', 'zip code', 'lab'],
+  },
+  {
+    id: 'open',
+    label: 'Open Roadmap',
+    description: 'Public changelog, upcoming features, and our mission',
+    href: '/open',
+    icon: <TrendingUp size={15} />,
+    category: 'Info',
+    keywords: ['roadmap', 'changelog', 'open', 'developer', 'updates', 'features', 'api'],
+  },
+  {
+    id: 'editorial',
+    label: 'Editorial',
+    description: 'In-depth healthcare journalism and guides',
+    href: '/editorial',
+    icon: <BookOpen size={15} />,
+    category: 'Community',
+    keywords: ['editorial', 'article', 'magazine', 'journalism', 'guide', 'read', 'long-form'],
+  },
+  {
+    id: 'triage',
+    label: 'AI Triage Co-Pilot',
+    description: 'Describe symptoms — AI helps you find the right care',
+    href: '/triage',
+    icon: <BrainCircuit size={15} />,
+    category: 'Features',
+    keywords: ['triage', 'symptoms', 'ai', 'chest', 'pain', 'diagnosis', 'hurt', 'sick'],
+  },
+  {
+    id: 'gps',
+    label: 'Healthcare GPS',
+    description: 'Step-by-step guide to getting care — phone scripts included',
+    href: '/gps',
+    icon: <Navigation size={15} />,
+    category: 'Features',
+    keywords: ['gps', 'guide', 'steps', 'navigate', 'clinic visit', 'appointment', 'help'],
+  },
+  {
+    id: 'passport',
+    label: 'Health Passport',
+    description: 'Your encrypted health record — allergies, meds, QR check-in',
+    href: '/passport',
+    icon: <Shield size={15} />,
+    category: 'Account',
+    keywords: ['passport', 'health record', 'allergies', 'medications', 'qr', 'encrypted'],
+  },
+  {
+    id: 'community',
+    label: 'Community Care Network',
+    description: 'Rides, childcare swaps, translator buddies, and nurse Q&A',
+    href: '/community',
+    icon: <Users size={15} />,
+    category: 'Community',
+    keywords: ['community', 'ride', 'translate', 'childcare', 'nurse', 'mutual aid', 'volunteer'],
+  },
+  {
+    id: 'crisis',
+    label: 'Crisis Support',
+    description: '988 lifeline, nearest ER, mental health walk-ins — right now',
+    href: '/crisis',
+    icon: <AlertTriangle size={15} />,
+    category: 'Core',
+    keywords: ['crisis', '988', 'emergency', 'mental health', 'help now', 'hurt', 'overdose'],
+  },
+  {
+    id: 'wrapped',
+    label: 'Care Wrapped',
+    description: 'Your year in healthcare — savings, clinics found, impact',
+    href: '/wrapped',
+    icon: <Sparkles size={15} />,
+    category: 'Account',
+    keywords: ['wrapped', 'year', 'impact', 'savings', 'statistics', 'annual'],
+  },
+  {
+    id: 'onboarding',
+    label: 'Get Started',
+    description: 'Personalized care plan based on your situation',
+    href: '/onboarding',
+    icon: <ArrowRight size={15} />,
+    category: 'Core',
+    keywords: ['start', 'onboarding', 'new', 'personalized', 'plan', 'setup'],
+  },
 ]
 
 function matchItems(query: string): CmdItem[] {
@@ -152,10 +253,49 @@ export default function CommandPalette() {
   const [open, setOpen]         = useState(false)
   const [query, setQuery]       = useState('')
   const [selected, setSelected] = useState(0)
+  const [listening, setListening] = useState(false)
+  const [voiceSupported, setVoiceSupported] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const router   = useRouter()
 
   const results = matchItems(query)
+
+  /* ── Check voice support ── */
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition
+      setVoiceSupported(!!SR)
+    }
+  }, [])
+
+  /* ── Start voice recognition ── */
+  const startVoice = useCallback(() => {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition
+    if (!SR) return
+    const rec = new SR()
+    rec.continuous = false
+    rec.interimResults = true
+    rec.lang = 'en-US'
+    rec.onstart  = () => setListening(true)
+    rec.onend    = () => setListening(false)
+    rec.onerror  = () => setListening(false)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    rec.onresult = (e: any) => {
+      const transcript = Array.from(e.results as ArrayLike<{0: {transcript: string}}>)
+        .map((r) => r[0].transcript).join('')
+      setQuery(transcript)
+      setSelected(0)
+    }
+    recognitionRef.current = rec
+    rec.start()
+  }, [])
+
+  const stopVoice = useCallback(() => {
+    recognitionRef.current?.stop()
+    setListening(false)
+  }, [])
 
   const close = useCallback(() => {
     setOpen(false)
@@ -235,6 +375,25 @@ export default function CommandPalette() {
               aria-label="Clear search"
             >
               <X size={14} />
+            </button>
+          )}
+          {voiceSupported && (
+            <button
+              onClick={listening ? stopVoice : startVoice}
+              style={{
+                background: listening ? 'rgba(248,113,113,0.12)' : 'none',
+                border: listening ? '1px solid rgba(248,113,113,0.3)' : 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                color: listening ? '#f87171' : 'var(--text-3)',
+                padding: '4px 6px', display: 'flex', alignItems: 'center',
+                transition: 'all 0.2s',
+                animation: listening ? 'pulse-dot 1s ease-in-out infinite' : 'none',
+              }}
+              aria-label={listening ? 'Stop voice search' : 'Start voice search'}
+              title={listening ? 'Listening… click to stop' : 'Voice search'}
+            >
+              {listening ? <MicOff size={14} /> : <Mic size={14} />}
             </button>
           )}
           <kbd style={{

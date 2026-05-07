@@ -39,27 +39,66 @@ setInterval(() => {
 const ALLOWED_TYPES = ['story', 'chw', 'legal', 'provider', 'accessibility', 'advocacy', 'outcome'] as const
 type SubmissionType = typeof ALLOWED_TYPES[number]
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+const SPAM_PATTERNS = [/\b(viagra|casino|lottery|winner|click here|free money|make \$\d+)\b/i]
+
+function isValidEmail(v: unknown): boolean {
+  return typeof v === 'string' && EMAIL_RE.test(v.trim())
+}
+
+function containsSpam(texts: unknown[]): boolean {
+  return texts.some(t => typeof t === 'string' && SPAM_PATTERNS.some(p => p.test(t)))
+}
+
 function validate(type: SubmissionType, data: Record<string, unknown>): string | null {
   switch (type) {
-    case 'story':
+    case 'story': {
       if (!data.story || typeof data.story !== 'string' || data.story.trim().length < 20)
         return 'Story must be at least 20 characters.'
       if (!data.consent) return 'You must consent to sharing your story.'
+      if (containsSpam([data.story, data.name]))
+        return 'Your submission was flagged by our content filter. Please revise and resubmit.'
       return null
-    case 'chw':
-      if (!data.name || !data.email || !data.city) return 'Name, email, and city are required.'
+    }
+    case 'chw': {
+      // Card "connect" clicks don't require email — only the "become a CHW" form does
+      const isSignup = Boolean(data.name && data.email && data.city && !data.source)
+      if (isSignup) {
+        if (!data.name || typeof data.name !== 'string' || data.name.trim().length < 2)
+          return 'Please enter your full name (at least 2 characters).'
+        if (!isValidEmail(data.email))
+          return 'Please enter a valid email address.'
+        if (!data.city || typeof data.city !== 'string' || data.city.trim().length < 2)
+          return 'Please enter your city.'
+        if (containsSpam([data.name, data.city]))
+          return 'Your submission was flagged by our content filter.'
+      }
       return null
+    }
     case 'legal':
-      if (!data.email || !data.description) return 'Email and description are required.'
+      if (!isValidEmail(data.email)) return 'Please enter a valid email address.'
+      if (!data.description || typeof data.description !== 'string' || data.description.trim().length < 10)
+        return 'Please describe your issue (at least 10 characters).'
       return null
     case 'provider':
-      if (!data.clinic || !data.email) return 'Clinic name and email are required.'
+      if (!data.clinic || typeof data.clinic !== 'string' || data.clinic.trim().length < 2)
+        return 'Please enter your clinic name.'
+      if (!isValidEmail(data.email)) return 'Please enter a valid email address.'
       return null
     case 'accessibility':
-      if (!data.email || !data.issue) return 'Email and issue description are required.'
+      if (!isValidEmail(data.email)) return 'Please enter a valid email address.'
+      if (!data.issue || typeof data.issue !== 'string' || data.issue.trim().length < 10)
+        return 'Please describe the accessibility issue (at least 10 characters).'
       return null
     case 'advocacy':
-      if (!data.name || !data.email || !data.message) return 'Name, email, and message are required.'
+      if (!data.name || typeof data.name !== 'string' || data.name.trim().length < 2)
+        return 'Please enter your name.'
+      if (!isValidEmail(data.email)) return 'Please enter a valid email address.'
+      if (!data.message || typeof data.message !== 'string' || data.message.trim().length < 20)
+        return 'Message must be at least 20 characters.'
+      if (containsSpam([data.name, data.message]))
+        return 'Your submission was flagged by our content filter.'
       return null
     case 'outcome':
       if (!data.care || !data.rating) return 'Care type and rating are required.'
@@ -139,8 +178,11 @@ export async function POST(req: NextRequest) {
 
     const getSupabaseClient = () => createClient(url, anonKey)
 
-    // Stories go to 'pending_review' so admin can approve before publishing
-    const status = type === 'story' ? 'pending_review' : 'new'
+    // Stories → pending_review (admin approves before publishing)
+    // CHW signups (has name+email+city but no source field) → pending_verification
+    // Everything else → new
+    const isCHWSignup = type === 'chw' && Boolean(data.name && data.email && data.city && !data.source)
+    const status = type === 'story' ? 'pending_review' : isCHWSignup ? 'pending_verification' : 'new'
 
     const { data: row, error } = await getSupabaseClient()
       .from('submissions')

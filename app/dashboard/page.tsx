@@ -1,395 +1,567 @@
 'use client'
-export const dynamic = 'force-dynamic'
-import { useEffect, useState } from 'react'
-import { createClientClient } from '@/lib/auth-client'
+import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import AppShell from '@/components/AppShell'
-import {
-  ArrowRight, User, Settings, MapPin, ReceiptText, Users,
-  CalendarDays, BookOpen, Scale, Megaphone, Accessibility,
-  Bookmark, Heart, Phone, Loader2, CheckCircle2, Clock,
-  TrendingUp, Shield, Star,
-} from 'lucide-react'
+import { createClientClient } from '@/lib/auth-client'
 
-const WALLET_SECTIONS = [
-  {
-    id: 'clinics',
-    label: 'Saved Clinics',
-    count: 0,
-    icon: <MapPin size={16} strokeWidth={2} />,
-    href: '/search',
-    color: 'var(--accent)',
-    bg: 'rgba(110,231,183,0.08)',
-    border: 'rgba(110,231,183,0.18)',
-    hint: 'Bookmark clinics to find them fast later',
-  },
-  {
-    id: 'programs',
-    label: 'Programs Matched',
-    count: 0,
-    icon: <ReceiptText size={16} strokeWidth={2} />,
-    href: '/programs',
-    color: 'var(--amber)',
-    bg: 'rgba(252,211,77,0.08)',
-    border: 'rgba(252,211,77,0.18)',
-    hint: 'Programs you may qualify for',
-  },
-  {
-    id: 'appointments',
-    label: 'Upcoming Visits',
-    count: 0,
-    icon: <CalendarDays size={16} strokeWidth={2} />,
-    href: '/calendar',
-    color: 'var(--violet)',
-    bg: 'rgba(167,139,250,0.08)',
-    border: 'rgba(167,139,250,0.18)',
-    hint: 'Track your scheduled appointments',
-  },
-  {
-    id: 'chw',
-    label: 'CHW Connection',
-    count: 0,
-    icon: <Users size={16} strokeWidth={2} />,
-    href: '/chw',
-    color: 'var(--green-pulse)',
-    bg: 'rgba(52,211,153,0.08)',
-    border: 'rgba(52,211,153,0.18)',
-    hint: 'Connect with a community health worker',
-  },
-]
-
-const QUICK_ACTIONS = [
-  { title: 'Share Your Story',     description: 'Your experience helps others find care',      href: '/stories',     icon: <BookOpen size={16} strokeWidth={2} />,     color: 'var(--accent)'  },
-  { title: 'Connect with CHWs',    description: 'Find workers who speak your language',        href: '/chw',         icon: <Users size={16} strokeWidth={2} />,        color: 'var(--violet)'  },
-  { title: 'Know Your Rights',     description: 'Legal protections and EMTALA explained',      href: '/rights',      icon: <Scale size={16} strokeWidth={2} />,        color: 'var(--amber)'   },
-  { title: 'Advocate for Change',  description: 'Campaigns and letters to representatives',   href: '/advocacy',    icon: <Megaphone size={16} strokeWidth={2} />,    color: 'var(--coral)'   },
-  { title: 'Find Programs',        description: 'Medicaid, ACA, HRSA and 40+ programs',       href: '/programs',    icon: <ReceiptText size={16} strokeWidth={2} />,  color: 'var(--amber)'   },
-  { title: 'Accessibility Help',   description: 'ADA info and reporting barriers',             href: '/accessibility', icon: <Accessibility size={16} strokeWidth={2} />, color: 'var(--green-pulse)' },
-]
-
-const CARE_TEAM = [
-  { role: 'Primary Care',   status: 'None assigned', icon: <Heart size={14} strokeWidth={2} />,  filled: false },
-  { role: 'Dental',         status: 'None assigned', icon: <Star size={14} strokeWidth={2} />,   filled: false },
-  { role: 'Mental Health',  status: 'None assigned', icon: <Shield size={14} strokeWidth={2} />, filled: false },
-  { role: 'CHW Navigator',  status: 'None assigned', icon: <Users size={14} strokeWidth={2} />,  filled: false },
-]
-
-type Profile = {
-  id: string; email: string | null; full_name: string | null;
-  phone: string | null; user_type: string | null
+type UserProfile = {
+  id: string
+  email?: string
+  full_name?: string
+  phone?: string
+  user_type?: 'patient' | 'provider' | 'admin'
+  created_at?: string
 }
 
-export default function DashboardPage() {
-  const [profile, setProfile] = useState<Profile | null>(null)
+type SavedClinic = {
+  id: string
+  resource_id: string
+  resource_type: string
+  resource_name?: string
+  resource_data?: Record<string, unknown>
+  created_at: string
+}
+
+type TimelineEntry = {
+  id: string
+  date: string
+  icon: React.ReactNode
+  title: string
+  sub: string
+  color: string
+}
+
+/* ── Small reusable pieces ──────────────────────────────────────── */
+
+function SectionHeader({ title, action, actionLabel }: { title: string; action?: () => void; actionLabel?: string }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+      <h2 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em', fontFamily: 'var(--font-inter)' }}>
+        {title}
+      </h2>
+      {action && actionLabel && (
+        <button onClick={action} style={{ fontSize: '12px', color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-inter)', fontWeight: 500 }}>
+          {actionLabel} →
+        </button>
+      )}
+    </div>
+  )
+}
+
+function EmptyState({ icon, title, sub, cta, href }: { icon: React.ReactNode; title: string; sub: string; cta: string; href: string }) {
+  return (
+    <div style={{ textAlign: 'center', padding: '32px 24px', borderRadius: '14px', background: 'rgba(255,255,255,0.01)', border: '1px dashed rgba(255,255,255,0.08)' }}>
+      <div style={{ fontSize: '28px', marginBottom: '10px' }}>{icon}</div>
+      <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px', fontFamily: 'var(--font-inter)' }}>{title}</div>
+      <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginBottom: '16px', fontFamily: 'var(--font-inter)', lineHeight: 1.6 }}>{sub}</div>
+      <Link href={href} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 18px', borderRadius: '8px', background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.2)', color: 'var(--accent)', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}>
+        {cta}
+      </Link>
+    </div>
+  )
+}
+
+/* ── Saved Clinics panel ──────────────────────────────────────────── */
+function SavedClinicsPanel({ userId }: { userId: string }) {
+  const [saved, setSaved]   = useState<SavedClinic[]>([])
   const [loading, setLoading] = useState(true)
-  const [savedCount, setSavedCount] = useState(0)
 
   useEffect(() => {
     const supabase = createClientClient()
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (!session) { window.location.href = '/login'; return }
+    supabase.from('bookmarks').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(6)
+      .then(({ data }) => { setSaved((data as SavedClinic[]) ?? []); setLoading(false) })
+  }, [userId])
 
-      const { data } = await supabase
-        .from('user_profiles').select('*').eq('id', session.user.id).single()
+  if (loading) return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      {[1,2].map(i => <div key={i} style={{ height: '64px', borderRadius: '12px', background: 'rgba(255,255,255,0.03)', animation: 'shimmer 1.5s infinite' }} />)}
+    </div>
+  )
 
-      if (data) {
-        setProfile(data)
-      } else {
-        const np = { id: session.user.id, email: session.user.email ?? '', full_name: session.user.user_metadata?.full_name || 'User', phone: null, user_type: 'patient' }
-        await supabase.from('user_profiles').upsert(np)
-        setProfile(np)
-      }
-
-      /* Count bookmarks */
-      const { count } = await supabase
-        .from('bookmarks').select('*', { count: 'exact', head: true }).eq('user_id', session.user.id)
-      setSavedCount(count ?? 0)
-
-      setLoading(false)
-    })
-  }, [])
-
-  if (loading) {
-    return (
-      <AppShell>
-        <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-            <Loader2 size={24} color="var(--accent)" style={{ animation: 'spin-slow 1s linear infinite' }} />
-            <span style={{ color: 'var(--text-3)', fontSize: '13px', fontFamily: 'var(--font-inter)' }}>
-              Loading your health wallet...
-            </span>
-          </div>
-        </div>
-      </AppShell>
-    )
-  }
-
-  if (!profile) return null
-
-  const firstName = profile.full_name?.split(' ')[0] || 'User'
-  const initials  = (profile.full_name ?? 'U').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-
-  const walletSections = WALLET_SECTIONS.map(s => ({
-    ...s,
-    count: s.id === 'clinics' ? savedCount : s.count,
-  }))
+  if (!saved.length) return (
+    <EmptyState icon="🏥" title="No saved clinics yet" sub="Bookmark clinics in the search results to see them here." cta="Search clinics" href="/search" />
+  )
 
   return (
-    <AppShell>
-      <div style={{ minHeight: '100vh', paddingTop: '80px', paddingBottom: '80px' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px' }}>
-
-          {/* ── Profile header ── */}
-          <div style={{
-            display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',
-            gap: '24px', marginBottom: '48px', flexWrap: 'wrap',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-              {/* Avatar */}
-              <div style={{
-                width: '64px', height: '64px', borderRadius: '16px',
-                background: 'linear-gradient(135deg, rgba(110,231,183,0.20), rgba(110,231,183,0.08))',
-                border: '1px solid rgba(110,231,183,0.22)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontFamily: 'var(--font-sora)', fontSize: '20px', fontWeight: 700,
-                color: 'var(--accent)', flexShrink: 0,
-              }}>
-                {initials}
-              </div>
-              <div>
-                <div style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '5px',
-                  background: 'rgba(110,231,183,0.07)', border: '1px solid rgba(110,231,183,0.14)',
-                  borderRadius: '100px', padding: '3px 10px', marginBottom: '8px',
-                }}>
-                  <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--accent)', animation: 'blink 2s ease-in-out infinite' }} />
-                  <span style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--accent)', fontFamily: 'var(--font-inter)' }}>
-                    {profile.user_type === 'admin' ? 'Admin' : profile.user_type === 'provider' ? 'Provider' : 'Patient'} Account
-                  </span>
-                </div>
-                <h1 style={{
-                  fontFamily: 'var(--font-sora)',
-                  fontSize: 'clamp(1.6rem, 4vw, 2.25rem)',
-                  fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1,
-                  color: 'var(--text)', marginBottom: '4px',
-                }}>
-                  Welcome back, {firstName}
-                </h1>
-                <p style={{ fontSize: '14px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)' }}>
-                  {profile.email}
-                </p>
-              </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      {saved.map(s => {
+        const data = s.resource_data as any ?? {}
+        const name = s.resource_name || data.name || 'Clinic'
+        const addr = data.address ? `${data.address}, ${data.city ?? ''}` : (data.city ?? '')
+        const phone = data.phone ?? ''
+        const gMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + ' ' + addr)}`
+        return (
+          <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '14px 16px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'rgba(110,231,183,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
             </div>
-
-            {/* Action buttons */}
-            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              <Link href="/dashboard/profile" style={{
-                display: 'inline-flex', alignItems: 'center', gap: '8px',
-                padding: '10px 16px',
-                background: 'rgba(110,231,183,0.10)', border: '1px solid rgba(110,231,183,0.22)',
-                color: 'var(--accent)', borderRadius: '10px', textDecoration: 'none',
-                fontWeight: 600, fontSize: '13px', fontFamily: 'var(--font-inter)',
-                transition: 'background 0.2s',
-              }}>
-                <User size={14} /> Edit Profile
-              </Link>
-              {profile.user_type === 'admin' && (
-                <Link href="/admin" style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '8px',
-                  padding: '10px 16px',
-                  background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
-                  color: 'var(--text-2)', borderRadius: '10px', textDecoration: 'none',
-                  fontWeight: 600, fontSize: '13px', fontFamily: 'var(--font-inter)',
-                }}>
-                  <Settings size={14} /> Admin Panel
-                </Link>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</div>
+              {addr && <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{addr}</div>}
+            </div>
+            <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
+              {phone && (
+                <a href={`tel:${phone.replace(/\D/g,'')}`} style={{ padding: '5px 10px', borderRadius: '7px', background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.15)', color: 'var(--accent)', fontSize: '11px', fontWeight: 600, textDecoration: 'none' }}>Call</a>
               )}
+              <a href={gMaps} target="_blank" rel="noopener noreferrer" style={{ padding: '5px 10px', borderRadius: '7px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)', fontSize: '11px', textDecoration: 'none' }}>Map</a>
             </div>
           </div>
+        )
+      })}
+    </div>
+  )
+}
 
-          {/* ── Health Wallet ── */}
-          <div style={{ marginBottom: '48px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
-              <Heart size={16} color="var(--accent)" strokeWidth={2} />
-              <h2 style={{ fontFamily: 'var(--font-sora)', fontSize: '18px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>
-                My Health Wallet
-              </h2>
+/* ── Health Timeline ─────────────────────────────────────────────── */
+function HealthTimeline({ userId }: { userId: string }) {
+  const [entries, setEntries] = useState<TimelineEntry[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // Build timeline from bookmarks and submissions
+    const supabase = createClientClient()
+    Promise.all([
+      supabase.from('bookmarks').select('id,created_at,resource_name').eq('user_id', userId).order('created_at', { ascending: false }).limit(5),
+      supabase.from('submissions').select('id,created_at,type').eq('user_id', userId).order('created_at', { ascending: false }).limit(5),
+    ]).then(([bRes, sRes]) => {
+      const timeline: TimelineEntry[] = []
+      ;(bRes.data ?? []).forEach((b: any) => {
+        timeline.push({
+          id: `b-${b.id}`,
+          date: b.created_at,
+          icon: '🏥',
+          title: `Saved clinic`,
+          sub: b.resource_name || 'A clinic',
+          color: 'var(--accent)',
+        })
+      })
+      ;(sRes.data ?? []).forEach((s: any) => {
+        timeline.push({
+          id: `s-${s.id}`,
+          date: s.created_at,
+          icon: '📝',
+          title: `Submitted ${s.type || 'form'}`,
+          sub: new Date(s.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+          color: '#60a5fa',
+        })
+      })
+      timeline.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      setEntries(timeline.slice(0, 8))
+      setLoading(false)
+    })
+  }, [userId])
+
+  if (loading) return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      {[1,2,3].map(i => <div key={i} style={{ height: '48px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', animation: 'shimmer 1.5s infinite' }} />)}
+    </div>
+  )
+
+  if (!entries.length) return (
+    <div style={{ textAlign: 'center', padding: '24px', fontSize: '13px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>
+      Your health activity will appear here as you use NEXUS.
+    </div>
+  )
+
+  return (
+    <div style={{ position: 'relative' }}>
+      {/* Timeline line */}
+      <div style={{ position: 'absolute', left: '18px', top: '18px', bottom: '18px', width: '1px', background: 'rgba(255,255,255,0.06)' }} />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+        {entries.map(e => (
+          <div key={e.id} style={{ display: 'flex', gap: '14px', alignItems: 'center', padding: '10px 0 10px 0' }}>
+            <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '14px', zIndex: 1 }}>
+              {e.icon}
             </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
-              {walletSections.map(s => (
-                <Link key={s.id} href={s.href} style={{ textDecoration: 'none' }}>
-                  <div className="wallet-card" style={{
-                    cursor: 'pointer',
-                    transition: 'border-color 0.25s, box-shadow 0.25s, transform 0.2s',
-                  }}
-                    onMouseEnter={e => {
-                      const el = e.currentTarget
-                      el.style.borderColor = s.border
-                      el.style.transform = 'translateY(-2px)'
-                    }}
-                    onMouseLeave={e => {
-                      const el = e.currentTarget
-                      el.style.borderColor = 'var(--border2)'
-                      el.style.transform = 'translateY(0)'
-                    }}
-                  >
-                    <div style={{
-                      width: '36px', height: '36px', borderRadius: '9px',
-                      background: s.bg, border: `1px solid ${s.border}`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: s.color, marginBottom: '12px',
-                    }}>
-                      {s.icon}
-                    </div>
-                    <div style={{
-                      fontFamily: 'var(--font-mono),monospace',
-                      fontSize: '28px', fontWeight: 600, color: s.count > 0 ? s.color : 'var(--text)',
-                      letterSpacing: '-0.02em', lineHeight: 1, marginBottom: '4px',
-                    }}>
-                      {s.count}
-                    </div>
-                    <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '3px' }}>
-                      {s.label}
-                    </div>
-                    <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>
-                      {s.count === 0 ? s.hint : `${s.count} item${s.count !== 1 ? 's' : ''}`}
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* ── My Care Team ── */}
-          <div style={{ marginBottom: '48px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
-              <Shield size={16} color="var(--violet)" strokeWidth={2} />
-              <h2 style={{ fontFamily: 'var(--font-sora)', fontSize: '18px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>
-                My Care Team
-              </h2>
-              <div style={{
-                marginLeft: '8px', fontSize: '10px', fontWeight: 600, letterSpacing: '0.08em',
-                textTransform: 'uppercase', color: 'var(--text-3)',
-                background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)',
-                borderRadius: '100px', padding: '2px 8px', fontFamily: 'var(--font-inter)',
-              }}>
-                Coming Soon
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>{e.title}</div>
+              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '2px' }}>
+                {e.sub} · {new Date(e.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
               </div>
             </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
-              {CARE_TEAM.map(ct => (
-                <div key={ct.role} style={{
-                  background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.05)',
-                  borderRadius: '12px', padding: '16px',
-                  display: 'flex', alignItems: 'center', gap: '12px',
-                }}>
-                  <div style={{
-                    width: '32px', height: '32px', borderRadius: '8px',
-                    background: 'rgba(167,139,250,0.07)', border: '1px solid rgba(167,139,250,0.12)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: 'var(--violet)',
-                  }}>
-                    {ct.icon}
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '1px' }}>
-                      {ct.role}
-                    </div>
-                    <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>
-                      {ct.status}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
-          {/* ── Account snapshot ── */}
-          <div style={{ marginBottom: '48px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
-              <TrendingUp size={16} color="var(--amber)" strokeWidth={2} />
-              <h2 style={{ fontFamily: 'var(--font-sora)', fontSize: '18px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>
-                Account Details
-              </h2>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
-              {[
-                { label: 'Account Type', value: profile.user_type === 'patient' ? 'Patient' : profile.user_type === 'provider' ? 'Provider' : 'Admin' },
-                { label: 'Email',        value: profile.email || '—' },
-                { label: 'Phone',        value: profile.phone || 'Not provided' },
-              ].map(stat => (
-                <div key={stat.label} style={{
-                  padding: '18px 20px',
-                  background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px',
-                }}>
-                  <p style={{ fontSize: '10px', color: 'var(--text-3)', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '6px', fontFamily: 'var(--font-inter)' }}>
-                    {stat.label}
-                  </p>
-                  <p style={{ fontSize: '15px', color: 'var(--text)', fontWeight: 500, fontFamily: 'var(--font-inter)' }}>
-                    {stat.value}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
+/* ── Savings Calculator ──────────────────────────────────────────── */
+function SavingsCalculator({ savedCount }: { savedCount: number }) {
+  // Estimated avg ER visit cost: $1,500. Each search/clinic save = avoided ER visit.
+  const erCost    = 1500
+  const avgSaving = 847  // avg savings vs ER per NEXUS visit
+  const estimated = savedCount * avgSaving
 
-          {/* ── Quick Actions ── */}
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
-              <CheckCircle2 size={16} color="var(--accent)" strokeWidth={2} />
-              <h2 style={{ fontFamily: 'var(--font-sora)', fontSize: '18px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>
-                Explore
-              </h2>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
-              {QUICK_ACTIONS.map(action => (
-                <Link
-                  key={action.href}
-                  href={action.href}
-                  style={{
-                    display: 'flex', alignItems: 'flex-start', gap: '14px',
-                    padding: '20px 22px',
-                    background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)',
-                    borderRadius: '14px', textDecoration: 'none',
-                    transition: 'border-color 0.2s, background 0.2s, transform 0.2s',
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = 'rgba(110,231,183,0.18)'
-                    e.currentTarget.style.background = 'rgba(110,231,183,0.03)'
-                    e.currentTarget.style.transform = 'translateY(-2px)'
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)'
-                    e.currentTarget.style.background = 'rgba(255,255,255,0.02)'
-                    e.currentTarget.style.transform = 'translateY(0)'
-                  }}
-                >
-                  <div style={{
-                    width: '36px', height: '36px', borderRadius: '9px',
-                    background: `${action.color}12`, border: `1px solid ${action.color}28`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: action.color, flexShrink: 0,
-                  }}>
-                    {action.icon}
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <h3 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '4px' }}>
-                      {action.title}
-                    </h3>
-                    <p style={{ fontSize: '12px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', lineHeight: 1.5 }}>
-                      {action.description}
-                    </p>
-                  </div>
-                  <ArrowRight size={14} color="var(--text-3)" style={{ flexShrink: 0, marginTop: '2px' }} />
-                </Link>
-              ))}
-            </div>
-          </div>
+  return (
+    <div style={{ padding: '24px', borderRadius: '16px', background: 'linear-gradient(135deg, rgba(110,231,183,0.06) 0%, rgba(52,211,153,0.02) 100%)', border: '1px solid rgba(110,231,183,0.15)' }}>
+      <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '16px', fontFamily: 'var(--font-inter)' }}>
+        Estimated savings vs. ER
+      </div>
 
+      <div style={{ fontSize: 'clamp(32px,5vw,52px)', fontWeight: 800, fontFamily: 'var(--font-display)', color: 'var(--accent)', letterSpacing: '-0.04em', lineHeight: 1, marginBottom: '4px' }}>
+        ${estimated.toLocaleString()}
+      </div>
+      <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-inter)', marginBottom: '20px' }}>
+        based on {savedCount} clinic{savedCount !== 1 ? 's' : ''} saved · avg ER visit: ${erCost.toLocaleString()}
+      </div>
+
+      {/* Savings bar */}
+      <div style={{ marginBottom: '12px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginBottom: '6px', fontFamily: 'var(--font-inter)' }}>
+          <span>NEXUS cost</span>
+          <span>ER visit avg</span>
+        </div>
+        <div style={{ position: 'relative', height: '8px', borderRadius: '4px', background: 'rgba(255,255,255,0.07)' }}>
+          <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '2.7%', borderRadius: '4px', background: 'var(--accent)' }} />
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginTop: '4px', fontFamily: 'var(--font-mono, monospace)' }}>
+          <span style={{ color: 'var(--accent)', fontWeight: 700 }}>$0</span>
+          <span style={{ color: '#f87171', fontWeight: 700 }}>${erCost.toLocaleString()}</span>
         </div>
       </div>
-    </AppShell>
+
+      <Link href="/search" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--accent)', fontFamily: 'var(--font-inter)', textDecoration: 'none' }}>
+        Find more free care →
+      </Link>
+    </div>
+  )
+}
+
+/* ── Care Plan ────────────────────────────────────────────────────── */
+function CarePlan() {
+  const [goals, setGoals]   = useState<string[]>(() => {
+    if (typeof window === 'undefined') return []
+    try { return JSON.parse(localStorage.getItem('nexus_care_goals') ?? '[]') } catch { return [] }
+  })
+  const [input, setInput]   = useState('')
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const addGoal = () => {
+    const trimmed = input.trim()
+    if (!trimmed) return
+    const updated = [...goals, trimmed]
+    setGoals(updated)
+    localStorage.setItem('nexus_care_goals', JSON.stringify(updated))
+    setInput('')
+  }
+
+  const removeGoal = (i: number) => {
+    const updated = goals.filter((_, idx) => idx !== i)
+    setGoals(updated)
+    localStorage.setItem('nexus_care_goals', JSON.stringify(updated))
+  }
+
+  return (
+    <div>
+      {goals.length === 0 && (
+        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)', marginBottom: '12px', lineHeight: 1.6 }}>
+          Add your health goals — dental checkup, mental health visit, vaccination — and NEXUS will help you find the right free care.
+        </p>
+      )}
+
+      {goals.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '12px' }}>
+          {goals.map((g, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', flexShrink: 0 }} />
+              <span style={{ flex: 1, fontSize: '13px', color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>{g}</span>
+              <button onClick={() => removeGoal(i)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.3)', padding: '2px', display: 'flex', alignItems: 'center' }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div style={{ display: 'flex', gap: '8px' }}>
+        <input
+          ref={inputRef}
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && addGoal()}
+          placeholder="Add a health goal…"
+          style={{ flex: 1, padding: '9px 14px', borderRadius: '9px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: 'var(--text)', fontSize: '13px', fontFamily: 'var(--font-inter)', outline: 'none' }}
+        />
+        <button
+          onClick={addGoal}
+          style={{ padding: '9px 16px', borderRadius: '9px', background: 'var(--accent)', color: '#07070F', border: 'none', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-inter)', flexShrink: 0 }}
+        >
+          Add
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/* ── Quick Actions ───────────────────────────────────────────────── */
+function QuickActions({ router }: { router: ReturnType<typeof useRouter> }) {
+  const ACTIONS = [
+    { label: 'Re-search near me', sub: 'Use my last location', icon: '🔍', action: () => router.push('/search') },
+    { label: 'Crisis support', sub: 'Free, confidential, 24/7', icon: '🆘', action: () => router.push('/crisis') },
+    { label: 'Find telehealth', sub: 'Remote care in minutes', icon: '💻', action: () => router.push('/telehealth') },
+    { label: 'Know your rights', sub: 'Legal patient protections', icon: '⚖️', action: () => router.push('/rights') },
+  ]
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '10px' }}>
+      {ACTIONS.map(a => (
+        <button
+          key={a.label}
+          onClick={a.action}
+          style={{ textAlign: 'left', padding: '16px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer', transition: 'background 0.2s, border-color 0.2s' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(110,231,183,0.04)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(110,231,183,0.18)' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.06)' }}
+        >
+          <div style={{ fontSize: '22px', marginBottom: '8px' }}>{a.icon}</div>
+          <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '3px' }}>{a.label}</div>
+          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>{a.sub}</div>
+        </button>
+      ))}
+    </div>
+  )
+}
+
+/* ── Profile Completeness Bar ───────────────────────────────────── */
+function ProfileCompletenessBar({ profile }: { profile: UserProfile | null }) {
+  const fields = [
+    { done: !!profile?.full_name, label: 'Full name' },
+    { done: !!profile?.email,     label: 'Email' },
+    { done: !!profile?.phone,     label: 'Phone' },
+    { done: !!profile?.user_type, label: 'Account type' },
+  ]
+  const completed = fields.filter(f => f.done).length
+  const pct = Math.round((completed / fields.length) * 100)
+  if (pct === 100) return null // don't clutter when complete
+
+  return (
+    <div style={{ padding: '20px 24px', borderRadius: '14px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', marginBottom: '32px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+        <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>Complete your profile</span>
+        <span style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)' }}>{pct}%</span>
+      </div>
+      <div style={{ height: '4px', borderRadius: '2px', background: 'rgba(255,255,255,0.07)', marginBottom: '12px' }}>
+        <div style={{ height: '100%', borderRadius: '2px', background: 'linear-gradient(90deg, var(--accent), rgba(110,231,183,0.6))', width: `${pct}%`, transition: 'width 0.6s var(--ease-out-expo)' }} />
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+        {fields.filter(f => !f.done).map(f => (
+          <Link key={f.label} href="/dashboard/profile" style={{ padding: '3px 10px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, background: 'rgba(255,255,255,0.04)', border: '1px dashed rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}>
+            + Add {f.label.toLowerCase()}
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* ── Main Dashboard Page ─────────────────────────────────────────── */
+export default function DashboardPage() {
+  const router   = useRouter()
+  const supabase = createClientClient()
+  const [profile,  setProfile]  = useState<UserProfile | null>(null)
+  const [loading,  setLoading]  = useState(true)
+  const [savedCount, setSavedCount] = useState(0)
+  const [activeTab, setActiveTab] = useState<'overview' | 'saved' | 'timeline' | 'care'>('overview')
+
+  useEffect(() => {
+    async function load() {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) { router.replace('/login'); return }
+
+      const [profRes, bookRes] = await Promise.all([
+        supabase.from('user_profiles').select('*').eq('id', session.user.id).single(),
+        supabase.from('bookmarks').select('id', { count: 'exact', head: true }).eq('user_id', session.user.id),
+      ])
+
+      setProfile({
+        ...(profRes.data ?? {}),
+        id: session.user.id,
+        email: (profRes.data?.email ?? session.user.email) ?? undefined,
+        full_name: profRes.data?.full_name ?? undefined,
+        phone: profRes.data?.phone ?? undefined,
+        user_type: (profRes.data?.user_type as UserProfile['user_type']) ?? undefined,
+        created_at: profRes.data?.created_at ?? undefined,
+      })
+      setSavedCount(bookRes.count ?? 0)
+      setLoading(false)
+    }
+    load()
+  }, []) // eslint-disable-line
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.replace('/login')
+  }
+
+  const firstName   = profile?.full_name?.split(' ')[0] || profile?.email?.split('@')[0] || 'there'
+  const userTypeLabel = profile?.user_type ? profile.user_type.charAt(0).toUpperCase() + profile.user_type.slice(1) : 'Patient'
+
+  if (loading) return (
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ width: 40, height: 40, borderRadius: '50%', border: '2px solid rgba(110,231,183,0.2)', borderTopColor: 'var(--accent)', margin: '0 auto 16px', animation: 'spin 0.8s linear infinite' }} />
+        <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>Loading…</p>
+      </div>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    </div>
+  )
+
+  const TABS = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'saved',    label: `Saved (${savedCount})` },
+    { id: 'timeline', label: 'Timeline' },
+    { id: 'care',     label: 'Care plan' },
+  ] as const
+
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'var(--font-inter)' }}>
+      {/* Top nav */}
+      <nav style={{ position: 'sticky', top: 0, zIndex: 100, borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(2,4,9,0.88)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', padding: '0 24px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 60 }}>
+          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontFamily: 'var(--font-orbitron)', fontWeight: 700, fontSize: '16px', color: 'var(--accent)', letterSpacing: '0.08em' }}>NEXUS</span>
+            <span style={{ padding: '2px 8px', borderRadius: '6px', fontSize: '10px', fontWeight: 600, background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.15)', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em' }}>DASHBOARD</span>
+          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', display: 'none' }} className="md-show">{profile?.email}</span>
+            <Link href="/dashboard/profile" style={{ padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: 500, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>
+              Profile
+            </Link>
+            <button onClick={handleLogout} style={{ padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: 500, background: 'rgba(248,113,113,0.06)', border: '1px solid rgba(248,113,113,0.15)', color: '#f87171', cursor: 'pointer' }}>
+              Log out
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <main style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 24px 80px' }}>
+        {/* Welcome header */}
+        <div style={{ marginBottom: '32px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', borderRadius: '100px', background: 'rgba(110,231,183,0.07)', border: '1px solid rgba(110,231,183,0.15)', marginBottom: '14px', fontSize: '11px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', animation: 'pulse-dot 1.8s ease-in-out infinite', display: 'inline-block' }} />
+            {userTypeLabel} account
+          </div>
+          <h1 style={{ fontSize: 'clamp(26px,5vw,44px)', fontWeight: 800, fontFamily: 'var(--font-display)', letterSpacing: '-0.03em', color: 'var(--text)', marginBottom: '6px' }}>
+            Welcome back, {firstName}
+          </h1>
+          <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>
+            Your free healthcare hub. Everything in one place.
+          </p>
+        </div>
+
+        {/* Profile completeness nudge */}
+        <ProfileCompletenessBar profile={profile} />
+
+        {/* Tab bar */}
+        <div style={{ display: 'flex', gap: '4px', marginBottom: '28px', padding: '4px', borderRadius: '12px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', width: 'fit-content' }}>
+          {TABS.map(t => (
+            <button
+              key={t.id}
+              onClick={() => setActiveTab(t.id)}
+              style={{ padding: '7px 16px', borderRadius: '9px', fontSize: '13px', fontWeight: activeTab === t.id ? 600 : 400, background: activeTab === t.id ? 'rgba(110,231,183,0.1)' : 'transparent', color: activeTab === t.id ? 'var(--accent)' : 'rgba(255,255,255,0.5)', border: activeTab === t.id ? '1px solid rgba(110,231,183,0.2)' : '1px solid transparent', cursor: 'pointer', transition: 'all 0.2s', fontFamily: 'var(--font-inter)', whiteSpace: 'nowrap' }}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        {/* ── OVERVIEW TAB ── */}
+        {activeTab === 'overview' && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+            {/* Savings Calculator */}
+            <div>
+              <SectionHeader title="Your savings" />
+              <SavingsCalculator savedCount={savedCount} />
+            </div>
+
+            {/* Quick Actions */}
+            <div>
+              <SectionHeader title="Quick actions" />
+              <QuickActions router={router} />
+            </div>
+
+            {/* Recent saved */}
+            <div style={{ gridColumn: '1 / -1' }}>
+              <SectionHeader title="Recently saved clinics" action={() => setActiveTab('saved')} actionLabel="See all" />
+              <SavedClinicsPanel userId={profile!.id} />
+            </div>
+          </div>
+        )}
+
+        {/* ── SAVED TAB ── */}
+        {activeTab === 'saved' && (
+          <div>
+            <SectionHeader title={`Saved clinics (${savedCount})`} action={() => router.push('/search')} actionLabel="Find more" />
+            {savedCount === 0 ? (
+              <EmptyState icon="🏥" title="No saved clinics" sub="Search for free clinics near you and bookmark them to track your options." cta="Search now" href="/search" />
+            ) : (
+              <SavedClinicsPanel userId={profile!.id} />
+            )}
+          </div>
+        )}
+
+        {/* ── TIMELINE TAB ── */}
+        {activeTab === 'timeline' && (
+          <div>
+            <SectionHeader title="Health activity timeline" />
+            <div style={{ padding: '24px', borderRadius: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}>
+              <HealthTimeline userId={profile!.id} />
+            </div>
+          </div>
+        )}
+
+        {/* ── CARE PLAN TAB ── */}
+        {activeTab === 'care' && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+            <div>
+              <SectionHeader title="My care goals" />
+              <div style={{ padding: '24px', borderRadius: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                <CarePlan />
+              </div>
+            </div>
+
+            <div>
+              <SectionHeader title="Recommended next steps" />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {[
+                  { label: 'Annual preventive checkup', href: '/search', desc: 'Covered free at FQHCs with no insurance', icon: '🩺' },
+                  { label: 'Check program eligibility', href: '/programs', desc: 'You may qualify for Medicaid or CHIP', icon: '📋' },
+                  { label: 'Connect with a CHW', href: '/chw', desc: 'A community health worker can guide you', icon: '👥' },
+                ].map(item => (
+                  <Link key={item.label} href={item.href} style={{ display: 'flex', gap: '14px', alignItems: 'center', padding: '14px 16px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', textDecoration: 'none', transition: 'border-color 0.2s' }}
+                    onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(110,231,183,0.2)'}
+                    onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(255,255,255,0.06)'}
+                  >
+                    <span style={{ fontSize: '22px' }}>{item.icon}</span>
+                    <div>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>{item.label}</div>
+                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '2px', fontFamily: 'var(--font-inter)' }}>{item.desc}</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Provider portal shortcut for providers */}
+            {profile?.user_type === 'provider' && (
+              <div style={{ gridColumn: '1 / -1' }}>
+                <SectionHeader title="Provider tools" />
+                <Link href="/provider" style={{ display: 'flex', gap: '16px', alignItems: 'center', padding: '20px 24px', borderRadius: '14px', background: 'rgba(110,231,183,0.04)', border: '1px solid rgba(110,231,183,0.18)', textDecoration: 'none' }}>
+                  <span style={{ fontSize: '28px' }}>🏥</span>
+                  <div>
+                    <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '4px' }}>Provider portal</div>
+                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)' }}>Manage your clinic listing, view patient analytics, update availability</div>
+                  </div>
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
+      </main>
+
+      <style>{`
+        @keyframes pulse-dot { 0%,100% { opacity:1;transform:scale(1); } 50% { opacity:0.5;transform:scale(0.85); } }
+      `}</style>
+    </div>
   )
 }

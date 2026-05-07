@@ -1,9 +1,8 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger)
+import { registerGSAP } from '@/lib/gsap-st'
+registerGSAP()
 
 const MAJOR_CITIES = [
   { id: 'seattle',     name: 'Seattle',       state: 'WA', x:  9, y: 15, clinics: 234,  delay: 0    },
@@ -145,6 +144,7 @@ export default function MissionFreeze() {
       ref={sectionRef}
       id="coverage"
       aria-label="Nationwide clinic coverage map"
+      className="cv-auto"
       style={{ position: 'relative', zIndex: 2, padding: '100px 0 120px', overflow: 'hidden' }}
     >
       {/* Ambient section glow */}
@@ -167,7 +167,7 @@ export default function MissionFreeze() {
           Coverage
         </div>
         <h2 style={{
-          fontFamily: 'var(--font-sora)',
+          fontFamily: 'var(--font-display)',
           fontSize: 'clamp(2.4rem, 4.5vw, 3.8rem)',
           fontWeight: 700, lineHeight: 1.05,
           letterSpacing: '-0.03em', marginBottom: '1rem',
@@ -318,7 +318,7 @@ export default function MissionFreeze() {
                   backdropFilter: 'blur(16px)', zIndex: 10,
                   animation: 'fadeUp 0.18s var(--ease-out-expo) forwards',
                 }}>
-                  <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-sora)', letterSpacing: '-0.01em' }}>
+                  <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-display)', letterSpacing: '-0.01em' }}>
                     {city.name}, {city.state}
                   </div>
                   <div style={{ fontSize: '11px', color: 'var(--accent)', fontFamily: 'var(--font-inter)', fontWeight: 300, marginTop: '2px' }}>
@@ -343,7 +343,7 @@ export default function MissionFreeze() {
                 backdropFilter: 'blur(16px)', minWidth: '150px',
                 boxShadow: '0 8px 30px rgba(0,0,0,0.4), 0 0 20px rgba(110,231,183,0.07)',
               }}>
-                <div style={{ fontFamily: 'var(--font-sora)', fontSize: '1.5rem', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.02em', lineHeight: 1, marginBottom: '3px' }}>{s.n}</div>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.02em', lineHeight: 1, marginBottom: '3px' }}>{s.n}</div>
                 <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>{s.label}</div>
               </div>
             ))}
@@ -352,7 +352,7 @@ export default function MissionFreeze() {
           {/* Search demo card */}
           <div style={{
             position: 'absolute', bottom: '20px', right: '20px',
-            background: 'rgba(7,7,15,0.92)',
+            background: 'rgba(7,7,15,0.90)',
             border: '1px solid rgba(110,231,183,0.22)',
             borderRadius: '14px', padding: '14px',
             backdropFilter: 'blur(20px)', width: '240px',
@@ -387,7 +387,7 @@ export default function MissionFreeze() {
                   background: 'var(--accent-dim)', border: '1px solid var(--border)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '8px', fontWeight: 600, color: 'var(--accent)',
-                  fontFamily: 'var(--font-sora)', flexShrink: 0,
+                  fontFamily: 'var(--font-display)', flexShrink: 0,
                 }}>{r.initials}</div>
                 <div style={{ flex: 1, fontSize: '11px', color: 'var(--text)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>{r.name}</div>
                 <div style={{ fontSize: '10px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>{r.dist}</div>
