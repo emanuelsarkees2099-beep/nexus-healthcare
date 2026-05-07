@@ -10,8 +10,6 @@ const ScrollProgress  = dynamic(() => import('@/components/ScrollProgress'),  { 
 const Nav             = dynamic(() => import('@/components/Nav'),             { ssr: false })
 const CrisisButton    = dynamic(() => import('@/components/CrisisButton'),    { ssr: false })
 const CommandPalette  = dynamic(() => import('@/components/CommandPalette'),  { ssr: false })
-const TerminalMode    = dynamic(() => import('@/components/TerminalMode'),    { ssr: false })
-const ScaredButton    = dynamic(() => import('@/components/ScaredButton'),    { ssr: false })
 
 /* ── Page transition wrapper (#10) ── */
 function PageTransition({ children }: { children: React.ReactNode }) {
@@ -62,8 +60,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <Nav />
       <CommandPalette />
       <CrisisButton />
-      <ScaredButton />
-      <TerminalMode />
       <main style={{ paddingTop: '62px', minHeight: '100dvh' }}>
         <PageTransition>{children}</PageTransition>
       </main>

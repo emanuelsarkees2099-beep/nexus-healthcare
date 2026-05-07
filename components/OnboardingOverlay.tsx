@@ -10,7 +10,7 @@ const OPTIONS = [
     id: 'clinic',
     href: '/search',
     label: 'Find a free clinic near me',
-    description: 'Search 12,000+ free and sliding-scale providers',
+    description: 'Search federally-funded free and sliding-scale providers',
     icon: <MapPin size={18} strokeWidth={2} />,
     cls: 'ob-mint',
   },
@@ -51,7 +51,7 @@ export default function OnboardingOverlay() {
     if (typeof window === 'undefined') return
     const done = localStorage.getItem(STORAGE_KEY)
     if (done) return
-    const t = setTimeout(() => setVisible(true), 2000)
+    const t = setTimeout(() => setVisible(true), 15000)
     return () => clearTimeout(t)
   }, [])
 

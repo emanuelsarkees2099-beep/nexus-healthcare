@@ -92,7 +92,7 @@ export default function FloatingCTA() {
             background: 'var(--accent)', color: '#07070F',
             border: 'none', borderRadius: '100px', padding: '10px 20px',
             fontFamily: 'var(--font-inter)', fontSize: '12px', fontWeight: 600,
-            cursor: 'none', whiteSpace: 'nowrap', flexShrink: 0,
+            cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0,
             letterSpacing: '0.01em',
             transition: 'transform 0.25s var(--ease-spring), box-shadow 0.25s',
             boxShadow: '0 4px 16px rgba(29,111,191,0.22)',

@@ -37,12 +37,13 @@ const ALL_APP_LINK_DEFS = [
   { labelKey: 'nav.rights' as const,      href: '/rights',    fallback: 'Rights' },
   { labelKey: null,                        href: '/open',      fallback: 'Open' },
   { labelKey: 'nav.methodology' as const, href: '/methodology', fallback: 'Methodology' },
-  { labelKey: null,                        href: '/triage',    fallback: 'AI Triage' },
+  { labelKey: null,                        href: '/triage',    fallback: 'Symptom Guide' },
   { labelKey: null,                        href: '/gps',       fallback: 'Healthcare GPS' },
   { labelKey: null,                        href: '/passport',  fallback: 'Health Passport' },
   { labelKey: null,                        href: '/community', fallback: 'Community' },
   { labelKey: null,                        href: '/crisis',    fallback: 'Crisis Help' },
   { labelKey: null,                        href: '/wrapped',   fallback: 'Wrapped' },
+  { labelKey: null,                        href: '/about',     fallback: 'About NEXUS' },
 ]
 
 export default function Nav() {
@@ -345,6 +346,28 @@ export default function Nav() {
 
         {/* Right — actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }} className="nav-actions-desktop">
+          {/* Get Help — crisis link (always visible) */}
+          <Link
+            href="/crisis"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '5px',
+              fontSize: '11px', fontWeight: 600, color: 'rgba(248,113,113,0.75)',
+              fontFamily: 'var(--font-inter)',
+              background: 'rgba(248,113,113,0.08)',
+              border: '1px solid rgba(248,113,113,0.18)',
+              borderRadius: '100px', padding: '4px 10px',
+              textDecoration: 'none',
+              transition: 'color 0.2s, background 0.2s, border-color 0.2s',
+              letterSpacing: '0.01em',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#f87171'; e.currentTarget.style.background = 'rgba(248,113,113,0.14)'; e.currentTarget.style.borderColor = 'rgba(248,113,113,0.3)' }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(248,113,113,0.75)'; e.currentTarget.style.background = 'rgba(248,113,113,0.08)'; e.currentTarget.style.borderColor = 'rgba(248,113,113,0.18)' }}
+            aria-label="Crisis help resources"
+            className="nav-get-help"
+          >
+            <span aria-hidden="true" style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#f87171', flexShrink: 0 }} />
+            Get Help
+          </Link>
           {/* Saved clinics badge */}
           {!isHome && (
             <button
@@ -622,6 +645,30 @@ export default function Nav() {
           })}
         </ul>
 
+        {/* Crisis link in drawer */}
+        <div style={{
+          marginBottom: '8px',
+          opacity: open ? 1 : 0, transform: open ? 'translateX(0)' : 'translateX(18px)',
+          transition: open ? 'opacity 0.35s 0.05s ease, transform 0.35s 0.05s ease' : 'opacity 0.15s ease, transform 0.15s ease',
+        }}>
+          <Link
+            href="/crisis"
+            onClick={() => setOpen(false)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '8px',
+              padding: '10px 12px', borderRadius: '9px',
+              background: 'rgba(248,113,113,0.07)', border: '1px solid rgba(248,113,113,0.18)',
+              color: '#f87171', fontSize: '14px', fontFamily: 'var(--font-inter)',
+              fontWeight: 500, textDecoration: 'none', transition: 'background 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(248,113,113,0.12)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(248,113,113,0.07)' }}
+          >
+            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#f87171', flexShrink: 0 }} />
+            Get Help — Crisis Resources
+          </Link>
+        </div>
+
         <div style={{
           borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '14px',
           opacity: open ? 1 : 0, transform: open ? 'translateY(0)' : 'translateY(8px)',
@@ -650,8 +697,9 @@ export default function Nav() {
         @media (max-width: 768px) {
           #main-nav { width: calc(100% - 24px) !important; top: 10px !important; padding: 0 14px !important; }
           .nav-links-desktop { display: none !important; }
-          .nav-actions-desktop > *:not(.nav-hamburger) { display: none !important; }
+          .nav-actions-desktop > *:not(.nav-hamburger):not(.nav-get-help) { display: none !important; }
           .nav-hamburger { display: flex !important; }
+          .nav-get-help { display: inline-flex !important; }
         }
         @media (min-width: 769px) {
           .nav-hamburger { display: none !important; }

@@ -12,8 +12,6 @@ const ScrollProgress    = dynamic(() => import('@/components/ScrollProgress'),  
 const FloatingCTA       = dynamic(() => import('@/components/FloatingCTA'),       { ssr: false })
 const ExitIntent        = dynamic(() => import('@/components/ExitIntent'),        { ssr: false })
 const CrisisButton      = dynamic(() => import('@/components/CrisisButton'),      { ssr: false })
-const ScaredButton      = dynamic(() => import('@/components/ScaredButton'),      { ssr: false })
-const TerminalMode      = dynamic(() => import('@/components/TerminalMode'),      { ssr: false })
 
 /* ── Nav + Hero ── */
 const Nav               = dynamic(() => import('@/components/Nav'),               { ssr: false })
@@ -43,8 +41,6 @@ export default function Home() {
       <FloatingCTA />
       <ExitIntent />
       <CrisisButton />
-      <ScaredButton />
-      <TerminalMode />
 
       {/* Navigation */}
       <Nav />

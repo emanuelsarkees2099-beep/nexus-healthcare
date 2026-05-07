@@ -582,7 +582,7 @@ export default function Hero() {
                 border: 'none', borderRadius: '11px',
                 padding: '13px 22px',
                 fontFamily: 'var(--font-inter)', fontSize: '14px', fontWeight: 500,
-                cursor: 'none', whiteSpace: 'nowrap', flexShrink: 0,
+                cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0,
                 boxShadow: '0 4px 20px rgba(74,144,217,0.32)',
               }}
               onMouseEnter={e => {
@@ -609,7 +609,7 @@ export default function Hero() {
                 background: 'rgba(255,255,255,0.03)',
                 border: '1px solid var(--border2)',
                 borderRadius: '100px', padding: '4px 14px',
-                cursor: 'none', textDecoration: 'none',
+                cursor: 'pointer', textDecoration: 'none',
                 fontFamily: 'var(--font-inter)', fontWeight: 300,
                 transition: 'all 0.25s var(--ease-spring)',
               }}
@@ -654,7 +654,7 @@ export default function Hero() {
                     background: 'rgba(255,255,255,0.02)',
                     border: '1px solid var(--border2)',
                     borderRadius: '100px', padding: '4px 12px',
-                    cursor: 'none', whiteSpace: 'nowrap',
+                    cursor: 'pointer', whiteSpace: 'nowrap',
                     fontFamily: 'var(--font-inter)', fontWeight: 300,
                     transition: 'color 0.2s, border-color 0.2s, background 0.2s',
                   }}

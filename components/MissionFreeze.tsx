@@ -275,7 +275,7 @@ export default function MissionFreeze() {
                 position: 'absolute',
                 left: `${city.x}%`, top: `${city.y}%`,
                 transform: 'translate(-50%,-50%)',
-                cursor: 'none', zIndex: 4,
+                cursor: 'pointer', zIndex: 4,
               }}
             >
               {/* Outer ring */}

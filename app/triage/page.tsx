@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
-import { BrainCircuit, Search, AlertTriangle, CheckCircle, MapPin, ChevronRight, Loader2, Info, ArrowRight, Phone, Clock } from 'lucide-react'
+import { Stethoscope, AlertTriangle, CheckCircle, MapPin, ChevronRight, Loader2, Info, ArrowRight, Clock } from 'lucide-react'
 
 type Step = {
   type: 'thinking' | 'checking' | 'result' | 'warning'
@@ -173,11 +173,11 @@ export default function TriagePage() {
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '8px',
           padding: '5px 14px', borderRadius: '100px',
-          background: 'rgba(129,140,248,0.08)', border: '1px solid rgba(129,140,248,0.25)',
+          background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.25)',
           marginBottom: '24px', fontSize: '11px', fontWeight: 600,
-          color: '#818cf8', letterSpacing: '0.1em', textTransform: 'uppercase',
+          color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase',
         }}>
-          <BrainCircuit size={11} /> AI Triage Co-Pilot
+          <Stethoscope size={11} /> Symptom Guide
         </div>
 
         <h1 style={{
@@ -186,15 +186,29 @@ export default function TriagePage() {
           marginBottom: '16px', maxWidth: '640px', margin: '0 auto 16px',
         }}>
           Describe what you&apos;re feeling.<br />
-          <span style={{ color: '#818cf8' }}>We&apos;ll help you find care.</span>
+          <span style={{ color: 'var(--accent)' }}>We&apos;ll help you find care.</span>
         </h1>
 
         <p style={{
           fontSize: '15px', color: 'rgba(255,255,255,0.45)',
           maxWidth: '440px', lineHeight: 1.7, margin: '0 auto 48px',
         }}>
-          Not a diagnosis — a guide. NEXUS shows its reasoning, cites its sources, and always defers to real care.
+          A structured guide — not a diagnosis. We match your symptoms to general care pathways based on published clinical guidelines, and point you toward a real provider near you.
         </p>
+
+        {/* Honest disclaimer banner */}
+        <div style={{
+          display: 'inline-flex', alignItems: 'flex-start', gap: '10px',
+          padding: '12px 18px', borderRadius: '12px',
+          background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.2)',
+          maxWidth: '520px', margin: '0 auto 48px', textAlign: 'left',
+        }}>
+          <Info size={14} color="#fbbf24" style={{ flexShrink: 0, marginTop: '1px' }} />
+          <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, margin: 0, fontFamily: 'var(--font-inter)' }}>
+            <strong style={{ color: 'rgba(251,191,36,0.9)', fontWeight: 600 }}>This is not a medical diagnosis.</strong>{' '}
+            This tool uses keyword matching against published guidelines (CDC, AAFP, AHA) to suggest appropriate care settings. It cannot examine you, review your medical history, or replace a licensed provider. In any emergency, call 911.
+          </p>
+        </div>
       </section>
 
       {/* Main Triage Interface */}
@@ -250,7 +264,7 @@ export default function TriagePage() {
                     cursor: 'pointer', fontFamily: 'inherit',
                     transition: 'all 0.18s',
                   }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(129,140,248,0.3)'; (e.currentTarget as HTMLElement).style.color = '#818cf8' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,144,217,0.3)'; (e.currentTarget as HTMLElement).style.color = 'var(--accent)' }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.45)' }}
                 >
                   {s}
@@ -263,16 +277,16 @@ export default function TriagePage() {
               disabled={!query.trim()}
               style={{
                 padding: '15px 30px', borderRadius: '14px',
-                background: query.trim() ? 'rgba(129,140,248,0.15)' : 'rgba(255,255,255,0.04)',
-                border: `1px solid ${query.trim() ? 'rgba(129,140,248,0.35)' : 'rgba(255,255,255,0.08)'}`,
-                color: query.trim() ? '#818cf8' : 'rgba(255,255,255,0.3)',
+                background: query.trim() ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${query.trim() ? 'rgba(74,144,217,0.35)' : 'rgba(255,255,255,0.08)'}`,
+                color: query.trim() ? 'var(--accent)' : 'rgba(255,255,255,0.3)',
                 fontSize: '15px', fontWeight: 600, cursor: query.trim() ? 'pointer' : 'not-allowed',
                 fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center',
                 gap: '10px', transition: 'all 0.2s',
               }}
             >
-              <BrainCircuit size={16} />
-              Analyze symptoms
+              <Stethoscope size={16} />
+              Find care pathway
             </button>
 
             {/* Disclaimer */}
@@ -306,11 +320,11 @@ export default function TriagePage() {
               display: 'flex', flexDirection: 'column', gap: '12px',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                <BrainCircuit size={14} color="#818cf8" />
-                <span style={{ fontSize: '12px', fontWeight: 600, color: '#818cf8', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                  Reasoning
+                <Stethoscope size={14} color="var(--accent)" />
+                <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                  Matching care pathway
                 </span>
-                {phase === 'thinking' && <Loader2 size={12} color="#818cf8" style={{ animation: 'spin 1s linear infinite', marginLeft: 'auto' }} />}
+                {phase === 'thinking' && <Loader2 size={12} color="var(--accent)" style={{ animation: 'spin 1s linear infinite', marginLeft: 'auto' }} />}
               </div>
 
               {visibleSteps.map((step, i) => (
@@ -327,13 +341,13 @@ export default function TriagePage() {
                     width: '6px', height: '6px', borderRadius: '50%', flexShrink: 0,
                     marginTop: '5px',
                     background: step.type === 'warning' ? '#fb923c'
-                      : step.type === 'result' ? '#60a5fa'
-                      : step.type === 'checking' ? '#818cf8'
+                      : step.type === 'result' ? 'var(--accent)'
+                      : step.type === 'checking' ? 'rgba(74,144,217,0.7)'
                       : 'rgba(255,255,255,0.3)',
                   }} />
                   <span style={{
                     color: step.type === 'warning' ? '#fb923c'
-                      : step.type === 'result' ? '#60a5fa'
+                      : step.type === 'result' ? 'var(--accent)'
                       : 'rgba(255,255,255,0.6)',
                     fontFamily: 'var(--font-mono, monospace)',
                   }}>
@@ -421,10 +435,10 @@ export default function TriagePage() {
                       <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                         <div style={{
                           width: '20px', height: '20px', borderRadius: '50%', flexShrink: 0,
-                          background: 'rgba(129,140,248,0.15)',
-                          border: '1px solid rgba(129,140,248,0.3)',
+                          background: 'rgba(74,144,217,0.12)',
+                          border: '1px solid rgba(74,144,217,0.28)',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          fontSize: '10px', fontWeight: 700, color: '#818cf8',
+                          fontSize: '10px', fontWeight: 700, color: 'var(--accent)',
                         }}>
                           {i + 1}
                         </div>

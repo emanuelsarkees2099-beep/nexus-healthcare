@@ -124,8 +124,8 @@ export default function ExitIntent() {
           fontFamily: 'var(--font-inter)', fontWeight: 300,
           lineHeight: 1.75, marginBottom: '1.75rem',
         }}>
-          12,000+ free clinics are within reach. No insurance card, no signup, no cost — ever.
-          Most people find care within 3 minutes.
+          Federally-funded free clinics are within reach in most U.S. cities. No insurance card, no signup, no cost — ever.
+          Most people find care within minutes.
         </p>
 
         {/* CTA row */}

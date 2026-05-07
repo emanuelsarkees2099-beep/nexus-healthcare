@@ -27,7 +27,7 @@ export default function Footer() {
         {/* Main grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '1.2fr auto auto auto auto',
+          gridTemplateColumns: '1.2fr auto auto auto auto auto',
           gap: '3rem', alignItems: 'start',
           marginBottom: '3rem',
         }}>
@@ -90,7 +90,7 @@ export default function Footer() {
                 fontSize: '11px', color: 'var(--text-3)',
                 fontFamily: 'var(--font-inter)', fontWeight: 300,
               }}>
-                30M+ Americans served nationwide
+                Built for the 30M uninsured in America
               </span>
             </div>
           </div>
@@ -118,7 +118,7 @@ export default function Footer() {
             {
               title: 'Tools',
               links: [
-                { label: 'AI Triage Co-Pilot', href: '/triage' },
+                { label: 'Symptom Guide',       href: '/triage' },
                 { label: 'Healthcare GPS',     href: '/gps' },
                 { label: 'Health Passport',    href: '/passport' },
                 { label: 'Care Wrapped',       href: '/wrapped' },
@@ -137,6 +137,18 @@ export default function Footer() {
                 { label: 'For Providers',    href: '/provider' },
               ],
             },
+            {
+              title: 'Resources',
+              links: [
+                { label: 'Find a Health Center (HRSA)', href: 'https://findahealthcenter.hrsa.gov', external: true },
+                { label: '211 — Local Help',            href: 'https://www.211.org',               external: true },
+                { label: 'NeedyMeds',                   href: 'https://www.needymeds.org',         external: true },
+                { label: 'GoodRx',                      href: 'https://www.goodrx.com',            external: true },
+                { label: 'RxAssist',                    href: 'https://www.rxassist.org',          external: true },
+                { label: 'About NEXUS',                 href: '/about',                            external: false },
+                { label: 'Privacy',                     href: '/privacy',                          external: false },
+              ],
+            },
           ].map(col => (
             <div key={col.title}>
               <div style={{
@@ -147,21 +159,42 @@ export default function Footer() {
                 {col.title}
               </div>
               <ul role="list" style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-                {col.links.map(l => (
+                {col.links.map((l: { label: string; href: string; external?: boolean }) => (
                   <li key={l.label}>
-                    <Link
-                      href={l.href}
-                      style={{
-                        fontSize: '13px', color: 'var(--text-3)', textDecoration: 'none',
-                        fontFamily: 'var(--font-inter)', fontWeight: 300,
-                        transition: 'color 0.2s',
-                        display: 'inline-flex', alignItems: 'center', gap: '5px',
-                      }}
-                      onMouseEnter={e => (e.currentTarget.style.color = 'var(--text-2)')}
-                      onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
-                    >
-                      {l.label}
-                    </Link>
+                    {l.external ? (
+                      <a
+                        href={l.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          fontSize: '13px', color: 'var(--text-3)', textDecoration: 'none',
+                          fontFamily: 'var(--font-inter)', fontWeight: 300,
+                          transition: 'color 0.2s',
+                          display: 'inline-flex', alignItems: 'center', gap: '5px',
+                        }}
+                        onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-2)')}
+                        onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-3)')}
+                      >
+                        {l.label}
+                        <svg width="9" height="9" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                          <path d="M3.5 1H11M11 1V8.5M11 1L1 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </a>
+                    ) : (
+                      <Link
+                        href={l.href}
+                        style={{
+                          fontSize: '13px', color: 'var(--text-3)', textDecoration: 'none',
+                          fontFamily: 'var(--font-inter)', fontWeight: 300,
+                          transition: 'color 0.2s',
+                          display: 'inline-flex', alignItems: 'center', gap: '5px',
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.color = 'var(--text-2)')}
+                        onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
+                      >
+                        {l.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

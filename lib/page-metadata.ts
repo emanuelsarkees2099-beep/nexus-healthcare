@@ -48,9 +48,9 @@ export const PAGE_META = {
   ),
 
   triage: meta(
-    'Symptom Triage',
-    'Answer a few questions about your symptoms and get personalized guidance on where to seek care — free, fast, and private.',
-    ['symptom checker', 'healthcare triage', 'when to go to ER', 'urgent care'],
+    'Symptom Guide',
+    'Describe your symptoms and get guidance on what level of care to seek — matched to published clinical guidelines. Not a diagnosis. Free and private.',
+    ['symptom guide', 'symptom checker', 'what level of care', 'when to go to ER', 'urgent care'],
   ),
 
   crisis: meta(

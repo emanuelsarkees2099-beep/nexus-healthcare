@@ -12,8 +12,8 @@ export default function CrisisButton() {
     <>
       <style>{`
         .crisis-btn { transition: all 0.2s cubic-bezier(0.16,1,0.3,1); }
-        .crisis-btn:hover { transform: scale(1.08); box-shadow: 0 0 30px rgba(248,113,113,0.45) !important; }
-        @keyframes crisis-pulse { 0%,100%{box-shadow:0 0 12px rgba(248,113,113,0.3)} 50%{box-shadow:0 0 24px rgba(248,113,113,0.6)} }
+        .crisis-btn:hover { transform: scale(1.06); box-shadow: 0 0 20px rgba(248,113,113,0.35) !important; }
+        @keyframes crisis-pulse { 0%,100%{box-shadow:0 0 8px rgba(248,113,113,0.2), 0 4px 16px rgba(0,0,0,0.4)} 50%{box-shadow:0 0 16px rgba(248,113,113,0.35), 0 4px 16px rgba(0,0,0,0.4)} }
       `}</style>
 
       {/* Expand overlay */}
@@ -106,17 +106,18 @@ export default function CrisisButton() {
         aria-label={t('emergency.helpNow')}
         style={{
           position: 'fixed', bottom: '24px', right: '24px',
-          zIndex: 9999, width: '52px', height: '52px',
+          zIndex: 9999, width: '44px', height: '44px',
           borderRadius: '50%',
-          background: 'linear-gradient(135deg, #dc2626, #f87171)',
-          border: 'none', cursor: 'pointer',
+          background: 'rgba(220,38,38,0.88)',
+          border: '1px solid rgba(248,113,113,0.4)',
+          cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: '0 0 16px rgba(248,113,113,0.35), 0 8px 24px rgba(0,0,0,0.4)',
-          animation: 'crisis-pulse 3s ease-in-out infinite',
+          boxShadow: '0 0 8px rgba(248,113,113,0.2), 0 4px 16px rgba(0,0,0,0.4)',
+          animation: 'crisis-pulse 4s ease-in-out infinite',
           color: '#fff',
         }}
       >
-        {expanded ? <X size={20} /> : <Heart size={20} fill="white" />}
+        {expanded ? <X size={16} /> : <Heart size={16} fill="white" />}
       </button>
     </>
   )

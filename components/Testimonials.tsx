@@ -197,6 +197,14 @@ export default function Testimonials() {
         }}>
           Real stories from people who found care they didn&apos;t know was possible.
         </p>
+        <p style={{
+          fontSize: '11px', color: 'var(--text-3)',
+          fontFamily: 'var(--font-inter)', fontWeight: 300,
+          lineHeight: 1.6, maxWidth: '440px',
+          marginTop: '0.75rem', opacity: 0.65,
+        }}>
+          Stories are illustrative examples based on documented outcomes from FQHC and free clinic access programs. Names and identifying details are representative composites to protect privacy.
+        </p>
       </div>
 
       {/* Dual marquee rows */}
