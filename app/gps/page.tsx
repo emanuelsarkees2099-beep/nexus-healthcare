@@ -180,12 +180,12 @@ function StepCard({
     <div style={{
       borderRadius: '20px', overflow: 'hidden',
       border: `1px solid ${
-        status === 'complete' ? 'rgba(74,222,128,0.25)'
-        : status === 'active' ? 'rgba(110,231,183,0.35)'
+        status === 'complete' ? 'rgba(96,165,250,0.25)'
+        : status === 'active' ? 'rgba(74,144,217,0.35)'
         : status === 'stuck' ? 'rgba(251,191,36,0.3)'
         : 'rgba(255,255,255,0.07)'
       }`,
-      background: status === 'active' ? 'rgba(110,231,183,0.03)' : 'rgba(255,255,255,0.01)',
+      background: status === 'active' ? 'rgba(74,144,217,0.03)' : 'rgba(255,255,255,0.01)',
       transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
       opacity: status === 'pending' ? 0.5 : 1,
     }}>
@@ -203,12 +203,12 @@ function StepCard({
         <div style={{
           width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          background: status === 'complete' ? 'rgba(74,222,128,0.15)'
-            : status === 'active' ? 'rgba(110,231,183,0.12)'
+          background: status === 'complete' ? 'rgba(96,165,250,0.15)'
+            : status === 'active' ? 'rgba(74,144,217,0.12)'
             : status === 'stuck' ? 'rgba(251,191,36,0.12)'
             : 'rgba(255,255,255,0.04)',
-          border: `1px solid ${status === 'complete' ? 'rgba(74,222,128,0.35)' : status === 'active' ? 'rgba(110,231,183,0.3)' : 'rgba(255,255,255,0.08)'}`,
-          color: status === 'complete' ? '#4ade80' : status === 'active' ? 'var(--accent)' : 'rgba(255,255,255,0.35)',
+          border: `1px solid ${status === 'complete' ? 'rgba(96,165,250,0.35)' : status === 'active' ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)'}`,
+          color: status === 'complete' ? '#60a5fa' : status === 'active' ? 'var(--accent)' : 'rgba(255,255,255,0.35)',
         }}>
           {status === 'complete' ? <CheckCircle size={15} /> : status === 'pending' ? <Circle size={15} /> : step.icon}
         </div>
@@ -222,7 +222,7 @@ function StepCard({
               Step {step.id}
             </span>
             {status === 'complete' && (
-              <span style={{ fontSize: '10px', color: '#4ade80', fontWeight: 600 }}>✓ Done</span>
+              <span style={{ fontSize: '10px', color: '#60a5fa', fontWeight: 600 }}>✓ Done</span>
             )}
             {status === 'stuck' && (
               <span style={{ fontSize: '10px', color: '#fbbf24', fontWeight: 600 }}>⚠ Need help</span>
@@ -292,9 +292,9 @@ function StepCard({
                   onClick={handleGenerate}
                   style={{
                     marginTop: '12px', padding: '8px 16px', borderRadius: '8px',
-                    background: generated ? 'rgba(74,222,128,0.1)' : 'rgba(110,231,183,0.08)',
-                    border: `1px solid ${generated ? 'rgba(74,222,128,0.3)' : 'rgba(110,231,183,0.2)'}`,
-                    color: generated ? '#4ade80' : 'var(--accent)',
+                    background: generated ? 'rgba(96,165,250,0.1)' : 'rgba(74,144,217,0.08)',
+                    border: `1px solid ${generated ? 'rgba(96,165,250,0.3)' : 'rgba(74,144,217,0.2)'}`,
+                    color: generated ? '#60a5fa' : 'var(--accent)',
                     fontSize: '12px', fontWeight: 600, cursor: 'pointer',
                     fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '6px',
                     transition: 'all 0.2s',
@@ -366,14 +366,14 @@ function StepCard({
                 onClick={onComplete}
                 style={{
                   padding: '10px 20px', borderRadius: '100px',
-                  background: 'rgba(74,222,128,0.12)', border: '1px solid rgba(74,222,128,0.3)',
-                  color: '#4ade80', fontSize: '13px', fontWeight: 600,
+                  background: 'rgba(96,165,250,0.12)', border: '1px solid rgba(96,165,250,0.3)',
+                  color: '#60a5fa', fontSize: '13px', fontWeight: 600,
                   cursor: 'pointer', fontFamily: 'inherit',
                   display: 'flex', alignItems: 'center', gap: '6px',
                   transition: 'all 0.2s',
                 }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(74,222,128,0.2)'}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'rgba(74,222,128,0.12)'}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(96,165,250,0.2)'}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'rgba(96,165,250,0.12)'}
               >
                 <CheckCircle size={13} />
                 {isLast ? 'Complete journey 🎉' : 'Mark complete'}
@@ -448,7 +448,7 @@ export default function GPSPage() {
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
             <Link href="/outcomes" style={{
               padding: '12px 24px', borderRadius: '100px',
-              background: 'rgba(110,231,183,0.12)', border: '1px solid rgba(110,231,183,0.3)',
+              background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.3)',
               color: 'var(--accent)', fontSize: '14px', fontWeight: 600, textDecoration: 'none',
             }}>
               Share your experience
@@ -474,13 +474,13 @@ export default function GPSPage() {
       <section style={{ padding: 'clamp(80px,10vw,120px) 24px 0', textAlign: 'center', position: 'relative' }}>
         <div aria-hidden style={{
           position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(110,231,183,0.06) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(74,144,217,0.06) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '8px',
           padding: '5px 14px', borderRadius: '100px',
-          background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.2)',
+          background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)',
           marginBottom: '24px', fontSize: '11px', fontWeight: 600,
           color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase',
         }}>
@@ -520,7 +520,7 @@ export default function GPSPage() {
           <div style={{ height: '4px', borderRadius: '100px', background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
             <div style={{
               height: '100%', borderRadius: '100px',
-              background: 'linear-gradient(90deg, rgba(110,231,183,0.8), var(--accent))',
+              background: 'linear-gradient(90deg, rgba(74,144,217,0.8), var(--accent))',
               width: `${progress}%`, transition: 'width 0.5s cubic-bezier(0.16,1,0.3,1)',
             }} />
           </div>

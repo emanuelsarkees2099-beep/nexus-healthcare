@@ -57,7 +57,7 @@ function generateOffers(seed: number): HelpOffer[] {
 
 const typeConfig: Record<string, { label: string; color: string; bg: string; border: string; icon: React.ReactNode }> = {
   ride: { label: 'Ride Share', color: '#818cf8', bg: 'rgba(129,140,248,0.08)', border: 'rgba(129,140,248,0.25)', icon: <Car size={14} /> },
-  nurse: { label: 'Ask a Nurse', color: '#4ade80', bg: 'rgba(74,222,128,0.08)', border: 'rgba(74,222,128,0.25)', icon: <MessageCircle size={14} /> },
+  nurse: { label: 'Ask a Nurse', color: '#60a5fa', bg: 'rgba(96,165,250,0.08)', border: 'rgba(96,165,250,0.25)', icon: <MessageCircle size={14} /> },
   childcare: { label: 'Childcare Swap', color: '#f472b6', bg: 'rgba(244,114,182,0.08)', border: 'rgba(244,114,182,0.25)', icon: <Baby size={14} /> },
   translator: { label: 'Translator', color: '#fb923c', bg: 'rgba(251,146,60,0.08)', border: 'rgba(251,146,60,0.25)', icon: <Globe size={14} /> },
   buddy: { label: 'Care Buddy', color: '#fbbf24', bg: 'rgba(251,191,36,0.08)', border: 'rgba(251,191,36,0.25)', icon: <Heart size={14} /> },
@@ -74,7 +74,7 @@ const FEATURES = [
     icon: <MessageCircle size={20} />,
     title: 'Ask a Verified Nurse',
     desc: 'Real nurses, doctors, and health workers answer your questions for free. No diagnosis — just guidance.',
-    color: '#4ade80',
+    color: '#60a5fa',
   },
   {
     icon: <Baby size={20} />,
@@ -148,11 +148,11 @@ export default function CommunityPage() {
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '8px',
           padding: '6px 14px', borderRadius: '100px',
-          background: 'rgba(74,222,128,0.06)', border: '1px solid rgba(74,222,128,0.18)',
-          marginBottom: '32px', fontSize: '12px', color: 'rgba(74,222,128,0.9)',
+          background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.18)',
+          marginBottom: '32px', fontSize: '12px', color: 'rgba(96,165,250,0.9)',
           maxWidth: '400px',
         }}>
-          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#4ade80', flexShrink: 0 }} />
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#60a5fa', flexShrink: 0 }} />
           <span style={{ animation: 'feed-fade 3.5s ease infinite' }}>{LIVE_FEED[feedIdx]}</span>
         </div>
 
@@ -300,7 +300,7 @@ export default function CommunityPage() {
                         <span style={{
                           position: 'absolute', bottom: '1px', right: '1px',
                           width: '9px', height: '9px', borderRadius: '50%',
-                          background: '#4ade80', border: '1.5px solid #0d1117',
+                          background: '#60a5fa', border: '1.5px solid #0d1117',
                         }} />
                       )}
                     </div>

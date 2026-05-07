@@ -19,7 +19,7 @@ export default function Footer() {
         position: 'absolute', top: '-80px', left: '50%',
         transform: 'translateX(-50%)',
         width: '600px', height: '80px',
-        background: 'radial-gradient(ellipse, rgba(110,231,183,0.06) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse, rgba(74,144,217,0.06) 0%, transparent 70%)',
         filter: 'blur(30px)', pointerEvents: 'none',
       }} />
 
@@ -42,14 +42,14 @@ export default function Footer() {
                 {/* Top accent line */}
                 <div aria-hidden="true" style={{
                   width: '100%', height: '1px',
-                  background: 'linear-gradient(90deg, rgba(110,231,183,0.55), rgba(138,181,188,0.4), transparent)',
+                  background: 'linear-gradient(90deg, rgba(74,144,217,0.55), rgba(138,181,188,0.4), transparent)',
                 }} />
                 <span style={{
                   fontFamily: 'var(--font-orbitron)',
                   fontSize: '11px', fontWeight: 400,
                   letterSpacing: '0.5em', textTransform: 'uppercase',
                   color: '#E8E0FF',
-                  textShadow: '0 0 10px rgba(110,231,183,0.5), 0 0 24px rgba(110,231,183,0.2)',
+                  textShadow: '0 0 10px rgba(74,144,217,0.5), 0 0 24px rgba(74,144,217,0.2)',
                   paddingRight: '0.5em',
                 }}>
                   NEXUS
@@ -57,7 +57,7 @@ export default function Footer() {
                 {/* Bottom accent line */}
                 <div aria-hidden="true" style={{
                   width: '100%', height: '1px',
-                  background: 'linear-gradient(90deg, rgba(110,231,183,0.55), rgba(138,181,188,0.4), transparent)',
+                  background: 'linear-gradient(90deg, rgba(74,144,217,0.55), rgba(138,181,188,0.4), transparent)',
                 }} />
               </div>
             </div>
@@ -75,15 +75,15 @@ export default function Footer() {
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: '7px',
               marginTop: '1.25rem',
-              background: 'rgba(110,231,183,0.06)',
-              border: '1px solid rgba(110,231,183,0.12)',
+              background: 'rgba(74,144,217,0.06)',
+              border: '1px solid rgba(74,144,217,0.12)',
               borderRadius: '8px',
               padding: '6px 12px',
             }}>
               <span aria-hidden="true" style={{
                 width: '5px', height: '5px', borderRadius: '50%',
-                background: '#4ade80',
-                boxShadow: '0 0 6px rgba(74,222,128,0.5)',
+                background: '#60a5fa',
+                boxShadow: '0 0 6px rgba(96,165,250,0.5)',
                 flexShrink: 0,
               }} />
               <span style={{

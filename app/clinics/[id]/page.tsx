@@ -206,7 +206,7 @@ export default function ClinicDetailPage() {
           <div aria-hidden="true" style={{
             position: 'absolute', top: '-60px', right: '-60px',
             width: '300px', height: '300px', borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(110,231,183,0.06) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(74,144,217,0.06) 0%, transparent 70%)',
             filter: 'blur(60px)', pointerEvents: 'none',
           }} />
 
@@ -215,7 +215,7 @@ export default function ClinicDetailPage() {
             {clinic.free && (
               <div style={{
                 display: 'inline-flex', alignItems: 'center', gap: '5px',
-                background: 'rgba(110,231,183,0.10)', border: '1px solid rgba(110,231,183,0.22)',
+                background: 'rgba(74,144,217,0.10)', border: '1px solid rgba(74,144,217,0.22)',
                 borderRadius: '100px', padding: '4px 10px',
                 fontSize: '11px', fontWeight: 600, color: 'var(--accent)', fontFamily: 'var(--font-inter)',
               }}>
@@ -235,7 +235,7 @@ export default function ClinicDetailPage() {
             {clinic.accepting && (
               <div style={{
                 display: 'inline-flex', alignItems: 'center', gap: '5px',
-                background: 'rgba(52,211,153,0.10)', border: '1px solid rgba(52,211,153,0.22)',
+                background: 'rgba(96,165,250,0.10)', border: '1px solid rgba(96,165,250,0.22)',
                 borderRadius: '100px', padding: '4px 10px',
                 fontSize: '11px', fontWeight: 600, color: 'var(--green-pulse)', fontFamily: 'var(--font-inter)',
               }}>
@@ -312,8 +312,8 @@ export default function ClinicDetailPage() {
               disabled={bookmarkLoading}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '8px',
-                background: bookmarked ? 'rgba(110,231,183,0.10)' : 'rgba(255,255,255,0.04)',
-                border: `1px solid ${bookmarked ? 'rgba(110,231,183,0.25)' : 'rgba(255,255,255,0.08)'}`,
+                background: bookmarked ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${bookmarked ? 'rgba(74,144,217,0.25)' : 'rgba(255,255,255,0.08)'}`,
                 color: bookmarked ? 'var(--accent)' : 'var(--text-2)',
                 padding: '11px 18px', borderRadius: '10px', cursor: 'pointer',
                 fontWeight: 600, fontSize: '14px', fontFamily: 'var(--font-inter)',
@@ -402,7 +402,7 @@ export default function ClinicDetailPage() {
                   <div key={svc} style={{
                     display: 'inline-flex', alignItems: 'center', gap: '5px',
                     padding: '5px 11px', borderRadius: '8px',
-                    background: 'rgba(110,231,183,0.06)', border: '1px solid rgba(110,231,183,0.12)',
+                    background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.12)',
                     fontSize: '12px', color: 'var(--accent)', fontFamily: 'var(--font-inter)', fontWeight: 500,
                   }}>
                     {SERVICE_ICONS[svc] || <Stethoscope size={12} />}
@@ -431,7 +431,7 @@ export default function ClinicDetailPage() {
           </div>
           <div style={{
             marginTop: '16px', padding: '12px 16px',
-            background: 'rgba(110,231,183,0.05)', border: '1px solid rgba(110,231,183,0.12)',
+            background: 'rgba(74,144,217,0.05)', border: '1px solid rgba(74,144,217,0.12)',
             borderRadius: '10px',
           }}>
             <p style={{ fontSize: '13px', color: 'var(--accent)', fontFamily: 'var(--font-inter)', fontWeight: 500 }}>

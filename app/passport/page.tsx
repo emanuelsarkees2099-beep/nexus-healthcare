@@ -58,7 +58,7 @@ function Section({ title, icon, children }: { title: string; icon: React.ReactNo
       }}>
         <div style={{
           width: '28px', height: '28px', borderRadius: '8px',
-          background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)',
+          background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           color: 'var(--accent)',
         }}>
@@ -106,7 +106,7 @@ function AddModal({ onClose, onAdd }: { onClose: () => void; onAdd: (item: strin
           onClick={() => { if (val.trim()) { onAdd(val.trim()); onClose() } }}
           style={{
             width: '100%', padding: '12px', borderRadius: '12px',
-            background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.25)',
+            background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.25)',
             color: 'var(--accent)', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
           }}
         >
@@ -132,7 +132,7 @@ export default function PassportPage() {
   return (
     <AppShell>
       <style>{`
-        .passport-field:focus { outline: none; border-color: rgba(110,231,183,0.4) !important; }
+        .passport-field:focus { outline: none; border-color: rgba(74,144,217,0.4) !important; }
         @keyframes qr-appear { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
       `}</style>
 
@@ -150,13 +150,13 @@ export default function PassportPage() {
       }}>
         <div aria-hidden style={{
           position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(110,231,183,0.07) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(74,144,217,0.07) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '8px',
           padding: '5px 14px', borderRadius: '100px',
-          background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.2)',
+          background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)',
           marginBottom: '24px', fontSize: '11px', fontWeight: 600,
           color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase',
         }}>
@@ -189,8 +189,8 @@ export default function PassportPage() {
         {/* Card header */}
         <div style={{
           padding: '20px 24px', borderRadius: '20px 20px 0 0',
-          background: 'linear-gradient(135deg, rgba(110,231,183,0.12), rgba(129,140,248,0.08))',
-          border: '1px solid rgba(110,231,183,0.2)', borderBottom: 'none',
+          background: 'linear-gradient(135deg, rgba(74,144,217,0.12), rgba(129,140,248,0.08))',
+          border: '1px solid rgba(74,144,217,0.2)', borderBottom: 'none',
           display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px',
         }}>
           <div>
@@ -219,7 +219,7 @@ export default function PassportPage() {
               onClick={() => setShowQR(!showQR)}
               style={{
                 padding: '7px 14px', borderRadius: '100px', cursor: 'pointer',
-                background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.25)',
+                background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.25)',
                 color: 'var(--accent)', fontSize: '12px', fontFamily: 'inherit',
                 display: 'flex', alignItems: 'center', gap: '6px',
               }}
@@ -232,8 +232,8 @@ export default function PassportPage() {
         {/* QR Code panel */}
         {showQR && (
           <div style={{
-            borderLeft: '1px solid rgba(110,231,183,0.2)', borderRight: '1px solid rgba(110,231,183,0.2)',
-            background: 'rgba(110,231,183,0.03)', padding: '28px',
+            borderLeft: '1px solid rgba(74,144,217,0.2)', borderRight: '1px solid rgba(74,144,217,0.2)',
+            background: 'rgba(74,144,217,0.03)', padding: '28px',
             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px',
             animation: 'qr-appear 0.3s ease both',
           }}>
@@ -406,9 +406,9 @@ export default function PassportPage() {
             onClick={handleSave}
             style={{
               padding: '11px 22px', borderRadius: '100px',
-              background: saved ? 'rgba(74,222,128,0.12)' : 'rgba(110,231,183,0.1)',
-              border: `1px solid ${saved ? 'rgba(74,222,128,0.3)' : 'rgba(110,231,183,0.25)'}`,
-              color: saved ? '#4ade80' : 'var(--accent)', fontSize: '13px', fontWeight: 600,
+              background: saved ? 'rgba(96,165,250,0.12)' : 'rgba(74,144,217,0.1)',
+              border: `1px solid ${saved ? 'rgba(96,165,250,0.3)' : 'rgba(74,144,217,0.25)'}`,
+              color: saved ? '#60a5fa' : 'var(--accent)', fontSize: '13px', fontWeight: 600,
               cursor: 'pointer', fontFamily: 'inherit',
               display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s',
             }}

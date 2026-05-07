@@ -54,7 +54,7 @@ function EmptyState({ icon, title, sub, cta, href }: { icon: React.ReactNode; ti
       <div style={{ fontSize: '28px', marginBottom: '10px' }}>{icon}</div>
       <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px', fontFamily: 'var(--font-inter)' }}>{title}</div>
       <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginBottom: '16px', fontFamily: 'var(--font-inter)', lineHeight: 1.6 }}>{sub}</div>
-      <Link href={href} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 18px', borderRadius: '8px', background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.2)', color: 'var(--accent)', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}>
+      <Link href={href} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 18px', borderRadius: '8px', background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)', color: 'var(--accent)', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}>
         {cta}
       </Link>
     </div>
@@ -92,7 +92,7 @@ function SavedClinicsPanel({ userId }: { userId: string }) {
         const gMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + ' ' + addr)}`
         return (
           <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '14px 16px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-            <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'rgba(110,231,183,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'rgba(74,144,217,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
@@ -101,7 +101,7 @@ function SavedClinicsPanel({ userId }: { userId: string }) {
             </div>
             <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
               {phone && (
-                <a href={`tel:${phone.replace(/\D/g,'')}`} style={{ padding: '5px 10px', borderRadius: '7px', background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.15)', color: 'var(--accent)', fontSize: '11px', fontWeight: 600, textDecoration: 'none' }}>Call</a>
+                <a href={`tel:${phone.replace(/\D/g,'')}`} style={{ padding: '5px 10px', borderRadius: '7px', background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.15)', color: 'var(--accent)', fontSize: '11px', fontWeight: 600, textDecoration: 'none' }}>Call</a>
               )}
               <a href={gMaps} target="_blank" rel="noopener noreferrer" style={{ padding: '5px 10px', borderRadius: '7px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)', fontSize: '11px', textDecoration: 'none' }}>Map</a>
             </div>
@@ -194,7 +194,7 @@ function SavingsCalculator({ savedCount }: { savedCount: number }) {
   const estimated = savedCount * avgSaving
 
   return (
-    <div style={{ padding: '24px', borderRadius: '16px', background: 'linear-gradient(135deg, rgba(110,231,183,0.06) 0%, rgba(52,211,153,0.02) 100%)', border: '1px solid rgba(110,231,183,0.15)' }}>
+    <div style={{ padding: '24px', borderRadius: '16px', background: 'linear-gradient(135deg, rgba(74,144,217,0.06) 0%, rgba(96,165,250,0.02) 100%)', border: '1px solid rgba(74,144,217,0.15)' }}>
       <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '16px', fontFamily: 'var(--font-inter)' }}>
         Estimated savings vs. ER
       </div>
@@ -310,7 +310,7 @@ function QuickActions({ router }: { router: ReturnType<typeof useRouter> }) {
           key={a.label}
           onClick={a.action}
           style={{ textAlign: 'left', padding: '16px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer', transition: 'background 0.2s, border-color 0.2s' }}
-          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(110,231,183,0.04)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(110,231,183,0.18)' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.04)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,144,217,0.18)' }}
           onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.06)' }}
         >
           <div style={{ fontSize: '22px', marginBottom: '8px' }}>{a.icon}</div>
@@ -341,7 +341,7 @@ function ProfileCompletenessBar({ profile }: { profile: UserProfile | null }) {
         <span style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)' }}>{pct}%</span>
       </div>
       <div style={{ height: '4px', borderRadius: '2px', background: 'rgba(255,255,255,0.07)', marginBottom: '12px' }}>
-        <div style={{ height: '100%', borderRadius: '2px', background: 'linear-gradient(90deg, var(--accent), rgba(110,231,183,0.6))', width: `${pct}%`, transition: 'width 0.6s var(--ease-out-expo)' }} />
+        <div style={{ height: '100%', borderRadius: '2px', background: 'linear-gradient(90deg, var(--accent), rgba(74,144,217,0.6))', width: `${pct}%`, transition: 'width 0.6s var(--ease-out-expo)' }} />
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
         {fields.filter(f => !f.done).map(f => (
@@ -399,7 +399,7 @@ export default function DashboardPage() {
   if (loading) return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ width: 40, height: 40, borderRadius: '50%', border: '2px solid rgba(110,231,183,0.2)', borderTopColor: 'var(--accent)', margin: '0 auto 16px', animation: 'spin 0.8s linear infinite' }} />
+        <div style={{ width: 40, height: 40, borderRadius: '50%', border: '2px solid rgba(74,144,217,0.2)', borderTopColor: 'var(--accent)', margin: '0 auto 16px', animation: 'spin 0.8s linear infinite' }} />
         <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>Loading…</p>
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
@@ -420,7 +420,7 @@ export default function DashboardPage() {
         <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 60 }}>
           <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{ fontFamily: 'var(--font-orbitron)', fontWeight: 700, fontSize: '16px', color: 'var(--accent)', letterSpacing: '0.08em' }}>NEXUS</span>
-            <span style={{ padding: '2px 8px', borderRadius: '6px', fontSize: '10px', fontWeight: 600, background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.15)', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em' }}>DASHBOARD</span>
+            <span style={{ padding: '2px 8px', borderRadius: '6px', fontSize: '10px', fontWeight: 600, background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.15)', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em' }}>DASHBOARD</span>
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', display: 'none' }} className="md-show">{profile?.email}</span>
@@ -437,7 +437,7 @@ export default function DashboardPage() {
       <main style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 24px 80px' }}>
         {/* Welcome header */}
         <div style={{ marginBottom: '32px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', borderRadius: '100px', background: 'rgba(110,231,183,0.07)', border: '1px solid rgba(110,231,183,0.15)', marginBottom: '14px', fontSize: '11px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', borderRadius: '100px', background: 'rgba(74,144,217,0.07)', border: '1px solid rgba(74,144,217,0.15)', marginBottom: '14px', fontSize: '11px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', animation: 'pulse-dot 1.8s ease-in-out infinite', display: 'inline-block' }} />
             {userTypeLabel} account
           </div>
@@ -458,7 +458,7 @@ export default function DashboardPage() {
             <button
               key={t.id}
               onClick={() => setActiveTab(t.id)}
-              style={{ padding: '7px 16px', borderRadius: '9px', fontSize: '13px', fontWeight: activeTab === t.id ? 600 : 400, background: activeTab === t.id ? 'rgba(110,231,183,0.1)' : 'transparent', color: activeTab === t.id ? 'var(--accent)' : 'rgba(255,255,255,0.5)', border: activeTab === t.id ? '1px solid rgba(110,231,183,0.2)' : '1px solid transparent', cursor: 'pointer', transition: 'all 0.2s', fontFamily: 'var(--font-inter)', whiteSpace: 'nowrap' }}
+              style={{ padding: '7px 16px', borderRadius: '9px', fontSize: '13px', fontWeight: activeTab === t.id ? 600 : 400, background: activeTab === t.id ? 'rgba(74,144,217,0.1)' : 'transparent', color: activeTab === t.id ? 'var(--accent)' : 'rgba(255,255,255,0.5)', border: activeTab === t.id ? '1px solid rgba(74,144,217,0.2)' : '1px solid transparent', cursor: 'pointer', transition: 'all 0.2s', fontFamily: 'var(--font-inter)', whiteSpace: 'nowrap' }}
             >
               {t.label}
             </button>
@@ -529,7 +529,7 @@ export default function DashboardPage() {
                   { label: 'Connect with a CHW', href: '/chw', desc: 'A community health worker can guide you', icon: '👥' },
                 ].map(item => (
                   <Link key={item.label} href={item.href} style={{ display: 'flex', gap: '14px', alignItems: 'center', padding: '14px 16px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', textDecoration: 'none', transition: 'border-color 0.2s' }}
-                    onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(110,231,183,0.2)'}
+                    onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(74,144,217,0.2)'}
                     onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(255,255,255,0.06)'}
                   >
                     <span style={{ fontSize: '22px' }}>{item.icon}</span>
@@ -546,7 +546,7 @@ export default function DashboardPage() {
             {profile?.user_type === 'provider' && (
               <div style={{ gridColumn: '1 / -1' }}>
                 <SectionHeader title="Provider tools" />
-                <Link href="/provider" style={{ display: 'flex', gap: '16px', alignItems: 'center', padding: '20px 24px', borderRadius: '14px', background: 'rgba(110,231,183,0.04)', border: '1px solid rgba(110,231,183,0.18)', textDecoration: 'none' }}>
+                <Link href="/provider" style={{ display: 'flex', gap: '16px', alignItems: 'center', padding: '20px 24px', borderRadius: '14px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.18)', textDecoration: 'none' }}>
                   <span style={{ fontSize: '28px' }}>🏥</span>
                   <div>
                     <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '4px' }}>Provider portal</div>

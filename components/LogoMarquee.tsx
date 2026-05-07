@@ -115,7 +115,7 @@ function MarqueeRow({ items, reverse = false }: { items: Logo[]; reverse?: boole
                 whiteSpace: 'nowrap', transition: 'color 0.2s, border-color 0.2s',
                 cursor: 'default', flexShrink: 0,
               }}
-              onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.borderColor = 'rgba(110,231,183,0.2)' }}
+              onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.borderColor = 'rgba(74,144,217,0.2)' }}
               onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-3)'; e.currentTarget.style.borderColor = 'var(--border2)' }}
             >
               {logo.svg}

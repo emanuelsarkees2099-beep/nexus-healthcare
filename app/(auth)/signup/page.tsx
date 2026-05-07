@@ -154,8 +154,8 @@ export default function SignupPage() {
         {success ? (
           // Success state
           <div className="animate-slide" style={{ textAlign: 'center' }}>
-            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
-              <CheckCircle size={32} color="#4ade80" strokeWidth={1.5} />
+            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(96,165,250,0.1)', border: '1px solid rgba(96,165,250,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
+              <CheckCircle size={32} color="#60a5fa" strokeWidth={1.5} />
             </div>
             <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#fff', marginBottom: '8px' }}>Account created!</h2>
             <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '14px' }}>Welcome to NEXUS. Redirecting to dashboard...</p>
@@ -175,7 +175,7 @@ export default function SignupPage() {
             {/* Progress bar */}
             <div className="animate-slide stagger-3" style={{ marginBottom: '24px' }}>
               <div style={{ height: '2px', background: 'rgba(255,255,255,0.08)', borderRadius: '2px', overflow: 'hidden' }}>
-                <div style={{ height: '100%', background: `linear-gradient(90deg, #6d9197, #4ade80)`, width: `${completion}%`, transition: 'width 0.3s ease' }} />
+                <div style={{ height: '100%', background: `linear-gradient(90deg, #6d9197, #60a5fa)`, width: `${completion}%`, transition: 'width 0.3s ease' }} />
               </div>
               <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '6px' }}>{Math.round(completion)}% complete</p>
             </div>
@@ -185,7 +185,7 @@ export default function SignupPage() {
               <div className="animate-slide stagger-4" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <label style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.65)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span>Full name</span>
-                  {formData.fullName && <span style={{ color: '#4ade80', fontSize: '10px' }}>✓</span>}
+                  {formData.fullName && <span style={{ color: '#60a5fa', fontSize: '10px' }}>✓</span>}
                 </label>
                 <input
                   type="text"
@@ -216,7 +216,7 @@ export default function SignupPage() {
               <div className="animate-slide stagger-4" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <label style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.65)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span>Email</span>
-                  {formData.email && <span style={{ color: '#4ade80', fontSize: '10px' }}>✓</span>}
+                  {formData.email && <span style={{ color: '#60a5fa', fontSize: '10px' }}>✓</span>}
                 </label>
                 <input
                   type="email"
@@ -247,7 +247,7 @@ export default function SignupPage() {
               <div className="animate-slide stagger-5" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <label style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.65)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span>Password</span>
-                  {formData.password && <span style={{ color: '#4ade80', fontSize: '10px' }}>✓</span>}
+                  {formData.password && <span style={{ color: '#60a5fa', fontSize: '10px' }}>✓</span>}
                 </label>
                 <input
                   type="password"
@@ -278,7 +278,7 @@ export default function SignupPage() {
               <div className="animate-slide stagger-5" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <label style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.65)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span>Confirm password</span>
-                  {formData.confirmPassword && formData.password === formData.confirmPassword && <span style={{ color: '#4ade80', fontSize: '10px' }}>✓</span>}
+                  {formData.confirmPassword && formData.password === formData.confirmPassword && <span style={{ color: '#60a5fa', fontSize: '10px' }}>✓</span>}
                 </label>
                 <input
                   type="password"

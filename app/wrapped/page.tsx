@@ -115,19 +115,19 @@ export default function WrappedPage() {
     {
       id: 'clinics',
       bg: 'linear-gradient(135deg, #0d1117 0%, #0a1a0f 100%)',
-      accent: '#4ade80',
+      accent: '#60a5fa',
       content: (
         <div>
-          <MapPin size={40} color="#4ade80" style={{ marginBottom: '20px' }} />
-          <div style={{ fontSize: 'clamp(72px,15vw,110px)', fontWeight: 900, letterSpacing: '-0.05em', color: '#4ade80', lineHeight: 1, marginBottom: '8px' }}>
+          <MapPin size={40} color="#60a5fa" style={{ marginBottom: '20px' }} />
+          <div style={{ fontSize: 'clamp(72px,15vw,110px)', fontWeight: 900, letterSpacing: '-0.05em', color: '#60a5fa', lineHeight: 1, marginBottom: '8px' }}>
             {WRAPPED_DATA.clinicsFound}
           </div>
           <div style={{ fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>clinics found</div>
           <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, maxWidth: '260px', margin: '0 auto' }}>
             Your most-visited was{' '}
-            <span style={{ color: '#4ade80', fontWeight: 600 }}>{WRAPPED_DATA.topClinic}</span>.
+            <span style={{ color: '#60a5fa', fontWeight: 600 }}>{WRAPPED_DATA.topClinic}</span>.
           </p>
-          <div style={{ marginTop: '20px', display: 'inline-flex', gap: '6px', alignItems: 'center', padding: '6px 14px', borderRadius: '100px', background: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.25)', fontSize: '12px', color: '#4ade80' }}>
+          <div style={{ marginTop: '20px', display: 'inline-flex', gap: '6px', alignItems: 'center', padding: '6px 14px', borderRadius: '100px', background: 'rgba(96,165,250,0.1)', border: '1px solid rgba(96,165,250,0.25)', fontSize: '12px', color: '#60a5fa' }}>
             <Shield size={11} /> HRSA Verified
           </div>
         </div>
@@ -203,7 +203,7 @@ export default function WrappedPage() {
     {
       id: 'badges',
       bg: 'linear-gradient(135deg, #0d1117 0%, #0a1505 100%)',
-      accent: '#4ade80',
+      accent: '#60a5fa',
       content: (
         <div>
           <Award size={32} color="#fbbf24" style={{ marginBottom: '20px' }} />
@@ -299,7 +299,7 @@ export default function WrappedPage() {
             onClick={() => setStarted(true)}
             style={{
               padding: '16px 36px', borderRadius: '20px',
-              background: 'linear-gradient(135deg, rgba(129,140,248,0.2), rgba(110,231,183,0.15))',
+              background: 'linear-gradient(135deg, rgba(129,140,248,0.2), rgba(74,144,217,0.15))',
               border: '1px solid rgba(129,140,248,0.4)',
               color: '#c7d2fe', fontSize: '16px', fontWeight: 700,
               cursor: 'pointer', fontFamily: 'inherit',

@@ -11,7 +11,7 @@ export default function AnimatedDiagramsSection() {
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '8px',
           padding: '5px 14px', borderRadius: '100px',
-          background: 'rgba(110,231,183,0.07)', border: '1px solid rgba(110,231,183,0.15)',
+          background: 'rgba(74,144,217,0.07)', border: '1px solid rgba(74,144,217,0.15)',
           marginBottom: '20px', fontSize: '11px', fontWeight: 600,
           color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase',
         }}>

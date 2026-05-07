@@ -35,11 +35,11 @@ function avatarColor(initials: string) {
     hash = (hash * 31 + initials.charCodeAt(i)) & 0xffffffff
   }
   const palette = [
-    { bg: 'rgba(110,231,183,0.12)', border: 'rgba(110,231,183,0.35)', text: '#6EE7B7' }, // mint
+    { bg: 'rgba(74,144,217,0.12)', border: 'rgba(74,144,217,0.35)', text: '#4A90D9' }, // mint
     { bg: 'rgba(167,139,250,0.12)', border: 'rgba(167,139,250,0.35)', text: '#A78BFA' }, // violet
     { bg: 'rgba(252,211,77,0.12)',  border: 'rgba(252,211,77,0.35)',  text: '#FCD34D' }, // amber
     { bg: 'rgba(248,113,113,0.12)', border: 'rgba(248,113,113,0.35)', text: '#F87171' }, // coral
-    { bg: 'rgba(52,211,153,0.12)',  border: 'rgba(52,211,153,0.35)',  text: '#34D399' }, // emerald
+    { bg: 'rgba(96,165,250,0.12)',  border: 'rgba(96,165,250,0.35)',  text: '#60A5FA' }, // emerald
     { bg: 'rgba(96,165,250,0.12)',  border: 'rgba(96,165,250,0.35)',  text: '#60A5FA' }, // blue
   ]
   return palette[Math.abs(hash) % palette.length]

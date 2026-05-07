@@ -176,7 +176,7 @@ export default function OnboardingPage() {
       }}>
         <div aria-hidden style={{
           position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse 70% 50% at 50% 40%, rgba(110,231,183,0.08) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse 70% 50% at 50% 40%, rgba(74,144,217,0.08) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
         <Sparkles size={40} color="var(--accent)" style={{ marginBottom: '24px' }} />
@@ -195,7 +195,7 @@ export default function OnboardingPage() {
           gap: '12px', maxWidth: '600px', width: '100%', marginBottom: '40px',
         }}>
           {[
-            { href: '/search', label: 'Find your clinic', icon: <MapPin size={16} />, color: '#4ade80' },
+            { href: '/search', label: 'Find your clinic', icon: <MapPin size={16} />, color: '#60a5fa' },
             { href: '/programs', label: 'Check eligibility', icon: <Shield size={16} />, color: '#818cf8' },
             { href: '/triage', label: 'AI symptom check', icon: <Heart size={16} />, color: '#f472b6' },
             { href: '/gps', label: 'Step-by-step guide', icon: <ArrowRight size={16} />, color: '#fbbf24' },
@@ -217,7 +217,7 @@ export default function OnboardingPage() {
 
         <Link href="/search" style={{
           padding: '15px 36px', borderRadius: '100px',
-          background: 'rgba(110,231,183,0.12)', border: '1px solid rgba(110,231,183,0.3)',
+          background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.3)',
           color: 'var(--accent)', fontSize: '15px', fontWeight: 700,
           textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px',
         }}>
@@ -235,13 +235,13 @@ export default function OnboardingPage() {
       position: 'relative', overflow: 'hidden',
     }}>
       <style>{`
-        .ob-option:hover { border-color: rgba(110,231,183,0.35) !important; background: rgba(110,231,183,0.04) !important; }
+        .ob-option:hover { border-color: rgba(74,144,217,0.35) !important; background: rgba(74,144,217,0.04) !important; }
         .ob-option { transition: all 0.18s; }
       `}</style>
 
       <div aria-hidden style={{
         position: 'absolute', inset: 0,
-        background: `radial-gradient(ellipse 70% 60% at 50% ${(step / QUESTIONS.length) * 80 + 10}%, rgba(110,231,183,0.05) 0%, transparent 70%)`,
+        background: `radial-gradient(ellipse 70% 60% at 50% ${(step / QUESTIONS.length) * 80 + 10}%, rgba(74,144,217,0.05) 0%, transparent 70%)`,
         pointerEvents: 'none', transition: 'all 0.8s ease',
       }} />
 
@@ -274,8 +274,8 @@ export default function OnboardingPage() {
           {activeInsight && (
             <div style={{
               padding: '14px 18px', borderRadius: '12px', marginBottom: '20px',
-              background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.25)',
-              fontSize: '13px', color: 'rgba(110,231,183,0.9)', lineHeight: 1.65,
+              background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.25)',
+              fontSize: '13px', color: 'rgba(74,144,217,0.9)', lineHeight: 1.65,
               animation: 'fadeIn 0.4s ease both',
             }}>
               💡 {activeInsight}
@@ -298,8 +298,8 @@ export default function OnboardingPage() {
                 style={{
                   display: 'flex', alignItems: 'center', gap: '14px',
                   padding: '14px 18px', borderRadius: '14px', textAlign: 'left',
-                  background: isSelected(q.id, opt.value) ? 'rgba(110,231,183,0.08)' : 'rgba(255,255,255,0.03)',
-                  border: `1px solid ${isSelected(q.id, opt.value) ? 'rgba(110,231,183,0.4)' : 'rgba(255,255,255,0.09)'}`,
+                  background: isSelected(q.id, opt.value) ? 'rgba(74,144,217,0.08)' : 'rgba(255,255,255,0.03)',
+                  border: `1px solid ${isSelected(q.id, opt.value) ? 'rgba(74,144,217,0.4)' : 'rgba(255,255,255,0.09)'}`,
                   cursor: 'pointer', fontFamily: 'inherit', color: 'inherit', width: '100%',
                 }}
               >
@@ -325,8 +325,8 @@ export default function OnboardingPage() {
               disabled={!answers[q.id] || (answers[q.id] as string[]).length === 0}
               style={{
                 padding: '13px 28px', borderRadius: '100px',
-                background: answers[q.id] && (answers[q.id] as string[]).length > 0 ? 'rgba(110,231,183,0.12)' : 'rgba(255,255,255,0.04)',
-                border: `1px solid ${answers[q.id] && (answers[q.id] as string[]).length > 0 ? 'rgba(110,231,183,0.3)' : 'rgba(255,255,255,0.08)'}`,
+                background: answers[q.id] && (answers[q.id] as string[]).length > 0 ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${answers[q.id] && (answers[q.id] as string[]).length > 0 ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)'}`,
                 color: answers[q.id] && (answers[q.id] as string[]).length > 0 ? 'var(--accent)' : 'rgba(255,255,255,0.25)',
                 fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
                 display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.2s',

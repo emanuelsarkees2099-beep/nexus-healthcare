@@ -47,7 +47,7 @@ export default function BeforeAfterBar() {
           {/* After */}
           <div style={{
             padding: '24px', borderRadius: '16px',
-            background: 'rgba(110,231,183,0.04)', border: '1px solid rgba(110,231,183,0.2)',
+            background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.2)',
           }}>
             <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '16px' }}>
               With NEXUS
@@ -70,7 +70,7 @@ export default function BeforeAfterBar() {
                   </span>
                   <span style={{
                     padding: '1px 6px', borderRadius: '4px',
-                    background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)',
+                    background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)',
                     fontSize: '10px', color: 'var(--accent)', fontWeight: 600,
                   }}>
                     {item.improvement} better

@@ -40,8 +40,8 @@ const QUIZ = [
 ]
 
 const PROGRAMS_BASE = [
-  { name: 'Medicaid', tag: 'Federal', color: '#4ade80', colorBg: 'rgba(74,222,128,0.08)', desc: 'Full health coverage for qualifying low-income adults and families. Covers doctor visits, hospital stays, prescriptions, and more.', savings: '$0 premium · $0–$3 copays', annualValue: 8400, icon: <ShieldCheck size={16} strokeWidth={1.5} />, url: 'https://www.healthcare.gov/medicaid-chip/getting-medicaid-chip/' },
-  { name: 'HRSA Free Clinic Program', tag: 'Federal', color: 'var(--accent)', colorBg: 'rgba(110,231,183,0.08)', desc: 'Federally funded community health centers required to serve everyone regardless of ability to pay — primary care, dental, mental health.', savings: 'Up to $400/visit covered', annualValue: 1800, icon: <TrendingUp size={16} strokeWidth={1.5} />, url: '/pathways' },
+  { name: 'Medicaid', tag: 'Federal', color: '#60a5fa', colorBg: 'rgba(96,165,250,0.08)', desc: 'Full health coverage for qualifying low-income adults and families. Covers doctor visits, hospital stays, prescriptions, and more.', savings: '$0 premium · $0–$3 copays', annualValue: 8400, icon: <ShieldCheck size={16} strokeWidth={1.5} />, url: 'https://www.healthcare.gov/medicaid-chip/getting-medicaid-chip/' },
+  { name: 'HRSA Free Clinic Program', tag: 'Federal', color: 'var(--accent)', colorBg: 'rgba(74,144,217,0.08)', desc: 'Federally funded community health centers required to serve everyone regardless of ability to pay — primary care, dental, mental health.', savings: 'Up to $400/visit covered', annualValue: 1800, icon: <TrendingUp size={16} strokeWidth={1.5} />, url: '/pathways' },
   { name: 'ACA Marketplace Subsidy', tag: 'Federal', color: '#60a5fa', colorBg: 'rgba(96,165,250,0.08)', desc: 'Premium tax credits that may reduce your health insurance cost to $0–$50/month based on your income.', savings: 'Avg $340/month subsidy', annualValue: 4080, icon: <DollarSign size={16} strokeWidth={1.5} />, url: 'https://www.healthcare.gov/apply-and-enroll/start-enrollment/' },
   { name: 'NeedyMeds PAP', tag: 'Rx', color: '#f472b6', colorBg: 'rgba(244,114,182,0.08)', desc: 'Manufacturer patient assistance programs that provide brand-name medications at no or low cost for uninsured and low-income patients.', savings: 'Avg $200–$400/month in Rx', annualValue: 3600, icon: <Zap size={16} strokeWidth={1.5} />, url: 'https://www.needymeds.org/pap' },
   { name: 'State 340B Program', tag: 'State', color: '#fbbf24', colorBg: 'rgba(251,191,36,0.08)', desc: 'Discounted prescription drugs at HRSA-participating clinics for low-income patients — often 25–50% below retail prices.', savings: '25–50% off all medications', annualValue: 600, icon: <RefreshCw size={16} strokeWidth={1.5} />, url: '/pathways' },
@@ -123,7 +123,7 @@ const COST_ROWS = [
 const ALERTS = [
   { title: 'Medicaid Open Enrollment', date: 'Re-enrollment opens Jan 1', status: 'Upcoming', color: '#60a5fa' },
   { title: 'ACA Marketplace',          date: 'Closes Dec 15 — act now',   status: 'Urgent',   color: '#f87171' },
-  { title: 'CHIP for Families',        date: 'Year-round enrollment',      status: 'Open',     color: '#4ade80' },
+  { title: 'CHIP for Families',        date: 'Year-round enrollment',      status: 'Open',     color: '#60a5fa' },
 ]
 
 const HOW_STEPS = [
@@ -173,7 +173,7 @@ function SavingsReveal({ programs }: { programs: Array<{ name: string; color: st
   }, [revealed, total, maxVal, programs])
 
   return (
-    <div ref={ref} style={{ borderRadius: '24px', padding: '3px', background: 'linear-gradient(135deg, rgba(110,231,183,0.3), rgba(251,191,36,0.15), transparent)', marginBottom: '40px', opacity: revealed ? 1 : 0, transform: revealed ? 'none' : 'translateY(24px)', transition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)' }}>
+    <div ref={ref} style={{ borderRadius: '24px', padding: '3px', background: 'linear-gradient(135deg, rgba(74,144,217,0.3), rgba(251,191,36,0.15), transparent)', marginBottom: '40px', opacity: revealed ? 1 : 0, transform: revealed ? 'none' : 'translateY(24px)', transition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)' }}>
       <div style={{ borderRadius: '22px', padding: '36px 32px', background: 'rgba(8,10,20,0.98)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.04)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
           <TrendingUp size={14} strokeWidth={1.5} style={{ color: 'var(--accent)' }} />
@@ -201,8 +201,8 @@ function SavingsReveal({ programs }: { programs: Array<{ name: string; color: st
         </div>
 
         {/* Total reveal box */}
-        <div style={{ borderRadius: '16px', padding: '28px', background: 'rgba(110,231,183,0.04)', border: '1px solid rgba(110,231,183,0.15)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '200px', height: '60px', background: 'radial-gradient(ellipse, rgba(110,231,183,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ borderRadius: '16px', padding: '28px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.15)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '200px', height: '60px', background: 'radial-gradient(ellipse, rgba(74,144,217,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
           <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: '12px' }}>Total Unclaimed Savings</div>
           <div style={{ fontSize: 'clamp(44px, 8vw, 72px)', fontWeight: 800, letterSpacing: '-0.04em', color: 'var(--accent)', lineHeight: 1, fontVariantNumeric: 'tabular-nums', fontFamily: 'var(--font-mono, monospace)', marginBottom: '8px' }}>
             ${totalCount.toLocaleString()}
@@ -241,18 +241,18 @@ function ProgramsFAQ() {
     <section ref={ref} style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)', opacity: visible ? 1 : 0, transform: visible ? 'none' : 'translateY(28px)', transition: 'opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1)' }}>
       <div style={{ maxWidth: '700px', margin: '0 auto' }}>
         <div style={{ marginBottom: '48px' }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(110,231,183,0.08)', color: 'var(--accent)', border: '1px solid rgba(110,231,183,0.18)', marginBottom: '20px' }}>Common questions</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)', marginBottom: '20px' }}>Common questions</span>
           <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.15 }}>Program & eligibility FAQs</h2>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           {PROG_FAQ.map((item, i) => (
-            <div key={i} style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid', borderColor: open === i ? 'rgba(110,231,183,0.25)' : 'rgba(255,255,255,0.06)', background: open === i ? 'rgba(110,231,183,0.04)' : 'transparent', transition: 'border-color 0.25s, background 0.25s', marginBottom: '4px' }}>
+            <div key={i} style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid', borderColor: open === i ? 'rgba(74,144,217,0.25)' : 'rgba(255,255,255,0.06)', background: open === i ? 'rgba(74,144,217,0.04)' : 'transparent', transition: 'border-color 0.25s, background 0.25s', marginBottom: '4px' }}>
               <button
                 onClick={() => setOpen(open === i ? null : i)}
                 style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 24px', background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontFamily: 'inherit', textAlign: 'left', gap: '16px' }}
               >
                 <span style={{ fontSize: '15px', fontWeight: 500, lineHeight: 1.4 }}>{item.q}</span>
-                <span style={{ flexShrink: 0, width: '20px', height: '20px', borderRadius: '50%', background: open === i ? 'rgba(110,231,183,0.15)' : 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.3s, background 0.25s', transform: open === i ? 'rotate(45deg)' : 'none', color: open === i ? 'var(--accent)' : 'rgba(255,255,255,0.4)', fontSize: '16px', lineHeight: 1 }}>+</span>
+                <span style={{ flexShrink: 0, width: '20px', height: '20px', borderRadius: '50%', background: open === i ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.3s, background 0.25s', transform: open === i ? 'rotate(45deg)' : 'none', color: open === i ? 'var(--accent)' : 'rgba(255,255,255,0.4)', fontSize: '16px', lineHeight: 1 }}>+</span>
               </button>
               <div style={{ maxHeight: open === i ? '300px' : '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.16,1,0.3,1)' }}>
                 <p style={{ padding: '0 24px 20px', fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.75, margin: 0 }}>{item.a}</p>
@@ -280,7 +280,7 @@ export default function ProgramsPage() {
     display: 'inline-flex', alignItems: 'center', gap: '6px',
     padding: '4px 12px', borderRadius: '100px',
     fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-    background: 'rgba(110,231,183,0.08)', color: 'var(--accent)', border: '1px solid rgba(110,231,183,0.18)',
+    background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)',
   }
 
   const card: React.CSSProperties = {
@@ -331,7 +331,7 @@ export default function ProgramsPage() {
       />
       {/* ── HERO ─────────────────────────────────────── */}
       <section style={{ minHeight: '80dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '80px 24px 60px', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)', width: '700px', height: '350px', background: 'radial-gradient(ellipse, rgba(74,222,128,0.07) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)', width: '700px', height: '350px', background: 'radial-gradient(ellipse, rgba(96,165,250,0.07) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
         <div style={{ maxWidth: '720px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}>
@@ -361,7 +361,7 @@ export default function ProgramsPage() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '2px', borderRadius: '20px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)' }}>
               {HOW_STEPS.map((s, i) => (
                 <div key={s.n} style={{ padding: '32px 28px', background: i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent' }}>
-                  <div style={{ fontSize: '11px', fontWeight: 700, color: '#4ade80', letterSpacing: '0.12em', marginBottom: '14px' }}>{s.n}</div>
+                  <div style={{ fontSize: '11px', fontWeight: 700, color: '#60a5fa', letterSpacing: '0.12em', marginBottom: '14px' }}>{s.n}</div>
                   <h3 style={{ fontSize: '17px', fontWeight: 600, marginBottom: '10px', lineHeight: 1.3 }}>{s.title}</h3>
                   <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.65 }}>{s.body}</p>
                 </div>
@@ -381,7 +381,7 @@ export default function ProgramsPage() {
               <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)' }}>{Math.round((qIdx / QUIZ.length) * 100)}% complete</span>
             </div>
             <div style={{ height: '3px', background: 'rgba(255,255,255,0.06)', borderRadius: '100px', overflow: 'hidden', marginBottom: '40px' }}>
-              <div style={{ height: '100%', width: `${(qIdx / QUIZ.length) * 100}%`, background: 'linear-gradient(90deg, #4ade80, #6d9197)', borderRadius: '100px', transition: 'width 0.6s cubic-bezier(0.16,1,0.3,1)' }} />
+              <div style={{ height: '100%', width: `${(qIdx / QUIZ.length) * 100}%`, background: 'linear-gradient(90deg, #60a5fa, #6d9197)', borderRadius: '100px', transition: 'width 0.6s cubic-bezier(0.16,1,0.3,1)' }} />
             </div>
 
             {!running ? (
@@ -394,14 +394,14 @@ export default function ProgramsPage() {
                     <button key={opt} onClick={() => setSelected(opt)}
                       style={{
                         padding: '16px 20px', borderRadius: '14px', textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                        background: selected === opt ? 'rgba(74,222,128,0.08)' : 'rgba(255,255,255,0.03)',
-                        border: `1px solid ${selected === opt ? 'rgba(74,222,128,0.3)' : 'rgba(255,255,255,0.07)'}`,
-                        color: selected === opt ? '#4ade80' : 'rgba(255,255,255,0.7)',
+                        background: selected === opt ? 'rgba(96,165,250,0.08)' : 'rgba(255,255,255,0.03)',
+                        border: `1px solid ${selected === opt ? 'rgba(96,165,250,0.3)' : 'rgba(255,255,255,0.07)'}`,
+                        color: selected === opt ? '#60a5fa' : 'rgba(255,255,255,0.7)',
                         fontSize: '15px', transition: 'all 0.22s cubic-bezier(0.16,1,0.3,1)',
                       }}
                     >
                       {opt}
-                      {selected === opt && <CheckCircle2 size={16} strokeWidth={1.5} style={{ color: '#4ade80', flexShrink: 0 }} />}
+                      {selected === opt && <CheckCircle2 size={16} strokeWidth={1.5} style={{ color: '#60a5fa', flexShrink: 0 }} />}
                     </button>
                   ))}
                 </div>
@@ -415,7 +415,7 @@ export default function ProgramsPage() {
                   <button onClick={next} disabled={!selected}
                     style={{
                       flex: 1, padding: '14px', borderRadius: '12px', border: 'none', cursor: selected ? 'pointer' : 'not-allowed',
-                      background: selected ? 'rgba(74,222,128,0.9)' : 'rgba(255,255,255,0.05)',
+                      background: selected ? 'rgba(96,165,250,0.9)' : 'rgba(255,255,255,0.05)',
                       color: selected ? '#0a0a0a' : 'rgba(255,255,255,0.25)',
                       fontSize: '15px', fontWeight: 600, fontFamily: 'inherit',
                       transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
@@ -428,7 +428,7 @@ export default function ProgramsPage() {
               </div>
             ) : (
               <div style={{ textAlign: 'center', padding: '60px 0', animation: 'fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both' }}>
-                <div style={{ width: '52px', height: '52px', borderRadius: '50%', border: '2px solid rgba(74,222,128,0.15)', borderTopColor: '#4ade80', margin: '0 auto 24px', animation: 'spin 0.9s linear infinite' }} />
+                <div style={{ width: '52px', height: '52px', borderRadius: '50%', border: '2px solid rgba(96,165,250,0.15)', borderTopColor: '#60a5fa', margin: '0 auto 24px', animation: 'spin 0.9s linear infinite' }} />
                 <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.55)' }}>Checking 40+ federal and state programs…</p>
                 <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.25)', marginTop: '8px' }}>Medicaid · ACA · 340B · NeedyMeds · State programs</p>
               </div>
@@ -498,7 +498,7 @@ export default function ProgramsPage() {
             <RevealBlock>
               <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '20px', padding: '32px', marginBottom: '40px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
-                  <div style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}><DollarSign size={15} strokeWidth={1.5} /></div>
+                  <div style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}><DollarSign size={15} strokeWidth={1.5} /></div>
                   <div>
                     <h3 style={{ fontWeight: 600, fontSize: '16px' }}>Cost estimator</h3>
                     <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>What you'd pay vs. what you'd pay with your top programs</p>
@@ -511,7 +511,7 @@ export default function ProgramsPage() {
                   <div key={row.label} style={{ display: 'grid', gridTemplateColumns: '1fr 80px 80px', gap: '0', padding: '13px 0', borderBottom: '1px solid rgba(255,255,255,0.04)', alignItems: 'center' }}>
                     <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)' }}>{row.label}</span>
                     <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.25)', textDecoration: 'line-through', textAlign: 'right' }}>{row.base}</span>
-                    <span style={{ fontSize: '15px', color: '#4ade80', fontWeight: 600, textAlign: 'right' }}>{row.aided}</span>
+                    <span style={{ fontSize: '15px', color: '#60a5fa', fontWeight: 600, textAlign: 'right' }}>{row.aided}</span>
                   </div>
                 ))}
               </div>
@@ -542,7 +542,7 @@ export default function ProgramsPage() {
       <section style={{ padding: '0 24px 80px' }}>
         <div style={{ maxWidth: '860px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ borderRadius: '24px', padding: '2px', background: 'linear-gradient(135deg, rgba(96,165,250,0.2), rgba(74,222,128,0.1))' }}>
+            <div style={{ borderRadius: '24px', padding: '2px', background: 'linear-gradient(135deg, rgba(96,165,250,0.2), rgba(96,165,250,0.1))' }}>
               <div style={{ borderRadius: '23px', padding: '40px 44px', background: 'rgba(10,9,22,0.97)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.04)' }}>
                 <div style={{ marginBottom: '32px' }}>
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(96,165,250,0.08)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.18)', marginBottom: '16px' }}>
@@ -559,11 +559,11 @@ export default function ProgramsPage() {
                 {/* Medicaid enrollment steps */}
                 <div style={{ marginBottom: '28px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-                    <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <ShieldCheck size={14} color="#4ade80" strokeWidth={1.5} />
+                    <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'rgba(96,165,250,0.1)', border: '1px solid rgba(96,165,250,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <ShieldCheck size={14} color="#60a5fa" strokeWidth={1.5} />
                     </div>
                     <h3 style={{ fontSize: '16px', fontWeight: 600 }}>Medicaid Enrollment</h3>
-                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '100px', background: 'rgba(74,222,128,0.08)', color: '#4ade80', border: '1px solid rgba(74,222,128,0.2)' }}>Free coverage</span>
+                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '100px', background: 'rgba(96,165,250,0.08)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.2)' }}>Free coverage</span>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {[
@@ -573,12 +573,12 @@ export default function ProgramsPage() {
                       { step: '04', title: 'Coverage is retroactive', body: 'Medicaid coverage typically begins on the first day of the month you applied. Emergency care you received may be retroactively covered up to 3 months prior in some states.' },
                     ].map((s) => (
                       <div key={s.step} style={{ display: 'flex', gap: '14px', padding: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px' }}>
-                        <span style={{ flexShrink: 0, fontSize: '10px', fontWeight: 700, color: '#4ade80', letterSpacing: '0.1em', marginTop: '2px', minWidth: '22px' }}>{s.step}</span>
+                        <span style={{ flexShrink: 0, fontSize: '10px', fontWeight: 700, color: '#60a5fa', letterSpacing: '0.1em', marginTop: '2px', minWidth: '22px' }}>{s.step}</span>
                         <div>
                           <div style={{ fontSize: '14px', fontWeight: 600, color: 'rgba(255,255,255,0.8)', marginBottom: '5px' }}>{s.title}</div>
                           <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65 }}>{s.body}</div>
                           {s.link && (
-                            <a href={s.link} target={s.link.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '8px', fontSize: '12px', color: '#4ade80', textDecoration: 'none', borderBottom: '1px solid rgba(74,222,128,0.3)', paddingBottom: '1px' }}>
+                            <a href={s.link} target={s.link.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '8px', fontSize: '12px', color: '#60a5fa', textDecoration: 'none', borderBottom: '1px solid rgba(96,165,250,0.3)', paddingBottom: '1px' }}>
                               {s.linkLabel}
                             </a>
                           )}
@@ -621,16 +621,16 @@ export default function ProgramsPage() {
                 </div>
 
                 {/* Immediate access */}
-                <div style={{ padding: '20px', background: 'rgba(110,231,183,0.06)', border: '1px solid rgba(110,231,183,0.2)', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+                <div style={{ padding: '20px', background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.2)', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>Need care right now?</div>
                     <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.6 }}>FQHCs cannot turn you away regardless of insurance status or ability to pay. Walk in today.</div>
                   </div>
                   <button
                     onClick={() => router.push('/search')}
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '100px', background: 'rgba(110,231,183,0.15)', border: '1px solid rgba(110,231,183,0.3)', color: 'var(--accent)', fontSize: '13px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' as const, transition: 'background 0.2s' }}
-                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(110,231,183,0.25)')}
-                    onMouseLeave={e => (e.currentTarget.style.background = 'rgba(110,231,183,0.15)')}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '100px', background: 'rgba(74,144,217,0.15)', border: '1px solid rgba(74,144,217,0.3)', color: 'var(--accent)', fontSize: '13px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' as const, transition: 'background 0.2s' }}
+                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.25)')}
+                    onMouseLeave={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.15)')}
                   >
                     Find free clinic <ArrowRight size={12} strokeWidth={2} />
                   </button>
@@ -645,10 +645,10 @@ export default function ProgramsPage() {
       <section style={{ padding: '60px 24px 120px' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ borderRadius: '28px', padding: '3px', background: 'linear-gradient(135deg, rgba(74,222,128,0.25), rgba(110,231,183,0.1))' }}>
+            <div style={{ borderRadius: '28px', padding: '3px', background: 'linear-gradient(135deg, rgba(96,165,250,0.25), rgba(74,144,217,0.1))' }}>
               <div style={{ borderRadius: '26px', padding: '56px 52px', background: 'rgba(10,9,22,0.97)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '28px', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.04)' }}>
                 <div>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(74,222,128,0.08)', color: '#4ade80', border: '1px solid rgba(74,222,128,0.18)', marginBottom: '16px' }}><Sparkles size={10} strokeWidth={1.5} /> Free & private</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(96,165,250,0.08)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.18)', marginBottom: '16px' }}><Sparkles size={10} strokeWidth={1.5} /> Free & private</span>
                   <h2 style={{ fontSize: 'clamp(22px, 3vw, 36px)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '12px' }}>Your eligibility doesn't expire</h2>
                   <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', maxWidth: '400px', lineHeight: 1.65 }}>Check again whenever your situation changes — income, household size, or coverage status.</p>
                 </div>
@@ -671,7 +671,7 @@ export default function ProgramsPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(110,231,183,0.08)', color: 'var(--accent)', border: '1px solid rgba(110,231,183,0.18)', marginBottom: '20px' }}><ReceiptText size={10} strokeWidth={1.5} /> Application guide</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)', marginBottom: '20px' }}><ReceiptText size={10} strokeWidth={1.5} /> Application guide</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.15, maxWidth: '520px' }}>How to apply for each program</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', marginTop: '16px', maxWidth: '440px', lineHeight: 1.65 }}>Every program has a different process. Here's what to expect — and what to bring.</p>
             </div>
@@ -680,7 +680,7 @@ export default function ProgramsPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {[
               {
-                name: 'Medicaid', badge: 'Highest impact', badgeColor: '#4ade80',
+                name: 'Medicaid', badge: 'Highest impact', badgeColor: '#60a5fa',
                 steps: ['Visit healthcare.gov or your state\'s Medicaid portal', 'Provide proof of income (pay stubs, tax return, or self-attestation)', 'Provide ID and proof of residency', 'Wait 1–45 days for determination', 'Retroactive coverage possible from application date'],
                 tip: 'Many states now have same-day presumptive eligibility — you can be seen at a clinic before approval is final.',
                 timeToApply: '15–30 min online',
@@ -699,7 +699,7 @@ export default function ProgramsPage() {
               },
             ].map((prog, idx) => (
               <RevealBlock key={prog.name} delay={idx * 80}>
-                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(110,231,183,0.15), rgba(110,231,183,0.04))', borderRadius: '20px' }}>
+                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(74,144,217,0.15), rgba(74,144,217,0.04))', borderRadius: '20px' }}>
                   <div style={{ background: '#0d1618', borderRadius: '18px', padding: '28px 32px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
                       <div>
@@ -713,12 +713,12 @@ export default function ProgramsPage() {
                     <ol style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                       {prog.steps.map((step, si) => (
                         <li key={si} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                          <span style={{ flexShrink: 0, width: '22px', height: '22px', borderRadius: '50%', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 600, color: 'var(--accent)', marginTop: '1px' }}>{si + 1}</span>
+                          <span style={{ flexShrink: 0, width: '22px', height: '22px', borderRadius: '50%', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 600, color: 'var(--accent)', marginTop: '1px' }}>{si + 1}</span>
                           <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.6 }}>{step}</span>
                         </li>
                       ))}
                     </ol>
-                    <div style={{ padding: '14px 16px', background: 'rgba(110,231,183,0.04)', borderRadius: '10px', borderLeft: '2px solid rgba(110,231,183,0.3)', fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>
+                    <div style={{ padding: '14px 16px', background: 'rgba(74,144,217,0.04)', borderRadius: '10px', borderLeft: '2px solid rgba(74,144,217,0.3)', fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>
                       <span style={{ color: 'var(--accent)', fontWeight: 600 }}>Tip: </span>{prog.tip}
                     </div>
                   </div>
@@ -734,7 +734,7 @@ export default function ProgramsPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(110,231,183,0.08)', color: 'var(--accent)', border: '1px solid rgba(110,231,183,0.18)', marginBottom: '20px' }}><Sparkles size={10} strokeWidth={1.5} /> Results</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)', marginBottom: '20px' }}><Sparkles size={10} strokeWidth={1.5} /> Results</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.15, maxWidth: '520px' }}>Programs that actually changed things</h2>
             </div>
           </RevealBlock>
@@ -746,11 +746,11 @@ export default function ProgramsPage() {
               { name: 'Lin C.',  city: 'Los Angeles, CA', program: 'ACA Subsidy', saved: '$290/month', quote: 'I thought healthcare.gov was too complicated. The NEXUS guide walked me through every step and now I have coverage for $0 a month.' },
             ].map((t, i) => (
               <RevealBlock key={t.name} delay={i * 100}>
-                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(110,231,183,0.15), rgba(110,231,183,0.04))', borderRadius: '20px', height: '100%' }}>
+                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(74,144,217,0.15), rgba(74,144,217,0.04))', borderRadius: '20px', height: '100%' }}>
                   <div style={{ background: '#0d1618', borderRadius: '18px', padding: '28px', height: '100%', boxSizing: 'border-box' }}>
                     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
-                      <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.18)', color: 'var(--accent)' }}>{t.program}</span>
-                      <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(74,222,128,0.06)', border: '1px solid rgba(74,222,128,0.15)', color: '#4ade80' }}>Saved {t.saved}</span>
+                      <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.18)', color: 'var(--accent)' }}>{t.program}</span>
+                      <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.15)', color: '#60a5fa' }}>Saved {t.saved}</span>
                     </div>
                     <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, marginBottom: '20px', fontStyle: 'italic' }}>&ldquo;{t.quote}&rdquo;</p>
                     <div>

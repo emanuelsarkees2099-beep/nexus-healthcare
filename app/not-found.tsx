@@ -16,10 +16,10 @@ export default function NotFound() {
 
       {/* 404 display */}
       <div style={{ position: 'relative', marginBottom: '36px' }}>
-        <p style={{ fontSize: 'clamp(80px, 18vw, 160px)', fontWeight: 900, color: 'rgba(110,231,183,0.06)', letterSpacing: '-0.05em', lineHeight: 1, margin: 0, userSelect: 'none', fontFamily: 'var(--font-mono, monospace)' }}>404</p>
+        <p style={{ fontSize: 'clamp(80px, 18vw, 160px)', fontWeight: 900, color: 'rgba(74,144,217,0.06)', letterSpacing: '-0.05em', lineHeight: 1, margin: 0, userSelect: 'none', fontFamily: 'var(--font-mono, monospace)' }}>404</p>
         <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Search size={22} strokeWidth={1.5} style={{ color: 'var(--accent, #6EE7B7)' }} />
+          <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Search size={22} strokeWidth={1.5} style={{ color: 'var(--accent, #4A90D9)' }} />
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@ export default function NotFound() {
       <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '48px' }}>
         <Link
           href="/search"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '13px 26px', background: 'var(--accent, #6EE7B7)', color: '#020409', borderRadius: '100px', textDecoration: 'none', fontWeight: 700, fontSize: '14px', transition: 'opacity 0.2s' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '13px 26px', background: 'var(--accent, #4A90D9)', color: '#020409', borderRadius: '100px', textDecoration: 'none', fontWeight: 700, fontSize: '14px', transition: 'opacity 0.2s' }}
         >
           <Search size={14} strokeWidth={2} /> Find a clinic
         </Link>

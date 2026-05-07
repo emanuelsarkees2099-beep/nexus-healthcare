@@ -16,8 +16,8 @@ const LABEL_CONFIG = {
     text:    'Likely Free',
     cls:     'aff-free',
     color:   'var(--accent)',
-    bg:      'rgba(110,231,183,0.10)',
-    border:  'rgba(110,231,183,0.22)',
+    bg:      'rgba(74,144,217,0.10)',
+    border:  'rgba(74,144,217,0.22)',
   },
   'low-cost': {
     text:    'Low Cost',

@@ -26,8 +26,8 @@ const pill: React.CSSProperties = {
   display: 'inline-flex', alignItems: 'center', gap: '6px',
   padding: '4px 12px', borderRadius: '100px',
   fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-  background: 'rgba(110,231,183,0.08)', color: 'var(--accent)',
-  border: '1px solid rgba(110,231,183,0.18)',
+  background: 'rgba(74,144,217,0.08)', color: 'var(--accent)',
+  border: '1px solid rgba(74,144,217,0.18)',
 }
 
 const CHANGELOG = [
@@ -35,7 +35,7 @@ const CHANGELOG = [
     version: '2.4.0',
     date: 'April 2025',
     tag: 'Major',
-    color: '#6EE7B7',
+    color: '#4A90D9',
     changes: [
       { type: 'new', text: 'Command palette (⌘K) with voice input + fuzzy search across all 13 pages' },
       { type: 'new', text: 'Healthcare Equity Lab — state-by-state racial disparity data + interactive heatmaps' },
@@ -99,7 +99,7 @@ const CHANGELOG = [
 type ChangeType = 'new' | 'improved' | 'fixed'
 
 const CHANGE_COLORS: Record<ChangeType, string> = {
-  new:      '#6EE7B7',
+  new:      '#4A90D9',
   improved: '#60A5FA',
   fixed:    '#FCD34D',
 }
@@ -113,7 +113,7 @@ const ROADMAP = [
     quarter: 'Q1 2025',
     title: 'Core platform',
     items: ['Clinic search (12,000+)', 'Programs eligibility', 'CHW connections', 'Know your rights', 'Stories community', 'Advocacy campaigns'],
-    color: '#6EE7B7',
+    color: '#4A90D9',
   },
   {
     status: 'live',
@@ -146,12 +146,12 @@ const PRINCIPLES = [
 ]
 
 const STATS = [
-  { val: '12,847', label: 'Verified clinics', color: '#6EE7B7' },
+  { val: '12,847', label: 'Verified clinics', color: '#4A90D9' },
   { val: '284K+', label: 'People helped', color: '#A78BFA' },
   { val: '50', label: 'States covered', color: '#60A5FA' },
   { val: '48', label: 'Languages', color: '#FCD34D' },
   { val: '4hrs', label: 'Data refresh rate', color: '#FB923C' },
-  { val: '$0', label: 'Cost to patients', color: '#4ade80' },
+  { val: '$0', label: 'Cost to patients', color: '#60a5fa' },
 ]
 
 export default function OpenPage() {
@@ -166,7 +166,7 @@ export default function OpenPage() {
         justifyContent: 'center', alignItems: 'center', textAlign: 'center',
         padding: '100px 24px 60px', position: 'relative', overflow: 'hidden',
       }}>
-        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(110,231,183,0.07) 0%, transparent 65%)', pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(74,144,217,0.07) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
         <Reveal>
           <div style={{ ...pill, marginBottom: '24px' }}><GitBranch size={10} strokeWidth={1.5} /> Open Roadmap</div>
@@ -209,7 +209,7 @@ export default function OpenPage() {
             {PRINCIPLES.map((p, i) => (
               <Reveal key={p.title} delay={i * 80}>
                 <div style={{ padding: '28px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '20px', height: '100%', transition: 'border-color 0.3s, background 0.3s' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(110,231,183,0.2)'; (e.currentTarget as HTMLElement).style.background = 'rgba(110,231,183,0.03)' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,144,217,0.2)'; (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.03)' }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.06)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)' }}
                 >
                   <div style={{ fontSize: '28px', marginBottom: '14px' }}>{p.icon}</div>
@@ -377,7 +377,7 @@ export default function OpenPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
             {[
-              { icon: <CheckCircle size={18} strokeWidth={1.5} />, title: 'Submit a feature request', body: 'Have an idea that could help someone get care? Tell us.', href: '/advocacy', color: '#6EE7B7', cta: 'Submit idea' },
+              { icon: <CheckCircle size={18} strokeWidth={1.5} />, title: 'Submit a feature request', body: 'Have an idea that could help someone get care? Tell us.', href: '/advocacy', color: '#4A90D9', cta: 'Submit idea' },
               { icon: <Globe size={18} strokeWidth={1.5} />, title: 'Verify or add a clinic', body: 'Know a free clinic that isn\'t in our database? Help us add it.', href: '/search', color: '#60A5FA', cta: 'Add clinic' },
               { icon: <Zap size={18} strokeWidth={1.5} />, title: 'Share your story', body: 'Your experience navigating care without insurance can help someone else.', href: '/stories', color: '#A78BFA', cta: 'Share story' },
             ].map((card, i) => (

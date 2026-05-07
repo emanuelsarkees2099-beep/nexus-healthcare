@@ -77,7 +77,7 @@ export default function OnboardingOverlay() {
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: '6px',
               marginBottom: '10px',
-              background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.18)',
+              background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.18)',
               borderRadius: '100px', padding: '4px 10px',
             }}>
               <Heart size={11} color="var(--accent)" />

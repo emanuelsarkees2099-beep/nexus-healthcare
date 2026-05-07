@@ -85,15 +85,15 @@ const MOBILE_FRAMES = [
     body: '"$1,800 minimum." "Medicaid only." "Try the ER." — over and over.',
   },
   {
-    bg: 'rgba(110,231,183,0.06)',
-    border: 'rgba(110,231,183,0.2)',
+    bg: 'rgba(74,144,217,0.06)',
+    border: 'rgba(74,144,217,0.2)',
     icon: '🔍',
     title: '12 seconds with NEXUS.',
     body: 'One search. Free clinic 2 miles away. Walk-ins welcome.',
   },
   {
-    bg: 'rgba(74,222,128,0.06)',
-    border: 'rgba(74,222,128,0.2)',
+    bg: 'rgba(96,165,250,0.06)',
+    border: 'rgba(96,165,250,0.2)',
     icon: '💚',
     title: 'Cost: $0.',
     body: 'She saw a real doctor. Her chest pain was anxiety. NEXUS saved her $4,200 this year.',
@@ -118,12 +118,12 @@ function CounterOverlay() {
   return (
     <div style={{
       position: 'absolute', top: '18%', right: '8%',
-      background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(110,231,183,0.25)',
+      background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(74,144,217,0.25)',
       borderRadius: '12px', padding: '16px 22px',
       backdropFilter: 'blur(12px)',
       animation: 'cinematic-fadein 0.6s ease both',
     }}>
-      <div style={{ fontSize: '10px', color: 'rgba(110,231,183,0.7)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px', fontFamily: 'var(--font-inter)' }}>
+      <div style={{ fontSize: '10px', color: 'rgba(74,144,217,0.7)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px', fontFamily: 'var(--font-inter)' }}>
         Uninsured Americans
       </div>
       <div style={{ fontSize: '28px', fontWeight: 800, color: '#fff', fontFamily: 'var(--font-orbitron)', letterSpacing: '-0.02em' }}>
@@ -191,11 +191,11 @@ function ComparisonOverlay() {
       </div>
       <div style={{ fontSize: '22px', color: 'rgba(255,255,255,0.3)' }}>vs</div>
       <div style={{
-        background: 'rgba(0,0,0,0.75)', border: '1px solid rgba(110,231,183,0.3)',
+        background: 'rgba(0,0,0,0.75)', border: '1px solid rgba(74,144,217,0.3)',
         borderRadius: '12px', padding: '16px 24px', textAlign: 'center',
         backdropFilter: 'blur(12px)',
       }}>
-        <div style={{ fontSize: '32px', fontWeight: 800, color: '#6ee7b7', fontFamily: 'var(--font-orbitron)' }}>12s</div>
+        <div style={{ fontSize: '32px', fontWeight: 800, color: '#4a90d9', fontFamily: 'var(--font-orbitron)' }}>12s</div>
         <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '4px', fontFamily: 'var(--font-inter)' }}>with NEXUS</div>
       </div>
     </div>
@@ -211,11 +211,11 @@ function SavingsOverlay() {
       animation: 'cinematic-fadein 0.6s ease both',
     }}>
       <div style={{
-        background: 'rgba(0,0,0,0.75)', border: '1px solid rgba(110,231,183,0.25)',
+        background: 'rgba(0,0,0,0.75)', border: '1px solid rgba(74,144,217,0.25)',
         borderRadius: '16px', padding: '24px 36px',
         backdropFilter: 'blur(12px)',
       }}>
-        <div style={{ fontSize: '11px', color: 'rgba(110,231,183,0.7)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '10px', fontFamily: 'var(--font-inter)' }}>
+        <div style={{ fontSize: '11px', color: 'rgba(74,144,217,0.7)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '10px', fontFamily: 'var(--font-inter)' }}>
           Maria saved this year
         </div>
         <div style={{ fontSize: '48px', fontWeight: 800, color: '#fff', fontFamily: 'var(--font-orbitron)', letterSpacing: '-0.03em', lineHeight: 1 }}>
@@ -231,7 +231,7 @@ function SavingsOverlay() {
               fontSize: '12px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)',
             }}>
               <span>{item.label}</span>
-              <span style={{ color: 'rgba(110,231,183,0.8)', fontWeight: 600 }}>{item.amount}</span>
+              <span style={{ color: 'rgba(74,144,217,0.8)', fontWeight: 600 }}>{item.amount}</span>
             </div>
           ))}
         </div>
@@ -259,7 +259,7 @@ function CTAOverlay() {
           fontFamily: 'var(--font-inter)',
         }}>
           Maria saved{' '}
-          <span style={{ color: '#6ee7b7' }}>$4,200</span>
+          <span style={{ color: '#4a90d9' }}>$4,200</span>
           {' '}this year.
         </div>
         <div style={{
@@ -273,11 +273,11 @@ function CTAOverlay() {
             href="/search"
             style={{
               padding: '14px 28px', borderRadius: '100px',
-              background: 'linear-gradient(135deg, #6ee7b7, #34d399)',
+              background: 'linear-gradient(135deg, #4a90d9, #60a5fa)',
               color: '#0a1a12', fontSize: '14px', fontWeight: 700,
               textDecoration: 'none', fontFamily: 'var(--font-inter)',
               display: 'inline-flex', alignItems: 'center', gap: '8px',
-              boxShadow: '0 0 32px rgba(110,231,183,0.35)',
+              boxShadow: '0 0 32px rgba(74,144,217,0.35)',
             }}
           >
             Find your clinic
@@ -287,8 +287,8 @@ function CTAOverlay() {
             style={{
               padding: '14px 28px', borderRadius: '100px',
               background: 'transparent',
-              border: '1px solid rgba(110,231,183,0.35)',
-              color: '#6ee7b7', fontSize: '14px', fontWeight: 600,
+              border: '1px solid rgba(74,144,217,0.35)',
+              color: '#4a90d9', fontSize: '14px', fontWeight: 600,
               textDecoration: 'none', fontFamily: 'var(--font-inter)',
               display: 'inline-flex', alignItems: 'center', gap: '8px',
             }}
@@ -328,14 +328,14 @@ function Heartbeat({ bpm, visible }: { bpm: number; visible: boolean }) {
         <polyline
           points="0,8 6,8 8,2 10,14 12,8 14,8 16,3 18,13 20,8 26,8 28,5 30,11 32,8"
           fill="none"
-          stroke={bpm > 80 ? '#f87171' : '#6ee7b7'}
+          stroke={bpm > 80 ? '#f87171' : '#4a90d9'}
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
       </svg>
       <span style={{
-        fontSize: '11px', color: bpm > 80 ? '#f87171' : '#6ee7b7',
+        fontSize: '11px', color: bpm > 80 ? '#f87171' : '#4a90d9',
         fontFamily: 'var(--font-orbitron)', letterSpacing: '0.05em',
       }}>
         {bpm} <span style={{ fontSize: '9px', opacity: 0.6 }}>BPM</span>
@@ -416,7 +416,7 @@ function MobileFallback() {
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '8px',
           padding: '5px 14px', borderRadius: '100px',
-          background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.2)',
+          background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)',
           marginBottom: '20px', fontSize: '10px', fontWeight: 600,
           color: 'var(--accent)', letterSpacing: '0.12em', textTransform: 'uppercase',
           fontFamily: 'var(--font-inter)',
@@ -469,17 +469,17 @@ function MobileFallback() {
       }}>
         <Link href="/search" style={{
           padding: '14px 24px', borderRadius: '100px', textAlign: 'center',
-          background: 'linear-gradient(135deg, #6ee7b7, #34d399)',
+          background: 'linear-gradient(135deg, #4a90d9, #60a5fa)',
           color: '#0a1a12', fontSize: '14px', fontWeight: 700,
           textDecoration: 'none', fontFamily: 'var(--font-inter)',
-          boxShadow: '0 0 24px rgba(110,231,183,0.25)',
+          boxShadow: '0 0 24px rgba(74,144,217,0.25)',
         }}>
           Find your clinic
         </Link>
         <Link href="/gps" style={{
           padding: '14px 24px', borderRadius: '100px', textAlign: 'center',
-          background: 'transparent', border: '1px solid rgba(110,231,183,0.3)',
-          color: '#6ee7b7', fontSize: '14px', fontWeight: 600,
+          background: 'transparent', border: '1px solid rgba(74,144,217,0.3)',
+          color: '#4a90d9', fontSize: '14px', fontWeight: 600,
           textDecoration: 'none', fontFamily: 'var(--font-inter)',
         }}>
           Your care plan
@@ -707,9 +707,9 @@ export default function CinematicHero() {
                     width: isActive ? '18px' : '6px',
                     height: '6px', borderRadius: '3px',
                     background: isActive
-                      ? '#6ee7b7'
+                      ? '#4a90d9'
                       : isVisited
-                      ? 'rgba(110,231,183,0.4)'
+                      ? 'rgba(74,144,217,0.4)'
                       : 'rgba(255,255,255,0.15)',
                     transition: 'all 0.3s ease',
                   }} />

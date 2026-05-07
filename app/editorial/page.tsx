@@ -26,8 +26,8 @@ const pill: React.CSSProperties = {
   display: 'inline-flex', alignItems: 'center', gap: '6px',
   padding: '4px 12px', borderRadius: '100px',
   fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-  background: 'rgba(110,231,183,0.08)', color: 'var(--accent)',
-  border: '1px solid rgba(110,231,183,0.18)',
+  background: 'rgba(74,144,217,0.08)', color: 'var(--accent)',
+  border: '1px solid rgba(74,144,217,0.18)',
 }
 
 type Article = {
@@ -55,7 +55,7 @@ const ARTICLES: Article[] = [
     author: 'NEXUS Research',
     date: 'April 14, 2025',
     readTime: '8 min read',
-    color: '#6EE7B7',
+    color: '#4A90D9',
     featured: true,
     tldr: 'ZIP codes 4 miles apart in Houston have a 20-year life expectancy gap. The healthcare desert is not geography — it\'s policy.',
     body: [
@@ -163,7 +163,7 @@ const ARTICLES: Article[] = [
 
 const CATEGORIES = ['All', 'Investigation', 'Guide', 'Data Story', 'Community']
 const CATEGORY_COLORS: Record<string, string> = {
-  Investigation: '#6EE7B7', Guide: '#A78BFA', 'Data Story': '#FCD34D', Community: '#60A5FA',
+  Investigation: '#4A90D9', Guide: '#A78BFA', 'Data Story': '#FCD34D', Community: '#60A5FA',
 }
 
 function ArticleCard({ article, featured = false }: { article: Article; featured?: boolean }) {
@@ -325,7 +325,7 @@ export default function EditorialPage() {
         padding: '100px 24px 60px', textAlign: 'center',
         position: 'relative', overflow: 'hidden',
       }}>
-        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(110,231,183,0.08) 0%, transparent 65%)', pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(74,144,217,0.08) 0%, transparent 65%)', pointerEvents: 'none' }} />
         <Reveal>
           <div style={{ ...pill, marginBottom: '24px' }}><BookOpen size={10} strokeWidth={1.5} /> Editorial</div>
         </Reveal>
@@ -357,13 +357,13 @@ export default function EditorialPage() {
                       padding: '8px 18px', borderRadius: '100px', fontSize: '13px', fontWeight: 500,
                       fontFamily: 'inherit', cursor: 'pointer',
                       background: activeCategory === cat
-                        ? (cat === 'All' ? 'rgba(110,231,183,0.15)' : `${CATEGORY_COLORS[cat] || 'var(--accent)'}15`)
+                        ? (cat === 'All' ? 'rgba(74,144,217,0.15)' : `${CATEGORY_COLORS[cat] || 'var(--accent)'}15`)
                         : 'rgba(255,255,255,0.03)',
                       color: activeCategory === cat
                         ? (cat === 'All' ? 'var(--accent)' : CATEGORY_COLORS[cat] || 'var(--accent)')
                         : 'rgba(255,255,255,0.4)',
                       border: `1px solid ${activeCategory === cat
-                        ? (cat === 'All' ? 'rgba(110,231,183,0.35)' : `${CATEGORY_COLORS[cat] || 'var(--accent)'}35`)
+                        ? (cat === 'All' ? 'rgba(74,144,217,0.35)' : `${CATEGORY_COLORS[cat] || 'var(--accent)'}35`)
                         : 'rgba(255,255,255,0.08)'}`,
                       transition: 'all 0.2s',
                     }}
@@ -418,7 +418,7 @@ export default function EditorialPage() {
           <Reveal>
             <div style={{
               marginTop: '80px', padding: '4px', borderRadius: '24px',
-              background: 'linear-gradient(135deg, rgba(110,231,183,0.2), rgba(110,231,183,0.04))',
+              background: 'linear-gradient(135deg, rgba(74,144,217,0.2), rgba(74,144,217,0.04))',
             }}>
               <div style={{
                 borderRadius: '21px', padding: '48px',

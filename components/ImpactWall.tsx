@@ -44,8 +44,8 @@ const INITIALS_LIST = [
   'YO','IS','BK','NR','ZA','QP','XL','HE','OB','WS',
 ]
 const COLORS = [
-  '#6EE7B7','#A78BFA','#FCD34D','#F87171','#60A5FA','#34D399',
-  '#FB923C','#E879F9','#38BDF8','#4ADE80',
+  '#4A90D9','#A78BFA','#FCD34D','#F87171','#60A5FA','#60A5FA',
+  '#FB923C','#E879F9','#38BDF8','#60A5FA',
 ]
 const TIMES = ['just now', '1 min ago', '2 min ago', '3 min ago', '5 min ago', '7 min ago', '10 min ago', '12 min ago']
 
@@ -193,7 +193,7 @@ function StatBar({ label, value, color, pct }: { label: string; value: string; c
 }
 
 const COUNTERS = [
-  { label: 'People helped', value: 284000, suffix: '+', color: '#6EE7B7' },
+  { label: 'People helped', value: 284000, suffix: '+', color: '#4A90D9' },
   { label: 'Clinic matches', value: 847000, suffix: '+', color: '#A78BFA' },
   { label: 'Cost avoided',   value: 2,      prefix: '$', suffix: 'B+', color: '#FCD34D' },
   { label: 'Cities covered', value: 2800,   suffix: '+', color: '#60A5FA' },
@@ -228,7 +228,7 @@ export default function ImpactWall() {
         position: 'absolute', top: '50%', left: '50%',
         transform: 'translate(-50%, -50%)',
         width: '800px', height: '400px',
-        background: 'radial-gradient(ellipse, rgba(110,231,183,0.06) 0%, transparent 65%)',
+        background: 'radial-gradient(ellipse, rgba(74,144,217,0.06) 0%, transparent 65%)',
         filter: 'blur(60px)', pointerEvents: 'none',
       }} />
 
@@ -244,15 +244,15 @@ export default function ImpactWall() {
           {/* Live badge */}
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: '7px',
-            background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.2)',
+            background: 'rgba(96,165,250,0.08)', border: '1px solid rgba(96,165,250,0.2)',
             borderRadius: '100px', padding: '5px 14px',
-            fontSize: '11px', fontWeight: 500, color: '#4ade80',
+            fontSize: '11px', fontWeight: 500, color: '#60a5fa',
             fontFamily: 'var(--font-inter)', letterSpacing: '0.06em',
             textTransform: 'uppercase', marginBottom: '24px',
           }}>
             <span style={{
               width: '6px', height: '6px', borderRadius: '50%',
-              background: '#4ade80', boxShadow: '0 0 8px rgba(74,222,128,0.7)',
+              background: '#60a5fa', boxShadow: '0 0 8px rgba(96,165,250,0.7)',
               animation: 'pulse-dot 2s ease-in-out infinite',
             }} aria-hidden="true" />
             Live
@@ -333,7 +333,7 @@ export default function ImpactWall() {
               Who we serve
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <StatBar label="Uninsured or underinsured" value="73%" color="#6EE7B7" pct={73} />
+              <StatBar label="Uninsured or underinsured" value="73%" color="#4A90D9" pct={73} />
               <StatBar label="Below 200% poverty line" value="67%" color="#A78BFA" pct={67} />
               <StatBar label="Primary language not English" value="41%" color="#FCD34D" pct={41} />
             </div>
@@ -343,7 +343,7 @@ export default function ImpactWall() {
               Care outcomes
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <StatBar label="Received care within 7 days" value="94%" color="#4ade80" pct={94} />
+              <StatBar label="Received care within 7 days" value="94%" color="#60a5fa" pct={94} />
               <StatBar label="Would recommend NEXUS" value="97%" color="#60A5FA" pct={97} />
               <StatBar label="Returned for follow-up care" value="81%" color="#FB923C" pct={81} />
             </div>
@@ -377,7 +377,7 @@ export default function ImpactWall() {
           animation-play-state: paused;
         }
         .impact-win-card:hover {
-          border-color: rgba(110,231,183,0.2) !important;
+          border-color: rgba(74,144,217,0.2) !important;
         }
         @media (max-width: 640px) {
           .impact-win-card { min-width: 240px !important; }

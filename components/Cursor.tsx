@@ -51,7 +51,7 @@ export default function Cursor() {
       dot.style.background   = 'var(--accent2)'
       ring.style.width       = '50px'
       ring.style.height      = '50px'
-      ring.style.borderColor = 'rgba(110,231,183,0.35)'
+      ring.style.borderColor = 'rgba(74,144,217,0.35)'
     }
     const onLeaveLink = () => {
       dot.style.width  = '8px'
@@ -59,7 +59,7 @@ export default function Cursor() {
       dot.style.background   = 'var(--accent)'
       ring.style.width       = '36px'
       ring.style.height      = '36px'
-      ring.style.borderColor = 'rgba(110,231,183,0.40)'
+      ring.style.borderColor = 'rgba(74,144,217,0.40)'
     }
 
     const bindLinks = () => {
@@ -108,7 +108,7 @@ export default function Cursor() {
         style={{
           position: 'fixed',
           width: '36px', height: '36px',
-          border: '1px solid rgba(110,231,183,0.40)',
+          border: '1px solid rgba(74,144,217,0.40)',
           borderRadius: '50%',
           pointerEvents: 'none',
           zIndex: 9998,
@@ -124,7 +124,7 @@ export default function Cursor() {
           position: 'fixed',
           width: '340px', height: '340px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(110,231,183,0.06) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(74,144,217,0.06) 0%, transparent 70%)',
           pointerEvents: 'none',
           zIndex: 1,
           transform: 'translate(-50%,-50%)',

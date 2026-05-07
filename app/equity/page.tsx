@@ -122,7 +122,7 @@ const STATE_DATA_ACCESS = [
   { label: 'TX', value: 68  }, { label: 'GA', value: 67  }, { label: 'AL', value: 63  },
   { label: 'MS', value: 61  }, { label: 'OK', value: 60  }, { label: 'LA', value: 59  },
   { label: 'WY', value: 58  }, { label: 'ID', value: 57  }, { label: 'SD', value: 55  },
-].map(d => ({ ...d, color: '#6EE7B7' }))
+].map(d => ({ ...d, color: '#4A90D9' }))
 
 const DISPARITIES = [
   { label: 'Black Americans uninsured vs white', white: 7.4, poc: 14.2, color: '#A78BFA' },
@@ -136,7 +136,7 @@ const STORIES = [
     subhead: 'How your address determines your health',
     readTime: '6 min read',
     tag: 'Data Story',
-    color: '#6EE7B7',
+    color: '#4A90D9',
     body: 'Born in 77002 (Houston) vs 77021 (4 miles south): 20-year difference in life expectancy. Same city. Different worlds. We mapped 2,800+ ZIP codes to show exactly where the system breaks.',
   },
   {
@@ -161,11 +161,11 @@ const FACT_CARDS = [
   { stat: '30M', label: 'Uninsured Americans', context: 'That\'s 9.1% of the population — roughly the size of Texas', color: '#F87171' },
   { stat: '20yrs', label: 'Life expectancy gap', context: 'Between the richest and poorest US counties. Preventable.', color: '#FCD34D' },
   { stat: '41%', label: 'Avoid care due to cost', context: 'Of uninsured adults skipped needed care because of price', color: '#A78BFA' },
-  { stat: '$3.2B', label: 'Annual avoidable costs', context: 'Spent on complications from delayed care that a free clinic could have prevented', color: '#6EE7B7' },
+  { stat: '$3.2B', label: 'Annual avoidable costs', context: 'Spent on complications from delayed care that a free clinic could have prevented', color: '#4A90D9' },
 ]
 
 const POLICY_TIMELINE = [
-  { year: '1965', event: 'Medicare & Medicaid established', impact: 'First federal healthcare safety net', color: '#6EE7B7' },
+  { year: '1965', event: 'Medicare & Medicaid established', impact: 'First federal healthcare safety net', color: '#4A90D9' },
   { year: '1996', event: 'EMTALA enforcement strengthened', impact: 'ERs must stabilize regardless of ability to pay', color: '#A78BFA' },
   { year: '2010', event: 'Affordable Care Act signed', impact: 'Medicaid expansion, pre-existing conditions banned', color: '#60A5FA' },
   { year: '2014', event: 'ACA marketplace opens', impact: '7M enrolled in year one; 14M would remain uninsured', color: '#FCD34D' },
@@ -178,8 +178,8 @@ const pill: React.CSSProperties = {
   display: 'inline-flex', alignItems: 'center', gap: '6px',
   padding: '4px 12px', borderRadius: '100px',
   fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-  background: 'rgba(110,231,183,0.08)', color: 'var(--accent)',
-  border: '1px solid rgba(110,231,183,0.18)',
+  background: 'rgba(74,144,217,0.08)', color: 'var(--accent)',
+  border: '1px solid rgba(74,144,217,0.18)',
 }
 
 export default function EquityPage() {
@@ -274,7 +274,7 @@ export default function EquityPage() {
                 style={{
                   padding: '9px 22px', borderRadius: '9px', border: 'none', cursor: 'pointer',
                   fontSize: '13px', fontWeight: 500, fontFamily: 'inherit',
-                  background: activeMap === key ? (key === 'uninsured' ? 'rgba(248,113,113,0.15)' : 'rgba(110,231,183,0.15)') : 'transparent',
+                  background: activeMap === key ? (key === 'uninsured' ? 'rgba(248,113,113,0.15)' : 'rgba(74,144,217,0.15)') : 'transparent',
                   color: activeMap === key ? (key === 'uninsured' ? '#f87171' : 'var(--accent)') : 'rgba(255,255,255,0.4)',
                   transition: 'all 0.25s',
                 }}
@@ -291,11 +291,11 @@ export default function EquityPage() {
 
           <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: activeMap === 'uninsured' ? 'rgba(248,113,113,0.3)' : 'rgba(110,231,183,0.3)' }} />
+              <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: activeMap === 'uninsured' ? 'rgba(248,113,113,0.3)' : 'rgba(74,144,217,0.3)' }} />
               <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)' }}>Low</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: activeMap === 'uninsured' ? '#f87171' : '#6EE7B7' }} />
+              <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: activeMap === 'uninsured' ? '#f87171' : '#4A90D9' }} />
               <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)' }}>High</span>
             </div>
             <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.2)', fontFamily: 'var(--font-inter)', marginLeft: '8px' }}>
@@ -327,7 +327,7 @@ export default function EquityPage() {
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
                     <div>
                       <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', marginBottom: '8px', fontFamily: 'var(--font-inter)' }}>White Americans</div>
-                      <Bar pct={d.white * 5} color="#4ade80" label={`${d.white}% uninsured`} value={`${d.white}%`} />
+                      <Bar pct={d.white * 5} color="#60a5fa" label={`${d.white}% uninsured`} value={`${d.white}%`} />
                     </div>
                     <div>
                       <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', marginBottom: '8px', fontFamily: 'var(--font-inter)' }}>{d.label.split(' ').slice(0, 2).join(' ')}</div>
@@ -481,10 +481,10 @@ export default function EquityPage() {
                   background: 'rgba(255,255,255,0.94)', color: '#07070F',
                   fontSize: '14px', fontWeight: 600, textDecoration: 'none',
                   transition: 'transform 0.3s, box-shadow 0.3s',
-                  boxShadow: '0 0 40px rgba(110,231,183,0.15)',
+                  boxShadow: '0 0 40px rgba(74,144,217,0.15)',
                 }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.03)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 40px rgba(110,231,183,0.3)' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 0 40px rgba(110,231,183,0.15)' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.03)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 40px rgba(74,144,217,0.3)' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 0 40px rgba(74,144,217,0.15)' }}
                 >
                   Find free care now <ArrowRight size={14} strokeWidth={2} />
                 </a>

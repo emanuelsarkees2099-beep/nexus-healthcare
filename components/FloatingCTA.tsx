@@ -56,20 +56,20 @@ export default function FloatingCTA() {
       <div style={{
         display: 'flex', alignItems: 'center', gap: '12px',
         background: 'rgba(7,7,15,0.90)',
-        border: '1px solid rgba(5,150,105,0.22)',
+        border: '1px solid rgba(29,111,191,0.22)',
         borderRadius: '100px',
         padding: '10px 10px 10px 20px',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
         boxShadow:
-          '0 4px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(110,231,183,0.10), inset 0 1px 0 rgba(255,255,255,0.05)',
+          '0 4px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(74,144,217,0.10), inset 0 1px 0 rgba(255,255,255,0.05)',
       }}>
         {/* Pulse dot */}
         <span aria-hidden="true" style={{
           width: '6px', height: '6px', borderRadius: '50%',
           background: 'var(--accent)', flexShrink: 0,
           animation: 'pulse-dot 1.8s ease-in-out infinite',
-          boxShadow: '0 0 0 3px rgba(5,150,105,0.18)',
+          boxShadow: '0 0 0 3px rgba(29,111,191,0.18)',
         }} />
 
         <span
@@ -95,15 +95,15 @@ export default function FloatingCTA() {
             cursor: 'none', whiteSpace: 'nowrap', flexShrink: 0,
             letterSpacing: '0.01em',
             transition: 'transform 0.25s var(--ease-spring), box-shadow 0.25s',
-            boxShadow: '0 4px 16px rgba(5,150,105,0.22)',
+            boxShadow: '0 4px 16px rgba(29,111,191,0.22)',
           }}
           onMouseEnter={e => {
             e.currentTarget.style.transform = 'scale(1.05)'
-            e.currentTarget.style.boxShadow = '0 8px 28px rgba(5,150,105,0.35)'
+            e.currentTarget.style.boxShadow = '0 8px 28px rgba(29,111,191,0.35)'
           }}
           onMouseLeave={e => {
             e.currentTarget.style.transform = ''
-            e.currentTarget.style.boxShadow = '0 4px 16px rgba(5,150,105,0.22)'
+            e.currentTarget.style.boxShadow = '0 4px 16px rgba(29,111,191,0.22)'
           }}
           onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.96)' }}
           onMouseUp={e => { e.currentTarget.style.transform = 'scale(1.05)' }}

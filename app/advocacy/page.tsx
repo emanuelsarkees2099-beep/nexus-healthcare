@@ -45,14 +45,14 @@ function Counter({ target, suffix = '', prefix = '' }: { target: number; suffix?
 
 /* ─── data ────────────────────────────────────────── */
 const PETITIONS = [
-  { id: 'medicaid-expansion', title: 'Expand Medicaid in All 50 States', desc: 'Close the coverage gap that leaves 2.2 million people without coverage in states that haven\'t expanded.', signatures: 84312, goal: 100000, color: '#4ade80', urgent: true },
+  { id: 'medicaid-expansion', title: 'Expand Medicaid in All 50 States', desc: 'Close the coverage gap that leaves 2.2 million people without coverage in states that haven\'t expanded.', signatures: 84312, goal: 100000, color: '#60a5fa', urgent: true },
   { id: 'drug-pricing', title: 'Allow Medicare to Negotiate All Drug Prices', desc: 'The Inflation Reduction Act lets Medicare negotiate prices for 10 drugs. Expand this to all drugs.', signatures: 127849, goal: 150000, color: 'var(--accent)', urgent: false },
   { id: 'uninsured-crisis', title: 'Declare the Uninsured Crisis a National Emergency', desc: '30 million Americans lack health coverage. Federal emergency response should include free clinic surge funding.', signatures: 43201, goal: 75000, color: '#60a5fa', urgent: true },
   { id: 'chw-funding', title: 'Fund Community Health Workers Through Medicare', desc: 'CHWs have proven 47% better outcomes. Make their services a covered Medicare and Medicaid benefit.', signatures: 29740, goal: 50000, color: '#a78bfa', urgent: false },
 ]
 
 const POLICY_WINS = [
-  { state: 'AZ', name: 'Arizona', win: 'FQHC funding +$14M', year: '2024', color: '#4ade80' },
+  { state: 'AZ', name: 'Arizona', win: 'FQHC funding +$14M', year: '2024', color: '#60a5fa' },
   { state: 'CA', name: 'California', win: 'Medi-Cal expansion to all adults', year: '2024', color: 'var(--accent)' },
   { state: 'CO', name: 'Colorado', win: 'CHW Medicaid coverage added', year: '2023', color: '#a78bfa' },
   { state: 'IL', name: 'Illinois', win: 'Language access mandate passed', year: '2024', color: '#60a5fa' },
@@ -100,7 +100,7 @@ const LEGISLATION = [
     id: 'chw-medicare',
     title: 'Community Health Workers Medicare Act',
     status: 'Signed into Law',
-    statusColor: '#4ade80',
+    statusColor: '#60a5fa',
     chamber: 'Signed',
     lastAction: 'Signed by President — effective Jan 1, 2025',
     lastDate: 'Dec 2024',
@@ -180,7 +180,7 @@ export default function AdvocacyPage() {
     display: 'inline-flex', alignItems: 'center', gap: '6px',
     padding: '4px 12px', borderRadius: '100px',
     fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase' as const,
-    background: 'rgba(110,231,183,0.08)', color: 'var(--accent)', border: '1px solid rgba(110,231,183,0.18)',
+    background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)',
   }
 
   const filledLetter = letterText
@@ -237,7 +237,7 @@ export default function AdvocacyPage() {
     <AppShell>
       {/* ── HERO ─────────────────────────────────────── */}
       <section style={{ minHeight: '85dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '100px 24px 60px', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: '800px', height: '500px', background: 'radial-gradient(ellipse, rgba(110,231,183,0.10) 0%, rgba(96,165,250,0.05) 45%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: '800px', height: '500px', background: 'radial-gradient(ellipse, rgba(74,144,217,0.10) 0%, rgba(96,165,250,0.05) 45%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', top: '50%', right: '10%', width: '300px', height: '300px', background: 'radial-gradient(ellipse, rgba(167,139,250,0.07) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
         <div style={{ maxWidth: '760px', position: 'relative' }}>
@@ -323,7 +323,7 @@ export default function AdvocacyPage() {
                           <button
                             onClick={() => handleCopyLink(pet.id, pet.title)}
                             title="Copy link"
-                            style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid', background: copiedId === pet.id ? 'rgba(110,231,183,0.1)' : 'rgba(255,255,255,0.03)', color: copiedId === pet.id ? 'var(--accent)' : 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', borderColor: copiedId === pet.id ? 'rgba(110,231,183,0.3)' : 'rgba(255,255,255,0.08)', fontFamily: 'inherit' }}>
+                            style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid', background: copiedId === pet.id ? 'rgba(74,144,217,0.1)' : 'rgba(255,255,255,0.03)', color: copiedId === pet.id ? 'var(--accent)' : 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', borderColor: copiedId === pet.id ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)', fontFamily: 'inherit' }}>
                             {copiedId === pet.id ? <CheckCircle size={13} strokeWidth={2} /> : <Link2 size={13} strokeWidth={2} />}
                           </button>
                           {/* Sign button */}
@@ -368,20 +368,20 @@ export default function AdvocacyPage() {
 
           {letterState === 'sent' ? (
             <RevealBlock>
-              <div style={{ textAlign: 'center', padding: '56px', background: 'rgba(110,231,183,0.04)', border: '1px solid rgba(110,231,183,0.15)', borderRadius: '20px' }}>
+              <div style={{ textAlign: 'center', padding: '56px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.15)', borderRadius: '20px' }}>
                 <CheckCircle size={44} strokeWidth={1.5} style={{ color: 'var(--accent)', marginBottom: '16px' }} />
                 <h3 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>Letter sent</h3>
                 <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, maxWidth: '360px', margin: '0 auto 24px' }}>
                   Your letter has been logged. Remember: you can also send it directly to your representatives at <a href="https://www.congress.gov/members/find-your-member" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none' }}>congress.gov/members</a>.
                 </p>
-                <button onClick={() => setLetterState('idle')} style={{ padding: '10px 24px', borderRadius: '100px', border: '1px solid rgba(110,231,183,0.25)', background: 'transparent', color: 'var(--accent)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit' }}>
+                <button onClick={() => setLetterState('idle')} style={{ padding: '10px 24px', borderRadius: '100px', border: '1px solid rgba(74,144,217,0.25)', background: 'transparent', color: 'var(--accent)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit' }}>
                   Write another
                 </button>
               </div>
             </RevealBlock>
           ) : (
             <RevealBlock delay={80}>
-              <div style={{ borderRadius: '24px', padding: '2px', background: 'linear-gradient(135deg, rgba(110,231,183,0.2), rgba(96,165,250,0.08))' }}>
+              <div style={{ borderRadius: '24px', padding: '2px', background: 'linear-gradient(135deg, rgba(74,144,217,0.2), rgba(96,165,250,0.08))' }}>
                 <div style={{ borderRadius: '23px', padding: '32px', background: 'rgba(8,10,20,0.97)' }}>
                   {/* personalisation fields */}
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '20px' }}>
@@ -395,7 +395,7 @@ export default function AdvocacyPage() {
                         <input
                           value={f.val} onChange={e => f.set(e.target.value)} placeholder={f.placeholder}
                           style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '9px', padding: '10px 12px', color: '#eef4f5', fontSize: '14px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' }}
-                          onFocus={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.4)')}
+                          onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.4)')}
                           onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}
                         />
                       </div>
@@ -411,7 +411,7 @@ export default function AdvocacyPage() {
                     <textarea
                       value={letterText} onChange={e => setLetterText(e.target.value)} rows={14}
                       style={{ width: '100%', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', padding: '16px', color: 'rgba(255,255,255,0.65)', fontSize: '13px', lineHeight: 1.75, fontFamily: 'inherit', resize: 'vertical', outline: 'none', boxSizing: 'border-box', caretColor: 'var(--accent)' }}
-                      onFocus={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.3)')}
+                      onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.3)')}
                       onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}
                     />
                   </div>
@@ -466,7 +466,7 @@ export default function AdvocacyPage() {
                 onKeyDown={e => { if (e.key === 'Enter') handleRepLookup() }}
                 placeholder="Enter ZIP code (e.g. 90210)"
                 style={{ flex: 1, minWidth: '200px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '14px 18px', color: '#fff', fontSize: '16px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box', letterSpacing: '0.08em' }}
-                onFocus={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.4)')}
+                onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.4)')}
                 onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)')}
               />
               <button
@@ -555,7 +555,7 @@ export default function AdvocacyPage() {
                         </a>
                         <button
                           onClick={() => handleBillAlert(bill.id)}
-                          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '9px 16px', background: billAlert === bill.id ? 'rgba(110,231,183,0.15)' : 'rgba(255,255,255,0.03)', border: `1px solid ${billAlert === bill.id ? 'rgba(110,231,183,0.3)' : 'rgba(255,255,255,0.08)'}`, borderRadius: '10px', color: billAlert === bill.id ? 'var(--accent)' : 'rgba(255,255,255,0.45)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}>
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '9px 16px', background: billAlert === bill.id ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.03)', border: `1px solid ${billAlert === bill.id ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)'}`, borderRadius: '10px', color: billAlert === bill.id ? 'var(--accent)' : 'rgba(255,255,255,0.45)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}>
                           {billAlert === bill.id ? <><CheckCircle size={12} /> Alert set!</> : <><Bell size={12} /> Get action alerts</>}
                         </button>
                       </div>
@@ -574,7 +574,7 @@ export default function AdvocacyPage() {
                     { color: '#f87171', label: 'Urgent' },
                     { color: '#fbbf24', label: 'In Committee' },
                     { color: '#60a5fa', label: 'Floor Vote' },
-                    { color: '#4ade80', label: 'Enacted' },
+                    { color: '#60a5fa', label: 'Enacted' },
                   ].map(s => (
                     <span key={s.label} style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'rgba(255,255,255,0.4)' }}>
                       <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: s.color, display: 'inline-block' }} /> {s.label}
@@ -636,7 +636,7 @@ export default function AdvocacyPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
             {[
               { val: 285000, suffix: '+', label: 'Total petition signatures', color: 'var(--accent)' },
-              { val: 6, suffix: '', label: 'State policy wins in 2 years', color: '#4ade80' },
+              { val: 6, suffix: '', label: 'State policy wins in 2 years', color: '#60a5fa' },
               { val: 14200, suffix: '+', label: 'Letters sent to representatives', color: '#60a5fa' },
               { val: 5, suffix: '', label: 'National partner organizations', color: '#a78bfa' },
             ].map((s, i) => (
@@ -666,7 +666,7 @@ export default function AdvocacyPage() {
             {PARTNERS.map((p, i) => (
               <RevealBlock key={p.name} delay={i * 60}>
                 <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 22px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px', textDecoration: 'none', gap: '16px', flexWrap: 'wrap', transition: 'all 0.22s' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(110,231,183,0.2)'; (e.currentTarget as HTMLElement).style.background = 'rgba(110,231,183,0.03)' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,144,217,0.2)'; (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.03)' }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.06)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)' }}>
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '15px', color: '#eef4f5', marginBottom: '3px' }}>{p.name}</div>
@@ -698,7 +698,7 @@ export default function AdvocacyPage() {
             { q: 'I\'m not a citizen — can I still be involved?', a: 'Yes. You can contact elected officials regardless of immigration status. You can share petitions, share information, and support others in navigating the system. Your voice and your story matter.' },
           ].map((f, i) => (
             <RevealBlock key={i} delay={i * 50}>
-              <div style={{ borderRadius: '14px', overflow: 'hidden', border: '1px solid', marginBottom: '6px', borderColor: openFaq === i ? 'rgba(110,231,183,0.2)' : 'rgba(255,255,255,0.06)', background: openFaq === i ? 'rgba(110,231,183,0.03)' : 'transparent', transition: 'all 0.25s' }}>
+              <div style={{ borderRadius: '14px', overflow: 'hidden', border: '1px solid', marginBottom: '6px', borderColor: openFaq === i ? 'rgba(74,144,217,0.2)' : 'rgba(255,255,255,0.06)', background: openFaq === i ? 'rgba(74,144,217,0.03)' : 'transparent', transition: 'all 0.25s' }}>
                 <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 22px', background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontFamily: 'inherit', textAlign: 'left', gap: '16px' }}>
                   <span style={{ fontSize: '15px', fontWeight: 500, lineHeight: 1.4 }}>{f.q}</span>

@@ -31,8 +31,8 @@ const pill: React.CSSProperties = {
   display: 'inline-flex', alignItems: 'center', gap: '6px',
   padding: '4px 12px', borderRadius: '100px',
   fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-  background: 'rgba(110,231,183,0.08)', color: 'var(--accent)',
-  border: '1px solid rgba(110,231,183,0.18)',
+  background: 'rgba(74,144,217,0.08)', color: 'var(--accent)',
+  border: '1px solid rgba(74,144,217,0.18)',
 }
 
 const RIGHTS = [
@@ -168,7 +168,7 @@ export default function RightsPage() {
     <AppShell>
       {/* ── HERO ── */}
       <section style={{ minHeight: '80dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '100px 24px 60px', position: 'relative', overflow: 'hidden' }}>
-        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(110,231,183,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(74,144,217,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
         <div style={{ ...pill, marginBottom: '24px' }}><Scale size={10} strokeWidth={1.5} /> Rights & Legal Aid</div>
 
@@ -184,7 +184,7 @@ export default function RightsPage() {
 
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '40px' }}>
           {[['Federal law', 'protects you'], ['2,800+', 'legal aid partners'], ['Free', 'consultations']].map(([v, l]) => (
-            <div key={l} style={{ padding: '10px 20px', background: 'rgba(110,231,183,0.07)', border: '1px solid rgba(110,231,183,0.18)', borderRadius: '100px', textAlign: 'center' }}>
+            <div key={l} style={{ padding: '10px 20px', background: 'rgba(74,144,217,0.07)', border: '1px solid rgba(74,144,217,0.18)', borderRadius: '100px', textAlign: 'center' }}>
               <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.01em' }}>{v}</div>
               <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '2px' }}>{l}</div>
             </div>
@@ -194,7 +194,7 @@ export default function RightsPage() {
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
           <button
             onClick={() => legalRef.current && smoothScrollTo(legalRef.current)}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 28px', borderRadius: '100px', background: 'var(--accent)', color: '#07070F', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', transition: 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1)', boxShadow: '0 4px 20px rgba(110,231,183,0.3)' }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 28px', borderRadius: '100px', background: 'var(--accent)', color: '#07070F', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', transition: 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1)', boxShadow: '0 4px 20px rgba(74,144,217,0.3)' }}
             onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
             onMouseLeave={e => (e.currentTarget.style.transform = '')}
           >
@@ -203,7 +203,7 @@ export default function RightsPage() {
           <button
             onClick={() => formRef.current && smoothScrollTo(formRef.current)}
             style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 28px', borderRadius: '100px', background: 'transparent', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.15)', cursor: 'pointer', fontSize: '14px', fontFamily: 'inherit', transition: 'border-color 0.2s' }}
-            onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.4)')}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.4)')}
             onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)')}
           >
             Get help now
@@ -225,13 +225,13 @@ export default function RightsPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             {RIGHTS.map((r, i) => (
               <RevealBlock key={i} delay={i * 60}>
-                <div style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid', borderColor: openRight === i ? 'rgba(110,231,183,0.3)' : 'rgba(255,255,255,0.07)', background: openRight === i ? 'rgba(110,231,183,0.04)' : 'transparent', transition: 'all 0.25s', marginBottom: '4px' }}>
+                <div style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid', borderColor: openRight === i ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.07)', background: openRight === i ? 'rgba(74,144,217,0.04)' : 'transparent', transition: 'all 0.25s', marginBottom: '4px' }}>
                   <button
                     onClick={() => setOpenRight(openRight === i ? null : i)}
                     style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 24px', background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontFamily: 'inherit', textAlign: 'left', gap: '16px' }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
-                      <span style={{ fontSize: '11px', padding: '3px 9px', borderRadius: '100px', background: 'rgba(110,231,183,0.1)', color: 'var(--accent)', border: '1px solid rgba(110,231,183,0.2)', fontWeight: 600, flexShrink: 0 }}>{r.badge}</span>
+                      <span style={{ fontSize: '11px', padding: '3px 9px', borderRadius: '100px', background: 'rgba(74,144,217,0.1)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.2)', fontWeight: 600, flexShrink: 0 }}>{r.badge}</span>
                       <span style={{ fontSize: '15px', fontWeight: 600, lineHeight: 1.35 }}>{r.title}</span>
                     </div>
                     <ChevronDown size={16} style={{ flexShrink: 0, color: 'rgba(255,255,255,0.4)', transform: openRight === i ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s' }} />
@@ -239,7 +239,7 @@ export default function RightsPage() {
                   <div style={{ maxHeight: openRight === i ? '600px' : '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.16,1,0.3,1)' }}>
                     <div style={{ padding: '0 24px 24px' }}>
                       <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.75, marginBottom: '16px' }}>{r.body}</p>
-                      <div style={{ padding: '14px 16px', background: 'rgba(110,231,183,0.05)', borderRadius: '10px', borderLeft: '2px solid rgba(110,231,183,0.3)', fontSize: '13px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.65 }}>
+                      <div style={{ padding: '14px 16px', background: 'rgba(74,144,217,0.05)', borderRadius: '10px', borderLeft: '2px solid rgba(74,144,217,0.3)', fontSize: '13px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.65 }}>
                         <span style={{ color: 'var(--accent)', fontWeight: 600 }}>What to do: </span>{r.action}
                       </div>
                     </div>
@@ -262,7 +262,7 @@ export default function RightsPage() {
           </RevealBlock>
 
           <RevealBlock delay={80}>
-            <div style={{ padding: '1.5px', borderRadius: '12px', background: 'rgba(110,231,183,0.12)', marginBottom: '32px', maxWidth: '320px' }}>
+            <div style={{ padding: '1.5px', borderRadius: '12px', background: 'rgba(74,144,217,0.12)', marginBottom: '32px', maxWidth: '320px' }}>
               <select value={selectedState} onChange={e => setSelectedState(e.target.value)} style={{ width: '100%', background: '#0d1618', border: 'none', borderRadius: '11px', padding: '13px 16px', color: selectedState ? '#eef4f5' : 'rgba(255,255,255,0.4)', fontSize: '14px', fontFamily: 'inherit', cursor: 'pointer', outline: 'none' }}>
                 <option value="">Select your state...</option>
                 {[['AZ', 'Arizona'], ['CA', 'California'], ['TX', 'Texas'], ['NY', 'New York']].map(([code, name]) => <option key={code} value={code}>{name}</option>)}
@@ -273,15 +273,15 @@ export default function RightsPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '16px' }}>
             {legalAid.map((org, i) => (
               <RevealBlock key={org.name} delay={i * 80}>
-                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(110,231,183,0.18), rgba(110,231,183,0.04))', borderRadius: '18px' }}>
+                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(74,144,217,0.18), rgba(74,144,217,0.04))', borderRadius: '18px' }}>
                   <div style={{ background: '#0d1618', borderRadius: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     <h3 style={{ fontSize: '15px', fontWeight: 700, lineHeight: 1.3 }}>{org.name}</h3>
                     <p style={{ fontSize: '13px', color: 'var(--accent)', margin: 0 }}>{org.specialty}</p>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
                       <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', display: 'flex', alignItems: 'center', gap: '6px' }}><Phone size={12} strokeWidth={1.5} />{org.phone}</span>
-                      <button onClick={() => window.open(`tel:${org.phone.replace(/[-()]/g, '')}`)} style={{ padding: '7px 14px', borderRadius: '100px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', color: 'var(--accent)', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'background 0.2s' }}
-                        onMouseEnter={e => (e.currentTarget.style.background = 'rgba(110,231,183,0.2)')}
-                        onMouseLeave={e => (e.currentTarget.style.background = 'rgba(110,231,183,0.1)')}
+                      <button onClick={() => window.open(`tel:${org.phone.replace(/[-()]/g, '')}`)} style={{ padding: '7px 14px', borderRadius: '100px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', color: 'var(--accent)', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'background 0.2s' }}
+                        onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.2)')}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.1)')}
                       >
                         Get help
                       </button>
@@ -316,7 +316,7 @@ export default function RightsPage() {
                   <p style={{ fontSize: '14px', fontWeight: 500, marginBottom: '14px', lineHeight: 1.45 }}>{q}</p>
                   <div style={{ display: 'flex', gap: '10px' }}>
                     {(['Yes', 'No'] as const).map(ans => (
-                      <button key={ans} onClick={() => handleQuizAnswer(i, ans === 'Yes')} style={{ flex: 1, padding: '10px', borderRadius: '10px', border: '1px solid', borderColor: quizAnswers[i] === (ans === 'Yes') ? 'rgba(110,231,183,0.4)' : 'rgba(255,255,255,0.1)', background: quizAnswers[i] === (ans === 'Yes') ? 'rgba(110,231,183,0.12)' : 'rgba(255,255,255,0.03)', color: quizAnswers[i] === (ans === 'Yes') ? 'var(--accent)' : 'rgba(255,255,255,0.55)', fontSize: '13px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}>
+                      <button key={ans} onClick={() => handleQuizAnswer(i, ans === 'Yes')} style={{ flex: 1, padding: '10px', borderRadius: '10px', border: '1px solid', borderColor: quizAnswers[i] === (ans === 'Yes') ? 'rgba(74,144,217,0.4)' : 'rgba(255,255,255,0.1)', background: quizAnswers[i] === (ans === 'Yes') ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.03)', color: quizAnswers[i] === (ans === 'Yes') ? 'var(--accent)' : 'rgba(255,255,255,0.55)', fontSize: '13px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}>
                         {ans}
                       </button>
                     ))}
@@ -328,12 +328,12 @@ export default function RightsPage() {
 
           {showResults && relevantRights.length > 0 && (
             <RevealBlock delay={100}>
-              <div style={{ marginTop: '24px', padding: '24px', background: 'rgba(110,231,183,0.06)', border: '1px solid rgba(110,231,183,0.2)', borderRadius: '16px' }}>
+              <div style={{ marginTop: '24px', padding: '24px', background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.2)', borderRadius: '16px' }}>
                 <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '16px', color: 'var(--accent)' }}>Rights that apply to your situation:</h3>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {relevantRights.map((r, i) => (
                     <li key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', fontSize: '14px', color: 'rgba(255,255,255,0.55)' }}>
-                      <CheckCircle size={14} strokeWidth={2} style={{ color: '#4ade80', flexShrink: 0, marginTop: '2px' }} />
+                      <CheckCircle size={14} strokeWidth={2} style={{ color: '#60a5fa', flexShrink: 0, marginTop: '2px' }} />
                       {r}
                     </li>
                   ))}
@@ -357,7 +357,7 @@ export default function RightsPage() {
             {TIPS.map((t, i) => (
               <RevealBlock key={t.title} delay={i * 60}>
                 <div style={{ padding: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', height: '100%', boxSizing: 'border-box', transition: 'border-color 0.25s' }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.22)')}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.22)')}
                   onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)')}
                 >
                   <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '8px', lineHeight: 1.3 }}>{t.title}</h3>
@@ -380,8 +380,8 @@ export default function RightsPage() {
 
           {submitted ? (
             <RevealBlock>
-              <div style={{ textAlign: 'center', padding: '48px', background: 'rgba(74,222,128,0.04)', border: '1px solid rgba(74,222,128,0.15)', borderRadius: '20px' }}>
-                <CheckCircle size={40} strokeWidth={1.5} style={{ color: '#4ade80', marginBottom: '16px' }} />
+              <div style={{ textAlign: 'center', padding: '48px', background: 'rgba(96,165,250,0.04)', border: '1px solid rgba(96,165,250,0.15)', borderRadius: '20px' }}>
+                <CheckCircle size={40} strokeWidth={1.5} style={{ color: '#60a5fa', marginBottom: '16px' }} />
                 <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Request received</h3>
                 <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65 }}>We'll connect you with a legal aid partner within 24 hours at <strong style={{ color: '#eef4f5' }}>{form.email}</strong>.</p>
               </div>
@@ -395,7 +395,7 @@ export default function RightsPage() {
                   <label style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.5)' }}>Issue type</label>
                   <select value={form.issue} onChange={e => setForm(p => ({ ...p, issue: e.target.value }))}
                     style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '9px', padding: '11px 14px', color: form.issue ? '#eef4f5' : 'rgba(255,255,255,0.3)', fontSize: '14px', fontFamily: 'inherit', cursor: 'pointer', outline: 'none', transition: 'border-color 0.2s, box-shadow 0.2s' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(110,231,183,0.45)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(110,231,183,0.08)' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(74,144,217,0.45)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.08)' }}
                     onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'none' }}
                   >
                     <option value="">Select issue type…</option>
@@ -410,7 +410,7 @@ export default function RightsPage() {
                   <textarea value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
                     placeholder="What happened? When did it occur? Who was involved?" rows={4}
                     style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '9px', padding: '11px 14px', color: '#eef4f5', fontSize: '14px', fontFamily: 'inherit', resize: 'vertical', outline: 'none', boxSizing: 'border-box', caretColor: 'var(--accent)', transition: 'border-color 0.2s, box-shadow 0.2s' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(110,231,183,0.45)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(110,231,183,0.08)' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(74,144,217,0.45)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.08)' }}
                     onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'none' }}
                   />
                 </div>
@@ -418,9 +418,9 @@ export default function RightsPage() {
                 {submitError && (
                   <p style={{ fontSize: '13px', color: '#f87171', background: 'rgba(248,113,113,0.08)', border: '1px solid rgba(248,113,113,0.2)', borderRadius: '8px', padding: '10px 14px', margin: 0 }}>{submitError}</p>
                 )}
-                <button type="submit" disabled={submitting} style={{ marginTop: '8px', padding: '15px', borderRadius: '12px', background: submitting ? 'rgba(110,231,183,0.5)' : 'var(--accent)', color: '#07070F', border: 'none', cursor: submitting ? 'not-allowed' : 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', boxShadow: '0 4px 20px rgba(110,231,183,0.3)', transition: 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s' }}
-                  onMouseEnter={e => { if (!submitting) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(110,231,183,0.45)' } }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(110,231,183,0.3)' }}
+                <button type="submit" disabled={submitting} style={{ marginTop: '8px', padding: '15px', borderRadius: '12px', background: submitting ? 'rgba(74,144,217,0.5)' : 'var(--accent)', color: '#07070F', border: 'none', cursor: submitting ? 'not-allowed' : 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', boxShadow: '0 4px 20px rgba(74,144,217,0.3)', transition: 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s' }}
+                  onMouseEnter={e => { if (!submitting) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(74,144,217,0.45)' } }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(74,144,217,0.3)' }}
                 >
                   {submitting ? 'Submitting…' : 'Connect me with legal aid →'}
                 </button>
@@ -446,8 +446,8 @@ function RightsField({ label, placeholder, value, onChange }: { label: string; p
         onBlur={() => setFocused(false)}
         style={{
           width: '100%', background: 'rgba(255,255,255,0.03)',
-          border: `1px solid ${focused ? 'rgba(110,231,183,0.45)' : 'rgba(255,255,255,0.08)'}`,
-          boxShadow: focused ? '0 0 0 3px rgba(110,231,183,0.08)' : 'none',
+          border: `1px solid ${focused ? 'rgba(74,144,217,0.45)' : 'rgba(255,255,255,0.08)'}`,
+          boxShadow: focused ? '0 0 0 3px rgba(74,144,217,0.08)' : 'none',
           borderRadius: '9px', padding: '11px 14px',
           color: '#eef4f5', fontSize: '14px', fontFamily: 'inherit',
           outline: 'none', boxSizing: 'border-box', caretColor: 'var(--accent)',

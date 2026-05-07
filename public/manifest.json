@@ -5,10 +5,14 @@
   "start_url": "/search",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#020409",
-  "theme_color": "#6EE7B7",
+  "background_color": "#040408",
+  "theme_color": "#4A8FD4",
   "lang": "en",
-  "categories": ["health", "medical", "lifestyle"],
+  "categories": [
+    "health",
+    "medical",
+    "lifestyle"
+  ],
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -37,42 +41,72 @@
       "short_name": "Search",
       "description": "Search for free clinics near you",
       "url": "/search",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "AI Triage",
       "short_name": "Triage",
       "description": "Describe your symptoms — AI finds the right care",
       "url": "/triage",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "Crisis Help",
       "short_name": "Crisis",
       "description": "988 lifeline and emergency resources",
       "url": "/crisis",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "Healthcare GPS",
       "short_name": "GPS",
       "description": "Step-by-step guide to getting care",
       "url": "/gps",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "Health Passport",
       "short_name": "Passport",
       "description": "Your encrypted health record and QR code",
       "url": "/passport",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "Check Programs",
       "short_name": "Programs",
       "description": "See programs you qualify for",
       "url": "/programs",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ],
   "related_applications": [],

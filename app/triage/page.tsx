@@ -89,7 +89,7 @@ function TypewriterText({ text, speed = 18 }: { text: string; speed?: number }) 
 }
 
 const urgencyConfig = {
-  routine: { label: 'Routine — within a few days', color: '#4ade80', bg: 'rgba(74,222,128,0.08)', border: 'rgba(74,222,128,0.25)' },
+  routine: { label: 'Routine — within a few days', color: '#60a5fa', bg: 'rgba(96,165,250,0.08)', border: 'rgba(96,165,250,0.25)' },
   soon: { label: 'See care within 24–48 hours', color: '#fbbf24', bg: 'rgba(251,191,36,0.08)', border: 'rgba(251,191,36,0.25)' },
   urgent: { label: 'Urgent — see care today', color: '#fb923c', bg: 'rgba(251,146,60,0.08)', border: 'rgba(251,146,60,0.25)' },
   emergency: { label: 'Emergency — go now', color: '#f87171', bg: 'rgba(248,113,113,0.08)', border: 'rgba(248,113,113,0.35)' },
@@ -157,7 +157,7 @@ export default function TriagePage() {
         .triage-step { animation: fadeSlideUp 0.4s cubic-bezier(0.16,1,0.3,1) both; }
         @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .triage-result { animation: fadeSlideUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
-        .triage-ta:focus { outline: none !important; border-color: rgba(110,231,183,0.4) !important; }
+        .triage-ta:focus { outline: none !important; border-color: rgba(74,144,217,0.4) !important; }
       `}</style>
 
       {/* Header */}
@@ -327,13 +327,13 @@ export default function TriagePage() {
                     width: '6px', height: '6px', borderRadius: '50%', flexShrink: 0,
                     marginTop: '5px',
                     background: step.type === 'warning' ? '#fb923c'
-                      : step.type === 'result' ? '#4ade80'
+                      : step.type === 'result' ? '#60a5fa'
                       : step.type === 'checking' ? '#818cf8'
                       : 'rgba(255,255,255,0.3)',
                   }} />
                   <span style={{
                     color: step.type === 'warning' ? '#fb923c'
-                      : step.type === 'result' ? '#4ade80'
+                      : step.type === 'result' ? '#60a5fa'
                       : 'rgba(255,255,255,0.6)',
                     fontFamily: 'var(--font-mono, monospace)',
                   }}>
@@ -375,8 +375,8 @@ export default function TriagePage() {
                 {/* Best match clinic */}
                 <div style={{
                   padding: '22px', borderRadius: '16px',
-                  background: 'rgba(110,231,183,0.04)',
-                  border: '1px solid rgba(110,231,183,0.18)',
+                  background: 'rgba(74,144,217,0.04)',
+                  border: '1px solid rgba(74,144,217,0.18)',
                 }}>
                   <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>
                     Best match
@@ -385,12 +385,12 @@ export default function TriagePage() {
                   <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', fontSize: '13px', color: 'rgba(255,255,255,0.55)', marginBottom: '16px' }}>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><MapPin size={12} /> {result.clinic.dist}</span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><Clock size={12} /> {result.clinic.wait}</span>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#4ade80', fontWeight: 600 }}>💚 {result.clinic.cost}</span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#60a5fa', fontWeight: 600 }}>💚 {result.clinic.cost}</span>
                   </div>
                   <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                     <Link href="/search" style={{
                       padding: '9px 18px', borderRadius: '100px',
-                      background: 'rgba(110,231,183,0.12)', border: '1px solid rgba(110,231,183,0.3)',
+                      background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.3)',
                       color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
                       textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px',
                     }}>

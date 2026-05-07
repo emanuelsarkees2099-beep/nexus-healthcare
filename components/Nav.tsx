@@ -283,7 +283,7 @@ export default function Nav() {
             <polygon
               points="10,1 18,5.5 18,14.5 10,19 2,14.5 2,5.5"
               stroke="var(--accent)" strokeWidth="1.4"
-              fill="rgba(110,231,183,0.08)"
+              fill="rgba(74,144,217,0.08)"
             />
             <path
               d="M6.5 13.5V6.5L10 13l3.5-6.5V13.5"
@@ -353,16 +353,16 @@ export default function Nav() {
               style={{
                 position: 'relative',
                 width: '34px', height: '34px', borderRadius: '9px',
-                background: savedCount > 0 ? 'rgba(110,231,183,0.12)' : 'rgba(255,255,255,0.06)',
-                border: `1px solid ${savedCount > 0 ? 'rgba(110,231,183,0.28)' : 'rgba(255,255,255,0.08)'}`,
+                background: savedCount > 0 ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.06)',
+                border: `1px solid ${savedCount > 0 ? 'rgba(74,144,217,0.28)' : 'rgba(255,255,255,0.08)'}`,
                 cursor: 'pointer',
                 color: savedCount > 0 ? 'var(--accent)' : 'rgba(255,255,255,0.4)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 transition: 'background 0.2s, color 0.2s, border-color 0.2s',
                 flexShrink: 0,
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(110,231,183,0.2)'; e.currentTarget.style.color = 'var(--accent)' }}
-              onMouseLeave={e => { e.currentTarget.style.background = savedCount > 0 ? 'rgba(110,231,183,0.12)' : 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = savedCount > 0 ? 'var(--accent)' : 'rgba(255,255,255,0.4)' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(74,144,217,0.2)'; e.currentTarget.style.color = 'var(--accent)' }}
+              onMouseLeave={e => { e.currentTarget.style.background = savedCount > 0 ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = savedCount > 0 ? 'var(--accent)' : 'rgba(255,255,255,0.4)' }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill={savedCount > 0 ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
@@ -432,15 +432,15 @@ export default function Nav() {
                 onClick={() => setShowUserMenu(v => !v)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '8px',
-                  background: 'rgba(110,231,183,0.12)',
-                  border: '1px solid rgba(110,231,183,0.25)',
+                  background: 'rgba(74,144,217,0.12)',
+                  border: '1px solid rgba(74,144,217,0.25)',
                   borderRadius: '9px', padding: '6px 12px 6px 8px',
                   cursor: 'pointer', color: '#eef4f5',
                   fontFamily: 'var(--font-inter)', fontSize: '12.5px', fontWeight: 500,
                   transition: 'background 0.2s',
                 }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(110,231,183,0.2)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'rgba(110,231,183,0.12)'}
+                onMouseEnter={e => e.currentTarget.style.background = 'rgba(74,144,217,0.2)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'rgba(74,144,217,0.12)'}
               >
                 <div style={{
                   width: '22px', height: '22px', borderRadius: '50%',
@@ -564,7 +564,7 @@ export default function Nav() {
           background: 'rgba(8,10,22,0.97)',
           backdropFilter: 'blur(48px) saturate(180%)',
           WebkitBackdropFilter: 'blur(48px) saturate(180%)',
-          border: '1px solid rgba(110,231,183,0.08)',
+          border: '1px solid rgba(74,144,217,0.08)',
           borderRadius: '20px',
           padding: '20px',
           boxShadow: '0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04) inset',
@@ -630,7 +630,7 @@ export default function Nav() {
         }}>
           {user ? (
             <>
-              <div style={{ padding: '8px 12px', borderRadius: '9px', background: 'rgba(110,231,183,0.08)', marginBottom: '2px' }}>
+              <div style={{ padding: '8px 12px', borderRadius: '9px', background: 'rgba(74,144,217,0.08)', marginBottom: '2px' }}>
                 <div style={{ fontSize: '12px', fontWeight: 600, color: '#eef4f5' }}>{user.full_name || 'User'}</div>
                 <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>{user.email}</div>
               </div>

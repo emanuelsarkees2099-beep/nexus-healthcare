@@ -14,10 +14,10 @@ type Node = {
 const NODES: Node[] = [
   { id: 'symptom',  label: 'Symptom',         sublabel: 'You notice something',       x: 80,  y: 50,  color: '#fbbf24', icon: '💭' },
   { id: 'search',   label: 'Search',           sublabel: 'Find care options',          x: 240, y: 50,  color: '#818cf8', icon: '🔍' },
-  { id: 'match',    label: 'Match',            sublabel: 'AI finds best clinic',       x: 400, y: 50,  color: '#4ade80', icon: '✅' },
+  { id: 'match',    label: 'Match',            sublabel: 'AI finds best clinic',       x: 400, y: 50,  color: '#60a5fa', icon: '✅' },
   { id: 'navigate', label: 'Navigate',         sublabel: 'GPS guides you there',       x: 560, y: 50,  color: '#38bdf8', icon: '🧭' },
   { id: 'care',     label: 'Receive Care',     sublabel: 'Seen by a provider',         x: 720, y: 50,  color: '#f472b6', icon: '🏥' },
-  { id: 'outcome',  label: 'Outcome',          sublabel: 'You track & share',          x: 880, y: 50,  color: '#6ee7b7', icon: '⭐' },
+  { id: 'outcome',  label: 'Outcome',          sublabel: 'You track & share',          x: 880, y: 50,  color: '#4a90d9', icon: '⭐' },
 ]
 
 const CONNECTIONS = [
@@ -74,7 +74,7 @@ export default function JourneyDiagram() {
         display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px',
         marginBottom: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.4)',
       }}>
-        <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#4ade80', display: 'inline-block', animation: 'live-dot 1.5s ease-in-out infinite' }} />
+        <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#60a5fa', display: 'inline-block', animation: 'live-dot 1.5s ease-in-out infinite' }} />
         <span>
           <strong style={{ color: '#f5f5f5' }}>{liveCount}</strong> people are navigating this journey right now
         </span>

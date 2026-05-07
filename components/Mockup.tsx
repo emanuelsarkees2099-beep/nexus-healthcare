@@ -8,7 +8,7 @@ const CLINICS = [
   {
     init: 'CA', name: 'Clinica Adelante — Peoria', dist: '1.2 mi',
     wait: '~20 min wait', langs: 'Español · English',
-    status: 'Open now', statusBg: 'rgba(74,222,128,0.10)', statusColor: '#4ade80', top: true,
+    status: 'Open now', statusBg: 'rgba(96,165,250,0.10)', statusColor: '#60a5fa', top: true,
   },
   {
     init: 'VS', name: 'Valle del Sol Health', dist: '2.8 mi',
@@ -18,7 +18,7 @@ const CLINICS = [
   {
     init: 'MP', name: 'Mountain Park Health Center', dist: '4.1 mi',
     wait: '~15 min wait', langs: 'English · Somali',
-    status: 'Open now', statusBg: 'rgba(74,222,128,0.10)', statusColor: '#4ade80', top: false,
+    status: 'Open now', statusBg: 'rgba(96,165,250,0.10)', statusColor: '#60a5fa', top: false,
   },
 ]
 

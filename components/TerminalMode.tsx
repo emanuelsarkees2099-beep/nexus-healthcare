@@ -186,9 +186,9 @@ export default function TerminalMode() {
       <style>{`@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }`}</style>
       <div style={{
         width: '100%', maxWidth: '720px', height: '480px',
-        background: '#0a0f1a', border: '1px solid rgba(110,231,183,0.2)',
+        background: '#0a0f1a', border: '1px solid rgba(74,144,217,0.2)',
         borderRadius: '16px', overflow: 'hidden',
-        boxShadow: '0 40px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(110,231,183,0.1)',
+        boxShadow: '0 40px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(74,144,217,0.1)',
         display: 'flex', flexDirection: 'column',
         fontFamily: 'var(--font-mono, "Fira Code", "Cascadia Code", monospace)',
         animation: 'slideUp 0.3s cubic-bezier(0.16,1,0.3,1) both',
@@ -203,7 +203,7 @@ export default function TerminalMode() {
           <div style={{ display: 'flex', gap: '6px' }}>
             <button onClick={() => setOpen(false)} style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#f87171', border: 'none', cursor: 'pointer', padding: 0 }} />
             <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#fbbf24' }} />
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#4ade80' }} />
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#60a5fa' }} />
           </div>
           <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginLeft: '8px' }}>
             nexus — terminal

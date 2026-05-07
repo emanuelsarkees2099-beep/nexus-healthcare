@@ -10,7 +10,7 @@ type Source = {
 }
 
 const SOURCES: Source[] = [
-  { id: 'hrsa', label: 'HRSA API',          sublabel: 'Federal FQHC registry',    color: '#4ade80',  angle: 0 },
+  { id: 'hrsa', label: 'HRSA API',          sublabel: 'Federal FQHC registry',    color: '#60a5fa',  angle: 0 },
   { id: 'nafc', label: 'NAFC Database',      sublabel: 'Free clinic network',      color: '#818cf8',  angle: 60 },
   { id: 'chw',  label: 'CHW Confirmation',   sublabel: 'On-ground verification',   color: '#fbbf24',  angle: 120 },
   { id: 'user', label: 'User Reports',       sublabel: 'Community-sourced data',   color: '#f472b6',  angle: 180 },
@@ -46,12 +46,12 @@ export default function VerificationDiagram() {
       <svg viewBox={`0 0 ${cx * 2} ${cy * 2}`} style={{ width: '280px', height: '200px', overflow: 'visible' }}>
         {/* Orbit ring */}
         <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(110,231,183,0.2)" strokeWidth="1" strokeDasharray="8 12"
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(74,144,217,0.2)" strokeWidth="1" strokeDasharray="8 12"
           style={{ animation: 'vd-spin 6s linear infinite' }} />
 
         {/* Center NEXUS node */}
-        <circle cx={cx} cy={cy} r="24" fill="rgba(110,231,183,0.1)" stroke="rgba(110,231,183,0.3)" strokeWidth="1.5" />
-        <text x={cx} y={cy - 2} textAnchor="middle" fontSize="8" fontWeight="700" fill="rgba(110,231,183,0.9)" fontFamily="var(--font-orbitron,sans-serif)">NEXUS</text>
+        <circle cx={cx} cy={cy} r="24" fill="rgba(74,144,217,0.1)" stroke="rgba(74,144,217,0.3)" strokeWidth="1.5" />
+        <text x={cx} y={cy - 2} textAnchor="middle" fontSize="8" fontWeight="700" fill="rgba(74,144,217,0.9)" fontFamily="var(--font-orbitron,sans-serif)">NEXUS</text>
         <text x={cx} y={cy + 9} textAnchor="middle" fontSize="7" fill="rgba(255,255,255,0.4)" fontFamily="var(--font-inter,sans-serif)">Verified</text>
 
         {SOURCES.map((src, i) => {

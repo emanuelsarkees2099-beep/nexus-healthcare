@@ -186,15 +186,15 @@ export default function NotificationBell() {
         style={{
           position: 'relative',
           width: '34px', height: '34px', borderRadius: '9px',
-          background: unread > 0 ? 'rgba(110,231,183,0.10)' : 'rgba(255,255,255,0.06)',
-          border: `1px solid ${unread > 0 ? 'rgba(110,231,183,0.25)' : 'rgba(255,255,255,0.08)'}`,
+          background: unread > 0 ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.06)',
+          border: `1px solid ${unread > 0 ? 'rgba(74,144,217,0.25)' : 'rgba(255,255,255,0.08)'}`,
           cursor: 'pointer',
           color: unread > 0 ? 'var(--accent)' : 'rgba(255,255,255,0.45)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           transition: 'all 0.2s', flexShrink: 0,
         }}
-        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(110,231,183,0.18)'; e.currentTarget.style.color = 'var(--accent)' }}
-        onMouseLeave={e => { e.currentTarget.style.background = unread > 0 ? 'rgba(110,231,183,0.10)' : 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = unread > 0 ? 'var(--accent)' : 'rgba(255,255,255,0.45)' }}
+        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(74,144,217,0.18)'; e.currentTarget.style.color = 'var(--accent)' }}
+        onMouseLeave={e => { e.currentTarget.style.background = unread > 0 ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = unread > 0 ? 'var(--accent)' : 'rgba(255,255,255,0.45)' }}
       >
         {unread > 0 ? <BellRing size={15} /> : <Bell size={15} />}
         {unread > 0 && (
@@ -293,8 +293,8 @@ export default function NotificationBell() {
                 style={{
                   padding: '4px 12px', borderRadius: '100px', fontSize: '11px',
                   fontFamily: 'var(--font-inter)', fontWeight: 600, cursor: subscribing ? 'not-allowed' : 'pointer',
-                  background: pushOn ? 'rgba(110,231,183,0.12)' : 'rgba(255,255,255,0.06)',
-                  border: `1px solid ${pushOn ? 'rgba(110,231,183,0.28)' : 'rgba(255,255,255,0.10)'}`,
+                  background: pushOn ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.06)',
+                  border: `1px solid ${pushOn ? 'rgba(74,144,217,0.28)' : 'rgba(255,255,255,0.10)'}`,
                   color: pushOn ? 'var(--accent)' : 'rgba(255,255,255,0.5)',
                   transition: 'all 0.2s', opacity: subscribing ? 0.6 : 1,
                 }}
@@ -330,7 +330,7 @@ function NotifRow({ notif, onRead, onDismiss, onClose }: {
       style={{
         display: 'flex', gap: '10px',
         padding: '12px 16px',
-        background: hovered ? 'rgba(255,255,255,0.04)' : notif.read ? 'transparent' : 'rgba(110,231,183,0.025)',
+        background: hovered ? 'rgba(255,255,255,0.04)' : notif.read ? 'transparent' : 'rgba(74,144,217,0.025)',
         borderBottom: '1px solid rgba(255,255,255,0.04)',
         cursor: notif.url ? 'pointer' : 'default',
         position: 'relative', transition: 'background 0.15s',

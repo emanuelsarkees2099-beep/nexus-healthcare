@@ -102,15 +102,15 @@ export default function PwaInstallPrompt() {
       {/* App icon */}
       <div style={{
         width: '44px', height: '44px', borderRadius: '12px', flexShrink: 0,
-        background: 'linear-gradient(135deg, rgba(110,231,183,0.2) 0%, rgba(110,231,183,0.05) 100%)',
-        border: '1px solid rgba(110,231,183,0.25)',
+        background: 'linear-gradient(135deg, rgba(74,144,217,0.2) 0%, rgba(74,144,217,0.05) 100%)',
+        border: '1px solid rgba(74,144,217,0.25)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         {/* NEXUS N monogram */}
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
           <path
             d="M4 20V4L12 14.5L20 4V20"
-            stroke="#6EE7B7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+            stroke="#4A90D9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
           />
         </svg>
       </div>
@@ -154,8 +154,8 @@ export default function PwaInstallPrompt() {
           disabled={installing}
           aria-label="Install NEXUS as app"
           style={{
-            background: installing ? 'rgba(110,231,183,0.1)' : 'rgba(110,231,183,0.15)',
-            border: '1px solid rgba(110,231,183,0.3)',
+            background: installing ? 'rgba(74,144,217,0.1)' : 'rgba(74,144,217,0.15)',
+            border: '1px solid rgba(74,144,217,0.3)',
             color: 'var(--accent)',
             fontSize: '12px', fontWeight: 600,
             fontFamily: 'var(--font-inter)',
@@ -166,12 +166,12 @@ export default function PwaInstallPrompt() {
           }}
           onMouseEnter={e => {
             if (!installing) {
-              e.currentTarget.style.background = 'rgba(110,231,183,0.22)'
+              e.currentTarget.style.background = 'rgba(74,144,217,0.22)'
               e.currentTarget.style.transform = 'scale(1.02)'
             }
           }}
           onMouseLeave={e => {
-            e.currentTarget.style.background = 'rgba(110,231,183,0.15)'
+            e.currentTarget.style.background = 'rgba(74,144,217,0.15)'
             e.currentTarget.style.transform = 'scale(1)'
           }}
         >

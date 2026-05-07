@@ -1,8 +1,6 @@
 'use client'
 import dynamic from 'next/dynamic'
 import Footer from '@/components/Footer'
-import BeforeAfterBar from '@/components/BeforeAfterBar'
-import AnimatedDiagramsSection from '@/components/AnimatedDiagramsSection'
 
 /* ── Browser-API-only: must skip SSR ───────────────────────────────────
    These components use window / document / navigator / canvas / WebGL
@@ -13,33 +11,22 @@ const Cursor            = dynamic(() => import('@/components/Cursor'),          
 const ScrollProgress    = dynamic(() => import('@/components/ScrollProgress'),    { ssr: false })
 const FloatingCTA       = dynamic(() => import('@/components/FloatingCTA'),       { ssr: false })
 const ExitIntent        = dynamic(() => import('@/components/ExitIntent'),        { ssr: false })
-const CommandPalette    = dynamic(() => import('@/components/CommandPalette'),    { ssr: false })
 const CrisisButton      = dynamic(() => import('@/components/CrisisButton'),      { ssr: false })
 const ScaredButton      = dynamic(() => import('@/components/ScaredButton'),      { ssr: false })
 const TerminalMode      = dynamic(() => import('@/components/TerminalMode'),      { ssr: false })
 
-/* ── Nav + Hero: uses geolocation / scroll / video APIs ────────────── */
+/* ── Nav + Hero ── */
 const Nav               = dynamic(() => import('@/components/Nav'),               { ssr: false })
 const Hero              = dynamic(() => import('@/components/Hero'),              { ssr: false })
-const CinematicHero     = dynamic(() => import('@/components/CinematicHero'),     { ssr: false })
 
-/* ── Content components: SSR-safe (GSAP guard + no direct browser refs)
-   Dynamic imports for code-splitting; SSR enabled for LCP.
-   ─────────────────────────────────────────────────────────────────── */
+/* ── Content sections — code-split, SSR-safe ── */
 const Stats             = dynamic(() => import('@/components/Stats'))
 const Features          = dynamic(() => import('@/components/Features'))
-const LogoMarquee       = dynamic(() => import('@/components/LogoMarquee'))
-const Mockup            = dynamic(() => import('@/components/Mockup'))
 const HowItWorks        = dynamic(() => import('@/components/HowItWorks'))
-const Eligibility       = dynamic(() => import('@/components/Eligibility'))
-const MissionFreeze     = dynamic(() => import('@/components/MissionFreeze'))
 const Testimonials      = dynamic(() => import('@/components/Testimonials'))
 const CTA               = dynamic(() => import('@/components/CTA'))
-const ImpactWall        = dynamic(() => import('@/components/ImpactWall'))
 const CostCalculator    = dynamic(() => import('@/components/CostCalculator'))
-
-/* ── Toggle: set to true to use the cinematic scroll-story hero ── */
-const USE_CINEMATIC_HERO = false
+const MissionFreeze     = dynamic(() => import('@/components/MissionFreeze'))
 
 export default function Home() {
   return (
@@ -49,13 +36,12 @@ export default function Home() {
         Skip to main content
       </a>
 
-      {/* Global systems — browser-API-only, no SSR */}
+      {/* Page-level background + chrome (no SSR) */}
       <BackgroundCanvas />
       <Cursor />
       <ScrollProgress />
       <FloatingCTA />
       <ExitIntent />
-      <CommandPalette />
       <CrisisButton />
       <ScaredButton />
       <TerminalMode />
@@ -65,19 +51,13 @@ export default function Home() {
 
       {/* Page content */}
       <main id="main-content">
-        {USE_CINEMATIC_HERO ? <CinematicHero /> : <Hero />}
+        <Hero />
         <Stats />
         <Features />
-        <LogoMarquee />
-        <Mockup />
         <HowItWorks />
-        <AnimatedDiagramsSection />
-        <BeforeAfterBar />
-        <Eligibility />
-        <ImpactWall />
         <CostCalculator />
-        <MissionFreeze />
         <Testimonials />
+        <MissionFreeze />
         <CTA />
       </main>
 

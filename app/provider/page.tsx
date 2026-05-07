@@ -47,13 +47,13 @@ const pill: React.CSSProperties = {
   display: 'inline-flex', alignItems: 'center', gap: '6px',
   padding: '4px 12px', borderRadius: '100px',
   fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-  background: 'rgba(110,231,183,0.08)', color: 'var(--accent)',
-  border: '1px solid rgba(110,231,183,0.18)',
+  background: 'rgba(74,144,217,0.08)', color: 'var(--accent)',
+  border: '1px solid rgba(74,144,217,0.18)',
 }
 
 const card: React.CSSProperties = {
   padding: '2px',
-  background: 'linear-gradient(135deg, rgba(110,231,183,0.2), rgba(110,231,183,0.04))',
+  background: 'linear-gradient(135deg, rgba(74,144,217,0.2), rgba(74,144,217,0.04))',
   borderRadius: '20px',
 }
 
@@ -193,7 +193,7 @@ export default function ProviderPage() {
     <AppShell>
       {/* ── HERO ── */}
       <section style={{ minHeight: '88dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '100px 24px 60px', position: 'relative', overflow: 'hidden' }}>
-        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(110,231,183,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(74,144,217,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
         <div style={{ ...pill, marginBottom: '24px' }}><Stethoscope size={10} strokeWidth={1.5} /> For Healthcare Providers</div>
 
@@ -209,7 +209,7 @@ export default function ProviderPage() {
 
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '56px' }}>
           {[['2,400+', 'partner clinics'], ['$18M', 'revenue recovered'], ['94%', 'patient retention']].map(([v, l]) => (
-            <div key={l} style={{ padding: '10px 20px', background: 'rgba(110,231,183,0.07)', border: '1px solid rgba(110,231,183,0.18)', borderRadius: '100px', textAlign: 'center' }}>
+            <div key={l} style={{ padding: '10px 20px', background: 'rgba(74,144,217,0.07)', border: '1px solid rgba(74,144,217,0.18)', borderRadius: '100px', textAlign: 'center' }}>
               <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.02em' }}>{v}</div>
               <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '2px' }}>{l}</div>
             </div>
@@ -227,7 +227,7 @@ export default function ProviderPage() {
       </section>
 
       {/* ── MANAGE YOUR LISTING PORTAL ── */}
-      <section ref={manageRef} style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(110,231,183,0.015)' }}>
+      <section ref={manageRef} style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(74,144,217,0.015)' }}>
         <div style={{ maxWidth: '860px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '40px' }}>
@@ -256,7 +256,7 @@ export default function ProviderPage() {
                   flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                   padding: '9px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 500,
                   fontFamily: 'var(--font-inter)', cursor: tab.disabled ? 'not-allowed' : 'pointer', border: 'none',
-                  background: manageTab === tab.id ? 'rgba(110,231,183,0.12)' : 'transparent',
+                  background: manageTab === tab.id ? 'rgba(74,144,217,0.12)' : 'transparent',
                   color: tab.disabled ? 'rgba(255,255,255,0.2)' : manageTab === tab.id ? 'var(--accent)' : 'rgba(255,255,255,0.5)',
                   transition: 'all 0.2s',
                 }}
@@ -272,7 +272,7 @@ export default function ProviderPage() {
             <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', padding: '32px' }}>
               {claimStep === 'verified' ? (
                 <div style={{ textAlign: 'center', padding: '24px 0' }}>
-                  <CheckCircle size={40} color="#4ade80" strokeWidth={1.5} style={{ marginBottom: '16px' }} />
+                  <CheckCircle size={40} color="#60a5fa" strokeWidth={1.5} style={{ marginBottom: '16px' }} />
                   <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Listing claimed</h3>
                   <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)' }}>You now have full control. Use the tabs above to update your listing.</p>
                   <button onClick={() => setManageTab('edit')} style={{ marginTop: '20px', padding: '10px 24px', borderRadius: '100px', background: 'var(--accent)', color: '#07070F', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 700, fontFamily: 'inherit' }}>
@@ -313,7 +313,7 @@ export default function ProviderPage() {
                     {(['email', 'phone'] as const).map(m => (
                       <button
                         key={m} onClick={() => setClaimMethod(m)}
-                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px', padding: '10px', borderRadius: '9px', fontSize: '13px', fontFamily: 'inherit', cursor: 'pointer', transition: 'all 0.2s', border: `1px solid ${claimMethod === m ? 'rgba(110,231,183,0.35)' : 'rgba(255,255,255,0.09)'}`, background: claimMethod === m ? 'rgba(110,231,183,0.10)' : 'rgba(255,255,255,0.03)', color: claimMethod === m ? 'var(--accent)' : 'rgba(255,255,255,0.55)' }}
+                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px', padding: '10px', borderRadius: '9px', fontSize: '13px', fontFamily: 'inherit', cursor: 'pointer', transition: 'all 0.2s', border: `1px solid ${claimMethod === m ? 'rgba(74,144,217,0.35)' : 'rgba(255,255,255,0.09)'}`, background: claimMethod === m ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.03)', color: claimMethod === m ? 'var(--accent)' : 'rgba(255,255,255,0.55)' }}
                       >
                         {m === 'email' ? <Mail size={13} /> : <Phone size={13} />}
                         {m === 'email' ? 'Email' : 'Phone'}
@@ -327,11 +327,11 @@ export default function ProviderPage() {
                     placeholder={claimMethod === 'email' ? 'clinic@example.org' : '+1 (602) 555-0100'}
                     type={claimMethod === 'email' ? 'email' : 'tel'}
                     style={{ width: '100%', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '12px 14px', color: '#eef4f5', fontSize: '14px', fontFamily: 'inherit', outline: 'none', caretColor: 'var(--accent)', marginBottom: '8px', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
-                    onFocus={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.40)')}
+                    onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.40)')}
                     onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.10)')}
                   />
                   {claimError && <p style={{ fontSize: '12px', color: '#f87171', marginBottom: '8px' }}>{claimError}</p>}
-                  <button onClick={handleSendCode} disabled={claimSending} style={{ width: '100%', marginTop: '8px', padding: '13px', borderRadius: '10px', background: claimSending ? 'rgba(110,231,183,0.5)' : 'var(--accent)', color: '#07070F', border: 'none', cursor: claimSending ? 'wait' : 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', boxShadow: '0 4px 18px rgba(110,231,183,0.28)', transition: 'opacity 0.2s' }}>
+                  <button onClick={handleSendCode} disabled={claimSending} style={{ width: '100%', marginTop: '8px', padding: '13px', borderRadius: '10px', background: claimSending ? 'rgba(74,144,217,0.5)' : 'var(--accent)', color: '#07070F', border: 'none', cursor: claimSending ? 'wait' : 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', boxShadow: '0 4px 18px rgba(74,144,217,0.28)', transition: 'opacity 0.2s' }}>
                     {claimSending ? 'Sending code…' : `Send verification code via ${claimMethod}`}
                   </button>
                 </div>
@@ -356,7 +356,7 @@ export default function ProviderPage() {
                       onChange={e => setListing(l => ({ ...l, [f.key]: e.target.value }))}
                       placeholder={f.placeholder}
                       style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '9px', padding: '10px 14px', color: '#eef4f5', fontSize: '14px', fontFamily: 'inherit', outline: 'none', caretColor: 'var(--accent)', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
-                      onFocus={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.38)')}
+                      onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.38)')}
                       onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)')}
                     />
                   </div>
@@ -377,7 +377,7 @@ export default function ProviderPage() {
                       placeholder={f.placeholder}
                       rows={3}
                       style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '9px', padding: '10px 14px', color: '#eef4f5', fontSize: '14px', fontFamily: 'inherit', outline: 'none', resize: 'vertical', caretColor: 'var(--accent)', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
-                      onFocus={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.38)')}
+                      onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.38)')}
                       onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)')}
                     />
                   </div>
@@ -401,8 +401,8 @@ export default function ProviderPage() {
                         padding: '8px 16px', borderRadius: '100px', fontSize: '13px',
                         fontFamily: 'inherit', cursor: 'pointer', border: '1px solid',
                         transition: 'all 0.2s',
-                        background: listing[opt.key as keyof typeof listing] ? 'rgba(110,231,183,0.12)' : 'rgba(255,255,255,0.04)',
-                        borderColor: listing[opt.key as keyof typeof listing] ? 'rgba(110,231,183,0.30)' : 'rgba(255,255,255,0.09)',
+                        background: listing[opt.key as keyof typeof listing] ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.04)',
+                        borderColor: listing[opt.key as keyof typeof listing] ? 'rgba(74,144,217,0.30)' : 'rgba(255,255,255,0.09)',
                         color: listing[opt.key as keyof typeof listing] ? 'var(--accent)' : 'rgba(255,255,255,0.5)',
                       }}
                     >
@@ -430,7 +430,7 @@ export default function ProviderPage() {
                   ))}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)', minWidth: '130px' }}>Sunday</span>
-                    <button onClick={() => setListing(l => ({ ...l, sunClosed: !l.sunClosed }))} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '7px 14px', borderRadius: '8px', background: listing.sunClosed ? 'rgba(248,113,113,0.08)' : 'rgba(110,231,183,0.08)', border: `1px solid ${listing.sunClosed ? 'rgba(248,113,113,0.25)' : 'rgba(110,231,183,0.25)'}`, color: listing.sunClosed ? '#f87171' : 'var(--accent)', fontSize: '12px', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}>
+                    <button onClick={() => setListing(l => ({ ...l, sunClosed: !l.sunClosed }))} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '7px 14px', borderRadius: '8px', background: listing.sunClosed ? 'rgba(248,113,113,0.08)' : 'rgba(74,144,217,0.08)', border: `1px solid ${listing.sunClosed ? 'rgba(248,113,113,0.25)' : 'rgba(74,144,217,0.25)'}`, color: listing.sunClosed ? '#f87171' : 'var(--accent)', fontSize: '12px', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}>
                       {listing.sunClosed ? 'Closed' : 'Open'}
                     </button>
                   </div>
@@ -442,7 +442,7 @@ export default function ProviderPage() {
                 <label style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em', display: 'block', marginBottom: '12px' }}>PHOTOS</label>
                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
                   {listing.photos.map((p, i) => (
-                    <div key={i} style={{ width: '80px', height: '80px', borderRadius: '10px', background: `rgba(110,231,183,0.${10 + i * 5})`, border: '1px solid rgba(110,231,183,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', color: 'var(--accent)', position: 'relative' }}>
+                    <div key={i} style={{ width: '80px', height: '80px', borderRadius: '10px', background: `rgba(74,144,217,0.${10 + i * 5})`, border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', color: 'var(--accent)', position: 'relative' }}>
                       <Camera size={20} />
                       <button onClick={() => setListing(l => ({ ...l, photos: l.photos.filter((_, j) => j !== i) }))} style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#f87171', border: 'none', borderRadius: '50%', width: '16px', height: '16px', color: '#fff', fontSize: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</button>
                     </div>
@@ -450,7 +450,7 @@ export default function ProviderPage() {
                   <button
                     onClick={() => setListing(l => ({ ...l, photos: [...l.photos, `photo-${Date.now()}`] }))}
                     style={{ width: '80px', height: '80px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '2px dashed rgba(255,255,255,0.12)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px', cursor: 'pointer', color: 'rgba(255,255,255,0.35)', fontSize: '10px', fontFamily: 'inherit', transition: 'border-color 0.2s, color 0.2s' }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(110,231,183,0.35)'; e.currentTarget.style.color = 'var(--accent)' }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(74,144,217,0.35)'; e.currentTarget.style.color = 'var(--accent)' }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'; e.currentTarget.style.color = 'rgba(255,255,255,0.35)' }}
                   >
                     <Camera size={18} />
@@ -464,7 +464,7 @@ export default function ProviderPage() {
 
               <button
                 onClick={handleSaveListing}
-                style={{ alignSelf: 'flex-start', padding: '12px 28px', borderRadius: '10px', background: listingSaved ? 'rgba(74,222,128,0.15)' : 'var(--accent)', color: listingSaved ? '#4ade80' : '#07070F', border: listingSaved ? '1px solid rgba(74,222,128,0.35)' : 'none', cursor: 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', transition: 'all 0.3s', boxShadow: listingSaved ? 'none' : '0 4px 18px rgba(110,231,183,0.28)' }}
+                style={{ alignSelf: 'flex-start', padding: '12px 28px', borderRadius: '10px', background: listingSaved ? 'rgba(96,165,250,0.15)' : 'var(--accent)', color: listingSaved ? '#60a5fa' : '#07070F', border: listingSaved ? '1px solid rgba(96,165,250,0.35)' : 'none', cursor: 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', transition: 'all 0.3s', boxShadow: listingSaved ? 'none' : '0 4px 18px rgba(74,144,217,0.28)' }}
               >
                 {listingSaved ? '✓ Saved' : 'Save changes'}
               </button>
@@ -512,7 +512,7 @@ export default function ProviderPage() {
                 </div>
               </div>
 
-              <div style={{ padding: '14px 18px', background: 'rgba(110,231,183,0.04)', border: '1px solid rgba(110,231,183,0.14)', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ padding: '14px 18px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.14)', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <AlertCircle size={14} color="var(--accent)" />
                 <p style={{ fontSize: '12px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', lineHeight: 1.5, margin: 0 }}>
                   Analytics update daily at midnight UTC. Historical data available for the past 12 months. Export as CSV from your provider dashboard.
@@ -529,7 +529,7 @@ export default function ProviderPage() {
                   <h4 style={{ fontSize: '15px', fontWeight: 600, color: '#eef4f5', marginBottom: '4px' }}>Incoming appointment requests</h4>
                   <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)' }}>3 pending · accepting new patients</p>
                 </div>
-                <button onClick={() => setListing(l => ({ ...l, acceptingAppts: !l.acceptingAppts }))} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '100px', background: listing.acceptingAppts ? 'rgba(110,231,183,0.12)' : 'rgba(248,113,113,0.08)', border: `1px solid ${listing.acceptingAppts ? 'rgba(110,231,183,0.28)' : 'rgba(248,113,113,0.25)'}`, color: listing.acceptingAppts ? 'var(--accent)' : '#f87171', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}>
+                <button onClick={() => setListing(l => ({ ...l, acceptingAppts: !l.acceptingAppts }))} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '100px', background: listing.acceptingAppts ? 'rgba(74,144,217,0.12)' : 'rgba(248,113,113,0.08)', border: `1px solid ${listing.acceptingAppts ? 'rgba(74,144,217,0.28)' : 'rgba(248,113,113,0.25)'}`, color: listing.acceptingAppts ? 'var(--accent)' : '#f87171', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}>
                   {listing.acceptingAppts ? '● Accepting patients' : '○ Not accepting'}
                 </button>
               </div>
@@ -542,7 +542,7 @@ export default function ProviderPage() {
                 ].map((req, i) => (
                   <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px', gap: '12px', flexWrap: 'wrap' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(110,231,183,0.12)', border: '1px solid rgba(110,231,183,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', color: 'var(--accent)', flexShrink: 0 }}>
+                      <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', color: 'var(--accent)', flexShrink: 0 }}>
                         {req.name[0]}
                       </div>
                       <div>
@@ -582,7 +582,7 @@ export default function ProviderPage() {
               <RevealBlock key={m.label} delay={i * 80}>
                 <div style={card}>
                   <div style={cardInner}>
-                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', marginBottom: '16px' }}>{m.icon}</div>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', marginBottom: '16px' }}>{m.icon}</div>
                     <div style={{ fontSize: '36px', fontWeight: 800, color: '#eef4f5', letterSpacing: '-0.03em', lineHeight: 1, marginBottom: '8px' }}>
                       <Counter target={m.value} suffix={m.suffix} />
                     </div>
@@ -609,7 +609,7 @@ export default function ProviderPage() {
             {STEPS.map((s, i) => (
               <RevealBlock key={s.n} delay={i * 80}>
                 <div style={{ padding: '28px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '18px', height: '100%', boxSizing: 'border-box', transition: 'border-color 0.25s' }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.22)')}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.22)')}
                   onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)')}
                 >
                   <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.12em', marginBottom: '16px' }}>{s.n}</div>
@@ -637,7 +637,7 @@ export default function ProviderPage() {
               <RevealBlock key={f.title} delay={i * 80}>
                 <div style={card}>
                   <div style={{ ...cardInner, minHeight: '220px' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '11px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', marginBottom: '20px' }}>{f.icon}</div>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '11px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', marginBottom: '20px' }}>{f.icon}</div>
                     <h3 style={{ fontSize: '17px', fontWeight: 700, marginBottom: '10px', lineHeight: 1.3 }}>{f.title}</h3>
                     <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.75, marginBottom: '16px' }}>{f.desc}</p>
                     <span style={{ ...pill, fontSize: '10px', padding: '3px 10px' }}>{f.tag}</span>
@@ -661,8 +661,8 @@ export default function ProviderPage() {
 
           {submitted ? (
             <RevealBlock>
-              <div style={{ textAlign: 'center', padding: '48px', background: 'rgba(74,222,128,0.04)', border: '1px solid rgba(74,222,128,0.15)', borderRadius: '20px' }}>
-                <CheckCircle size={40} strokeWidth={1.5} style={{ color: '#4ade80', marginBottom: '16px' }} />
+              <div style={{ textAlign: 'center', padding: '48px', background: 'rgba(96,165,250,0.04)', border: '1px solid rgba(96,165,250,0.15)', borderRadius: '20px' }}>
+                <CheckCircle size={40} strokeWidth={1.5} style={{ color: '#60a5fa', marginBottom: '16px' }} />
                 <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Application received</h3>
                 <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65 }}>We'll reach out to <strong style={{ color: '#eef4f5' }}>{form.email}</strong> within 2 business days to schedule your onboarding.</p>
               </div>
@@ -682,7 +682,7 @@ export default function ProviderPage() {
                   <label style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.5)' }}>Clinic Type</label>
                   <select value={form.clinicType} onChange={e => setForm(prev => ({ ...prev, clinicType: e.target.value }))}
                     style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '9px', padding: '11px 14px', color: form.clinicType ? '#eef4f5' : 'rgba(255,255,255,0.3)', fontSize: '14px', fontFamily: 'inherit', cursor: 'pointer', outline: 'none', transition: 'border-color 0.2s, box-shadow 0.2s' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(110,231,183,0.45)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(110,231,183,0.08)' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(74,144,217,0.45)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.08)' }}
                     onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'none' }}
                   >
                     <option value="">Select clinic type…</option>
@@ -693,9 +693,9 @@ export default function ProviderPage() {
                 {submitError && (
                   <p style={{ fontSize: '13px', color: '#f87171', background: 'rgba(248,113,113,0.08)', border: '1px solid rgba(248,113,113,0.2)', borderRadius: '8px', padding: '10px 14px', margin: 0 }}>{submitError}</p>
                 )}
-                <button type="submit" disabled={submitting} style={{ marginTop: '8px', padding: '15px 28px', borderRadius: '12px', background: submitting ? 'rgba(110,231,183,0.5)' : 'var(--accent)', color: '#07070F', border: 'none', cursor: submitting ? 'not-allowed' : 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', transition: 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s', boxShadow: '0 4px 20px rgba(110,231,183,0.3)' }}
-                  onMouseEnter={e => { if (!submitting) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(110,231,183,0.45)' } }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(110,231,183,0.3)' }}
+                <button type="submit" disabled={submitting} style={{ marginTop: '8px', padding: '15px 28px', borderRadius: '12px', background: submitting ? 'rgba(74,144,217,0.5)' : 'var(--accent)', color: '#07070F', border: 'none', cursor: submitting ? 'not-allowed' : 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', transition: 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s', boxShadow: '0 4px 20px rgba(74,144,217,0.3)' }}
+                  onMouseEnter={e => { if (!submitting) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(74,144,217,0.45)' } }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(74,144,217,0.3)' }}
                 >
                   {submitting ? 'Submitting…' : 'Submit application →'}
                 </button>
@@ -721,8 +721,8 @@ function ProviderField({ label, placeholder, value, onChange }: { label: string;
         onBlur={() => setFocused(false)}
         style={{
           width: '100%', background: 'rgba(255,255,255,0.03)',
-          border: `1px solid ${focused ? 'rgba(110,231,183,0.45)' : 'rgba(255,255,255,0.08)'}`,
-          boxShadow: focused ? '0 0 0 3px rgba(110,231,183,0.08)' : 'none',
+          border: `1px solid ${focused ? 'rgba(74,144,217,0.45)' : 'rgba(255,255,255,0.08)'}`,
+          boxShadow: focused ? '0 0 0 3px rgba(74,144,217,0.08)' : 'none',
           borderRadius: '9px', padding: '11px 14px',
           color: '#eef4f5', fontSize: '14px', fontFamily: 'inherit',
           outline: 'none', boxSizing: 'border-box', caretColor: 'var(--accent)',

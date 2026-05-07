@@ -103,7 +103,7 @@ async function sendDigestEmail(stats: WeeklyStats): Promise<boolean> {
       .subtitle { color: rgba(255,255,255,0.4); font-size: 14px; margin-bottom: 32px; }
       .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
       .stat { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 20px; }
-      .stat-num { font-size: 32px; font-weight: 700; color: #4ade80; }
+      .stat-num { font-size: 32px; font-weight: 700; color: #60a5fa; }
       .stat-label { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 4px; }
       .section { margin: 24px 0; }
       .section h2 { font-size: 16px; color: rgba(255,255,255,0.7); border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 10px; }
@@ -138,7 +138,7 @@ async function sendDigestEmail(stats: WeeklyStats): Promise<boolean> {
         ${Object.entries(stats.top_outcome_events).map(([type, count]) =>
           `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:14px;">
             <span style="color:rgba(255,255,255,0.6)">${type.replace(/_/g, ' ')}</span>
-            <span style="color:#4ade80;font-weight:600">${count}</span>
+            <span style="color:#60a5fa;font-weight:600">${count}</span>
           </div>`
         ).join('')}
       </div>` : ''}

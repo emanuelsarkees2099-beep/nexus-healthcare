@@ -170,7 +170,7 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
 
     programs.push({
       id: 'medicaid', name: 'Medicaid', tag: 'Federal / State',
-      color: '#4ade80', icon: <ShieldCheck size={16} strokeWidth={1.5} />,
+      color: '#60a5fa', icon: <ShieldCheck size={16} strokeWidth={1.5} />,
       match: Math.round(match),
       desc: 'Full health coverage: doctor visits, hospital stays, prescriptions, preventive care, and more. Covers most or all costs for qualifying individuals.',
       savings: '$0 premium · $0–$3 copays',
@@ -505,7 +505,7 @@ export default function EligibilityPage() {
                   style={{
                     padding: '12px 14px', borderRadius: '12px', border: '1px solid',
                     borderColor: selected ? 'var(--accent)' : 'rgba(255,255,255,0.08)',
-                    background: selected ? 'rgba(110,231,183,0.12)' : 'rgba(255,255,255,0.02)',
+                    background: selected ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.02)',
                     color: selected ? 'var(--accent)' : 'rgba(255,255,255,0.7)',
                     cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left',
                     transition: 'all 0.15s',
@@ -514,7 +514,7 @@ export default function EligibilityPage() {
                   <span style={{ fontWeight: 700, fontSize: '14px' }}>{s.abbr}</span>
                   <span style={{ fontSize: '11px', opacity: 0.7 }}>{s.name}</span>
                   {isExpansion && (
-                    <span style={{ fontSize: '9px', color: '#4ade80', background: 'rgba(74,222,128,0.1)', padding: '2px 6px', borderRadius: '100px', width: 'fit-content', marginTop: '2px' }}>
+                    <span style={{ fontSize: '9px', color: '#60a5fa', background: 'rgba(96,165,250,0.1)', padding: '2px 6px', borderRadius: '100px', width: 'fit-content', marginTop: '2px' }}>
                       Expanded Medicaid
                     </span>
                   )}
@@ -523,9 +523,9 @@ export default function EligibilityPage() {
             })}
           </div>
           {answers.state && EXPANSION_STATES.has(answers.state) ? (
-            <div style={{ marginTop: '16px', padding: '12px 16px', background: 'rgba(74,222,128,0.06)', border: '1px solid rgba(74,222,128,0.2)', borderRadius: '12px', fontSize: '13px', color: 'rgba(255,255,255,0.6)', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-              <CheckCircle2 size={14} style={{ color: '#4ade80', marginTop: '1px', flexShrink: 0 }} strokeWidth={1.5} />
-              <span><strong style={{ color: '#4ade80' }}>{STATES.find(s => s.abbr === answers.state)?.name}</strong> expanded Medicaid — adults up to 138% FPL may qualify for full coverage.</span>
+            <div style={{ marginTop: '16px', padding: '12px 16px', background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.2)', borderRadius: '12px', fontSize: '13px', color: 'rgba(255,255,255,0.6)', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+              <CheckCircle2 size={14} style={{ color: '#60a5fa', marginTop: '1px', flexShrink: 0 }} strokeWidth={1.5} />
+              <span><strong style={{ color: '#60a5fa' }}>{STATES.find(s => s.abbr === answers.state)?.name}</strong> expanded Medicaid — adults up to 138% FPL may qualify for full coverage.</span>
             </div>
           ) : answers.state ? (
             <div style={{ marginTop: '16px', padding: '12px 16px', background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.2)', borderRadius: '12px', fontSize: '13px', color: 'rgba(255,255,255,0.6)', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
@@ -555,7 +555,7 @@ export default function EligibilityPage() {
                 <button key={n} onClick={() => setAnswers(a => ({ ...a, householdSize: n }))}
                   style={{ width: '56px', height: '56px', borderRadius: '14px', border: '1px solid', fontWeight: 700, fontSize: '18px', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s',
                     borderColor: answers.householdSize === n ? 'var(--accent)' : 'rgba(255,255,255,0.08)',
-                    background: answers.householdSize === n ? 'rgba(110,231,183,0.12)' : 'rgba(255,255,255,0.02)',
+                    background: answers.householdSize === n ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.02)',
                     color: answers.householdSize === n ? 'var(--accent)' : 'rgba(255,255,255,0.6)',
                   }}>
                   {n}{n === 8 ? '+' : ''}
@@ -577,7 +577,7 @@ export default function EligibilityPage() {
                 onClick={() => setAnswers(a => ({ ...a, [opt.key]: !a[opt.key as keyof WizardAnswers] }))}
                 style={{ padding: '14px 18px', borderRadius: '12px', border: '1px solid', textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '12px', transition: 'all 0.15s',
                   borderColor: answers[opt.key as keyof WizardAnswers] ? 'var(--accent)' : 'rgba(255,255,255,0.08)',
-                  background: answers[opt.key as keyof WizardAnswers] ? 'rgba(110,231,183,0.08)' : 'rgba(255,255,255,0.02)',
+                  background: answers[opt.key as keyof WizardAnswers] ? 'rgba(74,144,217,0.08)' : 'rgba(255,255,255,0.02)',
                 }}>
                 <span style={{ fontSize: '20px' }}>{opt.icon}</span>
                 <span style={{ fontSize: '15px', color: answers[opt.key as keyof WizardAnswers] ? 'var(--accent)' : 'rgba(255,255,255,0.7)', flex: 1 }}>{opt.label}</span>
@@ -614,7 +614,7 @@ export default function EligibilityPage() {
               <button key={b.label} onClick={() => setAnswers(a => ({ ...a, annualIncome: b.value }))}
                 style={{ padding: '14px 18px', borderRadius: '12px', border: '1px solid', textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'space-between', transition: 'all 0.15s',
                   borderColor: answers.annualIncome === b.value ? 'var(--accent)' : 'rgba(255,255,255,0.08)',
-                  background: answers.annualIncome === b.value ? 'rgba(110,231,183,0.08)' : 'rgba(255,255,255,0.02)',
+                  background: answers.annualIncome === b.value ? 'rgba(74,144,217,0.08)' : 'rgba(255,255,255,0.02)',
                 }}>
                 <span style={{ fontSize: '15px', fontWeight: 600, color: answers.annualIncome === b.value ? 'var(--accent)' : 'rgba(255,255,255,0.7)' }}>{b.label}</span>
                 {answers.annualIncome === b.value && <Check size={14} style={{ color: 'var(--accent)' }} strokeWidth={2.5} />}
@@ -623,10 +623,10 @@ export default function EligibilityPage() {
           </div>
 
           {/* FPL% live preview */}
-          <div style={{ padding: '14px 18px', background: 'rgba(110,231,183,0.04)', border: '1px solid rgba(110,231,183,0.12)', borderRadius: '12px', fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>
+          <div style={{ padding: '14px 18px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.12)', borderRadius: '12px', fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>
             <span>Your income is approximately <strong style={{ color: 'var(--accent)' }}>{fplPct}% of the Federal Poverty Level</strong> for a household of {answers.householdSize}.</span>
             {fplPct <= 138 && EXPANSION_STATES.has(answers.state) && (
-              <div style={{ marginTop: '8px', color: '#4ade80' }}>✓ You may qualify for Medicaid in {STATES.find(s => s.abbr === answers.state)?.name}.</div>
+              <div style={{ marginTop: '8px', color: '#60a5fa' }}>✓ You may qualify for Medicaid in {STATES.find(s => s.abbr === answers.state)?.name}.</div>
             )}
             {fplPct > 100 && fplPct <= 400 && (
               <div style={{ marginTop: '8px', color: '#60a5fa' }}>✓ You likely qualify for ACA premium tax credits.</div>
@@ -648,7 +648,7 @@ export default function EligibilityPage() {
               <button key={opt.value} onClick={() => setAnswers(a => ({ ...a, employment: opt.value }))}
                 style={{ padding: '16px 20px', borderRadius: '14px', border: '1px solid', textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '14px', transition: 'all 0.15s',
                   borderColor: answers.employment === opt.value ? 'var(--accent)' : 'rgba(255,255,255,0.08)',
-                  background: answers.employment === opt.value ? 'rgba(110,231,183,0.08)' : 'rgba(255,255,255,0.02)',
+                  background: answers.employment === opt.value ? 'rgba(74,144,217,0.08)' : 'rgba(255,255,255,0.02)',
                 }}>
                 <span style={{ color: answers.employment === opt.value ? 'var(--accent)' : 'rgba(255,255,255,0.35)', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{opt.icon}</span>
                 <span style={{ fontSize: '15px', fontWeight: 600, color: answers.employment === opt.value ? 'var(--accent)' : 'rgba(255,255,255,0.7)', flex: 1 }}>{opt.label}</span>
@@ -684,7 +684,7 @@ export default function EligibilityPage() {
                 <button key={opt.value} onClick={() => setAnswers(a => ({ ...a, currentCoverage: opt.value }))}
                   style={{ padding: '13px 16px', borderRadius: '12px', border: '1px solid', textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'space-between', transition: 'all 0.15s',
                     borderColor: answers.currentCoverage === opt.value ? 'var(--accent)' : 'rgba(255,255,255,0.08)',
-                    background: answers.currentCoverage === opt.value ? 'rgba(110,231,183,0.08)' : 'rgba(255,255,255,0.02)',
+                    background: answers.currentCoverage === opt.value ? 'rgba(74,144,217,0.08)' : 'rgba(255,255,255,0.02)',
                   }}>
                   <span style={{ fontSize: '14px', color: answers.currentCoverage === opt.value ? 'var(--accent)' : 'rgba(255,255,255,0.7)' }}>{opt.label}</span>
                   {answers.currentCoverage === opt.value && <Check size={13} style={{ color: 'var(--accent)' }} strokeWidth={2.5} />}
@@ -705,8 +705,8 @@ export default function EligibilityPage() {
                   <button key={opt.value}
                     onClick={() => setAnswers(a => ({ ...a, careNeeds: selected ? a.careNeeds.filter(c => c !== opt.value) : [...a.careNeeds, opt.value] }))}
                     style={{ padding: '12px 14px', borderRadius: '12px', border: '1px solid', textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.15s',
-                      borderColor: selected ? 'rgba(110,231,183,0.4)' : 'rgba(255,255,255,0.08)',
-                      background: selected ? 'rgba(110,231,183,0.08)' : 'rgba(255,255,255,0.02)',
+                      borderColor: selected ? 'rgba(74,144,217,0.4)' : 'rgba(255,255,255,0.08)',
+                      background: selected ? 'rgba(74,144,217,0.08)' : 'rgba(255,255,255,0.02)',
                     }}>
                     <span style={{ width: '16px', height: '16px', borderRadius: '4px', border: '1px solid', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                       borderColor: selected ? 'var(--accent)' : 'rgba(255,255,255,0.15)',
@@ -728,7 +728,7 @@ export default function EligibilityPage() {
         <div>
           {/* Results header */}
           <div style={{ marginBottom: '32px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', borderRadius: '100px', fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.06em', marginBottom: '20px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', borderRadius: '100px', fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.06em', marginBottom: '20px' }}>
               <Sparkles size={10} strokeWidth={1.5} /> YOUR PERSONALIZED RESULTS
             </div>
             <h2 style={{ fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '12px', color: '#fff' }}>
@@ -832,7 +832,7 @@ export default function EligibilityPage() {
           {/* HRSA always-available */}
           {!results.some(r => r.id === 'fqhc') && (
             <Reveal>
-              <div style={{ padding: '20px 24px', background: 'rgba(110,231,183,0.04)', border: '1px solid rgba(110,231,183,0.15)', borderRadius: '16px', display: 'flex', gap: '16px', alignItems: 'flex-start', marginBottom: '16px' }}>
+              <div style={{ padding: '20px 24px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.15)', borderRadius: '16px', display: 'flex', gap: '16px', alignItems: 'flex-start', marginBottom: '16px' }}>
                 <Stethoscope size={20} style={{ color: 'var(--accent)', marginTop: '2px', flexShrink: 0 }} strokeWidth={1.5} />
                 <div>
                   <div style={{ fontSize: '15px', fontWeight: 700, color: '#eef4f5', marginBottom: '4px' }}>Free clinics are always available</div>
@@ -876,7 +876,7 @@ export default function EligibilityPage() {
         {/* ── PAGE HERO ───────────────────────────── */}
         <section style={{ padding: '60px 24px 48px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
           <div style={{ maxWidth: '680px', margin: '0 auto' }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', borderRadius: '100px', fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.06em', marginBottom: '24px' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', borderRadius: '100px', fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.06em', marginBottom: '24px' }}>
               <ShieldCheck size={10} strokeWidth={1.5} /> ELIGIBILITY WIZARD
             </span>
             <h1 style={{ fontSize: 'clamp(34px, 6vw, 60px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '20px', color: '#fff' }}>
@@ -888,13 +888,13 @@ export default function EligibilityPage() {
             </p>
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle2 size={13} style={{ color: '#4ade80' }} strokeWidth={1.5} /> No personal info required
+                <CheckCircle2 size={13} style={{ color: '#60a5fa' }} strokeWidth={1.5} /> No personal info required
               </span>
               <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle2 size={13} style={{ color: '#4ade80' }} strokeWidth={1.5} /> Never stored or shared
+                <CheckCircle2 size={13} style={{ color: '#60a5fa' }} strokeWidth={1.5} /> Never stored or shared
               </span>
               <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle2 size={13} style={{ color: '#4ade80' }} strokeWidth={1.5} /> State-specific thresholds
+                <CheckCircle2 size={13} style={{ color: '#60a5fa' }} strokeWidth={1.5} /> State-specific thresholds
               </span>
             </div>
           </div>
@@ -913,7 +913,7 @@ export default function EligibilityPage() {
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
                       <div style={{ width: '28px', height: '28px', borderRadius: '50%', border: '1px solid', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.3s',
                         borderColor: i < step ? 'var(--accent)' : i === step ? 'var(--accent)' : 'rgba(255,255,255,0.12)',
-                        background: i < step ? 'var(--accent)' : i === step ? 'rgba(110,231,183,0.15)' : 'transparent',
+                        background: i < step ? 'var(--accent)' : i === step ? 'rgba(74,144,217,0.15)' : 'transparent',
                       }}>
                         {i < step
                           ? <Check size={12} color="#07070F" strokeWidth={3} />
@@ -977,7 +977,7 @@ export default function EligibilityPage() {
               </Reveal>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
                 {[
-                  { name: 'Medicaid',               color: '#4ade80', desc: 'Full coverage for low-income adults and families. Federal + state.',   icon: <ShieldCheck size={16} strokeWidth={1.5} /> },
+                  { name: 'Medicaid',               color: '#60a5fa', desc: 'Full coverage for low-income adults and families. Federal + state.',   icon: <ShieldCheck size={16} strokeWidth={1.5} /> },
                   { name: 'CHIP',                   color: '#a78bfa', desc: "Children's coverage up to 200–300% FPL depending on your state.",       icon: <Baby size={16} strokeWidth={1.5} /> },
                   { name: 'ACA Marketplace',        color: '#60a5fa', desc: 'Tax credits that reduce or eliminate monthly premiums for marketplace plans.', icon: <DollarSign size={16} strokeWidth={1.5} /> },
                   { name: 'FQHC / Free Clinics',    color: 'var(--accent)', desc: 'Federally-funded health centers that serve everyone regardless of income.', icon: <Stethoscope size={16} strokeWidth={1.5} /> },
@@ -1000,7 +1000,7 @@ export default function EligibilityPage() {
 
               {/* Privacy note */}
               <Reveal delay={100}>
-                <div style={{ marginTop: '40px', padding: '20px 24px', background: 'rgba(110,231,183,0.04)', border: '1px solid rgba(110,231,183,0.12)', borderRadius: '14px', display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+                <div style={{ marginTop: '40px', padding: '20px 24px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.12)', borderRadius: '14px', display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
                   <ShieldCheck size={18} style={{ color: 'var(--accent)', marginTop: '2px', flexShrink: 0 }} strokeWidth={1.5} />
                   <div>
                     <div style={{ fontSize: '14px', fontWeight: 700, color: '#eef4f5', marginBottom: '4px' }}>100% private — calculated in your browser</div>

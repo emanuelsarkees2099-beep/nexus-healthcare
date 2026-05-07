@@ -208,7 +208,7 @@ export default function Stats() {
                   /* Skeleton pulse */
                   <span style={{
                     display: 'inline-block', width: '4ch', height: '1em',
-                    background: 'rgba(110,231,183,0.08)',
+                    background: 'rgba(74,144,217,0.08)',
                     borderRadius: '4px',
                     animation: 'stat-skeleton 1.4s ease-in-out infinite',
                     verticalAlign: 'middle',

@@ -131,7 +131,7 @@ export default function VerifyPage() {
           </p>
           <div style={{
             padding: '16px 24px', borderRadius: '14px', marginBottom: '32px',
-            background: 'rgba(74,222,128,0.06)', border: '1px solid rgba(74,222,128,0.2)',
+            background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.2)',
             fontSize: '13px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: '420px',
           }}>
             47 people who saved this clinic were notified of your update. Real lives, real impact.
@@ -139,7 +139,7 @@ export default function VerifyPage() {
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
             <Link href="/search" style={{
               padding: '11px 24px', borderRadius: '100px',
-              background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.3)',
+              background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.3)',
               color: 'var(--accent)', fontSize: '14px', fontWeight: 600, textDecoration: 'none',
             }}>
               Back to search
@@ -176,11 +176,11 @@ export default function VerifyPage() {
                 }}>
                   <div style={{
                     width: '20px', height: '20px', borderRadius: '50%', flexShrink: 0,
-                    background: i < submitStep ? 'rgba(74,222,128,0.2)' : i === submitStep ? 'rgba(110,231,183,0.15)' : 'rgba(255,255,255,0.05)',
-                    border: `1px solid ${i < submitStep ? 'rgba(74,222,128,0.4)' : 'rgba(255,255,255,0.1)'}`,
+                    background: i < submitStep ? 'rgba(96,165,250,0.2)' : i === submitStep ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.05)',
+                    border: `1px solid ${i < submitStep ? 'rgba(96,165,250,0.4)' : 'rgba(255,255,255,0.1)'}`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
-                    {i < submitStep ? <CheckCircle size={12} color="#4ade80" /> : <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'rgba(255,255,255,0.3)' }} />}
+                    {i < submitStep ? <CheckCircle size={12} color="#60a5fa" /> : <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'rgba(255,255,255,0.3)' }} />}
                   </div>
                   <span style={{ fontSize: '14px', color: i <= submitStep ? '#f5f5f5' : 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-mono, monospace)', transition: 'color 0.4s' }}>
                     {s.label}
@@ -200,15 +200,15 @@ export default function VerifyPage() {
       <section style={{ padding: 'clamp(80px,10vw,120px) 24px 0', textAlign: 'center', position: 'relative' }}>
         <div aria-hidden style={{
           position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(74,222,128,0.07) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(96,165,250,0.07) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '8px',
           padding: '5px 14px', borderRadius: '100px',
-          background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.2)',
+          background: 'rgba(96,165,250,0.08)', border: '1px solid rgba(96,165,250,0.2)',
           marginBottom: '24px', fontSize: '11px', fontWeight: 600,
-          color: '#4ade80', letterSpacing: '0.1em', textTransform: 'uppercase',
+          color: '#60a5fa', letterSpacing: '0.1em', textTransform: 'uppercase',
         }}>
           <Shield size={11} /> Verify a Clinic
         </div>
@@ -218,7 +218,7 @@ export default function VerifyPage() {
           maxWidth: '600px', margin: '0 auto 16px',
         }}>
           You just used a clinic.<br />
-          <span style={{ color: '#4ade80' }}>Help the next person.</span>
+          <span style={{ color: '#60a5fa' }}>Help the next person.</span>
         </h1>
         <p style={{
           fontSize: '15px', color: 'rgba(255,255,255,0.45)',
@@ -237,7 +237,7 @@ export default function VerifyPage() {
             {[
               { icon: <Clock size={18} color="#818cf8" />, label: '~30 sec', desc: 'Time it takes' },
               { icon: <Users size={18} color="#fbbf24" />, label: '47 people', desc: 'Will see your update' },
-              { icon: <Star size={18} color="#4ade80" />, label: `+${totalPoints || 100} karma`, desc: 'You earn for helping' },
+              { icon: <Star size={18} color="#60a5fa" />, label: `+${totalPoints || 100} karma`, desc: 'You earn for helping' },
             ].map(item => (
               <div key={item.label} style={{
                 padding: '16px', borderRadius: '14px',
@@ -255,13 +255,13 @@ export default function VerifyPage() {
             onClick={() => setStep('form')}
             style={{
               width: '100%', padding: '15px', borderRadius: '14px',
-              background: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.3)',
-              color: '#4ade80', fontSize: '15px', fontWeight: 700, cursor: 'pointer',
+              background: 'rgba(96,165,250,0.1)', border: '1px solid rgba(96,165,250,0.3)',
+              color: '#60a5fa', fontSize: '15px', fontWeight: 700, cursor: 'pointer',
               fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
               transition: 'all 0.2s',
             }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(74,222,128,0.18)'}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'rgba(74,222,128,0.1)'}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(96,165,250,0.18)'}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'rgba(96,165,250,0.1)'}
           >
             <CheckCircle size={18} /> Start verification (30 sec)
           </button>
@@ -322,9 +322,9 @@ export default function VerifyPage() {
                         onClick={() => setAnswers(prev => ({ ...prev, [field.id]: opt.toLowerCase() }))}
                         style={{
                           padding: '9px 22px', borderRadius: '100px',
-                          background: answers[field.id] === opt.toLowerCase() ? 'rgba(74,222,128,0.12)' : 'rgba(255,255,255,0.04)',
-                          border: `1px solid ${answers[field.id] === opt.toLowerCase() ? 'rgba(74,222,128,0.35)' : 'rgba(255,255,255,0.1)'}`,
-                          color: answers[field.id] === opt.toLowerCase() ? '#4ade80' : 'rgba(255,255,255,0.6)',
+                          background: answers[field.id] === opt.toLowerCase() ? 'rgba(96,165,250,0.12)' : 'rgba(255,255,255,0.04)',
+                          border: `1px solid ${answers[field.id] === opt.toLowerCase() ? 'rgba(96,165,250,0.35)' : 'rgba(255,255,255,0.1)'}`,
+                          color: answers[field.id] === opt.toLowerCase() ? '#60a5fa' : 'rgba(255,255,255,0.6)',
                           fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
                           transition: 'all 0.18s',
                         }}
@@ -347,7 +347,7 @@ export default function VerifyPage() {
                       color: '#f5f5f5', fontSize: '14px', fontFamily: 'inherit',
                       outline: 'none', boxSizing: 'border-box',
                     }}
-                    onFocus={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.4)')}
+                    onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.4)')}
                     onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)')}
                   />
                 )}
@@ -384,9 +384,9 @@ export default function VerifyPage() {
             disabled={Object.keys(answers).length < 3}
             style={{
               width: '100%', padding: '15px', borderRadius: '14px',
-              background: Object.keys(answers).length >= 3 ? 'rgba(74,222,128,0.12)' : 'rgba(255,255,255,0.04)',
-              border: `1px solid ${Object.keys(answers).length >= 3 ? 'rgba(74,222,128,0.35)' : 'rgba(255,255,255,0.08)'}`,
-              color: Object.keys(answers).length >= 3 ? '#4ade80' : 'rgba(255,255,255,0.25)',
+              background: Object.keys(answers).length >= 3 ? 'rgba(96,165,250,0.12)' : 'rgba(255,255,255,0.04)',
+              border: `1px solid ${Object.keys(answers).length >= 3 ? 'rgba(96,165,250,0.35)' : 'rgba(255,255,255,0.08)'}`,
+              color: Object.keys(answers).length >= 3 ? '#60a5fa' : 'rgba(255,255,255,0.25)',
               fontSize: '15px', fontWeight: 700, cursor: Object.keys(answers).length >= 3 ? 'pointer' : 'not-allowed',
               fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
               transition: 'all 0.2s',

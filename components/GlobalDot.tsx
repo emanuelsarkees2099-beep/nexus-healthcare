@@ -77,16 +77,16 @@ export default function GlobalDot() {
         {/* Simple world map outline — very rough */}
         <svg viewBox="0 0 100 60" style={{ width: '100%', height: '100%', opacity: 0.15 }}>
           {/* North America */}
-          <ellipse cx="20" cy="28" rx="14" ry="12" fill="rgba(110,231,183,0.4)" />
+          <ellipse cx="20" cy="28" rx="14" ry="12" fill="rgba(74,144,217,0.4)" />
           {/* South America */}
-          <ellipse cx="26" cy="47" rx="7" ry="9" fill="rgba(110,231,183,0.4)" />
+          <ellipse cx="26" cy="47" rx="7" ry="9" fill="rgba(74,144,217,0.4)" />
           {/* Europe/Africa */}
-          <ellipse cx="48" cy="28" rx="7" ry="8" fill="rgba(110,231,183,0.4)" />
-          <ellipse cx="50" cy="44" rx="8" ry="10" fill="rgba(110,231,183,0.4)" />
+          <ellipse cx="48" cy="28" rx="7" ry="8" fill="rgba(74,144,217,0.4)" />
+          <ellipse cx="50" cy="44" rx="8" ry="10" fill="rgba(74,144,217,0.4)" />
           {/* Asia */}
-          <ellipse cx="72" cy="26" rx="18" ry="10" fill="rgba(110,231,183,0.4)" />
+          <ellipse cx="72" cy="26" rx="18" ry="10" fill="rgba(74,144,217,0.4)" />
           {/* Australia */}
-          <ellipse cx="80" cy="46" rx="7" ry="5" fill="rgba(110,231,183,0.4)" />
+          <ellipse cx="80" cy="46" rx="7" ry="5" fill="rgba(74,144,217,0.4)" />
         </svg>
 
         {/* Live dots */}
@@ -102,11 +102,11 @@ export default function GlobalDot() {
                 width: dot.age < 5 ? '8px' : '5px',
                 height: dot.age < 5 ? '8px' : '5px',
                 borderRadius: '50%',
-                background: '#6EE7B7',
+                background: '#4A90D9',
                 transform: 'translate(-50%, -50%)',
                 opacity,
                 transition: 'width 0.3s, height 0.3s, opacity 0.5s',
-                boxShadow: dot.age < 8 ? '0 0 8px rgba(110,231,183,0.7)' : '0 0 3px rgba(110,231,183,0.4)',
+                boxShadow: dot.age < 8 ? '0 0 8px rgba(74,144,217,0.7)' : '0 0 3px rgba(74,144,217,0.4)',
               }}
             />
           )

@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     description: 'Find free clinics, sliding-scale care, and eligibility programs near you. No insurance required.',
     type: 'website',
   },
-  themeColor: '#6EE7B7',
+  themeColor: '#4A90D9',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -66,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <meta name="theme-color" content="#020409" />
+        <meta name="theme-color" content="#040408" />
         {/* Preconnect for Google Fonts CDN (#32) */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

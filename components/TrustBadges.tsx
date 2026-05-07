@@ -28,7 +28,7 @@ const BADGES = [
     ),
     label: 'Zero Data Sold',
     desc: 'We have never sold user data and structurally cannot',
-    color: '#4ade80',
+    color: '#60a5fa',
   },
   {
     icon: (
@@ -105,7 +105,7 @@ export default function TrustBadges() {
       <div aria-hidden="true" style={{
         maxWidth: '1200px', margin: '0 auto 60px',
         height: '1px',
-        background: 'linear-gradient(90deg, transparent, rgba(110,231,183,0.18) 30%, rgba(110,231,183,0.18) 70%, transparent)',
+        background: 'linear-gradient(90deg, transparent, rgba(74,144,217,0.18) 30%, rgba(74,144,217,0.18) 70%, transparent)',
       }} />
 
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -207,15 +207,15 @@ export default function TrustBadges() {
         <div style={{
           marginTop: '2.5rem',
           padding: '1rem 1.5rem',
-          background: 'rgba(110,231,183,0.03)',
-          border: '1px solid rgba(110,231,183,0.10)',
+          background: 'rgba(74,144,217,0.03)',
+          border: '1px solid rgba(74,144,217,0.10)',
           borderRadius: '12px',
           display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap',
         }}>
           <div style={{
             width: '6px', height: '6px', borderRadius: '50%',
             background: 'var(--accent)', flexShrink: 0,
-            boxShadow: '0 0 8px rgba(110,231,183,0.6)',
+            boxShadow: '0 0 8px rgba(74,144,217,0.6)',
             animation: 'pulse-dot 2s ease-in-out infinite',
           }} aria-hidden="true" />
           <p style={{

@@ -149,8 +149,8 @@ function ClinicCard({ clinic, index, isSaved, saving, onBookmark, openNowFilter 
       {/* Rank badge */}
       <div style={{
         width: '32px', height: '32px', borderRadius: '8px',
-        background: index === 0 ? 'rgba(110,231,183,0.10)' : 'rgba(255,255,255,0.04)',
-        border: `1px solid ${index === 0 ? 'rgba(110,231,183,0.20)' : 'rgba(255,255,255,0.07)'}`,
+        background: index === 0 ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.04)',
+        border: `1px solid ${index === 0 ? 'rgba(74,144,217,0.20)' : 'rgba(255,255,255,0.07)'}`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontSize: '13px', fontWeight: 600,
         color: index === 0 ? 'var(--accent)' : 'var(--text-3)',
@@ -185,8 +185,8 @@ function ClinicCard({ clinic, index, isSaved, saving, onBookmark, openNowFilter 
               onClick={() => onBookmark(clinic)}
               disabled={saving}
               style={{
-                background: isSaved ? 'rgba(110,231,183,0.10)' : 'rgba(255,255,255,0.04)',
-                border: `1px solid ${isSaved ? 'rgba(110,231,183,0.25)' : 'rgba(255,255,255,0.08)'}`,
+                background: isSaved ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${isSaved ? 'rgba(74,144,217,0.25)' : 'rgba(255,255,255,0.08)'}`,
                 borderRadius: '8px', padding: '7px', cursor: 'pointer',
                 color: isSaved ? 'var(--accent)' : 'var(--text-3)',
                 display: 'flex', alignItems: 'center', transition: 'all 0.18s',
@@ -198,13 +198,13 @@ function ClinicCard({ clinic, index, isSaved, saving, onBookmark, openNowFilter 
             {clinic.phone && (
               <a href={`tel:${clinic.phone}`} style={{
                 display: 'flex', alignItems: 'center', gap: '5px',
-                background: 'rgba(110,231,183,0.07)', border: '1px solid rgba(110,231,183,0.15)',
+                background: 'rgba(74,144,217,0.07)', border: '1px solid rgba(74,144,217,0.15)',
                 borderRadius: '8px', padding: '7px 12px', fontSize: '12px',
                 color: 'var(--accent)', textDecoration: 'none', fontWeight: 600,
                 transition: 'background 0.2s',
               }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(110,231,183,0.14)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(110,231,183,0.07)')}
+                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.14)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.07)')}
               >
                 <Phone size={12} /> {t('search.call')}
               </a>
@@ -257,8 +257,8 @@ function ClinicCard({ clinic, index, isSaved, saving, onBookmark, openNowFilter 
             <span style={{
               fontSize: '10px', letterSpacing: '0.06em',
               color: clinic.type === 'FQHC' ? 'var(--accent)' : clinic.type?.includes('Free') ? 'var(--green-pulse)' : 'var(--text-3)',
-              background: clinic.type === 'FQHC' ? 'rgba(110,231,183,0.07)' : 'rgba(255,255,255,0.04)',
-              border: `1px solid ${clinic.type === 'FQHC' ? 'rgba(110,231,183,0.15)' : 'rgba(255,255,255,0.08)'}`,
+              background: clinic.type === 'FQHC' ? 'rgba(74,144,217,0.07)' : 'rgba(255,255,255,0.04)',
+              border: `1px solid ${clinic.type === 'FQHC' ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.08)'}`,
               padding: '2px 8px', borderRadius: '5px', fontFamily: 'var(--font-inter)', fontWeight: 600,
             }}>
               {clinic.type}
@@ -291,9 +291,9 @@ function ClinicCard({ clinic, index, isSaved, saving, onBookmark, openNowFilter 
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '4px',
                 fontSize: '10px', fontWeight: 600,
-                color: '#34D399',
-                background: 'rgba(52,211,153,0.07)',
-                border: '1px solid rgba(52,211,153,0.2)',
+                color: '#60A5FA',
+                background: 'rgba(96,165,250,0.07)',
+                border: '1px solid rgba(96,165,250,0.2)',
                 padding: '2px 8px', borderRadius: '5px',
                 fontFamily: 'var(--font-inter)', cursor: 'help',
               }}
@@ -320,10 +320,10 @@ function ClinicCard({ clinic, index, isSaved, saving, onBookmark, openNowFilter 
               <div style={{
                 display: 'inline-flex', alignItems: 'center', gap: '5px',
                 padding: '3px 10px', borderRadius: '100px',
-                background: 'rgba(74,222,128,0.07)', border: '1px solid rgba(74,222,128,0.2)',
-                fontSize: '11px', color: '#4ade80', fontWeight: 600,
+                background: 'rgba(96,165,250,0.07)', border: '1px solid rgba(96,165,250,0.2)',
+                fontSize: '11px', color: '#60a5fa', fontWeight: 600,
               }}>
-                <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#4ade80', animation: 'open-pulse 1.5s ease-in-out infinite', display: 'inline-block' }} />
+                <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#60a5fa', animation: 'open-pulse 1.5s ease-in-out infinite', display: 'inline-block' }} />
                 Walk-in available · ~{waitMins} min wait
               </div>
               <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>
@@ -369,9 +369,9 @@ function ClinicCard({ clinic, index, isSaved, saving, onBookmark, openNowFilter 
           </Link>
           <Link
             href="/verify"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: 'rgba(74,222,128,0.6)', textDecoration: 'none', fontFamily: 'var(--font-inter)', transition: 'color 0.2s' }}
-            onMouseEnter={e => (e.currentTarget.style.color = '#4ade80')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(74,222,128,0.6)')}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: 'rgba(96,165,250,0.6)', textDecoration: 'none', fontFamily: 'var(--font-inter)', transition: 'color 0.2s' }}
+            onMouseEnter={e => (e.currentTarget.style.color = '#60a5fa')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(96,165,250,0.6)')}
           >
             ✓ Verify this clinic
           </Link>
@@ -394,7 +394,7 @@ function IntentBanner({ intent, onApplySpecialty }: { intent: ReturnType<typeof 
     <div style={{
       display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap',
       padding: '10px 14px', borderRadius: '10px',
-      background: 'rgba(110,231,183,0.04)', border: '1px solid rgba(110,231,183,0.12)',
+      background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.12)',
       marginBottom: '12px',
     }}>
       <Zap size={13} color="var(--accent)" />
@@ -692,8 +692,8 @@ function SearchResults() {
                   padding: '4px 11px', borderRadius: '100px',
                   fontSize: '11px', fontFamily: 'var(--font-inter),sans-serif', cursor: 'pointer',
                   transition: 'all 0.18s',
-                  background: radius === r.value ? 'rgba(110,231,183,0.12)' : 'rgba(255,255,255,0.03)',
-                  border: `1px solid ${radius === r.value ? 'rgba(110,231,183,0.28)' : 'rgba(255,255,255,0.07)'}`,
+                  background: radius === r.value ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.03)',
+                  border: `1px solid ${radius === r.value ? 'rgba(74,144,217,0.28)' : 'rgba(255,255,255,0.07)'}`,
                   color: radius === r.value ? 'var(--accent)' : 'var(--text-3)',
                 }}
               >
@@ -709,8 +709,8 @@ function SearchResults() {
                 padding: '4px 12px', borderRadius: '100px',
                 fontSize: '11px', fontFamily: 'var(--font-inter),sans-serif',
                 cursor: 'pointer', transition: 'all 0.18s', fontWeight: openNowFilter ? 600 : 400,
-                background: openNowFilter ? 'rgba(52,211,153,0.12)' : 'rgba(255,255,255,0.03)',
-                border: `1px solid ${openNowFilter ? 'rgba(52,211,153,0.30)' : 'rgba(255,255,255,0.07)'}`,
+                background: openNowFilter ? 'rgba(96,165,250,0.12)' : 'rgba(255,255,255,0.03)',
+                border: `1px solid ${openNowFilter ? 'rgba(96,165,250,0.30)' : 'rgba(255,255,255,0.07)'}`,
                 color: openNowFilter ? 'var(--green-pulse)' : 'var(--text-3)',
               }}
             >
@@ -747,7 +747,7 @@ function SearchResults() {
                     style={{
                       padding: '5px 11px', fontSize: '11px', fontFamily: 'var(--font-inter),sans-serif',
                       cursor: 'pointer', border: 'none',
-                      background: viewMode === mode ? 'rgba(110,231,183,0.10)' : 'transparent',
+                      background: viewMode === mode ? 'rgba(74,144,217,0.10)' : 'transparent',
                       color: viewMode === mode ? 'var(--accent)' : 'var(--text-3)',
                       display: 'flex', alignItems: 'center', gap: '4px', transition: 'all 0.18s',
                     }}
@@ -794,27 +794,27 @@ function SearchResults() {
               {/* SVG illustration — simplified city + cross */}
               <svg width="160" height="100" viewBox="0 0 160 100" fill="none" aria-hidden="true" style={{ margin: '0 auto 24px', display: 'block', opacity: 0.85 }}>
                 {/* Ground */}
-                <rect x="0" y="82" width="160" height="2" fill="rgba(110,231,183,0.15)" rx="1"/>
+                <rect x="0" y="82" width="160" height="2" fill="rgba(74,144,217,0.15)" rx="1"/>
                 {/* Buildings */}
                 <rect x="8"  y="52" width="18" height="30" rx="3" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" strokeWidth="1"/>
-                <rect x="14" y="46" width="6"  height="6"  rx="1" fill="rgba(110,231,183,0.15)"/>
+                <rect x="14" y="46" width="6"  height="6"  rx="1" fill="rgba(74,144,217,0.15)"/>
                 <rect x="30" y="38" width="24" height="44" rx="3" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.09)" strokeWidth="1"/>
-                <rect x="36" y="32" width="8"  height="6"  rx="1" fill="rgba(110,231,183,0.20)"/>
+                <rect x="36" y="32" width="8"  height="6"  rx="1" fill="rgba(74,144,217,0.20)"/>
                 {/* Center building — clinic */}
-                <rect x="60" y="26" width="40" height="56" rx="4" fill="rgba(110,231,183,0.07)" stroke="rgba(110,231,183,0.25)" strokeWidth="1.2"/>
+                <rect x="60" y="26" width="40" height="56" rx="4" fill="rgba(74,144,217,0.07)" stroke="rgba(74,144,217,0.25)" strokeWidth="1.2"/>
                 {/* Cross on clinic */}
-                <rect x="76" y="36" width="8" height="20" rx="2" fill="rgba(110,231,183,0.60)"/>
-                <rect x="70" y="42" width="20" height="8"  rx="2" fill="rgba(110,231,183,0.60)"/>
+                <rect x="76" y="36" width="8" height="20" rx="2" fill="rgba(74,144,217,0.60)"/>
+                <rect x="70" y="42" width="20" height="8"  rx="2" fill="rgba(74,144,217,0.60)"/>
                 {/* Right buildings */}
                 <rect x="106" y="44" width="20" height="38" rx="3" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" strokeWidth="1"/>
                 <rect x="110" y="38" width="8"  height="6"  rx="1" fill="rgba(167,139,250,0.18)"/>
                 <rect x="130" y="56" width="16" height="26" rx="3" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.07)" strokeWidth="1"/>
                 {/* Location pin */}
-                <circle cx="80" cy="12" r="7" fill="rgba(110,231,183,0.15)" stroke="rgba(110,231,183,0.50)" strokeWidth="1.4"/>
+                <circle cx="80" cy="12" r="7" fill="rgba(74,144,217,0.15)" stroke="rgba(74,144,217,0.50)" strokeWidth="1.4"/>
                 <circle cx="80" cy="12" r="2.5" fill="var(--accent)"/>
-                <line x1="80" y1="19" x2="80" y2="25" stroke="rgba(110,231,183,0.40)" strokeWidth="1.4" strokeLinecap="round"/>
+                <line x1="80" y1="19" x2="80" y2="25" stroke="rgba(74,144,217,0.40)" strokeWidth="1.4" strokeLinecap="round"/>
                 {/* Glow */}
-                <ellipse cx="80" cy="83" rx="28" ry="4" fill="rgba(110,231,183,0.06)"/>
+                <ellipse cx="80" cy="83" rx="28" ry="4" fill="rgba(74,144,217,0.06)"/>
               </svg>
               <h3 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--text)', marginBottom: '10px', fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>
                 {t('search.findClinic')}
@@ -828,15 +828,15 @@ function SearchResults() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px', maxWidth: '600px', margin: '0 auto 32px' }}>
               {/* Card 1 — sliding scale */}
               <div style={{
-                background: 'rgba(110,231,183,0.05)', border: '1px solid rgba(110,231,183,0.18)',
+                background: 'rgba(74,144,217,0.05)', border: '1px solid rgba(74,144,217,0.18)',
                 borderRadius: '16px', padding: '20px', cursor: 'pointer',
                 transition: 'border-color 0.2s, background 0.2s',
               }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(110,231,183,0.09)'; e.currentTarget.style.borderColor = 'rgba(110,231,183,0.30)' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(110,231,183,0.05)'; e.currentTarget.style.borderColor = 'rgba(110,231,183,0.18)' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(74,144,217,0.09)'; e.currentTarget.style.borderColor = 'rgba(74,144,217,0.30)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(74,144,217,0.05)'; e.currentTarget.style.borderColor = 'rgba(74,144,217,0.18)' }}
                 onClick={() => { document.querySelector<HTMLInputElement>('input[placeholder*="ZIP"]')?.focus() }}
               >
-                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(110,231,183,0.12)', border: '1px solid rgba(110,231,183,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
                   <MapPin size={16} color="var(--accent)" />
                 </div>
                 <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px', fontFamily: 'var(--font-display)' }}>
@@ -944,7 +944,7 @@ function SearchResults() {
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '24px' }}>
               <button
                 onClick={() => setRadius('50')}
-                style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(110,231,183,0.08)', border: '1px solid rgba(110,231,183,0.22)', color: 'var(--accent)', fontSize: '12px', fontFamily: 'var(--font-inter)', fontWeight: 600, cursor: 'pointer' }}
+                style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.22)', color: 'var(--accent)', fontSize: '12px', fontFamily: 'var(--font-inter)', fontWeight: 600, cursor: 'pointer' }}
               >
                 Expand to 50 mi
               </button>
@@ -963,7 +963,7 @@ function SearchResults() {
         {results.length > 0 && (
           <div style={{
             marginTop: '32px', padding: '14px 18px',
-            background: 'rgba(110,231,183,0.04)', border: '1px solid rgba(110,231,183,0.12)',
+            background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.12)',
             borderRadius: '14px', display: 'flex', alignItems: 'flex-start', gap: '10px',
           }}>
             <Stethoscope size={15} color="var(--accent)" style={{ marginTop: '2px', flexShrink: 0 }} />

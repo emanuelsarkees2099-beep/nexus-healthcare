@@ -50,7 +50,7 @@ export default function ScaredButton() {
             </Link>
             <Link href="/gps" onClick={() => setOpen(false)} style={{
               padding: '10px 14px', borderRadius: '10px',
-              background: 'rgba(110,231,183,0.06)', border: '1px solid rgba(110,231,183,0.18)',
+              background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.18)',
               color: 'var(--accent)', fontSize: '13px',
               textDecoration: 'none', display: 'block',
             }}>

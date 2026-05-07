@@ -199,7 +199,7 @@ export default function TelehealthPage() {
         {/* ── HERO ─────────────────────────────── */}
         <section style={{ padding: '60px 24px 40px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
           <div style={{ maxWidth: '700px', margin: '0 auto' }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', borderRadius: '100px', fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.06em', marginBottom: '24px' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', borderRadius: '100px', fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.06em', marginBottom: '24px' }}>
               <Video size={10} strokeWidth={1.5} /> TELEHEALTH ACCESS
             </span>
             <h1 style={{ fontSize: 'clamp(34px, 6vw, 64px)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '20px', color: '#fff' }}>
@@ -229,7 +229,7 @@ export default function TelehealthPage() {
               {HOW_IT_WORKS.map((step) => (
                 <div key={step.step} style={{ padding: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-                    <span style={{ fontSize: '11px', color: 'rgba(110,231,183,0.5)', fontWeight: 700 }}>{step.step}</span>
+                    <span style={{ fontSize: '11px', color: 'rgba(74,144,217,0.5)', fontWeight: 700 }}>{step.step}</span>
                     <span style={{ color: 'var(--accent)' }}>{step.icon}</span>
                   </div>
                   <div style={{ fontSize: '15px', fontWeight: 600, color: '#eef4f5', marginBottom: '8px' }}>{step.title}</div>
@@ -257,17 +257,17 @@ export default function TelehealthPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {filtered.map((p, i) => (
                 <div key={p.name} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', overflow: 'hidden', transition: 'border-color 0.2s' }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(110,231,183,0.25)')}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.25)')}
                   onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)')}>
 
                   {/* Header row */}
                   <div style={{ padding: '20px 24px', display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer' }}
                     onClick={() => setExpanded(expanded === i ? null : i)}>
-                    <span style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', flexShrink: 0 }}>{p.logo}</span>
+                    <span style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', flexShrink: 0 }}>{p.logo}</span>
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                         <span style={{ fontSize: '16px', fontWeight: 700, color: '#eef4f5' }}>{p.name}</span>
-                        {p.verified && <span style={{ fontSize: '10px', color: '#4ade80', background: 'rgba(74,222,128,0.1)', padding: '2px 7px', borderRadius: '100px', border: '1px solid rgba(74,222,128,0.2)' }}>✓ Verified</span>}
+                        {p.verified && <span style={{ fontSize: '10px', color: '#60a5fa', background: 'rgba(96,165,250,0.1)', padding: '2px 7px', borderRadius: '100px', border: '1px solid rgba(96,165,250,0.2)' }}>✓ Verified</span>}
                       </div>
                       <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
                         <span style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 600 }}>{p.cost}</span>
@@ -297,7 +297,7 @@ export default function TelehealthPage() {
                       </div>
 
                       {p.note && (
-                        <div style={{ padding: '10px 14px', background: 'rgba(110,231,183,0.06)', borderRadius: '8px', fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginBottom: '16px', borderLeft: '2px solid rgba(110,231,183,0.3)' }}>
+                        <div style={{ padding: '10px 14px', background: 'rgba(74,144,217,0.06)', borderRadius: '8px', fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginBottom: '16px', borderLeft: '2px solid rgba(74,144,217,0.3)' }}>
                           <span style={{ color: 'var(--accent)', fontWeight: 600 }}>Note: </span>{p.note}
                         </div>
                       )}
@@ -372,7 +372,7 @@ export default function TelehealthPage() {
                               <button
                                 onClick={() => copyScript(`${script.id}-${si}`, step.script)}
                                 title="Copy to clipboard"
-                                style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid', background: copiedScript === `${script.id}-${si}` ? 'rgba(110,231,183,0.1)' : 'rgba(255,255,255,0.03)', color: copiedScript === `${script.id}-${si}` ? 'var(--accent)' : 'rgba(255,255,255,0.35)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', borderColor: copiedScript === `${script.id}-${si}` ? 'rgba(110,231,183,0.3)' : 'rgba(255,255,255,0.08)', flexShrink: 0, fontFamily: 'inherit' }}>
+                                style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid', background: copiedScript === `${script.id}-${si}` ? 'rgba(74,144,217,0.1)' : 'rgba(255,255,255,0.03)', color: copiedScript === `${script.id}-${si}` ? 'var(--accent)' : 'rgba(255,255,255,0.35)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', borderColor: copiedScript === `${script.id}-${si}` ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)', flexShrink: 0, fontFamily: 'inherit' }}>
                                 {copiedScript === `${script.id}-${si}` ? <CheckCircle size={13} strokeWidth={2} /> : <Copy size={13} strokeWidth={2} />}
                               </button>
                             </div>
@@ -403,7 +403,7 @@ export default function TelehealthPage() {
                 { label: 'SAMHSA Substance Use', number: '1-800-662-4357', href: 'tel:18006624357', color: '#facc15' },
                 { label: 'National Domestic Violence', number: '1-800-799-7233', href: 'tel:18007997233', color: '#a78bfa' },
                 { label: 'FQHC Health Center Finder', number: 'findahealthcenter.hrsa.gov', href: 'https://findahealthcenter.hrsa.gov', color: 'var(--accent)' },
-                { label: 'Medicaid Enrollment Help', number: '1-800-318-2596', href: 'tel:18003182596', color: '#34d399' },
+                { label: 'Medicaid Enrollment Help', number: '1-800-318-2596', href: 'tel:18003182596', color: '#60a5fa' },
               ].map(c => (
                 <a key={c.label} href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer"
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', textDecoration: 'none', transition: 'all 0.2s' }}

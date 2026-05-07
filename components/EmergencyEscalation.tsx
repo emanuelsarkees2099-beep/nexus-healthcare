@@ -51,8 +51,8 @@ const RESOURCES = [
     description: '1-800-222-1222 — free, 24/7',
     action: () => { window.location.href = 'tel:18002221222' },
     color: 'var(--accent)',
-    bg: 'rgba(110,231,183,0.10)',
-    border: 'rgba(110,231,183,0.25)',
+    bg: 'rgba(74,144,217,0.10)',
+    border: 'rgba(74,144,217,0.25)',
     icon: <Pill size={16} strokeWidth={2} />,
   },
 ]

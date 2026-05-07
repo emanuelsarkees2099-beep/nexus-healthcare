@@ -31,7 +31,7 @@ const STATUS_COLORS: Record<string, string> = {
   pending_review: '#f97316',
   reviewed: '#f59e0b',
   resolved: '#10b981',
-  published: '#4ade80',
+  published: '#60a5fa',
   archived: 'rgba(255,255,255,0.3)',
 }
 
@@ -154,7 +154,7 @@ export default function AdminPage() {
             { label: 'New', key: 'new', color: '#6d9197' },
             { label: 'Reviewed', key: 'reviewed', color: '#f59e0b' },
             { label: 'Resolved', key: 'resolved', color: '#10b981' },
-            { label: 'Published', key: 'published', color: '#4ade80' },
+            { label: 'Published', key: 'published', color: '#60a5fa' },
           ].map(s => (
             <div key={s.key} style={{ padding: '16px 20px', background: 'rgba(255,255,255,0.03)', border: `1px solid ${s.color}30`, borderRadius: '10px', minWidth: '120px', cursor: 'pointer' }}
               onClick={() => setStatusFilter(s.key)}>
@@ -255,7 +255,7 @@ export default function AdminPage() {
                       {sub.status === 'pending_review' ? (
                         <>
                           <button onClick={() => updateStatus(sub.id, 'published')} disabled={updating}
-                            style={{ padding: '5px 10px', borderRadius: '6px', border: '1px solid #4ade8060', background: 'rgba(74,222,128,0.1)', color: '#4ade80', fontSize: '11px', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 700 }}>
+                            style={{ padding: '5px 10px', borderRadius: '6px', border: '1px solid #60a5fa60', background: 'rgba(96,165,250,0.1)', color: '#60a5fa', fontSize: '11px', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 700 }}>
                             ✓ Approve
                           </button>
                           <button onClick={() => updateStatus(sub.id, 'archived')} disabled={updating}

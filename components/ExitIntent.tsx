@@ -65,17 +65,17 @@ export default function ExitIntent() {
           background: 'rgba(8,13,26,0.82)',
           backdropFilter: 'blur(32px) saturate(180%)',
           WebkitBackdropFilter: 'blur(32px) saturate(180%)',
-          border: '1px solid rgba(110,231,183,0.12)',
+          border: '1px solid rgba(74,144,217,0.12)',
           borderRadius: '24px',
           padding: '2.25rem 2.5rem',
-          boxShadow: '0 40px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(110,231,183,0.06), inset 0 1px 0 rgba(255,255,255,0.04)',
+          boxShadow: '0 40px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(74,144,217,0.06), inset 0 1px 0 rgba(255,255,255,0.04)',
           animation: 'exit-slide-up 0.45s cubic-bezier(0.16,1,0.3,1) forwards',
         }}
       >
         {/* Top accent line */}
         <div aria-hidden="true" style={{
           position: 'absolute', top: 0, left: '15%', right: '15%', height: '1px',
-          background: 'linear-gradient(90deg, transparent, rgba(110,231,183,0.5), transparent)',
+          background: 'linear-gradient(90deg, transparent, rgba(74,144,217,0.5), transparent)',
         }} />
 
         {/* Close button */}
@@ -137,16 +137,16 @@ export default function ExitIntent() {
               border: 'none', borderRadius: '12px', padding: '13px 20px',
               fontFamily: 'var(--font-display)', fontSize: '14px', fontWeight: 600,
               cursor: 'pointer', minWidth: '160px',
-              boxShadow: '0 4px 20px rgba(110,231,183,0.30)',
+              boxShadow: '0 4px 20px rgba(74,144,217,0.30)',
               transition: 'transform 0.2s var(--ease-spring), box-shadow 0.2s',
             }}
             onMouseEnter={e => {
               e.currentTarget.style.transform = 'translateY(-2px)'
-              e.currentTarget.style.boxShadow = '0 8px 32px rgba(110,231,183,0.45)'
+              e.currentTarget.style.boxShadow = '0 8px 32px rgba(74,144,217,0.45)'
             }}
             onMouseLeave={e => {
               e.currentTarget.style.transform = ''
-              e.currentTarget.style.boxShadow = '0 4px 20px rgba(110,231,183,0.30)'
+              e.currentTarget.style.boxShadow = '0 4px 20px rgba(74,144,217,0.30)'
             }}
             onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.97)' }}
             onMouseUp={e => { e.currentTarget.style.transform = 'translateY(-2px)' }}
@@ -165,7 +165,7 @@ export default function ExitIntent() {
             }}
             onMouseEnter={e => {
               e.currentTarget.style.color = 'var(--text-2)'
-              e.currentTarget.style.borderColor = 'rgba(110,231,183,0.25)'
+              e.currentTarget.style.borderColor = 'rgba(74,144,217,0.25)'
             }}
             onMouseLeave={e => {
               e.currentTarget.style.color = 'var(--text-3)'

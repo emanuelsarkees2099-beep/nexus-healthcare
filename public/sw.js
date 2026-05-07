@@ -103,7 +103,7 @@ self.addEventListener('fetch', event => {
     body{min-height:100vh;background:#020409;color:#fff;font-family:system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px}
     h1{font-size:clamp(28px,5vw,42px);font-weight:800;margin-bottom:12px;letter-spacing:-0.03em}
     p{font-size:15px;color:rgba(255,255,255,0.5);max-width:360px;line-height:1.7;margin-bottom:28px}
-    a{display:inline-block;background:#6EE7B7;color:#020409;padding:13px 28px;border-radius:100px;font-weight:700;font-size:14px;text-decoration:none}
+    a{display:inline-block;background:#4A90D9;color:#020409;padding:13px 28px;border-radius:100px;font-weight:700;font-size:14px;text-decoration:none}
     .dot{width:10px;height:10px;border-radius:50%;background:#F87171;display:inline-block;margin-right:6px;animation:blink 1.2s ease-in-out infinite}
     @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
   </style>
@@ -113,7 +113,7 @@ self.addEventListener('fetch', event => {
   <h1>You're offline</h1>
   <p>Check your internet connection. Emergency numbers below work even without NEXUS.</p>
   <a href="tel:911">Call 911</a>
-  <p style="margin-top:16px;font-size:12px">Crisis line: <a href="tel:988" style="background:none;color:#6EE7B7;padding:0;font-size:12px">988</a> · Poison Control: <a href="tel:18002221222" style="background:none;color:#6EE7B7;padding:0;font-size:12px">1-800-222-1222</a></p>
+  <p style="margin-top:16px;font-size:12px">Crisis line: <a href="tel:988" style="background:none;color:#4A90D9;padding:0;font-size:12px">988</a> · Poison Control: <a href="tel:18002221222" style="background:none;color:#4A90D9;padding:0;font-size:12px">1-800-222-1222</a></p>
 </body>
 </html>`,
               { headers: { 'Content-Type': 'text/html' } }

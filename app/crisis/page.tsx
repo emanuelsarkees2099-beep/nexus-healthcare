@@ -56,9 +56,9 @@ const CRISIS_RESOURCES = [
     number: '1-800-662-4357',
     desc: 'Substance use treatment. Free, confidential, 24/7.',
     type: 'substance',
-    color: '#34d399',
-    bg: 'rgba(52,211,153,0.08)',
-    border: 'rgba(52,211,153,0.25)',
+    color: '#60a5fa',
+    bg: 'rgba(96,165,250,0.08)',
+    border: 'rgba(96,165,250,0.25)',
   },
 ]
 
@@ -336,7 +336,7 @@ export default function CrisisPage() {
                         <Clock size={10} /> {er.wait} wait
                       </span>
                       <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <PulsingDot color="#4ade80" /> Open now
+                        <PulsingDot color="#60a5fa" /> Open now
                       </span>
                     </div>
                   </div>
@@ -400,7 +400,7 @@ export default function CrisisPage() {
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link href="/search" style={{
                 padding: '10px 22px', borderRadius: '100px',
-                background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.25)',
+                background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.25)',
                 color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
                 textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px',
               }}>

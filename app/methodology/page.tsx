@@ -43,9 +43,9 @@ export default function MethodologyPage() {
     fontWeight: 500,
     letterSpacing: '0.08em',
     textTransform: 'uppercase' as const,
-    background: 'rgba(110,231,183,0.08)',
+    background: 'rgba(74,144,217,0.08)',
     color: 'var(--accent)',
-    border: '1px solid rgba(110,231,183,0.18)',
+    border: '1px solid rgba(74,144,217,0.18)',
     marginBottom: '20px',
   }
   const table: React.CSSProperties = {
@@ -71,9 +71,9 @@ export default function MethodologyPage() {
     verticalAlign: 'top' as const,
   }
   const callout: React.CSSProperties = {
-    background: 'rgba(110,231,183,0.05)',
-    border: '1px solid rgba(110,231,183,0.2)',
-    borderLeft: '3px solid rgba(110,231,183,0.5)',
+    background: 'rgba(74,144,217,0.05)',
+    border: '1px solid rgba(74,144,217,0.2)',
+    borderLeft: '3px solid rgba(74,144,217,0.5)',
     borderRadius: '10px',
     padding: '16px 20px',
     fontSize: '14px',
@@ -305,7 +305,7 @@ export default function MethodologyPage() {
         <h3 style={h3}>2.4 Label Thresholds</h3>
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '24px' }}>
           {[
-            { label: 'LIKELY FREE', range: '≥ 70 / 100', color: '#4ade80', bg: 'rgba(74,222,128,0.08)', desc: 'FQHC, NAFC free clinic, or name strongly indicates $0 care' },
+            { label: 'LIKELY FREE', range: '≥ 70 / 100', color: '#60a5fa', bg: 'rgba(96,165,250,0.08)', desc: 'FQHC, NAFC free clinic, or name strongly indicates $0 care' },
             { label: 'LOW COST', range: '45–69 / 100', color: '#60a5fa', bg: 'rgba(96,165,250,0.08)', desc: 'Community health, income-based fees, sliding scale available' },
             { label: 'STANDARD', range: '< 45 / 100', color: 'rgba(255,255,255,0.3)', bg: 'rgba(255,255,255,0.03)', desc: 'Unknown affordability — may not offer reduced-cost care' },
           ].map(t => (
@@ -450,7 +450,7 @@ export default function MethodologyPage() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px', marginBottom: '28px' }}>
           {[
-            { title: 'No PHI stored', desc: 'NEXUS never collects, stores, or transmits Protected Health Information. Search queries are not logged to any database. ZIP codes in localStorage are stored only on the user\'s own device.', color: '#4ade80' },
+            { title: 'No PHI stored', desc: 'NEXUS never collects, stores, or transmits Protected Health Information. Search queries are not logged to any database. ZIP codes in localStorage are stored only on the user\'s own device.', color: '#60a5fa' },
             { title: 'Outcome data is opt-in', desc: 'The outcome logging feature is entirely voluntary. When a user logs an outcome (e.g. "I visited a clinic"), only the event type and optionally ZIP code are stored — no names, dates of birth, diagnosis, or insurance information.', color: '#60a5fa' },
             { title: 'No tracking pixels', desc: 'NEXUS does not use advertising trackers, cross-site cookies, or third-party analytics. Vercel Speed Insights is used for performance measurement only and does not expose individual user data.', color: '#a78bfa' },
             { title: 'IRB-adjacent posture', desc: 'All data collection is designed to comply with the spirit of IRB minimal-risk standards: data is anonymized, consent is explicit, and collection is proportionate to the research question.', color: '#fbbf24' },

@@ -65,15 +65,15 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
       className: '',
       html: `<div style="
         width:14px;height:14px;border-radius:50%;
-        background:#6EE7B7;
-        box-shadow:0 0 0 3px rgba(110,231,183,0.35),0 0 16px rgba(110,231,183,0.5);
+        background:#4A90D9;
+        box-shadow:0 0 0 3px rgba(74,144,217,0.35),0 0 16px rgba(74,144,217,0.5);
         border:2px solid #fff;
       "></div>`,
       iconSize:   [14, 14],
       iconAnchor: [7, 7],
     })
     L.marker([lat, lng], { icon: homeIcon }).addTo(map)
-      .bindPopup('<strong style="color:#6EE7B7">Your location</strong>')
+      .bindPopup('<strong style="color:#4A90D9">Your location</strong>')
 
     // Clinic markers
     addMarkers(L, map, clinics, setSelected)
@@ -134,14 +134,14 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
             zIndex: 1000,
             display: 'flex', alignItems: 'center', gap: '6px',
             padding: '8px 18px', borderRadius: '100px',
-            background: 'rgba(8,13,26,0.92)', border: '1px solid rgba(110,231,183,0.35)',
+            background: 'rgba(8,13,26,0.92)', border: '1px solid rgba(74,144,217,0.35)',
             color: 'var(--accent)', fontSize: '12px', fontWeight: 600,
             fontFamily: 'var(--font-inter)', cursor: 'pointer',
             backdropFilter: 'blur(12px)', transition: 'background 0.2s',
             boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
             whiteSpace: 'nowrap',
           }}
-          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(110,231,183,0.12)')}
+          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.12)')}
           onMouseLeave={e => (e.currentTarget.style.background = 'rgba(8,13,26,0.92)')}
         >
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -167,7 +167,7 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
         <div style={{
           position: 'absolute', bottom: '12px', right: '12px', zIndex: 1000,
           width: '260px', maxWidth: 'calc(100% - 24px)',
-          background: 'rgba(8,13,26,0.96)', border: '1px solid rgba(110,231,183,0.18)',
+          background: 'rgba(8,13,26,0.96)', border: '1px solid rgba(74,144,217,0.18)',
           borderRadius: '14px', padding: '16px',
           backdropFilter: 'blur(20px)',
           boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
@@ -192,7 +192,7 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
           {/* Status badge */}
           <div style={{ display: 'flex', gap: '6px', marginBottom: '10px', flexWrap: 'wrap' }}>
             {selected.free && (
-              <span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--accent)', background: 'rgba(110,231,183,0.1)', border: '1px solid rgba(110,231,183,0.2)', borderRadius: '4px', padding: '2px 7px' }}>
+              <span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--accent)', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', borderRadius: '4px', padding: '2px 7px' }}>
                 Free
               </span>
             )}
@@ -202,7 +202,7 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
               </span>
             )}
             {selected.accepting && (
-              <span style={{ fontSize: '10px', fontWeight: 600, color: '#4ade80', background: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.2)', borderRadius: '4px', padding: '2px 7px' }}>
+              <span style={{ fontSize: '10px', fontWeight: 600, color: '#60a5fa', background: 'rgba(96,165,250,0.1)', border: '1px solid rgba(96,165,250,0.2)', borderRadius: '4px', padding: '2px 7px' }}>
                 Accepting patients
               </span>
             )}
@@ -296,7 +296,7 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
         /* Override Leaflet popup to match dark theme */
         .leaflet-popup-content-wrapper {
           background: rgba(8,13,26,0.97) !important;
-          border: 1px solid rgba(110,231,183,0.18) !important;
+          border: 1px solid rgba(74,144,217,0.18) !important;
           border-radius: 10px !important;
           box-shadow: 0 8px 24px rgba(0,0,0,0.5) !important;
           color: #eef4f5 !important;
@@ -306,9 +306,9 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
         .leaflet-popup-tip { background: rgba(8,13,26,0.97) !important; }
         .leaflet-popup-close-button { color: rgba(255,255,255,0.4) !important; }
         .leaflet-bar a { background: rgba(8,13,26,0.95) !important; color: #eef4f5 !important; border-color: rgba(255,255,255,0.1) !important; }
-        .leaflet-bar a:hover { background: rgba(110,231,183,0.1) !important; color: var(--accent) !important; }
+        .leaflet-bar a:hover { background: rgba(74,144,217,0.1) !important; color: var(--accent) !important; }
         .leaflet-control-attribution { background: rgba(8,13,26,0.75) !important; color: rgba(255,255,255,0.35) !important; font-size: 10px !important; }
-        .leaflet-control-attribution a { color: rgba(110,231,183,0.6) !important; }
+        .leaflet-control-attribution a { color: rgba(74,144,217,0.6) !important; }
       `}</style>
     </div>
   )
@@ -345,7 +345,7 @@ function addMarkers(
 
     const isFree    = group.some(c => c.free)
     const isSliding = group.some(c => c.sliding_scale)
-    const color     = isFree ? '#6EE7B7' : isSliding ? '#60a5fa' : '#fbbf24'
+    const color     = isFree ? '#4A90D9' : isSliding ? '#60a5fa' : '#fbbf24'
     const count     = group.length
 
     const icon = L.divIcon({

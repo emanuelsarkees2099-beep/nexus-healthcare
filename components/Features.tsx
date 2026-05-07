@@ -59,14 +59,14 @@ function ClinicMapMini() {
     <div style={{
       marginTop: '1.25rem',
       background: 'rgba(0,0,0,0.25)',
-      border: '1px solid rgba(110,231,183,0.08)',
+      border: '1px solid rgba(74,144,217,0.08)',
       borderRadius: '12px', padding: '12px',
       position: 'relative', overflow: 'hidden',
     }}>
       {/* Faint grid lines for map feel */}
       <div aria-hidden="true" style={{
         position: 'absolute', inset: 0,
-        backgroundImage: 'linear-gradient(rgba(110,231,183,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(110,231,183,0.03) 1px, transparent 1px)',
+        backgroundImage: 'linear-gradient(rgba(74,144,217,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(74,144,217,0.03) 1px, transparent 1px)',
         backgroundSize: '20px 20px',
         borderRadius: '12px',
       }} />
@@ -86,8 +86,8 @@ function ClinicMapMini() {
         <div key={c.name} style={{
           display: 'flex', alignItems: 'center', gap: '8px',
           padding: '7px 9px', borderRadius: '8px', marginBottom: '4px',
-          background: i === 0 ? 'rgba(110,231,183,0.06)' : 'rgba(255,255,255,0.02)',
-          border: `1px solid ${i === 0 ? 'rgba(110,231,183,0.14)' : 'transparent'}`,
+          background: i === 0 ? 'rgba(74,144,217,0.06)' : 'rgba(255,255,255,0.02)',
+          border: `1px solid ${i === 0 ? 'rgba(74,144,217,0.14)' : 'transparent'}`,
           fontFamily: 'var(--font-inter)', position: 'relative',
         }}>
           <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: c.open ? 'var(--green-pulse)' : 'var(--text-3)', flexShrink: 0 }} />
@@ -160,8 +160,8 @@ function OutcomesSparkline() {
       <svg width={w} height={h + 4} viewBox={`0 0 ${w} ${h + 4}`} aria-hidden="true">
         <defs>
           <linearGradient id="spark-grad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="rgba(110,231,183,0.3)" />
-            <stop offset="100%" stopColor="rgba(110,231,183,0.9)" />
+            <stop offset="0%" stopColor="rgba(74,144,217,0.3)" />
+            <stop offset="100%" stopColor="rgba(74,144,217,0.9)" />
           </linearGradient>
         </defs>
         <path d={pathD} fill="none" stroke="url(#spark-grad)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -175,7 +175,7 @@ function OutcomesSparkline() {
 /* ── Mini live illustration: CHW avatar row ─────────────────────── */
 function CHWAvatarRow() {
   const initials = ['MA', 'JR', 'SP', 'LC', 'TK']
-  const colors   = ['#6EE7B7', '#A78BFA', '#FCD34D', '#F87171', '#34D399']
+  const colors   = ['#4A90D9', '#A78BFA', '#FCD34D', '#F87171', '#60A5FA']
   return (
     <div style={{ marginTop: '14px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '-8px', marginBottom: '10px' }}>
@@ -252,8 +252,8 @@ function PathwaysMini() {
         <div key={step} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <div style={{
             padding: '5px 10px', borderRadius: '8px',
-            background: i === 2 ? 'rgba(110,231,183,0.10)' : 'rgba(255,255,255,0.03)',
-            border: `1px solid ${i === 2 ? 'rgba(110,231,183,0.22)' : 'rgba(255,255,255,0.06)'}`,
+            background: i === 2 ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.03)',
+            border: `1px solid ${i === 2 ? 'rgba(74,144,217,0.22)' : 'rgba(255,255,255,0.06)'}`,
             fontSize: '10px', fontWeight: i === 2 ? 600 : 400,
             color: i === 2 ? 'var(--accent)' : 'var(--text-2)',
             fontFamily: 'var(--font-inter)',
@@ -341,7 +341,7 @@ export default function Features() {
       style={{ position: 'relative', zIndex: 2, maxWidth: '1200px', margin: '0 auto', padding: '120px 3rem', overflow: 'visible' }}
     >
       {/* Three-source light system */}
-      <div className="section-glow-left"  aria-hidden="true" style={{ top: '5%',  background: 'radial-gradient(circle, rgba(110,231,183,0.06) 0%, transparent 65%)' }} />
+      <div className="section-glow-left"  aria-hidden="true" style={{ top: '5%',  background: 'radial-gradient(circle, rgba(74,144,217,0.06) 0%, transparent 65%)' }} />
       <div className="section-glow-right" aria-hidden="true" style={{ top: '40%', background: 'radial-gradient(circle, rgba(252,211,77,0.04) 0%, transparent 65%)'  }} />
       <div className="section-glow-violet" aria-hidden="true" style={{ bottom: '5%', left: '50%', transform: 'translateX(-50%)' }} />
 
@@ -352,7 +352,7 @@ export default function Features() {
           fontSize: '11px', fontWeight: 500, letterSpacing: '0.14em',
           textTransform: 'uppercase', color: 'var(--accent)',
           marginBottom: '1.25rem', fontFamily: 'var(--font-inter)',
-          background: 'rgba(110,231,183,0.06)', border: '1px solid rgba(110,231,183,0.14)',
+          background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.14)',
           borderRadius: '100px', padding: '5px 14px',
         }}>
           <Activity size={11} strokeWidth={2} />
@@ -397,8 +397,8 @@ export default function Features() {
             <BentoIcon
               icon={<MapPin size={18} strokeWidth={1.5} />}
               color="var(--accent)"
-              bg="rgba(110,231,183,0.10)"
-              border="rgba(110,231,183,0.18)"
+              bg="rgba(74,144,217,0.10)"
+              border="rgba(74,144,217,0.18)"
             />
             <div style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.5rem', fontFamily: 'var(--font-display)' }}>
               Clinic Finder
@@ -406,7 +406,7 @@ export default function Features() {
             <div style={{ fontSize: '13px', color: 'var(--text-2)', lineHeight: 1.75, fontFamily: 'var(--font-inter)', maxWidth: '280px' }}>
               12,000+ federally qualified health centers, free clinics, and sliding-scale providers — searchable by specialty, language, and wait time.
             </div>
-            <Tag color="var(--accent)" bg="rgba(110,231,183,0.07)">Core feature</Tag>
+            <Tag color="var(--accent)" bg="rgba(74,144,217,0.07)">Core feature</Tag>
             <ClinicMapMini />
           </div>
         </Link>
@@ -529,8 +529,8 @@ export default function Features() {
               <BentoIcon
                 icon={<CalendarDays size={18} strokeWidth={1.5} />}
                 color="var(--accent)"
-                bg="rgba(110,231,183,0.10)"
-                border="rgba(110,231,183,0.18)"
+                bg="rgba(74,144,217,0.10)"
+                border="rgba(74,144,217,0.18)"
               />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.35rem', fontFamily: 'var(--font-display)' }}>
@@ -541,7 +541,7 @@ export default function Features() {
                 </div>
                 <CalendarEventMini />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '0.75rem' }}>
-                  <Tag color="var(--accent)" bg="rgba(110,231,183,0.07)">Events</Tag>
+                  <Tag color="var(--accent)" bg="rgba(74,144,217,0.07)">Events</Tag>
                   <ExploreLink />
                 </div>
               </div>
@@ -579,8 +579,8 @@ export default function Features() {
             }}
             onMouseEnter={e => {
               e.currentTarget.style.color = 'var(--accent)'
-              e.currentTarget.style.borderColor = 'rgba(110,231,183,0.25)'
-              e.currentTarget.style.background = 'rgba(110,231,183,0.05)'
+              e.currentTarget.style.borderColor = 'rgba(74,144,217,0.25)'
+              e.currentTarget.style.background = 'rgba(74,144,217,0.05)'
             }}
             onMouseLeave={e => {
               e.currentTarget.style.color = 'rgba(255,255,255,0.45)'

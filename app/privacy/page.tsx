@@ -8,8 +8,8 @@ const pill: React.CSSProperties = {
   display: 'inline-flex', alignItems: 'center', gap: '6px',
   padding: '4px 12px', borderRadius: '100px',
   fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-  background: 'rgba(110,231,183,0.08)', color: 'var(--accent)',
-  border: '1px solid rgba(110,231,183,0.18)',
+  background: 'rgba(74,144,217,0.08)', color: 'var(--accent)',
+  border: '1px solid rgba(74,144,217,0.18)',
 }
 
 const SECTIONS = [
@@ -122,7 +122,7 @@ export default function PrivacyPage() {
       }}>
         <div aria-hidden="true" style={{
           position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(110,231,183,0.08) 0%, transparent 65%)',
+          background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(74,144,217,0.08) 0%, transparent 65%)',
           pointerEvents: 'none',
         }} />
 
@@ -166,14 +166,14 @@ export default function PrivacyPage() {
             ].map(item => (
               <div key={item.label} style={{
                 padding: '20px', borderRadius: '16px',
-                background: 'rgba(110,231,183,0.04)',
-                border: '1px solid rgba(110,231,183,0.12)',
+                background: 'rgba(74,144,217,0.04)',
+                border: '1px solid rgba(74,144,217,0.12)',
                 display: 'flex', flexDirection: 'column', gap: '8px',
               }}>
                 <div style={{
                   width: '32px', height: '32px', borderRadius: '8px',
-                  background: 'rgba(110,231,183,0.1)',
-                  border: '1px solid rgba(110,231,183,0.2)',
+                  background: 'rgba(74,144,217,0.1)',
+                  border: '1px solid rgba(74,144,217,0.2)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   color: 'var(--accent)',
                 }}>
@@ -206,8 +206,8 @@ export default function PrivacyPage() {
                 style={{
                   borderRadius: '16px', overflow: 'hidden',
                   border: '1px solid',
-                  borderColor: openSection === sec.id ? 'rgba(110,231,183,0.25)' : 'rgba(255,255,255,0.06)',
-                  background: openSection === sec.id ? 'rgba(110,231,183,0.04)' : 'transparent',
+                  borderColor: openSection === sec.id ? 'rgba(74,144,217,0.25)' : 'rgba(255,255,255,0.06)',
+                  background: openSection === sec.id ? 'rgba(74,144,217,0.04)' : 'transparent',
                   transition: 'all 0.25s',
                   marginBottom: '4px',
                 }}
@@ -224,7 +224,7 @@ export default function PrivacyPage() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <div style={{
                       width: '32px', height: '32px', borderRadius: '8px',
-                      background: openSection === sec.id ? 'rgba(110,231,183,0.15)' : 'rgba(255,255,255,0.05)',
+                      background: openSection === sec.id ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.05)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       color: openSection === sec.id ? 'var(--accent)' : 'rgba(255,255,255,0.4)',
                       flexShrink: 0, transition: 'all 0.25s',
@@ -284,13 +284,13 @@ export default function PrivacyPage() {
                 href="/"
                 style={{
                   padding: '9px 18px', borderRadius: '100px',
-                  background: 'rgba(110,231,183,0.1)',
-                  border: '1px solid rgba(110,231,183,0.2)',
+                  background: 'rgba(74,144,217,0.1)',
+                  border: '1px solid rgba(74,144,217,0.2)',
                   color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
                   textDecoration: 'none', transition: 'background 0.2s',
                 }}
-                onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = 'rgba(110,231,183,0.2)')}
-                onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'rgba(110,231,183,0.1)')}
+                onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.2)')}
+                onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.1)')}
               >
                 Back to home
               </Link>

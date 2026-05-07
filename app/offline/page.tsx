@@ -19,7 +19,7 @@ export default function OfflinePage() {
     <div style={{
       minHeight: '100dvh',
       background: '#020409',
-      color: '#F0FDF8',
+      color: '#F4F8FF',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -31,17 +31,17 @@ export default function OfflinePage() {
     }}>
       <div aria-hidden="true" style={{
         position: 'fixed', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(110,231,183,0.07) 0%, transparent 65%)',
+        background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(74,144,217,0.07) 0%, transparent 65%)',
       }} />
 
       <div style={{
         width: '72px', height: '72px', borderRadius: '20px',
-        background: 'rgba(110,231,183,0.08)',
-        border: '1px solid rgba(110,231,183,0.18)',
+        background: 'rgba(74,144,217,0.08)',
+        border: '1px solid rgba(74,144,217,0.18)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         marginBottom: '1.75rem', position: 'relative', zIndex: 1,
       }}>
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6EE7B7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4A90D9" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/>
           <path d="M8 2v16M16 6v16"/>
         </svg>
@@ -79,16 +79,16 @@ export default function OfflinePage() {
         onClick={() => window.location.reload()}
         style={{
           padding: '14px 28px', borderRadius: '12px',
-          background: '#6EE7B7', color: '#07070F',
+          background: '#4A90D9', color: '#07070F',
           border: 'none', cursor: 'pointer',
           fontSize: '15px', fontWeight: 700,
           marginBottom: '1.5rem',
           transition: 'transform 0.2s, box-shadow 0.2s',
-          boxShadow: '0 4px 20px rgba(110,231,183,0.3)',
+          boxShadow: '0 4px 20px rgba(74,144,217,0.3)',
           position: 'relative', zIndex: 1,
         }}
-        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(110,231,183,0.45)' }}
-        onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(110,231,183,0.3)' }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(74,144,217,0.45)' }}
+        onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(74,144,217,0.3)' }}
       >
         Try again
       </button>
@@ -125,10 +125,10 @@ export default function OfflinePage() {
                 border: '1px solid rgba(255,255,255,0.07)',
                 textAlign: 'left',
               }}>
-                <div style={{ fontSize: '14px', fontWeight: 600, color: '#F0FDF8', marginBottom: '4px' }}>{clinic.name}</div>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: '#F4F8FF', marginBottom: '4px' }}>{clinic.name}</div>
                 {clinic.address && <div style={{ fontSize: '12px', color: 'rgba(240,253,248,0.4)', marginBottom: '3px' }}>{clinic.address}</div>}
                 {clinic.phone && (
-                  <a href={`tel:${clinic.phone}`} style={{ fontSize: '12px', color: '#6EE7B7', textDecoration: 'none', fontWeight: 500 }}>
+                  <a href={`tel:${clinic.phone}`} style={{ fontSize: '12px', color: '#4A90D9', textDecoration: 'none', fontWeight: 500 }}>
                     {clinic.phone}
                   </a>
                 )}
