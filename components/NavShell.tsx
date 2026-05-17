@@ -36,7 +36,7 @@ export default async function NavShell() {
   let initialUser: { full_name?: string | null; email?: string | null; user_type?: string | null } | null = null
 
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const supabase    = createSupabaseServerClient(cookieStore)
 
     const { data: { session } } = await supabase.auth.getSession()
