@@ -22,7 +22,7 @@ const RESULTS = [
 ]
 
 interface HeroMockupProps {
-  mockupRef: React.RefObject<HTMLDivElement>
+  mockupRef: React.RefObject<HTMLDivElement | null>
 }
 
 export default function HeroMockup({ mockupRef }: HeroMockupProps) {
