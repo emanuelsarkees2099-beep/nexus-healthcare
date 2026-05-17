@@ -11,8 +11,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient }        from '@supabase/ssr'
-import { cookies }                   from 'next/headers'
+import { createClient }              from '@supabase/supabase-js'
 import { rateLimit }                 from '@/lib/rate-limit'
 
 /* VAPID public key — set NEXT_PUBLIC_VAPID_PUBLIC_KEY in env */
@@ -36,16 +35,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid subscription object' }, { status: 400 })
   }
 
-  const cookieStore = cookies()
-  const supabase = createServerClient(
+  const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { cookies: { getAll: () => cookieStore.getAll(), setAll: () => {} } }
   )
 
   /* Resolve user id (optional — anonymous subscriptions are allowed) */
-  const { data: { session } } = await supabase.auth.getSession()
-  const userId = body.userId ?? session?.user?.id ?? null
+  const userId = body.userId ?? null
 
   /* Upsert by endpoint — idempotent */
   const { error } = await supabase
@@ -74,11 +70,9 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: 'Missing endpoint' }, { status: 400 })
   }
 
-  const cookieStore = cookies()
-  const supabase = createServerClient(
+  const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { cookies: { getAll: () => cookieStore.getAll(), setAll: () => {} } }
   )
 
   await supabase

@@ -24,13 +24,24 @@
 const DSN = process.env.NEXT_PUBLIC_SENTRY_DSN ?? ''
 
 /* ── Lazy Sentry loader ── */
-let sentryModule: typeof import('@sentry/nextjs') | null = null
+// @sentry/nextjs is optional — install it to enable real error tracking.
+// Without it, errors fall back to console.error (no build errors).
+type SentryModule = {
+  withScope: (fn: (scope: { setExtra: (k: string, v: unknown) => void }) => void) => void
+  captureException: (e: unknown) => void
+  addBreadcrumb: (b: Record<string, unknown>) => void
+  setUser: (u: Record<string, unknown> | null) => void
+  init: (opts: Record<string, unknown>) => void
+}
+let sentryModule: SentryModule | null = null
 
-async function getSentry() {
+async function getSentry(): Promise<SentryModule | null> {
   if (!DSN) return null
   if (sentryModule) return sentryModule
   try {
-    sentryModule = await import('@sentry/nextjs')
+    // Use Function constructor to avoid static analysis by Turbopack/webpack
+    const load = new Function('m', 'return import(m)')
+    sentryModule = await load('@sentry/nextjs') as SentryModule
     return sentryModule
   } catch {
     /* @sentry/nextjs not installed — graceful no-op */
