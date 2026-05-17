@@ -203,45 +203,13 @@ async function geocode(location: string): Promise<{ lat: number; lng: number; zi
   }
 }
 
-// ── Parse Overpass XML ────────────────────────────────────────────────────────
-function parseOverpassXML(xml: string): Array<{ id: number; lat: number; lon: number; tags: Record<string, string> }> {
-  const results: Array<{ id: number; lat: number; lon: number; tags: Record<string, string> }> = []
-
-  const nodeRx = /<node\s+id="(\d+)"\s+lat="([\d.-]+)"\s+lon="([\d.-]+)"[^>]*>([\s\S]*?)<\/node>/g
-  let m: RegExpExecArray | null
-  while ((m = nodeRx.exec(xml)) !== null && results.length < 200) {
-    const tags = extractTags(m[4])
-    if (tags.name && (tags.amenity || tags.healthcare || tags.social_facility))
-      results.push({ id: +m[1], lat: +m[2], lon: +m[3], tags })
-  }
-
-  const wayRx = /<way\s+id="(\d+)"[^>]*>([\s\S]*?)<\/way>/g
-  while ((m = wayRx.exec(xml)) !== null && results.length < 200) {
-    const inner = m[2]
-    const tags = extractTags(inner)
-    const ctrM = inner.match(/<center\s+lat="([\d.-]+)"\s+lon="([\d.-]+)"/)
-    if (ctrM && tags.name && (tags.amenity || tags.healthcare))
-      results.push({ id: +m[1], lat: +ctrM[1], lon: +ctrM[2], tags })
-  }
-
-  return results
-}
-
-function extractTags(block: string): Record<string, string> {
-  const tags: Record<string, string> = {}
-  const rx = /<tag\s+k="([^"]+)"\s+v="([^"]*)"\s*\/?>/g
-  let m: RegExpExecArray | null
-  while ((m = rx.exec(block)) !== null) tags[m[1]] = m[2]
-  return tags
-}
-
-// ── Overpass query ────────────────────────────────────────────────────────────
+// ── Overpass query (JSON output — no regex XML parsing bug) ──────────────────
 async function queryOverpass(lat: number, lng: number, radiusMiles: number): Promise<Clinic[]> {
   const radiusMeters = Math.round(radiusMiles * 1609.34)
 
-  // Use `around` filter (more accurate than bbox) and capture far more OSM tags
+  // [out:json] is simpler and avoids the attribute-order bug in XML regex parsing
   const ql = [
-    `[out:xml][timeout:28];`,
+    `[out:json][timeout:25];`,
     `(`,
     `node(around:${radiusMeters},${lat},${lng})["amenity"~"^(clinic|hospital|doctors|dentist|health_post|nursing_home)$"]["name"];`,
     `node(around:${radiusMeters},${lat},${lng})["healthcare"]["name"];`,
@@ -261,25 +229,40 @@ async function queryOverpass(lat: number, lng: number, radiusMiles: number): Pro
       headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': 'NEXUS-Healthcare/1.0' },
       body: `data=${encodeURIComponent(ql)}`,
       next: { revalidate: 7200 },
+      signal: AbortSignal.timeout(28000),
     })
 
     if (!res.ok) return []
 
-    const xml = await res.text()
-    const nodes = parseOverpassXML(xml)
+    type OsmElement = {
+      type: string; id: number
+      lat?: number; lon?: number
+      center?: { lat: number; lon: number }
+      tags?: Record<string, string>
+    }
+    const data = await res.json() as { elements?: OsmElement[] }
+    const elements = data?.elements ?? []
 
-    return nodes
-      .map(n => {
-        const tags = n.tags
-        const rawName = (tags.name || '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').trim()
+    return elements
+      .slice(0, 200)
+      .map((el): Clinic | null => {
+        const tags = el.tags ?? {}
+        const rawName = (tags.name || '').trim()
         if (!rawName) return null
 
+        // Resolve lat/lon — nodes have direct coords, ways use center
+        const eLat = el.lat ?? el.center?.lat
+        const eLon = el.lon ?? el.center?.lon
+        if (!eLat || !eLon) return null
+
         const { score, label, reasons } = scoreAffordability(rawName, tags)
-        const dist = distanceMiles(lat, lng, n.lat, n.lon)
-        const street = tags['addr:housenumber'] ? `${tags['addr:housenumber']} ${tags['addr:street'] || ''}`.trim() : (tags['addr:street'] || '')
+        const dist = distanceMiles(lat, lng, eLat, eLon)
+        const street = tags['addr:housenumber']
+          ? `${tags['addr:housenumber']} ${tags['addr:street'] || ''}`.trim()
+          : (tags['addr:street'] || '')
 
         return {
-          id: String(n.id),
+          id: String(el.id),
           name: rawName,
           address: street,
           city: tags['addr:city'] || '',
@@ -296,12 +279,12 @@ async function queryOverpass(lat: number, lng: number, radiusMiles: number): Pro
           affordability_label: label,
           affordability_reasons: reasons,
           url: tags.website || tags['contact:website'] || tags.url || '',
-          mapsUrl: `https://www.openstreetmap.org/?lat=${n.lat}&lon=${n.lon}&zoom=18`,
+          mapsUrl: `https://www.openstreetmap.org/?mlat=${eLat}&mlon=${eLon}&zoom=18`,
           hours: tags.opening_hours || '',
           openNow: null,
           type: tags.amenity === 'hospital' ? 'Hospital' : 'Clinic',
-          lat: n.lat,
-          lng: n.lon,
+          lat: eLat,
+          lng: eLon,
         } as Clinic
       })
       .filter((c): c is Clinic => c !== null && isOrganization(c.name))
@@ -316,106 +299,82 @@ async function queryOverpass(lat: number, lng: number, radiusMiles: number): Pro
   }
 }
 
-// ── HRSA: primary source — federally qualified health centers ─────────────────
-async function fetchHRSAClinics(zip: string, radiusMiles: number): Promise<Clinic[]> {
-  const clean = zip.replace(/\D/g, '').slice(0, 5)
-  if (!clean) return []
+// ── HRSA FQHCs via FQHC ArcGIS public layer ──────────────────────────────────
+// The old findahealthcenter.hrsa.gov API is internal-only (returns 404 publicly).
+// HRSA publishes FQHC locations via ArcGIS REST, which IS publicly accessible.
+async function fetchHRSAClinics(lat: number, lng: number, radiusMiles: number): Promise<Clinic[]> {
+  try {
+    // HRSA FQHC sites via publicly accessible ArcGIS Feature Service
+    const url = new URL('https://services1.arcgis.com/4yjifSiIG17X0gW4/arcgis/rest/services/FQHC_Locations/FeatureServer/0/query')
+    url.searchParams.set('where', '1=1')
+    url.searchParams.set('geometry', JSON.stringify({ x: lng, y: lat }))
+    url.searchParams.set('geometryType', 'esriGeometryPoint')
+    url.searchParams.set('spatialRel', 'esriSpatialRelIntersects')
+    url.searchParams.set('distance', String(radiusMiles))
+    url.searchParams.set('units', 'esriSRUnit_StatuteMile')
+    url.searchParams.set('inSR', '4326')
+    url.searchParams.set('outSR', '4326')
+    url.searchParams.set('outFields', 'Site_Name,Site_Address,Site_City,Site_State,Site_Postal_Code,Site_Phone_Number,Site_Web_Address,Health_Center_Type,Latitude,Longitude')
+    url.searchParams.set('returnGeometry', 'false')
+    url.searchParams.set('resultRecordCount', '100')
+    url.searchParams.set('f', 'json')
 
-  const endpoints = [
-    `https://findahealthcenter.hrsa.gov/api/v1/healthcenter/FindHealthCenters?zipcode=${clean}&radius=${radiusMiles}`,
-    `https://findahealthcenter.hrsa.gov/api/v1.0/FindHealthCenters?ZipCode=${clean}&Radius=${radiusMiles}`,
-    `https://findahealthcenter.hrsa.gov/api/HealthCenterFinder/FindHealthCenters?zipcode=${clean}&radius=${radiusMiles}`,
-    `https://findahealthcenter.hrsa.gov/api/v2/healthcenter/FindHealthCenters?zipcode=${clean}&radius=${radiusMiles}`,
-    `https://bphc.hrsa.gov/hccguidancematerials/findahealthcenter/api/findahealthcenter?zip=${clean}&radius=${radiusMiles}`,
-  ]
+    const res = await fetch(url.toString(), {
+      headers: { 'Accept': 'application/json', 'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health' },
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(10000),
+    })
+    if (!res.ok) return []
 
-  for (const url of endpoints) {
-    try {
-      const res = await fetch(url, {
-        headers: { Accept: 'application/json', 'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health' },
-        next: { revalidate: 3600 },
-        signal: AbortSignal.timeout(8000),
+    const data = await res.json() as { features?: { attributes: Record<string, unknown> }[]; error?: unknown }
+    if (data.error || !Array.isArray(data.features) || data.features.length === 0) return []
+
+    const clinics: Clinic[] = data.features
+      .map((f): Clinic | null => {
+        const a = f.attributes
+        const name = String(a.Site_Name ?? '').trim()
+        if (!name) return null
+
+        const fLat = parseFloat(String(a.Latitude ?? 0)) || lat
+        const fLng = parseFloat(String(a.Longitude ?? 0)) || lng
+        const dist = distanceMiles(lat, lng, fLat, fLng)
+        const addr = String(a.Site_Address ?? '')
+        const city = String(a.Site_City ?? '')
+        const state = String(a.Site_State ?? '')
+        const zip = String(a.Site_Postal_Code ?? '').slice(0, 5)
+        const phone = String(a.Site_Phone_Number ?? '').replace(/[^\d()\-+\s]/g, '').trim()
+        const website = String(a.Site_Web_Address ?? '')
+        const hcType = String(a.Health_Center_Type ?? '')
+
+        const services = guessServices(name)
+        if (/migrant|farmworker/i.test(hcType)) services.push('Primary care')
+        if (/homeless/i.test(hcType)) services.push('Primary care')
+        if (/mental/i.test(hcType)) services.push('Mental health')
+
+        return {
+          id: `hrsa-${name.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 14)}-${zip}`,
+          name, address: addr, city, state, zip, phone,
+          distance: dist.toFixed(1),
+          services: [...new Set(services)],
+          accepting: true, free: true, sliding_scale: true, isFreeOrDiscounted: true,
+          affordability_score: 95,
+          affordability_label: 'likely-free' as AffordabilityLabel,
+          affordability_reasons: ['FQHC – federally required sliding-scale care for all patients'],
+          url: website,
+          mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name} ${addr} ${city} ${state}`)}`,
+          hours: '', openNow: null, type: 'FQHC',
+          lat: fLat, lng: fLng,
+        }
       })
-      if (!res.ok) continue
+      .filter((c): c is Clinic => c !== null)
+      .sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
 
-      const raw: unknown = await res.json()
-
-      let list: Record<string, unknown>[] = []
-      if (Array.isArray(raw)) {
-        list = raw as Record<string, unknown>[]
-      } else if (raw && typeof raw === 'object') {
-        const r = raw as Record<string, unknown>
-        list = (r.Results ?? r.HealthCenters ?? r.Sites ?? r.results ?? []) as Record<string, unknown>[]
-      }
-
-      if (list.length === 0) continue
-
-      const clinics: Clinic[] = list
-        .map((c): Clinic | null => {
-          const name = String(c.SiteName ?? c.HealthCenterName ?? c.Name ?? c.name ?? '').trim()
-          if (!name) return null
-
-          const dist = Number(c.SiteDistance ?? c.Distance ?? c.Miles ?? c.distance ?? 0)
-          const addr = String(c.SiteAddress ?? c.Address ?? c.SiteStreetAddress ?? c.HealthCenterAddress ?? '')
-          const city = String(c.SiteCity ?? c.City ?? '')
-          const state = String(c.SiteState ?? c.State ?? '')
-          const zipCode = String(c.SiteZipCode ?? c.ZipCode ?? c.SiteZip ?? clean)
-          const phone = String(c.SitePhoneNumber ?? c.SiteTelephone ?? c.PhoneNumber ?? c.Phone ?? '')
-          const website = String(c.SiteWebAddress ?? c.WebAddress ?? c.URL ?? c.url ?? '')
-          const hours = String(c.HoursOfOperation ?? c.Hours ?? '')
-          const lat = parseFloat(String(c.Latitude ?? c.SiteLatitude ?? c.lat ?? '0')) || undefined
-          const lng = parseFloat(String(c.Longitude ?? c.SiteLongitude ?? c.lng ?? '0')) || undefined
-
-          const desc = String(c.SiteServiceDescription ?? c.ServiceCategory ?? c.Services ?? '').toLowerCase()
-          const services: string[] = []
-          if (/primary|general|family|internal/i.test(desc)) services.push('Primary care')
-          if (/mental|behav|psych|counsel/i.test(desc)) services.push('Mental health')
-          if (/dental/i.test(desc)) services.push('Dental')
-          if (/women|maternal|ob|gynec/i.test(desc)) services.push("Women's health")
-          if (/pediatric|child/i.test(desc)) services.push('Pediatrics')
-          if (/vision|eye|optom/i.test(desc)) services.push('Vision')
-          if (services.length === 0) services.push(...guessServices(name))
-
-          const id = `hrsa-${String(c.SiteId ?? c.BPHCId ?? c.HealthCenterId ?? Math.random()).replace(/\./g, '')}`
-
-          return {
-            id, name,
-            address: addr, city, state,
-            zip: zipCode,
-            phone: phone.replace(/[^\d()\-+\s]/g, '').trim(),
-            distance: dist.toFixed(1),
-            services: [...new Set(services)],
-            accepting: true,
-            free: true,
-            sliding_scale: true,
-            isFreeOrDiscounted: true,
-            affordability_score: 95,
-            affordability_label: 'likely-free' as AffordabilityLabel,
-            affordability_reasons: ['FQHC – federally required to serve all patients on sliding scale'],
-            url: website,
-            mapsUrl: addr
-              ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name} ${addr} ${city} ${state}`)}`
-              : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name} ${city} ${state}`)}`,
-            hours,
-            openNow: null,
-            type: 'FQHC',
-            lat,
-            lng,
-          }
-        })
-        .filter((c): c is Clinic => c !== null)
-        .sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
-
-      console.log('[NEXUS] HRSA %s → %d FQHCs', url.split('?')[0].split('/').pop(), clinics.length)
-      return clinics
-    } catch (e) {
-      console.warn('[NEXUS] HRSA endpoint failed:', String(e).slice(0, 80))
-      continue
-    }
+    console.log('[NEXUS] HRSA ArcGIS → %d FQHCs', clinics.length)
+    return clinics
+  } catch (e) {
+    console.warn('[NEXUS] HRSA ArcGIS failed:', String(e).slice(0, 80))
+    return []
   }
-
-  console.warn('[NEXUS] All HRSA endpoints failed for zip=%s', clean)
-  return []
 }
 
 // ── NAFC: secondary source — volunteer free clinics ──────────────────────────
@@ -631,21 +590,23 @@ function detectState(formatted: string): string {
   return m ? m[1] : ''
 }
 
-// ── CMS Rural Health Clinics — public dataset, no API key required ────────────
+// ── CMS Rural Health Clinics — new CMS Open Data API (Socrata deprecated) ────
 async function fetchCMSRuralHealthClinics(lat: number, lng: number, state: string, radiusMiles: number): Promise<Clinic[]> {
   if (!state) return []
   try {
-    // CMS Provider of Services file — Rural Health Clinics (public Socrata API)
-    const url = `https://data.cms.gov/resource/mj5m-pzi6.json?$limit=200&state=${encodeURIComponent(state)}&$select=provider_name,street_address,city,state,zip_code,phone_number,provider_type`
+    // New CMS Open Data API (replaces deprecated Socrata endpoint)
+    const url = `https://data.cms.gov/api/1/datastore/query/mj5m-pzi6/0?conditions[0][property]=state&conditions[0][value]=${encodeURIComponent(state)}&conditions[0][operator]=%3D&limit=150&results=true&schema=false&keys=true&format=json&rowIds=false`
     const res = await fetch(url, {
       headers: { 'Accept': 'application/json', 'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health' },
       next: { revalidate: 86400 },
-      signal: AbortSignal.timeout(7000),
+      signal: AbortSignal.timeout(8000),
     })
     if (!res.ok) return []
 
-    const data = await res.json() as Record<string, string>[]
-    if (!Array.isArray(data)) return []
+    type CmsResponse = { results?: Record<string, string>[]; data?: Record<string, string>[] }
+    const raw = await res.json() as CmsResponse
+    const data: Record<string, string>[] = raw.results ?? raw.data ?? (Array.isArray(raw) ? raw as Record<string, string>[] : [])
+    if (!Array.isArray(data) || data.length === 0) return []
 
     const clinics: Clinic[] = []
     for (const r of data) {
@@ -684,68 +645,11 @@ async function fetchCMSRuralHealthClinics(lat: number, lng: number, state: strin
   }
 }
 
-// ── SAMHSA Treatment Locator — completely free, no API key ───────────────────
-// Covers mental health centers, substance abuse treatment, and many FQHCs
-// that aren't in the HRSA database. Public federal API, no registration needed.
-async function fetchSAMHSAClinics(lat: number, lng: number, radiusMiles: number): Promise<Clinic[]> {
-  try {
-    // SAMHSA Find a Treatment Facility API (public, no key required)
-    const url = `https://findtreatment.samhsa.gov/treatment/api/v2/locations.json?sAddr=${lat},${lng}&sDistance=${radiusMiles}&sType=SA,MH`
-    const res = await fetch(url, {
-      headers: { 'Accept': 'application/json', 'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health' },
-      next: { revalidate: 3600 },
-      signal: AbortSignal.timeout(8000),
-    })
-    if (!res.ok) return []
-
-    const data = await res.json() as { rows?: Record<string, unknown>[] }
-    const rows = data?.rows ?? []
-    if (!Array.isArray(rows) || rows.length === 0) return []
-
-    const clinics: Clinic[] = rows.slice(0, 60).map((r): Clinic | null => {
-      const name = String(r.name1 ?? r.name ?? '').trim()
-      if (!name) return null
-
-      const addr  = String(r.street1 ?? r.addr1 ?? '')
-      const city  = String(r.city   ?? '')
-      const state = String(r.state  ?? '')
-      const zip   = String(r.zip    ?? '').slice(0, 5)
-      const phone = String(r.phone  ?? '').replace(/[^\d()\-+\s]/g, '').trim()
-      const rLat  = parseFloat(String(r.latitude  ?? r.lat ?? '0')) || lat
-      const rLng  = parseFloat(String(r.longitude ?? r.lng ?? '0')) || lng
-      const dist  = distanceMiles(lat, lng, rLat, rLng)
-
-      const services: string[] = ['Mental health']
-      const typeStr = String(r.typeDescr ?? r.facilityType ?? '').toLowerCase()
-      if (/substance|alcohol|drug|opiate|opioid/i.test(typeStr)) services.push('Substance use')
-      if (/primary|medical/i.test(typeStr)) services.push('Primary care')
-
-      const freeFlag = /sliding|free|no cost|low.cost|income/i.test(String(r.paymentTypes ?? r.payment ?? ''))
-
-      return {
-        id: `samhsa-${String(r.facilityCode ?? r.id ?? Math.random()).replace(/\./g, '')}`,
-        name, address: addr, city, state, zip, phone,
-        distance: dist.toFixed(1),
-        services,
-        accepting: true,
-        free: freeFlag,
-        sliding_scale: freeFlag || /sliding/i.test(String(r.paymentTypes ?? '')),
-        isFreeOrDiscounted: freeFlag,
-        affordability_score: freeFlag ? 75 : 55,
-        affordability_label: freeFlag ? 'likely-free' : 'low-cost',
-        affordability_reasons: ['SAMHSA-listed treatment center', ...(freeFlag ? ['sliding scale / free care'] : [])],
-        url: String(r.website ?? ''),
-        mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name} ${addr} ${city} ${state}`)}`,
-        hours: '', openNow: null, type: 'Treatment Center',
-        lat: rLat, lng: rLng,
-      }
-    }).filter((c): c is Clinic => c !== null)
-
-    console.log('[NEXUS] SAMHSA → %d treatment centers', clinics.length)
-    return clinics
-  } catch {
-    return []
-  }
+// ── SAMHSA — no public API available (findtreatment.gov is a React SPA) ──────
+// The backend is AWS-internal. Stubbed out — returns [] until a real API exists.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function fetchSAMHSAClinics(_lat: number, _lng: number, _radiusMiles: number): Promise<Clinic[]> {
+  return []
 }
 
 // ── Yelp Fusion — free tier (500 req/day, no payment required) ───────────────
@@ -1142,7 +1046,7 @@ export async function GET(req: NextRequest) {
 
   // 2. Run all sources in parallel
   let [hrsaClinics, nafcClinics, osmClinics, googleClinics, stateClinics, cmsClinics, samhsaClinics, yelpClinics, findHelpClinics, vaClinics] = await Promise.all([
-    fetchHRSAClinics(zip, radiusMiles),
+    fetchHRSAClinics(geo.lat, geo.lng, radiusMiles),
     Promise.resolve(fetchNAFCClinics(geo.lat, geo.lng, radiusMiles)),
     queryOverpass(geo.lat, geo.lng, radiusMiles),
     fetchGooglePlacesClinics(geo.lat, geo.lng, radiusMiles),
@@ -1165,7 +1069,7 @@ export async function GET(req: NextRequest) {
     const expandedRadius = Math.min(radiusMiles * 2, 75)
     console.log('[NEXUS] Sparse results (%d) — auto-expanding to %d miles', initialCount, expandedRadius)
     const [h2, n2, o2, c2, s2, y2, f2, v2] = await Promise.all([
-      fetchHRSAClinics(zip, expandedRadius),
+      fetchHRSAClinics(geo.lat, geo.lng, expandedRadius),
       Promise.resolve(fetchNAFCClinics(geo.lat, geo.lng, expandedRadius)),
       queryOverpass(geo.lat, geo.lng, expandedRadius),
       detectedState ? fetchCMSRuralHealthClinics(geo.lat, geo.lng, detectedState, expandedRadius) : Promise.resolve([]),
@@ -1211,7 +1115,7 @@ export async function GET(req: NextRequest) {
   addIfNew(yelpClinics,    merged) // 8th: Yelp (free tier, optional — requires YELP_API_KEY)
   addIfNew(googleClinics,  merged) // 9th: Google Places (keyed, optional)
   // OSM: include if score ≥ 40 (lowered from 55 — catches more legitimate clinics)
-  addIfNew(osmClinics.filter(c => c.affordability_score >= 40), merged)
+  addIfNew(osmClinics.filter(c => c.affordability_score >= 25), merged)
 
   // 4. Apply specialty filter
   const filtered = specialty && specialty !== 'all'
