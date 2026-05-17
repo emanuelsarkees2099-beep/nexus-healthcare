@@ -21,8 +21,8 @@ interface SearchBarProps {
   setLocationVal: (v: string) => void
   onSearch: () => void
   placeholder: string
-  inputRef: React.RefObject<HTMLInputElement>
-  ctaBtnRef: React.RefObject<HTMLButtonElement>
+  inputRef: React.RefObject<HTMLInputElement | null>
+  ctaBtnRef: React.RefObject<HTMLButtonElement | null>
 }
 
 export default function SearchBar({
