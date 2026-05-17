@@ -133,6 +133,7 @@ export default function ProviderPage() {
     sunClosed: true,
     photos: [] as string[],
     acceptingAppts: true,
+    calLink: '',   // N3: Cal.com, Calendly, or any booking URL for clinic detail page embed
   })
   const [listingSaved, setListingSaved] = useState(false)
 
@@ -361,6 +362,25 @@ export default function ProviderPage() {
                     />
                   </div>
                 ))}
+              </div>
+
+              {/* N7: Online booking URL (Cal.com / Calendly) */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em' }}>
+                  ONLINE BOOKING URL <span style={{ fontSize: '10px', fontWeight: 400, color: 'rgba(255,255,255,0.3)', letterSpacing: 0, textTransform: 'none' }}>(optional — Cal.com, Calendly, or your EHR scheduler)</span>
+                </label>
+                <input
+                  value={listing.calLink}
+                  onChange={e => setListing(l => ({ ...l, calLink: e.target.value }))}
+                  placeholder="https://cal.com/your-clinic or https://calendly.com/your-clinic"
+                  type="url"
+                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '9px', padding: '10px 14px', color: '#eef4f5', fontSize: '14px', fontFamily: 'inherit', outline: 'none', caretColor: 'var(--accent)', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+                  onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.38)')}
+                  onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)')}
+                />
+                <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', margin: '2px 0 0', fontFamily: 'var(--font-inter)', lineHeight: 1.6 }}>
+                  When provided, patients will see an embedded calendar on your clinic&apos;s NEXUS page and can book directly without calling. Works with Cal.com (free), Calendly, or any embeddable booking URL your EHR provides.
+                </p>
               </div>
 
               {/* Languages + Services */}

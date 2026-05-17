@@ -4,12 +4,9 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import Footer from '@/components/Footer'
 
-const BackgroundCanvas = dynamic(() => import('@/components/BackgroundCanvas'), { ssr: false })
-const Cursor          = dynamic(() => import('@/components/Cursor'),          { ssr: false })
 const ScrollProgress  = dynamic(() => import('@/components/ScrollProgress'),  { ssr: false })
 const Nav             = dynamic(() => import('@/components/Nav'),             { ssr: false })
 const CrisisButton    = dynamic(() => import('@/components/CrisisButton'),    { ssr: false })
-const CommandPalette  = dynamic(() => import('@/components/CommandPalette'),  { ssr: false })
 
 /* ── Page transition wrapper (#10) ── */
 function PageTransition({ children }: { children: React.ReactNode }) {
@@ -51,14 +48,81 @@ function PageTransition({ children }: { children: React.ReactNode }) {
   return <div style={style}>{display}</div>
 }
 
+/* ── N8: Care Continuity Reminder Checker ───────────────────────
+   Runs once on every page mount. Reads nexus_reminders localStorage,
+   fires Notification API for any past-due reminders, then marks them
+   as fired so they never repeat.
+   ─────────────────────────────────────────────────────────────── */
+type ClinicReminder = {
+  clinicId:  string
+  clinicName: string
+  ts48h:     number
+  ts11m:     number
+  fired48h:  boolean
+  fired11m:  boolean
+}
+
+function useReminderChecker() {
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (typeof Notification === 'undefined') return
+    if (Notification.permission !== 'granted') return
+
+    try {
+      const raw = localStorage.getItem('nexus_reminders')
+      if (!raw) return
+      const reminders: ClinicReminder[] = JSON.parse(raw)
+      const now = Date.now()
+      let changed = false
+
+      const updated = reminders.map(r => {
+        const next = { ...r }
+
+        /* 48-hour follow-up */
+        if (!r.fired48h && now >= r.ts48h) {
+          try {
+            new Notification('NEXUS — Following up', {
+              body:  `Have you scheduled your visit to ${r.clinicName}? It's been 2 days since you saved it.`,
+              icon:  '/icons/icon-192.png',
+              tag:   `nexus-48h-${r.clinicId}`,
+              badge: '/icons/icon-96.png',
+            })
+          } catch { /* ignore if notification blocked */ }
+          next.fired48h = true
+          changed = true
+        }
+
+        /* 11-month annual reminder */
+        if (!r.fired11m && now >= r.ts11m) {
+          try {
+            new Notification('NEXUS — Annual care reminder', {
+              body:  `It's been about a year. Consider scheduling a follow-up visit at ${r.clinicName}.`,
+              icon:  '/icons/icon-192.png',
+              tag:   `nexus-11m-${r.clinicId}`,
+              badge: '/icons/icon-96.png',
+            })
+          } catch { /* ignore if notification blocked */ }
+          next.fired11m = true
+          changed = true
+        }
+
+        return next
+      })
+
+      if (changed) {
+        localStorage.setItem('nexus_reminders', JSON.stringify(updated))
+      }
+    } catch { /* localStorage unavailable */ }
+  }, [])
+}
+
 export default function AppShell({ children }: { children: React.ReactNode }) {
+  useReminderChecker()
+
   return (
     <>
-      <BackgroundCanvas />
-      <Cursor />
       <ScrollProgress />
       <Nav />
-      <CommandPalette />
       <CrisisButton />
       <main style={{ paddingTop: '62px', minHeight: '100dvh' }}>
         <PageTransition>{children}</PageTransition>

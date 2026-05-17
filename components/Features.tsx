@@ -551,11 +551,11 @@ export default function Features() {
       </div>
 
       {/* ── Also included pill row ── */}
-      <div style={{ marginTop: '40px', paddingTop: '28px', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-        <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.28)', fontFamily: 'var(--font-inter)', whiteSpace: 'nowrap' }}>
+      <div style={{ marginTop: '40px', paddingTop: '28px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+        <span style={{ fontSize: '11px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', whiteSpace: 'nowrap', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
           Also included
         </span>
-        <div style={{ width: '1px', height: '14px', background: 'rgba(255,255,255,0.10)', flexShrink: 0 }} />
+        <div style={{ width: '1px', height: '12px', background: 'rgba(255,255,255,0.12)', flexShrink: 0 }} />
         {[
           { href: '/provider',      label: 'Provider Dashboard' },
           { href: '/impact',        label: 'Impact Dashboard'   },
@@ -568,27 +568,29 @@ export default function Features() {
           <Link
             key={item.href}
             href={item.href}
+            className="also-included-pill"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '5px',
-              fontSize: '12px', color: 'var(--text-2)',
-              fontFamily: 'var(--font-inter)',
-              textDecoration: 'none', padding: '5px 12px',
-              borderRadius: '100px', border: '1px solid rgba(255,255,255,0.07)',
-              background: 'rgba(255,255,255,0.02)',
-              transition: 'color 0.2s, border-color 0.2s, background 0.2s',
+              fontSize: '12px', color: 'rgba(255,255,255,0.55)',
+              fontFamily: 'var(--font-inter)', fontWeight: 400,
+              textDecoration: 'none', padding: '5px 13px',
+              borderRadius: '100px',
+              border: '1px solid rgba(74,144,217,0.20)',
+              background: 'rgba(74,144,217,0.05)',
+              transition: 'color 0.2s, border-color 0.25s, background 0.25s',
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.color = 'var(--accent)'
-              e.currentTarget.style.borderColor = 'rgba(74,144,217,0.25)'
-              e.currentTarget.style.background = 'rgba(74,144,217,0.05)'
+              e.currentTarget.style.color = 'var(--accent2)'
+              e.currentTarget.style.borderColor = 'rgba(74,144,217,0.40)'
+              e.currentTarget.style.background = 'rgba(74,144,217,0.10)'
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.color = 'rgba(255,255,255,0.45)'
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'
-              e.currentTarget.style.background = 'rgba(255,255,255,0.02)'
+              e.currentTarget.style.color = 'rgba(255,255,255,0.55)'
+              e.currentTarget.style.borderColor = 'rgba(74,144,217,0.20)'
+              e.currentTarget.style.background = 'rgba(74,144,217,0.05)'
             }}
           >
-            {item.label} <ArrowRight size={10} strokeWidth={2} />
+            {item.label} <ArrowRight size={10} strokeWidth={1.5} />
           </Link>
         ))}
       </div>

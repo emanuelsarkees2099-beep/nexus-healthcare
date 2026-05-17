@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type DotColor = 'mint' | 'violet' | 'amber'
 interface Dot {
@@ -9,13 +9,35 @@ interface Dot {
   color: DotColor
 }
 
+/* ── P1: prefers-reduced-motion guard ────────────────────────────
+   If the user has requested reduced motion we skip the canvas entirely.
+   This also eliminates the JS cost — not just the visual output.
+   ─────────────────────────────────────────────────────────────── */
+function useReducedMotion(): boolean {
+  const [reduced, setReduced] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  })
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const handler = (e: MediaQueryListEvent) => setReduced(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+  return reduced
+}
+
 export default function BackgroundCanvas() {
+  const reducedMotion = useReducedMotion()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const dotsRef   = useRef<Dot[]>([])
   const mouseRef  = useRef({ x: -9999, y: -9999 })
   const rafRef    = useRef<number>(0)
   const pausedRef = useRef(false)
   const GRID = 44
+
+  /* P1: skip entirely when reduced motion is active */
+  if (reducedMotion) return null
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -93,16 +115,41 @@ export default function BackgroundCanvas() {
     )
     visObs.observe(canvas)
 
-    resize()
-    window.addEventListener('resize', resize, { passive: true })
-    window.addEventListener('mousemove', onMouse, { passive: true })
-    rafRef.current = requestAnimationFrame(draw)
+    /* ── P1: defer canvas boot until after first paint ─────────────
+       requestIdleCallback fires after the browser has painted and the
+       main thread is free, eliminating LCP blocking. Fallback to
+       setTimeout(200) in Safari which lacks rIC.
+       ─────────────────────────────────────────────────────────────── */
+    let cleanupFn: (() => void) | null = null
+
+    const boot = () => {
+      resize()
+      window.addEventListener('resize', resize, { passive: true })
+      window.addEventListener('mousemove', onMouse, { passive: true })
+      rafRef.current = requestAnimationFrame(draw)
+
+      cleanupFn = () => {
+        cancelAnimationFrame(rafRef.current)
+        window.removeEventListener('resize', resize)
+        window.removeEventListener('mousemove', onMouse)
+        visObs.disconnect()
+      }
+    }
+
+    let idleHandle: number | ReturnType<typeof setTimeout>
+    if ('requestIdleCallback' in window) {
+      idleHandle = window.requestIdleCallback(boot, { timeout: 1000 })
+    } else {
+      idleHandle = setTimeout(boot, 200)
+    }
 
     return () => {
-      cancelAnimationFrame(rafRef.current)
-      window.removeEventListener('resize', resize)
-      window.removeEventListener('mousemove', onMouse)
-      visObs.disconnect()
+      if ('cancelIdleCallback' in window && typeof idleHandle === 'number') {
+        window.cancelIdleCallback(idleHandle as number)
+      } else {
+        clearTimeout(idleHandle as ReturnType<typeof setTimeout>)
+      }
+      cleanupFn?.()
     }
   }, [])
 

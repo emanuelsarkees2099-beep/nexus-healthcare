@@ -160,6 +160,14 @@ export default function OnboardingPage() {
       setTransitioning(true)
       setTimeout(() => { setStep(s => s + 1); setTransitioning(false) }, 300)
     } else {
+      // Persist onboarding answers so eligibility, programs, and search can use them
+      try {
+        localStorage.setItem('nexus_onboarding', JSON.stringify({
+          answers,
+          completedAt: new Date().toISOString(),
+          version: 1,
+        }))
+      } catch { /* ignore — Safari private mode blocks localStorage */ }
       setDone(true)
     }
   }

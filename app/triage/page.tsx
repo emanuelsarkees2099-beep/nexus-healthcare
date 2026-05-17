@@ -2,7 +2,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
-import { Stethoscope, AlertTriangle, CheckCircle, MapPin, ChevronRight, Loader2, Info, ArrowRight, Clock } from 'lucide-react'
+import { Stethoscope, AlertTriangle, CheckCircle, MapPin, ChevronRight, Loader2, Info, ArrowRight, Clock, Sparkles } from 'lucide-react'
+import QuickExit from '@/components/QuickExit'
 
 type Step = {
   type: 'thinking' | 'checking' | 'result' | 'warning'
@@ -12,13 +13,14 @@ type Step = {
 
 type TriageResult = {
   urgency: 'routine' | 'soon' | 'urgent' | 'emergency'
-  clinic: { name: string; dist: string; type: string; cost: string; wait: string }
+  clinic?: { name: string; dist: string; type: string; cost: string; wait: string } | null
   reasoning: string
   erAlert?: string
   steps: string[]
   citations: string[]
 }
 
+/* ── Fallback keyword-matched scenarios (used when AI is unavailable) ── */
 const SCENARIOS: Record<string, { steps: Step[]; result: TriageResult }> = {
   default: {
     steps: [
@@ -71,22 +73,6 @@ const SCENARIOS: Record<string, { steps: Step[]; result: TriageResult }> = {
   },
 }
 
-function TypewriterText({ text, speed = 18 }: { text: string; speed?: number }) {
-  const [displayed, setDisplayed] = useState('')
-  useEffect(() => {
-    setDisplayed('')
-    let i = 0
-    const t = setInterval(() => {
-      if (i < text.length) {
-        setDisplayed(text.slice(0, ++i))
-      } else {
-        clearInterval(t)
-      }
-    }, speed)
-    return () => clearInterval(t)
-  }, [text, speed])
-  return <span>{displayed}</span>
-}
 
 const urgencyConfig = {
   routine: { label: 'Routine — within a few days', color: '#60a5fa', bg: 'rgba(96,165,250,0.08)', border: 'rgba(96,165,250,0.25)' },
@@ -101,7 +87,9 @@ export default function TriagePage() {
   const [visibleSteps, setVisibleSteps] = useState<Step[]>([])
   const [result, setResult] = useState<TriageResult | null>(null)
   const [showWork, setShowWork] = useState(false)
+  const [isRealAI, setIsRealAI] = useState(false)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const timerIds = useRef<ReturnType<typeof setTimeout>[]>([])
 
   const SUGGESTIONS = [
     'chest hurts when I breathe, 2 days',
@@ -111,30 +99,111 @@ export default function TriagePage() {
     'fever and sore throat for 5 days',
   ]
 
-  const runTriage = useCallback((input: string) => {
-    const q = input.toLowerCase()
-    let scenario = SCENARIOS.default
-    if (q.includes('emergency') || q.includes('shortness of breath') || (q.includes('chest') && q.includes('sweat'))) {
-      scenario = SCENARIOS.emergency
-    } else if (q.includes('headache') || q.includes('head')) {
-      scenario = SCENARIOS.headache
-    }
+  // F2 — Symptom category quick-pick
+  const SYMPTOM_CATEGORIES = [
+    { emoji: '💨', label: 'Breathing', preset: 'chest hurts when I breathe, shortness of breath' },
+    { emoji: '🤕', label: 'Head pain', preset: 'bad headache lasting several days, no fever' },
+    { emoji: '🦷', label: 'Dental', preset: 'severe tooth pain, need free dental care, no insurance' },
+    { emoji: '🧠', label: 'Mental health', preset: 'anxiety and depression, need mental health support, uninsured' },
+    { emoji: '🤒', label: 'Fever / cold', preset: 'fever, sore throat, and body aches for 5 days' },
+    { emoji: '🩺', label: 'General care', preset: 'need a general checkup and primary care, no insurance' },
+    { emoji: '🦴', label: 'Pain / injury', preset: 'joint or muscle pain, need evaluation, no insurance' },
+    { emoji: '💊', label: 'Medication', preset: 'need help affording my prescription medications' },
+  ]
+
+  /* ── Core triage logic: real AI with keyword-match fallback ── */
+  const runTriage = useCallback(async (input: string) => {
+    // Clear any lingering timers from a previous run
+    timerIds.current.forEach(clearTimeout)
+    timerIds.current = []
 
     setPhase('thinking')
     setVisibleSteps([])
     setResult(null)
+    setIsRealAI(false)
 
-    scenario.steps.forEach((step) => {
-      setTimeout(() => {
-        setVisibleSteps(prev => [...prev, step])
-        if (step.type === 'result') {
-          setTimeout(() => {
-            setResult(scenario.result)
-            setPhase('done')
-          }, 600)
-        }
-      }, step.delay)
+    const q = input.toLowerCase()
+    const isEmergency =
+      q.includes('emergency') ||
+      q.includes('shortness of breath') ||
+      (q.includes('chest') && q.includes('sweat'))
+    const isHeadache = !isEmergency && (q.includes('headache') || q.includes('head pain'))
+
+    // Choose animated step sequence based on symptom urgency
+    const STEPS: Step[] = isEmergency
+      ? [
+          { type: 'thinking', text: 'Analyzing symptom description…', delay: 400 },
+          { type: 'warning', text: '⚠ Potential emergency symptom detected — accelerating triage…', delay: 900 },
+          { type: 'checking', text: 'Cross-referencing ACC/AHA emergency triage guidelines…', delay: 1500 },
+          { type: 'result', text: 'Emergency guidance ready.', delay: 2200 },
+        ]
+      : [
+          { type: 'thinking', text: 'Analyzing symptom description…', delay: 500 },
+          { type: 'checking', text: 'Cross-referencing CDC and clinical triage guidelines…', delay: 1300 },
+          { type: 'checking', text: 'Assessing urgency level and appropriate care setting…', delay: 2100 },
+          { type: 'checking', text: 'Identifying free care options for uninsured patients…', delay: 2900 },
+          { type: 'result', text: 'Care pathway identified.', delay: 3600 },
+        ]
+
+    const lastDelay = STEPS[STEPS.length - 1].delay
+
+    // Animate steps at fixed intervals
+    STEPS.forEach(step => {
+      const id = setTimeout(
+        () => setVisibleSteps(prev => [...prev, step]),
+        step.delay
+      )
+      timerIds.current.push(id)
     })
+
+    // Minimum display time: last step + 600ms "reveal" buffer
+    const minWait = new Promise<void>(resolve => {
+      const id = setTimeout(resolve, lastDelay + 600)
+      timerIds.current.push(id)
+    })
+
+    // Real AI call — graceful 503/500 fallback to keyword matching
+    const aiCall: Promise<TriageResult> = fetch('/api/triage', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ query: input }),
+    })
+      .then(async res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const data = await res.json() as Record<string, unknown>
+        if (
+          !data.urgency ||
+          typeof data.reasoning !== 'string' ||
+          !Array.isArray(data.steps)
+        ) {
+          throw new Error('Incomplete AI response')
+        }
+        setIsRealAI(true)
+        // AI result has no specific clinic (user searches via /search)
+        return {
+          urgency:   data.urgency,
+          reasoning: data.reasoning,
+          steps:     data.steps as string[],
+          citations: Array.isArray(data.citations) ? data.citations as string[] : [],
+          erAlert:   typeof data.erAlert === 'string' ? data.erAlert : undefined,
+          clinic:    null,
+        } as TriageResult
+      })
+      .catch(() => {
+        // Keyword-match fallback (API unavailable or key not configured)
+        const scenario = isEmergency
+          ? SCENARIOS.emergency
+          : isHeadache
+          ? SCENARIOS.headache
+          : SCENARIOS.default
+        return scenario.result
+      })
+
+    // Wait for BOTH minimum animation time AND AI response
+    const [, triageResult] = await Promise.all([minWait, aiCall])
+
+    setResult(triageResult)
+    setPhase('done')
   }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -144,20 +213,25 @@ export default function TriagePage() {
   }
 
   const reset = () => {
+    timerIds.current.forEach(clearTimeout)
+    timerIds.current = []
     setPhase('input')
     setQuery('')
     setVisibleSteps([])
     setResult(null)
     setShowWork(false)
+    setIsRealAI(false)
   }
 
   return (
     <AppShell>
+      <QuickExit />
       <style>{`
         .triage-step { animation: fadeSlideUp 0.4s cubic-bezier(0.16,1,0.3,1) both; }
         @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .triage-result { animation: fadeSlideUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
         .triage-ta:focus { outline: none !important; border-color: rgba(74,144,217,0.4) !important; }
+        @keyframes spin { to { transform: rotate(360deg); } }
       `}</style>
 
       {/* Header */}
@@ -206,7 +280,7 @@ export default function TriagePage() {
           <Info size={14} color="#fbbf24" style={{ flexShrink: 0, marginTop: '1px' }} />
           <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, margin: 0, fontFamily: 'var(--font-inter)' }}>
             <strong style={{ color: 'rgba(251,191,36,0.9)', fontWeight: 600 }}>This is not a medical diagnosis.</strong>{' '}
-            This tool uses keyword matching against published guidelines (CDC, AAFP, AHA) to suggest appropriate care settings. It cannot examine you, review your medical history, or replace a licensed provider. In any emergency, call 911.
+            This tool uses AI analysis and published guidelines (CDC, AAFP, AHA) to suggest appropriate care settings. It cannot examine you, review your medical history, or replace a licensed provider. In any emergency, call 911.
           </p>
         </div>
       </section>
@@ -217,6 +291,51 @@ export default function TriagePage() {
         {/* Input Phase */}
         {phase === 'input' && (
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* Symptom category quick-pick */}
+            <div>
+              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', marginBottom: 10, textAlign: 'center', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                Quick start — select a category
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+                {SYMPTOM_CATEGORIES.map(cat => (
+                  <button
+                    key={cat.label}
+                    type="button"
+                    onClick={() => setQuery(cat.preset)}
+                    style={{
+                      padding: '10px 8px', borderRadius: 12, textAlign: 'center',
+                      background: query === cat.preset ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.02)',
+                      border: `1px solid ${query === cat.preset ? 'rgba(74,144,217,0.35)' : 'rgba(255,255,255,0.07)'}`,
+                      color: query === cat.preset ? 'var(--accent)' : 'rgba(255,255,255,0.5)',
+                      cursor: 'pointer', fontFamily: 'var(--font-inter)',
+                      transition: 'all 0.15s',
+                    }}
+                    onMouseEnter={e => {
+                      if (query !== cat.preset) {
+                        e.currentTarget.style.borderColor = 'rgba(74,144,217,0.2)'
+                        e.currentTarget.style.color = 'rgba(255,255,255,0.7)'
+                      }
+                    }}
+                    onMouseLeave={e => {
+                      if (query !== cat.preset) {
+                        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'
+                        e.currentTarget.style.color = 'rgba(255,255,255,0.5)'
+                      }
+                    }}
+                  >
+                    <div style={{ fontSize: 18, marginBottom: 4 }}>{cat.emoji}</div>
+                    <div style={{ fontSize: 11, fontWeight: 500 }}>{cat.label}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-inter)' }}>or describe in your own words</span>
+              <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+            </div>
+
             <div style={{ position: 'relative' }}>
               <textarea
                 ref={inputRef}
@@ -292,12 +411,12 @@ export default function TriagePage() {
             {/* Disclaimer */}
             <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', textAlign: 'center', lineHeight: 1.6 }}>
               <Info size={10} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
-              Not a medical diagnosis. This tool helps you find appropriate care — always consult a healthcare professional. Nothing you enter leaves your device.
+              Not a medical diagnosis. This tool helps you find appropriate care — always consult a healthcare professional. Nothing you enter leaves your device to third parties.
             </p>
           </form>
         )}
 
-        {/* Thinking Phase */}
+        {/* Thinking + Done Phase */}
         {(phase === 'thinking' || phase === 'done') && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
             {/* Your query */}
@@ -319,12 +438,26 @@ export default function TriagePage() {
               marginBottom: '24px',
               display: 'flex', flexDirection: 'column', gap: '12px',
             }}>
+              {/* Header row */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                 <Stethoscope size={14} color="var(--accent)" />
                 <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
                   Matching care pathway
                 </span>
-                {phase === 'thinking' && <Loader2 size={12} color="var(--accent)" style={{ animation: 'spin 1s linear infinite', marginLeft: 'auto' }} />}
+                {phase === 'done' && isRealAI && (
+                  <span style={{
+                    marginLeft: 'auto',
+                    display: 'inline-flex', alignItems: 'center', gap: '4px',
+                    fontSize: '10px', padding: '2px 9px', borderRadius: '100px',
+                    background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)',
+                    color: 'rgba(74,144,217,0.8)',
+                  }}>
+                    <Sparkles size={9} /> AI-analyzed
+                  </span>
+                )}
+                {phase === 'thinking' && (
+                  <Loader2 size={12} color="var(--accent)" style={{ animation: 'spin 1s linear infinite', marginLeft: 'auto' }} />
+                )}
               </div>
 
               {visibleSteps.map((step, i) => (
@@ -357,10 +490,11 @@ export default function TriagePage() {
               ))}
             </div>
 
-            {/* Result */}
+            {/* Result cards */}
             {result && (
               <div className="triage-result" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {/* Urgency */}
+
+                {/* Urgency badge */}
                 <div style={{
                   padding: '14px 18px', borderRadius: '12px',
                   background: urgencyConfig[result.urgency].bg,
@@ -386,21 +520,33 @@ export default function TriagePage() {
                   </div>
                 )}
 
-                {/* Best match clinic */}
+                {/* Best match clinic / Find care CTA */}
                 <div style={{
                   padding: '22px', borderRadius: '16px',
                   background: 'rgba(74,144,217,0.04)',
                   border: '1px solid rgba(74,144,217,0.18)',
                 }}>
                   <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>
-                    Best match
+                    {result.clinic ? 'Best match' : 'Find care near you'}
                   </div>
-                  <div style={{ fontSize: '20px', fontWeight: 700, marginBottom: '10px' }}>{result.clinic.name}</div>
-                  <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', fontSize: '13px', color: 'rgba(255,255,255,0.55)', marginBottom: '16px' }}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><MapPin size={12} /> {result.clinic.dist}</span>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><Clock size={12} /> {result.clinic.wait}</span>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#60a5fa', fontWeight: 600 }}>💚 {result.clinic.cost}</span>
-                  </div>
+
+                  {result.clinic ? (
+                    <>
+                      <div style={{ fontSize: '20px', fontWeight: 700, marginBottom: '10px' }}>{result.clinic.name}</div>
+                      <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', fontSize: '13px', color: 'rgba(255,255,255,0.55)', marginBottom: '16px' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><MapPin size={12} /> {result.clinic.dist}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><Clock size={12} /> {result.clinic.wait}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#60a5fa', fontWeight: 600 }}>💚 {result.clinic.cost}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.75, marginBottom: '16px' }}>
+                      Based on your symptoms and urgency level, search for free and sliding-scale clinics near you.{' '}
+                      <strong style={{ color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>FQHCs cannot turn you away</strong>{' '}
+                      regardless of insurance status or ability to pay.
+                    </p>
+                  )}
+
                   <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                     <Link href="/search" style={{
                       padding: '9px 18px', borderRadius: '100px',
@@ -408,7 +554,8 @@ export default function TriagePage() {
                       color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
                       textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px',
                     }}>
-                      <MapPin size={12} /> Get directions
+                      <MapPin size={12} />
+                      {result.clinic ? 'Get directions' : 'Search free clinics near me'}
                     </Link>
                     <Link href="/gps" style={{
                       padding: '9px 18px', borderRadius: '100px',
@@ -421,7 +568,7 @@ export default function TriagePage() {
                   </div>
                 </div>
 
-                {/* Steps */}
+                {/* Next steps */}
                 <div style={{
                   padding: '20px', borderRadius: '16px',
                   background: 'rgba(255,255,255,0.02)',
@@ -448,7 +595,7 @@ export default function TriagePage() {
                   </div>
                 </div>
 
-                {/* Show work toggle */}
+                {/* Show reasoning + citations toggle */}
                 <button
                   onClick={() => setShowWork(!showWork)}
                   style={{
@@ -469,25 +616,39 @@ export default function TriagePage() {
                     border: '1px solid rgba(255,255,255,0.07)',
                     animation: 'fadeSlideUp 0.3s ease both',
                   }}>
-                    <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '10px', color: 'rgba(255,255,255,0.7)' }}>
-                      Clinical reasoning
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: 'rgba(255,255,255,0.7)' }}>
+                        Clinical reasoning
+                      </div>
+                      {isRealAI && (
+                        <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '100px', background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.15)', color: 'rgba(74,144,217,0.7)' }}>
+                          Powered by Claude
+                        </span>
+                      )}
                     </div>
                     <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, marginBottom: '16px' }}>
                       {result.reasoning}
                     </p>
-                    <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '10px', color: 'rgba(255,255,255,0.7)' }}>
-                      Sources
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      {result.citations.map((c, i) => (
-                        <div key={i} style={{
-                          fontSize: '12px', color: 'rgba(255,255,255,0.4)',
-                          display: 'flex', alignItems: 'center', gap: '6px',
-                        }}>
-                          <ArrowRight size={10} /> {c}
+                    {result.citations.length > 0 && (
+                      <>
+                        <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '10px', color: 'rgba(255,255,255,0.7)' }}>
+                          Sources
                         </div>
-                      ))}
-                    </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                          {result.citations.map((c, i) => (
+                            <div key={i} style={{
+                              fontSize: '12px', color: 'rgba(255,255,255,0.4)',
+                              display: 'flex', alignItems: 'center', gap: '6px',
+                            }}>
+                              <ArrowRight size={10} /> {c}
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                    <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.2)', marginTop: '16px', lineHeight: 1.6 }}>
+                      This analysis is not a medical diagnosis. It is for informational purposes only and should not replace professional medical advice.
+                    </p>
                   </div>
                 )}
 

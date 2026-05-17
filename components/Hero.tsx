@@ -1,26 +1,17 @@
 'use client'
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import gsap from 'gsap'
 import { registerGSAP } from '@/lib/gsap-st'
 import { useI18n } from '@/components/I18nContext'
+import SearchBar from '@/components/hero/SearchBar'
+import TrendingCarousel from '@/components/hero/TrendingCarousel'
+import HeroMockup from '@/components/hero/HeroMockup'
+
 registerGSAP()
 
-/* ── 21st.dev animated-hero: cycling words ── */
+/* ── Animated cycling words (#21st-dev animated-hero) ── */
 const CYCLE_WORDS = ['unlocked', 'possible', 'deserved', 'waiting']
-
-const TRENDING = [
-  '🔥 Free dental Phoenix',
-  '💊 Insulin help NYC',
-  '🧠 Mental health LA',
-  '👶 Pediatrics Chicago',
-  '💉 Vaccines Houston',
-  '👁️ Eye care Miami',
-  '❤️ Cardiology Seattle',
-  '🦷 Dental Dallas',
-  '🤰 OB/GYN Austin',
-  '🩺 Walk-in Denver',
-]
 
 const PLACEHOLDERS = [
   'Symptom, specialty, or clinic name...',
@@ -31,64 +22,49 @@ const PLACEHOLDERS = [
   'Pediatrics · no insurance needed...',
 ]
 
-const SIDEBAR_ITEMS = [
-  { label: 'Home',        active: true,
-    icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> },
-  { label: 'Clinic Search', active: false,
-    icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> },
-  { label: 'Care Team',   active: false,
-    icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> },
-  { label: 'Settings',    active: false,
-    icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> },
-  { label: 'Programs',    active: false,
-    icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> },
-]
-
-const MOCKUP_RESULTS = [
-  { initials: 'CA', name: 'Clinica Adelante',      dist: '1.2 mi', wait: '~20 min', status: 'Open', green: true },
-  { initials: 'VS', name: 'Valle del Sol Health',   dist: '2.8 mi', wait: '~45 min', status: 'Busy', green: false },
-  { initials: 'MP', name: 'Mountain Park Health',   dist: '4.1 mi', wait: '~15 min', status: 'Open', green: true },
-]
-
 export default function Hero() {
   const { t } = useI18n()
-  const sectionRef = useRef<HTMLElement>(null)
-  const h1Ref      = useRef<HTMLHeadingElement>(null)
-  const subRef     = useRef<HTMLParagraphElement>(null)
-  const searchRef  = useRef<HTMLDivElement>(null)
-  const chipsRef   = useRef<HTMLDivElement>(null)
-  const eyebrowRef = useRef<HTMLDivElement>(null)
-  const socialRef  = useRef<HTMLDivElement>(null)
-  const mockupRef  = useRef<HTMLDivElement>(null)
-  const orb1Ref    = useRef<HTMLDivElement>(null)
-  const orb2Ref    = useRef<HTMLDivElement>(null)
-  const orb3Ref    = useRef<HTMLDivElement>(null)
-  const gridRef    = useRef<HTMLDivElement>(null)
-  const inputRef   = useRef<HTMLInputElement>(null)
-  const router     = useRouter()
+  const router = useRouter()
 
+  /* ── Section & animation refs ── */
+  const sectionRef  = useRef<HTMLElement>(null)
+  const h1Ref       = useRef<HTMLHeadingElement>(null)
+  const subRef      = useRef<HTMLParagraphElement>(null)
+  const searchRef   = useRef<HTMLDivElement>(null)
+  const chipsRef    = useRef<HTMLDivElement>(null)
+  const eyebrowRef  = useRef<HTMLDivElement>(null)
+  const socialRef   = useRef<HTMLDivElement>(null)
+  const mockupRef   = useRef<HTMLDivElement>(null)
+  const orb1Ref     = useRef<HTMLDivElement>(null)
+  const orb2Ref     = useRef<HTMLDivElement>(null)
+  const orb3Ref     = useRef<HTMLDivElement>(null)
+  const gridRef     = useRef<HTMLDivElement>(null)
+
+  /* SearchBar sub-component refs (passed down) */
+  const inputRef   = useRef<HTMLInputElement>(null)
+  const ctaBtnRef  = useRef<HTMLButtonElement>(null)
+
+  /* ── State ── */
   const [placeholderIdx, setPlaceholderIdx] = useState(0)
   const [searchVal, setSearchVal]           = useState('')
   const [locationVal, setLocationVal]       = useState('Phoenix, AZ')
-  const [editingLoc, setEditingLoc]         = useState(false)
-  const locationRef = useRef<HTMLInputElement>(null)
   const [cycleIdx, setCycleIdx]             = useState(0)
   const [wordClass, setWordClass]           = useState('word-cycle-in')
 
-  /* ── Word cycling (21st.dev animated-hero) ── */
+  /* ── Cycling headline word (#21st-dev animated-hero) ── */
   useEffect(() => {
     const id = setInterval(() => {
       setWordClass('word-cycle-out')
-      const t = setTimeout(() => {
+      const timer = setTimeout(() => {
         setCycleIdx(i => (i + 1) % CYCLE_WORDS.length)
         setWordClass('word-cycle-in')
       }, 380)
-      return () => clearTimeout(t)
+      return () => clearTimeout(timer)
     }, 2600)
     return () => clearInterval(id)
   }, [])
 
-  /* ── Cycling placeholder ── */
+  /* ── Cycling placeholder (GSAP fade) ── */
   useEffect(() => {
     const id = setInterval(() => {
       const input = inputRef.current
@@ -104,54 +80,34 @@ export default function Hero() {
     return () => clearInterval(id)
   }, [])
 
-
-  /* ── Subtle scroll parallax on background grid ── */
+  /* ── Scroll parallax on background grid ── */
   useEffect(() => {
     let rafId: number
     const onScroll = () => {
       rafId = requestAnimationFrame(() => {
         const y = window.scrollY
-        // Grid lines drift slightly upward on scroll (GSAP only sets opacity on gridRef, not transform)
-        if (gridRef.current) {
-          gridRef.current.style.transform = `translateY(${y * 0.12}px)`
-        }
-        // Orb1 drifts upward (no GSAP transform conflict after pin completes)
-        if (orb1Ref.current) {
-          orb1Ref.current.style.transform = `translateX(-50%) translateY(${y * 0.06}px)`
-        }
+        if (gridRef.current) gridRef.current.style.transform = `translateY(${y * 0.12}px)`
+        if (orb1Ref.current) orb1Ref.current.style.transform = `translateX(-50%) translateY(${y * 0.06}px)`
       })
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(rafId) }
   }, [])
 
-  /* ── Mockup 3D tilt ── */
-  useEffect(() => {
-    const mockup = mockupRef.current
-    if (!mockup) return
-    const inner = mockup.querySelector<HTMLElement>('.mockup-inner')
-    if (!inner) return
-    const onMove = (e: MouseEvent) => {
-      const r = mockup.getBoundingClientRect()
-      const x = (e.clientX - (r.left + r.width  / 2)) / (r.width  / 2)
-      const y = (e.clientY - (r.top  + r.height / 2)) / (r.height / 2)
-      gsap.to(inner, { rotateX: -y * 4, rotateY: x * 5, duration: 0.7, ease: 'power2.out', transformStyle: 'preserve-3d', overwrite: 'auto' })
-    }
-    const onLeave = () => gsap.to(inner, { rotateX: 5, rotateY: 0, duration: 1.2, ease: 'elastic.out(1,0.4)', overwrite: 'auto' })
-    mockup.addEventListener('mousemove', onMove)
-    mockup.addEventListener('mouseleave', onLeave)
-    return () => { mockup.removeEventListener('mousemove', onMove); mockup.removeEventListener('mouseleave', onLeave) }
+  /* ── P9: Synchronous GSAP initial states (prevent FOUC) ── */
+  useLayoutEffect(() => {
+    const words = h1Ref.current?.querySelectorAll('.h1-word') ?? []
+    gsap.set([...words, subRef.current, searchRef.current, chipsRef.current,
+              eyebrowRef.current, socialRef.current, mockupRef.current], { opacity: 0 })
+    gsap.set([...words], { y: '110%' })
+    gsap.set([subRef.current, searchRef.current, chipsRef.current,
+              socialRef.current, mockupRef.current], { y: 30 })
   }, [])
 
-  /* ── Hero entrance + scroll-out pin ── */
+  /* ── Hero entrance + ScrollTrigger pin ── */
   useEffect(() => {
     const ctx = gsap.context(() => {
       const words = h1Ref.current?.querySelectorAll('.h1-word') ?? []
-      gsap.set([...words, subRef.current, searchRef.current, chipsRef.current,
-                eyebrowRef.current, socialRef.current, mockupRef.current], { opacity: 0 })
-      gsap.set([...words], { y: '110%' })
-      gsap.set([subRef.current, searchRef.current, chipsRef.current,
-                socialRef.current, mockupRef.current], { y: 30 })
 
       const tl = gsap.timeline({ delay: 0.15 })
       tl
@@ -163,36 +119,31 @@ export default function Hero() {
         .to(chipsRef.current,    { y: 0,    opacity: 1,         duration: 0.7,  ease: 'power3.out' }, '-=0.5')
         .to(mockupRef.current,   { y: 0,    opacity: 1,         duration: 1.0,  ease: 'power3.out' }, '-=0.35')
 
-      /* Scroll-out pin: search fades, mockup rises */
+      /* Scroll-out: content fades, mockup rises */
       const pinTl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top top',
-          end: '+=580',
-          scrub: 1.4,
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
+          start: 'top top', end: '+=580',
+          scrub: 1.4, pin: true, pinSpacing: true, anticipatePin: 1,
         },
       })
       pinTl
-        .to(eyebrowRef.current, { opacity: 0, y: -18,                   duration: 0.28 }, 0)
-        .to(socialRef.current,  { opacity: 0, y: -14,                   duration: 0.25 }, 0)
-        .to(h1Ref.current,      { y: -80, opacity: 0, scale: 0.94,      duration: 0.50 }, 0)
-        .to(subRef.current,     { y: -45, opacity: 0,                   duration: 0.38 }, 0.06)
-        .to(chipsRef.current,   { opacity: 0, y: -16,                   duration: 0.28 }, 0.09)
-        .to(searchRef.current,  { y: -18, opacity: 0,                   duration: 0.32 }, 0.14)
-        .to(orb1Ref.current,    { scale: 2.4, opacity: 0,               duration: 0.65 }, 0)
-        .to(orb2Ref.current,    { x: 240, opacity: 0,                   duration: 0.50 }, 0.04)
-        .to(orb3Ref.current,    { x: -160, opacity: 0,                  duration: 0.50 }, 0.04)
-        .to(gridRef.current,    { opacity: 0,                           duration: 0.38 }, 0.12)
-        .to(mockupRef.current,  { y: -40, scale: 1.02,                  duration: 0.70 }, 0.08)
+        .to(eyebrowRef.current, { opacity: 0, y: -18,              duration: 0.28 }, 0)
+        .to(socialRef.current,  { opacity: 0, y: -14,              duration: 0.25 }, 0)
+        .to(h1Ref.current,      { y: -80, opacity: 0, scale: 0.94, duration: 0.50 }, 0)
+        .to(subRef.current,     { y: -45, opacity: 0,              duration: 0.38 }, 0.06)
+        .to(chipsRef.current,   { opacity: 0, y: -16,              duration: 0.28 }, 0.09)
+        .to(searchRef.current,  { y: -18, opacity: 0,              duration: 0.32 }, 0.14)
+        .to(orb1Ref.current,    { scale: 2.4, opacity: 0,          duration: 0.65 }, 0)
+        .to(orb2Ref.current,    { x: 240, opacity: 0,              duration: 0.50 }, 0.04)
+        .to(orb3Ref.current,    { x: -160, opacity: 0,             duration: 0.50 }, 0.04)
+        .to(gridRef.current,    { opacity: 0,                      duration: 0.38 }, 0.12)
+        .to(mockupRef.current,  { y: -40, scale: 1.02,             duration: 0.70 }, 0.08)
     }, sectionRef)
     return () => ctx.revert()
   }, [])
 
-  /* ── Magnetic CTA button (#12) ── */
-  const ctaBtnRef = useRef<HTMLButtonElement>(null)
+  /* ── Magnetic CTA button ── */
   useEffect(() => {
     const btn = ctaBtnRef.current
     if (!btn) return
@@ -202,9 +153,8 @@ export default function Hero() {
       const dx = e.clientX - (r.left + r.width  / 2)
       const dy = e.clientY - (r.top  + r.height / 2)
       const dist = Math.sqrt(dx * dx + dy * dy)
-      const maxDist = 90
-      if (dist < maxDist) {
-        const force = (1 - dist / maxDist) * 0.32
+      if (dist < 90) {
+        const force = (1 - dist / 90) * 0.32
         btn.style.transform = `translate(${dx * force}px, ${dy * force}px) translateY(-1px)`
       } else {
         btn.style.transform = ''
@@ -219,6 +169,7 @@ export default function Hero() {
     }
   }, [])
 
+  /* ── Search handler ── */
   const handleSearch = useCallback(() => {
     const query = searchVal.trim()
     if (!query) return
@@ -249,31 +200,26 @@ export default function Hero() {
       }}
     >
       {/* ── AMBIENT ORBS ── */}
-      {/* Primary top glow — stronger, larger */}
       <div ref={orb1Ref} aria-hidden="true" style={{
         position: 'absolute', width: '1100px', height: '700px', borderRadius: '50%',
         background: 'radial-gradient(ellipse, rgba(74,144,217,0.18) 0%, rgba(74,144,217,0.06) 40%, transparent 70%)',
         top: '-220px', left: '50%', transform: 'translateX(-50%)',
         filter: 'blur(80px)', pointerEvents: 'none', zIndex: 0,
       }} />
-      {/* Secondary — cool accent top-left */}
       <div aria-hidden="true" style={{
         position: 'absolute', width: '600px', height: '400px', borderRadius: '50%',
         background: 'radial-gradient(ellipse, rgba(167,210,190,0.10) 0%, transparent 65%)',
-        top: '5%', left: '-100px',
-        filter: 'blur(70px)', pointerEvents: 'none', zIndex: 0,
+        top: '5%', left: '-100px', filter: 'blur(70px)', pointerEvents: 'none', zIndex: 0,
       }} />
       <div ref={orb2Ref} aria-hidden="true" style={{
         position: 'absolute', width: '500px', height: '500px', borderRadius: '50%',
         background: 'radial-gradient(circle, rgba(167,210,190,0.08) 0%, transparent 65%)',
-        top: '25%', right: '-140px',
-        filter: 'blur(65px)', pointerEvents: 'none', zIndex: 0,
+        top: '25%', right: '-140px', filter: 'blur(65px)', pointerEvents: 'none', zIndex: 0,
       }} />
       <div ref={orb3Ref} aria-hidden="true" style={{
         position: 'absolute', width: '400px', height: '400px', borderRadius: '50%',
         background: 'radial-gradient(circle, rgba(74,144,217,0.08) 0%, transparent 65%)',
-        bottom: '8%', left: '-100px',
-        filter: 'blur(58px)', pointerEvents: 'none', zIndex: 0,
+        bottom: '8%', left: '-100px', filter: 'blur(58px)', pointerEvents: 'none', zIndex: 0,
       }} />
 
       {/* ── GRID LINES ── */}
@@ -285,46 +231,39 @@ export default function Hero() {
       </div>
 
       {/* ── HERO CONTENT ── */}
-      <div id="main-content" style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '1040px' }}>
+      <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '1040px' }}>
 
-        {/* Eyebrow */}
+        {/* Eyebrow pill */}
         <div ref={eyebrowRef} style={{
           display: 'inline-flex', alignItems: 'center', gap: '8px',
-          background: 'rgba(74,144,217,0.06)',
-          border: '1px solid rgba(74,144,217,0.22)',
-          borderRadius: '100px',
-          padding: '7px 18px 7px 12px',
-          fontSize: '11px', color: 'var(--accent2)',
-          fontWeight: 300, letterSpacing: '0.07em',
-          textTransform: 'uppercase',
-          marginBottom: '1rem',
-          fontFamily: 'var(--font-inter)',
+          background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.22)',
+          borderRadius: '100px', padding: '7px 18px 7px 12px',
+          fontSize: '11px', color: 'var(--accent2)', fontWeight: 300,
+          letterSpacing: '0.07em', textTransform: 'uppercase',
+          marginBottom: '1rem', fontFamily: 'var(--font-inter)',
           boxShadow: '0 0 20px rgba(74,144,217,0.10)',
         }}>
           <span style={{
-            width: '5px', height: '5px',
-            background: 'var(--accent)', borderRadius: '50%',
+            width: '5px', height: '5px', background: 'var(--accent)', borderRadius: '50%',
             animation: 'pulse-dot 2s ease-in-out infinite',
             boxShadow: '0 0 6px rgba(74,144,217,0.8)',
           }} aria-hidden="true" />
           Free. Private. No insurance required.
         </div>
 
-        {/* ── SOCIAL PROOF — above headline ── */}
+        {/* Social proof */}
         <div ref={socialRef} style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           gap: '12px', marginBottom: '1.2rem', flexWrap: 'wrap',
         }}>
           {/* Avatar stack */}
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            {['var(--accent)','#4a7c84','var(--accent2)','#5a9099','#3d717a'].map((bg, i) => (
+            {(['var(--accent)', '#4a7c84', 'var(--accent2)', '#5a9099', '#3d717a'] as const).map((bg, i) => (
               <div key={i} aria-hidden="true" style={{
                 width: '26px', height: '26px', borderRadius: '50%',
                 background: `linear-gradient(135deg, ${bg}, ${bg}99)`,
-                border: '2px solid #07070F',
-                marginLeft: i === 0 ? 0 : '-8px',
-                zIndex: 5 - i,
-                position: 'relative',
+                border: '2px solid #07070F', marginLeft: i === 0 ? 0 : '-8px',
+                zIndex: 5 - i, position: 'relative',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: '10px', fontWeight: 600, color: '#fff',
               }}>
@@ -339,7 +278,7 @@ export default function Hero() {
             </div>
             <div style={{ display: 'flex', gap: '2px' }}>
               {[1,2,3,4,5].map(s => (
-                <svg key={s} width="11" height="11" viewBox="0 0 24 24" fill="#fbbf24" stroke="none">
+                <svg key={s} width="11" height="11" viewBox="0 0 24 24" fill="#fbbf24" stroke="none" aria-hidden="true">
                   <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                 </svg>
               ))}
@@ -360,24 +299,16 @@ export default function Hero() {
           style={{
             fontFamily: 'var(--font-display)',
             fontSize: 'clamp(2.8rem, 6.5vw, 6.5rem)',
-            fontWeight: 800,
-            lineHeight: 1.05,
+            fontWeight: 800, lineHeight: 1.05,
             letterSpacing: '-0.035em',
-            maxWidth: '960px',
-            margin: '0 auto 0.9rem',
+            maxWidth: '960px', margin: '0 auto 0.9rem',
             perspective: '600px',
           }}
         >
-          {/* First line: char-by-char glow sweep after GSAP entrance (#9) */}
           <span className="h1-line" style={{ display: 'block', overflow: 'hidden' }}>
             <span className="h1-word" style={{ display: 'inline-block' }}>
               {'Free healthcare,'.split('').map((ch, i) => (
-                <span
-                  key={i}
-                  className="h1-char"
-                  style={{ animationDelay: `${0.95 + i * 0.028}s` }}
-                  aria-hidden={ch === ' ' ? 'true' : undefined}
-                >
+                <span key={i} className="h1-char" style={{ animationDelay: `${0.95 + i * 0.028}s` }} aria-hidden={ch === ' ' ? 'true' : undefined}>
                   {ch === ' ' ? ' ' : ch}
                 </span>
               ))}
@@ -385,40 +316,24 @@ export default function Hero() {
           </span>
           <span className="h1-line" style={{ display: 'block', overflow: 'hidden' }}>
             <span className="h1-word" style={{ display: 'inline-block' }}>
-              {/* Animated cycling word container */}
-              <span style={{
-                display: 'inline-block',
-                position: 'relative',
-                perspective: '500px',
-                transformStyle: 'preserve-3d',
-              }}>
-                {/* Invisible spacer = widest word, locks container width */}
+              <span style={{ display: 'inline-block', position: 'relative', perspective: '500px', transformStyle: 'preserve-3d' }}>
+                {/* Width spacer: widest word locks container */}
                 <span aria-hidden="true" style={{ visibility: 'hidden', display: 'inline-block' }}>
                   {CYCLE_WORDS.reduce((a, b) => a.length >= b.length ? a : b)}
                 </span>
-                {/* Visible animated word, absolutely positioned on top */}
+                {/* Animated word */}
                 <span
                   key={cycleIdx}
                   className={wordClass}
-                  style={{
-                    position: 'absolute',
-                    left: 0, top: 0,
-                    display: 'inline-block',
-                    color: 'var(--accent)',
-                    transformOrigin: 'center bottom',
-                    whiteSpace: 'nowrap',
-                  }}
+                  style={{ position: 'absolute', left: 0, top: 0, display: 'inline-block', color: 'var(--accent)', transformOrigin: 'center bottom', whiteSpace: 'nowrap' }}
                 >
                   {CYCLE_WORDS[cycleIdx]}
                 </span>
                 {/* Underline accent */}
                 <span aria-hidden="true" style={{
-                  position: 'absolute',
-                  bottom: '2px', left: 0, right: 0,
-                  height: '3px',
+                  position: 'absolute', bottom: '2px', left: 0, right: 0, height: '3px',
                   background: 'linear-gradient(90deg, var(--accent), var(--accent2), transparent)',
-                  borderRadius: '2px',
-                  opacity: 0.6,
+                  borderRadius: '2px', opacity: 0.6,
                 }} />
               </span>
               {' '}in seconds.
@@ -437,449 +352,79 @@ export default function Hero() {
           {t('home.hero.subheadline')}
         </p>
 
-        {/* ── SEARCH BAR (fades on scroll) ── */}
+        {/* ── SEARCH BAR (sub-component, fades on scroll) ── */}
         <div ref={searchRef} style={{ width: '100%', maxWidth: '660px', margin: '0 auto 0.8rem', position: 'relative' }}>
-          <div className="search-glow-ring" style={{
-            position: 'absolute', inset: '-2px',
-            borderRadius: '17px',
-            background: 'linear-gradient(135deg, rgba(74,144,217,0.40), rgba(167,210,190,0.14))',
-            opacity: 0, transition: 'opacity 0.4s',
-            zIndex: 0, pointerEvents: 'none', filter: 'blur(1px)',
-          }} />
-          <div
-            role="search"
-            style={{
-              position: 'relative', zIndex: 1,
-              display: 'flex', alignItems: 'center',
-              background: 'rgba(7,7,15,0.95)',
-              border: '1px solid rgba(74,144,217,0.22)',
-              borderRadius: '16px',
-              padding: '7px 7px 7px 18px', gap: '10px',
-              backdropFilter: 'blur(20px)',
-              transition: 'border-color 0.3s, box-shadow 0.3s',
-              boxShadow: '0 4px 24px rgba(0,0,0,0.30)',
-            }}
-            onFocusCapture={e => {
-              const w = e.currentTarget
-              w.style.borderColor = 'rgba(74,144,217,0.55)'
-              w.style.boxShadow = '0 0 0 1px rgba(74,144,217,0.22), 0 8px 36px rgba(0,0,0,0.40)'
-              // Glow ring pulse
-              const glow = w.previousElementSibling as HTMLElement
-              glow.style.opacity = '1'
-              glow.classList.remove('search-pulse-ring')
-              void glow.offsetWidth
-              glow.classList.add('search-pulse-ring')
-            }}
-            onBlurCapture={e => {
-              const w = e.currentTarget
-              w.style.borderColor = 'rgba(74,144,217,0.22)'
-              w.style.boxShadow = '0 4px 24px rgba(0,0,0,0.30)'
-              const glow = w.previousElementSibling as HTMLElement
-              glow.style.opacity = '0'
-              glow.classList.remove('search-pulse-ring')
-            }}
-          >
-            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
-              stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-              style={{ flexShrink: 0, opacity: 0.5 }}>
-              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-            </svg>
-            <label htmlFor="main-search" className="sr-only">Search for free healthcare near you</label>
-            <input
-              ref={inputRef}
-              id="main-search"
-              type="search"
-              value={searchVal}
-              onChange={e => setSearchVal(e.target.value)}
-              placeholder={PLACEHOLDERS[placeholderIdx]}
-              autoComplete="off"
-              aria-label="Search for free healthcare near you"
-              onKeyDown={e => { if (e.key === 'Enter') handleSearch() }}
-              style={{
-                flex: 1, background: 'none', border: 'none', outline: 'none',
-                color: 'var(--text)', fontFamily: 'var(--font-inter)',
-                fontSize: '15px', fontWeight: 300, padding: '9px 0', cursor: 'text',
-              }}
-            />
-            <div style={{ width: '1px', height: '26px', background: 'var(--border2)', flexShrink: 0 }} aria-hidden="true" />
-            <div style={{ display: 'flex', alignItems: 'center', gap: '7px', flexShrink: 0, padding: '0 4px' }}
-              onClick={() => { setEditingLoc(true); setTimeout(() => locationRef.current?.focus(), 50) }}
-            >
-              <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none"
-                stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                style={{ flexShrink: 0, opacity: 0.6 }}>
-                <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
-              </svg>
-              <input
-                ref={locationRef}
-                value={locationVal}
-                onChange={e => setLocationVal(e.target.value)}
-                onFocus={() => setEditingLoc(true)}
-                onBlur={() => setEditingLoc(false)}
-                onKeyDown={e => { if (e.key === 'Enter') handleSearch() }}
-                placeholder={t('home.hero.zipPlaceholder')}
-                style={{
-                  background: 'none', border: 'none', outline: 'none',
-                  color: editingLoc ? 'var(--text)' : 'var(--text-2)',
-                  fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 300,
-                  width: editingLoc ? '110px' : `${Math.max(70, locationVal.length * 7.5)}px`,
-                  cursor: 'text', transition: 'width 0.2s, color 0.2s',
-                  whiteSpace: 'nowrap',
-                }}
-              />
-              {/* Geolocation button */}
-              <button
-                aria-label="Use my current location"
-                title="Use my location"
-                onClick={e => {
-                  e.stopPropagation()
-                  if (!navigator.geolocation) return
-                  const btn = e.currentTarget
-                  btn.style.opacity = '0.4'
-                  navigator.geolocation.getCurrentPosition(
-                    async pos => {
-                      try {
-                        const r = await fetch(
-                          `/api/geocode?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`
-                        )
-                        const d = await r.json()
-                        const { city = '', state = '', zip = '' } = d
-                        if (zip) setLocationVal(zip)
-                        else if (city && state) setLocationVal(`${city}, ${state}`)
-                      } catch { /* ignore */ }
-                      btn.style.opacity = '1'
-                    },
-                    () => { btn.style.opacity = '1' },
-                    { timeout: 6000 }
-                  )
-                }}
-                style={{
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  padding: '2px', display: 'flex', alignItems: 'center',
-                  color: 'var(--accent)', opacity: 0.55,
-                  transition: 'opacity 0.2s',
-                  flexShrink: 0,
-                }}
-                onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-                onMouseLeave={e => (e.currentTarget.style.opacity = '0.55')}
-              >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="3"/>
-                  <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
-                  <path d="M12 8a4 4 0 1 0 4 4" strokeOpacity="0"/>
-                  <circle cx="12" cy="12" r="9" strokeOpacity="0.25"/>
-                </svg>
-              </button>
-            </div>
-            {/* Magnetic CTA button (#12) */}
-            <button
-              ref={ctaBtnRef}
-              className="search-submit btn-shimmer magnetic-btn"
-              onClick={handleSearch}
-              aria-label="Search for free care"
-              style={{
-                background: 'var(--accent)', color: 'var(--bg)',
-                border: 'none', borderRadius: '11px',
-                padding: '13px 22px',
-                fontFamily: 'var(--font-inter)', fontSize: '14px', fontWeight: 500,
-                cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0,
-                boxShadow: '0 4px 20px rgba(74,144,217,0.32)',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.boxShadow = '0 8px 32px rgba(74,144,217,0.48)'
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.boxShadow = '0 4px 20px rgba(74,144,217,0.32)'
-              }}
-            >
-              {t('home.hero.cta')} →
-            </button>
-          </div>
+          <SearchBar
+            searchVal={searchVal}
+            setSearchVal={setSearchVal}
+            locationVal={locationVal}
+            setLocationVal={setLocationVal}
+            onSearch={handleSearch}
+            placeholder={PLACEHOLDERS[placeholderIdx]}
+            inputRef={inputRef}
+            ctaBtnRef={ctaBtnRef}
+          />
         </div>
 
-        {/* Chips */}
+        {/* Quick-pick chips */}
         <div ref={chipsRef} role="list" aria-label="Quick search suggestions"
           style={{ display: 'flex', alignItems: 'center', gap: '7px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '0.75rem' }}>
           <span style={{ fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }} aria-hidden="true">Try:</span>
-          {['Primary care', 'Dental', 'Mental health', "Women's health", 'Pediatrics'].map(c => (
-            <a key={c} href="#" role="listitem"
-              onClick={e => { e.preventDefault(); setSearchVal(c) }}
+          {([
+            { label: 'Primary care', icon: (
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+              </svg>
+            )},
+            { label: 'Dental', icon: (
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M12 2C8 2 5 5 5 8c0 2 .8 3.5 1.5 5L8 21h2l2-5 2 5h2l1.5-8C18.2 11.5 19 10 19 8c0-3-3-6-7-6z"/>
+              </svg>
+            )},
+            { label: 'Mental health', icon: (
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6l-1 5H9l-1-5C6.5 13.5 5 11.5 5 9a7 7 0 0 1 7-7z"/>
+                <line x1="12" y1="17" x2="12" y2="20"/>
+              </svg>
+            )},
+            { label: "Women's health", icon: (
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="5"/>
+                <line x1="12" y1="13" x2="12" y2="21"/>
+                <line x1="9" y1="18" x2="15" y2="18"/>
+              </svg>
+            )},
+            { label: 'Pediatrics', icon: (
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="6" r="3"/>
+                <path d="M9 20v-5a3 3 0 0 1 6 0v5"/>
+                <line x1="9" y1="17" x2="15" y2="17"/>
+              </svg>
+            )},
+          ] as { label: string; icon: React.ReactNode }[]).map(({ label, icon }) => (
+            <button key={label} type="button" role="listitem"
+              onClick={() => setSearchVal(label)}
+              className="chip-pill"
               style={{
+                display: 'inline-flex', alignItems: 'center', gap: '5px',
                 fontSize: '12px', color: 'var(--text-2)',
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid var(--border2)',
-                borderRadius: '100px', padding: '4px 14px',
-                cursor: 'pointer', textDecoration: 'none',
+                background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border2)',
+                borderRadius: '100px', padding: '4px 12px 4px 10px', cursor: 'pointer',
                 fontFamily: 'var(--font-inter)', fontWeight: 300,
                 transition: 'all 0.25s var(--ease-spring)',
               }}
-              onMouseEnter={e => {
-                const t = e.currentTarget
-                t.style.color = 'var(--accent)'; t.style.borderColor = 'rgba(74,144,217,0.30)'
-                t.style.background = 'var(--accent-dim)'; t.style.transform = 'translateY(-1px)'
-                t.style.boxShadow = '0 4px 12px rgba(74,144,217,0.12)'
-              }}
-              onMouseLeave={e => {
-                const t = e.currentTarget
-                t.style.color = 'var(--text-2)'; t.style.borderColor = 'var(--border2)'
-                t.style.background = 'rgba(255,255,255,0.03)'; t.style.transform = ''
-                t.style.boxShadow = ''
-              }}
-            >{c}</a>
+            >{icon}{label}</button>
           ))}
         </div>
 
-        {/* ── TRENDING CAROUSEL ── */}
-        <div style={{
-          width: '100%', maxWidth: '660px', margin: '0 auto',
-          overflow: 'hidden',
-          maskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)',
-          WebkitMaskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-            <span style={{ fontSize: '10px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', letterSpacing: '0.08em', textTransform: 'uppercase', flexShrink: 0 }}>
-              Trending
-            </span>
-            <div style={{ flex: 1, height: '1px', background: 'var(--border2)' }} aria-hidden="true" />
-          </div>
-          <div style={{ overflow: 'hidden' }}>
-            <div className="trending-track" style={{ display: 'flex', gap: '8px' }}>
-              {[...TRENDING, ...TRENDING].map((t, i) => (
-                <button
-                  key={i}
-                  onClick={() => setSearchVal(t.replace(/^.{2}/, '').trim())}
-                  style={{
-                    flexShrink: 0,
-                    fontSize: '11px', color: 'var(--text-3)',
-                    background: 'rgba(255,255,255,0.02)',
-                    border: '1px solid var(--border2)',
-                    borderRadius: '100px', padding: '4px 12px',
-                    cursor: 'pointer', whiteSpace: 'nowrap',
-                    fontFamily: 'var(--font-inter)', fontWeight: 300,
-                    transition: 'color 0.2s, border-color 0.2s, background 0.2s',
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.color = 'var(--accent)'
-                    e.currentTarget.style.borderColor = 'rgba(74,144,217,0.25)'
-                    e.currentTarget.style.background = 'var(--accent-dim)'
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.color = 'var(--text-3)'
-                    e.currentTarget.style.borderColor = 'var(--border2)'
-                    e.currentTarget.style.background = 'rgba(255,255,255,0.02)'
-                  }}
-                >{t}</button>
-              ))}
-            </div>
-          </div>
-        </div>
+        {/* ── TRENDING CAROUSEL (sub-component) ── */}
+        <TrendingCarousel onSelect={q => setSearchVal(q)} />
+
 
       </div>
 
-      {/* ── FLOATING DASHBOARD MOCKUP — directly under search bar ── */}
-      <div ref={mockupRef} style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '860px', perspective: '1200px', marginTop: '1.5rem', animation: 'float-subtle 4s ease-in-out infinite' }}>
-
-        {/* Glow behind mockup */}
-        <div aria-hidden="true" style={{
-          position: 'absolute', top: '0%', left: '50%', transform: 'translate(-50%, -30%)',
-          width: '90%', height: '240px',
-          background: 'radial-gradient(ellipse, rgba(74,144,217,0.22) 0%, rgba(74,144,217,0.08) 40%, transparent 70%)',
-          filter: 'blur(50px)', pointerEvents: 'none', zIndex: 0,
-        }} />
-
-        {/* Frame */}
-        <div className="mockup-inner" style={{
-          background: 'linear-gradient(145deg, var(--bg2), var(--bg3))',
-          border: '1px solid rgba(74,144,217,0.20)',
-          borderRadius: '16px', overflow: 'hidden',
-          transform: 'rotateX(5deg) scale(0.97)',
-          transformStyle: 'preserve-3d',
-          boxShadow: `
-            0 50px 120px rgba(0,0,0,0.72),
-            0 0 0 1px rgba(74,144,217,0.10),
-            0 0 80px rgba(74,144,217,0.07),
-            inset 0 1px 0 rgba(255,255,255,0.05)
-          `,
-          transition: 'box-shadow 0.6s ease',
-          position: 'relative', zIndex: 1,
-        }}>
-          {/* Title bar */}
-          <div style={{
-            background: 'var(--bg3)', padding: '11px 16px',
-            display: 'flex', alignItems: 'center', gap: '8px',
-            borderBottom: '1px solid var(--border2)',
-          }}>
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#FF5F57', flexShrink: 0 }} />
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#FEBC2E', flexShrink: 0 }} />
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#28C840', flexShrink: 0 }} />
-            <div style={{
-              flex: 1, background: 'var(--bg4)', borderRadius: '6px', padding: '5px 12px',
-              margin: '0 12px', fontSize: '11px', color: 'var(--text-3)', fontWeight: 300,
-              display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-inter)',
-            }}>
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <rect width="11" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
-              nexus.health/dashboard
-            </div>
-            <div style={{ fontSize: '10px', color: 'var(--text-3)', fontWeight: 300, fontFamily: 'var(--font-inter)' }}>v1.0</div>
-          </div>
-
-          {/* Sidebar + Main */}
-          <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', minHeight: '260px' }}>
-
-            {/* Sidebar */}
-            <div style={{
-              background: 'var(--bg3)', borderRight: '1px solid var(--border2)',
-              padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '2px',
-            }}>
-              <div style={{
-                fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 700,
-                letterSpacing: '0.12em', color: 'var(--text)', textTransform: 'uppercase',
-                marginBottom: '1.25rem', paddingBottom: '0.9rem', borderBottom: '1px solid var(--border2)',
-              }}>NEXUS</div>
-
-              {SIDEBAR_ITEMS.map(item => (
-                <div key={item.label} style={{
-                  display: 'flex', alignItems: 'center', gap: '8px',
-                  padding: '7px 10px', borderRadius: '8px',
-                  fontSize: '12px', fontFamily: 'var(--font-inter)', fontWeight: 300,
-                  color: item.active ? 'var(--accent)' : 'var(--text-3)',
-                  background: item.active ? 'rgba(74,144,217,0.10)' : 'transparent',
-                  cursor: 'default',
-                }}>
-                  <span style={{ opacity: item.active ? 1 : 0.5, color: item.active ? 'var(--accent)' : 'inherit' }}>
-                    {item.icon}
-                  </span>
-                  {item.label}
-                </div>
-              ))}
-
-              <div style={{ marginTop: '1rem', fontSize: '9px', letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', paddingLeft: '10px', paddingBottom: '4px' }}>My Resources</div>
-              {[{ dot: 'var(--accent)', label: 'Saved Clinics' }, { dot: '#60A5FA', label: 'My Care Plan' }].map(x => (
-                <div key={x.label} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '5px 10px', fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: x.dot, flexShrink: 0 }} />
-                  {x.label}
-                </div>
-              ))}
-            </div>
-
-            {/* Main */}
-            <div style={{ padding: '1.5rem 1.75rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.1rem' }}>
-                <div>
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '2px', letterSpacing: '-0.01em' }}>Dashboard</div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>Free care near you · Phoenix, AZ</div>
-                </div>
-                <div style={{ display: 'flex', gap: '6px' }}>
-                  <div style={{ fontSize: '10px', color: 'var(--text-3)', background: 'var(--bg4)', border: '1px solid var(--border2)', borderRadius: '6px', padding: '4px 10px', fontFamily: 'var(--font-inter)' }}>Apr 8 – Apr 15</div>
-                  <div style={{ fontSize: '10px', color: 'var(--accent)', background: 'var(--accent-dim)', border: '1px solid var(--border)', borderRadius: '6px', padding: '4px 10px', fontFamily: 'var(--font-inter)' }}>Overview</div>
-                </div>
-              </div>
-
-              {/* Stats row */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '1.25rem' }}>
-                {[
-                  { n: '63,405', label: 'Searches this week', delta: '+12%' },
-                  { n: '8,432',   label: 'Clinics matched',    delta: '+8%'  },
-                  { n: '1,247',   label: 'Users helped',       delta: '+21%' },
-                ].map(s => (
-                  <div key={s.label} style={{
-                    background: 'var(--bg4)', border: '1px solid var(--border2)',
-                    borderRadius: '10px', padding: '12px',
-                    position: 'relative', overflow: 'hidden',
-                  }}>
-                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '2px', background: 'linear-gradient(90deg, var(--accent), transparent)', opacity: 0.35 }} />
-                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1 }}>{s.n}</div>
-                    <div style={{ fontSize: '9px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300, marginTop: '3px' }}>{s.label}</div>
-                    <div style={{ fontSize: '9px', color: '#60A5FA', fontFamily: 'var(--font-inter)', fontWeight: 500, marginTop: '4px' }}>{s.delta}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>Clinics Near You</div>
-                <div style={{ fontSize: '10px', color: 'var(--accent)', fontFamily: 'var(--font-inter)' }}>See all →</div>
-              </div>
-
-              {MOCKUP_RESULTS.map((r, i) => (
-                <div key={r.name} style={{
-                  display: 'flex', alignItems: 'center', gap: '10px',
-                  background: i === 0 ? 'rgba(74,144,217,0.05)' : 'var(--bg4)',
-                  border: `1px solid ${i === 0 ? 'rgba(74,144,217,0.18)' : 'var(--border2)'}`,
-                  borderRadius: '9px', padding: '9px 12px',
-                  marginBottom: i < MOCKUP_RESULTS.length - 1 ? '6px' : 0,
-                }}>
-                  <div style={{
-                    width: '28px', height: '28px', borderRadius: '7px',
-                    background: 'var(--accent-dim)', border: '1px solid var(--border)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '10px', fontWeight: 600, color: 'var(--accent)',
-                    fontFamily: 'var(--font-display)', flexShrink: 0,
-                  }}>{r.initials}</div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '12px', fontWeight: 400, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>{r.name}</div>
-                    <div style={{ fontSize: '10px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>{r.dist} · {r.wait}</div>
-                  </div>
-                  <div style={{
-                    fontSize: '9px', fontWeight: 500,
-                    background: r.green ? 'rgba(96,165,250,0.10)' : 'rgba(250,204,21,0.10)',
-                    color: r.green ? '#60A5FA' : '#FCD34D',
-                    padding: '3px 8px', borderRadius: '5px',
-                  }}>{r.status}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom fade gradient */}
-        <div aria-hidden="true" style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, height: '220px',
-          background: 'linear-gradient(to bottom, transparent 0%, var(--bg) 100%)',
-          pointerEvents: 'none', zIndex: 2,
-        }} />
-      </div>
-
-      {/* ── Mobile Hero Card Stack (replaces hidden mockup on ≤768px) ── */}
-      <div className="hero-mobile-cards" aria-hidden="true">
-        <div style={{
-          fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)',
-          fontWeight: 400, letterSpacing: '0.05em', textTransform: 'uppercase',
-          marginBottom: '12px', paddingLeft: '2px',
-        }}>
-          Clinics Near You
-        </div>
-
-        {MOCKUP_RESULTS.map((r, i) => (
-          <div key={r.name} className="hero-mobile-card" style={{ animationDelay: `${0.3 + i * 0.12}s` }}>
-            <div className="hero-mobile-card-avatar">{r.initials}</div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div className="hero-mobile-card-name">{r.name}</div>
-              <div className="hero-mobile-card-meta">{r.dist} · {r.wait}</div>
-            </div>
-            <div className="hero-mobile-card-badge" style={{
-              background: r.green ? 'rgba(96,165,250,0.12)' : 'rgba(250,204,21,0.12)',
-              color: r.green ? '#60A5FA' : '#FCD34D',
-            }}>
-              <span style={{
-                display: 'inline-block', width: '5px', height: '5px', borderRadius: '50%',
-                background: r.green ? '#60A5FA' : '#FCD34D', marginRight: '5px',
-                verticalAlign: 'middle', marginTop: '-1px',
-              }} />
-              {r.status}
-            </div>
-          </div>
-        ))}
-
-        <div style={{
-          textAlign: 'center', marginTop: '14px',
-          fontSize: '11px', color: 'var(--accent)', fontFamily: 'var(--font-inter)',
-          opacity: 0.8, animationDelay: '0.7s',
-        }}>
-          + 47 more clinics found →
-        </div>
-      </div>
+      {/* ── FLOATING MOCKUP (sub-component) ── */}
+      <HeroMockup mockupRef={mockupRef} />
 
       <style>{`
         @keyframes grid-fade {
@@ -889,6 +434,31 @@ export default function Hero() {
         @media (max-width: 768px) {
           #hero { padding: 90px 1.25rem 0 !important; }
           .mockup-inner { display: none !important; }
+        }
+        /* C3 — CSS hover for chip pills */
+        .chip-pill:hover {
+          color: var(--accent) !important;
+          border-color: rgba(74,144,217,0.30) !important;
+          background: var(--accent-dim) !important;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(74,144,217,0.12);
+        }
+        /* C3 — CSS hover for trending pills */
+        .trending-pill:hover {
+          color: var(--accent) !important;
+          border-color: rgba(74,144,217,0.25) !important;
+          background: var(--accent-dim) !important;
+        }
+        /* C3 — CSS hover for geo button */
+        .geo-btn:hover { opacity: 1 !important; }
+        /* C3 — CSS hover for search submit */
+        .search-submit:hover {
+          box-shadow: 0 8px 32px rgba(74,144,217,0.48) !important;
+        }
+        /* Search bar root positioning */
+        .search-bar-root {
+          position: relative;
+          width: 100%;
         }
       `}</style>
     </section>

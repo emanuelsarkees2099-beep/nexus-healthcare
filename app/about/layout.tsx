@@ -1,13 +1,6 @@
-import type { Metadata } from 'next'
+import { PAGE_META } from '@/lib/page-metadata'
 
-export const metadata: Metadata = {
-  title: 'About NEXUS — Free Healthcare for Every Uninsured American',
-  description: 'NEXUS is a mission-driven platform connecting 30 million uninsured Americans to federally-funded free clinics, sliding-scale care, and benefits they qualify for — at zero cost.',
-  openGraph: {
-    title: 'About NEXUS',
-    description: 'How NEXUS works, what we believe, and the data sources behind the platform.',
-  },
-}
+export const metadata = PAGE_META.about
 
 export default function AboutLayout({ children }: { children: React.ReactNode }) {
   return children

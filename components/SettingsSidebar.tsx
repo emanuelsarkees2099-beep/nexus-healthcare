@@ -1,5 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
+const PushNotificationToggle = dynamic(() => import('@/components/PushNotificationToggle'), { ssr: false })
 
 const LANG_KEY   = 'nexus_language'
 const A11Y_KEY   = 'nexus_a11y'
@@ -57,7 +59,7 @@ export default function SettingsSidebar() {
   const [closing, setClosing] = useState(false)
   const [lang, setLang] = useState('en')
   const [a11y, setA11y] = useState<A11ySettings>(DEFAULT_A11Y)
-  const [activeSection, setActiveSection] = useState<'language' | 'accessibility' | 'display'>('language')
+  const [activeSection, setActiveSection] = useState<'language' | 'accessibility' | 'display' | 'notifications'>('language')
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
 
   useEffect(() => {
@@ -218,6 +220,11 @@ export default function SettingsSidebar() {
               <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
             </svg>
           ))}
+          {sectionBtn('notifications', 'Alerts', (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+          ))}
         </div>
 
         {/* Content */}
@@ -371,6 +378,23 @@ export default function SettingsSidebar() {
               >
                 Reset all preferences
               </button>
+            </div>
+          )}
+
+          {/* ── F3: Notifications ── */}
+          {activeSection === 'notifications' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <p style={{ fontSize: '12px', color: 'rgba(232,240,241,0.4)', fontFamily: 'var(--font-inter)', lineHeight: 1.6 }}>
+                Get alerts about clinic availability, new programs in your area, and crisis support reminders.
+              </p>
+              <div style={{ padding: '14px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <PushNotificationToggle />
+              </div>
+              <div style={{ padding: '12px 14px', borderRadius: '10px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.12)' }}>
+                <p style={{ fontSize: '11px', color: 'rgba(232,240,241,0.45)', fontFamily: 'var(--font-inter)', lineHeight: 1.6 }}>
+                  NEXUS only sends notifications about free care availability and health alerts. We never send marketing or share your data with advertisers.
+                </p>
+              </div>
             </div>
           )}
         </div>

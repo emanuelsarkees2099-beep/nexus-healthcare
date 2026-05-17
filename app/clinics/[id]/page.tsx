@@ -1,6 +1,6 @@
 'use client'
 export const dynamic = 'force-dynamic'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import AppShell from '@/components/AppShell'
@@ -10,9 +10,11 @@ import {
   MapPin, Phone, Globe, Clock, ArrowLeft, Bookmark, BookmarkCheck,
   CheckCircle2, Stethoscope, Brain, Baby, Eye, Heart, Pill,
   Accessibility, Languages, Car, Bus, Loader2, Share2, Printer,
-  Navigation, ChevronRight, Shield, Award, AlertCircle,
+  Navigation, ChevronRight, Shield, Award, AlertCircle, ExternalLink,
+  MessageCircle, Copy, Check, CalendarDays, ShieldCheck, Star, X,
 } from 'lucide-react'
 import { createClientClient } from '@/lib/auth-client'
+import { computeEquityScore } from '@/lib/search-utils'
 
 type AffordabilityLabel = 'likely-free' | 'low-cost' | 'standard'
 
@@ -26,6 +28,7 @@ type Clinic = {
   lat?: number; lng?: number
   languages?: string[]
   accessibility?: string[]
+  cal_link?: string   // N3: Cal.com/Calendly booking URL provided by provider
 }
 
 const SERVICE_ICONS: Record<string, React.ReactNode> = {
@@ -49,12 +52,14 @@ export default function ClinicDetailPage() {
   const router = useRouter()
   const id     = params?.id as string
 
-  const [clinic,    setClinic]    = useState<Clinic | null>(null)
-  const [loading,   setLoading]   = useState(true)
-  const [bookmarked, setBookmarked] = useState(false)
+  const [clinic,          setClinic]         = useState<Clinic | null>(null)
+  const [loading,         setLoading]        = useState(true)
+  const [bookmarked,      setBookmarked]     = useState(false)
   const [bookmarkLoading, setBookmarkLoading] = useState(false)
-  const [user, setUser] = useState<{ id: string } | null>(null)
-  const [notFound, setNotFound]  = useState(false)
+  const [user,            setUser]           = useState<{ id: string } | null>(null)
+  const [notFound,        setNotFound]       = useState(false)
+  const [copied,          setCopied]         = useState(false)
+  const [bridgeVisible,   setBridgeVisible]  = useState(false)  // N5: insurance bridge
 
   useEffect(() => {
     if (!id) return
@@ -100,31 +105,57 @@ export default function ClinicDetailPage() {
         resource_data: clinic as unknown as import('@/lib/database.types').Json,
       })
       setBookmarked(true)
+      /* N5: show insurance bridge toast */
+      setBridgeVisible(true)
+      setTimeout(() => setBridgeVisible(false), 9000)
     }
     setBookmarkLoading(false)
   }
 
-  const handleShare = async () => {
+  const handleShare = useCallback(async () => {
     const url = window.location.href
     if (navigator.share) {
       await navigator.share({ title: clinic?.name, text: `Free clinic: ${clinic?.name} — found via NEXUS`, url })
     } else {
       await navigator.clipboard.writeText(url)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
     }
-  }
+  }, [clinic])
 
-  const handleSMS = () => {
+  const handleSMS = useCallback(() => {
     if (!clinic) return
-    const msg = `Free clinic: ${clinic.name}, ${clinic.address}, ${clinic.city} ${clinic.state}. Phone: ${clinic.phone}. Found via NEXUS.`
+    const msg = `Free clinic: ${clinic.name}, ${clinic.address}, ${clinic.city} ${clinic.state}. Phone: ${clinic.phone}. Found via NEXUS (nexus.health)`
     window.location.href = `sms:?body=${encodeURIComponent(msg)}`
-  }
+  }, [clinic])
 
-  const handleDirections = () => {
+  const handleDirections = useCallback(() => {
     if (!clinic) return
     const addr = encodeURIComponent(`${clinic.address}, ${clinic.city}, ${clinic.state} ${clinic.zip}`)
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
     window.open(isIOS ? `maps://?daddr=${addr}` : `https://www.google.com/maps/dir/?api=1&destination=${addr}`)
-  }
+  }, [clinic])
+
+  const handlePrint = useCallback(() => {
+    window.print()
+  }, [])
+
+  // Track last-viewed clinics (U16)
+  useEffect(() => {
+    if (!clinic) return
+    try {
+      const STORAGE_KEY = 'nexus_last_viewed'
+      const raw  = localStorage.getItem(STORAGE_KEY)
+      const list: Array<{ id: string; name: string; city: string; state: string; ts: number }> =
+        raw ? JSON.parse(raw) : []
+      const filtered = list.filter(c => c.id !== clinic.id)
+      const updated  = [
+        { id: clinic.id, name: clinic.name, city: clinic.city, state: clinic.state, ts: Date.now() },
+        ...filtered,
+      ].slice(0, 10) // keep last 10
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    } catch { /* ignore */ }
+  }, [clinic])
 
   /* ── Loading state ── */
   if (loading) {
@@ -174,9 +205,52 @@ export default function ClinicDetailPage() {
   const score = clinic.affordability_score ?? (clinic.free ? 95 : clinic.sliding_scale ? 72 : 40)
   const aLabel: AffordabilityLabel = clinic.affordability_label ?? (clinic.free ? 'likely-free' : clinic.sliding_scale ? 'low-cost' : 'standard')
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${clinic.name} ${clinic.address} ${clinic.city} ${clinic.state}`)}`
+  /* N6: Equity score */
+  const equity = computeEquityScore(clinic)
 
   return (
     <AppShell>
+      {/* ── N5: Insurance Bridge Toast ─────────────────────────────── */}
+      {bridgeVisible && (
+        <div
+          role="status"
+          aria-live="polite"
+          style={{
+            position: 'fixed', bottom: 24, right: 24, zIndex: 8000,
+            width: 320, borderRadius: 14,
+            background: 'rgba(14,14,24,0.97)',
+            border: '1px solid rgba(74,144,217,0.25)',
+            boxShadow: '0 16px 48px rgba(0,0,0,0.5)',
+            padding: '16px 18px',
+            animation: 'slideInRight 0.25s ease',
+          }}
+        >
+          <style>{`@keyframes slideInRight { from { opacity:0; transform:translateX(20px) } to { opacity:1; transform:translateX(0) } }`}</style>
+          <button
+            onClick={() => setBridgeVisible(false)}
+            aria-label="Dismiss"
+            style={{ position: 'absolute', top: 10, right: 10, background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.3)', display: 'flex', padding: 2 }}
+          >
+            <X size={14} />
+          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+            <ShieldCheck size={16} color="var(--accent)" />
+            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>
+              Clinic saved!
+            </span>
+          </div>
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)', lineHeight: 1.55, margin: '0 0 12px', fontWeight: 300 }}>
+            You may qualify for Medicaid, ACA subsidies, or sliding-scale fees. Check your coverage before your visit.
+          </p>
+          <Link
+            href="/eligibility"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.28)', color: 'var(--accent)', fontSize: 12, fontWeight: 600, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}
+          >
+            Check coverage <ChevronRight size={12} />
+          </Link>
+        </div>
+      )}
+
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 24px 80px' }}>
 
         {/* ── Back breadcrumb ── */}
@@ -252,6 +326,20 @@ export default function ClinicDetailPage() {
                 {clinic.type}
               </div>
             )}
+            {/* N6: Equity Score badge */}
+            <div
+              title={`Equity Score: ${equity.label} — Language: ${equity.breakdown.languageAccess}/2, Sliding scale: ${equity.breakdown.slidingScale ? 'Yes' : 'No'}, Free: ${equity.breakdown.freeCare ? 'Yes' : 'No'}, FQHC: ${equity.breakdown.fqhcStatus ? 'Yes' : 'No'}`}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '5px',
+                background: `${equity.color}18`, border: `1px solid ${equity.color}40`,
+                borderRadius: '100px', padding: '4px 10px',
+                fontSize: '11px', fontWeight: 600, color: equity.color,
+                fontFamily: 'var(--font-inter)', cursor: 'default',
+              }}
+            >
+              <Star size={10} fill={equity.color} stroke="none" />
+              Equity: {equity.label}
+            </div>
           </div>
 
           {/* Name + affordability */}
@@ -326,14 +414,45 @@ export default function ClinicDetailPage() {
             <button
               onClick={handleSMS}
               style={{
-                display: 'inline-flex', alignItems: 'center', gap: '8px',
+                display: 'inline-flex', alignItems: 'center', gap: '7px',
                 background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
                 color: 'var(--text-2)', padding: '11px 14px', borderRadius: '10px',
                 cursor: 'pointer', fontWeight: 500, fontSize: '13px', fontFamily: 'var(--font-inter)',
+                transition: 'background 0.2s, color 0.2s',
               }}
               title="Text me this clinic"
+              aria-label="Text clinic info to yourself"
             >
-              <Share2 size={14} />
+              <MessageCircle size={14} />
+            </button>
+            <button
+              onClick={handleShare}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '7px',
+                background: copied ? 'rgba(74,144,217,0.08)' : 'rgba(255,255,255,0.03)',
+                border: `1px solid ${copied ? 'rgba(74,144,217,0.22)' : 'rgba(255,255,255,0.07)'}`,
+                color: copied ? 'var(--accent)' : 'var(--text-2)', padding: '11px 14px', borderRadius: '10px',
+                cursor: 'pointer', fontWeight: 500, fontSize: '13px', fontFamily: 'var(--font-inter)',
+                transition: 'background 0.2s, color 0.2s, border-color 0.2s',
+              }}
+              title={copied ? 'Copied!' : 'Share clinic'}
+              aria-label={copied ? 'Link copied to clipboard' : 'Share clinic'}
+            >
+              {copied ? <Check size={14} /> : <Share2 size={14} />}
+            </button>
+            <button
+              onClick={handlePrint}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '7px',
+                background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
+                color: 'var(--text-2)', padding: '11px 14px', borderRadius: '10px',
+                cursor: 'pointer', fontWeight: 500, fontSize: '13px', fontFamily: 'var(--font-inter)',
+                transition: 'background 0.2s, color 0.2s',
+              }}
+              title="Print clinic info"
+              aria-label="Print clinic info"
+            >
+              <Printer size={14} />
             </button>
           </div>
         </div>
@@ -438,6 +557,76 @@ export default function ClinicDetailPage() {
               No insurance? No problem. FQHCs and free clinics are federally required to see all patients regardless of insurance or immigration status.
             </p>
           </div>
+        </div>
+
+        {/* ── N3: Appointment Booking ── */}
+        <div style={{ background: 'var(--bg2)', border: '1px solid var(--border2)', borderRadius: '16px', padding: '22px 24px', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <div style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <CalendarDays size={15} color="var(--accent)" />
+            </div>
+            <h2 style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', margin: 0 }}>
+              Book an Appointment
+            </h2>
+          </div>
+
+          {clinic.cal_link ? (
+            /* Provider has provided a Cal.com or Calendly booking URL */
+            <div>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-inter)', marginBottom: 14, fontWeight: 300, lineHeight: 1.6 }}>
+                This clinic offers online scheduling. Select a time that works for you:
+              </p>
+              {/* Inline calendar embed */}
+              <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(74,144,217,0.12)' }}>
+                <iframe
+                  src={clinic.cal_link}
+                  title={`Schedule appointment at ${clinic.name}`}
+                  width="100%"
+                  height="560"
+                  frameBorder="0"
+                  style={{ display: 'block', background: 'rgba(255,255,255,0.02)' }}
+                  loading="lazy"
+                  sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                />
+              </div>
+              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-inter)', marginTop: 10, fontWeight: 300 }}>
+                Scheduling powered by the clinic&apos;s own booking system. NEXUS does not store appointment data.
+              </p>
+            </div>
+          ) : (
+            /* No booking URL — show call-to-book prompt */
+            <div>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-inter)', marginBottom: 16, fontWeight: 300, lineHeight: 1.6 }}>
+                Online booking is not available for this clinic yet. Call to schedule your visit:
+              </p>
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 16 }}>
+                {clinic.phone && (
+                  <a
+                    href={`tel:${clinic.phone}`}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '11px 20px', borderRadius: 10, background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.25)', color: 'var(--accent)', fontSize: 14, fontWeight: 700, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}
+                  >
+                    <Phone size={15} /> Call to Book
+                  </a>
+                )}
+                {clinic.url && (
+                  <a
+                    href={clinic.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '11px 20px', borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', color: 'var(--text-2)', fontSize: 14, fontWeight: 600, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}
+                  >
+                    <Globe size={14} /> Visit Website
+                  </a>
+                )}
+              </div>
+              {/* Tips for the call */}
+              <div style={{ padding: '12px 16px', borderRadius: 10, background: 'rgba(251,191,36,0.05)', border: '1px solid rgba(251,191,36,0.12)' }}>
+                <p style={{ fontSize: 12, color: 'rgba(251,191,36,0.75)', fontFamily: 'var(--font-inter)', margin: 0, lineHeight: 1.65, fontWeight: 300 }}>
+                  💡 <strong style={{ fontWeight: 600 }}>Tip when calling:</strong> Ask about sliding-scale fees, bring your income information, and confirm they accept uninsured patients. Most clinics are required to say yes.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* ── HRSA badge if applicable ── */}

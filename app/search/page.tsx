@@ -1,90 +1,35 @@
 'use client'
-export const dynamic = 'force-dynamic'
 import { useEffect, useRef, useState, Suspense, useCallback } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import dynamic_import from 'next/dynamic'
 import AppShell from '@/components/AppShell'
-import AffordabilityBar from '@/components/AffordabilityBar'
 import EmergencyEscalation from '@/components/EmergencyEscalation'
 import { createClientClient } from '@/lib/auth-client'
 import { useI18n } from '@/components/I18nContext'
+import { detectIntent, isOpenNow } from '@/lib/search-utils'
+import type { SearchIntent } from '@/lib/search-utils'
 import {
-  Search, MapPin, Phone, Globe, ChevronRight, X, Stethoscope,
-  Heart, Brain, Eye, Pill, Baby, Bookmark, BookmarkCheck,
-  AlertCircle, Loader2, Map, List, Printer, Navigation,
-  Clock, Wifi, WifiOff, SlidersHorizontal, Zap, ArrowRight,
+  Search, MapPin, X, Stethoscope,
+  Heart, Brain, Eye, Pill, Baby,
+  AlertCircle, Map, List, Printer,
+  Clock, Zap, ArrowRight, Loader2,
 } from 'lucide-react'
+/* P3 — standardized skeleton */
+import { SkeletonClinicCard, SKELETON_STYLES } from '@/components/ui/Skeleton'
 
-// Leaflet requires browser APIs — must be client-only
+/* P2 — ClinicCard code-split: loads after the search input is interactive */
+const ClinicCard = dynamic_import(() => import('@/components/search/ClinicCard'), {
+  ssr: false,
+  loading: () => <SkeletonClinicCard />,
+})
+
+/* P2 — ClinicMap code-split: Leaflet requires browser APIs */
 const ClinicMap = dynamic_import(() => import('@/components/ClinicMap'), { ssr: false })
 
-/* ── Types ────────────────────────────────────────────────────────── */
-
-type AffordabilityLabel = 'likely-free' | 'low-cost' | 'standard'
-type Clinic = {
-  id: string; name: string; address: string; city: string; state: string
-  zip: string; phone: string; distance: number | string; services: string[]
-  accepting: boolean; sliding_scale: boolean; free: boolean; url?: string; hours?: string; type?: string
-  affordability_score?: number; affordability_label?: AffordabilityLabel
-  affordability_reasons?: string[]; isFreeOrDiscounted?: boolean
-  lat?: number; lng?: number
-}
-
-/* ── Semantic intent detection — no AI, pure pattern matching ─────── */
-function detectIntent(q: string): { specialty?: string; freeOnly?: boolean; openNow?: boolean; language?: string; accessibility?: boolean } {
-  const t = q.toLowerCase()
-  const intent: ReturnType<typeof detectIntent> = {}
-  if (/\bfree\b/.test(t))                                             intent.freeOnly = true
-  if (/open\s*now|open\s*today|tonight|right now/.test(t))           intent.openNow  = true
-  if (/spanish|español|habla/.test(t))                               intent.language = 'Spanish'
-  if (/wheelchair|accessible|disability|ada/.test(t))                intent.accessibility = true
-  if (/mental\s*health|therapist|counselor|psych|anxiety|depress/.test(t)) intent.specialty = 'mental'
-  if (/dental|dentist|tooth|teeth/.test(t))                         intent.specialty = 'dental'
-  if (/pediatric|child|kids|infant|baby/.test(t))                   intent.specialty = 'pediatrics'
-  if (/vision|eye|optom/.test(t))                                   intent.specialty = 'vision'
-  if (/\bwomen\b|obgyn|ob-gyn|gynec|prenatal|pregnancy/.test(t))   intent.specialty = 'womens'
-  if (/primary\s*care|doctor|physician|pcp|family\s*med/.test(t))  intent.specialty = 'primary'
-  return intent
-}
-
-/* ── Open-now parser — checks clinic hours string vs current time ──── */
-function isOpenNow(hours?: string): boolean | null {
-  if (!hours) return null
-  const now     = new Date()
-  const dayIdx  = now.getDay() // 0=Sun … 6=Sat
-  const hourNow = now.getHours() + now.getMinutes() / 60
-  const days    = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-  const today   = days[dayIdx]
-  const lower   = hours.toLowerCase()
-
-  /* Quick heuristic — look for today abbreviation next to a time range */
-  const dayMatch = new RegExp(`${today}[^0-9]*?(\\d{1,2})(?::(\\d{2}))?\\s*(am|pm)?\\s*[-–]\\s*(\\d{1,2})(?::(\\d{2}))?\\s*(am|pm)?`)
-  const m = lower.match(dayMatch)
-  if (!m) {
-    /* Fallback: "Mon-Fri" or "M-F" patterns */
-    const mf = lower.match(/(?:mon|m)[\w\s-]*?(?:fri|f)[^0-9]*(\\d{1,2})\s*(?:am|pm)?\s*[-–]\s*(\\d{1,2})\s*(am|pm)?/)
-    if (!mf && (dayIdx >= 1 && dayIdx <= 5)) {
-      const generic = lower.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\s*[-–]\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/)
-      if (generic) {
-        const open  = parseHour(parseInt(generic[1]), generic[2], generic[3])
-        const close = parseHour(parseInt(generic[4]), generic[5], generic[6])
-        return hourNow >= open && hourNow < close
-      }
-    }
-    return null
-  }
-  const open  = parseHour(parseInt(m[1]), m[2], m[3])
-  const close = parseHour(parseInt(m[4]), m[5], m[6])
-  return hourNow >= open && hourNow < close
-}
-
-function parseHour(h: number, mins: string | undefined, ampm: string | undefined): number {
-  let hour = h
-  if (ampm === 'pm' && hour !== 12) hour += 12
-  if (ampm === 'am' && hour === 12) hour = 0
-  return hour + (mins ? parseInt(mins) / 60 : 0)
-}
+/* ── Types (P2: imported from extracted ClinicCard component) ─────── */
+export type { Clinic, AffordabilityLabel } from '@/components/search/ClinicCard'
+import type { Clinic, AffordabilityLabel } from '@/components/search/ClinicCard'
 
 /* ── Constants ────────────────────────────────────────────────────── */
 
@@ -105,284 +50,10 @@ const RADIUS_OPTIONS = [
   { label: '50 mi', value: '50' },
 ]
 
-/* ── Skeleton card ────────────────────────────────────────────────── */
-function SkeletonCard() {
-  return (
-    <div style={{ background: 'var(--bg2)', border: '1px solid var(--border2)', borderRadius: '16px', padding: '20px 24px', display: 'flex', gap: '16px' }}>
-      <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', flexShrink: 0, animation: 'skel-pulse 1.5s ease-in-out infinite' }} />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <div style={{ height: '16px', width: '55%', borderRadius: '6px', background: 'rgba(255,255,255,0.05)', animation: 'skel-pulse 1.5s ease-in-out infinite' }} />
-        <div style={{ height: '12px', width: '38%', borderRadius: '5px', background: 'rgba(255,255,255,0.04)', animation: 'skel-pulse 1.5s ease-in-out 0.15s infinite' }} />
-        <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
-          {[60, 45, 70].map((w, i) => (
-            <div key={i} style={{ height: '20px', width: `${w}px`, borderRadius: '5px', background: 'rgba(255,255,255,0.04)', animation: `skel-pulse 1.5s ease-in-out ${i * 0.1}s infinite` }} />
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
 
-/* MapPanel is now ClinicMap — imported dynamically below */
-
-/* ── Clinic card ──────────────────────────────────────────────────── */
-function ClinicCard({ clinic, index, isSaved, saving, onBookmark, openNowFilter }: {
-  clinic: Clinic; index: number;
-  isSaved: boolean; saving: boolean;
-  onBookmark: (c: Clinic) => void
-  openNowFilter: boolean
-}) {
-  const { t } = useI18n()
-  const openStatus = isOpenNow(clinic.hours)
-  if (openNowFilter && openStatus === false) return null
-
-  const score  = clinic.affordability_score ?? (clinic.free ? 95 : clinic.sliding_scale ? 72 : 40)
-  const aLabel: AffordabilityLabel = clinic.affordability_label ?? (clinic.free ? 'likely-free' : clinic.sliding_scale ? 'low-cost' : 'standard')
-
-  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${clinic.name} ${clinic.address} ${clinic.city} ${clinic.state}`)}`
-
-  return (
-    <div
-      className="clinic-card"
-      style={{ padding: '20px 24px', display: 'flex', alignItems: 'flex-start', gap: '16px' }}
-    >
-      {/* Rank badge */}
-      <div style={{
-        width: '32px', height: '32px', borderRadius: '8px',
-        background: index === 0 ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.04)',
-        border: `1px solid ${index === 0 ? 'rgba(74,144,217,0.20)' : 'rgba(255,255,255,0.07)'}`,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: '13px', fontWeight: 600,
-        color: index === 0 ? 'var(--accent)' : 'var(--text-3)',
-        fontFamily: 'var(--font-mono),monospace',
-        flexShrink: 0,
-      }}>
-        {index + 1}
-      </div>
-
-      <div style={{ flex: 1, minWidth: 0 }}>
-        {/* Header row */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', marginBottom: '10px', flexWrap: 'wrap' }}>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <Link
-              href={`/clinics/${clinic.id}`}
-              data-tooltip={clinic.type === 'FQHC' ? `FQHCs have provided $48B+ in uncompensated care since 1965. This clinic cannot turn you away.` : `Free clinics in the US provide over $3B in care annually — to people just like you.`}
-              style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text)', textDecoration: 'none', fontFamily: 'var(--font-display)', display: 'block', marginBottom: '4px', transition: 'color 0.2s', cursor: 'pointer' }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--text)')}
-            >
-              {clinic.name}
-            </Link>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: 'var(--text-3)' }}>
-              <MapPin size={11} color="var(--text-3)" />
-              {[clinic.address, clinic.city, clinic.state].filter(Boolean).join(', ') || 'Address unavailable'}
-            </div>
-          </div>
-
-          {/* Action buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '7px', flexShrink: 0 }}>
-            <button
-              onClick={() => onBookmark(clinic)}
-              disabled={saving}
-              style={{
-                background: isSaved ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.04)',
-                border: `1px solid ${isSaved ? 'rgba(74,144,217,0.25)' : 'rgba(255,255,255,0.08)'}`,
-                borderRadius: '8px', padding: '7px', cursor: 'pointer',
-                color: isSaved ? 'var(--accent)' : 'var(--text-3)',
-                display: 'flex', alignItems: 'center', transition: 'all 0.18s',
-              }}
-              aria-label={isSaved ? t('search.bookmarked') : t('search.bookmark')}
-            >
-              {saving ? <Loader2 size={14} style={{ animation: 'spin-slow 0.8s linear infinite' }} /> : isSaved ? <BookmarkCheck size={14} /> : <Bookmark size={14} />}
-            </button>
-            {clinic.phone && (
-              <a href={`tel:${clinic.phone}`} style={{
-                display: 'flex', alignItems: 'center', gap: '5px',
-                background: 'rgba(74,144,217,0.07)', border: '1px solid rgba(74,144,217,0.15)',
-                borderRadius: '8px', padding: '7px 12px', fontSize: '12px',
-                color: 'var(--accent)', textDecoration: 'none', fontWeight: 600,
-                transition: 'background 0.2s',
-              }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.14)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.07)')}
-              >
-                <Phone size={12} /> {t('search.call')}
-              </a>
-            )}
-            <a
-              href={clinic.url ? (clinic.url.startsWith('http') ? clinic.url : `https://${clinic.url}`) : googleMapsUrl}
-              target="_blank" rel="noopener noreferrer"
-              style={{
-                background: 'var(--accent)', color: 'var(--bg)',
-                borderRadius: '9px', padding: '8px 14px', fontSize: '12px',
-                fontWeight: 700, textDecoration: 'none', display: 'flex',
-                alignItems: 'center', gap: '5px',
-              }}
-            >
-              {clinic.url ? <><Globe size={12} /> {t('search.visit')}</> : <><Navigation size={12} /> {t('search.directions')}</>}
-            </a>
-          </div>
-        </div>
-
-        {/* Status pills row */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '7px', marginBottom: '12px', alignItems: 'center' }}>
-          {/* Open now indicator */}
-          {openStatus === true && (
-            <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: 'var(--green-pulse)', fontFamily: 'var(--font-inter)', fontWeight: 600 }}>
-              <div className="open-pulse" style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--green-pulse)' }} />
-              {t('search.openNow')}
-            </span>
-          )}
-          {openStatus === false && (
-            <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>
-              <Clock size={11} /> {t('search.closed')}
-            </span>
-          )}
-          {clinic.accepting && (
-            <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: 'var(--accent)', fontFamily: 'var(--font-inter)', fontWeight: 500 }}>
-              <Zap size={11} /> {t('search.accepting')}
-            </span>
-          )}
-          {clinic.distance && (
-            <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-mono),monospace' }}>
-              <MapPin size={11} /> {clinic.distance} mi
-            </span>
-          )}
-          {clinic.phone && (
-            <span style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-mono),monospace' }}>
-              {clinic.phone}
-            </span>
-          )}
-          {clinic.type && (
-            <span style={{
-              fontSize: '10px', letterSpacing: '0.06em',
-              color: clinic.type === 'FQHC' ? 'var(--accent)' : clinic.type?.includes('Free') ? 'var(--green-pulse)' : 'var(--text-3)',
-              background: clinic.type === 'FQHC' ? 'rgba(74,144,217,0.07)' : 'rgba(255,255,255,0.04)',
-              border: `1px solid ${clinic.type === 'FQHC' ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.08)'}`,
-              padding: '2px 8px', borderRadius: '5px', fontFamily: 'var(--font-inter)', fontWeight: 600,
-            }}>
-              {clinic.type}
-            </span>
-          )}
-          {/* Trust marker: HRSA verified */}
-          {clinic.type === 'FQHC' && (
-            <span
-              title="Federally Qualified Health Center — verified by HRSA. Required by law to accept all patients regardless of ability to pay."
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: '4px',
-                fontSize: '10px', fontWeight: 600, letterSpacing: '0.04em',
-                color: '#60A5FA',
-                background: 'rgba(96,165,250,0.08)',
-                border: '1px solid rgba(96,165,250,0.2)',
-                padding: '2px 8px', borderRadius: '5px',
-                fontFamily: 'var(--font-inter)', cursor: 'help',
-              }}
-            >
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              </svg>
-              HRSA Verified
-            </span>
-          )}
-          {/* Trust marker: accepts uninsured */}
-          {(clinic.free || clinic.sliding_scale) && (
-            <span
-              title="This clinic accepts uninsured patients. No insurance card required."
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: '4px',
-                fontSize: '10px', fontWeight: 600,
-                color: '#60A5FA',
-                background: 'rgba(96,165,250,0.07)',
-                border: '1px solid rgba(96,165,250,0.2)',
-                padding: '2px 8px', borderRadius: '5px',
-                fontFamily: 'var(--font-inter)', cursor: 'help',
-              }}
-            >
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-              Accepts uninsured
-            </span>
-          )}
-        </div>
-
-        {/* Live wait time — crowd-sourced */}
-        {(() => {
-          // Deterministic "live" wait time seeded from clinic ID + hour
-          const seed = clinic.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0) + Math.floor(Date.now() / 3600000)
-          const rng = () => { return ((seed * 16807) % 2147483647 - 1) / 2147483646 }
-          const waitMins = Math.round(12 + rng() * 48)
-          const reporters = Math.round(2 + rng() * 8)
-          const walkIn = rng() > 0.45
-          if (!walkIn) return null
-          return (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px', flexWrap: 'wrap' }}>
-              <div style={{
-                display: 'inline-flex', alignItems: 'center', gap: '5px',
-                padding: '3px 10px', borderRadius: '100px',
-                background: 'rgba(96,165,250,0.07)', border: '1px solid rgba(96,165,250,0.2)',
-                fontSize: '11px', color: '#60a5fa', fontWeight: 600,
-              }}>
-                <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#60a5fa', animation: 'open-pulse 1.5s ease-in-out infinite', display: 'inline-block' }} />
-                Walk-in available · ~{waitMins} min wait
-              </div>
-              <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>
-                Reported by {reporters} patients today
-              </span>
-            </div>
-          )
-        })()}
-        {/* Affordability bar */}
-        <div style={{ marginBottom: '10px' }}>
-          <AffordabilityBar score={score} label={aLabel} reasons={clinic.affordability_reasons} compact />
-        </div>
-
-        {/* Services */}
-        {clinic.services?.length > 0 && (
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
-            {clinic.services.slice(0, 5).map(s => (
-              <span key={s} style={{
-                fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)',
-                background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)',
-                padding: '3px 9px', borderRadius: '5px',
-              }}>
-                {s}
-              </span>
-            ))}
-            {clinic.services.length > 5 && (
-              <span style={{ fontSize: '11px', color: 'var(--text-3)', padding: '3px 6px', fontFamily: 'var(--font-inter)' }}>
-                +{clinic.services.length - 5} more
-              </span>
-            )}
-          </div>
-        )}
-
-        {/* Detail + verify links */}
-        <div style={{ marginTop: '10px', display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
-          <Link
-            href={`/clinics/${clinic.id}`}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: 'var(--text-3)', textDecoration: 'none', fontFamily: 'var(--font-inter)', transition: 'color 0.2s' }}
-            onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
-          >
-            {t('search.viewDetails')} <ArrowRight size={10} />
-          </Link>
-          <Link
-            href="/verify"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: 'rgba(96,165,250,0.6)', textDecoration: 'none', fontFamily: 'var(--font-inter)', transition: 'color 0.2s' }}
-            onMouseEnter={e => (e.currentTarget.style.color = '#60a5fa')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(96,165,250,0.6)')}
-          >
-            ✓ Verify this clinic
-          </Link>
-        </div>
-      </div>
-    </div>
-  )
-}
 
 /* ── Intent banner ────────────────────────────────────────────────── */
-function IntentBanner({ intent, onApplySpecialty }: { intent: ReturnType<typeof detectIntent>; onApplySpecialty: (s: string) => void }) {
+function IntentBanner({ intent, onApplySpecialty }: { intent: SearchIntent; onApplySpecialty: (s: string) => void }) {
   const items = []
   if (intent.freeOnly)     items.push({ label: 'Showing free clinics only', color: 'var(--accent)' })
   if (intent.openNow)      items.push({ label: 'Filtering to open right now', color: 'var(--green-pulse)' })
@@ -416,8 +87,24 @@ function IntentBanner({ intent, onApplySpecialty }: { intent: ReturnType<typeof 
 
 /* ── Main search component ────────────────────────────────────────── */
 
+/* E8 — locale → expected language keyword in clinic data */
+const LOCALE_LANGUAGE_MAP: Record<string, string> = {
+  es: 'Spanish', fr: 'French', zh: 'Chinese', ar: 'Arabic',
+  vi: 'Vietnamese', ko: 'Korean', pt: 'Portuguese', ru: 'Russian',
+  ht: 'Creole', tl: 'Tagalog', pl: 'Polish', de: 'German',
+  fa: 'Farsi', ur: 'Urdu', hi: 'Hindi', am: 'Amharic',
+}
+
+function clinicHasLanguage(clinic: Clinic, lang: string): boolean {
+  const lower = lang.toLowerCase()
+  return (
+    clinic.services?.some(s => s.toLowerCase().includes(lower)) === true ||
+    clinic.name.toLowerCase().includes(lower)
+  )
+}
+
 function SearchResults() {
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const searchParams = useSearchParams()
   const router       = useRouter()
   const supabase     = createClientClient()
@@ -446,7 +133,8 @@ function SearchResults() {
   const [geoCenter,     setGeoCenter]     = useState<{ lat: number; lng: number } | null>(null)
   const [savedCount,    setSavedCount]    = useState(0)
   const [openNowFilter, setOpenNowFilter] = useState(false)
-  const [intent,        setIntent]        = useState<ReturnType<typeof detectIntent>>({})
+  const [intent,        setIntent]        = useState<SearchIntent>({})
+  const [bridgeClinic,  setBridgeClinic]  = useState<string | null>(null)   // N5: insurance bridge toast
 
   /* Detect intent from query */
   useEffect(() => {
@@ -555,6 +243,30 @@ function SearchResults() {
       }
     } catch { /* silent */ }
     setSavingId(null)
+
+    // N5 — Insurance Bridge: show "check coverage" toast after saving a clinic
+    if (!savedIds.has(String(clinic.id))) {
+      setBridgeClinic(clinic.name)
+      setTimeout(() => setBridgeClinic(null), 9000)
+    }
+
+    // N8 — Care Continuity Reminders: schedule push when ADDING a bookmark
+    if (!savedIds.has(String(clinic.id))) {
+      try {
+        type ClinicReminder = { clinicId: string; clinicName: string; ts48h: number; ts11m: number; fired48h: boolean; fired11m: boolean }
+        const raw = localStorage.getItem('nexus_reminders')
+        const reminders: ClinicReminder[] = raw ? JSON.parse(raw) : []
+        const now = Date.now()
+        const entry: ClinicReminder = {
+          clinicId: String(clinic.id), clinicName: clinic.name,
+          ts48h: now + 48 * 60 * 60 * 1000,
+          ts11m: now + 11 * 30 * 24 * 60 * 60 * 1000,
+          fired48h: false, fired11m: false,
+        }
+        const updated = [entry, ...reminders.filter(r => r.clinicId !== String(clinic.id))]
+        localStorage.setItem('nexus_reminders', JSON.stringify(updated))
+      } catch { /* ignore */ }
+    }
   }
 
   function handleSearch(e?: React.FormEvent) {
@@ -562,6 +274,15 @@ function SearchResults() {
     const loc = locationVal.trim()
     if (loc) {
       localStorage.setItem('nexus_zip', loc)
+      // E4 — persist recent searches for dashboard recent-searches panel
+      try {
+        type RecentSearch = { q: string; loc: string; ts: number }
+        const raw = localStorage.getItem('nexus_recent_searches')
+        const recent: RecentSearch[] = raw ? JSON.parse(raw) : []
+        const entry: RecentSearch = { q: inputVal.trim(), loc, ts: Date.now() }
+        const updated = [entry, ...recent.filter(r => !(r.q === entry.q && r.loc === entry.loc))].slice(0, 8)
+        localStorage.setItem('nexus_recent_searches', JSON.stringify(updated))
+      } catch { /* Safari private / quota exceeded — ignore */ }
       router.push(`/search?q=${encodeURIComponent(inputVal.trim())}&loc=${encodeURIComponent(loc)}`)
       fetchClinics(loc, activeFilter, radius)
     }
@@ -578,6 +299,16 @@ function SearchResults() {
 
   if (intent.freeOnly) results = results.filter(c => c.free || c.sliding_scale || c.affordability_label === 'likely-free')
 
+  // E8 — language-matched care: boost language-concordant providers to the top
+  const targetLanguage = lang !== 'en' ? (LOCALE_LANGUAGE_MAP[lang as keyof typeof LOCALE_LANGUAGE_MAP] ?? null) : null
+  if (targetLanguage) {
+    results = [...results].sort((a, b) => {
+      const aMatch = clinicHasLanguage(a, targetLanguage) ? 1 : 0
+      const bMatch = clinicHasLanguage(b, targetLanguage) ? 1 : 0
+      return bMatch - aMatch
+    })
+  }
+
   const visibleCount = openNowFilter
     ? results.filter(c => isOpenNow(c.hours) !== false).length
     : results.length
@@ -590,6 +321,7 @@ function SearchResults() {
 
   return (
     <AppShell>
+      <style>{SKELETON_STYLES}</style>
       {/* ── Sticky search header ── */}
       <div style={{
         position: 'sticky', top: '62px', zIndex: 100,
@@ -875,7 +607,7 @@ function SearchResults() {
         {/* Loading skeletons */}
         {loading && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[1, 2, 3, 4, 5].map(i => <SkeletonCard key={i} />)}
+            {[1, 2, 3, 4, 5].map(i => <SkeletonClinicCard key={i} />)}
           </div>
         )}
 
@@ -887,6 +619,7 @@ function SearchResults() {
                 <ClinicCard key={clinic.id} clinic={clinic} index={i}
                   isSaved={savedIds.has(String(clinic.id))} saving={savingId === String(clinic.id)}
                   onBookmark={toggleBookmark} openNowFilter={openNowFilter}
+                  langMatch={targetLanguage ? clinicHasLanguage(clinic, targetLanguage) : false}
                 />
               ))}
             </div>
@@ -919,6 +652,7 @@ function SearchResults() {
                 <ClinicCard clinic={clinic} index={i}
                   isSaved={savedIds.has(String(clinic.id))} saving={savingId === String(clinic.id)}
                   onBookmark={toggleBookmark} openNowFilter={openNowFilter}
+                  langMatch={targetLanguage ? clinicHasLanguage(clinic, targetLanguage) : false}
                 />
               </div>
             ))}
@@ -991,7 +725,47 @@ function SearchResults() {
           .clinic-card { border: 1px solid #ccc !important; background: white !important; page-break-inside: avoid; margin-bottom: 12px; }
           .clinic-card * { color: black !important; }
         }
+        @keyframes bridge-in {
+          from { opacity: 0; transform: translateY(16px) scale(0.97); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
       `}</style>
+
+      {/* N5 — Insurance Bridge Toast */}
+      {bridgeClinic && (
+        <div style={{
+          position: 'fixed', bottom: '24px', left: '50%', transform: 'translateX(-50%)',
+          zIndex: 2000, maxWidth: '480px', width: 'calc(100vw - 32px)',
+          background: 'rgba(10,10,24,0.97)', backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(74,144,217,0.28)', borderRadius: '16px',
+          padding: '16px 20px',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(74,144,217,0.08)',
+          animation: 'bridge-in 0.35s cubic-bezier(0.16,1,0.3,1) both',
+          display: 'flex', alignItems: 'flex-start', gap: '14px',
+        }}>
+          <div style={{ width: '32px', height: '32px', borderRadius: '9px', background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--accent)' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '3px' }}>
+              Saved {bridgeClinic}
+            </div>
+            <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)', lineHeight: 1.5, marginBottom: '10px' }}>
+              While you wait — you may qualify for Medicaid, CHIP, or a $0 ACA plan that covers this clinic.
+            </div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <Link href="/eligibility" style={{ padding: '6px 14px', borderRadius: '7px', background: 'var(--accent)', color: '#07070F', fontSize: '11px', fontWeight: 700, textDecoration: 'none', fontFamily: 'var(--font-inter)' }}>
+                Check coverage →
+              </Link>
+              <button onClick={() => setBridgeClinic(null)} style={{ padding: '6px 10px', borderRadius: '7px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.4)', fontSize: '11px', cursor: 'pointer', fontFamily: 'var(--font-inter)' }}>
+                Dismiss
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </AppShell>
   )
 }

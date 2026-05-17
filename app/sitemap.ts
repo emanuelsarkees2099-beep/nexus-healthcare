@@ -1,28 +1,63 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = process.env.NEXT_PUBLIC_APP_URL ?? 'https://nexus-health.app'
-  const now = new Date()
+  const base = process.env.NEXT_PUBLIC_APP_URL ?? 'https://nexus.health'
+  const now  = new Date()
 
-  const publicRoutes = [
-    { url: `${base}/`, priority: 1.0, changeFrequency: 'weekly' as const },
-    { url: `${base}/search`, priority: 0.9, changeFrequency: 'daily' as const },
-    { url: `${base}/pathways`, priority: 0.9, changeFrequency: 'weekly' as const },
-    { url: `${base}/stories`, priority: 0.8, changeFrequency: 'daily' as const },
-    { url: `${base}/programs`, priority: 0.8, changeFrequency: 'weekly' as const },
-    { url: `${base}/outcomes`, priority: 0.7, changeFrequency: 'weekly' as const },
-    { url: `${base}/impact`, priority: 0.7, changeFrequency: 'weekly' as const },
-    { url: `${base}/chw`, priority: 0.7, changeFrequency: 'monthly' as const },
-    { url: `${base}/rights`, priority: 0.7, changeFrequency: 'monthly' as const },
-    { url: `${base}/advocacy`, priority: 0.6, changeFrequency: 'monthly' as const },
-    { url: `${base}/provider`, priority: 0.6, changeFrequency: 'monthly' as const },
-    { url: `${base}/accessibility`, priority: 0.5, changeFrequency: 'monthly' as const },
+  const routes: Array<{
+    url: string
+    priority: number
+    changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency']
+  }> = [
+    /* Core — highest priority */
+    { url: `${base}/`,           priority: 1.0, changeFrequency: 'weekly'  },
+    { url: `${base}/search`,     priority: 0.95, changeFrequency: 'daily'  },
+    { url: `${base}/crisis`,     priority: 0.95, changeFrequency: 'weekly' },
+    { url: `${base}/triage`,     priority: 0.90, changeFrequency: 'weekly' },
+    { url: `${base}/programs`,   priority: 0.90, changeFrequency: 'weekly' },
+    { url: `${base}/eligibility`,priority: 0.90, changeFrequency: 'weekly' },
+
+    /* Navigation pages */
+    { url: `${base}/pathways`,   priority: 0.85, changeFrequency: 'weekly'  },
+    { url: `${base}/gps`,        priority: 0.85, changeFrequency: 'weekly'  },
+    { url: `${base}/telehealth`, priority: 0.85, changeFrequency: 'weekly'  },
+
+    /* Community & content */
+    { url: `${base}/stories`,    priority: 0.80, changeFrequency: 'daily'   },
+    { url: `${base}/community`,  priority: 0.80, changeFrequency: 'daily'   },
+    { url: `${base}/editorial`,  priority: 0.80, changeFrequency: 'weekly'  },
+    { url: `${base}/advocacy`,   priority: 0.75, changeFrequency: 'monthly' },
+    { url: `${base}/chw`,        priority: 0.75, changeFrequency: 'monthly' },
+
+    /* Tools & features */
+    { url: `${base}/passport`,   priority: 0.70, changeFrequency: 'monthly' },
+    { url: `${base}/calendar`,   priority: 0.70, changeFrequency: 'monthly' },
+    { url: `${base}/wrapped`,    priority: 0.65, changeFrequency: 'yearly'  },
+
+    /* Impact & data */
+    { url: `${base}/impact`,     priority: 0.70, changeFrequency: 'weekly'  },
+    { url: `${base}/outcomes`,   priority: 0.70, changeFrequency: 'weekly'  },
+    { url: `${base}/equity`,     priority: 0.70, changeFrequency: 'monthly' },
+    { url: `${base}/methodology`,priority: 0.60, changeFrequency: 'monthly' },
+    { url: `${base}/open`,       priority: 0.60, changeFrequency: 'monthly' },
+
+    /* Provider & rights */
+    { url: `${base}/provider`,   priority: 0.65, changeFrequency: 'monthly' },
+    { url: `${base}/rights`,     priority: 0.70, changeFrequency: 'monthly' },
+
+    /* Tools */
+    { url: `${base}/medications`, priority: 0.80, changeFrequency: 'weekly'  },
+
+    /* Informational */
+    { url: `${base}/about`,      priority: 0.60, changeFrequency: 'monthly' },
+    { url: `${base}/accessibility`, priority: 0.50, changeFrequency: 'monthly' },
+    { url: `${base}/privacy`,    priority: 0.40, changeFrequency: 'yearly'  },
   ]
 
-  return publicRoutes.map(route => ({
-    url: route.url,
+  return routes.map(r => ({
+    url: r.url,
     lastModified: now,
-    changeFrequency: route.changeFrequency,
-    priority: route.priority,
+    changeFrequency: r.changeFrequency,
+    priority: r.priority,
   }))
 }

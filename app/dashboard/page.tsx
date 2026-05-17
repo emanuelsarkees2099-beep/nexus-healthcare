@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClientClient } from '@/lib/auth-client'
+import AppShell from '@/components/AppShell'
 
 type UserProfile = {
   id: string
@@ -294,6 +295,91 @@ function CarePlan() {
   )
 }
 
+/* ── U16: Last Viewed Clinics ────────────────────────────────────── */
+type LastViewedEntry = { id: string; name: string; city: string; state: string; ts: number }
+
+function LastViewedSection() {
+  const [items, setItems] = useState<LastViewedEntry[]>([])
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('nexus_last_viewed')
+      if (raw) setItems(JSON.parse(raw).slice(0, 6))
+    } catch { /* ignore */ }
+  }, [])
+
+  if (!items.length) return null
+
+  return (
+    <div style={{ gridColumn: '1 / -1', marginBottom: '0' }}>
+      <SectionHeader title="Recently viewed" />
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '10px' }}>
+        {items.map(item => {
+          const timeAgo = (() => {
+            const diff = Date.now() - item.ts
+            const m = Math.floor(diff / 60000)
+            const h = Math.floor(diff / 3600000)
+            const d = Math.floor(diff / 86400000)
+            if (m < 1)  return 'Just now'
+            if (m < 60) return `${m}m ago`
+            if (h < 24) return `${h}h ago`
+            return `${d}d ago`
+          })()
+          return (
+            <Link
+              key={item.id}
+              href={`/clinics/${item.id}`}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '12px',
+                padding: '12px 14px', borderRadius: '12px',
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid rgba(255,255,255,0.06)',
+                textDecoration: 'none', transition: 'border-color 0.2s, background 0.2s',
+              }}
+              onMouseEnter={e => {
+                const el = e.currentTarget as HTMLAnchorElement
+                el.style.borderColor = 'rgba(74,144,217,0.22)'
+                el.style.background  = 'rgba(74,144,217,0.03)'
+              }}
+              onMouseLeave={e => {
+                const el = e.currentTarget as HTMLAnchorElement
+                el.style.borderColor = 'rgba(255,255,255,0.06)'
+                el.style.background  = 'rgba(255,255,255,0.02)'
+              }}
+            >
+              {/* Icon */}
+              <div style={{
+                width: '34px', height: '34px', borderRadius: '9px', flexShrink: 0,
+                background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.15)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+              </div>
+              {/* Info */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {item.name}
+                </div>
+                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.38)', fontFamily: 'var(--font-inter)', marginTop: '2px', display: 'flex', gap: '5px' }}>
+                  <span>{item.city}, {item.state}</span>
+                  <span aria-hidden="true">·</span>
+                  <span>{timeAgo}</span>
+                </div>
+              </div>
+              {/* Arrow */}
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </Link>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 /* ── Quick Actions ───────────────────────────────────────────────── */
 function QuickActions({ router }: { router: ReturnType<typeof useRouter> }) {
   const ACTIONS = [
@@ -318,6 +404,225 @@ function QuickActions({ router }: { router: ReturnType<typeof useRouter> }) {
           <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>{a.sub}</div>
         </button>
       ))}
+    </div>
+  )
+}
+
+/* ── Eligibility Status Badge (E4) ──────────────────────────────── */
+function EligibilityBadge() {
+  const [badge, setBadge] = useState<{ situation: string; needs: string[] } | null>(null)
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('nexus_onboarding')
+      if (!raw) return
+      const saved = JSON.parse(raw)
+      const a = saved.answers ?? {}
+      if (!a.situation) return
+      const labelsMap: Record<string, string> = {
+        uninsured: 'Uninsured',
+        underinsured: 'Underinsured',
+        transition: 'Lost coverage',
+        helper: 'Helping someone',
+      }
+      const needLabels: Record<string, string> = {
+        primary: 'Primary care', dental: 'Dental', mental: 'Mental health',
+        prescriptions: 'Prescriptions', vision: 'Vision',
+        pregnancy: 'Prenatal', emergency: 'Urgent care',
+      }
+      setBadge({
+        situation: labelsMap[a.situation as string] ?? 'Other',
+        needs: ((a.needs as string[]) ?? []).slice(0, 3).map(n => needLabels[n] ?? n),
+      })
+    } catch { /* ignore */ }
+  }, [])
+
+  if (!badge) return null
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '20px', padding: '12px 16px', borderRadius: '12px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.12)' }}>
+      <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: 'var(--font-inter)' }}>
+        Eligibility profile
+      </span>
+      <span style={{ width: '1px', height: '14px', background: 'rgba(255,255,255,0.08)' }} />
+      <span style={{ padding: '3px 10px', borderRadius: '100px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', fontSize: '11px', color: 'var(--accent)', fontFamily: 'var(--font-inter)', fontWeight: 600 }}>
+        {badge.situation}
+      </span>
+      {badge.needs.map(n => (
+        <span key={n} style={{ padding: '3px 10px', borderRadius: '100px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)' }}>
+          {n}
+        </span>
+      ))}
+      <Link href="/programs" style={{ marginLeft: 'auto', fontSize: '11px', color: 'var(--accent)', fontFamily: 'var(--font-inter)', fontWeight: 600, textDecoration: 'none' }}>
+        Check programs →
+      </Link>
+    </div>
+  )
+}
+
+/* ── Recent Searches (E4) ───────────────────────────────────────── */
+type RecentSearch = { q: string; loc: string; ts: number }
+
+function RecentSearchesSection({ router }: { router: ReturnType<typeof useRouter> }) {
+  const [searches, setSearches] = useState<RecentSearch[]>([])
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('nexus_recent_searches')
+      if (raw) setSearches(JSON.parse(raw).slice(0, 5))
+    } catch { /* ignore */ }
+  }, [])
+
+  if (!searches.length) return null
+
+  return (
+    <div style={{ gridColumn: '1 / -1' }}>
+      <SectionHeader title="Recent searches" action={() => router.push('/search')} actionLabel="New search" />
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+        {searches.map((s, i) => {
+          const timeAgo = (() => {
+            const m = Math.floor((Date.now() - s.ts) / 60000)
+            if (m < 1) return 'Just now'
+            if (m < 60) return `${m}m ago`
+            const h = Math.floor(m / 60)
+            if (h < 24) return `${h}h ago`
+            return `${Math.floor(h / 24)}d ago`
+          })()
+          const href = `/search?q=${encodeURIComponent(s.q)}&loc=${encodeURIComponent(s.loc)}`
+          return (
+            <Link
+              key={i}
+              href={href}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 14px', borderRadius: '10px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', textDecoration: 'none', transition: 'border-color 0.2s', maxWidth: '260px' }}
+              onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(74,144,217,0.22)'}
+              onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(255,255,255,0.07)'}
+            >
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {s.q || 'Free clinics'}
+                </div>
+                <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', marginTop: '1px' }}>
+                  {s.loc} · {timeAgo}
+                </div>
+              </div>
+            </Link>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+/* ── Notification Settings (E10 / E4) ───────────────────────────── */
+function NotificationSettings({ userId }: { userId: string }) {
+  const [enabled, setEnabled] = useState(false)
+  const [status, setStatus]   = useState<'idle' | 'requesting' | 'subscribed' | 'denied' | 'unsupported'>('idle')
+
+  useEffect(() => {
+    // Check current permission state
+    if (!('Notification' in window) || !('serviceWorker' in navigator)) {
+      setStatus('unsupported'); return
+    }
+    if (Notification.permission === 'granted') {
+      setEnabled(true); setStatus('subscribed')
+    } else if (Notification.permission === 'denied') {
+      setStatus('denied')
+    }
+  }, [])
+
+  const subscribe = async () => {
+    if (!('Notification' in window)) return
+    setStatus('requesting')
+    try {
+      const permission = await Notification.requestPermission()
+      if (permission !== 'granted') { setStatus('denied'); return }
+
+      // Get VAPID public key
+      const keyRes = await fetch('/api/push/subscribe')
+      if (!keyRes.ok) {
+        // VAPID not configured — still enable local notifications
+        setEnabled(true); setStatus('subscribed'); return
+      }
+      const { vapidPublicKey } = await keyRes.json()
+
+      // Register push subscription via service worker
+      const sw = await navigator.serviceWorker.ready
+      const sub = await sw.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: vapidPublicKey,
+      })
+
+      // Send to backend
+      await fetch('/api/push/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subscription: sub.toJSON(), userId }),
+      })
+
+      setEnabled(true); setStatus('subscribed')
+    } catch {
+      setStatus('denied')
+    }
+  }
+
+  const unsubscribe = async () => {
+    try {
+      const sw = await navigator.serviceWorker.ready
+      const sub = await sw.pushManager.getSubscription()
+      if (sub) {
+        await fetch('/api/push/subscribe', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ endpoint: sub.endpoint }),
+        })
+        await sub.unsubscribe()
+      }
+    } catch { /* ignore */ }
+    setEnabled(false); setStatus('idle')
+  }
+
+  return (
+    <div style={{ padding: '20px', borderRadius: '14px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' }}>
+        <div>
+          <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '4px' }}>
+            Clinic reminders
+          </div>
+          <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)', lineHeight: 1.6 }}>
+            {status === 'subscribed' ? 'You\'ll be notified about saved clinics and health reminders.' :
+             status === 'denied'     ? 'Blocked in browser settings. Open site settings to re-enable.' :
+             status === 'unsupported'? 'Not supported in your browser.' :
+             'Get notified when saved clinics update hours or availability.'}
+          </div>
+        </div>
+        {status !== 'unsupported' && status !== 'denied' && (
+          <button
+            onClick={enabled ? unsubscribe : subscribe}
+            disabled={status === 'requesting'}
+            style={{
+              padding: '8px 18px', borderRadius: '8px', border: 'none', cursor: status === 'requesting' ? 'not-allowed' : 'pointer',
+              background: enabled ? 'rgba(74,144,217,0.15)' : 'var(--accent)',
+              color: enabled ? 'var(--accent)' : '#07070F',
+              fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-inter)',
+              transition: 'all 0.2s', flexShrink: 0,
+            }}
+          >
+            {status === 'requesting' ? 'Requesting…' : enabled ? 'Turn off' : 'Enable'}
+          </button>
+        )}
+      </div>
+      {status === 'subscribed' && (
+        <div style={{ marginTop: '12px', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+          {['Clinic hour changes', 'Appointment reminders', 'Program deadlines'].map(item => (
+            <span key={item} style={{ padding: '3px 9px', borderRadius: '100px', fontSize: '10px', fontWeight: 600, color: 'var(--accent)', background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.18)', fontFamily: 'var(--font-inter)' }}>
+              ✓ {item}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -397,13 +702,15 @@ export default function DashboardPage() {
   const userTypeLabel = profile?.user_type ? profile.user_type.charAt(0).toUpperCase() + profile.user_type.slice(1) : 'Patient'
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ width: 40, height: 40, borderRadius: '50%', border: '2px solid rgba(74,144,217,0.2)', borderTopColor: 'var(--accent)', margin: '0 auto 16px', animation: 'spin 0.8s linear infinite' }} />
-        <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>Loading…</p>
+    <AppShell>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ width: 40, height: 40, borderRadius: '50%', border: '2px solid rgba(74,144,217,0.2)', borderTopColor: 'var(--accent)', margin: '0 auto 16px', animation: 'spin 0.8s linear infinite' }} />
+          <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>Loading…</p>
+        </div>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-    </div>
+    </AppShell>
   )
 
   const TABS = [
@@ -414,27 +721,8 @@ export default function DashboardPage() {
   ] as const
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'var(--font-inter)' }}>
-      {/* Top nav */}
-      <nav style={{ position: 'sticky', top: 0, zIndex: 100, borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(2,4,9,0.88)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', padding: '0 24px' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 60 }}>
-          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontFamily: 'var(--font-orbitron)', fontWeight: 700, fontSize: '16px', color: 'var(--accent)', letterSpacing: '0.08em' }}>NEXUS</span>
-            <span style={{ padding: '2px 8px', borderRadius: '6px', fontSize: '10px', fontWeight: 600, background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.15)', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em' }}>DASHBOARD</span>
-          </Link>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', display: 'none' }} className="md-show">{profile?.email}</span>
-            <Link href="/dashboard/profile" style={{ padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: 500, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>
-              Profile
-            </Link>
-            <button onClick={handleLogout} style={{ padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: 500, background: 'rgba(248,113,113,0.06)', border: '1px solid rgba(248,113,113,0.15)', color: '#f87171', cursor: 'pointer' }}>
-              Log out
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      <main style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 24px 80px' }}>
+    <AppShell>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 24px 80px', fontFamily: 'var(--font-inter)' }}>
         {/* Welcome header */}
         <div style={{ marginBottom: '32px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', borderRadius: '100px', background: 'rgba(74,144,217,0.07)', border: '1px solid rgba(74,144,217,0.15)', marginBottom: '14px', fontSize: '11px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
@@ -448,6 +736,9 @@ export default function DashboardPage() {
             Your free healthcare hub. Everything in one place.
           </p>
         </div>
+
+        {/* E4 — eligibility status badge from onboarding profile */}
+        <EligibilityBadge />
 
         {/* Profile completeness nudge */}
         <ProfileCompletenessBar profile={profile} />
@@ -479,6 +770,12 @@ export default function DashboardPage() {
               <SectionHeader title="Quick actions" />
               <QuickActions router={router} />
             </div>
+
+            {/* E4 — recent searches */}
+            <RecentSearchesSection router={router} />
+
+            {/* Last viewed — U16: persistent across sessions */}
+            <LastViewedSection />
 
             {/* Recent saved */}
             <div style={{ gridColumn: '1 / -1' }}>
@@ -542,6 +839,12 @@ export default function DashboardPage() {
               </div>
             </div>
 
+            {/* E10/E4 — notification settings */}
+            <div style={{ gridColumn: '1 / -1' }}>
+              <SectionHeader title="Notification settings" />
+              <NotificationSettings userId={profile!.id} />
+            </div>
+
             {/* Provider portal shortcut for providers */}
             {profile?.user_type === 'provider' && (
               <div style={{ gridColumn: '1 / -1' }}>
@@ -557,11 +860,10 @@ export default function DashboardPage() {
             )}
           </div>
         )}
-      </main>
-
+      </div>
       <style>{`
         @keyframes pulse-dot { 0%,100% { opacity:1;transform:scale(1); } 50% { opacity:0.5;transform:scale(0.85); } }
       `}</style>
-    </div>
+    </AppShell>
   )
 }

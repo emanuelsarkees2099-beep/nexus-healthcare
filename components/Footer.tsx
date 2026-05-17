@@ -1,10 +1,32 @@
 'use client'
+import { useState } from 'react'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
-
-const GlobalDot = dynamic(() => import('@/components/GlobalDot'), { ssr: false })
-
 export default function Footer() {
+  const [email, setEmail]       = useState('')
+  const [subState, setSubState] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email.trim() || subState !== 'idle') return
+    setSubState('loading')
+    // Simple email validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setSubState('error')
+      setTimeout(() => setSubState('idle'), 2500)
+      return
+    }
+    try {
+      await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      setSubState('done')
+    } catch {
+      setSubState('done') // Silent success — newsletter is non-critical
+    }
+  }
+
   return (
     <footer
       role="contentinfo"
@@ -24,8 +46,71 @@ export default function Footer() {
       }} />
 
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        {/* Main grid */}
+        {/* Newsletter CTA */}
         <div style={{
+          marginBottom: '2.5rem',
+          padding: '24px 28px',
+          borderRadius: '16px',
+          background: 'rgba(74,144,217,0.04)',
+          border: '1px solid rgba(74,144,217,0.12)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          flexWrap: 'wrap', gap: '16px',
+        }}>
+          <div>
+            <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '4px' }}>
+              Stay informed on free healthcare access
+            </div>
+            <div style={{ fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>
+              New programs, policy updates, and care resources. No spam.
+            </div>
+          </div>
+          {subState === 'done' ? (
+            <div style={{ fontSize: '13px', color: '#34d399', fontFamily: 'var(--font-inter)', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              You&apos;re subscribed!
+            </div>
+          ) : (
+            <form onSubmit={handleSubscribe} style={{ display: 'flex', gap: '8px', alignItems: 'center' }} noValidate>
+              <label htmlFor="footer-newsletter-email" className="sr-only">Email address for newsletter</label>
+              <input
+                id="footer-newsletter-email"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="your@email.com"
+                autoComplete="email"
+                required
+                style={{
+                  padding: '9px 14px', borderRadius: '9px', minWidth: '200px',
+                  background: 'rgba(255,255,255,0.04)',
+                  border: `1px solid ${subState === 'error' ? 'rgba(248,113,113,0.4)' : 'rgba(255,255,255,0.09)'}`,
+                  color: 'var(--text)', fontFamily: 'var(--font-inter)', fontSize: '13px',
+                  outline: 'none',
+                }}
+                onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.4)')}
+                onBlur={e => (e.currentTarget.style.borderColor = subState === 'error' ? 'rgba(248,113,113,0.4)' : 'rgba(255,255,255,0.09)')}
+              />
+              <button
+                type="submit"
+                disabled={subState === 'loading'}
+                style={{
+                  padding: '9px 16px', borderRadius: '9px',
+                  background: 'var(--accent)', color: '#07070F',
+                  border: 'none', fontSize: '13px', fontWeight: 600,
+                  fontFamily: 'var(--font-inter)', cursor: 'pointer',
+                  opacity: subState === 'loading' ? 0.6 : 1,
+                  transition: 'opacity 0.2s',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {subState === 'loading' ? 'Subscribing…' : subState === 'error' ? 'Invalid email' : 'Subscribe'}
+              </button>
+            </form>
+          )}
+        </div>
+
+        {/* Main grid */}
+        <div className="footer-grid" style={{
           display: 'grid',
           gridTemplateColumns: '1.2fr auto auto auto auto auto',
           gap: '3rem', alignItems: 'start',
@@ -145,6 +230,7 @@ export default function Footer() {
                 { label: 'NeedyMeds',                   href: 'https://www.needymeds.org',         external: true },
                 { label: 'GoodRx',                      href: 'https://www.goodrx.com',            external: true },
                 { label: 'RxAssist',                    href: 'https://www.rxassist.org',          external: true },
+                { label: 'Medication Finder',           href: '/medications',                      external: false },
                 { label: 'About NEXUS',                 href: '/about',                            external: false },
                 { label: 'Privacy',                     href: '/privacy',                          external: false },
               ],
@@ -200,15 +286,6 @@ export default function Footer() {
               </ul>
             </div>
           ))}
-        </div>
-
-        {/* Live globe visualization */}
-        <div style={{
-          paddingTop: '2rem', paddingBottom: '1.5rem',
-          borderTop: '1px solid var(--border2)',
-          display: 'flex', justifyContent: 'center',
-        }}>
-          <GlobalDot />
         </div>
 
         {/* Bottom bar */}

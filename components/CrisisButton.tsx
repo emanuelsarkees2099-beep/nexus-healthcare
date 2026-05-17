@@ -16,9 +16,17 @@ export default function CrisisButton() {
         @keyframes crisis-pulse { 0%,100%{box-shadow:0 0 8px rgba(248,113,113,0.2), 0 4px 16px rgba(0,0,0,0.4)} 50%{box-shadow:0 0 16px rgba(248,113,113,0.35), 0 4px 16px rgba(0,0,0,0.4)} }
       `}</style>
 
+      {/* Screen-reader live region for expand state (A3) */}
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {expanded ? 'Crisis help panel opened. Call 988, text 741741, or visit the crisis page.' : ''}
+      </div>
+
       {/* Expand overlay */}
       {expanded && (
         <div
+          role="dialog"
+          aria-label="Crisis and mental health support resources"
+          aria-modal="false"
           style={{
             position: 'fixed', inset: 0, zIndex: 9998,
             background: 'rgba(0,0,0,0.6)',

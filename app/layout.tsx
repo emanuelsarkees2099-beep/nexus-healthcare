@@ -9,9 +9,10 @@ import { I18nProvider } from '@/components/I18nContext'
 import JsonLd, { WEB_APP_SCHEMA, ORG_SCHEMA } from '@/components/JsonLd'
 
 /* ── Font subsetting (#32): latin-only, swap, no fallback shift ─── */
+// D7: Variable font — request full wght axis range (200–800) for fluid weight transitions
 const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['200', '300', '400', '500', '600', '700', '800'],
   variable: '--font-display',
   display: 'swap',
   adjustFontFallback: false,
@@ -53,9 +54,23 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'NEXUS — Free Healthcare, Found in Seconds',
     description: 'Find free clinics, sliding-scale care, and eligibility programs near you. No insurance required.',
+    siteName: 'NEXUS',
     type: 'website',
+    // D9: dynamic OG image via @vercel/og edge function
+    images: [{ url: 'https://nexus.health/api/og', width: 1200, height: 630, alt: 'NEXUS — Free Healthcare, Found in Seconds' }],
   },
-  themeColor: '#4A90D9',
+  twitter: {
+    card: 'summary_large_image',
+    site: '@nexushealth',
+    creator: '@nexushealth',
+    title: 'NEXUS — Free Healthcare, Found in Seconds',
+    description: 'Find free clinics, sliding-scale care, and eligibility programs near you. No insurance required.',
+    images: ['https://nexus.health/api/og'],
+  },
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)',  color: '#040408' },
+    { media: '(prefers-color-scheme: light)', color: '#040408' },
+  ],
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -66,12 +81,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <meta name="theme-color" content="#040408" />
-        {/* Preconnect for Google Fonts CDN (#32) */}
+
+        {/* P7 — Preconnect + preload for Google Fonts CDN */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        {/* S5 — hreflang for multi-language support (48 languages via i18n) */}
+        <link rel="alternate" hrefLang="x-default" href="https://nexus.health/" />
+        <link rel="alternate" hrefLang="en" href="https://nexus.health/" />
+        <link rel="alternate" hrefLang="es" href="https://nexus.health/?lang=es" />
+        <link rel="alternate" hrefLang="zh" href="https://nexus.health/?lang=zh" />
+        <link rel="alternate" hrefLang="fr" href="https://nexus.health/?lang=fr" />
+        <link rel="alternate" hrefLang="ar" href="https://nexus.health/?lang=ar" />
+        <link rel="alternate" hrefLang="pt" href="https://nexus.health/?lang=pt" />
+        <link rel="alternate" hrefLang="hi" href="https://nexus.health/?lang=hi" />
+        <link rel="alternate" hrefLang="ru" href="https://nexus.health/?lang=ru" />
+        <link rel="alternate" hrefLang="ko" href="https://nexus.health/?lang=ko" />
+        <link rel="alternate" hrefLang="vi" href="https://nexus.health/?lang=vi" />
         {/* 5.9 — Structured Data */}
         <JsonLd schema={WEB_APP_SCHEMA} id="schema-webapp" />
         <JsonLd schema={ORG_SCHEMA} id="schema-org" />

@@ -265,16 +265,67 @@ function ProgramsFAQ() {
   )
 }
 
+/* ─── map onboarding answers → programs quiz format ──── */
+function getProfilePreFill(): { answers: string[]; firstSelected: string; fromProfile: boolean } | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = localStorage.getItem('nexus_onboarding')
+    if (!raw) return null
+    const saved = JSON.parse(raw)
+    const a = saved.answers ?? {}
+
+    const situationMap: Record<string, string> = {
+      uninsured:    'No insurance',
+      underinsured: "Employer coverage I can't afford",
+      transition:   'Lost coverage recently',
+      helper:       'Other / Not sure',
+    }
+    const needsMap: Record<string, string> = {
+      primary:      'Primary care visits',
+      dental:       'Dental or vision',
+      vision:       'Dental or vision',
+      mental:       'Mental health services',
+      prescriptions:'Prescription medications',
+      specialist:   'Specialist referrals',
+      pregnancy:    'Primary care visits',
+      emergency:    'Primary care visits',
+    }
+
+    const q0 = situationMap[a.situation as string] ?? 'No insurance'
+    const topNeed = (a.needs as string[] | undefined)?.[0]
+    const q3 = (topNeed && needsMap[topNeed]) ?? 'Primary care visits'
+
+    return {
+      // We pre-fill Q0 (insurance) — user still manually answers Q1 (household) and Q2 (income)
+      answers: [],
+      firstSelected: q0,
+      fromProfile: true,
+      // Stash q3 for when user reaches question 3
+      ...({ _q3Hint: q3 } as Record<string, string>),
+    } as { answers: string[]; firstSelected: string; fromProfile: boolean }
+  } catch { return null }
+}
+
 /* ─── page ────────────────────────────────────────── */
 export default function ProgramsPage() {
   const router = useRouter()
-  const [step, setStep]         = useState<'quiz'|'results'>('quiz')
-  const [qIdx, setQIdx]         = useState(0)
-  const [answers, setAnswers]   = useState<string[]>([])
-  const [selected, setSelected] = useState('')
-  const [running, setRunning]   = useState(false)
+  const [step, setStep]           = useState<'quiz'|'results'>('quiz')
+  const [qIdx, setQIdx]           = useState(0)
+  const [answers, setAnswers]     = useState<string[]>([])
+  const [selected, setSelected]   = useState('')
+  const [running, setRunning]     = useState(false)
+  const [fromProfile, setFromProfile] = useState(false)
   const [matchedPrograms, setMatchedPrograms] = useState<Array<typeof PROGRAMS_BASE[0] & { match: number }>>(PROGRAMS_BASE.map(p => ({ ...p, match: 0 })))
   const resultsRef = useRef<HTMLDivElement>(null)
+
+  // Auto-select Q0 from onboarding profile on mount
+  useEffect(() => {
+    const preFill = getProfilePreFill()
+    if (preFill) {
+      setSelected(preFill.firstSelected)
+      setFromProfile(true)
+    }
+  }, [])
 
   const pill: React.CSSProperties = {
     display: 'inline-flex', alignItems: 'center', gap: '6px',
@@ -386,6 +437,12 @@ export default function ProgramsPage() {
 
             {!running ? (
               <div style={{ animation: 'fadeUp 0.45s cubic-bezier(0.16,1,0.3,1) both' }} key={qIdx}>
+                {fromProfile && qIdx === 0 && (
+                  <div style={{ marginBottom: '16px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.15)', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'var(--accent)' }}>
+                    <Sparkles size={11} strokeWidth={1.5} />
+                    Auto-detected from your onboarding profile — confirm or change below
+                  </div>
+                )}
                 <h2 style={{ fontSize: 'clamp(20px, 3.5vw, 30px)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '10px', lineHeight: 1.25 }}>{QUIZ[qIdx].q}</h2>
                 <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.38)', marginBottom: '28px' }}>{QUIZ[qIdx].hint}</p>
 

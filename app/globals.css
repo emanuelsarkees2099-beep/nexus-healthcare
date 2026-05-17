@@ -138,18 +138,6 @@ body {
      This prevents the flash-of-no-cursor on first paint. */
 }
 
-/* Custom cursor — only active once component has mounted */
-[data-custom-cursor="true"] body {
-  cursor: none;
-}
-[data-custom-cursor="true"] button,
-[data-custom-cursor="true"] a,
-[data-custom-cursor="true"] [role="button"],
-[data-custom-cursor="true"] input,
-[data-custom-cursor="true"] select,
-[data-custom-cursor="true"] textarea {
-  cursor: none;
-}
 
 /* ── TRENDING CAROUSEL ── */
 .trending-track {
@@ -1265,6 +1253,30 @@ a[role="button"]:active {
 .nav-logo-glyph { flex-shrink: 0; transition: transform 0.4s var(--ease-spring); }
 .nav-logo:hover .nav-logo-glyph { transform: rotate(15deg) scale(1.08); }
 
+/* D8 — Logo draw-in animation on load */
+@keyframes logo-draw {
+  from { stroke-dashoffset: 80; opacity: 0; }
+  to   { stroke-dashoffset: 0;  opacity: 1; }
+}
+.nav-logo-glyph polygon,
+.nav-logo-glyph path {
+  stroke-dasharray: 80;
+  stroke-dashoffset: 0;
+  animation: logo-draw 0.9s cubic-bezier(0.16,1,0.3,1) both;
+}
+.nav-logo-glyph path {
+  animation-delay: 0.15s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-logo-glyph polygon,
+  .nav-logo-glyph path {
+    animation: none;
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    IMPACT WALL — win marquee pauses on hover, tab focus
    ═══════════════════════════════════════════════════════════════════ */
@@ -1734,4 +1746,408 @@ a:not(.no-press):active,
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   A4 — HIGH CONTRAST MODE (prefers-contrast: more)
+   ═══════════════════════════════════════════════════════════════════ */
+@media (prefers-contrast: more) {
+  :root {
+    --text:    #ffffff;
+    --text-2:  rgba(255,255,255,0.9);
+    --text-3:  rgba(255,255,255,0.8);
+    --border2: rgba(255,255,255,0.3);
+    --accent:  #70B8FF;
+    --accent2: #A8D4FF;
+  }
+
+  /* Ensure sufficient border contrast on interactive elements */
+  button, [role="button"], a[href], input, textarea, select {
+    outline-offset: 2px;
+  }
+  button:focus-visible, [role="button"]:focus-visible,
+  a[href]:focus-visible, input:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid #70B8FF !important;
+    outline-offset: 3px;
+  }
+
+  /* Boost card borders */
+  .glass-panel,
+  [style*="rgba(255,255,255,0.0"] {
+    border-color: rgba(255,255,255,0.25) !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   A1 — TRENDING CAROUSEL — pause on hover / focus
+   ═══════════════════════════════════════════════════════════════════ */
+.trending-track {
+  animation-play-state: running;
+}
+.trending-track:focus-within,
+[style*="overflow: hidden"]:focus-within .trending-track {
+  animation-play-state: paused;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   D1 — DOT-GRID BACKGROUND — inner page hero sections
+   ═══════════════════════════════════════════════════════════════════ */
+.dot-grid-bg {
+  background-image:
+    radial-gradient(circle, rgba(74,144,217,0.18) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: center center;
+}
+.dot-grid-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 40%,
+    transparent 40%, var(--bg, #040408) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   D2 — SIGNATURE GRADIENT CTA BUTTON
+   ═══════════════════════════════════════════════════════════════════ */
+.cta-signature {
+  background: linear-gradient(135deg,
+    var(--accent, #4A8FD4) 0%,
+    #284F8F 50%,
+    #4A8FD4 100%
+  );
+  background-size: 200% 200%;
+  background-position: 0% 50%;
+  color: #fff;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  transition: background-position 0.6s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 24px rgba(74,144,217,0.35), 0 1px 4px rgba(0,0,0,0.4);
+}
+.cta-signature:hover {
+  background-position: 100% 50%;
+  box-shadow: 0 8px 40px rgba(74,144,217,0.55), 0 2px 8px rgba(0,0,0,0.5);
+  transform: translateY(-1px);
+}
+.cta-signature:active {
+  transform: translateY(0);
+}
+/* Shimmer sweep */
+.cta-signature::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg,
+    transparent 30%, rgba(255,255,255,0.12) 50%, transparent 70%
+  );
+  background-size: 200% 100%;
+  background-position: -100% 0;
+  transition: background-position 0s;
+}
+.cta-signature:hover::after {
+  background-position: 200% 0;
+  transition: background-position 0.55s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   D3 — NOISE TEXTURE on glass panels
+   ═══════════════════════════════════════════════════════════════════ */
+.glass-panel {
+  position: relative;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   D4 — AURORA ANIMATIONS  (section-level background sweeps)
+   ═══════════════════════════════════════════════════════════════════ */
+@keyframes aurora-drift {
+  0%   { transform: translate(0,   0)   scale(1);    opacity: 0.35; }
+  33%  { transform: translate(30px,-20px) scale(1.06); opacity: 0.5;  }
+  66%  { transform: translate(-20px,15px) scale(0.96); opacity: 0.3;  }
+  100% { transform: translate(0,   0)   scale(1);    opacity: 0.35; }
+}
+
+.aurora-bg {
+  position: relative;
+  overflow: hidden;
+}
+.aurora-bg::before,
+.aurora-bg::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  animation: aurora-drift 12s ease-in-out infinite;
+}
+.aurora-bg::before {
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse, rgba(74,144,217,0.22) 0%, transparent 65%);
+  top: -100px; left: -100px;
+}
+.aurora-bg::after {
+  width: 500px; height: 400px;
+  background: radial-gradient(ellipse, rgba(40,79,143,0.18) 0%, transparent 65%);
+  bottom: -80px; right: -80px;
+  animation-delay: -6s;
+  animation-direction: reverse;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   D5 — iOS MOBILE QUALITY IMPROVEMENTS
+   ═══════════════════════════════════════════════════════════════════ */
+@supports (-webkit-touch-callout: none) {
+  /* Prevent text size adjust on orientation change */
+  html { -webkit-text-size-adjust: 100%; }
+
+  /* Smooth momentum scrolling */
+  .scroll-container, body { -webkit-overflow-scrolling: touch; }
+
+  /* Safe area padding for notched iPhones */
+  .mobile-safe-bottom {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+  .mobile-safe-top {
+    padding-top: calc(0px + env(safe-area-inset-top, 0px));
+  }
+}
+
+/* Tap highlight color for iOS */
+* { -webkit-tap-highlight-color: rgba(74,144,217,0.15); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   D6 — SECTION COLOR TRANSITIONS (smooth bg shifts between sections)
+   ═══════════════════════════════════════════════════════════════════ */
+.section-transition {
+  position: relative;
+}
+.section-transition::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--section-bg, var(--bg)));
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   A6 — QUICK EXIT BUTTON (crisis / triage pages)
+   ═══════════════════════════════════════════════════════════════════ */
+.quick-exit-btn {
+  position: fixed;
+  top: 80px; right: 16px;
+  z-index: 8000;
+  padding: 7px 14px;
+  border-radius: 9px;
+  background: rgba(248,113,113,0.08);
+  border: 1px solid rgba(248,113,113,0.22);
+  color: #f87171;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-inter);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.quick-exit-btn:hover {
+  background: rgba(248,113,113,0.14);
+  transform: translateY(-1px);
+}
+.quick-exit-btn:focus-visible {
+  outline: 2px solid #f87171;
+  outline-offset: 3px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   A7 — COOKIE CONSENT BANNER
+   ═══════════════════════════════════════════════════════════════════ */
+.cookie-banner {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 9900;
+  background: rgba(4,4,8,0.97);
+  border-top: 1px solid rgba(74,144,217,0.18);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  font-family: var(--font-inter);
+  transform: translateY(100%);
+  transition: transform 0.4s var(--ease-out-expo, cubic-bezier(0.16,1,0.3,1));
+}
+.cookie-banner.visible {
+  transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   V4 — FOOTER MOBILE BREAKPOINTS
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+@media (max-width: 600px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 380px) {
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   S — SEARCH CHIPS — proper group role visual style
+   ═══════════════════════════════════════════════════════════════════ */
+[role="list"][aria-label="Quick search suggestions"] button {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   D7 — VARIABLE FONT UTILITIES
+   Bricolage Grotesque supports wght axis 200–800.
+   These utility classes leverage the full axis for fluid weight transitions
+   and expressive typographic hierarchy.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Static weight utilities */
+.fw-200 { font-weight: 200; }
+.fw-300 { font-weight: 300; }
+.fw-400 { font-weight: 400; }
+.fw-500 { font-weight: 500; }
+.fw-600 { font-weight: 600; }
+.fw-700 { font-weight: 700; }
+.fw-800 { font-weight: 800; }
+
+/* Semantic weight utilities */
+.font-thin       { font-weight: 200; }
+.font-light      { font-weight: 300; }
+.font-regular    { font-weight: 400; }
+.font-medium     { font-weight: 500; }
+.font-semibold   { font-weight: 600; }
+.font-bold       { font-weight: 700; }
+.font-extrabold  { font-weight: 800; }
+
+/* Fluid weight transitions — weight morphs on interaction */
+.weight-hover {
+  transition: font-weight 0.25s var(--ease-out-expo);
+}
+.weight-hover:hover {
+  font-weight: 600;
+}
+
+/* Animated weight pulse — draws attention to live counters or labels */
+@keyframes weight-pulse {
+  0%, 100% { font-weight: 300; }
+  50%       { font-weight: 700; }
+}
+.weight-pulse {
+  animation: weight-pulse 2.4s var(--ease-in-out-circ) infinite;
+}
+
+/* Optical-size utility — tight tracking for large display text */
+.display-tight {
+  font-family: var(--font-display);
+  letter-spacing: -0.038em;
+  font-weight: 800;
+  line-height: 1.02;
+}
+
+/* Sub-display: section headlines */
+.display-section {
+  font-family: var(--font-display);
+  letter-spacing: -0.028em;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* Label: all-caps micro labels */
+.label-caps {
+  font-family: var(--font-inter);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+/* Numeric display: tabular figures for data */
+.num-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Gradient text utility — for accent headings */
+.text-gradient {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Responsive fluid heading — weight drops at mobile for readability */
+@media (max-width: 640px) {
+  .display-tight   { font-weight: 700; }
+  .display-section { font-weight: 600; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   C3 — GLOBAL CSS HOVER STATES
+   Replaces remaining onMouseEnter/Leave inline JS style mutations.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Nav link pills */
+.nav-link-pill {
+  display: inline-flex; align-items: center;
+  padding: 6px 12px; border-radius: 8px;
+  font-family: var(--font-inter); font-size: 13px; font-weight: 400;
+  text-decoration: none; transition: color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+.nav-link-pill:hover  { color: var(--text) !important; background: rgba(255,255,255,0.06) !important; }
+.nav-link-pill.active { color: rgba(255,255,255,0.95) !important; }
+
+/* Chip pills (Hero quick-picks) */
+.chip-pill:hover {
+  color: var(--accent) !important;
+  border-color: rgba(74,144,217,0.30) !important;
+  background: var(--accent-dim) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(74,144,217,0.12);
+}
+
+/* Trending carousel pills */
+.trending-pill:hover {
+  color: var(--accent) !important;
+  border-color: rgba(74,144,217,0.25) !important;
+  background: var(--accent-dim) !important;
+}
 

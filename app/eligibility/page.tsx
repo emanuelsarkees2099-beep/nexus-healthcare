@@ -33,6 +33,92 @@ const FPL_2024: Record<number, number> = {
 
 const FPL_FOR = (hh: number) => FPL_2024[Math.min(Math.max(hh, 1), 8)] ?? 52720
 
+/**
+ * State-specific Medicaid enrollment portals (2024).
+ * Falls back to healthcare.gov when a state URL is missing.
+ */
+const STATE_MEDICAID_URLS: Record<string, string> = {
+  AL: 'https://myalabama.gov/medicaid',
+  AK: 'https://manuals.medicaidalaska.com/docs/apply',
+  AZ: 'https://healthearizonaplus.gov/Login/Default',
+  AR: 'https://www.access.arkansas.gov',
+  CA: 'https://www.coveredca.com/apply/',
+  CO: 'https://peak.colorado.gov',
+  CT: 'https://www.accesshealthct.com/',
+  DC: 'https://dc.gov/service/apply-medicaid',
+  DE: 'https://assist.dhss.delaware.gov/apsLogin.action',
+  FL: 'https://www.myflorida.com/accessflorida/',
+  GA: 'https://gateway.ga.gov',
+  HI: 'https://mybenefits.hawaii.gov',
+  ID: 'https://enroll.yourhealthidaho.org',
+  IL: 'https://abe.illinois.gov/abe/access/',
+  IN: 'https://www.in.gov/fssa/onlinebenfits/index.html',
+  IA: 'https://www.ia.gov/services/health/',
+  KS: 'https://www.kancare.ks.gov',
+  KY: 'https://benefind.ky.gov',
+  LA: 'https://ldh.la.gov/Medicaid',
+  ME: 'https://www.maine.gov/dhhs/ofi/programs-services/mainecare',
+  MD: 'https://www.marylandhealthconnection.gov',
+  MA: 'https://www.mahealthconnector.org',
+  MI: 'https://mibridges.michigan.gov',
+  MN: 'https://mn.gov/dhs/people-we-serve/adults/health-care/health-care-programs/',
+  MS: 'https://medicaid.ms.gov',
+  MO: 'https://mydss.mo.gov',
+  MT: 'https://compass.dphhs.mt.gov/COMPASS/Account/LogIn',
+  NE: 'https://www.ne.gov/nebraska_medicaid_main_page',
+  NV: 'https://www.nevadahealthlink.com',
+  NH: 'https://nhhealthprotection.nh.gov',
+  NJ: 'https://www.nj.gov/humanservices/dmahs/home/',
+  NM: 'https://www.bewellnm.com',
+  NY: 'https://nystateofhealth.ny.gov',
+  NC: 'https://medicaid.ncdhhs.gov',
+  ND: 'https://www.hhs.nd.gov/healthcare/medicaid',
+  OH: 'https://ohio.gov/services/apply-for-medicaid',
+  OK: 'https://www.mysoonercare.org',
+  OR: 'https://www.oregon.gov/oha/hsd/ohp/pages/apply.aspx',
+  PA: 'https://www.compass.state.pa.us',
+  RI: 'https://healthyrhode.ri.gov',
+  SC: 'https://www.scdhhs.gov',
+  SD: 'https://dss.sd.gov/formsandpubs/docs/AME/MedApplyOnline.aspx',
+  TN: 'https://www.tn.gov/tenncare/members-applicants/apply-for-tenncare.html',
+  TX: 'https://yourtexasbenefits.com',
+  UT: 'https://medicaid.utah.gov/apply-for-medicaid/',
+  VT: 'https://dcf.vermont.gov/benefits/medicaid',
+  VA: 'https://www.coverva.org',
+  WA: 'https://www.wahealthplanfinder.org',
+  WV: 'https://dhhr.wv.gov/bms/Pages/default.aspx',
+  WI: 'https://www.dhs.wisconsin.gov/badgercareplus/apply.htm',
+  WY: 'https://health.wyo.gov/healthcarefin/medicaid/',
+}
+
+/**
+ * State-based ACA marketplace portals.
+ * States not listed use the federal Healthcare.gov.
+ */
+const STATE_ACA_URLS: Record<string, string> = {
+  CA: 'https://www.coveredca.com/apply/',
+  CO: 'https://connectforhealthco.com/get-started/',
+  CT: 'https://www.accesshealthct.com/',
+  DC: 'https://dchealthlink.com/',
+  ID: 'https://enroll.yourhealthidaho.org',
+  KY: 'https://kynect.ky.gov/',
+  MA: 'https://www.mahealthconnector.org/',
+  MD: 'https://www.marylandhealthconnection.gov/',
+  MN: 'https://www.mnsure.org/index.jsp',
+  NJ: 'https://www.getcovered.nj.gov/',
+  NM: 'https://www.bewellnm.com/',
+  NY: 'https://nystateofhealth.ny.gov/',
+  PA: 'https://pennie.com/',
+  RI: 'https://healthyrhode.ri.gov/',
+  VT: 'https://vermontHealthConnect.gov/',
+  WA: 'https://www.wahealthplanfinder.org/',
+}
+
+const getMedicaidUrl = (state: string) =>
+  STATE_MEDICAID_URLS[state] ?? 'https://www.healthcare.gov/medicaid-chip/getting-medicaid-chip/'
+const getAcaUrl = (state: string) =>
+  STATE_ACA_URLS[state] ?? 'https://www.healthcare.gov/apply-and-enroll/start-enrollment/'
+
 /** All US states + DC for selector */
 const STATES: { abbr: string; name: string }[] = [
   { abbr: 'AL', name: 'Alabama' },       { abbr: 'AK', name: 'Alaska' },
@@ -175,7 +261,7 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
       desc: 'Full health coverage: doctor visits, hospital stays, prescriptions, preventive care, and more. Covers most or all costs for qualifying individuals.',
       savings: '$0 premium · $0–$3 copays',
       annualValue: 9600,
-      url: 'https://www.healthcare.gov/medicaid-chip/getting-medicaid-chip/',
+      url: getMedicaidUrl(a.state),
       highlights: ['No monthly premiums', 'Covers dental & vision (children)', 'Prescription coverage included'],
       stateNote,
     })
@@ -197,7 +283,7 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
       desc: `Children's Health Insurance Program covers kids up to ${highChip ? '300%' : '200%'} FPL in ${STATES.find(s => s.abbr === a.state)?.name ?? a.state}. Includes well-child visits, immunizations, dental, and vision.`,
       savings: 'Low or $0 premiums · $0–$5 copays',
       annualValue: 4800,
-      url: 'https://www.healthcare.gov/medicaid-chip/childrens-health-insurance-program/',
+      url: getMedicaidUrl(a.state),
       highlights: ['Covers preventive care 100%', 'Dental and vision included', 'No coverage gaps between visits'],
     })
   }
@@ -220,6 +306,7 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
 
     const monthlyEst = fplPct <= 150 ? '$0' : fplPct <= 250 ? '$0–$50' : fplPct <= 400 ? '$50–$150' : '$150+'
 
+    const hasStateExchange = a.state in STATE_ACA_URLS
     programs.push({
       id: 'aca', name: 'ACA Marketplace Subsidy', tag: 'Federal',
       color: '#60a5fa', icon: <DollarSign size={16} strokeWidth={1.5} />,
@@ -227,8 +314,17 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
       desc: 'Premium tax credits reduce your monthly health insurance cost — potentially to $0. Plans cover doctor visits, prescriptions, hospitalizations, and preventive care.',
       savings: `~${monthlyEst}/month premium`,
       annualValue: fplPct <= 200 ? 5400 : fplPct <= 400 ? 3200 : 1400,
-      url: 'https://www.healthcare.gov/apply-and-enroll/start-enrollment/',
-      highlights: ['Enrollment: Nov 1 – Jan 15', 'Special Enrollment if life event', 'Bronze to Platinum tier plans'],
+      url: getAcaUrl(a.state),
+      highlights: [
+        hasStateExchange
+          ? `Apply on ${STATES.find(s => s.abbr === a.state)?.name ?? a.state}'s state exchange`
+          : 'Apply on Healthcare.gov',
+        'Special Enrollment if life event',
+        'Bronze to Platinum tier plans',
+      ],
+      stateNote: hasStateExchange
+        ? `${STATES.find(s => s.abbr === a.state)?.name ?? a.state} runs its own health insurance marketplace — apply there for faster processing and state-specific plans.`
+        : undefined,
     })
   }
 

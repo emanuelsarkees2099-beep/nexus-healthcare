@@ -1,39 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { rateLimit } from '@/lib/rate-limit'
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
 const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
 const RESEND_API_KEY = process.env.RESEND_API_KEY ?? ''
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? ''
-
-// ─── Simple in-memory rate limiter ────────────────────────────────────────────
-// Upgrade to Upstash Redis for production: https://upstash.com
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
-const RATE_LIMIT = 5      // max requests
-const RATE_WINDOW = 60_000 // per 60 seconds
-
-function checkRateLimit(ip: string): { ok: boolean; retryAfter: number } {
-  const now = Date.now()
-  const entry = rateLimitMap.get(ip)
-
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_WINDOW })
-    return { ok: true, retryAfter: 0 }
-  }
-
-  if (entry.count >= RATE_LIMIT) {
-    return { ok: false, retryAfter: Math.ceil((entry.resetAt - now) / 1000) }
-  }
-
-  entry.count++
-  return { ok: true, retryAfter: 0 }
-}
-
-// Clean up old entries every 5 minutes
-setInterval(() => {
-  const now = Date.now()
-  rateLimitMap.forEach((v, k) => { if (now > v.resetAt) rateLimitMap.delete(k) })
-}, 300_000)
 
 // ─── Allowed submission types ──────────────────────────────────────────────────
 const ALLOWED_TYPES = ['story', 'chw', 'legal', 'provider', 'accessibility', 'advocacy', 'outcome'] as const
@@ -152,15 +124,12 @@ async function notifyAdmin(type: string, data: Record<string, unknown>, userId: 
 // ─── POST /api/submit ──────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
   try {
-    // Rate limiting
-    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
-      ?? req.headers.get('x-real-ip')
-      ?? '127.0.0.1'
-    const rl = checkRateLimit(ip)
+    // Rate limiting (centralized — 5 submissions per minute per IP)
+    const rl = rateLimit(req as unknown as Request, { limit: 5, windowMs: 60_000, namespace: 'submit' })
     if (!rl.ok) {
       return NextResponse.json(
-        { error: `Too many requests. Try again in ${rl.retryAfter} seconds.` },
-        { status: 429, headers: { 'Retry-After': String(rl.retryAfter) } }
+        { error: 'Too many requests. Please wait a moment before submitting again.' },
+        { status: 429, headers: rl.headers }
       )
     }
 

@@ -7,7 +7,6 @@ import Footer from '@/components/Footer'
    at top-level and will crash if rendered on the server.
    ─────────────────────────────────────────────────────────────────── */
 const BackgroundCanvas  = dynamic(() => import('@/components/BackgroundCanvas'),  { ssr: false })
-const Cursor            = dynamic(() => import('@/components/Cursor'),            { ssr: false })
 const ScrollProgress    = dynamic(() => import('@/components/ScrollProgress'),    { ssr: false })
 const FloatingCTA       = dynamic(() => import('@/components/FloatingCTA'),       { ssr: false })
 const ExitIntent        = dynamic(() => import('@/components/ExitIntent'),        { ssr: false })
@@ -19,6 +18,7 @@ const Hero              = dynamic(() => import('@/components/Hero'),            
 
 /* ── Content sections — code-split, SSR-safe ── */
 const Stats             = dynamic(() => import('@/components/Stats'))
+const BeforeAfterBar    = dynamic(() => import('@/components/BeforeAfterBar'))
 const Features          = dynamic(() => import('@/components/Features'))
 const HowItWorks        = dynamic(() => import('@/components/HowItWorks'))
 const Testimonials      = dynamic(() => import('@/components/Testimonials'))
@@ -36,7 +36,6 @@ export default function Home() {
 
       {/* Page-level background + chrome (no SSR) */}
       <BackgroundCanvas />
-      <Cursor />
       <ScrollProgress />
       <FloatingCTA />
       <ExitIntent />
@@ -49,6 +48,7 @@ export default function Home() {
       <main id="main-content">
         <Hero />
         <Stats />
+        <BeforeAfterBar />
         <Features />
         <HowItWorks />
         <CostCalculator />

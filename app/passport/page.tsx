@@ -237,20 +237,31 @@ export default function PassportPage() {
             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px',
             animation: 'qr-appear 0.3s ease both',
           }}>
-            {/* Simulated QR */}
-            <div style={{
-              width: '160px', height: '160px', borderRadius: '12px', padding: '12px',
-              background: '#fff', display: 'grid',
-              gridTemplateColumns: 'repeat(12,1fr)', gap: '2px',
-            }}>
-              {Array.from({ length: 144 }).map((_, i) => (
-                <div key={i} style={{
-                  borderRadius: '1px',
-                  background: Math.random() > 0.5 ? '#000' : '#fff',
-                  aspectRatio: '1',
-                }} />
-              ))}
-            </div>
+            {/* Real QR code — encodes key passport data for clinic check-in */}
+            {(() => {
+              const lines = [
+                'NEXUS Health Passport',
+                `Name: ${masked ? 'HIDDEN' : passport.name}`,
+                `Blood: ${passport.bloodType}`,
+                `Allergies: ${masked ? 'HIDDEN' : passport.allergies.map(a => `${a.name}(${a.severity})`).join(', ') || 'None'}`,
+                `Meds: ${masked ? 'HIDDEN' : passport.medications.map(m => `${m.name} ${m.dose} ${m.frequency}`).join(' | ') || 'None'}`,
+                `Conditions: ${masked ? 'HIDDEN' : passport.conditions.map(c => c.name).join(', ') || 'None'}`,
+                `Emergency: ${masked ? 'HIDDEN' : `${passport.emergencyContact.name} (${passport.emergencyContact.relation}) ${passport.emergencyContact.phone}`}`,
+                `Updated: ${passport.lastUpdated}`,
+                'nexus.health/passport',
+              ].join('\n')
+              const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&format=png&margin=8&data=${encodeURIComponent(lines)}`
+              return (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={qrUrl}
+                  alt="Health Passport QR Code — scan at clinic check-in"
+                  width={160}
+                  height={160}
+                  style={{ borderRadius: '10px', display: 'block' }}
+                />
+              )
+            })()}
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '14px', fontWeight: 600, marginBottom: '4px' }}>
                 Show this at clinic check-in

@@ -53,19 +53,31 @@ export default function AdminPage() {
 
       const { data: profile } = await supabase
         .from('user_profiles')
-        .select('user_type')
+        .select('user_type, email')
         .eq('id', session.user.id)
         .single()
 
+      // Primary check: user_type must be 'admin' in the database
       if (profile?.user_type !== 'admin') {
         router.push('/dashboard')
         return
       }
 
+      // Secondary check: email must match NEXT_PUBLIC_ADMIN_EMAILS whitelist (if set)
+      const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS
+      if (adminEmails) {
+        const allowed = adminEmails.split(',').map(e => e.trim().toLowerCase())
+        const userEmail = (profile?.email ?? session.user.email ?? '').toLowerCase()
+        if (!allowed.includes(userEmail)) {
+          router.push('/dashboard')
+          return
+        }
+      }
+
       loadSubmissions()
     }
     checkAdmin()
-  }, [])
+  }, []) // eslint-disable-line
 
   const loadSubmissions = async () => {
     setLoading(true)

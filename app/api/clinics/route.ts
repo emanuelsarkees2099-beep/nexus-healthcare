@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 import { getNAFCClinicsNear, type NAFCClinic } from '@/lib/nafc-clinics'
+import { rateLimit } from '@/lib/rate-limit'
+
+// ── Supabase (server-side, anon key) ──────────────────────────────────────────
+const sbUrl    = process.env.NEXT_PUBLIC_SUPABASE_URL    ?? ''
+const sbAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+const supabase  = createClient(sbUrl, sbAnonKey)
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 export type AffordabilityLabel = 'likely-free' | 'low-cost' | 'standard'
@@ -28,6 +35,8 @@ export type Clinic = {
   type?: string
   lat?: number
   lng?: number
+  cal_link?: string  // N3: provider-submitted booking URL (from clinic_overrides)
+  languages?: string[]
 }
 
 // ── Haversine distance ─────────────────────────────────────────────────────────
@@ -159,8 +168,11 @@ function matchesSpecialty(clinic: Clinic, specialty: string): boolean {
 }
 
 // ── Name fingerprint for deduplication ───────────────────────────────────────
-function fingerprint(name: string): string {
-  return name.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 12)
+// Uses 18 chars of name + zip so two "Community Health Center" locations in
+// different ZIP codes are NOT collapsed into one result.
+function fingerprint(name: string, zip = ''): string {
+  const n = name.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 18)
+  return zip ? `${n}|${zip.slice(0, 5)}` : n
 }
 
 // ── Geocode with Nominatim ────────────────────────────────────────────────────
@@ -225,13 +237,23 @@ function extractTags(block: string): Record<string, string> {
 
 // ── Overpass query ────────────────────────────────────────────────────────────
 async function queryOverpass(lat: number, lng: number, radiusMiles: number): Promise<Clinic[]> {
-  const degOffset = (radiusMiles * 1.2) / 69.0
-  const south = (lat - degOffset).toFixed(6)
-  const west  = (lng - degOffset).toFixed(6)
-  const north = (lat + degOffset).toFixed(6)
-  const east  = (lng + degOffset).toFixed(6)
+  const radiusMeters = Math.round(radiusMiles * 1609.34)
 
-  const ql = `[bbox:${south},${west},${north},${east}];(node["amenity"="clinic"]["name"];node["amenity"="hospital"]["name"];node["amenity"="doctors"]["name"];node["amenity"="dentist"]["name"];node["healthcare"]["name"];node["social_facility"="outreach"]["name"];way["amenity"="clinic"]["name"];way["amenity"="hospital"]["name"];way["healthcare"]["name"];);out center tags;`
+  // Use `around` filter (more accurate than bbox) and capture far more OSM tags
+  const ql = [
+    `[out:xml][timeout:28];`,
+    `(`,
+    `node(around:${radiusMeters},${lat},${lng})["amenity"~"^(clinic|hospital|doctors|dentist|health_post|nursing_home)$"]["name"];`,
+    `node(around:${radiusMeters},${lat},${lng})["healthcare"]["name"];`,
+    `node(around:${radiusMeters},${lat},${lng})["healthcare:speciality"]["name"];`,
+    `node(around:${radiusMeters},${lat},${lng})["social_facility"~"outreach|health_care|healthcare"]["name"];`,
+    `node(around:${radiusMeters},${lat},${lng})["office"="healthcare"]["name"];`,
+    `way(around:${radiusMeters},${lat},${lng})["amenity"~"^(clinic|hospital|doctors|dentist)$"]["name"];`,
+    `way(around:${radiusMeters},${lat},${lng})["healthcare"]["name"];`,
+    `way(around:${radiusMeters},${lat},${lng})["office"="healthcare"]["name"];`,
+    `);`,
+    `out center tags;`,
+  ].join('')
 
   try {
     const res = await fetch('https://overpass-api.de/api/interpreter', {
@@ -288,7 +310,7 @@ async function queryOverpass(lat: number, lng: number, radiusMiles: number): Pro
           ? b.affordability_score - a.affordability_score
           : parseFloat(a.distance) - parseFloat(b.distance)
       )
-      .slice(0, 60)
+      .slice(0, 100)
   } catch {
     return []
   }
@@ -303,6 +325,8 @@ async function fetchHRSAClinics(zip: string, radiusMiles: number): Promise<Clini
     `https://findahealthcenter.hrsa.gov/api/v1/healthcenter/FindHealthCenters?zipcode=${clean}&radius=${radiusMiles}`,
     `https://findahealthcenter.hrsa.gov/api/v1.0/FindHealthCenters?ZipCode=${clean}&Radius=${radiusMiles}`,
     `https://findahealthcenter.hrsa.gov/api/HealthCenterFinder/FindHealthCenters?zipcode=${clean}&radius=${radiusMiles}`,
+    `https://findahealthcenter.hrsa.gov/api/v2/healthcenter/FindHealthCenters?zipcode=${clean}&radius=${radiusMiles}`,
+    `https://bphc.hrsa.gov/hccguidancematerials/findahealthcenter/api/findahealthcenter?zip=${clean}&radius=${radiusMiles}`,
   ]
 
   for (const url of endpoints) {
@@ -582,22 +606,521 @@ async function fetchStateHealthClinics(lat: number, lng: number, state: string, 
 }
 
 // ── Detect state from geocode result ─────────────────────────────────────────
+const STATE_MAP: Record<string, string> = {
+  'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR',
+  'California': 'CA', 'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE',
+  'Florida': 'FL', 'Georgia': 'GA', 'Hawaii': 'HI', 'Idaho': 'ID',
+  'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA', 'Kansas': 'KS',
+  'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
+  'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS',
+  'Missouri': 'MO', 'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV',
+  'New Hampshire': 'NH', 'New Jersey': 'NJ', 'New Mexico': 'NM', 'New York': 'NY',
+  'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH', 'Oklahoma': 'OK',
+  'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC',
+  'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT',
+  'Vermont': 'VT', 'Virginia': 'VA', 'Washington': 'WA', 'West Virginia': 'WV',
+  'Wisconsin': 'WI', 'Wyoming': 'WY', 'District of Columbia': 'DC',
+}
+
 function detectState(formatted: string): string {
-  const stateMap: Record<string, string> = {
-    'California': 'CA', 'Texas': 'TX', 'New York': 'NY', 'Florida': 'FL', 'Illinois': 'IL',
-    ' CA,': 'CA', ' TX,': 'TX', ' NY,': 'NY', ' FL,': 'FL', ' IL,': 'IL',
+  for (const [name, code] of Object.entries(STATE_MAP)) {
+    if (formatted.includes(name)) return code
   }
-  for (const [key, code] of Object.entries(stateMap)) {
-    if (formatted.includes(key)) return code
+  // Fallback: look for 2-letter state abbreviation pattern ", XX " or ", XX,"
+  const m = formatted.match(/,\s*([A-Z]{2})[, ]/)
+  return m ? m[1] : ''
+}
+
+// ── CMS Rural Health Clinics — public dataset, no API key required ────────────
+async function fetchCMSRuralHealthClinics(lat: number, lng: number, state: string, radiusMiles: number): Promise<Clinic[]> {
+  if (!state) return []
+  try {
+    // CMS Provider of Services file — Rural Health Clinics (public Socrata API)
+    const url = `https://data.cms.gov/resource/mj5m-pzi6.json?$limit=200&state=${encodeURIComponent(state)}&$select=provider_name,street_address,city,state,zip_code,phone_number,provider_type`
+    const res = await fetch(url, {
+      headers: { 'Accept': 'application/json', 'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health' },
+      next: { revalidate: 86400 },
+      signal: AbortSignal.timeout(7000),
+    })
+    if (!res.ok) return []
+
+    const data = await res.json() as Record<string, string>[]
+    if (!Array.isArray(data)) return []
+
+    const clinics: Clinic[] = []
+    for (const r of data) {
+      const name = String(r.provider_name ?? '').trim()
+      if (!name || !isOrganization(name)) continue
+
+      const addr  = String(r.street_address ?? '')
+      const city  = String(r.city ?? '')
+      const st    = String(r.state ?? state)
+      const zip   = String(r.zip_code ?? '').replace(/\D/g, '').slice(0, 5)
+      const phone = String(r.phone_number ?? '').replace(/[^\d()\-+\s]/g, '').trim()
+      const { score, label, reasons } = scoreAffordability(name, {})
+      if (score < 35) continue
+
+      clinics.push({
+        id: `cms-rhc-${name.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 14)}-${zip}`,
+        name, address: addr, city, state: st, zip, phone,
+        distance: '?',
+        services: guessServices(name),
+        accepting: true,
+        free: score >= 70, sliding_scale: true, isFreeOrDiscounted: true,
+        affordability_score: Math.max(score, 60), // RHCs must accept Medicare/Medicaid
+        affordability_label: label,
+        affordability_reasons: [...reasons, 'CMS Rural Health Clinic — accepts Medicare & Medicaid'],
+        url: '',
+        mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name} ${addr} ${city} ${st}`)}`,
+        hours: '', openNow: null, type: 'Rural Health Clinic',
+        lat: undefined, lng: undefined,
+      } as unknown as Clinic)
+    }
+
+    console.log('[NEXUS] CMS-RHC(%s) → %d clinics', state, clinics.length)
+    return clinics.slice(0, 40)
+  } catch {
+    return []
   }
-  return ''
+}
+
+// ── SAMHSA Treatment Locator — completely free, no API key ───────────────────
+// Covers mental health centers, substance abuse treatment, and many FQHCs
+// that aren't in the HRSA database. Public federal API, no registration needed.
+async function fetchSAMHSAClinics(lat: number, lng: number, radiusMiles: number): Promise<Clinic[]> {
+  try {
+    // SAMHSA Find a Treatment Facility API (public, no key required)
+    const url = `https://findtreatment.samhsa.gov/treatment/api/v2/locations.json?sAddr=${lat},${lng}&sDistance=${radiusMiles}&sType=SA,MH`
+    const res = await fetch(url, {
+      headers: { 'Accept': 'application/json', 'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health' },
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(8000),
+    })
+    if (!res.ok) return []
+
+    const data = await res.json() as { rows?: Record<string, unknown>[] }
+    const rows = data?.rows ?? []
+    if (!Array.isArray(rows) || rows.length === 0) return []
+
+    const clinics: Clinic[] = rows.slice(0, 60).map((r): Clinic | null => {
+      const name = String(r.name1 ?? r.name ?? '').trim()
+      if (!name) return null
+
+      const addr  = String(r.street1 ?? r.addr1 ?? '')
+      const city  = String(r.city   ?? '')
+      const state = String(r.state  ?? '')
+      const zip   = String(r.zip    ?? '').slice(0, 5)
+      const phone = String(r.phone  ?? '').replace(/[^\d()\-+\s]/g, '').trim()
+      const rLat  = parseFloat(String(r.latitude  ?? r.lat ?? '0')) || lat
+      const rLng  = parseFloat(String(r.longitude ?? r.lng ?? '0')) || lng
+      const dist  = distanceMiles(lat, lng, rLat, rLng)
+
+      const services: string[] = ['Mental health']
+      const typeStr = String(r.typeDescr ?? r.facilityType ?? '').toLowerCase()
+      if (/substance|alcohol|drug|opiate|opioid/i.test(typeStr)) services.push('Substance use')
+      if (/primary|medical/i.test(typeStr)) services.push('Primary care')
+
+      const freeFlag = /sliding|free|no cost|low.cost|income/i.test(String(r.paymentTypes ?? r.payment ?? ''))
+
+      return {
+        id: `samhsa-${String(r.facilityCode ?? r.id ?? Math.random()).replace(/\./g, '')}`,
+        name, address: addr, city, state, zip, phone,
+        distance: dist.toFixed(1),
+        services,
+        accepting: true,
+        free: freeFlag,
+        sliding_scale: freeFlag || /sliding/i.test(String(r.paymentTypes ?? '')),
+        isFreeOrDiscounted: freeFlag,
+        affordability_score: freeFlag ? 75 : 55,
+        affordability_label: freeFlag ? 'likely-free' : 'low-cost',
+        affordability_reasons: ['SAMHSA-listed treatment center', ...(freeFlag ? ['sliding scale / free care'] : [])],
+        url: String(r.website ?? ''),
+        mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name} ${addr} ${city} ${state}`)}`,
+        hours: '', openNow: null, type: 'Treatment Center',
+        lat: rLat, lng: rLng,
+      }
+    }).filter((c): c is Clinic => c !== null)
+
+    console.log('[NEXUS] SAMHSA → %d treatment centers', clinics.length)
+    return clinics
+  } catch {
+    return []
+  }
+}
+
+// ── Yelp Fusion — free tier (500 req/day, no payment required) ───────────────
+// Sign up free at https://www.yelp.com/developers — add YELP_API_KEY to .env.local
+async function fetchYelpClinics(lat: number, lng: number, radiusMiles: number): Promise<Clinic[]> {
+  const apiKey = process.env.YELP_API_KEY
+  if (!apiKey) return []
+
+  const radiusMeters = Math.min(Math.round(radiusMiles * 1609.34), 40000) // Yelp max 40km
+  const terms = ['free clinic', 'community health center', 'federally qualified health center']
+  const seen  = new Set<string>()
+  const all: Clinic[] = []
+
+  for (const term of terms) {
+    try {
+      const url = `https://api.yelp.com/v3/businesses/search?latitude=${lat}&longitude=${lng}&radius=${radiusMeters}&term=${encodeURIComponent(term)}&categories=health,medcenters&limit=20&sort_by=distance`
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${apiKey}`, 'User-Agent': 'NEXUS-Healthcare/1.0' },
+        next: { revalidate: 3600 },
+        signal: AbortSignal.timeout(6000),
+      })
+      if (!res.ok) continue
+
+      const data = await res.json() as { businesses?: Record<string, unknown>[] }
+      for (const b of (data.businesses ?? []).slice(0, 20)) {
+        const name = String(b.name ?? '').trim()
+        const fp   = name.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 14)
+        if (!name || seen.has(fp)) continue
+        seen.add(fp)
+
+        const loc    = b.location as Record<string, unknown> ?? {}
+        const coords = b.coordinates as Record<string, number> ?? {}
+        const addr   = String(loc.address1 ?? '')
+        const city   = String(loc.city ?? '')
+        const state  = String(loc.state ?? '')
+        const zip    = String(loc.zip_code ?? '').slice(0, 5)
+        const phone  = String(b.phone ?? b.display_phone ?? '').replace(/[^\d()\-+\s]/g, '').trim()
+        const rLat   = coords.latitude  ?? lat
+        const rLng   = coords.longitude ?? lng
+        const dist   = distanceMiles(lat, lng, rLat, rLng)
+        const { score, label, reasons } = scoreAffordability(name, {})
+        if (score < 40) continue
+
+        all.push({
+          id: `yelp-${String(b.id ?? fp)}`,
+          name, address: addr, city, state, zip, phone,
+          distance: dist.toFixed(1),
+          services: guessServices(name),
+          accepting: true,
+          free: score >= 70, sliding_scale: score >= 45, isFreeOrDiscounted: score >= 45,
+          affordability_score: score, affordability_label: label,
+          affordability_reasons: [...reasons, 'Yelp'],
+          url: String(b.url ?? ''),
+          mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name} ${addr} ${city} ${state}`)}`,
+          hours: '', openNow: (b.hours as Record<string, unknown>[] | undefined)?.[0]
+            ? null : null,
+          type: 'Clinic', lat: rLat, lng: rLng,
+        })
+      }
+    } catch { /* fail silently per term */ }
+  }
+
+  console.log('[NEXUS] Yelp → %d clinics', all.length)
+  return all
+}
+
+// ── FindHelp (211) — free tier, requires FINDHELP_API_KEY ────────────────────
+// Get a free key at https://company.findhelp.com/api — takes ~3 business days.
+// This is the largest social-services database in the US (~1.5M records),
+// covering mobile clinics, faith-based free clinics, sliding-scale practices,
+// dental days, and many FQHCs not in the HRSA database.
+async function fetchFindHelpClinics(lat: number, lng: number, zip: string, radiusMiles: number): Promise<Clinic[]> {
+  const apiKey = process.env.FINDHELP_API_KEY
+  if (!apiKey) return []
+
+  // FindHelp uses category codes — HLTH covers all health-related programs
+  // subs: HLTH-MNTL (mental health), HLTH-DNTL (dental), HLTH-MDCN (medical)
+  const categories = ['HLTH-MDCN', 'HLTH-MNTL', 'HLTH-DNTL', 'HLTH']
+  const seen  = new Set<string>()
+  const all: Clinic[] = []
+
+  for (const category of categories) {
+    try {
+      // FindHelp REST API v2 — search by lat/lng + radius + category
+      const url = new URL('https://api.findhelp.com/v2/programs')
+      url.searchParams.set('lat',      String(lat))
+      url.searchParams.set('lng',      String(lng))
+      url.searchParams.set('postal',   zip)
+      url.searchParams.set('distance', String(radiusMiles))
+      url.searchParams.set('category', category)
+      url.searchParams.set('cost',     'free,reduced_fee,sliding_scale') // filter to affordable only
+      url.searchParams.set('per_page', '50')
+
+      const res = await fetch(url.toString(), {
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Accept':        'application/json',
+          'User-Agent':    'NEXUS-Healthcare/1.0 contact@nexus.health',
+        },
+        next: { revalidate: 3600 },
+        signal: AbortSignal.timeout(8000),
+      })
+      if (!res.ok) {
+        console.warn('[NEXUS] FindHelp %s → HTTP %d', category, res.status)
+        continue
+      }
+
+      const raw = await res.json() as Record<string, unknown>
+
+      // FindHelp wraps results in { programs: [...] } or { data: [...] }
+      const programs: Record<string, unknown>[] =
+        (Array.isArray(raw) ? raw :
+         Array.isArray(raw.programs) ? raw.programs as Record<string, unknown>[] :
+         Array.isArray(raw.data)     ? raw.data     as Record<string, unknown>[] :
+         [])
+
+      for (const p of programs) {
+        // Program name — may be nested under agency or at top level
+        const agency  = p.agency  as Record<string, unknown> | undefined
+        const name    = String(p.program_name ?? p.name ?? agency?.name ?? '').trim()
+        if (!name || !isOrganization(name)) continue
+
+        const fp = name.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 18)
+        if (seen.has(fp)) continue
+        seen.add(fp)
+
+        // Location — may be nested
+        const loc     = (p.location ?? p.address ?? {}) as Record<string, unknown>
+        const addr    = String(loc.address1 ?? loc.street ?? p.street_address ?? '')
+        const city    = String(loc.city     ?? p.city    ?? '')
+        const state   = String(loc.state    ?? p.state   ?? '')
+        const pZip    = String(loc.zip      ?? loc.postal_code ?? p.zip_code ?? zip).slice(0, 5)
+        const phone   = String(p.phone ?? agency?.phone ?? '').replace(/[^\d()\-+\s]/g, '').trim()
+        const website = String(p.url ?? p.website ?? agency?.url ?? '')
+
+        const rLat  = parseFloat(String(loc.latitude  ?? p.latitude  ?? lat))  || lat
+        const rLng  = parseFloat(String(loc.longitude ?? p.longitude ?? lng))  || lng
+        const dist  = distanceMiles(lat, lng, rLat, rLng)
+        if (dist > radiusMiles * 1.1) continue   // small buffer for geo imprecision
+
+        // Cost / affordability
+        const costStr  = String(p.cost ?? p.fees ?? p.payment_options ?? '').toLowerCase()
+        const isFree   = /free|no cost|no charge/i.test(costStr)
+        const isSlide  = /sliding|reduced|income/i.test(costStr)
+        const { score, label, reasons } = scoreAffordability(name, {})
+        const adjScore = isFree ? Math.max(score, 80) : isSlide ? Math.max(score, 65) : score
+
+        // Hours
+        const hours = String(p.hours ?? p.schedule ?? '')
+
+        // Services — infer from category + name
+        const services = guessServices(name)
+        if (/mental|behav|psych|counsel/i.test(category)) services.unshift('Mental health')
+        if (/dental|dntl/i.test(category)) services.unshift('Dental')
+
+        all.push({
+          id: `findhelp-${String(p.id ?? p.program_id ?? fp).replace(/\./g, '')}`,
+          name,
+          address: addr, city, state, zip: pZip, phone,
+          distance: dist.toFixed(1),
+          services: [...new Set(services)],
+          accepting: true,
+          free: isFree || adjScore >= 70,
+          sliding_scale: isSlide || adjScore >= 55,
+          isFreeOrDiscounted: adjScore >= 55,
+          affordability_score: adjScore,
+          affordability_label: label,
+          affordability_reasons: [...reasons, '211 / FindHelp directory', ...(isFree ? ['free program'] : isSlide ? ['sliding scale'] : [])],
+          url: website,
+          mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name} ${addr} ${city} ${state}`)}`,
+          hours,
+          openNow: null,
+          type: /mental|behav|psych/i.test(category) ? 'Mental Health Center'
+               : /dental/i.test(category) ? 'Dental Clinic'
+               : 'Community Health',
+          lat: rLat,
+          lng: rLng,
+        })
+      }
+    } catch (e) {
+      console.warn('[NEXUS] FindHelp %s error: %s', category, String(e).slice(0, 80))
+    }
+  }
+
+  console.log('[NEXUS] FindHelp/211 → %d programs', all.length)
+  return all.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
+}
+
+// ── VA Facility Locator — free, instant key at developer.va.gov ───────────────
+// Covers VA medical centers, community clinics, and Vet Centers.
+// Many VA community care sites also serve low-income non-veterans.
+// Key is free and emailed instantly — no review, no payment.
+async function fetchVAClinics(lat: number, lng: number, radiusMiles: number): Promise<Clinic[]> {
+  const apiKey = process.env.VA_API_KEY
+  if (!apiKey) return []
+
+  try {
+    // VA Facilities API v1 — health facilities within radius
+    const url = new URL('https://api.va.gov/services/va_facilities/v1/facilities')
+    url.searchParams.set('lat',      String(lat))
+    url.searchParams.set('long',     String(lng))   // VA uses "long" not "lng"
+    url.searchParams.set('radius',   String(Math.min(radiusMiles, 50)))
+    url.searchParams.set('type',     'health')
+    url.searchParams.set('per_page', '50')
+
+    const res = await fetch(url.toString(), {
+      headers: {
+        'apikey':     apiKey,
+        'Accept':     'application/json',
+        'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health',
+      },
+      next: { revalidate: 86400 },
+      signal: AbortSignal.timeout(8000),
+    })
+    if (!res.ok) {
+      console.warn('[NEXUS] VA Facilities API → HTTP %d', res.status)
+      return []
+    }
+
+    const raw = await res.json() as { data?: Record<string, unknown>[] }
+    const facilities = raw?.data ?? []
+    if (!Array.isArray(facilities) || facilities.length === 0) return []
+
+    const clinics: Clinic[] = facilities
+      .map((f): Clinic | null => {
+        const attrs   = f.attributes as Record<string, unknown> | undefined
+        if (!attrs) return null
+
+        const name    = String(attrs.name ?? '').trim()
+        if (!name) return null
+
+        const physAddr = (attrs.address as Record<string, unknown>)?.physical as Record<string, string> | undefined
+        const addr    = String(physAddr?.address_1 ?? physAddr?.address1 ?? '')
+        const city    = String(physAddr?.city  ?? '')
+        const state   = String(physAddr?.state ?? '')
+        const zip     = String(physAddr?.zip   ?? '').slice(0, 5)
+
+        const phoneObj = attrs.phone as Record<string, string> | undefined
+        const phone   = String(phoneObj?.main ?? phoneObj?.mental_health ?? '').replace(/[^\d()\-+\s]/g, '').trim()
+
+        const rLat    = parseFloat(String(attrs.lat  ?? attrs.latitude  ?? lat)) || lat
+        const rLng    = parseFloat(String(attrs.long ?? attrs.longitude ?? lng)) || lng
+        const dist    = distanceMiles(lat, lng, rLat, rLng)
+
+        const website = String(attrs.website ?? attrs.url ?? '')
+
+        // Build hours string from VA's day-keyed object
+        const hoursObj = attrs.hours as Record<string, string> | undefined
+        const hours    = hoursObj
+          ? Object.entries(hoursObj)
+              .filter(([, v]) => v && v !== 'Closed')
+              .map(([k, v]) => `${k.slice(0, 3)}: ${v}`)
+              .join(' | ')
+          : ''
+
+        // VA services list
+        const svcGroups = (attrs.services as Record<string, unknown> | undefined)?.health
+        const vaServices: string[] = Array.isArray(svcGroups)
+          ? svcGroups.map((s: unknown) => String((s as Record<string, string>).name ?? s)).filter(Boolean)
+          : []
+
+        const services = guessServices(name)
+        if (vaServices.some(s => /mental|psych|behav/i.test(s))) services.push('Mental health')
+        if (vaServices.some(s => /dental/i.test(s)))             services.push('Dental')
+        if (vaServices.some(s => /women/i.test(s)))              services.push("Women's health")
+
+        const facilityType = String(attrs.facility_type ?? f.type ?? '')
+        const isVetCenter  = /vet_center/i.test(facilityType)
+
+        return {
+          id: `va-${String(f.id ?? name.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 14))}`,
+          name,
+          address: addr, city, state, zip, phone,
+          distance: dist.toFixed(1),
+          services: [...new Set(services)],
+          accepting: true,
+          free: true,       // VA care is free or very low cost for eligible veterans
+          sliding_scale: true,
+          isFreeOrDiscounted: true,
+          affordability_score: 85,
+          affordability_label: 'likely-free',
+          affordability_reasons: [
+            isVetCenter ? 'VA Vet Center — free readjustment counseling' : 'VA Health Facility — free/low-cost for veterans',
+            'Federal VA system',
+          ],
+          url: website,
+          mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name} ${addr} ${city} ${state}`)}`,
+          hours,
+          openNow: null,
+          type: isVetCenter ? 'Vet Center' : 'VA Clinic',
+          lat: rLat,
+          lng: rLng,
+        }
+      })
+      .filter((c): c is Clinic => c !== null)
+      .sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
+
+    console.log('[NEXUS] VA Facilities → %d clinics', clinics.length)
+    return clinics
+  } catch (e) {
+    console.warn('[NEXUS] VA Facilities error: %s', String(e).slice(0, 80))
+    return []
+  }
+}
+
+// ── Cache search results (fire-and-forget, non-blocking) ─────────────────────
+async function cacheClinicsBg(clinics: Clinic[], source: string): Promise<void> {
+  if (!sbUrl || clinics.length === 0) return
+  try {
+    const rows = clinics.map(c => ({
+      clinic_id:   c.id,
+      clinic_data: c as unknown as Record<string, unknown>,
+      source,
+    }))
+    await supabase
+      .from('clinic_cache')
+      .upsert(rows, { onConflict: 'clinic_id', ignoreDuplicates: false })
+  } catch {
+    // Background cache — never let this block or throw
+  }
+}
+
+// ── Single clinic lookup by ID ────────────────────────────────────────────────
+async function lookupClinicById(id: string): Promise<Clinic | null> {
+  if (!sbUrl) return null
+  try {
+    // 1. Get base clinic from cache
+    const { data: cacheRow } = await supabase
+      .from('clinic_cache')
+      .select('clinic_data, source')
+      .eq('clinic_id', id)
+      .single()
+
+    if (!cacheRow?.clinic_data) return null
+    const clinic = cacheRow.clinic_data as Clinic
+
+    // 2. Merge any admin-approved overrides (cal_link, corrected hours, etc.)
+    const { data: override } = await supabase
+      .from('clinic_overrides')
+      .select('cal_link, phone, hours')
+      .eq('clinic_id', id)
+      .single()
+
+    if (override) {
+      if (override.cal_link) clinic.cal_link = override.cal_link
+      if (override.phone)    clinic.phone    = override.phone
+      if (override.hours)    clinic.hours    = override.hours
+    }
+
+    return clinic
+  } catch {
+    return null
+  }
 }
 
 // ── Main GET handler ───────────────────────────────────────────────────────────
 export async function GET(req: NextRequest) {
+  // Rate-limit: 60 clinic searches per minute per IP
+  const rl = rateLimit(req as unknown as Request, { limit: 60, windowMs: 60_000, namespace: 'clinics' })
+  if (!rl.ok) {
+    return NextResponse.json({ error: 'Too many requests. Please wait.' }, { status: 429, headers: rl.headers })
+  }
+
   const { searchParams } = new URL(req.url)
+
+  // ── Single clinic lookup by ID (for clinic detail page) ───────────────────
+  const clinicId = searchParams.get('id')
+  if (clinicId) {
+    const clinic = await lookupClinicById(clinicId)
+    if (!clinic) return NextResponse.json({ clinic: null, error: 'Not found' }, { status: 404 })
+    return NextResponse.json({ clinic })
+  }
+
   let rawLoc = searchParams.get('location') || searchParams.get('zip') || ''
-  const radiusMiles = Math.min(parseInt(searchParams.get('radius') || '25'), 50)
+  const radiusMiles = Math.min(parseInt(searchParams.get('radius') || '25'), 75)
   const specialty = searchParams.get('specialty') || 'all'
 
   try { rawLoc = decodeURIComponent(rawLoc) } catch { /* already decoded */ }
@@ -618,22 +1141,58 @@ export async function GET(req: NextRequest) {
   console.log('[NEXUS] Geocoded "%s" → lat=%.4f lng=%.4f zip=%s state=%s', rawLoc, geo.lat, geo.lng, zip, detectedState)
 
   // 2. Run all sources in parallel
-  const [hrsaClinics, nafcClinics, osmClinics, googleClinics, stateClinics] = await Promise.all([
+  let [hrsaClinics, nafcClinics, osmClinics, googleClinics, stateClinics, cmsClinics, samhsaClinics, yelpClinics, findHelpClinics, vaClinics] = await Promise.all([
     fetchHRSAClinics(zip, radiusMiles),
     Promise.resolve(fetchNAFCClinics(geo.lat, geo.lng, radiusMiles)),
     queryOverpass(geo.lat, geo.lng, radiusMiles),
     fetchGooglePlacesClinics(geo.lat, geo.lng, radiusMiles),
     detectedState ? fetchStateHealthClinics(geo.lat, geo.lng, detectedState, radiusMiles) : Promise.resolve([]),
+    detectedState ? fetchCMSRuralHealthClinics(geo.lat, geo.lng, detectedState, radiusMiles) : Promise.resolve([]),
+    fetchSAMHSAClinics(geo.lat, geo.lng, radiusMiles),
+    fetchYelpClinics(geo.lat, geo.lng, radiusMiles),
+    fetchFindHelpClinics(geo.lat, geo.lng, zip, radiusMiles),
+    fetchVAClinics(geo.lat, geo.lng, radiusMiles),
   ])
 
-  console.log('[NEXUS] Sources: HRSA=%d NAFC=%d OSM=%d Google=%d State=%d',
-    hrsaClinics.length, nafcClinics.length, osmClinics.length, googleClinics.length, stateClinics.length)
+  console.log('[NEXUS] Sources: HRSA=%d NAFC=%d OSM=%d Google=%d State=%d CMS=%d SAMHSA=%d Yelp=%d FindHelp=%d VA=%d',
+    hrsaClinics.length, nafcClinics.length, osmClinics.length, googleClinics.length,
+    stateClinics.length, cmsClinics.length, samhsaClinics.length, yelpClinics.length,
+    findHelpClinics.length, vaClinics.length)
 
-  // 3. Deduplicate: build fingerprint set starting with HRSA (most authoritative)
+  // 2b. Auto-expand radius if results are sparse (rural / underserved areas)
+  const initialCount = hrsaClinics.length + nafcClinics.length + osmClinics.length + stateClinics.length + cmsClinics.length + samhsaClinics.length + findHelpClinics.length + vaClinics.length
+  if (initialCount < 8 && radiusMiles <= 40) {
+    const expandedRadius = Math.min(radiusMiles * 2, 75)
+    console.log('[NEXUS] Sparse results (%d) — auto-expanding to %d miles', initialCount, expandedRadius)
+    const [h2, n2, o2, c2, s2, y2, f2, v2] = await Promise.all([
+      fetchHRSAClinics(zip, expandedRadius),
+      Promise.resolve(fetchNAFCClinics(geo.lat, geo.lng, expandedRadius)),
+      queryOverpass(geo.lat, geo.lng, expandedRadius),
+      detectedState ? fetchCMSRuralHealthClinics(geo.lat, geo.lng, detectedState, expandedRadius) : Promise.resolve([]),
+      fetchSAMHSAClinics(geo.lat, geo.lng, expandedRadius),
+      fetchYelpClinics(geo.lat, geo.lng, expandedRadius),
+      fetchFindHelpClinics(geo.lat, geo.lng, zip, expandedRadius),
+      fetchVAClinics(geo.lat, geo.lng, expandedRadius),
+    ])
+    hrsaClinics     = [...hrsaClinics,     ...h2]
+    nafcClinics     = [...nafcClinics,     ...n2]
+    osmClinics      = [...osmClinics,      ...o2]
+    cmsClinics      = [...cmsClinics,      ...c2]
+    samhsaClinics   = [...samhsaClinics,   ...s2]
+    yelpClinics     = [...yelpClinics,     ...y2]
+    findHelpClinics = [...findHelpClinics, ...f2]
+    vaClinics       = [...vaClinics,       ...v2]
+    console.log('[NEXUS] After expansion: HRSA=%d NAFC=%d OSM=%d CMS=%d SAMHSA=%d Yelp=%d FindHelp=%d VA=%d',
+      hrsaClinics.length, nafcClinics.length, osmClinics.length, cmsClinics.length,
+      samhsaClinics.length, yelpClinics.length, findHelpClinics.length, vaClinics.length)
+  }
+
+  // 3. Deduplicate: fingerprint = name(18 chars) + zip so same-name different-location clinics
+  //    are NOT collapsed. Priority: HRSA > NAFC > State > CMS > Google > OSM
   const seen = new Set<string>()
   const addIfNew = (clinics: Clinic[], out: Clinic[]) => {
     for (const c of clinics) {
-      const fp = fingerprint(c.name)
+      const fp = fingerprint(c.name, c.zip)
       if (!seen.has(fp)) {
         seen.add(fp)
         out.push(c)
@@ -642,12 +1201,17 @@ export async function GET(req: NextRequest) {
   }
 
   const merged: Clinic[] = []
-  addIfNew(hrsaClinics, merged)   // 1st: HRSA (federally verified)
-  addIfNew(nafcClinics, merged)   // 2nd: NAFC (volunteer free clinics)
-  addIfNew(stateClinics, merged)  // 3rd: State health dept
-  addIfNew(googleClinics, merged) // 4th: Google Places (keyed, optional)
-  // OSM: supplemental only if score ≥ 55
-  addIfNew(osmClinics.filter(c => c.affordability_score >= 55), merged)
+  addIfNew(hrsaClinics,    merged) // 1st: HRSA FQHCs (federally verified)
+  addIfNew(nafcClinics,    merged) // 2nd: NAFC free clinics
+  addIfNew(vaClinics,      merged) // 3rd: VA facilities (free/low-cost for veterans)
+  addIfNew(findHelpClinics,merged) // 4th: 211 / FindHelp (largest social-services DB)
+  addIfNew(stateClinics,   merged) // 5th: State health dept
+  addIfNew(cmsClinics,     merged) // 6th: CMS Rural Health Clinics
+  addIfNew(samhsaClinics,  merged) // 7th: SAMHSA treatment centers (free federal API)
+  addIfNew(yelpClinics,    merged) // 8th: Yelp (free tier, optional — requires YELP_API_KEY)
+  addIfNew(googleClinics,  merged) // 9th: Google Places (keyed, optional)
+  // OSM: include if score ≥ 40 (lowered from 55 — catches more legitimate clinics)
+  addIfNew(osmClinics.filter(c => c.affordability_score >= 40), merged)
 
   // 4. Apply specialty filter
   const filtered = specialty && specialty !== 'all'
@@ -662,20 +1226,29 @@ export async function GET(req: NextRequest) {
     hrsaClinics.length > 0 && nafcClinics.length > 0 ? 'hrsa+nafc' :
     hrsaClinics.length > 0 ? 'hrsa' :
     nafcClinics.length > 0 ? 'nafc' :
+    samhsaClinics.length > 0 ? 'samhsa' :
     osmClinics.length > 0 ? 'osm' : 'empty'
 
+  // Background: cache returned clinics so the detail page can look them up by ID
+  void cacheClinicsBg(finalList.slice(0, 150), sourceLabel)
+
   return NextResponse.json({
-    clinics: finalList.slice(0, 100),
+    clinics: finalList.slice(0, 150),
     source: sourceLabel,
     total: finalList.length,
     specialty_matched: !specialtyMissed,
     location: { lat: geo.lat, lng: geo.lng, zip: geo.zip, formatted: geo.formatted },
     sources: {
-      hrsa: hrsaClinics.length,
-      nafc: nafcClinics.length,
-      state: stateClinics.length,
-      google: googleClinics.length,
-      osm: osmClinics.length,
+      hrsa:     hrsaClinics.length,
+      nafc:     nafcClinics.length,
+      va:       vaClinics.length,
+      findhelp: findHelpClinics.length,
+      state:    stateClinics.length,
+      cms:      cmsClinics.length,
+      samhsa:   samhsaClinics.length,
+      yelp:     yelpClinics.length,
+      google:   googleClinics.length,
+      osm:      osmClinics.length,
     },
   })
 }

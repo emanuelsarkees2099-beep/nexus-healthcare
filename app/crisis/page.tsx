@@ -3,7 +3,9 @@ import React, { useState, useEffect } from 'react'
 import AppShell from '@/components/AppShell'
 import JsonLd, { medicalPageSchema, breadcrumbSchema } from '@/components/JsonLd'
 import Link from 'next/link'
-import { Phone, MapPin, Heart, AlertTriangle, ChevronRight, Clock, Navigation, Mic } from 'lucide-react'
+import { Phone, MapPin, Heart, AlertTriangle, ChevronRight, Clock, Navigation } from 'lucide-react'
+import QuickExit from '@/components/QuickExit'
+import DotGrid from '@/components/DotGrid'
 
 const CRISIS_RESOURCES = [
   {
@@ -86,10 +88,41 @@ function PulsingDot({ color }: { color: string }) {
   )
 }
 
+type GeoState = {
+  loading: boolean
+  lat: number | null
+  lon: number | null
+  location: string | null  // "City, State"
+  denied: boolean
+}
+
 export default function CrisisPage() {
   const [breathePhase, setBreathePhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale')
   const [breatheCount, setBreatheCount] = useState(0)
   const [showBreathe, setShowBreathe] = useState(false)
+
+  /* ── GPS-based nearest center detection ── */
+  const [geo, setGeo] = useState<GeoState>({ loading: false, lat: null, lon: null, location: null, denied: false })
+
+  useEffect(() => {
+    if (!navigator.geolocation) return
+    setGeo(g => ({ ...g, loading: true }))
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude: lat, longitude: lon } = pos.coords
+        try {
+          const res = await fetch(`/api/geocode?lat=${lat}&lon=${lon}`)
+          const data = await res.json()
+          const location = data.city && data.state ? `${data.city}, ${data.state}` : null
+          setGeo({ loading: false, lat, lon, location, denied: false })
+        } catch {
+          setGeo({ loading: false, lat, lon, location: null, denied: false })
+        }
+      },
+      () => setGeo({ loading: false, lat: null, lon: null, location: null, denied: true }),
+      { timeout: 8000, enableHighAccuracy: false }
+    )
+  }, [])
 
   useEffect(() => {
     if (!showBreathe) return
@@ -117,6 +150,7 @@ export default function CrisisPage() {
 
   return (
     <AppShell>
+      <QuickExit />
       {/* 5.9 — Structured Data */}
       <JsonLd
         schema={medicalPageSchema(
@@ -136,6 +170,7 @@ export default function CrisisPage() {
       <style>{`
         @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
         @keyframes breathe-pulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
+        @keyframes spin { to { transform: rotate(360deg); } }
         .crisis-call-btn:hover { transform: scale(1.03) !important; }
         .crisis-resource:hover { border-color: rgba(255,255,255,0.2) !important; background: rgba(255,255,255,0.04) !important; }
       `}</style>
@@ -147,6 +182,7 @@ export default function CrisisPage() {
         padding: '80px 24px 60px', position: 'relative', overflow: 'hidden',
         background: 'radial-gradient(ellipse 80% 60% at 50% 10%, rgba(248,113,113,0.06) 0%, transparent 70%)',
       }}>
+        <DotGrid opacity={0.35} />
         {/* Ambient red ring */}
         <div aria-hidden="true" style={{
           position: 'absolute', top: '20%', left: '50%', transform: 'translate(-50%,-50%)',
@@ -300,19 +336,83 @@ export default function CrisisPage() {
         </div>
       </section>
 
-      {/* Nearest ERs */}
+      {/* Nearest Centers — GPS-aware */}
       <section style={{ padding: '0 24px 80px' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+
+          {/* Location detection banner */}
           <div style={{
-            display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px',
+            display: 'flex', alignItems: 'center', gap: '10px',
+            padding: '12px 18px', borderRadius: '12px', marginBottom: '28px',
+            background: geo.loading
+              ? 'rgba(255,255,255,0.03)'
+              : geo.location
+              ? 'rgba(74,144,217,0.05)'
+              : 'rgba(255,255,255,0.02)',
+            border: `1px solid ${geo.location ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.07)'}`,
           }}>
+            {geo.loading ? (
+              <>
+                <Navigation size={13} color="rgba(255,255,255,0.4)" style={{ flexShrink: 0, animation: 'spin 1.5s linear infinite' }} />
+                <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>
+                  Detecting your location to find nearest centers…
+                </span>
+              </>
+            ) : geo.location ? (
+              <>
+                <Navigation size={13} color="var(--accent)" style={{ flexShrink: 0 }} />
+                <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', fontFamily: 'var(--font-inter)' }}>
+                  Your location: <strong style={{ color: '#eef4f5' }}>{geo.location}</strong>
+                </span>
+                <div style={{ marginLeft: 'auto', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  <a
+                    href={`https://findtreatment.gov/locator?lat=${geo.lat}&lng=${geo.lon}&sType=4&distance=25`}
+                    target="_blank" rel="noopener noreferrer"
+                    style={{ padding: '5px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 600, background: 'rgba(129,140,248,0.1)', border: '1px solid rgba(129,140,248,0.25)', color: '#818cf8', textDecoration: 'none', whiteSpace: 'nowrap' }}
+                  >
+                    SAMHSA Treatment Locator →
+                  </a>
+                  <a
+                    href={`https://www.google.com/maps/search/mental+health+crisis+center/@${geo.lat},${geo.lon},13z`}
+                    target="_blank" rel="noopener noreferrer"
+                    style={{ padding: '5px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 600, background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)', color: 'var(--accent)', textDecoration: 'none', whiteSpace: 'nowrap' }}
+                  >
+                    Maps: Crisis centers →
+                  </a>
+                </div>
+              </>
+            ) : geo.denied ? (
+              <>
+                <Navigation size={13} color="rgba(255,255,255,0.25)" style={{ flexShrink: 0 }} />
+                <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>
+                  Location access denied. Showing general resources.{' '}
+                  <a href="https://findtreatment.gov" target="_blank" rel="noopener noreferrer"
+                    style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>
+                    Search SAMHSA Locator →
+                  </a>
+                </span>
+              </>
+            ) : (
+              <>
+                <Navigation size={13} color="rgba(255,255,255,0.25)" style={{ flexShrink: 0 }} />
+                <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>
+                  Allow location access above to find the 3 nearest in-person crisis centers.{' '}
+                  <a href="https://www.211.org" target="_blank" rel="noopener noreferrer"
+                    style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>
+                    Or dial 211 →
+                  </a>
+                </span>
+              </>
+            )}
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
             {/* Emergency Rooms */}
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                 <div style={{
                   width: '32px', height: '32px', borderRadius: '8px',
-                  background: 'rgba(248,113,113,0.1)',
-                  border: '1px solid rgba(248,113,113,0.25)',
+                  background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
                   <AlertTriangle size={15} color="#f87171" />
@@ -320,27 +420,46 @@ export default function CrisisPage() {
                 <h3 style={{ fontSize: '16px', fontWeight: 700 }}>Nearest Emergency Rooms</h3>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {NEARBY_ER.map(er => (
-                  <div key={er.name} style={{
-                    padding: '16px 18px', borderRadius: '12px',
-                    background: 'rgba(248,113,113,0.04)',
-                    border: '1px solid rgba(248,113,113,0.15)',
-                    display: 'flex', flexDirection: 'column', gap: '6px',
-                  }}>
-                    <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5' }}>{er.name}</div>
-                    <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <Navigation size={10} /> {er.dist}
-                      </span>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <Clock size={10} /> {er.wait} wait
-                      </span>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <PulsingDot color="#60a5fa" /> Open now
-                      </span>
+                {geo.lat ? (
+                  /* GPS available — link to real map search */
+                  <a
+                    href={`https://www.google.com/maps/search/emergency+room/@${geo.lat},${geo.lon},13z`}
+                    target="_blank" rel="noopener noreferrer"
+                    style={{
+                      padding: '18px 20px', borderRadius: '14px',
+                      background: 'rgba(248,113,113,0.04)', border: '1px solid rgba(248,113,113,0.18)',
+                      textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '14px',
+                    }}
+                  >
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <MapPin size={16} color="#f87171" />
                     </div>
-                  </div>
-                ))}
+                    <div>
+                      <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5', marginBottom: '3px' }}>Emergency Rooms Near You</div>
+                      <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>
+                        {geo.location ? `Search near ${geo.location}` : 'Open Google Maps'} · All ERs must treat you (EMTALA)
+                      </div>
+                    </div>
+                  </a>
+                ) : (
+                  NEARBY_ER.map(er => (
+                    <div key={er.name} style={{
+                      padding: '16px 18px', borderRadius: '12px',
+                      background: 'rgba(248,113,113,0.04)', border: '1px solid rgba(248,113,113,0.15)',
+                      display: 'flex', flexDirection: 'column', gap: '6px',
+                    }}>
+                      <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5' }}>{er.name}</div>
+                      <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Navigation size={10} /> {er.dist}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={10} /> {er.wait} wait</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><PulsingDot color="#60a5fa" /> Open now</span>
+                      </div>
+                    </div>
+                  ))
+                )}
+                <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.2)', margin: '4px 0 0', lineHeight: 1.5 }}>
+                  All ERs are required by federal law (EMTALA) to stabilize emergencies regardless of insurance.
+                </p>
               </div>
             </div>
 
@@ -349,8 +468,7 @@ export default function CrisisPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                 <div style={{
                   width: '32px', height: '32px', borderRadius: '8px',
-                  background: 'rgba(129,140,248,0.1)',
-                  border: '1px solid rgba(129,140,248,0.25)',
+                  background: 'rgba(129,140,248,0.1)', border: '1px solid rgba(129,140,248,0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
                   <Heart size={15} color="#818cf8" />
@@ -358,24 +476,60 @@ export default function CrisisPage() {
                 <h3 style={{ fontSize: '16px', fontWeight: 700 }}>Mental Health Walk-ins</h3>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {NEARBY_MH.map(mh => (
-                  <div key={mh.name} style={{
-                    padding: '16px 18px', borderRadius: '12px',
-                    background: 'rgba(129,140,248,0.04)',
-                    border: '1px solid rgba(129,140,248,0.15)',
-                    display: 'flex', flexDirection: 'column', gap: '6px',
-                  }}>
-                    <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5' }}>{mh.name}</div>
-                    <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <Navigation size={10} /> {mh.dist}
-                      </span>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <Clock size={10} /> {mh.hours}
-                      </span>
+                {geo.lat ? (
+                  /* GPS available — link to SAMHSA + map */
+                  <>
+                    <a
+                      href={`https://findtreatment.gov/locator?lat=${geo.lat}&lng=${geo.lon}&sType=4&distance=25`}
+                      target="_blank" rel="noopener noreferrer"
+                      style={{
+                        padding: '18px 20px', borderRadius: '14px',
+                        background: 'rgba(129,140,248,0.04)', border: '1px solid rgba(129,140,248,0.18)',
+                        textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '14px',
+                      }}
+                    >
+                      <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(129,140,248,0.1)', border: '1px solid rgba(129,140,248,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <Heart size={16} color="#818cf8" />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5', marginBottom: '3px' }}>SAMHSA Mental Health Locator</div>
+                        <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>
+                          {geo.location ? `Crisis centers near ${geo.location}` : 'Find in-person crisis centers'} · Free · No insurance
+                        </div>
+                      </div>
+                    </a>
+                    <a
+                      href={`https://www.google.com/maps/search/mental+health+crisis+center/@${geo.lat},${geo.lon},13z`}
+                      target="_blank" rel="noopener noreferrer"
+                      style={{
+                        padding: '14px 18px', borderRadius: '12px',
+                        background: 'rgba(129,140,248,0.02)', border: '1px solid rgba(129,140,248,0.12)',
+                        textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px',
+                        fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.6)',
+                      }}
+                    >
+                      <MapPin size={13} color="#818cf8" />
+                      Also search Google Maps for crisis centers near you →
+                    </a>
+                  </>
+                ) : (
+                  NEARBY_MH.map(mh => (
+                    <div key={mh.name} style={{
+                      padding: '16px 18px', borderRadius: '12px',
+                      background: 'rgba(129,140,248,0.04)', border: '1px solid rgba(129,140,248,0.15)',
+                      display: 'flex', flexDirection: 'column', gap: '6px',
+                    }}>
+                      <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5' }}>{mh.name}</div>
+                      <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Navigation size={10} /> {mh.dist}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={10} /> {mh.hours}</span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
+                <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.2)', margin: '4px 0 0', lineHeight: 1.5 }}>
+                  Text <strong>HOME to 741741</strong> (Crisis Text Line) for 24/7 support while you locate in-person care.
+                </p>
               </div>
             </div>
           </div>
