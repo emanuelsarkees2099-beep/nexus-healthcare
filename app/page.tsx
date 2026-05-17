@@ -1,15 +1,6 @@
 import dynamic from 'next/dynamic'
 import Footer from '@/components/Footer'
-
-/* ── Browser-API-only: must skip SSR ───────────────────────────────────
-   These components use window / document / navigator / canvas / WebGL
-   at top-level and will crash if rendered on the server.
-   ─────────────────────────────────────────────────────────────────── */
-const BackgroundCanvas  = dynamic(() => import('@/components/BackgroundCanvas'),  { ssr: false })
-const ScrollProgress    = dynamic(() => import('@/components/ScrollProgress'),    { ssr: false })
-const FloatingCTA       = dynamic(() => import('@/components/FloatingCTA'),       { ssr: false })
-const ExitIntent        = dynamic(() => import('@/components/ExitIntent'),        { ssr: false })
-const CrisisButton      = dynamic(() => import('@/components/CrisisButton'),      { ssr: false })
+import HomeClientShell from '@/components/HomeClientShell'
 
 /* ── Nav + Hero — code-split, SSR-safe ── */
 const Nav               = dynamic(() => import('@/components/Nav'))
@@ -33,12 +24,8 @@ export default function Home() {
         Skip to main content
       </a>
 
-      {/* Page-level background + chrome (no SSR) */}
-      <BackgroundCanvas />
-      <ScrollProgress />
-      <FloatingCTA />
-      <ExitIntent />
-      <CrisisButton />
+      {/* Browser-only components (canvas, scroll, CTA, crisis) in client boundary */}
+      <HomeClientShell />
 
       {/* Navigation */}
       <Nav />
