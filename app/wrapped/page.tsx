@@ -81,9 +81,23 @@ function WrappedCard({ card, active, idx }: { card: Card; active: boolean; idx: 
 }
 
 export default function WrappedPage() {
-  const [started, setStarted] = useState(false)
-  const [cardIdx, setCardIdx] = useState(0)
-  const [counting, setCounting] = useState(false)
+  const [started,   setStarted]   = useState(false)
+  const [cardIdx,   setCardIdx]   = useState(0)
+  const [counting,  setCounting]  = useState(false)
+  const [shareCopied, setShareCopied] = useState(false)
+
+  const handleShare = async () => {
+    const text = `I helped ${WRAPPED_DATA.friendsHelped} people find free healthcare in ${WRAPPED_DATA.year} and saved $${WRAPPED_DATA.savedAmount.toLocaleString()} using NEXUS. Free healthcare finder — nexus.health`
+    if (navigator.share) {
+      try { await navigator.share({ title: `My ${WRAPPED_DATA.year} NEXUS Wrapped`, text, url: 'https://nexus.health/wrapped' }) } catch { /* cancelled */ }
+    } else {
+      try {
+        await navigator.clipboard.writeText(text + ' — nexus.health/wrapped')
+        setShareCopied(true)
+        setTimeout(() => setShareCopied(false), 2200)
+      } catch { /* ignore */ }
+    }
+  }
 
   const savings = useCounter(WRAPPED_DATA.savedAmount, 2000, counting)
   const total = useCounter(WRAPPED_DATA.totalSaved, 2500, counting)
@@ -337,51 +351,73 @@ export default function WrappedPage() {
         </div>
 
         {/* Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <button
-            onClick={() => setCardIdx(Math.max(0, cardIdx - 1))}
-            disabled={cardIdx === 0}
-            style={{
-              padding: '10px 20px', borderRadius: '100px',
-              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
-              color: cardIdx === 0 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.6)',
-              fontSize: '13px', cursor: cardIdx === 0 ? 'not-allowed' : 'pointer', fontFamily: 'inherit',
-            }}
-          >
-            ← Back
-          </button>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <button
+              onClick={() => setCardIdx(Math.max(0, cardIdx - 1))}
+              disabled={cardIdx === 0}
+              style={{
+                padding: '10px 20px', borderRadius: '100px',
+                background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+                color: cardIdx === 0 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.6)',
+                fontSize: '13px', cursor: cardIdx === 0 ? 'not-allowed' : 'pointer', fontFamily: 'inherit',
+              }}
+            >
+              ← Back
+            </button>
 
-          <div style={{ display: 'flex', gap: '6px' }}>
-            {cards.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCardIdx(i)}
-                style={{
-                  width: i === cardIdx ? '20px' : '6px', height: '6px',
-                  borderRadius: '100px', border: 'none', cursor: 'pointer',
-                  background: i === cardIdx ? '#818cf8' : 'rgba(255,255,255,0.2)',
-                  transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
-                  padding: 0,
-                }}
-              />
-            ))}
+            <div style={{ display: 'flex', gap: '6px' }}>
+              {cards.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCardIdx(i)}
+                  style={{
+                    width: i === cardIdx ? '20px' : '6px', height: '6px',
+                    borderRadius: '100px', border: 'none', cursor: 'pointer',
+                    background: i === cardIdx ? '#818cf8' : 'rgba(255,255,255,0.2)',
+                    transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
+                    padding: 0,
+                  }}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={() => {
+                if (cardIdx < cards.length - 1) setCardIdx(cardIdx + 1)
+              }}
+              disabled={cardIdx === cards.length - 1}
+              style={{
+                padding: '10px 20px', borderRadius: '100px',
+                background: cardIdx < cards.length - 1 ? 'rgba(129,140,248,0.12)' : 'rgba(255,255,255,0.06)',
+                border: `1px solid ${cardIdx < cards.length - 1 ? 'rgba(129,140,248,0.3)' : 'rgba(255,255,255,0.1)'}`,
+                color: cardIdx < cards.length - 1 ? '#818cf8' : 'rgba(255,255,255,0.2)',
+                fontSize: '13px', cursor: cardIdx < cards.length - 1 ? 'pointer' : 'not-allowed', fontFamily: 'inherit',
+              }}
+            >
+              Next →
+            </button>
           </div>
 
-          <button
-            onClick={() => {
-              if (cardIdx < cards.length - 1) setCardIdx(cardIdx + 1)
-            }}
-            disabled={cardIdx === cards.length - 1}
-            style={{
-              padding: '10px 20px', borderRadius: '100px',
-              background: cardIdx < cards.length - 1 ? 'rgba(129,140,248,0.12)' : 'rgba(255,255,255,0.06)',
-              border: `1px solid ${cardIdx < cards.length - 1 ? 'rgba(129,140,248,0.3)' : 'rgba(255,255,255,0.1)'}`,
-              color: cardIdx < cards.length - 1 ? '#818cf8' : 'rgba(255,255,255,0.2)',
-              fontSize: '13px', cursor: cardIdx < cards.length - 1 ? 'pointer' : 'not-allowed', fontFamily: 'inherit',
-            }}
-          >
-            Next →
-          </button>
+          {/* #27 — Share Wrapped on last card */}
+          {cardIdx === cards.length - 1 && (
+            <button
+              onClick={handleShare}
+              style={{
+                padding: '12px 28px', borderRadius: '100px',
+                background: shareCopied ? 'rgba(74,222,128,0.12)' : 'rgba(129,140,248,0.14)',
+                border: `1px solid ${shareCopied ? 'rgba(74,222,128,0.3)' : 'rgba(129,140,248,0.35)'}`,
+                color: shareCopied ? '#4ade80' : '#818cf8',
+                fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
+                display: 'flex', alignItems: 'center', gap: '8px',
+                transition: 'all 0.2s',
+                animation: 'fadeSlideUp 0.4s cubic-bezier(0.16,1,0.3,1) both',
+              }}
+            >
+              <Share2 size={14} />
+              {shareCopied ? 'Copied! Share with friends ✓' : `Share your ${WRAPPED_DATA.year} Wrapped`}
+            </button>
+          )}
         </div>
       </div>
     </AppShell>

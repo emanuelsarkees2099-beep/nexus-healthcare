@@ -88,8 +88,31 @@ export default function TriagePage() {
   const [result, setResult] = useState<TriageResult | null>(null)
   const [showWork, setShowWork] = useState(false)
   const [isRealAI, setIsRealAI] = useState(false)
-  const inputRef = useRef<HTMLTextAreaElement>(null)
-  const timerIds = useRef<ReturnType<typeof setTimeout>[]>([])
+  const inputRef    = useRef<HTMLTextAreaElement>(null)
+  const timerIds    = useRef<ReturnType<typeof setTimeout>[]>([])
+  const runTriageRef = useRef<((input: string) => void) | null>(null)
+
+  /* #21 — Pre-fill from ?symptom= query param sent by Hero search bar.
+   * When users type a symptom in the hero and press search, they land here
+   * with the symptom pre-filled and auto-triaged.
+   *
+   * We use a ref (runTriageRef) so the one-time mount effect can call the
+   * latest runTriage without listing it as a dependency (which would cause
+   * the effect to re-fire on every render). */
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const sym    = params.get('symptom')
+    if (sym && sym.trim()) {
+      const trimmed = sym.trim()
+      setQuery(trimmed)
+      // Auto-run triage after a short delay to let the UI render first
+      const tid = setTimeout(() => {
+        runTriageRef.current?.(trimmed)
+      }, 400)
+      return () => clearTimeout(tid)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const SUGGESTIONS = [
     'chest hurts when I breathe, 2 days',
@@ -205,6 +228,9 @@ export default function TriagePage() {
     setResult(triageResult)
     setPhase('done')
   }, [])
+
+  /* Keep runTriageRef current so the ?symptom= mount effect can call it. */
+  useEffect(() => { runTriageRef.current = runTriage }, [runTriage])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()

@@ -263,6 +263,26 @@ export default function MedicationsPage() {
             ))}
           </div>
 
+          {/* #28 — Savings snapshot bar */}
+          <div style={{
+            display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '20px',
+            padding: '14px 18px', borderRadius: '12px',
+            background: 'rgba(52,211,153,0.04)', border: '1px solid rgba(52,211,153,0.15)',
+          }}>
+            {[
+              { val: filteredDrugs.filter(d => d.incomeLimit === 'Any').length.toString(), label: 'No income limit', color: '#34d399' },
+              { val: `${filteredDrugs.length}`, label: `drugs in ${papCategory === 'All' ? 'database' : papCategory}`, color: '#60a5fa' },
+              { val: '$0–$35', label: 'insulin w/ PAP programs', color: '#fbbf24' },
+              { val: '50%', label: 'typical 340B savings', color: '#a78bfa' },
+            ].map(s => (
+              <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '14px', fontWeight: 800, color: s.color, fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>{s.val}</span>
+                <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>{s.label}</span>
+                <span style={{ color: 'rgba(255,255,255,0.1)' }}>·</span>
+              </div>
+            ))}
+          </div>
+
           {/* Drug cards grid */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
             {filteredDrugs.map(drug => (

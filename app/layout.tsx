@@ -9,18 +9,22 @@ import { I18nProvider } from '@/components/I18nContext'
 import JsonLd, { WEB_APP_SCHEMA, ORG_SCHEMA } from '@/components/JsonLd'
 
 /* ── Font subsetting (#32): latin-only, swap, no fallback shift ─── */
-// D7: Variable font — request full wght axis range (200–800) for fluid weight transitions
+// Weights trimmed to exactly what the design system uses (globals.css comment):
+// 400 → body copy, 700 → section titles, 800 → hero-only heads
+// Previously loaded 7 weights (200–800); saving ~4 font file requests.
 const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
-  weight: ['200', '300', '400', '500', '600', '700', '800'],
+  weight: ['400', '700', '800'],
   variable: '--font-display',
   display: 'swap',
   adjustFontFallback: false,
 })
 
+// Inter: 300 (light body) + 500 (medium labels) cover all use cases.
+// 400 and 600 removed — they're visually indistinguishable from neighbours.
 const inter = Inter({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
+  weight: ['300', '500'],
   variable: '--font-inter',
   display: 'swap',
   adjustFontFallback: false,
@@ -37,9 +41,11 @@ const orbitron = Orbitron({
   text: 'NEXUS·',
 })
 
+// JetBrains Mono: 400 + 500 only — used for badges, distances, code labels.
+// 600 weight removed, saving one font file.
 const mono = JetBrains_Mono({
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
+  weight: ['400', '500'],
   variable: '--font-mono',
   display: 'swap',
   adjustFontFallback: false,

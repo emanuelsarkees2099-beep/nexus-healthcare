@@ -1,14 +1,16 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Search, Bookmark, Users, AlertTriangle } from 'lucide-react'
+import { Search, Bookmark, Users, Navigation } from 'lucide-react'
 
-/* Programs removed — accessible via Search; 4 items is the sweet spot for mobile */
+/* #26 — Healthcare GPS added to dock for prominence/discoverability.
+ * Rights is accessible from the main nav; GPS is the most action-oriented
+ * tool for people arriving without a plan. */
 const DOCK_ITEMS = [
-  { href: '/search',    icon: <Search size={20} strokeWidth={2} />,        label: 'Search' },
-  { href: '/chw',       icon: <Users size={20} strokeWidth={2} />,         label: 'CHW'    },
-  { href: '/rights',    icon: <AlertTriangle size={20} strokeWidth={2} />, label: 'Rights' },
-  { href: '/dashboard', icon: <Bookmark size={20} strokeWidth={2} />,      label: 'Saved'  },
+  { href: '/search',    icon: <Search size={20} strokeWidth={2} />,     label: 'Search' },
+  { href: '/chw',       icon: <Users size={20} strokeWidth={2} />,      label: 'CHW'    },
+  { href: '/gps',       icon: <Navigation size={20} strokeWidth={2} />, label: 'GPS'    },
+  { href: '/dashboard', icon: <Bookmark size={20} strokeWidth={2} />,   label: 'Saved'  },
 ]
 
 export default function MobileDock() {

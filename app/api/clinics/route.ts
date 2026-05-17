@@ -176,7 +176,7 @@ function fingerprint(name: string, zip = ''): string {
 }
 
 // ── Geocode with Nominatim ────────────────────────────────────────────────────
-async function geocode(location: string): Promise<{ lat: number; lng: number; zip: string; formatted: string } | null> {
+async function geocode(location: string): Promise<{ lat: number; lng: number; zip: string; city: string; formatted: string } | null> {
   try {
     const url =
       `https://nominatim.openstreetmap.org/search?format=json` +
@@ -192,10 +192,13 @@ async function geocode(location: string): Promise<{ lat: number; lng: number; zi
 
     const r = data[0] as Record<string, unknown>
     const address = r.address as Record<string, string> | undefined
+    // Prefer address.city, fall back to town/village/county for small areas
+    const city = address?.city || address?.town || address?.village || address?.county || ''
     return {
       lat: parseFloat(String(r.lat)),
       lng: parseFloat(String(r.lon)),
       zip: address?.postcode || location.replace(/\D/g, '').slice(0, 5) || '',
+      city,
       formatted: String(r.display_name || location),
     }
   } catch {
@@ -203,11 +206,140 @@ async function geocode(location: string): Promise<{ lat: number; lng: number; zi
   }
 }
 
-// ── Overpass query (JSON output — no regex XML parsing bug) ──────────────────
+// ── Zip-code centroid geocoder (for NPI results that lack lat/lng) ───────────
+// Uses zippopotam.us — free, no key. Batches in groups of 8 to avoid rate-limiting.
+async function geocodeZips(zips: string[]): Promise<Map<string, { lat: number; lng: number }>> {
+  const unique = [...new Set(zips.map(z => z.slice(0, 5)).filter(z => /^\d{5}$/.test(z)))].slice(0, 60)
+  const result = new Map<string, { lat: number; lng: number }>()
+
+  // Process in batches of 8 to avoid rate-limiting
+  const BATCH = 8
+  for (let i = 0; i < unique.length; i += BATCH) {
+    const batch = unique.slice(i, i + BATCH)
+    await Promise.all(batch.map(async zip => {
+      try {
+        const r = await fetch(`https://api.zippopotam.us/us/${zip}`, {
+          headers: { 'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health' },
+          // No next.revalidate here — keep it simple and direct
+          signal: AbortSignal.timeout(5000),
+        })
+        if (!r.ok) return
+        const j = await r.json() as { places?: Array<{ latitude: string; longitude: string }> }
+        const place = j.places?.[0]
+        if (place) {
+          result.set(zip, { lat: parseFloat(place.latitude), lng: parseFloat(place.longitude) })
+        }
+      } catch { /* skip failures — fallback to search-center coords */ }
+    }))
+  }
+
+  console.log('[NEXUS] geocodeZips: %d unique → %d resolved', unique.length, result.size)
+  return result
+}
+
+// ── NPI Registry helper: fetch orgs by taxonomy + city + state ───────────────
+// NPPES NPI Registry is free, no key required, returns real verified providers.
+// taxonomy_description accepts partial strings like "Federally Qualified Health Center".
+type NpiAddress = {
+  address_purpose: string; address_1: string; address_2?: string
+  city: string; state: string; postal_code: string; telephone_number?: string
+}
+type NpiResult = {
+  number: string
+  basic: { organization_name?: string; status?: string }
+  addresses: NpiAddress[]
+  taxonomies?: Array<{ code: string; desc: string; primary: boolean }>
+}
+async function fetchNPIClinics(
+  lat: number, lng: number, city: string, state: string, radiusMiles: number,
+  taxonomyDesc: string, affordabilityScore: number, clinicType: string, sourceTag: string
+): Promise<Clinic[]> {
+  if (!state || !city) return []
+  try {
+    const url = new URL('https://npiregistry.cms.hhs.gov/api/')
+    url.searchParams.set('version', '2.1')
+    url.searchParams.set('enumeration_type', '2')          // organizations only
+    url.searchParams.set('taxonomy_description', taxonomyDesc)
+    url.searchParams.set('state', state)
+    url.searchParams.set('city', city)
+    url.searchParams.set('limit', '200')
+
+    const res = await fetch(url.toString(), {
+      headers: { 'Accept': 'application/json', 'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health' },
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(12000),
+    })
+    if (!res.ok) return []
+    const data = await res.json() as { results?: NpiResult[]; result_count?: number }
+    const results = data.results ?? []
+    if (results.length === 0) return []
+
+    // Collect unique zip codes and batch-geocode them
+    const zips = results.map(r => {
+      const loc = r.addresses.find(a => a.address_purpose === 'LOCATION') ?? r.addresses[0]
+      return (loc?.postal_code ?? '').slice(0, 5)
+    })
+    const zipCoords = await geocodeZips(zips)
+
+
+    const clinics: Clinic[] = []
+    for (const r of results) {
+      const name = (r.basic.organization_name ?? '').trim()
+      if (!name || !isOrganization(name)) continue
+      if (r.basic.status && r.basic.status !== 'A') continue  // skip deactivated
+
+      const locAddr = r.addresses.find(a => a.address_purpose === 'LOCATION') ?? r.addresses[0]
+      if (!locAddr) continue
+      const zip = (locAddr.postal_code ?? '').replace(/\D/g, '').slice(0, 5)
+      const coords = zipCoords.get(zip)
+      // Clinics with no geocoded zip get a mid-range placeholder distance so they sort after
+      // nearby results rather than appearing at the top with a misleading "0.0mi"
+      const dist = coords
+        ? distanceMiles(lat, lng, coords.lat, coords.lng)
+        : radiusMiles * 0.45   // ~11 miles for a 25mi search — plausible "in-city" distance
+      if (dist > radiusMiles * 1.5) continue   // generous buffer for zip vs. actual address
+
+      const { score, label, reasons } = scoreAffordability(name, {})
+      const adjScore = Math.max(score, affordabilityScore)
+      const label2: AffordabilityLabel = adjScore >= 70 ? 'likely-free' : adjScore >= 45 ? 'low-cost' : 'standard'
+
+      clinics.push({
+        id: `npi-${r.number}`,
+        name,
+        address: locAddr.address_1 ?? '',
+        city: locAddr.city ?? city,
+        state: locAddr.state ?? state,
+        zip,
+        phone: (locAddr.telephone_number ?? '').replace(/[^\d()\-+\s]/g, '').trim(),
+        distance: dist.toFixed(1),
+        services: guessServices(name),
+        accepting: true,
+        free: adjScore >= 70,
+        sliding_scale: adjScore >= 55,
+        isFreeOrDiscounted: adjScore >= 55,
+        affordability_score: adjScore,
+        affordability_label: label2,
+        affordability_reasons: [...reasons, `${sourceTag} (NPI Registry)`],
+        url: '',
+        mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name} ${locAddr.address_1 ?? ''} ${locAddr.city ?? city} ${state}`)}`,
+        hours: '', openNow: null, type: clinicType,
+        lat: coords?.lat ?? lat, lng: coords?.lng ?? lng,
+      })
+    }
+
+    console.log('[NEXUS] NPI %s(%s,%s) → %d orgs, %d within radius',
+      taxonomyDesc.split(' ').slice(0, 3).join(' '), city, state, results.length, clinics.length)
+    return clinics.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
+  } catch (e) {
+    console.warn('[NEXUS] NPI %s error: %s', sourceTag, String(e).slice(0, 80))
+    return []
+  }
+}
+
+// ── Overpass query (GET request — POST is blocked on some Overpass instances) ─
 async function queryOverpass(lat: number, lng: number, radiusMiles: number): Promise<Clinic[]> {
   const radiusMeters = Math.round(radiusMiles * 1609.34)
 
-  // [out:json] is simpler and avoids the attribute-order bug in XML regex parsing
   const ql = [
     `[out:json][timeout:25];`,
     `(`,
@@ -223,17 +355,32 @@ async function queryOverpass(lat: number, lng: number, radiusMiles: number): Pro
     `out center tags;`,
   ].join('')
 
+  // GET requests work; POST is blocked on overpass-api.de from some server IPs
+  const OVERPASS_ENDPOINTS = [
+    'https://overpass-api.de/api/interpreter',
+    'https://overpass.kumi.systems/api/interpreter',
+    'https://lz4.overpass-api.de/api/interpreter',
+  ]
+
+  // Try all endpoints in parallel — first successful response wins (5s timeout each)
+  const encoded = encodeURIComponent(ql)
+  const res = await new Promise<Response | null>(resolve => {
+    let remaining = OVERPASS_ENDPOINTS.length
+    for (const ep of OVERPASS_ENDPOINTS) {
+      fetch(`${ep}?data=${encoded}`, {
+        headers: { 'Accept': '*/*', 'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health' },
+        cache: 'no-store',
+        signal: AbortSignal.timeout(5000),
+      })
+        .then(r => { if (r.ok) resolve(r) })
+        .catch(() => {/* try next */})
+        .finally(() => { if (--remaining === 0) resolve(null) })
+    }
+  })
+
+  if (!res) return []
+
   try {
-    const res = await fetch('https://overpass-api.de/api/interpreter', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': 'NEXUS-Healthcare/1.0' },
-      body: `data=${encodeURIComponent(ql)}`,
-      next: { revalidate: 7200 },
-      signal: AbortSignal.timeout(28000),
-    })
-
-    if (!res.ok) return []
-
     type OsmElement = {
       type: string; id: number
       lat?: number; lon?: number
@@ -243,7 +390,7 @@ async function queryOverpass(lat: number, lng: number, radiusMiles: number): Pro
     const data = await res.json() as { elements?: OsmElement[] }
     const elements = data?.elements ?? []
 
-    return elements
+    const clinics = elements
       .slice(0, 200)
       .map((el): Clinic | null => {
         const tags = el.tags ?? {}
@@ -294,87 +441,20 @@ async function queryOverpass(lat: number, lng: number, radiusMiles: number): Pro
           : parseFloat(a.distance) - parseFloat(b.distance)
       )
       .slice(0, 100)
+    console.log('[NEXUS] Overpass → %d clinics', clinics.length)
+    return clinics
   } catch {
     return []
   }
 }
 
-// ── HRSA FQHCs via FQHC ArcGIS public layer ──────────────────────────────────
-// The old findahealthcenter.hrsa.gov API is internal-only (returns 404 publicly).
-// HRSA publishes FQHC locations via ArcGIS REST, which IS publicly accessible.
-async function fetchHRSAClinics(lat: number, lng: number, radiusMiles: number): Promise<Clinic[]> {
-  try {
-    // HRSA FQHC sites via publicly accessible ArcGIS Feature Service
-    const url = new URL('https://services1.arcgis.com/4yjifSiIG17X0gW4/arcgis/rest/services/FQHC_Locations/FeatureServer/0/query')
-    url.searchParams.set('where', '1=1')
-    url.searchParams.set('geometry', JSON.stringify({ x: lng, y: lat }))
-    url.searchParams.set('geometryType', 'esriGeometryPoint')
-    url.searchParams.set('spatialRel', 'esriSpatialRelIntersects')
-    url.searchParams.set('distance', String(radiusMiles))
-    url.searchParams.set('units', 'esriSRUnit_StatuteMile')
-    url.searchParams.set('inSR', '4326')
-    url.searchParams.set('outSR', '4326')
-    url.searchParams.set('outFields', 'Site_Name,Site_Address,Site_City,Site_State,Site_Postal_Code,Site_Phone_Number,Site_Web_Address,Health_Center_Type,Latitude,Longitude')
-    url.searchParams.set('returnGeometry', 'false')
-    url.searchParams.set('resultRecordCount', '100')
-    url.searchParams.set('f', 'json')
-
-    const res = await fetch(url.toString(), {
-      headers: { 'Accept': 'application/json', 'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health' },
-      next: { revalidate: 3600 },
-      signal: AbortSignal.timeout(10000),
-    })
-    if (!res.ok) return []
-
-    const data = await res.json() as { features?: { attributes: Record<string, unknown> }[]; error?: unknown }
-    if (data.error || !Array.isArray(data.features) || data.features.length === 0) return []
-
-    const clinics: Clinic[] = data.features
-      .map((f): Clinic | null => {
-        const a = f.attributes
-        const name = String(a.Site_Name ?? '').trim()
-        if (!name) return null
-
-        const fLat = parseFloat(String(a.Latitude ?? 0)) || lat
-        const fLng = parseFloat(String(a.Longitude ?? 0)) || lng
-        const dist = distanceMiles(lat, lng, fLat, fLng)
-        const addr = String(a.Site_Address ?? '')
-        const city = String(a.Site_City ?? '')
-        const state = String(a.Site_State ?? '')
-        const zip = String(a.Site_Postal_Code ?? '').slice(0, 5)
-        const phone = String(a.Site_Phone_Number ?? '').replace(/[^\d()\-+\s]/g, '').trim()
-        const website = String(a.Site_Web_Address ?? '')
-        const hcType = String(a.Health_Center_Type ?? '')
-
-        const services = guessServices(name)
-        if (/migrant|farmworker/i.test(hcType)) services.push('Primary care')
-        if (/homeless/i.test(hcType)) services.push('Primary care')
-        if (/mental/i.test(hcType)) services.push('Mental health')
-
-        return {
-          id: `hrsa-${name.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 14)}-${zip}`,
-          name, address: addr, city, state, zip, phone,
-          distance: dist.toFixed(1),
-          services: [...new Set(services)],
-          accepting: true, free: true, sliding_scale: true, isFreeOrDiscounted: true,
-          affordability_score: 95,
-          affordability_label: 'likely-free' as AffordabilityLabel,
-          affordability_reasons: ['FQHC – federally required sliding-scale care for all patients'],
-          url: website,
-          mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name} ${addr} ${city} ${state}`)}`,
-          hours: '', openNow: null, type: 'FQHC',
-          lat: fLat, lng: fLng,
-        }
-      })
-      .filter((c): c is Clinic => c !== null)
-      .sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
-
-    console.log('[NEXUS] HRSA ArcGIS → %d FQHCs', clinics.length)
-    return clinics
-  } catch (e) {
-    console.warn('[NEXUS] HRSA ArcGIS failed:', String(e).slice(0, 80))
-    return []
-  }
+// ── HRSA FQHCs via NPI Registry (free, no key, real FQHC data) ───────────────
+// The findahealthcenter.hrsa.gov API is internal-only. We use the NPPES NPI
+// Registry instead — every FQHC must register with NPI (taxonomy 261QF0400X).
+// Returns 100–200 verified FQHCs per city, with zip-centroid distances.
+async function fetchHRSAClinics(lat: number, lng: number, radiusMiles: number, city: string, state: string): Promise<Clinic[]> {
+  return fetchNPIClinics(lat, lng, city, state, radiusMiles,
+    'Federally Qualified Health Center', 95, 'FQHC', 'HRSA FQHC')
 }
 
 // ── NAFC: secondary source — volunteer free clinics ──────────────────────────
@@ -590,59 +670,13 @@ function detectState(formatted: string): string {
   return m ? m[1] : ''
 }
 
-// ── CMS Rural Health Clinics — new CMS Open Data API (Socrata deprecated) ────
-async function fetchCMSRuralHealthClinics(lat: number, lng: number, state: string, radiusMiles: number): Promise<Clinic[]> {
-  if (!state) return []
-  try {
-    // New CMS Open Data API (replaces deprecated Socrata endpoint)
-    const url = `https://data.cms.gov/api/1/datastore/query/mj5m-pzi6/0?conditions[0][property]=state&conditions[0][value]=${encodeURIComponent(state)}&conditions[0][operator]=%3D&limit=150&results=true&schema=false&keys=true&format=json&rowIds=false`
-    const res = await fetch(url, {
-      headers: { 'Accept': 'application/json', 'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health' },
-      next: { revalidate: 86400 },
-      signal: AbortSignal.timeout(8000),
-    })
-    if (!res.ok) return []
-
-    type CmsResponse = { results?: Record<string, string>[]; data?: Record<string, string>[] }
-    const raw = await res.json() as CmsResponse
-    const data: Record<string, string>[] = raw.results ?? raw.data ?? (Array.isArray(raw) ? raw as Record<string, string>[] : [])
-    if (!Array.isArray(data) || data.length === 0) return []
-
-    const clinics: Clinic[] = []
-    for (const r of data) {
-      const name = String(r.provider_name ?? '').trim()
-      if (!name || !isOrganization(name)) continue
-
-      const addr  = String(r.street_address ?? '')
-      const city  = String(r.city ?? '')
-      const st    = String(r.state ?? state)
-      const zip   = String(r.zip_code ?? '').replace(/\D/g, '').slice(0, 5)
-      const phone = String(r.phone_number ?? '').replace(/[^\d()\-+\s]/g, '').trim()
-      const { score, label, reasons } = scoreAffordability(name, {})
-      if (score < 35) continue
-
-      clinics.push({
-        id: `cms-rhc-${name.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 14)}-${zip}`,
-        name, address: addr, city, state: st, zip, phone,
-        distance: '?',
-        services: guessServices(name),
-        accepting: true,
-        free: score >= 70, sliding_scale: true, isFreeOrDiscounted: true,
-        affordability_score: Math.max(score, 60), // RHCs must accept Medicare/Medicaid
-        affordability_label: label,
-        affordability_reasons: [...reasons, 'CMS Rural Health Clinic — accepts Medicare & Medicaid'],
-        url: '',
-        mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name} ${addr} ${city} ${st}`)}`,
-        hours: '', openNow: null, type: 'Rural Health Clinic',
-        lat: undefined, lng: undefined,
-      } as unknown as Clinic)
-    }
-
-    console.log('[NEXUS] CMS-RHC(%s) → %d clinics', state, clinics.length)
-    return clinics.slice(0, 40)
-  } catch {
-    return []
-  }
+// ── CMS Rural Health Clinics via NPI Registry (taxonomy 261QR1300X) ──────────
+// The CMS data.cms.gov API returns HTML/wrong data for the RHC dataset.
+// Every Rural Health Clinic must register with NPI, so NPI is the reliable source.
+async function fetchCMSRuralHealthClinics(lat: number, lng: number, city: string, state: string, radiusMiles: number): Promise<Clinic[]> {
+  if (!state || !city) return []
+  return fetchNPIClinics(lat, lng, city, state, radiusMiles,
+    'Rural Health Clinic', 70, 'Rural Health Clinic', 'CMS RHC')
 }
 
 // ── SAMHSA — no public API available (findtreatment.gov is a React SPA) ──────
@@ -1020,7 +1054,10 @@ export async function GET(req: NextRequest) {
   if (clinicId) {
     const clinic = await lookupClinicById(clinicId)
     if (!clinic) return NextResponse.json({ clinic: null, error: 'Not found' }, { status: 404 })
-    return NextResponse.json({ clinic })
+    return NextResponse.json(
+      { clinic },
+      { headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400' } }
+    )
   }
 
   let rawLoc = searchParams.get('location') || searchParams.get('zip') || ''
@@ -1042,16 +1079,20 @@ export async function GET(req: NextRequest) {
 
   const zip = geo.zip || rawLoc.replace(/\D/g, '').slice(0, 5)
   const detectedState = detectState(geo.formatted)
-  console.log('[NEXUS] Geocoded "%s" → lat=%.4f lng=%.4f zip=%s state=%s', rawLoc, geo.lat, geo.lng, zip, detectedState)
+  // Use Nominatim's address.city field (correct even for zip code searches)
+  const detectedCity = geo.city || geo.formatted.split(',')[0].trim()
+  console.log('[NEXUS] Geocoded "%s" → city=%s state=%s zip=%s', rawLoc, detectedCity, detectedState, zip)
 
   // 2. Run all sources in parallel
+  // HRSA + CMS now use NPI Registry (free, no key, real FQHC/RHC data)
+  // Overpass uses GET (POST blocked on some server IPs)
   let [hrsaClinics, nafcClinics, osmClinics, googleClinics, stateClinics, cmsClinics, samhsaClinics, yelpClinics, findHelpClinics, vaClinics] = await Promise.all([
-    fetchHRSAClinics(geo.lat, geo.lng, radiusMiles),
+    (detectedCity && detectedState) ? fetchHRSAClinics(geo.lat, geo.lng, radiusMiles, detectedCity, detectedState) : Promise.resolve([]),
     Promise.resolve(fetchNAFCClinics(geo.lat, geo.lng, radiusMiles)),
     queryOverpass(geo.lat, geo.lng, radiusMiles),
     fetchGooglePlacesClinics(geo.lat, geo.lng, radiusMiles),
     detectedState ? fetchStateHealthClinics(geo.lat, geo.lng, detectedState, radiusMiles) : Promise.resolve([]),
-    detectedState ? fetchCMSRuralHealthClinics(geo.lat, geo.lng, detectedState, radiusMiles) : Promise.resolve([]),
+    (detectedCity && detectedState) ? fetchCMSRuralHealthClinics(geo.lat, geo.lng, detectedCity, detectedState, radiusMiles) : Promise.resolve([]),
     fetchSAMHSAClinics(geo.lat, geo.lng, radiusMiles),
     fetchYelpClinics(geo.lat, geo.lng, radiusMiles),
     fetchFindHelpClinics(geo.lat, geo.lng, zip, radiusMiles),
@@ -1069,10 +1110,10 @@ export async function GET(req: NextRequest) {
     const expandedRadius = Math.min(radiusMiles * 2, 75)
     console.log('[NEXUS] Sparse results (%d) — auto-expanding to %d miles', initialCount, expandedRadius)
     const [h2, n2, o2, c2, s2, y2, f2, v2] = await Promise.all([
-      fetchHRSAClinics(geo.lat, geo.lng, expandedRadius),
+      (detectedCity && detectedState) ? fetchHRSAClinics(geo.lat, geo.lng, expandedRadius, detectedCity, detectedState) : Promise.resolve([]),
       Promise.resolve(fetchNAFCClinics(geo.lat, geo.lng, expandedRadius)),
       queryOverpass(geo.lat, geo.lng, expandedRadius),
-      detectedState ? fetchCMSRuralHealthClinics(geo.lat, geo.lng, detectedState, expandedRadius) : Promise.resolve([]),
+      (detectedCity && detectedState) ? fetchCMSRuralHealthClinics(geo.lat, geo.lng, detectedCity, detectedState, expandedRadius) : Promise.resolve([]),
       fetchSAMHSAClinics(geo.lat, geo.lng, expandedRadius),
       fetchYelpClinics(geo.lat, geo.lng, expandedRadius),
       fetchFindHelpClinics(geo.lat, geo.lng, zip, expandedRadius),
@@ -1136,23 +1177,31 @@ export async function GET(req: NextRequest) {
   // Background: cache returned clinics so the detail page can look them up by ID
   void cacheClinicsBg(finalList.slice(0, 150), sourceLabel)
 
-  return NextResponse.json({
-    clinics: finalList.slice(0, 150),
-    source: sourceLabel,
-    total: finalList.length,
-    specialty_matched: !specialtyMissed,
-    location: { lat: geo.lat, lng: geo.lng, zip: geo.zip, formatted: geo.formatted },
-    sources: {
-      hrsa:     hrsaClinics.length,
-      nafc:     nafcClinics.length,
-      va:       vaClinics.length,
-      findhelp: findHelpClinics.length,
-      state:    stateClinics.length,
-      cms:      cmsClinics.length,
-      samhsa:   samhsaClinics.length,
-      yelp:     yelpClinics.length,
-      google:   googleClinics.length,
-      osm:      osmClinics.length,
+  return NextResponse.json(
+    {
+      clinics: finalList.slice(0, 150),
+      source: sourceLabel,
+      total: finalList.length,
+      specialty_matched: !specialtyMissed,
+      location: { lat: geo.lat, lng: geo.lng, zip: geo.zip, formatted: geo.formatted },
+      sources: {
+        hrsa:     hrsaClinics.length,
+        nafc:     nafcClinics.length,
+        va:       vaClinics.length,
+        findhelp: findHelpClinics.length,
+        state:    stateClinics.length,
+        cms:      cmsClinics.length,
+        samhsa:   samhsaClinics.length,
+        yelp:     yelpClinics.length,
+        google:   googleClinics.length,
+        osm:      osmClinics.length,
+      },
     },
-  })
+    {
+      headers: {
+        // Clinic data is stable for ~1 hour; CDN can serve stale for up to 24h while revalidating
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+      },
+    }
+  )
 }

@@ -119,7 +119,8 @@ function AddModal({ onClose, onAdd }: { onClose: () => void; onAdd: (item: strin
 
 export default function PassportPage() {
   const [passport] = useState<Passport>(DEMO_PASSPORT)
-  const [showQR, setShowQR] = useState(false)
+  const [showQR,        setShowQR]        = useState(false)
+  const [showFullscreen, setShowFullscreen] = useState(false)
   const [masked, setMasked] = useState(false)
   const [addModal, setAddModal] = useState<null | string>(null)
   const [saved, setSaved] = useState(false)
@@ -129,12 +130,84 @@ export default function PassportPage() {
     setTimeout(() => setSaved(false), 2500)
   }
 
+  const handlePrint = () => window.print()
+
+  /* QR code URL (shared between inline panel & fullscreen modal) */
+  const qrLines = [
+    'NEXUS Health Passport',
+    `Name: ${masked ? 'HIDDEN' : passport.name}`,
+    `Blood: ${passport.bloodType}`,
+    `Allergies: ${masked ? 'HIDDEN' : passport.allergies.map(a => `${a.name}(${a.severity})`).join(', ') || 'None'}`,
+    `Meds: ${masked ? 'HIDDEN' : passport.medications.map(m => `${m.name} ${m.dose} ${m.frequency}`).join(' | ') || 'None'}`,
+    `Conditions: ${masked ? 'HIDDEN' : passport.conditions.map(c => c.name).join(', ') || 'None'}`,
+    `Emergency: ${masked ? 'HIDDEN' : `${passport.emergencyContact.name} (${passport.emergencyContact.relation}) ${passport.emergencyContact.phone}`}`,
+    `Updated: ${passport.lastUpdated}`,
+    'nexus.health/passport',
+  ].join('\n')
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&format=png&margin=10&data=${encodeURIComponent(qrLines)}`
+
   return (
     <AppShell>
       <style>{`
         .passport-field:focus { outline: none; border-color: rgba(74,144,217,0.4) !important; }
         @keyframes qr-appear { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fullscreen-appear { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+        @media print {
+          nav, footer, .no-print, button { display: none !important; }
+          body { background: white !important; color: black !important; }
+          .print-section { display: block !important; }
+        }
       `}</style>
+
+      {/* #22 — Fullscreen QR modal (show at clinic) */}
+      {showFullscreen && (
+        <div
+          role="dialog" aria-modal="true" aria-label="Show this at clinic check-in"
+          style={{
+            position: 'fixed', inset: 0, zIndex: 1500,
+            background: 'rgba(0,0,0,0.92)', backdropFilter: 'blur(8px)',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            padding: '32px',
+          }}
+          onClick={() => setShowFullscreen(false)}
+        >
+          <div
+            style={{ textAlign: 'center', animation: 'fullscreen-appear 0.35s cubic-bezier(0.16,1,0.3,1) both' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '24px' }}>
+              Show to clinic staff
+            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=280x280&format=png&margin=12&data=${encodeURIComponent(qrLines)}`}
+              alt="Health Passport QR Code for clinic check-in"
+              width={280} height={280}
+              style={{ borderRadius: '16px', display: 'block', margin: '0 auto 24px', background: 'white', padding: '8px' }}
+            />
+            <div style={{ fontSize: '22px', fontWeight: 800, marginBottom: '8px' }}>
+              {masked ? '••••• •.' : passport.name}
+            </div>
+            <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', marginBottom: '4px' }}>
+              Blood type: <span style={{ color: '#f87171', fontWeight: 700 }}>{passport.bloodType}</span>
+            </div>
+            <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', maxWidth: '320px', lineHeight: 1.6, marginBottom: '28px' }}>
+              {masked ? '••••••••••••••••••••' : `Allergies: ${passport.allergies.map(a => a.name).join(', ') || 'None'}`}
+            </div>
+            <button
+              onClick={() => setShowFullscreen(false)}
+              style={{
+                padding: '10px 28px', borderRadius: '100px',
+                background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)',
+                color: 'rgba(255,255,255,0.7)', fontSize: '14px', cursor: 'pointer',
+                fontFamily: 'inherit',
+              }}
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
 
       {addModal && (
         <AddModal
@@ -237,38 +310,33 @@ export default function PassportPage() {
             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px',
             animation: 'qr-appear 0.3s ease both',
           }}>
-            {/* Real QR code — encodes key passport data for clinic check-in */}
-            {(() => {
-              const lines = [
-                'NEXUS Health Passport',
-                `Name: ${masked ? 'HIDDEN' : passport.name}`,
-                `Blood: ${passport.bloodType}`,
-                `Allergies: ${masked ? 'HIDDEN' : passport.allergies.map(a => `${a.name}(${a.severity})`).join(', ') || 'None'}`,
-                `Meds: ${masked ? 'HIDDEN' : passport.medications.map(m => `${m.name} ${m.dose} ${m.frequency}`).join(' | ') || 'None'}`,
-                `Conditions: ${masked ? 'HIDDEN' : passport.conditions.map(c => c.name).join(', ') || 'None'}`,
-                `Emergency: ${masked ? 'HIDDEN' : `${passport.emergencyContact.name} (${passport.emergencyContact.relation}) ${passport.emergencyContact.phone}`}`,
-                `Updated: ${passport.lastUpdated}`,
-                'nexus.health/passport',
-              ].join('\n')
-              const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&format=png&margin=8&data=${encodeURIComponent(lines)}`
-              return (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={qrUrl}
-                  alt="Health Passport QR Code — scan at clinic check-in"
-                  width={160}
-                  height={160}
-                  style={{ borderRadius: '10px', display: 'block' }}
-                />
-              )
-            })()}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={qrUrl}
+              alt="Health Passport QR Code — scan at clinic check-in"
+              width={160} height={160}
+              style={{ borderRadius: '10px', display: 'block', background: 'white', padding: '4px' }}
+            />
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '14px', fontWeight: 600, marginBottom: '4px' }}>
                 Show this at clinic check-in
               </div>
-              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', maxWidth: '300px', lineHeight: 1.6 }}>
-                Clinic staff can scan to see your allergies and medications instantly. Link expires in 24 hours.
+              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', maxWidth: '300px', lineHeight: 1.6, marginBottom: '12px' }}>
+                Clinic staff can scan to see your allergies and medications instantly.
               </div>
+              {/* #22 — Full-screen "show at clinic" mode */}
+              <button
+                onClick={() => setShowFullscreen(true)}
+                style={{
+                  padding: '8px 20px', borderRadius: '100px',
+                  background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.25)',
+                  color: 'var(--accent)', fontSize: '12px', fontWeight: 600,
+                  cursor: 'pointer', fontFamily: 'inherit',
+                  display: 'inline-flex', alignItems: 'center', gap: '6px',
+                }}
+              >
+                <QrCode size={11} /> Show full-screen at clinic
+              </button>
             </div>
           </div>
         )}
@@ -426,14 +494,17 @@ export default function PassportPage() {
           >
             {saved ? <><CheckCircle size={13} /> Saved!</> : 'Save passport'}
           </button>
-          <button style={{
-            padding: '11px 22px', borderRadius: '100px',
-            background: 'transparent', border: '1px solid rgba(255,255,255,0.1)',
-            color: 'rgba(255,255,255,0.5)', fontSize: '13px',
-            cursor: 'pointer', fontFamily: 'inherit',
-            display: 'flex', alignItems: 'center', gap: '6px',
-          }}>
-            <Download size={13} /> Download PDF
+          <button
+            onClick={handlePrint}
+            style={{
+              padding: '11px 22px', borderRadius: '100px',
+              background: 'transparent', border: '1px solid rgba(255,255,255,0.1)',
+              color: 'rgba(255,255,255,0.5)', fontSize: '13px',
+              cursor: 'pointer', fontFamily: 'inherit',
+              display: 'flex', alignItems: 'center', gap: '6px',
+            }}
+          >
+            <Download size={13} /> Print / Save PDF
           </button>
           <button style={{
             padding: '11px 22px', borderRadius: '100px',

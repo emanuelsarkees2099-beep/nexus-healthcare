@@ -208,8 +208,60 @@ export default function ClinicDetailPage() {
   /* N6: Equity score */
   const equity = computeEquityScore(clinic)
 
+  /* ── Real-time Open Now ── */
+  const openNow = (() => {
+    if (!clinic.hours) return null
+    const now   = new Date()
+    const day   = now.getDay()  // 0=Sun
+    const h     = now.getHours()
+    const lower = clinic.hours.toLowerCase()
+    // Simple heuristic: look for "24 hours" / "24/7"
+    if (lower.includes('24') || lower.includes('all day')) return true
+    // Closed weekend keywords
+    const isWeekend = day === 0 || day === 6
+    if (isWeekend && lower.includes('mon') && !lower.includes('sat')) return false
+    // Common 8am–5pm pattern
+    if (lower.match(/8[:\s]?a\.?m/i) || lower.match(/9[:\s]?a\.?m/i)) {
+      return h >= 8 && h < 17
+    }
+    return null // unknown
+  })()
+
+  /* ── #44: JSON-LD structured data — MedicalClinic + HealthcareOrganization ── */
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': ['MedicalClinic', 'HealthcareOrganization'],
+    name: clinic.name,
+    description: `Free and low-cost healthcare clinic. ${clinic.services?.join(', ') ?? ''}`,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: clinic.address,
+      addressLocality: clinic.city,
+      addressRegion: clinic.state,
+      postalCode: clinic.zip,
+      addressCountry: 'US',
+    },
+    ...(clinic.phone ? { telephone: clinic.phone } : {}),
+    ...(clinic.url   ? { url: clinic.url }            : {}),
+    ...(clinic.hours ? { openingHours: clinic.hours } : {}),
+    ...(clinic.lat && clinic.lng ? {
+      geo: { '@type': 'GeoCoordinates', latitude: clinic.lat, longitude: clinic.lng },
+    } : {}),
+    medicalSpecialty: clinic.services,
+    availableService: clinic.services?.map(s => ({ '@type': 'MedicalTherapy', name: s })) ?? [],
+    isAcceptingNewPatients: clinic.accepting,
+    priceRange: clinic.free ? '$0' : clinic.sliding_scale ? 'Sliding scale' : undefined,
+    knowsLanguage: clinic.languages ?? ['English'],
+  }
+
   return (
     <AppShell>
+      {/* #44 — Structured data for Google rich results */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* ── N5: Insurance Bridge Toast ─────────────────────────────── */}
       {bridgeVisible && (
         <div
@@ -326,6 +378,22 @@ export default function ClinicDetailPage() {
                 {clinic.type}
               </div>
             )}
+            {/* Real-time open now indicator */}
+            {openNow !== null && (
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', gap: '5px',
+                background: openNow ? 'rgba(74,222,128,0.08)' : 'rgba(248,113,113,0.08)',
+                border: openNow ? '1px solid rgba(74,222,128,0.22)' : '1px solid rgba(248,113,113,0.22)',
+                borderRadius: '100px', padding: '4px 10px',
+                fontSize: '11px', fontWeight: 600,
+                color: openNow ? 'var(--green-pulse)' : 'var(--coral)',
+                fontFamily: 'var(--font-inter)',
+              }}>
+                <div style={{ width: 5, height: 5, borderRadius: '50%', background: 'currentColor', flexShrink: 0 }} />
+                {openNow ? 'Open now' : 'Closed now'}
+              </div>
+            )}
+
             {/* N6: Equity Score badge */}
             <div
               title={`Equity Score: ${equity.label} — Language: ${equity.breakdown.languageAccess}/2, Sliding scale: ${equity.breakdown.slidingScale ? 'Yes' : 'No'}, Free: ${equity.breakdown.freeCare ? 'Yes' : 'No'}, FQHC: ${equity.breakdown.fqhcStatus ? 'Yes' : 'No'}`}
@@ -533,6 +601,31 @@ export default function ClinicDetailPage() {
           )}
         </div>
 
+        {/* ── Languages spoken ── */}
+        {clinic.languages && clinic.languages.length > 0 && (
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border2)', borderRadius: '16px', padding: '22px 24px', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+              <Languages size={14} color="var(--violet)" />
+              <h2 style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', margin: 0 }}>
+                Languages Spoken
+              </h2>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              {clinic.languages.map(lang => (
+                <div key={lang} style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '5px',
+                  padding: '5px 12px', borderRadius: '8px',
+                  background: 'rgba(167,139,250,0.06)', border: '1px solid rgba(167,139,250,0.18)',
+                  fontSize: '12px', color: 'var(--violet)', fontFamily: 'var(--font-inter)', fontWeight: 500,
+                }}>
+                  <Globe size={11} />
+                  {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* ── What to bring ── */}
         <div style={{ background: 'var(--bg2)', border: '1px solid var(--border2)', borderRadius: '16px', padding: '22px 24px', marginBottom: '16px' }}>
           <h2 style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', marginBottom: '16px' }}>
@@ -658,6 +751,23 @@ export default function ClinicDetailPage() {
             Need urgent help right now?
           </p>
           <EmergencyEscalation compact />
+        </div>
+
+        {/* ── Report outdated info ── */}
+        <div style={{ marginTop: '24px', textAlign: 'center' }}>
+          <a
+            href={`mailto:data@nexus.health?subject=Report outdated info: ${encodeURIComponent(clinic.name)}&body=Clinic ID: ${clinic.id}%0AClinic name: ${encodeURIComponent(clinic.name)}%0A%0AWhat's outdated:%0A`}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
+              fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)',
+              textDecoration: 'none', transition: 'color 0.2s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.color = 'var(--text-2)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
+          >
+            <AlertCircle size={12} />
+            Report outdated or incorrect information
+          </a>
         </div>
 
       </div>

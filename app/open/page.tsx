@@ -360,6 +360,204 @@ export default function OpenPage() {
         </div>
       </section>
 
+      {/* ── #42 — OPEN API DOCUMENTATION ── */}
+      <section style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <Reveal>
+            <div style={{ marginBottom: '48px' }}>
+              <div style={{ ...pill, marginBottom: '20px' }}><ExternalLink size={10} strokeWidth={1.5} /> Open API</div>
+              <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '16px' }}>
+                Use our data
+              </h2>
+              <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.42)', maxWidth: '600px', lineHeight: 1.65 }}>
+                The NEXUS API is free for researchers, health departments, and non-profit organizations. No API key required for public endpoints.
+              </p>
+            </div>
+          </Reveal>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {/* Endpoint: clinic search */}
+            {[
+              {
+                method: 'GET',
+                path: '/api/clinics',
+                color: '#60a5fa',
+                description: 'Search free clinics by ZIP code, city, state, or geographic radius.',
+                params: [
+                  { name: 'zip', type: 'string', desc: 'ZIP code for geographic search' },
+                  { name: 'state', type: 'string', desc: '2-letter state code (e.g. CA, TX)' },
+                  { name: 'radius', type: 'number', desc: 'Search radius in miles (default: 25)' },
+                  { name: 'type', type: 'string', desc: '"fqhc" | "free" | "all" (default: "all")' },
+                  { name: 'limit', type: 'number', desc: 'Max results (default: 50, max: 200)' },
+                ],
+                example: `curl "https://nexus.health/api/clinics?zip=85001&radius=10&type=fqhc&limit=5"`,
+                response: `{
+  "clinics": [
+    {
+      "id": "fqhc_az_0021",
+      "name": "Mountain Park Health Center",
+      "address": "15757 N. 33rd Ave",
+      "city": "Phoenix",
+      "state": "AZ",
+      "zip": "85053",
+      "phone": "(602) 243-7011",
+      "type": "FQHC",
+      "free": false,
+      "sliding_scale": true,
+      "services": ["Primary Care", "Dental", "Mental Health", "Pharmacy"],
+      "distance": 2.1,
+      "verified_at": "2026-04-01"
+    }
+  ],
+  "total": 12,
+  "source": "hrsa"
+}`,
+              },
+              {
+                method: 'GET',
+                path: '/api/clinics?id=:id',
+                color: '#a78bfa',
+                description: 'Fetch full details for a single clinic by its NEXUS ID.',
+                params: [
+                  { name: 'id', type: 'string', desc: 'Clinic ID from search results' },
+                ],
+                example: `curl "https://nexus.health/api/clinics?id=fqhc_az_0021"`,
+                response: `{
+  "clinic": {
+    "id": "fqhc_az_0021",
+    "name": "Mountain Park Health Center",
+    "address": "15757 N. 33rd Ave",
+    ...full clinic object
+  }
+}`,
+              },
+            ].map((ep, i) => (
+              <Reveal key={ep.path} delay={i * 80}>
+                <div style={{
+                  borderRadius: '20px', overflow: 'hidden',
+                  background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)',
+                }}>
+                  {/* Method + path */}
+                  <div style={{
+                    padding: '18px 24px', borderBottom: '1px solid rgba(255,255,255,0.05)',
+                    display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap',
+                  }}>
+                    <span style={{
+                      fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em',
+                      background: `${ep.color}18`, border: `1px solid ${ep.color}33`,
+                      color: ep.color, padding: '3px 10px', borderRadius: '6px',
+                      fontFamily: 'var(--font-mono)',
+                    }}>
+                      {ep.method}
+                    </span>
+                    <code style={{
+                      fontSize: '13px', color: 'rgba(255,255,255,0.8)',
+                      fontFamily: 'var(--font-mono)',
+                    }}>
+                      {ep.path}
+                    </code>
+                    <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>
+                      {ep.description}
+                    </span>
+                  </div>
+
+                  <div style={{ padding: '24px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                    {/* Parameters */}
+                    <div>
+                      <div style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '12px', fontFamily: 'var(--font-inter)' }}>
+                        Parameters
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {ep.params.map(p => (
+                          <div key={p.name} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                            <code style={{ fontSize: '11px', color: ep.color, background: `${ep.color}10`, padding: '2px 7px', borderRadius: '4px', fontFamily: 'var(--font-mono)', flexShrink: 0 }}>{p.name}</code>
+                            <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)' }}>{p.type} — {p.desc}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Example request */}
+                    <div>
+                      <div style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '12px', fontFamily: 'var(--font-inter)' }}>
+                        Example
+                      </div>
+                      <pre style={{
+                        fontSize: '11px', color: 'rgba(255,255,255,0.7)',
+                        background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.06)',
+                        borderRadius: '10px', padding: '12px 14px',
+                        overflowX: 'auto', margin: 0, lineHeight: 1.5,
+                        fontFamily: 'var(--font-mono)',
+                        whiteSpace: 'pre-wrap', wordBreak: 'break-all',
+                      }}>
+                        {ep.example}
+                      </pre>
+                    </div>
+                  </div>
+
+                  {/* Response sample */}
+                  <div style={{ padding: '0 24px 24px' }}>
+                    <div style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '10px', fontFamily: 'var(--font-inter)' }}>
+                      Response (200 OK)
+                    </div>
+                    <pre style={{
+                      fontSize: '11px', color: '#60a5fa',
+                      background: 'rgba(96,165,250,0.04)', border: '1px solid rgba(96,165,250,0.12)',
+                      borderRadius: '10px', padding: '14px 16px',
+                      overflowX: 'auto', margin: 0, lineHeight: 1.6,
+                      fontFamily: 'var(--font-mono)',
+                    }}>
+                      {ep.response}
+                    </pre>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+
+            {/* Rate limits & methodology */}
+            <Reveal>
+              <div style={{
+                display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+                gap: '16px', marginTop: '8px',
+              }}>
+                {[
+                  {
+                    icon: '⚡',
+                    title: 'Rate limits',
+                    color: '#fbbf24',
+                    body: 'Public endpoints: 60 req/min. Research tier (free for non-profits & health departments): 600 req/min. Email data@nexus.health for a research key.',
+                  },
+                  {
+                    icon: '📐',
+                    title: 'Data methodology',
+                    color: '#a78bfa',
+                    body: 'Primary sources: HRSA\'s 1,400+ FQHCs, NAFC registry, state health department feeds, and community-submitted clinics. Data refreshed every 4 hours. Affordability scores use a 5-factor model published in our GitHub repo.',
+                  },
+                  {
+                    icon: '📜',
+                    title: 'License',
+                    color: '#60a5fa',
+                    body: 'Clinic data is CC-BY 4.0. Attribution required: "Data sourced from NEXUS Health (nexus.health), HRSA, and NAFC." Commercial use restricted — contact us.',
+                  },
+                ].map(card => (
+                  <div
+                    key={card.title}
+                    style={{
+                      padding: '24px', borderRadius: '16px',
+                      background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+                    }}
+                  >
+                    <div style={{ fontSize: '22px', marginBottom: '10px' }}>{card.icon}</div>
+                    <div style={{ fontSize: '14px', fontWeight: 700, marginBottom: '8px', color: card.color }}>{card.title}</div>
+                    <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, margin: 0, fontFamily: 'var(--font-inter)' }}>{card.body}</p>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
       {/* ── GET INVOLVED ── */}
       <section style={{ padding: '80px 24px 120px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>

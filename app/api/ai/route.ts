@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     })
   }
 
-  let body: { messages?: unknown[] }
+  let body: { messages?: unknown[]; pageContext?: string }
   try {
     body = await req.json()
   } catch {
@@ -69,6 +69,14 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify({ error: 'No valid messages' }), { status: 400 })
   }
 
+  // #19 — Page context injection: append a brief context hint to system prompt
+  const pageContext = typeof body.pageContext === 'string'
+    ? body.pageContext.slice(0, 500)
+    : ''
+  const systemPrompt = pageContext
+    ? `${SYSTEM_PROMPT}\n\nCurrent page context: ${pageContext}`
+    : SYSTEM_PROMPT
+
   const apiKey = process.env.ANTHROPIC_API_KEY
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'AI service not configured' }), { status: 503 })
@@ -88,7 +96,7 @@ export async function POST(req: Request) {
         const stream = client.messages.stream({
           model:      'claude-haiku-4-5',
           max_tokens: 1024,
-          system:     SYSTEM_PROMPT,
+          system:     systemPrompt,
           messages,
         })
 

@@ -1,4 +1,3 @@
-'use client'
 import dynamic from 'next/dynamic'
 import Footer from '@/components/Footer'
 
@@ -12,9 +11,9 @@ const FloatingCTA       = dynamic(() => import('@/components/FloatingCTA'),     
 const ExitIntent        = dynamic(() => import('@/components/ExitIntent'),        { ssr: false })
 const CrisisButton      = dynamic(() => import('@/components/CrisisButton'),      { ssr: false })
 
-/* ── Nav + Hero ── */
-const Nav               = dynamic(() => import('@/components/Nav'),               { ssr: false })
-const Hero              = dynamic(() => import('@/components/Hero'),              { ssr: false })
+/* ── Nav + Hero — code-split, SSR-safe ── */
+const Nav               = dynamic(() => import('@/components/Nav'))
+const Hero              = dynamic(() => import('@/components/Hero'))
 
 /* ── Content sections — code-split, SSR-safe ── */
 const Stats             = dynamic(() => import('@/components/Stats'))

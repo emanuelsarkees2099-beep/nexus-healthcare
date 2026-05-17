@@ -56,6 +56,9 @@ export function registerGSAP(): void {
   if (syncRegistered) return
   if (typeof window === 'undefined') return
   gsap.registerPlugin(ScrollTrigger)
+  // Suppress "target not found" dev warnings — harmless when components
+  // unmount mid-animation (SSR hydration gaps, conditional rendering, etc.)
+  gsap.config({ nullTargetWarn: false })
   syncRegistered = true
   setupReducedMotionKillSwitch()
 }

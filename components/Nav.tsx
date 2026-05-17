@@ -284,6 +284,23 @@ export default function Nav({ initialUser }: NavProps = {}) {
             </button>
           )}
 
+          {/* ⌘K command palette hint */}
+          <button
+            aria-label="Open command palette (⌘K)"
+            onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true }))}
+            className="nav-cmd-hint"
+            style={{
+              display: 'flex', alignItems: 'center', gap: '6px',
+              padding: '5px 10px', borderRadius: '8px', height: '34px',
+              background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
+              cursor: 'pointer', color: 'var(--text-3)', fontSize: '11px',
+              fontFamily: 'var(--font-inter)', transition: 'all 0.2s', flexShrink: 0,
+            }}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <kbd style={{ fontFamily: 'var(--font-mono),monospace', fontSize: '10px', letterSpacing: '0.02em' }}>⌘K</kbd>
+          </button>
+
           {/* Notification bell */}
           <NotificationBell />
 
@@ -347,8 +364,12 @@ export default function Nav({ initialUser }: NavProps = {}) {
         @media (max-width: 768px) {
           #main-nav { width: calc(100% - 24px) !important; top: 10px !important; padding: 0 14px !important; }
           .nav-links-desktop { display: none !important; }
-          .nav-actions-desktop > *:not(.nav-hamburger) { display: none !important; }
+          /* Hide all action items on mobile EXCEPT the saved-clinics badge and hamburger */
+          .nav-actions-desktop > *:not(.nav-hamburger):not(.nav-saved-btn) { display: none !important; }
+          .nav-saved-btn { display: flex !important; }
           .nav-hamburger { display: flex !important; }
+          /* ⌘K hint is desktop-only */
+          .nav-cmd-hint { display: none !important; }
         }
         @media (min-width: 769px) {
           .nav-hamburger { display: none !important; }
@@ -356,8 +377,9 @@ export default function Nav({ initialUser }: NavProps = {}) {
         /* C3 — CSS hover states for nav elements */
         .nav-link-pill:hover { color: var(--text) !important; background: rgba(255,255,255,0.06) !important; }
         .nav-link-pill.active:hover { background: rgba(255,255,255,0.07) !important; }
-.nav-saved-btn:hover { background: rgba(74,144,217,0.2) !important; color: var(--accent) !important; }
+        .nav-saved-btn:hover { background: rgba(74,144,217,0.2) !important; color: var(--accent) !important; }
         .nav-settings-btn:hover { background: rgba(255,255,255,0.1) !important; color: var(--text) !important; border-color: rgba(255,255,255,0.1) !important; }
+        .nav-cmd-hint:hover { background: rgba(255,255,255,0.07) !important; border-color: rgba(255,255,255,0.12) !important; color: var(--text-2) !important; }
       `}</style>
     </>
   )

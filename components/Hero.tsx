@@ -94,14 +94,15 @@ export default function Hero() {
     return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(rafId) }
   }, [])
 
-  /* ── P9: Synchronous GSAP initial states (prevent FOUC) ── */
+  /* ── P9: GSAP initial states ──────────────────────────────────────────────
+   * CSS classes (.h1-word, .hero-fade-up) already set visibility:hidden +
+   * transform on these elements BEFORE JS runs, so LCP measurement happens
+   * on the pre-paint hidden state (counted by browsers) rather than being
+   * blocked by a post-paint opacity:0 set by JS.
+   * Here we only need to set the eyebrow (no CSS class) and orbs.
+   * ─────────────────────────────────────────────────────────────────────── */
   useLayoutEffect(() => {
-    const words = h1Ref.current?.querySelectorAll('.h1-word') ?? []
-    gsap.set([...words, subRef.current, searchRef.current, chipsRef.current,
-              eyebrowRef.current, socialRef.current, mockupRef.current], { opacity: 0 })
-    gsap.set([...words], { y: '110%' })
-    gsap.set([subRef.current, searchRef.current, chipsRef.current,
-              socialRef.current, mockupRef.current], { y: 30 })
+    gsap.set([eyebrowRef.current], { opacity: 0 })
   }, [])
 
   /* ── Hero entrance + ScrollTrigger pin ── */
@@ -111,13 +112,13 @@ export default function Hero() {
 
       const tl = gsap.timeline({ delay: 0.15 })
       tl
-        .to(eyebrowRef.current,  { opacity: 1,                  duration: 0.7,  ease: 'power3.out' })
-        .to(socialRef.current,   { y: 0,    opacity: 1,         duration: 0.65, ease: 'power3.out' }, '-=0.45')
-        .to([...words],          { y: '0%', opacity: 1,         duration: 1.0,  stagger: 0.11, ease: 'power4.out' }, '-=0.35')
-        .to(subRef.current,      { y: 0,    opacity: 1,         duration: 0.8,  ease: 'power3.out' }, '-=0.5')
-        .to(searchRef.current,   { y: 0,    opacity: 1,         duration: 0.8,  ease: 'power3.out' }, '-=0.55')
-        .to(chipsRef.current,    { y: 0,    opacity: 1,         duration: 0.7,  ease: 'power3.out' }, '-=0.5')
-        .to(mockupRef.current,   { y: 0,    opacity: 1,         duration: 1.0,  ease: 'power3.out' }, '-=0.35')
+        .to(eyebrowRef.current,  { opacity: 1, visibility: 'visible',                 duration: 0.7,  ease: 'power3.out' })
+        .to(socialRef.current,   { y: 0, opacity: 1, visibility: 'visible',           duration: 0.65, ease: 'power3.out' }, '-=0.45')
+        .to([...words],          { y: '0%', opacity: 1, visibility: 'visible',        duration: 1.0,  stagger: 0.11, ease: 'power4.out' }, '-=0.35')
+        .to(subRef.current,      { y: 0, opacity: 1, visibility: 'visible',           duration: 0.8,  ease: 'power3.out' }, '-=0.5')
+        .to(searchRef.current,   { y: 0, opacity: 1, visibility: 'visible',           duration: 0.8,  ease: 'power3.out' }, '-=0.55')
+        .to(chipsRef.current,    { y: 0, opacity: 1, visibility: 'visible',           duration: 0.7,  ease: 'power3.out' }, '-=0.5')
+        .to(mockupRef.current,   { y: 0, opacity: 1, visibility: 'visible',           duration: 1.0,  ease: 'power3.out' }, '-=0.35')
 
       /* Scroll-out: content fades, mockup rises */
       const pinTl = gsap.timeline({
@@ -169,6 +170,25 @@ export default function Hero() {
     }
   }, [])
 
+  /* ── Symptom keyword detector (#21) ────────────────────────────────────────
+   * If the user types a symptom ("chest pain", "can't sleep", "rash")
+   * instead of a specialty, route them to /triage?symptom=... first.
+   * The triage page walks them through severity → care-level → matched clinics.
+   * ─────────────────────────────────────────────────────────────────────────── */
+  const SYMPTOM_PATTERNS = [
+    /\b(chest\s*pain|shortness\s*of\s*breath|can['']?t\s*breathe)\b/i,
+    /\b(rash|itching|hives|skin\s+problem|eczema)\b/i,
+    /\b(can['']?t\s+sleep|insomnia|anxiety|depression|mental\s+health|feeling\s+(sad|hopeless|overwhelmed))\b/i,
+    /\b(headache|migraine|dizziness|fainting)\b/i,
+    /\b(fever|cough|cold|flu|sick|nausea|vomiting)\b/i,
+    /\b(back\s*pain|joint\s*pain|knee|shoulder)\b/i,
+    /\b(stomach\s*pain|abdominal|cramps|constipat|diarr)\b/i,
+    /\b(blurry\s*vision|eye\s*pain|ear\s*pain|hearing)\b/i,
+    /\b(tooth\s*ache|toothache|gum|dental\s*pain)\b/i,
+    /\b(blood|bleeding|wound|cut|swelling)\b/i,
+  ]
+  const isSymptomQuery = (q: string) => SYMPTOM_PATTERNS.some(rx => rx.test(q))
+
   /* ── Search handler ── */
   const handleSearch = useCallback(() => {
     const query = searchVal.trim()
@@ -179,9 +199,13 @@ export default function Hero() {
       gsap.to(btn, { scale: 0.97, duration: 0.1, yoyo: true, repeat: 1 })
     }
     const loc = locationVal.trim() || 'Phoenix, AZ'
-    setTimeout(() => {
-      router.push(`/search?q=${encodeURIComponent(query)}&loc=${encodeURIComponent(loc)}`)
-    }, 320)
+
+    // #21: Symptom queries → triage first; specialty/location queries → search
+    const destination = isSymptomQuery(query)
+      ? `/triage?symptom=${encodeURIComponent(query)}&loc=${encodeURIComponent(loc)}`
+      : `/search?q=${encodeURIComponent(query)}&loc=${encodeURIComponent(loc)}`
+
+    setTimeout(() => { router.push(destination) }, 320)
   }, [searchVal, locationVal, router])
 
   return (
@@ -252,7 +276,7 @@ export default function Hero() {
         </div>
 
         {/* Social proof */}
-        <div ref={socialRef} style={{
+        <div ref={socialRef} className="hero-fade-up" style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           gap: '12px', marginBottom: '1.2rem', flexWrap: 'wrap',
         }}>
@@ -342,7 +366,7 @@ export default function Hero() {
         </h1>
 
         {/* Subtitle */}
-        <p ref={subRef} style={{
+        <p ref={subRef} className="hero-fade-up" style={{
           fontSize: 'clamp(0.9rem, 1.4vw, 1.05rem)',
           color: 'var(--text-2)', maxWidth: '520px',
           lineHeight: 1.7, fontWeight: 300,
@@ -353,7 +377,7 @@ export default function Hero() {
         </p>
 
         {/* ── SEARCH BAR (sub-component, fades on scroll) ── */}
-        <div ref={searchRef} style={{ width: '100%', maxWidth: '660px', margin: '0 auto 0.8rem', position: 'relative' }}>
+        <div ref={searchRef} className="hero-fade-up" style={{ width: '100%', maxWidth: '660px', margin: '0 auto 0.8rem', position: 'relative' }}>
           <SearchBar
             searchVal={searchVal}
             setSearchVal={setSearchVal}
@@ -367,7 +391,7 @@ export default function Hero() {
         </div>
 
         {/* Quick-pick chips */}
-        <div ref={chipsRef} role="list" aria-label="Quick search suggestions"
+        <div ref={chipsRef} className="hero-fade-up" role="list" aria-label="Quick search suggestions"
           style={{ display: 'flex', alignItems: 'center', gap: '7px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '0.75rem' }}>
           <span style={{ fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }} aria-hidden="true">Try:</span>
           {([
@@ -423,8 +447,52 @@ export default function Hero() {
 
       </div>
 
-      {/* ── FLOATING MOCKUP (sub-component) ── */}
-      <HeroMockup mockupRef={mockupRef} />
+      {/* ── MOBILE VISUAL — stat cards (shown only on mobile via CSS) ── */}
+      <div className="hero-mobile-visual" style={{
+        display: 'none',
+        flexDirection: 'column', gap: '10px',
+        width: '100%', maxWidth: '400px', margin: '24px auto 0',
+        padding: '0 4px',
+      }}>
+        {/* Mini clinic result cards */}
+        {[
+          { name: 'Clinica Adelante',     dist: '1.2 mi', badge: 'Free care', badgeColor: 'var(--green-pulse)', badgeBg: 'rgba(74,222,128,0.10)' },
+          { name: 'Valle del Sol Health', dist: '2.8 mi', badge: 'Sliding scale', badgeColor: 'var(--amber)',      badgeBg: 'rgba(252,211,77,0.10)'  },
+          { name: 'Mountain Park Health', dist: '4.1 mi', badge: 'Accepting',    badgeColor: 'var(--accent)',     badgeBg: 'rgba(74,144,217,0.10)'  },
+        ].map((item, i) => (
+          <div key={item.name} aria-hidden="true" style={{
+            display: 'flex', alignItems: 'center', gap: '12px',
+            padding: '12px 14px', borderRadius: '12px',
+            background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
+            opacity: 1 - i * 0.15,
+            transform: `scale(${1 - i * 0.02})`,
+            transformOrigin: 'top center',
+          }}>
+            <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'rgba(74,144,217,0.10)', border: '1px solid rgba(74,144,217,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</div>
+              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.40)', fontFamily: 'var(--font-inter)', marginTop: '2px' }}>{item.dist} away</div>
+            </div>
+            <span style={{ fontSize: '10px', fontWeight: 700, padding: '3px 8px', borderRadius: '100px', color: item.badgeColor, background: item.badgeBg, flexShrink: 0, fontFamily: 'var(--font-inter)', letterSpacing: '0.01em' }}>{item.badge}</span>
+          </div>
+        ))}
+        {/* Bottom stat strip */}
+        <div style={{ display: 'flex', justifyContent: 'space-around', padding: '12px 0 4px', borderTop: '1px solid rgba(255,255,255,0.05)', marginTop: '4px' }}>
+          {[['12,000+', 'Free clinics'], ['$0', 'To use NEXUS'], ['50', 'States covered']].map(([val, label]) => (
+            <div key={label} style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '16px', fontWeight: 800, color: 'var(--accent)', fontFamily: 'var(--font-display)', letterSpacing: '-0.03em' }}>{val}</div>
+              <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.40)', fontFamily: 'var(--font-inter)', marginTop: '2px' }}>{label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── FLOATING MOCKUP — desktop only (wrapper collapses on mobile) ── */}
+      <div className="mockup-desktop-wrapper hero-fade-up" style={{ width: '100%' }}>
+        <HeroMockup mockupRef={mockupRef} />
+      </div>
 
       <style>{`
         @keyframes grid-fade {
@@ -433,7 +501,13 @@ export default function Hero() {
         }
         @media (max-width: 768px) {
           #hero { padding: 90px 1.25rem 0 !important; }
-          .mockup-inner { display: none !important; }
+          /* Collapse the desktop 3D mockup wrapper entirely — zero height, no ghost space */
+          .mockup-desktop-wrapper { display: none !important; }
+          /* Show the mobile clinic-card visual */
+          .hero-mobile-visual { display: flex !important; }
+        }
+        @media (min-width: 769px) {
+          .hero-mobile-visual { display: none !important; }
         }
         /* C3 — CSS hover for chip pills */
         .chip-pill:hover {

@@ -27,6 +27,7 @@
   --violet:       #A78BFA;
   --violet-dim:   rgba(167, 139, 250, 0.10);
   --blue-pulse:   #60A5FA;
+  --green-pulse:  #4ade80;
 
   /* Text — pure white hierarchy, no colour tint */
   --text:   #FFFFFF;
@@ -91,6 +92,7 @@
   --violet:       #7C3AED;
   --violet-dim:   rgba(124, 58, 237, 0.10);
   --blue-pulse:   #284F8F;
+  --green-pulse:  #16a34a;
   --text:   #0A0E1A;
   --text-2: rgba(10, 14, 26, 0.58);
   --text-3: rgba(10, 14, 26, 0.42);
@@ -106,6 +108,152 @@
 
 [data-theme="light"] #bg-canvas { display: none; }
 [data-theme="light"] body::after { opacity: 0.012; }
+
+/* ── Light mode background (#33): subtle dot-grid + soft gradient ── */
+/* In dark mode the BackgroundCanvas WebGL animation fills this role.
+   In light mode we replace it with a pure-CSS layered background so
+   the page doesn't feel flat and empty. */
+[data-theme="light"] body {
+  background-image:
+    /* Soft radial top-center glow */
+    radial-gradient(ellipse 120% 50% at 50% -10%, rgba(40,79,143,0.06) 0%, transparent 70%),
+    /* Dot-grid pattern */
+    radial-gradient(circle, rgba(40,79,143,0.07) 1px, transparent 1px);
+  background-size: auto, 32px 32px;
+}
+
+/* Floating accent orbs for light mode hero */
+[data-theme="light"] #hero::before {
+  content: '';
+  position: absolute;
+  top: -120px; left: 50%;
+  transform: translateX(-50%);
+  width: 800px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(74,144,217,0.10) 0%, rgba(74,144,217,0.03) 50%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   HERO LCP OPTIMIZATION (#16)
+   CSS-first initial hidden states so the H1 is "painted" before JS
+   runs. `visibility: hidden` keeps the element in the layout tree
+   (and counted for LCP measurement) while `opacity: 0` via GSAP
+   post-paint would not be counted by browsers.
+   GSAP removes these classes and animates to visible state.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* H1 word segments: start hidden via CSS (pre-paint) not GSAP (post-paint) */
+.h1-word {
+  display: inline-block;
+  visibility: hidden;
+  transform: translateY(110%);
+  will-change: transform, opacity;
+}
+
+/* Hero fade-up elements: subtitle, search bar, chips, social proof */
+.hero-fade-up {
+  visibility: hidden;
+  transform: translateY(30px);
+  will-change: transform, opacity;
+}
+
+/* When GSAP plays the entrance animation it removes these states.
+   Reduced-motion: immediately visible, no animation */
+@media (prefers-reduced-motion: reduce) {
+  .h1-word,
+  .hero-fade-up {
+    visibility: visible !important;
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PAGE TRANSITIONS — View Transitions API Level 2
+   Supported: Chrome 111+, Edge 111+. Gracefully ignored elsewhere.
+   ═══════════════════════════════════════════════════════════════════ */
+
+@view-transition {
+  navigation: auto;
+}
+
+/* Outgoing page fades out + slides up slightly */
+::view-transition-old(root) {
+  animation: 180ms cubic-bezier(0.4, 0, 1, 1) both vt-fade-out;
+}
+
+/* Incoming page fades in + slides up from below */
+::view-transition-new(root) {
+  animation: 240ms cubic-bezier(0, 0, 0.2, 1) 80ms both vt-fade-in;
+}
+
+@keyframes vt-fade-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-6px); }
+}
+
+@keyframes vt-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Nav + background persist: pin them so they don't transition */
+#main-nav,
+#bg-canvas {
+  view-transition-name: persistent-chrome;
+}
+
+::view-transition-old(persistent-chrome),
+::view-transition-new(persistent-chrome) {
+  animation: none;
+}
+
+/* Clinic card morphing into detail page */
+.clinic-card[data-clinic-id] {
+  view-transition-name: var(--vt-name, none);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MICRO-INTERACTIONS (#31) — ClinicCard animations
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Distance badge pulse for very nearby clinics (< 1 mile) */
+@keyframes distance-nearby-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+
+/* Open-now dot pulse (referenced in ClinicCard) */
+@keyframes open-pulse {
+  0%, 100% { transform: scale(1);   opacity: 1; }
+  50%       { transform: scale(1.6); opacity: 0.5; }
+}
+
+/* Phone ripple — ::after pseudo element on .phone-ripple-btn */
+.phone-ripple-btn {
+  position: relative;
+  overflow: hidden;
+}
+.phone-ripple-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(74,144,217,0.3);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.2s, transform 0.3s;
+  pointer-events: none;
+}
+.phone-ripple-btn:active::after {
+  opacity: 1;
+  transform: scale(1);
+  transition: none;
+}
 
 /* ═══════════════════════════════════════════════════════════════════
    RESET + BASE
@@ -922,38 +1070,6 @@ a[role="button"]:active {
   .card-container .clinic-card  { padding: 22px 28px !important; }
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   VIEW TRANSITIONS (#30) — native shared-element morphing
-   ═══════════════════════════════════════════════════════════════════ */
-
-@view-transition {
-  navigation: auto;
-}
-
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.35s;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-}
-::view-transition-old(root) {
-  animation-name: vt-slide-out;
-}
-::view-transition-new(root) {
-  animation-name: vt-slide-in;
-}
-@keyframes vt-slide-out {
-  from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(-8px); }
-}
-@keyframes vt-slide-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Clinic card view transition name — enables morphing into detail page ── */
-.clinic-card[data-clinic-id] {
-  view-transition-name: var(--vt-name, none);
-}
 
 /* ═══════════════════════════════════════════════════════════════════
    NAV ACTIVE SLIDING INDICATOR (#17)
@@ -2149,5 +2265,132 @@ a:not(.no-press):active,
   color: var(--accent) !important;
   border-color: rgba(74,144,217,0.25) !important;
   background: var(--accent-dim) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PAGE-LEVEL AMBIENT BACKGROUNDS (#34)
+   Each major inner page gets its own ambient color tone via a
+   data-page-theme attribute on the body (or page wrapper).
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Crisis page: warm coral ambient */
+[data-page="crisis"] body,
+body[data-page="crisis"] {
+  background-image:
+    radial-gradient(ellipse 120% 50% at 50% -5%, rgba(248,113,113,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 30% at 80% 100%, rgba(248,113,113,0.04) 0%, transparent 60%);
+}
+
+/* Mental health / triage: violet tones */
+[data-page="triage"] body,
+body[data-page="triage"],
+[data-page="mental"] body,
+body[data-page="mental"] {
+  background-image:
+    radial-gradient(ellipse 120% 50% at 50% -5%, rgba(167,139,250,0.07) 0%, transparent 60%);
+}
+
+/* Programs / eligibility: amber */
+[data-page="programs"] body,
+body[data-page="programs"],
+[data-page="eligibility"] body,
+body[data-page="eligibility"] {
+  background-image:
+    radial-gradient(ellipse 120% 50% at 50% -5%, rgba(251,191,36,0.05) 0%, transparent 60%);
+}
+
+/* Impact / equity: green positive */
+[data-page="impact"] body,
+body[data-page="impact"],
+[data-page="equity"] body,
+body[data-page="equity"] {
+  background-image:
+    radial-gradient(ellipse 120% 50% at 50% -5%, rgba(74,222,128,0.05) 0%, transparent 60%);
+}
+
+/* Simpler: use class-based ambient glow on any section/page wrapper */
+.ambient-coral   { background-image: radial-gradient(ellipse 100% 40% at 50% 0%, rgba(248,113,113,0.08) 0%, transparent 65%); }
+.ambient-violet  { background-image: radial-gradient(ellipse 100% 40% at 50% 0%, rgba(167,139,250,0.08) 0%, transparent 65%); }
+.ambient-amber   { background-image: radial-gradient(ellipse 100% 40% at 50% 0%, rgba(251,191,36,0.06) 0%, transparent 65%); }
+.ambient-green   { background-image: radial-gradient(ellipse 100% 40% at 50% 0%, rgba(74,222,128,0.06) 0%, transparent 65%); }
+.ambient-blue    { background-image: radial-gradient(ellipse 100% 40% at 50% 0%, rgba(74,144,217,0.08) 0%, transparent 65%); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   LOW-BANDWIDTH MODE (#37)
+   Toggle via: document.documentElement.setAttribute('data-reduced-data', 'true')
+   Persisted in localStorage. Disables heavy visuals for rural / slow connections.
+   ═══════════════════════════════════════════════════════════════════ */
+
+[data-reduced-data="true"] #bg-canvas          { display: none !important; }
+[data-reduced-data="true"] .hero-mobile-visual  { display: none !important; }
+[data-reduced-data="true"] .mockup-desktop-wrapper { display: none !important; }
+[data-reduced-data="true"] .aurora-bg::before,
+[data-reduced-data="true"] .aurora-bg::after   { display: none !important; }
+[data-reduced-data="true"] [style*="animation"] { animation: none !important; }
+[data-reduced-data="true"] [style*="blur"]      {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+/* Images in reduced-data mode: defer loading via JS, hide decorative ones */
+[data-reduced-data="true"] img[aria-hidden="true"] { display: none !important; }
+[data-reduced-data="true"] video                   { display: none !important; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   SCREEN READER & ARIA IMPROVEMENTS (#38)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Filter pills: show pressed state visually so it matches aria-pressed */
+[role="button"][aria-pressed="true"],
+button[aria-pressed="true"] {
+  background: rgba(74,144,217,0.14) !important;
+  border-color: rgba(74,144,217,0.35) !important;
+  color: var(--accent) !important;
+}
+
+/* Skip-to-content link (visually hidden until focused) */
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 99999;
+  background: var(--accent);
+  color: var(--bg);
+  padding: 8px 16px;
+  border-radius: 0 0 8px 8px;
+  font-weight: 700;
+  font-family: var(--font-inter);
+  font-size: 13px;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Visually hidden but accessible to screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Ensure map keyboard nav hint is visible when focused */
+.leaflet-container:focus-visible::after {
+  content: 'Use arrow keys to pan, +/- to zoom';
+  position: absolute;
+  bottom: 8px; left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 5px;
+  z-index: 999;
+  pointer-events: none;
+  white-space: nowrap;
 }
 

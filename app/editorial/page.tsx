@@ -414,10 +414,62 @@ export default function EditorialPage() {
             </div>
           )}
 
+          {/* #46 — City guides framework */}
+          <Reveal>
+            <div style={{ marginTop: '80px', marginBottom: '48px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '24px' }}>
+                <div>
+                  <div style={{ ...pill, marginBottom: '12px' }}>📍 City Guides</div>
+                  <h2 style={{ fontSize: 'clamp(20px, 3vw, 30px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>Free care, by city</h2>
+                  <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)', marginTop: '6px', lineHeight: 1.5 }}>
+                    Guides to navigating free and low-cost healthcare in the cities where the need is greatest.
+                  </p>
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '12px' }}>
+                {[
+                  { city: 'Houston, TX',        zip: '77001', clinics: 148, pop: '2.3M uninsured', color: '#4A90D9', flag: '🏙️' },
+                  { city: 'Phoenix, AZ',         zip: '85001', clinics: 112, pop: '1.1M uninsured', color: '#A78BFA', flag: '🌵' },
+                  { city: 'Los Angeles, CA',     zip: '90001', clinics: 203, pop: '2.8M uninsured', color: '#FB923C', flag: '🌴' },
+                  { city: 'Dallas, TX',          zip: '75201', clinics: 97,  pop: '0.9M uninsured', color: '#60A5FA', flag: '⭐' },
+                  { city: 'Miami, FL',           zip: '33101', clinics: 88,  pop: '0.7M uninsured', color: '#F472B6', flag: '🌊' },
+                  { city: 'Chicago, IL',         zip: '60601', clinics: 134, pop: '1.2M uninsured', color: '#FCD34D', flag: '🌆' },
+                  { city: 'New York, NY',        zip: '10001', clinics: 187, pop: '1.5M uninsured', color: '#4ADE80', flag: '🗽' },
+                  { city: 'San Antonio, TX',     zip: '78201', clinics: 79,  pop: '0.6M uninsured', color: '#F87171', flag: '🤠' },
+                ].map(g => (
+                  <a
+                    key={g.city}
+                    href={`/search?loc=${encodeURIComponent(g.zip)}&q=free+clinic`}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <div
+                      style={{
+                        padding: '18px 20px', borderRadius: '16px',
+                        background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)',
+                        transition: 'border-color 0.2s, background 0.2s, transform 0.2s',
+                        cursor: 'pointer',
+                      }}
+                      onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = `${g.color}33`; el.style.background = `${g.color}06`; el.style.transform = 'translateY(-2px)' }}
+                      onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(255,255,255,0.07)'; el.style.background = 'rgba(255,255,255,0.02)'; el.style.transform = 'translateY(0)' }}
+                    >
+                      <div style={{ fontSize: '20px', marginBottom: '8px' }}>{g.flag}</div>
+                      <div style={{ fontSize: '14px', fontWeight: 700, marginBottom: '4px', color: 'var(--text)' }}>{g.city}</div>
+                      <div style={{ fontSize: '11px', color: g.color, fontWeight: 600, fontFamily: 'var(--font-mono)' }}>{g.clinics} free clinics</div>
+                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', marginTop: '2px' }}>{g.pop}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '10px', fontSize: '11px', color: g.color, fontFamily: 'var(--font-inter)', fontWeight: 600 }}>
+                        Find care <ArrowRight size={10} />
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
           {/* Newsletter / pitch */}
           <Reveal>
             <div style={{
-              marginTop: '80px', padding: '4px', borderRadius: '24px',
+              marginTop: '48px', padding: '4px', borderRadius: '24px',
               background: 'linear-gradient(135deg, rgba(74,144,217,0.2), rgba(74,144,217,0.04))',
             }}>
               <div style={{

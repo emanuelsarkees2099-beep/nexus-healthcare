@@ -456,6 +456,61 @@ export default function EquityPage() {
         </div>
       </section>
 
+      {/* ── #30 — DOWNLOAD DATA ── */}
+      <section style={{ padding: '40px 24px 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <Reveal>
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              gap: '24px', flexWrap: 'wrap',
+              padding: '28px 32px', borderRadius: '20px',
+              background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.15)',
+            }}>
+              <div>
+                <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '4px' }}>
+                  Download this dataset
+                </div>
+                <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-inter)', lineHeight: 1.55, maxWidth: '420px' }}>
+                  State-by-state disparity data, clinic density scores, and Medicaid expansion outcomes. CC-BY 4.0 license. For researchers, journalists, and health departments.
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', flexShrink: 0 }}>
+                <a
+                  href="/api/equity-data?format=csv"
+                  download="nexus-equity-data.csv"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '6px',
+                    padding: '10px 20px', borderRadius: '100px',
+                    background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.3)',
+                    color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
+                    textDecoration: 'none', transition: 'background 0.18s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.2)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.12)')}
+                >
+                  <BarChart2 size={13} /> CSV Dataset
+                </a>
+                <a
+                  href="/api/equity-data?format=json"
+                  download="nexus-equity-data.json"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '6px',
+                    padding: '10px 20px', borderRadius: '100px',
+                    background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
+                    color: 'rgba(255,255,255,0.6)', fontSize: '13px', fontWeight: 600,
+                    textDecoration: 'none', transition: 'background 0.18s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.04)')}
+                >
+                  <Globe size={13} /> JSON API
+                </a>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
       {/* ── ACTION CTA ── */}
       <section style={{ padding: '80px 24px 120px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '760px', margin: '0 auto' }}>

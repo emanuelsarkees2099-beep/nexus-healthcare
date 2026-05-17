@@ -173,17 +173,29 @@ const EMERGENCY = {
   poison: { label: 'Poison Control', action: 'Call 1-800-222-1222', href: 'tel:18002221222', color: '#facc15' },
 }
 
+/* #29 — Language filter options */
+const LANG_FILTERS = ['All languages', 'Español', 'French', '40+ languages']
+
 export default function TelehealthPage() {
-  const [filter, setFilter] = useState('all')
-  const [expanded, setExpanded] = useState<number | null>(null)
+  const [filter,       setFilter]       = useState('all')
+  const [langFilter,   setLangFilter]   = useState('All languages')
+  const [expanded,     setExpanded]     = useState<number | null>(null)
   const [copiedScript, setCopiedScript] = useState<string | null>(null)
   const [expandedScript, setExpandedScript] = useState<string | null>(null)
 
   const filtered = PROVIDERS.filter(p => {
-    if (filter === 'all') return true
-    if (filter === 'free') return p.cost.startsWith('Free') || p.cost.startsWith('$0')
-    if (filter === 'crisis') return p.available === '24/7' || p.available.includes('24/7')
-    return p.specialtyTags.includes(filter)
+    if (filter === 'all' && langFilter === 'All languages') return true
+    const matchSpec = filter === 'all'
+      ? true
+      : filter === 'free'
+      ? p.cost.startsWith('Free') || p.cost.startsWith('$0')
+      : filter === 'crisis'
+      ? p.available === '24/7' || p.available.includes('24/7')
+      : p.specialtyTags.includes(filter)
+    const matchLang = langFilter === 'All languages'
+      ? true
+      : p.languages.some(l => l.toLowerCase().includes(langFilter.toLowerCase()) || l.includes('+'))
+    return matchSpec && matchLang
   })
 
   function copyScript(id: string, text: string) {
@@ -243,12 +255,35 @@ export default function TelehealthPage() {
         {/* ── PROVIDERS ────────────────────────── */}
         <section style={{ padding: '60px 24px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
           <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '28px' }}>
-              <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#fff' }}>Verified providers</h2>
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                {SPECIALTY_FILTERS.map(f => (
-                  <button key={f.value} onClick={() => setFilter(f.value)} style={{ padding: '7px 13px', borderRadius: '100px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', border: '1px solid', transition: 'all 0.18s', background: filter === f.value ? 'var(--accent)' : 'transparent', color: filter === f.value ? '#07070F' : 'rgba(255,255,255,0.5)', borderColor: filter === f.value ? 'var(--accent)' : 'rgba(255,255,255,0.1)' }}>
-                    {f.label}
+            <div style={{ marginBottom: '28px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '12px' }}>
+                <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#fff' }}>Verified providers</h2>
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                  {SPECIALTY_FILTERS.map(f => (
+                    <button key={f.value} onClick={() => setFilter(f.value)} style={{ padding: '7px 13px', borderRadius: '100px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', border: '1px solid', transition: 'all 0.18s', background: filter === f.value ? 'var(--accent)' : 'transparent', color: filter === f.value ? '#07070F' : 'rgba(255,255,255,0.5)', borderColor: filter === f.value ? 'var(--accent)' : 'rgba(255,255,255,0.1)' }}>
+                      {f.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {/* #29 — Language filter row */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <Globe size={11} /> Language:
+                </span>
+                {LANG_FILTERS.map(l => (
+                  <button
+                    key={l}
+                    onClick={() => setLangFilter(l)}
+                    style={{
+                      padding: '4px 11px', borderRadius: '100px', fontSize: '11px', fontWeight: 500,
+                      cursor: 'pointer', fontFamily: 'inherit', border: '1px solid', transition: 'all 0.15s',
+                      background: langFilter === l ? 'rgba(167,139,250,0.12)' : 'transparent',
+                      color: langFilter === l ? '#a78bfa' : 'rgba(255,255,255,0.4)',
+                      borderColor: langFilter === l ? 'rgba(167,139,250,0.3)' : 'rgba(255,255,255,0.1)',
+                    }}
+                  >
+                    {l}
                   </button>
                 ))}
               </div>

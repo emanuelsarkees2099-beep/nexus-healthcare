@@ -51,6 +51,33 @@ export default function AIAssistant() {
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
 
+  /* #19 — Context injection: read current URL to seed assistant with page context */
+  const getPageContext = useCallback((): string => {
+    if (typeof window === 'undefined') return ''
+    const url    = new URL(window.location.href)
+    const path   = url.pathname
+    const q      = url.searchParams.get('q')
+    const loc    = url.searchParams.get('loc')
+    const sym    = url.searchParams.get('symptom')
+
+    if (path.startsWith('/search') && (q || loc)) {
+      return `The user is currently on the search results page${q ? ` searching for "${q}"` : ''}${loc ? ` near ${loc}` : ''}. Tailor your response to help them find the right free clinic.`
+    }
+    if (path.startsWith('/triage') && sym) {
+      return `The user is on the triage page with symptom: "${sym}". Help them understand what level of care they need.`
+    }
+    if (path.startsWith('/clinics/')) {
+      return `The user is viewing a specific clinic detail page. They may have questions about services, affordability, or how to prepare for their visit.`
+    }
+    if (path.startsWith('/programs') || path.startsWith('/eligibility')) {
+      return `The user is exploring healthcare assistance programs. Help them understand eligibility and how to apply.`
+    }
+    if (path.startsWith('/crisis')) {
+      return `The user is on the crisis resources page. They may be in a vulnerable state. Be especially compassionate and provide immediate actionable resources. Always mention 988 (Suicide & Crisis Lifeline) and 911 for emergencies.`
+    }
+    return ''
+  }, [])
+
   const sendMessage = useCallback(async (text: string) => {
     const trimmed = text.trim()
     if (!trimmed || loading) return
@@ -66,12 +93,17 @@ export default function AIAssistant() {
 
     abortRef.current = new AbortController()
 
+    // Build context-injected system hint
+    const pageContext = getPageContext()
+
     try {
       const res = await fetch('/api/ai', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({
           messages: history.map(m => ({ role: m.role, content: m.content })),
+          // #19: inject page context as a system hint for this request
+          ...(pageContext ? { pageContext } : {}),
         }),
         signal: abortRef.current.signal,
       })
@@ -139,7 +171,7 @@ export default function AIAssistant() {
       setLoading(false)
       if (!open) setUnread(u => u + 1)
     }
-  }, [loading, messages, open])
+  }, [loading, messages, open, getPageContext])
 
   const handleKey = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {

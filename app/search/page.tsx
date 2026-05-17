@@ -135,6 +135,9 @@ function SearchResults() {
   const [openNowFilter, setOpenNowFilter] = useState(false)
   const [intent,        setIntent]        = useState<SearchIntent>({})
   const [bridgeClinic,  setBridgeClinic]  = useState<string | null>(null)   // N5: insurance bridge toast
+  const [visiblePage,   setVisiblePage]   = useState(1)                      // pagination
+
+  const PAGE_SIZE = 25
 
   /* Detect intent from query */
   useEffect(() => {
@@ -196,6 +199,7 @@ function SearchResults() {
       const res  = await fetch(`/api/clinics?${p}`)
       const data = await res.json()
       setClinics(data.clinics ?? [])
+      setVisiblePage(1)   // reset pagination on every new search
       setSource(data.source ?? '')
       setSourceCounts(data.sources ?? {})
       setSpecialtyMatched(data.specialty_matched !== false)
@@ -309,14 +313,52 @@ function SearchResults() {
     })
   }
 
+  /* Paginate: show PAGE_SIZE × page clinics at a time */
+  const pagedResults = results.slice(0, visiblePage * PAGE_SIZE)
+  const hasMore      = results.length > pagedResults.length
+
   const visibleCount = openNowFilter
     ? results.filter(c => isOpenNow(c.hours) !== false).length
     : results.length
 
-  const sourceBadge = source === 'hrsa+nafc' ? '● FQHC + Free Clinics verified'
-    : source === 'hrsa'  ? '● FQHC verified · federally funded'
-    : source === 'nafc'  ? '● NAFC free clinics verified'
-    : source === 'osm'   ? '● Community-sourced data'
+  /* #41 — Rich source attribution badges with tooltips */
+  type SourceBadgeConfig = { label: string; icon: string; tooltip: string; color: string; borderColor: string; bg: string } | null
+  const sourceBadge: SourceBadgeConfig = source === 'hrsa+nafc'
+    ? {
+        label: 'FQHC + Free Clinics',
+        icon: '🏥',
+        tooltip: 'Results from HRSA-verified Federally Qualified Health Centers AND NAFC-registered free clinics. FQHCs are required by federal law to accept all patients regardless of ability to pay.',
+        color: 'var(--accent)',
+        borderColor: 'rgba(74,144,217,0.25)',
+        bg: 'rgba(74,144,217,0.07)',
+      }
+    : source === 'hrsa'
+    ? {
+        label: 'HRSA Verified FQHCs',
+        icon: '🛡️',
+        tooltip: 'Federally Qualified Health Centers verified by HRSA (Health Resources & Services Administration). All FQHCs receive federal funding and are required to serve every patient on a sliding-scale fee regardless of income.',
+        color: '#60a5fa',
+        borderColor: 'rgba(96,165,250,0.25)',
+        bg: 'rgba(96,165,250,0.07)',
+      }
+    : source === 'nafc'
+    ? {
+        label: 'NAFC Free Clinics',
+        icon: '💚',
+        tooltip: 'Registered members of the National Association of Free & Charitable Clinics (NAFC). These clinics provide free or reduced-cost care to people in financial need.',
+        color: 'var(--green-pulse,#4ade80)',
+        borderColor: 'rgba(74,222,128,0.25)',
+        bg: 'rgba(74,222,128,0.07)',
+      }
+    : source === 'osm'
+    ? {
+        label: 'Community-sourced',
+        icon: '🌐',
+        tooltip: 'These clinics were contributed by the OpenStreetMap community. Data may be less verified — always call ahead to confirm.',
+        color: '#a78bfa',
+        borderColor: 'rgba(167,139,250,0.25)',
+        bg: 'rgba(167,139,250,0.07)',
+      }
     : null
 
   return (
@@ -498,8 +540,23 @@ function SearchResults() {
         <p style={{ fontSize: '12px', color: 'var(--text-3)', marginBottom: '16px', marginTop: '14px', display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', fontFamily: 'var(--font-inter)' }}>
           {loading ? t('general.loading') : `${visibleCount} ${visibleCount !== 1 ? t('search.clinics') : t('search.clinic')} ${locationVal ? `${t('search.clinicsNear')} ${locationVal}` : '— ' + t('search.enterZip')}`}
           {!loading && sourceBadge && (
-            <span style={{ color: 'var(--accent)', fontSize: '11px' }}>
-              {sourceBadge}
+            /* #41 — Rich source attribution badge */
+            <span
+              title={sourceBadge.tooltip}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '5px',
+                fontSize: '11px', fontWeight: 600, cursor: 'help',
+                color: sourceBadge.color,
+                background: sourceBadge.bg,
+                border: `1px solid ${sourceBadge.borderColor}`,
+                padding: '2px 9px', borderRadius: '100px',
+                fontFamily: 'var(--font-inter)',
+              }}
+            >
+              {sourceBadge.icon} {sourceBadge.label}
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ opacity: 0.5 }} aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
             </span>
           )}
           {!loading && Object.keys(sourceCounts).length > 0 && (
@@ -642,21 +699,41 @@ function SearchResults() {
 
         {/* List view — staggered entrance (#13) */}
         {!loading && results.length > 0 && viewMode === 'list' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {results.map((clinic, i) => (
-              <div
-                key={clinic.id}
-                className="result-enter"
-                style={{ animationDelay: `${Math.min(i * 0.055, 0.55)}s` }}
-              >
-                <ClinicCard clinic={clinic} index={i}
-                  isSaved={savedIds.has(String(clinic.id))} saving={savingId === String(clinic.id)}
-                  onBookmark={toggleBookmark} openNowFilter={openNowFilter}
-                  langMatch={targetLanguage ? clinicHasLanguage(clinic, targetLanguage) : false}
-                />
+          <>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {pagedResults.map((clinic, i) => (
+                <div
+                  key={clinic.id}
+                  className="result-enter"
+                  style={{ animationDelay: `${Math.min(i * 0.055, 0.55)}s` }}
+                >
+                  <ClinicCard clinic={clinic} index={i}
+                    isSaved={savedIds.has(String(clinic.id))} saving={savingId === String(clinic.id)}
+                    onBookmark={toggleBookmark} openNowFilter={openNowFilter}
+                    langMatch={targetLanguage ? clinicHasLanguage(clinic, targetLanguage) : false}
+                  />
+                </div>
+              ))}
+            </div>
+            {hasMore && (
+              <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                <button
+                  onClick={() => setVisiblePage(p => p + 1)}
+                  style={{
+                    padding: '11px 32px', borderRadius: '12px',
+                    background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.22)',
+                    color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
+                    cursor: 'pointer', fontFamily: 'var(--font-inter)',
+                    transition: 'background 0.2s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.15)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.08)')}
+                >
+                  Show more ({results.length - pagedResults.length} remaining)
+                </button>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
 
         {/* No results state (#15) */}

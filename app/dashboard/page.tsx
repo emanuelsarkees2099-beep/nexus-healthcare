@@ -2,6 +2,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import {
+  Building2, FileText, Search, AlertTriangle, Monitor, Scale,
+  Stethoscope, ClipboardList, Users, Hospital,
+} from 'lucide-react'
 import { createClientClient } from '@/lib/auth-client'
 import AppShell from '@/components/AppShell'
 
@@ -14,12 +18,20 @@ type UserProfile = {
   created_at?: string
 }
 
+/** Typed subset of the fields we actually read from bookmark resource_data. */
+type BookmarkResourceData = {
+  name?: string
+  address?: string
+  city?: string
+  phone?: string
+}
+
 type SavedClinic = {
   id: string
   resource_id: string
   resource_type: string
   resource_name?: string
-  resource_data?: Record<string, unknown>
+  resource_data?: BookmarkResourceData
   created_at: string
 }
 
@@ -52,7 +64,7 @@ function SectionHeader({ title, action, actionLabel }: { title: string; action?:
 function EmptyState({ icon, title, sub, cta, href }: { icon: React.ReactNode; title: string; sub: string; cta: string; href: string }) {
   return (
     <div style={{ textAlign: 'center', padding: '32px 24px', borderRadius: '14px', background: 'rgba(255,255,255,0.01)', border: '1px dashed rgba(255,255,255,0.08)' }}>
-      <div style={{ fontSize: '28px', marginBottom: '10px' }}>{icon}</div>
+      <div style={{ width: 48, height: 48, borderRadius: '14px', background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>{icon}</div>
       <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px', fontFamily: 'var(--font-inter)' }}>{title}</div>
       <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginBottom: '16px', fontFamily: 'var(--font-inter)', lineHeight: 1.6 }}>{sub}</div>
       <Link href={href} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 18px', borderRadius: '8px', background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)', color: 'var(--accent)', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}>
@@ -80,13 +92,13 @@ function SavedClinicsPanel({ userId }: { userId: string }) {
   )
 
   if (!saved.length) return (
-    <EmptyState icon="🏥" title="No saved clinics yet" sub="Bookmark clinics in the search results to see them here." cta="Search clinics" href="/search" />
+    <EmptyState icon={<Building2 size={20} color="var(--accent)" />} title="No saved clinics yet" sub="Bookmark clinics in the search results to see them here." cta="Search clinics" href="/search" />
   )
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
       {saved.map(s => {
-        const data = s.resource_data as any ?? {}
+        const data: BookmarkResourceData = s.resource_data ?? {}
         const name = s.resource_name || data.name || 'Clinic'
         const addr = data.address ? `${data.address}, ${data.city ?? ''}` : (data.city ?? '')
         const phone = data.phone ?? ''
@@ -130,7 +142,7 @@ function HealthTimeline({ userId }: { userId: string }) {
         timeline.push({
           id: `b-${b.id}`,
           date: b.created_at,
-          icon: '🏥',
+          icon: <Building2 size={15} color="var(--accent)" />,
           title: `Saved clinic`,
           sub: b.resource_name || 'A clinic',
           color: 'var(--accent)',
@@ -140,7 +152,7 @@ function HealthTimeline({ userId }: { userId: string }) {
         timeline.push({
           id: `s-${s.id}`,
           date: s.created_at,
-          icon: '📝',
+          icon: <FileText size={15} color="#60a5fa" />,
           title: `Submitted ${s.type || 'form'}`,
           sub: new Date(s.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
           color: '#60a5fa',
@@ -171,7 +183,7 @@ function HealthTimeline({ userId }: { userId: string }) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
         {entries.map(e => (
           <div key={e.id} style={{ display: 'flex', gap: '14px', alignItems: 'center', padding: '10px 0 10px 0' }}>
-            <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '14px', zIndex: 1 }}>
+            <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, zIndex: 1 }}>
               {e.icon}
             </div>
             <div style={{ flex: 1 }}>
@@ -382,11 +394,11 @@ function LastViewedSection() {
 
 /* ── Quick Actions ───────────────────────────────────────────────── */
 function QuickActions({ router }: { router: ReturnType<typeof useRouter> }) {
-  const ACTIONS = [
-    { label: 'Re-search near me', sub: 'Use my last location', icon: '🔍', action: () => router.push('/search') },
-    { label: 'Crisis support', sub: 'Free, confidential, 24/7', icon: '🆘', action: () => router.push('/crisis') },
-    { label: 'Find telehealth', sub: 'Remote care in minutes', icon: '💻', action: () => router.push('/telehealth') },
-    { label: 'Know your rights', sub: 'Legal patient protections', icon: '⚖️', action: () => router.push('/rights') },
+  const ACTIONS: { label: string; sub: string; icon: React.ReactNode; iconBg: string; action: () => void }[] = [
+    { label: 'Re-search near me',  sub: 'Use my last location',     icon: <Search size={18} color="var(--accent)" />,        iconBg: 'rgba(74,144,217,0.10)',  action: () => router.push('/search') },
+    { label: 'Crisis support',     sub: 'Free, confidential, 24/7', icon: <AlertTriangle size={18} color="var(--coral)" />,   iconBg: 'rgba(248,113,113,0.10)', action: () => router.push('/crisis') },
+    { label: 'Find telehealth',    sub: 'Remote care in minutes',   icon: <Monitor size={18} color="var(--accent)" />,        iconBg: 'rgba(74,144,217,0.10)',  action: () => router.push('/telehealth') },
+    { label: 'Know your rights',   sub: 'Legal patient protections',icon: <Scale size={18} color="var(--violet)" />,          iconBg: 'rgba(167,139,250,0.10)', action: () => router.push('/rights') },
   ]
 
   return (
@@ -399,7 +411,7 @@ function QuickActions({ router }: { router: ReturnType<typeof useRouter> }) {
           onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.04)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,144,217,0.18)' }}
           onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.06)' }}
         >
-          <div style={{ fontSize: '22px', marginBottom: '8px' }}>{a.icon}</div>
+          <div style={{ width: 38, height: 38, borderRadius: '11px', background: a.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>{a.icon}</div>
           <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '3px' }}>{a.label}</div>
           <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>{a.sub}</div>
         </button>
@@ -668,6 +680,20 @@ export default function DashboardPage() {
   const [savedCount, setSavedCount] = useState(0)
   const [activeTab, setActiveTab] = useState<'overview' | 'saved' | 'timeline' | 'care'>('overview')
 
+  /* ── Sync tab with URL ?tab= param (back button + deep-links) ─── */
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const t = params.get('tab') as 'overview' | 'saved' | 'timeline' | 'care'
+    if (['overview', 'saved', 'timeline', 'care'].includes(t)) setActiveTab(t)
+  }, [])
+
+  const handleTabChange = (tab: 'overview' | 'saved' | 'timeline' | 'care') => {
+    setActiveTab(tab)
+    const url = new URL(window.location.href)
+    url.searchParams.set('tab', tab)
+    router.push(url.pathname + url.search, { scroll: false })
+  }
+
   useEffect(() => {
     async function load() {
       const { data: { session } } = await supabase.auth.getSession()
@@ -748,7 +774,7 @@ export default function DashboardPage() {
           {TABS.map(t => (
             <button
               key={t.id}
-              onClick={() => setActiveTab(t.id)}
+              onClick={() => handleTabChange(t.id)}
               style={{ padding: '7px 16px', borderRadius: '9px', fontSize: '13px', fontWeight: activeTab === t.id ? 600 : 400, background: activeTab === t.id ? 'rgba(74,144,217,0.1)' : 'transparent', color: activeTab === t.id ? 'var(--accent)' : 'rgba(255,255,255,0.5)', border: activeTab === t.id ? '1px solid rgba(74,144,217,0.2)' : '1px solid transparent', cursor: 'pointer', transition: 'all 0.2s', fontFamily: 'var(--font-inter)', whiteSpace: 'nowrap' }}
             >
               {t.label}
@@ -779,7 +805,7 @@ export default function DashboardPage() {
 
             {/* Recent saved */}
             <div style={{ gridColumn: '1 / -1' }}>
-              <SectionHeader title="Recently saved clinics" action={() => setActiveTab('saved')} actionLabel="See all" />
+              <SectionHeader title="Recently saved clinics" action={() => handleTabChange('saved')} actionLabel="See all" />
               <SavedClinicsPanel userId={profile!.id} />
             </div>
           </div>
@@ -790,7 +816,7 @@ export default function DashboardPage() {
           <div>
             <SectionHeader title={`Saved clinics (${savedCount})`} action={() => router.push('/search')} actionLabel="Find more" />
             {savedCount === 0 ? (
-              <EmptyState icon="🏥" title="No saved clinics" sub="Search for free clinics near you and bookmark them to track your options." cta="Search now" href="/search" />
+              <EmptyState icon={<Building2 size={20} color="var(--accent)" />} title="No saved clinics" sub="Search for free clinics near you and bookmark them to track your options." cta="Search now" href="/search" />
             ) : (
               <SavedClinicsPanel userId={profile!.id} />
             )}
@@ -820,16 +846,16 @@ export default function DashboardPage() {
             <div>
               <SectionHeader title="Recommended next steps" />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {[
-                  { label: 'Annual preventive checkup', href: '/search', desc: 'Covered free at FQHCs with no insurance', icon: '🩺' },
-                  { label: 'Check program eligibility', href: '/programs', desc: 'You may qualify for Medicaid or CHIP', icon: '📋' },
-                  { label: 'Connect with a CHW', href: '/chw', desc: 'A community health worker can guide you', icon: '👥' },
-                ].map(item => (
+                {([
+                  { label: 'Annual preventive checkup', href: '/search',   desc: 'Covered free at FQHCs with no insurance',      icon: <Stethoscope size={18} color="var(--accent)" />,  bg: 'rgba(74,144,217,0.08)'  },
+                  { label: 'Check program eligibility', href: '/programs', desc: 'You may qualify for Medicaid or CHIP',          icon: <ClipboardList size={18} color="var(--amber)" />, bg: 'rgba(252,211,77,0.08)'  },
+                  { label: 'Connect with a CHW',        href: '/chw',      desc: 'A community health worker can guide you',       icon: <Users size={18} color="var(--violet)" />,        bg: 'rgba(167,139,250,0.08)' },
+                ] as { label: string; href: string; desc: string; icon: React.ReactNode; bg: string }[]).map(item => (
                   <Link key={item.label} href={item.href} style={{ display: 'flex', gap: '14px', alignItems: 'center', padding: '14px 16px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', textDecoration: 'none', transition: 'border-color 0.2s' }}
                     onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(74,144,217,0.2)'}
                     onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(255,255,255,0.06)'}
                   >
-                    <span style={{ fontSize: '22px' }}>{item.icon}</span>
+                    <div style={{ width: 38, height: 38, borderRadius: '11px', background: item.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{item.icon}</div>
                     <div>
                       <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>{item.label}</div>
                       <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '2px', fontFamily: 'var(--font-inter)' }}>{item.desc}</div>
@@ -850,7 +876,7 @@ export default function DashboardPage() {
               <div style={{ gridColumn: '1 / -1' }}>
                 <SectionHeader title="Provider tools" />
                 <Link href="/provider" style={{ display: 'flex', gap: '16px', alignItems: 'center', padding: '20px 24px', borderRadius: '14px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.18)', textDecoration: 'none' }}>
-                  <span style={{ fontSize: '28px' }}>🏥</span>
+                  <div style={{ width: 48, height: 48, borderRadius: '14px', background: 'rgba(74,144,217,0.10)', border: '1px solid rgba(74,144,217,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><Hospital size={22} color="var(--accent)" /></div>
                   <div>
                     <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '4px' }}>Provider portal</div>
                     <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)' }}>Manage your clinic listing, view patient analytics, update availability</div>
