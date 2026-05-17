@@ -13,7 +13,7 @@ interface NexusCardProps {
   children: React.ReactNode
   style?: React.CSSProperties
   className?: string
-  as?: keyof JSX.IntrinsicElements
+  as?: keyof React.JSX.IntrinsicElements
 }
 
 const VARIANT_BASE: Record<CardVariant, React.CSSProperties> = {

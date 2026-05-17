@@ -133,14 +133,15 @@ export async function initSentry(): Promise<void> {
       'Failed to fetch',
       'Load failed',
     ],
-    beforeSend(event) {
+    beforeSend(event: Record<string, unknown>) {
       /* Strip PII from breadcrumb URLs */
-      if (event.breadcrumbs?.values) {
-        event.breadcrumbs.values = event.breadcrumbs.values.map(b => ({
+      const breadcrumbs = event.breadcrumbs as { values?: Record<string, unknown>[] } | undefined
+      if (breadcrumbs?.values) {
+        breadcrumbs.values = breadcrumbs.values.map((b: Record<string, unknown>) => ({
           ...b,
           data: b.data
             ? Object.fromEntries(
-                Object.entries(b.data).filter(([k]) => !['email', 'phone', 'name', 'password'].includes(k))
+                Object.entries(b.data as Record<string, unknown>).filter(([k]) => !['email', 'phone', 'name', 'password'].includes(k))
               )
             : b.data,
         }))

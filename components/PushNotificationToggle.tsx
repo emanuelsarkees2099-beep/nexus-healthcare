@@ -78,7 +78,7 @@ export default function PushNotificationToggle() {
       /* 4 — Subscribe via Push API */
       const sub = await reg.pushManager.subscribe({
         userVisibleOnly:      true,
-        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
+        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey).buffer as ArrayBuffer,
       })
 
       /* 5 — Save to server */
