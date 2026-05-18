@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from '@sentry/nextjs'
 
 /**
  * P4 — Bundle analyzer support
@@ -95,4 +96,16 @@ if (process.env.ANALYZE === 'true') {
   }
 }
 
-export default nextConfig;
+/* ── Sentry — only active when NEXT_PUBLIC_SENTRY_DSN is set ─────── */
+export default process.env.NEXT_PUBLIC_SENTRY_DSN
+  ? withSentryConfig(nextConfig, {
+      // Suppress Sentry CLI output during builds
+      silent: true,
+      // Upload source maps to Sentry for readable stack traces
+      // Requires SENTRY_AUTH_TOKEN env var (optional — skips gracefully if missing)
+      widenClientFileUpload: true,
+      hideSourceMaps: true,
+      disableLogger: true,
+      automaticVercelMonitors: false,
+    })
+  : nextConfig
