@@ -23,14 +23,15 @@ const Section = ({ id, title, children }: { id: string; title: string; children:
 export default function TermsPage() {
   return (
     <div style={{ minHeight: '100vh', background: '#07070F', paddingTop: '100px', paddingBottom: '80px' }}>
+      <style>{`
+        .terms-back-link:hover { color: #4a90d9 !important; }
+        .terms-footer-link:hover { color: #4a90d9 !important; }
+      `}</style>
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 24px' }}>
 
         {/* Header */}
         <div style={{ marginBottom: '56px' }}>
-          <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', marginBottom: '32px' }}
-            onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.color = '#4a90d9')}
-            onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.color = 'rgba(255,255,255,0.4)')}
-          >
+          <Link href="/" className="terms-back-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', marginBottom: '32px', transition: 'color 0.15s' }}>
             ← Back to NEXUS
           </Link>
           <h1 style={{ fontSize: 'clamp(28px,4vw,40px)', fontWeight: 800, color: '#ffffff', marginBottom: '12px', letterSpacing: '-0.03em' }}>
@@ -211,10 +212,7 @@ export default function TermsPage() {
         {/* Footer nav */}
         <div style={{ display: 'flex', gap: '24px', paddingTop: '40px', borderTop: '1px solid rgba(255,255,255,0.07)', flexWrap: 'wrap' }}>
           {[['Privacy Policy', '/privacy'], ['Accessibility', '/accessibility'], ['Back to Home', '/']].map(([label, href]) => (
-            <Link key={href} href={href} style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', transition: 'color 0.15s' }}
-              onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.color = '#4a90d9')}
-              onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.color = 'rgba(255,255,255,0.4)')}
-            >
+            <Link key={href} href={href} className="terms-footer-link" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', transition: 'color 0.15s' }}>
               {label}
             </Link>
           ))}

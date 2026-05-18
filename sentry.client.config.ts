@@ -25,22 +25,5 @@ if (DSN) {
       'Failed to fetch',
       'Load failed',
     ],
-
-    beforeSend(event) {
-      // Strip PII from breadcrumb data before sending
-      if (event.breadcrumbs?.values) {
-        event.breadcrumbs.values = event.breadcrumbs.values.map(b => ({
-          ...b,
-          data: b.data
-            ? Object.fromEntries(
-                Object.entries(b.data).filter(
-                  ([k]) => !['email', 'phone', 'name', 'password', 'ssn', 'dob'].includes(k)
-                )
-              )
-            : b.data,
-        }))
-      }
-      return event
-    },
   })
 }

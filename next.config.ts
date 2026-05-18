@@ -104,7 +104,6 @@ export default process.env.NEXT_PUBLIC_SENTRY_DSN
       // Upload source maps to Sentry for readable stack traces
       // Requires SENTRY_AUTH_TOKEN env var (optional — skips gracefully if missing)
       widenClientFileUpload: true,
-      hideSourceMaps: true,
       disableLogger: true,
       automaticVercelMonitors: false,
     })
