@@ -94,7 +94,7 @@ export default function Nav({ initialUser }: NavProps = {}) {
     : ALL_APP_LINK_DEFS.map(d => ({ label: resolve(d), href: d.href }))
 
   /* ── Load current user ── */
-  /* P2: skip client-side fetch if server already injected a user via initialUser prop */
+  /* P2: skip initial client-side fetch if server already injected a user via initialUser prop */
   useEffect(() => {
     if (initialUser !== undefined) return // server-side session already resolved
     const load = async () => {
@@ -110,6 +110,27 @@ export default function Nav({ initialUser }: NavProps = {}) {
     }
     load()
   }, [supabase, initialUser])
+
+  /* ── Live auth-state listener — keeps Nav in sync after login / logout ── */
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (_event, session) => {
+        if (session) {
+          try {
+            const { data: profile } = await supabase
+              .from('user_profiles').select('full_name, email, user_type')
+              .eq('id', session.user.id).single()
+            setUser(profile ?? { email: session.user.email })
+          } catch {
+            setUser({ email: session.user.email })
+          }
+        } else {
+          setUser(null)
+        }
+      }
+    )
+    return () => subscription.unsubscribe()
+  }, [supabase])
 
   /* ── Logout ── */
   const handleLogout = async () => {

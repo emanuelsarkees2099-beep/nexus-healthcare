@@ -43,7 +43,8 @@ export default function AuthCompletePage() {
           setErrorMsg(err.message)
           setStatus('error')
         } else {
-          router.replace('/')
+          // Full-page navigation so Nav re-reads the session from localStorage
+          window.location.href = '/'
         }
       })
       .catch(err => {

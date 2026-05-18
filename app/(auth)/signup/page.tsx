@@ -84,6 +84,7 @@ export default function SignupPage() {
   const [gLoading,      setGLoading]      = useState(false)
   const [error,         setError]         = useState('')
   const [success,       setSuccess]       = useState(false)
+  const [needsConfirm,  setNeedsConfirm]  = useState(false)
   const [mounted,       setMounted]       = useState(false)
   const [focusedField,  setFocusedField]  = useState<string | null>(null)
 
@@ -136,8 +137,14 @@ export default function SignupPage() {
         user_type: userType,
       })
 
-      setSuccess(true)
-      setTimeout(() => router.push('/'), 1800)
+      if (authData.session) {
+        // Email confirmation is disabled — user is immediately logged in
+        setSuccess(true)
+        setTimeout(() => { window.location.href = '/' }, 1600)
+      } else {
+        // Email confirmation is required — tell the user to check inbox
+        setNeedsConfirm(true)
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign up failed.')
       setLoading(false)
@@ -228,8 +235,38 @@ export default function SignupPage() {
           </p>
         </div>
 
-        {/* ── Success state ── */}
-        {success ? (
+        {/* ── Confirm email state ── */}
+        {needsConfirm ? (
+          <div className="success-card" style={{
+            background: 'rgba(74,144,217,0.05)',
+            border: '1px solid rgba(74,144,217,0.18)',
+            borderRadius: '16px',
+            padding: '48px 32px',
+            textAlign: 'center',
+          }}>
+            <div style={{
+              width: '64px', height: '64px', borderRadius: '50%',
+              background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.25)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 20px',
+            }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4a90d9" strokeWidth="1.5" strokeLinecap="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </div>
+            <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#fff', marginBottom: '8px', letterSpacing: '-0.02em' }}>
+              Check your inbox
+            </h2>
+            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.42)', lineHeight: '1.6', maxWidth: '280px', margin: '0 auto 20px' }}>
+              We sent a confirmation link to <strong style={{ color: 'rgba(255,255,255,0.7)' }}>{email}</strong>. Click it to activate your account, then sign in.
+            </p>
+            <a href="/login" style={{ display: 'inline-block', padding: '10px 20px', background: 'rgba(74,144,217,0.15)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '9px', color: '#4a90d9', fontSize: '13px', fontWeight: 500, textDecoration: 'none' }}>
+              Go to sign in
+            </a>
+          </div>
+
+        ) : success ? (
           <div className="success-card" style={{
             background: 'rgba(52,211,153,0.05)',
             border: '1px solid rgba(52,211,153,0.18)',
@@ -238,10 +275,8 @@ export default function SignupPage() {
             textAlign: 'center',
           }}>
             <div style={{
-              width: '64px', height: '64px',
-              borderRadius: '50%',
-              background: 'rgba(52,211,153,0.1)',
-              border: '1px solid rgba(52,211,153,0.25)',
+              width: '64px', height: '64px', borderRadius: '50%',
+              background: 'rgba(52,211,153,0.1)', border: '1px solid rgba(52,211,153,0.25)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               margin: '0 auto 20px',
             }}>
@@ -540,7 +575,7 @@ export default function SignupPage() {
         )}
 
         {/* Footer */}
-        {!success && (
+        {!success && !needsConfirm && (
           <p style={{ textAlign: 'center', fontSize: '13px', color: 'rgba(255,255,255,0.38)', marginTop: '20px' }}>
             Already have an account?{' '}
             <Link

@@ -4,7 +4,6 @@ export const dynamic = 'force-dynamic'
 import { useState, useEffect, useRef } from 'react'
 import { createClientClient } from '@/lib/auth-client'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
 /* ─────────────────────────── tiny SVG primitives ─────────────────────────── */
 
@@ -42,11 +41,33 @@ const GoogleIcon = () => (
   </svg>
 )
 
+/* ── map raw Supabase / OAuth error strings → human-readable messages ─────── */
+function friendlyError(raw: string): string {
+  const r = raw.toLowerCase()
+  if (r.includes('invalid login') || r.includes('invalid credentials')) {
+    return 'Incorrect email or password. Double-check and try again.'
+  }
+  if (r.includes('email not confirmed')) {
+    return 'Please confirm your email first — check your inbox for the confirmation link.'
+  }
+  if (r.includes('too many requests') || r.includes('rate limit')) {
+    return 'Too many attempts. Please wait a minute and try again.'
+  }
+  if (r.includes('missing_code') || r.includes('no_code') || r.includes('no code')) {
+    return 'Google sign-in was cancelled or failed. Please try again.'
+  }
+  if (r.includes('access_denied')) {
+    return 'Google sign-in was denied. Please try again or use email/password.'
+  }
+  if (r.includes('network') || r.includes('fetch')) {
+    return 'Connection error. Check your internet and try again.'
+  }
+  return raw
+}
+
 /* ─────────────────────────────── component ───────────────────────────────── */
 
 export default function LoginPage() {
-  const router = useRouter()
-
   const [email,        setEmail]        = useState('')
   const [password,     setPassword]     = useState('')
   const [showPass,     setShowPass]     = useState(false)
@@ -64,25 +85,30 @@ export default function LoginPage() {
     setTimeout(() => emailRef.current?.focus(), 400)
   }, [])
 
-  /* check for an error forwarded by the OAuth callback */
+  /* read and clear any OAuth error forwarded via URL params */
   useEffect(() => {
     if (typeof window === 'undefined') return
     const params = new URLSearchParams(window.location.search)
     const e = params.get('error')
-    if (e) setError(decodeURIComponent(e))
+    if (e) {
+      setError(friendlyError(decodeURIComponent(e)))
+      // remove the ?error= param so it doesn't persist on refresh
+      window.history.replaceState({}, '', '/login')
+    }
   }, [])
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!email || !password) { setError('Please fill in all fields.'); return }
+    if (!email || !password) { setError('Please fill in both fields.'); return }
     setLoading(true)
     setError('')
     try {
       const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
       if (authError) throw authError
-      router.push('/')
+      // Full-page redirect so the Nav server component re-reads the session
+      window.location.href = '/'
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign in failed.')
+      setError(friendlyError(err instanceof Error ? err.message : 'Sign in failed.'))
       setLoading(false)
     }
   }
@@ -96,9 +122,9 @@ export default function LoginPage() {
         options: { redirectTo: `${window.location.origin}/auth/callback` },
       })
       if (authError) throw authError
-      /* browser navigates away — no need to reset gLoading */
+      /* browser navigates away — gLoading intentionally stays true */
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Google sign in failed.')
+      setError(friendlyError(err instanceof Error ? err.message : 'Google sign in failed.'))
       setGLoading(false)
     }
   }
@@ -159,32 +185,18 @@ export default function LoginPage() {
         pointerEvents: 'none',
       }} />
 
-      <div
-        className="auth-card"
-        style={{
-          width: '100%',
-          maxWidth: '400px',
-          position: 'relative',
-          zIndex: 10,
-        }}
-      >
+      <div className="auth-card" style={{ width: '100%', maxWidth: '400px', position: 'relative', zIndex: 10 }}>
+
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '36px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '9px', marginBottom: '6px' }}>
-            {/* NEXUS 3-lobe mark */}
             <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
               <path d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4a90d9" opacity="0.95"/>
               <path transform="rotate(120 50 50)" d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4a90d9" opacity="0.95"/>
               <path transform="rotate(240 50 50)" d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4a90d9" opacity="0.95"/>
               <circle cx="50" cy="50" r="5" fill="#4a90d9" opacity="0.7"/>
             </svg>
-            <span style={{
-              fontFamily: 'var(--font-orbitron, monospace)',
-              fontSize: '13px',
-              fontWeight: 400,
-              letterSpacing: '0.42em',
-              color: 'rgba(255,255,255,0.88)',
-            }}>NEXUS</span>
+            <span style={{ fontFamily: 'var(--font-orbitron, monospace)', fontSize: '13px', fontWeight: 400, letterSpacing: '0.42em', color: 'rgba(255,255,255,0.88)' }}>NEXUS</span>
           </div>
           <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.02em', margin: 0 }}>
             Healthcare navigation for everyone
@@ -192,19 +204,8 @@ export default function LoginPage() {
         </div>
 
         {/* Card */}
-        <div style={{
-          background: 'rgba(255,255,255,0.02)',
-          border: '1px solid rgba(255,255,255,0.07)',
-          borderRadius: '16px',
-          padding: '32px',
-        }}>
-          <h1 style={{
-            fontSize: '22px',
-            fontWeight: 700,
-            color: '#ffffff',
-            marginBottom: '4px',
-            letterSpacing: '-0.02em',
-          }}>
+        <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', padding: '32px' }}>
+          <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#ffffff', marginBottom: '4px', letterSpacing: '-0.02em' }}>
             Welcome back
           </h1>
           <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginBottom: '26px' }}>
@@ -214,18 +215,12 @@ export default function LoginPage() {
           {/* Error banner */}
           {error && (
             <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '9px',
-              background: 'rgba(248,113,113,0.08)',
-              border: '1px solid rgba(248,113,113,0.22)',
-              borderRadius: '9px',
-              padding: '11px 13px',
-              marginBottom: '20px',
-              color: '#f87171',
-              fontSize: '13px',
+              display: 'flex', alignItems: 'flex-start', gap: '9px',
+              background: 'rgba(248,113,113,0.08)', border: '1px solid rgba(248,113,113,0.22)',
+              borderRadius: '9px', padding: '11px 13px', marginBottom: '20px',
+              color: '#f87171', fontSize: '13px', lineHeight: '1.45',
             }}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ flexShrink: 0 }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ flexShrink: 0, marginTop: '1px' }}>
                 <circle cx="12" cy="12" r="10"/>
                 <line x1="12" y1="8" x2="12" y2="12"/>
                 <line x1="12" y1="16" x2="12.01" y2="16"/>
@@ -234,29 +229,17 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Google button — shown first for best UX */}
+          {/* Google button */}
           <button
             onClick={handleGoogleLogin}
             disabled={loading || gLoading}
             className="auth-btn-google"
             style={{
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px',
-              padding: '11px 16px',
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.11)',
-              borderRadius: '10px',
-              color: '#e0e6ed',
-              fontSize: '14px',
-              fontWeight: 500,
-              fontFamily: 'inherit',
-              cursor: loading || gLoading ? 'not-allowed' : 'pointer',
-              opacity: loading || gLoading ? 0.55 : 1,
-              transition: 'all 0.18s',
-              marginBottom: '16px',
+              width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+              padding: '11px 16px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.11)',
+              borderRadius: '10px', color: '#e0e6ed', fontSize: '14px', fontWeight: 500, fontFamily: 'inherit',
+              cursor: loading || gLoading ? 'not-allowed' : 'pointer', opacity: loading || gLoading ? 0.55 : 1,
+              transition: 'all 0.18s', marginBottom: '16px',
             }}
           >
             {gLoading ? <Spinner /> : <GoogleIcon />}
@@ -272,9 +255,8 @@ export default function LoginPage() {
 
           {/* Email / password form */}
           <form onSubmit={handleEmailLogin} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {/* Email */}
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.55)', marginBottom: '6px', letterSpacing: '0.01em' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.55)', marginBottom: '6px' }}>
                 Email address
               </label>
               <input
@@ -291,12 +273,9 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Password */}
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <label style={{ fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.01em' }}>
-                  Password
-                </label>
+                <label style={{ fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.55)' }}>Password</label>
                 <Link
                   href="/forgot-password"
                   style={{ fontSize: '11px', color: 'rgba(255,255,255,0.32)', textDecoration: 'none', transition: 'color 0.15s' }}
@@ -321,13 +300,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPass(v => !v)}
-                  style={{
-                    position: 'absolute', right: '12px', top: '50%',
-                    transform: 'translateY(-50%)',
-                    background: 'none', border: 'none', cursor: 'pointer',
-                    color: 'rgba(255,255,255,0.3)', padding: '2px',
-                    display: 'flex', alignItems: 'center', transition: 'color 0.15s',
-                  }}
+                  style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.3)', padding: '2px', display: 'flex', alignItems: 'center', transition: 'color 0.15s' }}
                   onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
                   onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}
                   tabIndex={-1}
@@ -337,28 +310,16 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading || gLoading}
               className="auth-btn-primary"
               style={{
-                padding: '12px 16px',
-                background: '#4a90d9',
-                color: '#ffffff',
-                border: 'none',
-                borderRadius: '10px',
-                fontWeight: 600,
-                fontSize: '14px',
-                fontFamily: 'inherit',
-                cursor: loading || gLoading ? 'not-allowed' : 'pointer',
-                opacity: loading || gLoading ? 0.6 : 1,
-                transition: 'all 0.18s',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                marginTop: '4px',
+                padding: '12px 16px', background: '#4a90d9', color: '#ffffff', border: 'none',
+                borderRadius: '10px', fontWeight: 600, fontSize: '14px', fontFamily: 'inherit',
+                cursor: loading || gLoading ? 'not-allowed' : 'pointer', opacity: loading || gLoading ? 0.6 : 1,
+                transition: 'all 0.18s', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                gap: '8px', marginTop: '4px',
               }}
             >
               {loading && <Spinner />}
@@ -367,12 +328,9 @@ export default function LoginPage() {
           </form>
         </div>
 
-        {/* Footer */}
         <p style={{ textAlign: 'center', fontSize: '13px', color: 'rgba(255,255,255,0.38)', marginTop: '20px' }}>
           No account?{' '}
-          <Link
-            href="/signup"
-            style={{ color: '#4a90d9', textDecoration: 'none', fontWeight: 500 }}
+          <Link href="/signup" style={{ color: '#4a90d9', textDecoration: 'none', fontWeight: 500 }}
             onMouseEnter={e => (e.currentTarget.style.textDecoration = 'underline')}
             onMouseLeave={e => (e.currentTarget.style.textDecoration = 'none')}
           >
