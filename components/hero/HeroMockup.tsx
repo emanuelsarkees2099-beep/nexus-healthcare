@@ -60,7 +60,8 @@ export default function HeroMockup({ mockupRef }: HeroMockupProps) {
       style={{
         position: 'relative', zIndex: 2,
         width: '100%', maxWidth: '860px',
-        perspective: '1200px', marginTop: '1.5rem',
+        margin: '1.5rem auto 0',
+        perspective: '1200px',
         animation: 'float-subtle 4s ease-in-out infinite',
       }}
     >

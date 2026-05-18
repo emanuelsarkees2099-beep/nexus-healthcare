@@ -13,7 +13,6 @@ const Features          = dynamic(() => import('@/components/Features'))
 const HowItWorks        = dynamic(() => import('@/components/HowItWorks'))
 const Testimonials      = dynamic(() => import('@/components/Testimonials'))
 const CTA               = dynamic(() => import('@/components/CTA'))
-const CostCalculator    = dynamic(() => import('@/components/CostCalculator'))
 const MissionFreeze     = dynamic(() => import('@/components/MissionFreeze'))
 
 export default function Home() {
@@ -37,7 +36,6 @@ export default function Home() {
         <BeforeAfterBar />
         <Features />
         <HowItWorks />
-        <CostCalculator />
         <Testimonials />
         <MissionFreeze />
         <CTA />

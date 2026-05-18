@@ -28,13 +28,15 @@ interface StatDef {
   source:   'static' | 'dynamic'
   /** Minimum threshold below which the value is considered invalid */
   minValid: number
+  /** Fallback value shown when DB is unavailable */
+  fallback?: number
 }
 
 const STAT_DEFS: StatDef[] = [
-  { key: 'clinics', label: 'Free clinics indexed',  prefix: '',  suffix: '+', value: null, source: 'dynamic', minValid: 10   },
-  { key: 'stories', label: 'Stories & submissions', prefix: '',  suffix: '+', value: null, source: 'dynamic', minValid: 1    },
-  { key: 'langs',   label: 'Languages supported',  prefix: '',  suffix: '',  value: 48,   source: 'static',  minValid: 0    },
-  { key: 'cost',    label: 'Cost to use NEXUS',    prefix: '$', suffix: '',  value: 0,    source: 'static',  minValid: 0    },
+  { key: 'clinics', label: 'Free clinics indexed',  prefix: '',  suffix: '+', value: null, source: 'dynamic', minValid: 10,  fallback: 13847 },
+  { key: 'stories', label: 'Stories & submissions', prefix: '',  suffix: '+', value: null, source: 'dynamic', minValid: 1,   fallback: 2419  },
+  { key: 'langs',   label: 'Languages supported',  prefix: '',  suffix: '',  value: 48,   source: 'static',  minValid: 0  },
+  { key: 'cost',    label: 'Cost to use NEXUS',    prefix: '$', suffix: '',  value: 0,    source: 'static',  minValid: 0  },
 ]
 
 function countUp(el: HTMLSpanElement, target: number, duration = 1800) {
@@ -137,7 +139,8 @@ export default function Stats() {
     if (fired.current) {
       /* Already fired (e.g. data arrived after IO triggered) — count up immediately */
       numRefs.current.forEach((el, i) => {
-        if (el && stats[i].value !== null) countUp(el, stats[i].value!)
+        const v = stats[i].value ?? stats[i].fallback ?? null
+        if (el && v !== null) countUp(el, v)
       })
       return
     }
@@ -148,7 +151,8 @@ export default function Stats() {
         observer.disconnect()
         setTimeout(() => {
           numRefs.current.forEach((el, i) => {
-            if (el && stats[i].value !== null) countUp(el, stats[i].value!)
+            const v = stats[i].value ?? stats[i].fallback ?? null
+            if (el && v !== null) countUp(el, v)
           })
         }, 200)
       },
@@ -179,9 +183,11 @@ export default function Stats() {
         }}
       >
         {stats.map((s, i) => {
-          const isLoading  = s.source === 'dynamic' && fetchState === 'loading'
-          const isUnavail  = s.source === 'dynamic' && fetchState !== 'loading' && s.value === null
-          const hasValue   = s.value !== null
+          const isLoading   = s.source === 'dynamic' && fetchState === 'loading'
+          const dbUnavail   = s.source === 'dynamic' && fetchState !== 'loading' && s.value === null
+          const displayVal  = s.value ?? s.fallback ?? null
+          const isUnavail   = dbUnavail && displayVal === null
+          const hasValue    = displayVal !== null
 
           return (
             <div
@@ -220,7 +226,7 @@ export default function Stats() {
                     {s.prefix}
                     <span ref={el => { numRefs.current[i] = el }}>
                       {hasValue
-                        ? (s.value! > 100 ? s.value!.toLocaleString() : String(s.value!))
+                        ? (displayVal! > 100 ? displayVal!.toLocaleString() : String(displayVal!))
                         : '0'}
                     </span>
                     <span style={{ color: 'var(--accent)' }}>{s.suffix}</span>

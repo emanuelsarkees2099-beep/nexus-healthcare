@@ -224,9 +224,11 @@ export default function Nav({ initialUser }: NavProps = {}) {
           aria-label="NEXUS — home"
           className="nav-logo"
         >
-          <svg className="nav-logo-glyph" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <polygon points="10,1 18,5.5 18,14.5 10,19 2,14.5 2,5.5" stroke="var(--accent)" strokeWidth="1.4" fill="rgba(74,144,217,0.08)"/>
-            <path d="M6.5 13.5V6.5L10 13l3.5-6.5V13.5" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+          <svg className="nav-logo-glyph" width="22" height="22" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+            <path d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="var(--accent)" opacity="0.95"/>
+            <path transform="rotate(120 50 50)" d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="var(--accent)" opacity="0.95"/>
+            <path transform="rotate(240 50 50)" d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="var(--accent)" opacity="0.95"/>
+            <circle cx="50" cy="50" r="5" fill="var(--accent)" opacity="0.7"/>
           </svg>
           <span style={{ fontFamily: 'var(--font-orbitron)', fontSize: '11px', fontWeight: 400, letterSpacing: '0.42em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.90)', paddingRight: '0.42em', userSelect: 'none' }}>
             NEXUS

@@ -1,8 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 
-/* ── Animated counter hook ── */
-function useCountUp(target: number, decimals = 0, enabled = false, duration = 1400) {
+function useCountUp(target: number, decimals = 0, enabled = false, duration = 1200) {
   const [value, setValue] = useState(0)
   useEffect(() => {
     if (!enabled) return
@@ -18,68 +17,112 @@ function useCountUp(target: number, decimals = 0, enabled = false, duration = 14
   return value
 }
 
-const BEFORE = [
-  { label: 'Calls to find a clinic',          value: 14,    unit: 'calls',  decimals: 0 },
-  { label: 'Days to get an appointment',       value: 6,     unit: 'days',   decimals: 0 },
-  { label: 'Avg. out-of-pocket cost',          value: 1847,  unit: '$',      decimals: 0, prefix: '$' },
-  { label: 'Patients who found care',          value: 34,    unit: '%',      decimals: 0 },
+const METRICS = [
+  {
+    label:       'Calls to find a clinic',
+    before:      { value: 14,   unit: 'calls', decimals: 0 },
+    after:       { value: 1.2,  unit: 'calls', decimals: 1 },
+    improvement: '12×',
+  },
+  {
+    label:       'Time to appointment',
+    before:      { value: 6,    unit: 'days',  decimals: 0 },
+    after:       { value: 4,    unit: 'hours', decimals: 0 },
+    improvement: '36×',
+  },
+  {
+    label:       'Out-of-pocket cost',
+    before:      { value: 1847, unit: '',      decimals: 0, prefix: '$' },
+    after:       { value: 0,    unit: 'to $40',decimals: 0, prefix: '$' },
+    improvement: '98%',
+  },
+  {
+    label:       'Patients who found care',
+    before:      { value: 34,   unit: '%',     decimals: 0 },
+    after:       { value: 91,   unit: '%',     decimals: 0 },
+    improvement: '2.7×',
+  },
 ]
 
-const AFTER = [
-  { label: 'Calls to find a clinic',          value: 1.2,   unit: 'calls',  decimals: 1, improvement: '12×' },
-  { label: 'Time to get an appointment',      value: 4,     unit: 'hours',  decimals: 0, improvement: '36×' },
-  { label: 'Cost with NEXUS',                 value: 0,     unit: 'to $40', decimals: 0, improvement: '98%', prefix: '$' },
-  { label: 'Patients who found care',         value: 91,    unit: '%',      decimals: 0, improvement: '2.7×' },
-]
+function MetricRow({
+  label, before, after, improvement, enabled, isLast,
+}: (typeof METRICS)[0] & { enabled: boolean; isLast: boolean }) {
+  const bv = useCountUp(before.value, before.decimals, enabled)
+  const av = useCountUp(after.value,  after.decimals,  enabled, 1400)
 
-/* Ratio of before→after for the visual bar (0–1 scale, capped) */
-const RATIOS = [1.2 / 14, 4 / (6 * 24), 20 / 1847, 91 / 34]
+  const fmt = (v: number, dec: number, pfx?: string, unit?: string) => {
+    const num = dec === 0 ? Math.floor(v).toLocaleString() : v.toFixed(dec)
+    return `${pfx ?? ''}${num}${unit ? ` ${unit}` : ''}`
+  }
 
-function BeforeRow({ label, value, unit, decimals, prefix, enabled }: {
-  label: string; value: number; unit: string; decimals: number; prefix?: string; enabled: boolean
-}) {
-  const animated = useCountUp(value, decimals, enabled)
   return (
     <div style={{
-      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-      padding: '12px 0', borderBottom: '1px solid rgba(255,255,255,0.05)',
-      fontSize: '13px', gap: '8px',
+      display: 'grid',
+      gridTemplateColumns: '1fr 110px 28px 110px 72px',
+      alignItems: 'center',
+      gap: '0 12px',
+      padding: '13px 0',
+      borderBottom: isLast ? 'none' : '1px solid rgba(255,255,255,0.045)',
     }}>
-      <span style={{ color: 'rgba(255,255,255,0.45)', lineHeight: 1.4 }}>{label}</span>
-      <span style={{ color: '#f87171', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', whiteSpace: 'nowrap' }}>
-        {prefix}{decimals === 0 ? animated.toLocaleString() : animated.toFixed(decimals)}
-        {!prefix && <span style={{ fontWeight: 400, fontSize: '11px', marginLeft: '3px' }}>{unit}</span>}
-        {prefix && <span style={{ fontWeight: 400, fontSize: '11px', marginLeft: '3px' }}>{unit}</span>}
+      {/* Label */}
+      <span style={{
+        fontSize: '13px',
+        color: 'rgba(255,255,255,0.50)',
+        fontFamily: 'var(--font-inter)',
+        fontWeight: 400,
+        letterSpacing: '-0.005em',
+      }}>
+        {label}
       </span>
-    </div>
-  )
-}
 
-function AfterRow({ label, value, unit, decimals, prefix, improvement, enabled }: {
-  label: string; value: number; unit: string; decimals: number; prefix?: string; improvement: string; enabled: boolean
-}) {
-  const animated = useCountUp(value, decimals, enabled)
-  return (
-    <div style={{
-      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-      padding: '12px 0', borderBottom: '1px solid rgba(255,255,255,0.05)',
-      fontSize: '13px', gap: '8px',
-    }}>
-      <span style={{ color: 'rgba(255,255,255,0.45)', lineHeight: 1.4 }}>{label}</span>
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
-        <span style={{ color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', whiteSpace: 'nowrap' }}>
-          {prefix}{decimals === 0 ? animated.toLocaleString() : animated.toFixed(decimals)}
-          {!prefix && <span style={{ fontWeight: 400, fontSize: '11px', marginLeft: '3px' }}>{unit}</span>}
-          {prefix && <span style={{ fontWeight: 400, fontSize: '11px', marginLeft: '3px' }}>{unit}</span>}
-        </span>
-        <span style={{
-          padding: '2px 7px', borderRadius: '5px',
-          background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.25)',
-          fontSize: '10px', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap',
-        }}>
-          {improvement} better
-        </span>
-      </div>
+      {/* Before */}
+      <span style={{
+        fontSize: '13px',
+        fontFamily: 'var(--font-mono, monospace)',
+        color: 'rgba(248,113,113,0.75)',
+        fontWeight: 500,
+        textAlign: 'right',
+        letterSpacing: '-0.02em',
+        textDecoration: 'line-through',
+        textDecorationColor: 'rgba(248,113,113,0.35)',
+      }}>
+        {fmt(bv, before.decimals, before.prefix, before.unit)}
+      </span>
+
+      {/* Arrow */}
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ opacity: 0.25, flexShrink: 0, margin: '0 auto' }}>
+        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+
+      {/* After */}
+      <span style={{
+        fontSize: '13px',
+        fontFamily: 'var(--font-mono, monospace)',
+        color: 'var(--accent)',
+        fontWeight: 600,
+        letterSpacing: '-0.02em',
+      }}>
+        {fmt(av, after.decimals, after.prefix, after.unit)}
+      </span>
+
+      {/* Improvement chip */}
+      <span style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '3px 8px',
+        borderRadius: '5px',
+        background: 'rgba(74,144,217,0.08)',
+        border: '1px solid rgba(74,144,217,0.16)',
+        fontSize: '11px',
+        fontWeight: 600,
+        color: 'rgba(74,144,217,0.8)',
+        fontFamily: 'var(--font-mono, monospace)',
+        letterSpacing: '0',
+        whiteSpace: 'nowrap',
+      }}>
+        ↑ {improvement}
+      </span>
     </div>
   )
 }
@@ -87,20 +130,12 @@ function AfterRow({ label, value, unit, decimals, prefix, improvement, enabled }
 export default function BeforeAfterBar() {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
-  const [barsVisible, setBarsVisible] = useState(false)
 
   useEffect(() => {
-    const el = ref.current
-    if (!el) return
+    const el = ref.current; if (!el) return
     const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true)
-          setTimeout(() => setBarsVisible(true), 300)
-          obs.disconnect()
-        }
-      },
-      { threshold: 0.2 }
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect() } },
+      { threshold: 0.15 }
     )
     obs.observe(el)
     return () => obs.disconnect()
@@ -110,123 +145,85 @@ export default function BeforeAfterBar() {
     <section
       ref={ref}
       style={{
-        padding: 'clamp(60px, 8vw, 100px) 24px',
-        maxWidth: '900px',
+        padding: 'clamp(48px, 6vw, 80px) 24px',
+        maxWidth: '780px',
         margin: '0 auto',
         opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(32px)',
-        transition: 'opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)',
+        transform: visible ? 'translateY(0)' : 'translateY(20px)',
+        transition: 'opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1)',
       }}
     >
       {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+      <div style={{ marginBottom: '32px' }}>
         <div style={{
-          display: 'inline-flex', alignItems: 'center', gap: '8px',
-          padding: '5px 14px', borderRadius: '100px',
-          background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)',
-          fontSize: '11px', fontWeight: 600, color: 'var(--accent)',
-          letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '20px',
+          display: 'inline-flex', alignItems: 'center', gap: '6px',
+          fontSize: '10px', fontWeight: 600, letterSpacing: '0.12em',
+          textTransform: 'uppercase', color: 'rgba(255,255,255,0.28)',
+          fontFamily: 'var(--font-inter)', marginBottom: '10px',
         }}>
-          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent)', display: 'inline-block' }} />
-          The difference NEXUS makes
+          <span style={{ width: '14px', height: '1px', background: 'rgba(255,255,255,0.2)', display: 'inline-block' }} />
+          Impact metrics
         </div>
         <h2 style={{
-          fontSize: 'clamp(26px, 4vw, 40px)', fontWeight: 800,
-          letterSpacing: '-0.03em', lineHeight: 1.15,
-          marginBottom: '14px',
+          fontSize: 'clamp(18px, 2.2vw, 22px)',
+          fontWeight: 700,
+          letterSpacing: '-0.025em',
+          lineHeight: 1.2,
+          margin: '0 0 8px',
+          fontFamily: 'var(--font-display)',
+          color: 'var(--text)',
         }}>
-          NEXUS vs. the old way
+          The difference NEXUS makes
         </h2>
-        <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.4)', maxWidth: '480px', margin: '0 auto', lineHeight: 1.65 }}>
+        <p style={{
+          fontSize: '13px',
+          color: 'rgba(255,255,255,0.35)',
+          fontFamily: 'var(--font-inter)',
+          fontWeight: 400,
+          margin: 0,
+          lineHeight: 1.6,
+        }}>
           Finding free care used to mean hours of calls and dead ends.
-          NEXUS changes that — in seconds.
         </p>
       </div>
 
-      {/* Comparison grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-
-        {/* Before column */}
-        <div style={{
-          padding: '28px', borderRadius: '20px',
-          background: 'rgba(248,113,113,0.04)', border: '1px solid rgba(248,113,113,0.15)',
-          opacity: visible ? 1 : 0,
-          transform: visible ? 'translateX(0)' : 'translateX(-20px)',
-          transition: 'opacity 0.6s 0.15s ease, transform 0.6s 0.15s cubic-bezier(0.16,1,0.3,1)',
-        }}>
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: '8px',
-            fontSize: '11px', fontWeight: 700, color: '#f87171',
-            letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '20px',
-          }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f87171" strokeWidth="2.5" strokeLinecap="round">
-              <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
-            </svg>
-            Without NEXUS
-          </div>
-          {BEFORE.map((item, i) => (
-            <BeforeRow key={i} {...item} enabled={visible} />
-          ))}
-        </div>
-
-        {/* After column */}
-        <div style={{
-          padding: '28px', borderRadius: '20px',
-          background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.2)',
-          opacity: visible ? 1 : 0,
-          transform: visible ? 'translateX(0)' : 'translateX(20px)',
-          transition: 'opacity 0.6s 0.25s ease, transform 0.6s 0.25s cubic-bezier(0.16,1,0.3,1)',
-        }}>
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: '8px',
-            fontSize: '11px', fontWeight: 700, color: 'var(--accent)',
-            letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '20px',
-          }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round">
-              <circle cx="12" cy="12" r="10"/><polyline points="9,12 11,14 15,10"/>
-            </svg>
-            With NEXUS
-          </div>
-          {AFTER.map((item, i) => (
-            <AfterRow key={i} {...item} enabled={visible} />
-          ))}
-        </div>
-      </div>
-
-      {/* Visual comparison bars */}
+      {/* Column headers */}
       <div style={{
-        marginTop: '32px', padding: '24px 28px', borderRadius: '16px',
-        background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
-        opacity: visible ? 1 : 0,
-        transition: 'opacity 0.6s 0.4s ease',
+        display: 'grid',
+        gridTemplateColumns: '1fr 110px 28px 110px 72px',
+        gap: '0 12px',
+        padding: '0 0 8px',
+        borderBottom: '1px solid rgba(255,255,255,0.07)',
+        marginBottom: '4px',
       }}>
-        <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '16px' }}>
-          Relative improvement
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {BEFORE.map((item, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', width: '180px', flexShrink: 0, lineHeight: 1.3 }}>{item.label}</span>
-              <div style={{ flex: 1, height: '6px', borderRadius: '100px', background: 'rgba(248,113,113,0.15)', overflow: 'hidden' }}>
-                <div style={{
-                  height: '100%', borderRadius: '100px',
-                  background: 'linear-gradient(90deg, rgba(74,144,217,0.9), rgba(74,144,217,0.5))',
-                  width: barsVisible ? `${Math.min(RATIOS[i] * 100, 100)}%` : '0%',
-                  transition: `width 1.2s ${0.5 + i * 0.1}s cubic-bezier(0.16,1,0.3,1)`,
-                }} />
-              </div>
-              <span style={{ fontSize: '11px', color: 'var(--accent)', fontWeight: 700, width: '50px', textAlign: 'right', flexShrink: 0 }}>
-                {AFTER[i].improvement}
-              </span>
-            </div>
-          ))}
-        </div>
+        <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.2)', fontFamily: 'var(--font-inter)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Metric</span>
+        <span style={{ fontSize: '10px', color: 'rgba(248,113,113,0.4)', fontFamily: 'var(--font-inter)', letterSpacing: '0.08em', textTransform: 'uppercase', textAlign: 'right' }}>Before</span>
+        <span />
+        <span style={{ fontSize: '10px', color: 'rgba(74,144,217,0.5)', fontFamily: 'var(--font-inter)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>With NEXUS</span>
+        <span />
       </div>
+
+      {/* Metric rows */}
+      {METRICS.map((m, i) => (
+        <MetricRow key={i} {...m} enabled={visible} isLast={i === METRICS.length - 1} />
+      ))}
 
       {/* Footnote */}
-      <p style={{ marginTop: '20px', fontSize: '11px', color: 'rgba(255,255,255,0.2)', textAlign: 'center', lineHeight: 1.5 }}>
-        * Based on internal platform data and published research on uninsured patient care-seeking behavior.
+      <p style={{
+        marginTop: '20px',
+        fontSize: '11px',
+        color: 'rgba(255,255,255,0.16)',
+        fontFamily: 'var(--font-inter)',
+        lineHeight: 1.5,
+      }}>
+        Based on internal platform data and published research on uninsured patient care-seeking behavior.
       </p>
+
+      <style>{`
+        @media (max-width: 600px) {
+          .bab-grid { grid-template-columns: 1fr auto !important; }
+        }
+      `}</style>
     </section>
   )
 }
