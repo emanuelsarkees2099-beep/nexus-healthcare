@@ -340,16 +340,16 @@ export default function Hero() {
           </span>
           <span className="h1-line" style={{ display: 'block', overflow: 'hidden' }}>
             <span className="h1-word" style={{ display: 'inline-block' }}>
-              <span style={{ display: 'inline-block', position: 'relative', perspective: '500px', transformStyle: 'preserve-3d' }}>
-                {/* Width spacer: widest word locks container */}
+              <span style={{ display: 'inline-block', position: 'relative', perspective: '500px', transformStyle: 'preserve-3d', textAlign: 'center' }}>
+                {/* Width spacer: locked to the widest word so the container never jumps */}
                 <span aria-hidden="true" style={{ visibility: 'hidden', display: 'inline-block' }}>
                   {CYCLE_WORDS.reduce((a, b) => a.length >= b.length ? a : b)}
                 </span>
-                {/* Animated word */}
+                {/* Animated word — centered inside the fixed-width container */}
                 <span
                   key={cycleIdx}
                   className={wordClass}
-                  style={{ position: 'absolute', left: 0, top: 0, display: 'inline-block', color: 'var(--accent)', transformOrigin: 'center bottom', whiteSpace: 'nowrap' }}
+                  style={{ position: 'absolute', left: 0, right: 0, top: 0, textAlign: 'center', display: 'block', color: 'var(--accent)', transformOrigin: 'center bottom', whiteSpace: 'nowrap' }}
                 >
                   {CYCLE_WORDS[cycleIdx]}
                 </span>
