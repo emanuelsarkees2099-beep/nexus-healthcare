@@ -1,19 +1,22 @@
 /**
  * NEXUS — AI Healthcare Navigator
- * Streaming SSE endpoint backed by claude-haiku-4-5 (fast + cheap).
+ * Streaming SSE endpoint backed by Groq (free tier — Llama 3.3 70B).
  *
  * POST /api/ai
- * Body: { messages: Array<{role:'user'|'assistant', content:string}> }
+ * Body: { messages: Array<{role:'user'|'assistant', content:string}>, pageContext?: string }
  *
- * Returns: text/event-stream with SSE chunks { delta: string } and a final [DONE] event.
+ * Returns: text/event-stream with SSE chunks { delta: string } and a final { done: true } event.
  *
  * Safety guardrails:
  *  - Hard-coded system prompt that prevents medical diagnosis
  *  - 20 req / min per IP rate limit
  *  - Input sanitised to ≤ 2,000 chars per message
+ *
+ * Free tier: 14,400 req/day · 30 req/min · no credit card required
+ * Get your key at: https://console.groq.com
  */
 
-import Anthropic from '@anthropic-ai/sdk'
+import Groq from 'groq-sdk'
 import { rateLimit } from '@/lib/rate-limit'
 
 const SYSTEM_PROMPT = `You are NEXUS Assistant, a compassionate healthcare navigation guide for uninsured and underinsured Americans.
@@ -58,55 +61,51 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify({ error: 'messages array required' }), { status: 400 })
   }
 
-  // Sanitise messages — only allow valid roles and cap content length
+  // Sanitise messages
   type Msg = { role: 'user' | 'assistant'; content: string }
   const messages: Msg[] = (body.messages as Msg[])
     .filter(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
     .map(m => ({ role: m.role, content: m.content.slice(0, 2000) }))
-    .slice(-20) // keep last 20 turns max
+    .slice(-20)
 
   if (messages.length === 0) {
     return new Response(JSON.stringify({ error: 'No valid messages' }), { status: 400 })
   }
 
-  // #19 — Page context injection: append a brief context hint to system prompt
-  const pageContext = typeof body.pageContext === 'string'
-    ? body.pageContext.slice(0, 500)
-    : ''
+  // Page context injection
+  const pageContext = typeof body.pageContext === 'string' ? body.pageContext.slice(0, 500) : ''
   const systemPrompt = pageContext
     ? `${SYSTEM_PROMPT}\n\nCurrent page context: ${pageContext}`
     : SYSTEM_PROMPT
 
-  const apiKey = process.env.ANTHROPIC_API_KEY
+  const apiKey = process.env.GROQ_API_KEY
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'AI service not configured' }), { status: 503 })
   }
 
-  const client = new Anthropic({ apiKey })
-
-  // SSE streaming response
+  const client = new Groq({ apiKey })
   const encoder = new TextEncoder()
-  const stream  = new ReadableStream({
+
+  const stream = new ReadableStream({
     async start(controller) {
       const send = (data: object) => {
         controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`))
       }
 
       try {
-        const stream = client.messages.stream({
-          model:      'claude-haiku-4-5',
+        const groqStream = await client.chat.completions.create({
+          model:      'llama-3.3-70b-versatile',
           max_tokens: 1024,
-          system:     systemPrompt,
-          messages,
+          stream:     true,
+          messages:   [
+            { role: 'system', content: systemPrompt },
+            ...messages,
+          ],
         })
 
-        for await (const event of stream) {
-          if (
-            event.type === 'content_block_delta' &&
-            event.delta.type === 'text_delta'
-          ) {
-            send({ delta: event.delta.text })
-          }
+        for await (const chunk of groqStream) {
+          const delta = chunk.choices[0]?.delta?.content
+          if (delta) send({ delta })
         }
 
         send({ done: true })
@@ -121,9 +120,9 @@ export async function POST(req: Request) {
 
   return new Response(stream, {
     headers: {
-      'Content-Type': 'text/event-stream',
+      'Content-Type':  'text/event-stream',
       'Cache-Control': 'no-cache',
-      Connection: 'keep-alive',
+      'Connection':    'keep-alive',
       ...rl.headers,
     },
   })
