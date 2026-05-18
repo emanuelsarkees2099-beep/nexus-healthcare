@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     siteName: 'NEXUS',
     type: 'website',
     // D9: dynamic OG image via @vercel/og edge function
-    images: [{ url: 'https://nexus.health/api/og', width: 1200, height: 630, alt: 'NEXUS — Free Healthcare, Found in Seconds' }],
+    images: [{ url: `${process.env.NEXT_PUBLIC_APP_URL ?? 'https://nexus-healthcare.vercel.app'}/api/og`, width: 1200, height: 630, alt: 'NEXUS — Free Healthcare, Found in Seconds' }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     creator: '@nexushealth',
     title: 'NEXUS — Free Healthcare, Found in Seconds',
     description: 'Find free clinics, sliding-scale care, and eligibility programs near you. No insurance required.',
-    images: ['https://nexus.health/api/og'],
+    images: [`${process.env.NEXT_PUBLIC_APP_URL ?? 'https://nexus-healthcare.vercel.app'}/api/og`],
   },
   themeColor: [
     { media: '(prefers-color-scheme: dark)',  color: '#040408' },
@@ -92,7 +92,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png" />
         {/* S5 — hreflang for multi-language support (48 languages via i18n) */}
         <link rel="alternate" hrefLang="x-default" href="https://nexus.health/" />
         <link rel="alternate" hrefLang="en" href="https://nexus.health/" />

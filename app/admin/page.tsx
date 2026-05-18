@@ -36,6 +36,7 @@ const STATUS_COLORS: Record<string, string> = {
 }
 
 export default function AdminPage() {
+  const [authChecked, setAuthChecked] = useState(false)
   const [submissions, setSubmissions] = useState<Submission[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -59,7 +60,7 @@ export default function AdminPage() {
 
       // Primary check: user_type must be 'admin' in the database
       if (profile?.user_type !== 'admin') {
-        router.push('/dashboard')
+        router.push('/')
         return
       }
 
@@ -69,11 +70,12 @@ export default function AdminPage() {
         const allowed = adminEmails.split(',').map(e => e.trim().toLowerCase())
         const userEmail = (profile?.email ?? session.user.email ?? '').toLowerCase()
         if (!allowed.includes(userEmail)) {
-          router.push('/dashboard')
+          router.push('/')
           return
         }
       }
 
+      setAuthChecked(true)
       loadSubmissions()
     }
     checkAdmin()
@@ -140,6 +142,19 @@ export default function AdminPage() {
     fontFamily: 'inherit',
     outline: 'none',
     cursor: 'pointer',
+  }
+
+  // Render nothing until server confirms admin role — prevents content flash
+  if (!authChecked) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#07070F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(74,144,217,0.7)" strokeWidth="2" strokeLinecap="round" style={{ animation: 'spin 0.9s linear infinite' }}>
+          <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.08)" />
+          <path d="M12 2 A10 10 0 0 1 22 12" />
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        </svg>
+      </div>
+    )
   }
 
   return (

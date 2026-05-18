@@ -456,9 +456,9 @@ export default function Hero() {
       }}>
         {/* Mini clinic result cards */}
         {[
-          { name: 'Clinica Adelante',     dist: '1.2 mi', badge: 'Free care', badgeColor: 'var(--green-pulse)', badgeBg: 'rgba(74,222,128,0.10)' },
-          { name: 'Valle del Sol Health', dist: '2.8 mi', badge: 'Sliding scale', badgeColor: 'var(--amber)',      badgeBg: 'rgba(252,211,77,0.10)'  },
-          { name: 'Mountain Park Health', dist: '4.1 mi', badge: 'Accepting',    badgeColor: 'var(--accent)',     badgeBg: 'rgba(74,144,217,0.10)'  },
+          { name: 'Community Health Center', dist: '1.2 mi', badge: 'Free care',    badgeColor: 'var(--green-pulse)', badgeBg: 'rgba(74,222,128,0.10)' },
+          { name: 'Free Care Clinic',       dist: '2.8 mi', badge: 'Sliding scale', badgeColor: 'var(--amber)',      badgeBg: 'rgba(252,211,77,0.10)'  },
+          { name: 'Neighborhood FQHC',      dist: '4.1 mi', badge: 'Accepting',     badgeColor: 'var(--accent)',     badgeBg: 'rgba(74,144,217,0.10)'  },
         ].map((item, i) => (
           <div key={item.name} aria-hidden="true" style={{
             display: 'flex', alignItems: 'center', gap: '12px',
