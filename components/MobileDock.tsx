@@ -1,16 +1,14 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Search, Bookmark, Users, Navigation } from 'lucide-react'
+import { Search, AlertTriangle, ClipboardList, User } from 'lucide-react'
 
-/* #26 — Healthcare GPS added to dock for prominence/discoverability.
- * Rights is accessible from the main nav; GPS is the most action-oriented
- * tool for people arriving without a plan. */
+/* The four highest-intent actions on mobile — always one tap away. */
 const DOCK_ITEMS = [
-  { href: '/search',    icon: <Search size={20} strokeWidth={2} />,     label: 'Search' },
-  { href: '/chw',       icon: <Users size={20} strokeWidth={2} />,      label: 'CHW'    },
-  { href: '/gps',       icon: <Navigation size={20} strokeWidth={2} />, label: 'GPS'    },
-  { href: '/dashboard', icon: <Bookmark size={20} strokeWidth={2} />,   label: 'Saved'  },
+  { href: '/search',            icon: <Search size={20} strokeWidth={2} />,        label: 'Search'  },
+  { href: '/triage',            icon: <ClipboardList size={20} strokeWidth={2} />, label: 'Triage'  },
+  { href: '/crisis',            icon: <AlertTriangle size={20} strokeWidth={2} />, label: 'Crisis'  },
+  { href: '/dashboard/profile', icon: <User size={20} strokeWidth={2} />,          label: 'Profile' },
 ]
 
 export default function MobileDock() {

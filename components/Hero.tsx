@@ -399,7 +399,7 @@ export default function Hero() {
         </div>
 
         {/* Quick-pick chips */}
-        <div ref={chipsRef} className="hero-fade-up" role="list" aria-label="Quick search suggestions"
+        <div ref={chipsRef} className="hero-fade-up" role="group" aria-label="Quick search suggestions"
           style={{ display: 'flex', alignItems: 'center', gap: '7px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '0.75rem' }}>
           <span style={{ fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }} aria-hidden="true">Try:</span>
           {([
@@ -434,7 +434,7 @@ export default function Hero() {
               </svg>
             )},
           ] as { label: string; icon: React.ReactNode }[]).map(({ label, icon }) => (
-            <button key={label} type="button" role="listitem"
+            <button key={label} type="button"
               onClick={() => setSearchVal(label)}
               className="chip-pill"
               style={{

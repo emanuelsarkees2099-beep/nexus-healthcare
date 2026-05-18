@@ -10,6 +10,7 @@ const AIAssistant                 = dynamic(() => import('@/components/AIAssista
 const CookieConsent               = dynamic(() => import('@/components/CookieConsent'),              { ssr: false })
 const SentryInit                  = dynamic(() => import('@/components/SentryInit'),                 { ssr: false })
 const PostHogProvider             = dynamic(() => import('@/components/PostHogProvider'),            { ssr: false })
+const MobileDock                  = dynamic(() => import('@/components/MobileDock'),                 { ssr: false })
 
 export default function GlobalClientComponents() {
   /* #37 — Low-bandwidth mode: restore persisted preference on mount */
@@ -33,6 +34,8 @@ export default function GlobalClientComponents() {
       <ServiceWorkerRegistration />
       <AIAssistant />
       <CookieConsent />
+      {/* Mobile bottom dock — shown via CSS only on ≤768px */}
+      <MobileDock />
       {/* #35 — Centralized toast notification system */}
       <ToastContainer />
     </>

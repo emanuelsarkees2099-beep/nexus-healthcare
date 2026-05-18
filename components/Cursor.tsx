@@ -11,6 +11,9 @@ export default function Cursor() {
   const frameSkip = useRef(0)
 
   useEffect(() => {
+    // Automatically disable custom cursor for users who prefer reduced motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
     // Gate cursor: none behind this attribute so it only hides the system
     // cursor after the custom cursor is actually rendered (no flash on SSR).
     document.documentElement.setAttribute('data-custom-cursor', 'true')

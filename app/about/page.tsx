@@ -1,6 +1,11 @@
-'use client'
+import type { Metadata } from 'next'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: 'About — NEXUS Healthcare Platform',
+  description: 'NEXUS is a free healthcare navigation platform helping uninsured and underinsured Americans find free clinics, sliding-scale providers, and government benefit programs.',
+}
 
 const TEAM_VALUES = [
   {
@@ -60,6 +65,10 @@ export default function AboutPage() {
           transition: border-color 0.2s ease;
         }
         .about-card:hover { border-color: rgba(74,144,217,0.25); }
+        .about-cta-primary { transition: transform 0.2s, box-shadow 0.2s; }
+        .about-cta-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(74,144,217,0.4) !important; }
+        .about-cta-secondary:hover { color: var(--text) !important; border-color: rgba(74,144,217,0.3) !important; }
+        .about-source-link:hover { color: var(--accent) !important; }
         @media (max-width: 600px) {
           .about-facts-grid { grid-template-columns: repeat(2, 1fr) !important; }
           .about-values-grid { grid-template-columns: 1fr !important; }
@@ -113,6 +122,7 @@ export default function AboutPage() {
         <div className="about-cta-row" style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link
             href="/search"
+            className="about-cta-primary"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
               background: 'var(--accent)', color: '#07070F',
@@ -120,25 +130,20 @@ export default function AboutPage() {
               fontFamily: 'var(--font-inter)', fontSize: '14px', fontWeight: 600,
               textDecoration: 'none', letterSpacing: '0.01em',
               boxShadow: '0 4px 20px rgba(74,144,217,0.3)',
-              transition: 'transform 0.2s, box-shadow 0.2s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(74,144,217,0.4)' }}
-            onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(74,144,217,0.3)' }}
           >
             Find free care near you
           </Link>
           <Link
             href="/open"
+            className="about-cta-secondary"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
               background: 'transparent', color: 'var(--text-2)',
               border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 24px',
               fontFamily: 'var(--font-inter)', fontSize: '14px', fontWeight: 400,
-              textDecoration: 'none',
-              transition: 'color 0.2s, border-color 0.2s',
+              textDecoration: 'none', transition: 'color 0.2s, border-color 0.2s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.color = 'var(--text)'; e.currentTarget.style.borderColor = 'rgba(74,144,217,0.3)' }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-2)'; e.currentTarget.style.borderColor = 'var(--border)' }}
           >
             View public roadmap →
           </Link>
@@ -348,7 +353,7 @@ export default function AboutPage() {
               <div>
                 <div style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '4px', fontFamily: 'var(--font-inter)' }}>
                   {s.href ? (
-                    <a href={s.href} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
+                    <a href={s.href} target="_blank" rel="noopener noreferrer" className="about-source-link" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
                       {s.name} ↗
                     </a>
                   ) : s.name}
@@ -384,24 +389,26 @@ export default function AboutPage() {
         <div className="about-cta-row" style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link
             href="/search"
+            className="about-cta-primary"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
               background: 'var(--accent)', color: '#07070F',
               border: 'none', borderRadius: '12px', padding: '13px 24px',
               fontFamily: 'var(--font-inter)', fontSize: '14px', fontWeight: 600,
-              textDecoration: 'none',
+              textDecoration: 'none', boxShadow: '0 4px 20px rgba(74,144,217,0.3)',
             }}
           >
             Find a free clinic
           </Link>
           <Link
             href="/programs"
+            className="about-cta-secondary"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
               background: 'transparent', color: 'var(--text-2)',
               border: '1px solid var(--border)', borderRadius: '12px', padding: '13px 24px',
               fontFamily: 'var(--font-inter)', fontSize: '14px', fontWeight: 400,
-              textDecoration: 'none',
+              textDecoration: 'none', transition: 'color 0.2s, border-color 0.2s',
             }}
           >
             Check program eligibility

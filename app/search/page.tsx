@@ -536,8 +536,8 @@ function SearchResults() {
 
         </div>{/* end sticky-filter-bar */}
 
-        {/* Status */}
-        <p style={{ fontSize: '12px', color: 'var(--text-3)', marginBottom: '16px', marginTop: '14px', display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', fontFamily: 'var(--font-inter)' }}>
+        {/* Status — aria-live so screen readers announce when results load */}
+        <p role="status" aria-live="polite" aria-atomic="true" style={{ fontSize: '12px', color: 'var(--text-3)', marginBottom: '16px', marginTop: '14px', display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', fontFamily: 'var(--font-inter)' }}>
           {loading ? t('general.loading') : `${visibleCount} ${visibleCount !== 1 ? t('search.clinics') : t('search.clinic')} ${locationVal ? `${t('search.clinicsNear')} ${locationVal}` : '— ' + t('search.enterZip')}`}
           {!loading && sourceBadge && (
             /* #41 — Rich source attribution badge */

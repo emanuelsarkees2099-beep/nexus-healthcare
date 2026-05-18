@@ -37,10 +37,13 @@ async function verifyHRSAEndpoint(zip: string): Promise<{ ok: boolean; count: nu
 }
 
 export async function GET(req: NextRequest) {
-  // Authorize via secret token (set in Vercel environment variables)
-  const authHeader = req.headers.get('Authorization')
+  // Require CRON_SECRET — route is disabled if not configured
   const cronSecret = process.env.CRON_SECRET
-  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+  if (!cronSecret) {
+    return NextResponse.json({ error: 'CRON_SECRET not configured' }, { status: 503 })
+  }
+  const authHeader = req.headers.get('Authorization')
+  if (authHeader !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

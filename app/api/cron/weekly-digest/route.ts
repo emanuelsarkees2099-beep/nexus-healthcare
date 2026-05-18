@@ -178,10 +178,14 @@ async function sendDigestEmail(stats: WeeklyStats): Promise<boolean> {
 }
 
 export async function GET(req: NextRequest) {
-  // Authorize
-  const authHeader = req.headers.get('Authorization')
+  // Require CRON_SECRET — if it's not set the route is disabled entirely.
+  // This prevents the digest from being triggered by anyone who knows the URL.
   const cronSecret = process.env.CRON_SECRET
-  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+  if (!cronSecret) {
+    return NextResponse.json({ error: 'CRON_SECRET not configured' }, { status: 503 })
+  }
+  const authHeader = req.headers.get('Authorization')
+  if (authHeader !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
