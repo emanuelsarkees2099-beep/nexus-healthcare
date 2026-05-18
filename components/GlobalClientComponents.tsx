@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { ToastContainer } from '@/components/ui/Toast'
 
 const CommandPalette              = dynamic(() => import('@/components/CommandPalette'),              { ssr: false })
-const PwaInstallPrompt            = dynamic(() => import('@/components/PwaInstallPrompt'),           { ssr: false })
 const ServiceWorkerRegistration   = dynamic(() => import('@/components/ServiceWorkerRegistration'),  { ssr: false })
 const AIAssistant                 = dynamic(() => import('@/components/AIAssistant'),                { ssr: false })
 const CookieConsent               = dynamic(() => import('@/components/CookieConsent'),              { ssr: false })
@@ -30,7 +29,6 @@ export default function GlobalClientComponents() {
       {/* Analytics — PostHog, no-op if NEXT_PUBLIC_POSTHOG_KEY not set */}
       <PostHogProvider />
       <CommandPalette />
-      <PwaInstallPrompt />
       <ServiceWorkerRegistration />
       <AIAssistant />
       <CookieConsent />

@@ -1836,33 +1836,6 @@ a:not(.no-press):active,
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   PWA INSTALL PROMPT (5.10)
-   ═══════════════════════════════════════════════════════════════════ */
-
-.pwa-install-prompt {
-  position: fixed;
-  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-  left: 50%;
-  transform: translateX(-50%) translateY(100px);
-  z-index: 9500;
-  width: calc(100% - 2rem);
-  max-width: 420px;
-  opacity: 0;
-  pointer-events: none;
-  transition: transform 0.45s var(--ease-out-expo), opacity 0.35s ease;
-}
-.pwa-install-prompt.visible {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-  pointer-events: auto;
-}
-/* Push above mobile dock on small screens */
-@media (max-width: 768px) {
-  .pwa-install-prompt {
-    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
-  }
-}
 
 /* ═══════════════════════════════════════════════════════════════════
    A4 — HIGH CONTRAST MODE (prefers-contrast: more)
