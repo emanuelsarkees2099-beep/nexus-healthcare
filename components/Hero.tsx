@@ -16,7 +16,7 @@ const CYCLE_WORDS = ['unlocked', 'possible', 'deserved', 'waiting']
 const PLACEHOLDERS = [
   'Symptom, specialty, or clinic name...',
   'Primary care near me...',
-  'Free dental in Phoenix...',
+  'Free dental near me...',
   'Mental health services...',
   'Walk-in clinic today...',
   'Pediatrics · no insurance needed...',
@@ -47,9 +47,17 @@ export default function Hero() {
   /* ── State ── */
   const [placeholderIdx, setPlaceholderIdx] = useState(0)
   const [searchVal, setSearchVal]           = useState('')
-  const [locationVal, setLocationVal]       = useState('Phoenix, AZ')
+  const [locationVal, setLocationVal]       = useState('')
   const [cycleIdx, setCycleIdx]             = useState(0)
   const [wordClass, setWordClass]           = useState('word-cycle-in')
+
+  /* ── Restore last-used location from localStorage ── */
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('nexus_location') || localStorage.getItem('nexus_zip') || ''
+      if (stored) setLocationVal(stored)
+    } catch { /* private browsing / storage denied */ }
+  }, [])
 
   /* ── Cycling headline word (#21st-dev animated-hero) ── */
   useEffect(() => {
@@ -198,7 +206,7 @@ export default function Hero() {
       btn.textContent = 'Searching...'
       gsap.to(btn, { scale: 0.97, duration: 0.1, yoyo: true, repeat: 1 })
     }
-    const loc = locationVal.trim() || 'Phoenix, AZ'
+    const loc = locationVal.trim()
 
     // #21: Symptom queries → triage first; specialty/location queries → search
     const destination = isSymptomQuery(query)

@@ -297,10 +297,12 @@ body {
 }
 
 /* ── NOISE TEXTURE — the tactile layer that separates premium from flat ── */
+/* z-index: 2 keeps it above static page content but below ALL interactive UI
+   (nav: 500, command palette: 498+, AI assistant: 9996+, toasts: 9999+)     */
 body::after {
   content: '';
   position: fixed; inset: 0;
-  z-index: 999;
+  z-index: 2;
   pointer-events: none;
   opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");

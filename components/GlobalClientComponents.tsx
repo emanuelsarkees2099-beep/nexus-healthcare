@@ -9,6 +9,7 @@ const ServiceWorkerRegistration   = dynamic(() => import('@/components/ServiceWo
 const AIAssistant                 = dynamic(() => import('@/components/AIAssistant'),                { ssr: false })
 const CookieConsent               = dynamic(() => import('@/components/CookieConsent'),              { ssr: false })
 const SentryInit                  = dynamic(() => import('@/components/SentryInit'),                 { ssr: false })
+const PostHogProvider             = dynamic(() => import('@/components/PostHogProvider'),            { ssr: false })
 
 export default function GlobalClientComponents() {
   /* #37 — Low-bandwidth mode: restore persisted preference on mount */
@@ -25,6 +26,8 @@ export default function GlobalClientComponents() {
     <>
       {/* I1 — initialise Sentry once at client startup, no-op if DSN not set */}
       <SentryInit />
+      {/* Analytics — PostHog, no-op if NEXT_PUBLIC_POSTHOG_KEY not set */}
+      <PostHogProvider />
       <CommandPalette />
       <PwaInstallPrompt />
       <ServiceWorkerRegistration />
