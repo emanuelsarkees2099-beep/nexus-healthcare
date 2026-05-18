@@ -264,7 +264,7 @@ export default function Nav({ initialUser }: NavProps = {}) {
           {!isHome && (
             <button
               aria-label={`Saved clinics${savedCount > 0 ? ` — ${savedCount} saved` : ''}`}
-              onClick={() => router.push('/dashboard')}
+              onClick={() => router.push('/dashboard/profile')}
               className="nav-saved-btn"
               style={{
                 position: 'relative', width: '34px', height: '34px', borderRadius: '9px',

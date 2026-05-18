@@ -43,3 +43,5 @@ seed-progress.log
 
 # Scripts
 scripts/seed-progress.log
+
+.vercel
