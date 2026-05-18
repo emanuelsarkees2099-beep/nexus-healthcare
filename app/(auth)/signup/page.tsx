@@ -1,473 +1,557 @@
 'use client'
 export const dynamic = 'force-dynamic'
+
 import { useState, useEffect } from 'react'
 import { createClientClient } from '@/lib/auth-client'
 import Link from 'next/link'
-import { CheckCircle, AlertCircle } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+
+/* ─────────────────────────── tiny SVG primitives ─────────────────────────── */
+
+const Spinner = () => (
+  <svg
+    width="16" height="16" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
+    style={{ animation: 'spin 0.8s linear infinite', flexShrink: 0 }}
+  >
+    <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+    <path d="M12 2 A10 10 0 0 1 22 12" />
+  </svg>
+)
+
+const EyeIcon = ({ show }: { show: boolean }) =>
+  show ? (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+      <line x1="1" y1="1" x2="23" y2="23"/>
+    </svg>
+  ) : (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+      <circle cx="12" cy="12" r="3"/>
+    </svg>
+  )
+
+const GoogleIcon = () => (
+  <svg width="17" height="17" viewBox="0 0 24 24">
+    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+  </svg>
+)
+
+const CheckIcon = () => (
+  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2" strokeLinecap="round">
+    <polyline points="20 6 9 17 4 12"/>
+  </svg>
+)
+
+/* ──────────────────────── password strength helper ──────────────────────── */
+
+function pwStrength(pw: string): { score: number; label: string; color: string } {
+  if (!pw) return { score: 0, label: '', color: '' }
+  let score = 0
+  if (pw.length >= 8)  score++
+  if (pw.length >= 12) score++
+  if (/[A-Z]/.test(pw)) score++
+  if (/[0-9]/.test(pw)) score++
+  if (/[^A-Za-z0-9]/.test(pw)) score++
+  if (score <= 1) return { score, label: 'Weak',   color: '#f87171' }
+  if (score <= 3) return { score, label: 'Fair',   color: '#fbbf24' }
+  return              { score, label: 'Strong', color: '#34d399' }
+}
+
+/* ────────────────────────────── types ───────────────────────────────────── */
 
 type UserType = 'patient' | 'provider' | 'admin'
 
+/* ─────────────────────────────── component ───────────────────────────────── */
+
 export default function SignupPage() {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    fullName: '',
-    phone: '',
-    userType: 'patient' as UserType,
-  })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const [focusedField, setFocusedField] = useState<string | null>(null)
-  const [supabase, setSupabase] = useState<ReturnType<typeof createClientClient> | null>(null)
+  const router = useRouter()
 
-  useEffect(() => {
-    setSupabase(createClientClient())
-  }, [])
+  const [fullName,      setFullName]      = useState('')
+  const [email,         setEmail]         = useState('')
+  const [password,      setPassword]      = useState('')
+  const [confirmPass,   setConfirmPass]   = useState('')
+  const [phone,         setPhone]         = useState('')
+  const [userType,      setUserType]      = useState<UserType>('patient')
+  const [showPass,      setShowPass]      = useState(false)
+  const [showConfirm,   setShowConfirm]   = useState(false)
+  const [loading,       setLoading]       = useState(false)
+  const [gLoading,      setGLoading]      = useState(false)
+  const [error,         setError]         = useState('')
+  const [success,       setSuccess]       = useState(false)
+  const [mounted,       setMounted]       = useState(false)
+  const [focusedField,  setFocusedField]  = useState<string | null>(null)
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const supabase = createClientClient()
+  const strength = pwStrength(password)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-    setError('')
-  }
-
-  const handleUserTypeChange = (type: UserType) => {
-    setFormData(prev => ({ ...prev, userType: type }))
-  }
+  useEffect(() => { setMounted(true) }, [])
 
   const handleGoogleSignup = async () => {
+    setGLoading(true)
+    setError('')
     try {
-      const { error: err } = await supabase!.auth.signInWithOAuth({
+      const { error: err } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: { redirectTo: `${window.location.origin}/auth/callback` },
       })
       if (err) throw err
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Google signup failed')
+      setError(err instanceof Error ? err.message : 'Google sign up failed.')
+      setGLoading(false)
     }
   }
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
-    const { email, password, confirmPassword, fullName, phone, userType } = formData
-
-    if (!email || !password || !confirmPassword || !fullName) {
-      setError('Please fill in all required fields')
+    if (!fullName || !email || !password || !confirmPass) {
+      setError('Please fill in all required fields.')
       return
     }
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match')
+    if (password !== confirmPass) {
+      setError('Passwords do not match.')
       return
     }
-
     if (password.length < 6) {
-      setError('Password must be at least 6 characters')
+      setError('Password must be at least 6 characters.')
       return
     }
-
     setLoading(true)
     setError('')
-
     try {
-      const { data: authData, error: authError } = await supabase!.auth.signUp({ email, password })
+      const { data: authData, error: authError } = await supabase.auth.signUp({ email, password })
       if (authError) throw authError
-      if (!authData.user) throw new Error('Signup failed')
+      if (!authData.user) throw new Error('Signup failed — no user returned.')
 
-      // Create profile
-      await supabase!.from('user_profiles').upsert({
-        id: authData.user.id,
+      await supabase.from('user_profiles').upsert({
+        id:        authData.user.id,
         email,
         full_name: fullName,
-        phone: phone || null,
-        user_type: userType || 'patient',
+        phone:     phone || null,
+        user_type: userType,
       })
 
       setSuccess(true)
-      setTimeout(() => { window.location.href = '/dashboard' }, 1500)
+      setTimeout(() => router.push('/'), 1800)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Signup failed')
-    } finally {
+      setError(err instanceof Error ? err.message : 'Sign up failed.')
       setLoading(false)
     }
   }
 
-  // Form completion percentage
-  const filledFields = [
-    formData.fullName,
-    formData.email,
-    formData.password,
-    formData.confirmPassword,
-  ].filter(Boolean).length
-  const completion = (filledFields / 4) * 100
-
   if (!mounted) return null
 
+  const inputStyle = (field: string): React.CSSProperties => ({
+    width: '100%',
+    padding: '11px 14px',
+    background: focusedField === field ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.03)',
+    border: `1px solid ${focusedField === field ? 'rgba(74,144,217,0.45)' : 'rgba(255,255,255,0.09)'}`,
+    borderRadius: '10px',
+    color: '#e8edf2',
+    fontSize: '14px',
+    fontFamily: 'inherit',
+    outline: 'none',
+    boxSizing: 'border-box',
+    caretColor: '#4a90d9',
+    transition: 'border-color 0.18s, background 0.18s',
+  })
+
   return (
-    <div style={{ minHeight: '100vh', background: '#07070F', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '20px', position: 'relative', overflow: 'hidden' }}>
-      {/* Animated background gradient */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(109,145,151,0.08) 0%, transparent 70%)',
-          pointerEvents: 'none',
-          animation: 'float 8s ease-in-out infinite',
-        }}
-      />
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '40px 16px',
+      background: '#07070F',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
       <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(18px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes slideIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
+        @keyframes scaleIn {
+          from { opacity: 0; transform: scale(0.88); }
+          to   { opacity: 1; transform: scale(1); }
         }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+        .auth-card { animation: fadeUp 0.55s cubic-bezier(0.16,1,0.3,1) both; }
+        .success-card { animation: scaleIn 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+        .auth-btn-primary:hover:not(:disabled) {
+          background: #5a9fe6 !important;
+          transform: translateY(-1px);
+          box-shadow: 0 8px 24px rgba(74,144,217,0.28);
         }
-        .animate-slide { animation: slideIn 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
-        .stagger-1 { animation-delay: 0.1s; opacity: 0; }
-        .stagger-2 { animation-delay: 0.2s; opacity: 0; }
-        .stagger-3 { animation-delay: 0.3s; opacity: 0; }
-        .stagger-4 { animation-delay: 0.4s; opacity: 0; }
-        .stagger-5 { animation-delay: 0.5s; opacity: 0; }
-        .stagger-6 { animation-delay: 0.6s; opacity: 0; }
-        .stagger-7 { animation-delay: 0.7s; opacity: 0; }
+        .auth-btn-primary:active:not(:disabled) { transform: translateY(0); }
+        .auth-btn-google:hover:not(:disabled) {
+          background: rgba(255,255,255,0.07) !important;
+          border-color: rgba(255,255,255,0.17) !important;
+        }
+        .role-chip:hover { opacity: 0.85; }
       `}</style>
 
-      <div style={{ width: '100%', maxWidth: '450px', position: 'relative', zIndex: 10 }}>
+      {/* Top glow */}
+      <div style={{
+        position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
+        width: '600px', height: '300px',
+        background: 'radial-gradient(ellipse at top, rgba(74,144,217,0.07) 0%, transparent 70%)',
+        pointerEvents: 'none',
+      }} />
+
+      <div className="auth-card" style={{ width: '100%', maxWidth: '420px', position: 'relative', zIndex: 10 }}>
+
         {/* Logo */}
-        <div className="animate-slide stagger-1" style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <span style={{ fontFamily: 'var(--font-orbitron, monospace)', fontSize: '13px', fontWeight: 400, letterSpacing: '0.45em', color: 'rgba(255,255,255,0.9)' }}>NEXUS</span>
-          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.3)', marginTop: '8px', letterSpacing: '0.05em' }}>Join the healthcare revolution</p>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '9px', marginBottom: '6px' }}>
+            <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+              <path d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4a90d9" opacity="0.95"/>
+              <path transform="rotate(120 50 50)" d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4a90d9" opacity="0.95"/>
+              <path transform="rotate(240 50 50)" d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4a90d9" opacity="0.95"/>
+              <circle cx="50" cy="50" r="5" fill="#4a90d9" opacity="0.7"/>
+            </svg>
+            <span style={{
+              fontFamily: 'var(--font-orbitron, monospace)',
+              fontSize: '13px', fontWeight: 400,
+              letterSpacing: '0.42em', color: 'rgba(255,255,255,0.88)',
+            }}>NEXUS</span>
+          </div>
+          <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.02em', margin: 0 }}>
+            Free healthcare resources for everyone
+          </p>
         </div>
 
+        {/* ── Success state ── */}
         {success ? (
-          // Success state
-          <div className="animate-slide" style={{ textAlign: 'center' }}>
-            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(96,165,250,0.1)', border: '1px solid rgba(96,165,250,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
-              <CheckCircle size={32} color="#60a5fa" strokeWidth={1.5} />
+          <div className="success-card" style={{
+            background: 'rgba(52,211,153,0.05)',
+            border: '1px solid rgba(52,211,153,0.18)',
+            borderRadius: '16px',
+            padding: '48px 32px',
+            textAlign: 'center',
+          }}>
+            <div style={{
+              width: '64px', height: '64px',
+              borderRadius: '50%',
+              background: 'rgba(52,211,153,0.1)',
+              border: '1px solid rgba(52,211,153,0.25)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 20px',
+            }}>
+              <CheckIcon />
             </div>
-            <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#fff', marginBottom: '8px' }}>Account created!</h2>
-            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '14px' }}>Welcome to NEXUS. Redirecting to dashboard...</p>
+            <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#fff', marginBottom: '8px', letterSpacing: '-0.02em' }}>
+              Account created!
+            </h2>
+            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.42)', marginBottom: '0' }}>
+              Welcome to NEXUS. Taking you home…
+            </p>
           </div>
         ) : (
-          <>
-            <h1 className="animate-slide stagger-2" style={{ fontSize: '28px', fontWeight: 700, marginBottom: '8px', color: '#ffffff' }}>Create account</h1>
-            <p className="animate-slide stagger-2" style={{ color: 'rgba(255,255,255,0.5)', marginBottom: '32px', fontSize: '14px' }}>Join thousands accessing healthcare</p>
 
-            {error && (
-              <div className="animate-slide stagger-3" style={{ background: 'rgba(255,107,107,0.1)', border: '1px solid rgba(255,107,107,0.3)', borderRadius: '10px', padding: '12px 14px', marginBottom: '20px', color: '#ff6b6b', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <AlertCircle size={16} strokeWidth={2} />
-                {error}
-              </div>
-            )}
+        /* ── Signup form ── */
+        <div style={{
+          background: 'rgba(255,255,255,0.02)',
+          border: '1px solid rgba(255,255,255,0.07)',
+          borderRadius: '16px',
+          padding: '32px',
+        }}>
+          <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#fff', marginBottom: '4px', letterSpacing: '-0.02em' }}>
+            Create account
+          </h1>
+          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginBottom: '26px' }}>
+            Join thousands accessing free care.
+          </p>
 
-            {/* Progress bar */}
-            <div className="animate-slide stagger-3" style={{ marginBottom: '24px' }}>
-              <div style={{ height: '2px', background: 'rgba(255,255,255,0.08)', borderRadius: '2px', overflow: 'hidden' }}>
-                <div style={{ height: '100%', background: `linear-gradient(90deg, #6d9197, #60a5fa)`, width: `${completion}%`, transition: 'width 0.3s ease' }} />
-              </div>
-              <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '6px' }}>{Math.round(completion)}% complete</p>
+          {/* Error banner */}
+          {error && (
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: '9px',
+              background: 'rgba(248,113,113,0.08)',
+              border: '1px solid rgba(248,113,113,0.22)',
+              borderRadius: '9px', padding: '11px 13px',
+              marginBottom: '20px', color: '#f87171', fontSize: '13px',
+            }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ flexShrink: 0 }}>
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              {error}
+            </div>
+          )}
+
+          {/* Google CTA */}
+          <button
+            onClick={handleGoogleSignup}
+            disabled={loading || gLoading}
+            className="auth-btn-google"
+            style={{
+              width: '100%',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+              padding: '11px 16px',
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.11)',
+              borderRadius: '10px',
+              color: '#e0e6ed', fontSize: '14px', fontWeight: 500, fontFamily: 'inherit',
+              cursor: loading || gLoading ? 'not-allowed' : 'pointer',
+              opacity: loading || gLoading ? 0.55 : 1,
+              transition: 'all 0.18s',
+              marginBottom: '16px',
+            }}
+          >
+            {gLoading ? <Spinner /> : <GoogleIcon />}
+            {gLoading ? 'Redirecting…' : 'Continue with Google'}
+          </button>
+
+          {/* Divider */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '22px' }}>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.07)' }} />
+            <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.04em' }}>OR</span>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.07)' }} />
+          </div>
+
+          <form onSubmit={handleSignup} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+
+            {/* Full name */}
+            <div>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.55)', marginBottom: '6px' }}>
+                Full name
+              </label>
+              <input
+                type="text"
+                value={fullName}
+                onChange={e => { setFullName(e.target.value); setError('') }}
+                onFocus={() => setFocusedField('name')}
+                onBlur={() => setFocusedField(null)}
+                placeholder="Maria Garcia"
+                style={inputStyle('name')}
+                disabled={loading}
+                autoComplete="name"
+              />
             </div>
 
-            <form onSubmit={handleSignup} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {/* Full Name */}
-              <div className="animate-slide stagger-4" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.65)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span>Full name</span>
-                  {formData.fullName && <span style={{ color: '#60a5fa', fontSize: '10px' }}>✓</span>}
-                </label>
-                <input
-                  type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  onFocus={() => setFocusedField('fullName')}
-                  onBlur={() => setFocusedField(null)}
-                  placeholder="Maria Garcia"
-                  style={{
-                    width: '100%',
-                    padding: '12px 14px',
-                    background: focusedField === 'fullName' ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.03)',
-                    border: focusedField === 'fullName' ? '1px solid rgba(109,145,151,0.45)' : '1px solid rgba(255,255,255,0.08)',
-                    borderRadius: '10px',
-                    color: '#eef4f5',
-                    fontSize: '14px',
-                    fontFamily: 'inherit',
-                    outline: 'none',
-                    boxSizing: 'border-box',
-                    caretColor: '#6d9197',
-                    transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
-                  }}
-                />
-              </div>
+            {/* Email */}
+            <div>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.55)', marginBottom: '6px' }}>
+                Email address
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={e => { setEmail(e.target.value); setError('') }}
+                onFocus={() => setFocusedField('email')}
+                onBlur={() => setFocusedField(null)}
+                placeholder="you@example.com"
+                style={inputStyle('email')}
+                disabled={loading}
+                autoComplete="email"
+              />
+            </div>
 
-              {/* Email */}
-              <div className="animate-slide stagger-4" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.65)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span>Email</span>
-                  {formData.email && <span style={{ color: '#60a5fa', fontSize: '10px' }}>✓</span>}
-                </label>
+            {/* Password */}
+            <div>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.55)', marginBottom: '6px' }}>
+                Password
+              </label>
+              <div style={{ position: 'relative' }}>
                 <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  onFocus={() => setFocusedField('email')}
-                  onBlur={() => setFocusedField(null)}
-                  placeholder="you@example.com"
-                  style={{
-                    width: '100%',
-                    padding: '12px 14px',
-                    background: focusedField === 'email' ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.03)',
-                    border: focusedField === 'email' ? '1px solid rgba(109,145,151,0.45)' : '1px solid rgba(255,255,255,0.08)',
-                    borderRadius: '10px',
-                    color: '#eef4f5',
-                    fontSize: '14px',
-                    fontFamily: 'inherit',
-                    outline: 'none',
-                    boxSizing: 'border-box',
-                    caretColor: '#6d9197',
-                    transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
-                  }}
-                />
-              </div>
-
-              {/* Password */}
-              <div className="animate-slide stagger-5" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.65)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span>Password</span>
-                  {formData.password && <span style={{ color: '#60a5fa', fontSize: '10px' }}>✓</span>}
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
+                  type={showPass ? 'text' : 'password'}
+                  value={password}
+                  onChange={e => { setPassword(e.target.value); setError('') }}
                   onFocus={() => setFocusedField('password')}
                   onBlur={() => setFocusedField(null)}
-                  placeholder="••••••••"
-                  style={{
-                    width: '100%',
-                    padding: '12px 14px',
-                    background: focusedField === 'password' ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.03)',
-                    border: focusedField === 'password' ? '1px solid rgba(109,145,151,0.45)' : '1px solid rgba(255,255,255,0.08)',
-                    borderRadius: '10px',
-                    color: '#eef4f5',
-                    fontSize: '14px',
-                    fontFamily: 'inherit',
-                    outline: 'none',
-                    boxSizing: 'border-box',
-                    caretColor: '#6d9197',
-                    transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
-                  }}
+                  placeholder="Min. 6 characters"
+                  style={{ ...inputStyle('password'), paddingRight: '44px' }}
+                  disabled={loading}
+                  autoComplete="new-password"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPass(v => !v)}
+                  style={{
+                    position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)',
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    color: 'rgba(255,255,255,0.3)', padding: '2px',
+                    display: 'flex', alignItems: 'center', transition: 'color 0.15s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}
+                  tabIndex={-1}
+                >
+                  <EyeIcon show={showPass} />
+                </button>
               </div>
+              {/* Strength bar */}
+              {password && (
+                <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ flex: 1, height: '3px', background: 'rgba(255,255,255,0.08)', borderRadius: '2px', overflow: 'hidden' }}>
+                    <div style={{
+                      height: '100%',
+                      width: `${(strength.score / 5) * 100}%`,
+                      background: strength.color,
+                      transition: 'width 0.3s, background 0.3s',
+                      borderRadius: '2px',
+                    }} />
+                  </div>
+                  <span style={{ fontSize: '11px', color: strength.color, minWidth: '38px' }}>{strength.label}</span>
+                </div>
+              )}
+            </div>
 
-              {/* Confirm Password */}
-              <div className="animate-slide stagger-5" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.65)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span>Confirm password</span>
-                  {formData.confirmPassword && formData.password === formData.confirmPassword && <span style={{ color: '#60a5fa', fontSize: '10px' }}>✓</span>}
-                </label>
+            {/* Confirm password */}
+            <div>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.55)', marginBottom: '6px' }}>
+                Confirm password
+              </label>
+              <div style={{ position: 'relative' }}>
                 <input
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  onFocus={() => setFocusedField('confirmPassword')}
+                  type={showConfirm ? 'text' : 'password'}
+                  value={confirmPass}
+                  onChange={e => { setConfirmPass(e.target.value); setError('') }}
+                  onFocus={() => setFocusedField('confirm')}
                   onBlur={() => setFocusedField(null)}
                   placeholder="••••••••"
                   style={{
-                    width: '100%',
-                    padding: '12px 14px',
-                    background: focusedField === 'confirmPassword' ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.03)',
-                    border: focusedField === 'confirmPassword' ? '1px solid rgba(109,145,151,0.45)' : '1px solid rgba(255,255,255,0.08)',
-                    borderRadius: '10px',
-                    color: '#eef4f5',
-                    fontSize: '14px',
-                    fontFamily: 'inherit',
-                    outline: 'none',
-                    boxSizing: 'border-box',
-                    caretColor: '#6d9197',
-                    transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
+                    ...inputStyle('confirm'),
+                    paddingRight: '44px',
+                    borderColor: confirmPass && password !== confirmPass
+                      ? 'rgba(248,113,113,0.4)'
+                      : confirmPass && password === confirmPass
+                        ? 'rgba(52,211,153,0.4)'
+                        : focusedField === 'confirm' ? 'rgba(74,144,217,0.45)' : 'rgba(255,255,255,0.09)',
                   }}
+                  disabled={loading}
+                  autoComplete="new-password"
                 />
-              </div>
-
-              {/* Phone (optional) */}
-              <div className="animate-slide stagger-5" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.5)' }}>Phone (optional)</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  placeholder="(555) 000-0000"
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm(v => !v)}
                   style={{
-                    width: '100%',
-                    padding: '12px 14px',
-                    background: 'rgba(255,255,255,0.03)',
-                    border: '1px solid rgba(255,255,255,0.08)',
-                    borderRadius: '10px',
-                    color: '#eef4f5',
-                    fontSize: '14px',
-                    fontFamily: 'inherit',
-                    outline: 'none',
-                    boxSizing: 'border-box',
-                    caretColor: '#6d9197',
-                    transition: 'all 0.2s',
+                    position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)',
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    color: 'rgba(255,255,255,0.3)', padding: '2px',
+                    display: 'flex', alignItems: 'center', transition: 'color 0.15s',
                   }}
-                  onFocus={e => { e.target.style.borderColor = 'rgba(109,145,151,0.45)'; e.target.style.background = 'rgba(255,255,255,0.05)' }}
-                  onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.08)'; e.target.style.background = 'rgba(255,255,255,0.03)' }}
-                />
+                  onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}
+                  tabIndex={-1}
+                >
+                  <EyeIcon show={showConfirm} />
+                </button>
               </div>
+            </div>
 
-              {/* User Type */}
-              <div className="animate-slide stagger-6" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <label style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.65)' }}>I am a:</label>
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                  {(['patient', 'provider', 'admin'] as UserType[]).map(type => (
+            {/* Phone (optional) */}
+            <div>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.38)', marginBottom: '6px' }}>
+                Phone <span style={{ color: 'rgba(255,255,255,0.22)', fontWeight: 400 }}>(optional)</span>
+              </label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
+                onFocus={() => setFocusedField('phone')}
+                onBlur={() => setFocusedField(null)}
+                placeholder="(555) 000-0000"
+                style={inputStyle('phone')}
+                disabled={loading}
+                autoComplete="tel"
+              />
+            </div>
+
+            {/* Role selector */}
+            <div>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.55)', marginBottom: '10px' }}>
+                I am a
+              </label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
+                {(['patient', 'provider', 'admin'] as UserType[]).map(type => {
+                  const active = userType === type
+                  const colors: Record<UserType, string> = {
+                    patient:  '#4a90d9',
+                    provider: '#34d399',
+                    admin:    '#a78bfa',
+                  }
+                  return (
                     <button
                       key={type}
                       type="button"
-                      onClick={() => handleUserTypeChange(type)}
+                      className="role-chip"
+                      onClick={() => setUserType(type)}
                       style={{
-                        flex: '1 1 calc(33.33% - 5.33px)',
-                        minWidth: '100px',
-                        padding: '12px',
-                        background: formData.userType === type ? '#6d9197' : 'rgba(255,255,255,0.05)',
-                        border: formData.userType === type ? 'none' : '1px solid rgba(255,255,255,0.1)',
-                        color: formData.userType === type ? '#07070F' : 'rgba(255,255,255,0.7)',
+                        padding: '10px 4px',
+                        background: active ? `${colors[type]}15` : 'rgba(255,255,255,0.03)',
+                        border: `1px solid ${active ? `${colors[type]}50` : 'rgba(255,255,255,0.09)'}`,
                         borderRadius: '9px',
-                        cursor: 'pointer',
-                        fontSize: '13px',
+                        color: active ? colors[type] : 'rgba(255,255,255,0.5)',
+                        fontSize: '12px',
                         fontWeight: 600,
                         fontFamily: 'inherit',
-                        transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
+                        cursor: 'pointer',
                         textTransform: 'capitalize',
-                      }}
-                      onMouseEnter={e => {
-                        if (formData.userType !== type) {
-                          e.currentTarget.style.background = 'rgba(255,255,255,0.08)'
-                          e.currentTarget.style.borderColor = 'rgba(109,145,151,0.3)'
-                        }
-                      }}
-                      onMouseLeave={e => {
-                        if (formData.userType !== type) {
-                          e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
-                          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'
-                        }
+                        transition: 'all 0.18s',
+                        letterSpacing: '0.01em',
                       }}
                     >
                       {type}
                     </button>
-                  ))}
-                </div>
+                  )
+                })}
               </div>
-
-              {/* Submit */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="animate-slide stagger-6"
-                style={{
-                  padding: '14px',
-                  background: loading ? 'rgba(109,145,151,0.5)' : '#6d9197',
-                  color: '#07070F',
-                  border: 'none',
-                  borderRadius: '10px',
-                  fontWeight: 700,
-                  fontSize: '14px',
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                  opacity: loading ? 0.6 : 1,
-                  fontFamily: 'inherit',
-                  transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
-                  marginTop: '8px',
-                }}
-                onMouseEnter={e => {
-                  if (!loading) {
-                    e.currentTarget.style.transform = 'translateY(-2px)'
-                    e.currentTarget.style.boxShadow = '0 12px 24px rgba(109,145,151,0.3)'
-                  }
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = ''
-                  e.currentTarget.style.boxShadow = 'none'
-                }}
-              >
-                {loading ? 'Creating account...' : 'Create account'}
-              </button>
-            </form>
-
-            {/* Divider */}
-            <div className="animate-slide stagger-7" style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '20px 0', opacity: 0 }}>
-              <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.08)' }} />
-              <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)' }}>or</span>
-              <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.08)' }} />
             </div>
 
-            {/* Google signup */}
+            {/* Submit */}
             <button
-              onClick={handleGoogleSignup}
-              disabled={loading}
-              className="animate-slide stagger-7"
+              type="submit"
+              disabled={loading || gLoading}
+              className="auth-btn-primary"
               style={{
-                width: '100%',
                 padding: '12px 16px',
-                background: 'rgba(255,255,255,0.05)',
-                color: '#eef4f5',
-                border: '1px solid rgba(255,255,255,0.1)',
+                background: '#4a90d9',
+                color: '#ffffff',
+                border: 'none',
                 borderRadius: '10px',
                 fontWeight: 600,
                 fontSize: '14px',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                opacity: loading ? 0.6 : 1,
                 fontFamily: 'inherit',
-                transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
+                cursor: loading || gLoading ? 'not-allowed' : 'pointer',
+                opacity: loading || gLoading ? 0.6 : 1,
+                transition: 'all 0.18s',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '10px',
-              }}
-              onMouseEnter={e => {
-                if (!loading) {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.08)'
-                  e.currentTarget.style.borderColor = 'rgba(109,145,151,0.3)'
-                }
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'
+                gap: '8px',
+                marginTop: '6px',
               }}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-              </svg>
-              Sign up with Google
+              {loading && <Spinner />}
+              {loading ? 'Creating account…' : 'Create account'}
             </button>
+          </form>
+        </div>
+        )}
 
-            {/* Sign in link */}
-            <p className="animate-slide stagger-7" style={{ marginTop: '20px', textAlign: 'center', fontSize: '14px', color: 'rgba(255,255,255,0.6)' }}>
-              Already have an account?{' '}
-              <Link href="/login" style={{ color: '#6d9197', textDecoration: 'none', fontWeight: 600 }}>
-                Sign in
-              </Link>
-            </p>
-          </>
+        {/* Footer */}
+        {!success && (
+          <p style={{ textAlign: 'center', fontSize: '13px', color: 'rgba(255,255,255,0.38)', marginTop: '20px' }}>
+            Already have an account?{' '}
+            <Link
+              href="/login"
+              style={{ color: '#4a90d9', textDecoration: 'none', fontWeight: 500 }}
+              onMouseEnter={e => (e.currentTarget.style.textDecoration = 'underline')}
+              onMouseLeave={e => (e.currentTarget.style.textDecoration = 'none')}
+            >
+              Sign in
+            </Link>
+          </p>
         )}
       </div>
     </div>
