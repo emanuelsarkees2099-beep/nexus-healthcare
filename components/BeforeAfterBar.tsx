@@ -111,7 +111,7 @@ function MetricRow({
         alignItems: 'center',
         justifyContent: 'center',
         padding: '3px 8px',
-        borderRadius: '5px',
+        borderRadius: 'var(--r-sm)',
         background: 'rgba(74,144,217,0.08)',
         border: '1px solid rgba(74,144,217,0.16)',
         fontSize: '11px',

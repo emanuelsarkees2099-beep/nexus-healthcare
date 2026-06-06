@@ -32,7 +32,7 @@ function Panel0() {
       <div style={{
         display: 'flex', alignItems: 'center', gap: '10px',
         background: 'var(--bg3)', border: '1px solid rgba(74,144,217,0.18)',
-        borderRadius: '12px', padding: '12px 16px', marginBottom: '1rem',
+        borderRadius: 'var(--r-md)', padding: '12px 16px', marginBottom: '1rem',
       }}>
         <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.7, flexShrink: 0 }}>
           <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
@@ -45,7 +45,7 @@ function Panel0() {
       <div style={{
         display: 'inline-flex', alignItems: 'center', gap: '6px',
         background: 'rgba(74,144,217,0.07)', border: '1px solid rgba(74,144,217,0.16)',
-        borderRadius: '8px', padding: '8px 12px',
+        borderRadius: 'var(--r-sm)', padding: '8px 12px',
         fontSize: '12px', color: 'var(--accent)', fontFamily: 'var(--font-inter)',
       }}>
         <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -62,7 +62,7 @@ function Panel1() {
     <div style={{ padding: '1.5rem' }}>
       <div style={{
         background: 'var(--bg3)', border: '1px solid rgba(74,144,217,0.14)',
-        borderRadius: '12px', padding: '1rem', marginBottom: '1rem',
+        borderRadius: 'var(--r-md)', padding: '1rem', marginBottom: '1rem',
         fontSize: '13px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)',
         fontStyle: 'italic', lineHeight: 1.7,
       }}>
@@ -70,7 +70,7 @@ function Panel1() {
       </div>
       <div style={{
         background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.16)',
-        borderRadius: '12px', padding: '1rem',
+        borderRadius: 'var(--r-md)', padding: '1rem',
       }}>
         <div style={{
           fontSize: '11px', color: 'var(--accent)', fontWeight: 500,
@@ -97,10 +97,10 @@ function Panel2() {
       <div style={{
         display: 'flex', alignItems: 'center', gap: '14px',
         background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.16)',
-        borderRadius: '12px', padding: '14px', marginBottom: '1rem',
+        borderRadius: 'var(--r-md)', padding: '14px', marginBottom: '1rem',
       }}>
         <div style={{
-          width: '36px', height: '36px', borderRadius: '10px',
+          width: '36px', height: '36px', borderRadius: 'var(--r-sm)',
           background: 'var(--accent-dim)', border: '1px solid var(--border)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: '11px', fontWeight: 600, color: 'var(--accent)',
@@ -117,7 +117,7 @@ function Panel2() {
         <div style={{
           marginLeft: 'auto', fontSize: '10px', fontWeight: 500,
           background: 'rgba(74,144,217,0.12)', color: 'var(--accent)',
-          borderRadius: '5px', padding: '3px 9px', fontFamily: 'var(--font-inter)',
+          borderRadius: 'var(--r-sm)', padding: '3px 9px', fontFamily: 'var(--font-inter)',
           flexShrink: 0,
         }}>Open</div>
       </div>
@@ -125,7 +125,7 @@ function Panel2() {
         onClick={() => router.push('/pathways')}
         style={{
           width: '100%', background: 'var(--accent)', color: 'var(--bg)',
-          border: 'none', borderRadius: '10px', padding: '12px',
+          border: 'none', borderRadius: 'var(--r-sm)', padding: '12px',
           fontSize: '13px', fontWeight: 600, cursor: 'pointer',
           fontFamily: 'var(--font-inter)', marginBottom: '10px',
           boxShadow: '0 4px 16px rgba(74,144,217,0.25)',
@@ -277,7 +277,7 @@ export default function HowItWorks() {
                 }}
               >
                 <div style={{
-                  fontFamily: 'var(--font-orbitron)',
+                  fontFamily: 'var(--font-mono)',
                   fontSize: '1.1rem', fontWeight: 400,
                   color: active === i ? 'var(--accent)' : 'var(--text-3)',
                   lineHeight: 1.2, transition: 'color 0.3s', paddingTop: '2px',
@@ -337,7 +337,7 @@ export default function HowItWorks() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid rgba(74,144,217,0.14)',
-            borderRadius: '24px', overflow: 'hidden',
+            borderRadius: 'var(--r-md)', overflow: 'hidden',
             position: 'relative',
             boxShadow: '0 20px 60px rgba(0,0,0,0.35)',
           }}>

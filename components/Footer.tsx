@@ -50,7 +50,7 @@ export default function Footer() {
         <div style={{
           marginBottom: '2.5rem',
           padding: '24px 28px',
-          borderRadius: '16px',
+          borderRadius: 'var(--r-md)',
           background: 'rgba(74,144,217,0.04)',
           border: '1px solid rgba(74,144,217,0.12)',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -81,7 +81,7 @@ export default function Footer() {
                 autoComplete="email"
                 required
                 style={{
-                  padding: '9px 14px', borderRadius: '9px', minWidth: '200px',
+                  padding: '9px 14px', borderRadius: 'var(--r-sm)', minWidth: '200px',
                   background: 'rgba(255,255,255,0.04)',
                   border: `1px solid ${subState === 'error' ? 'rgba(248,113,113,0.4)' : 'rgba(255,255,255,0.09)'}`,
                   color: 'var(--text)', fontFamily: 'var(--font-inter)', fontSize: '13px',
@@ -94,7 +94,7 @@ export default function Footer() {
                 type="submit"
                 disabled={subState === 'loading'}
                 style={{
-                  padding: '9px 16px', borderRadius: '9px',
+                  padding: '9px 16px', borderRadius: 'var(--r-sm)',
                   background: 'var(--accent)', color: '#07070F',
                   border: 'none', fontSize: '13px', fontWeight: 600,
                   fontFamily: 'var(--font-inter)', cursor: 'pointer',
@@ -162,7 +162,7 @@ export default function Footer() {
               marginTop: '1.25rem',
               background: 'rgba(74,144,217,0.06)',
               border: '1px solid rgba(74,144,217,0.12)',
-              borderRadius: '8px',
+              borderRadius: 'var(--r-sm)',
               padding: '6px 12px',
             }}>
               <span aria-hidden="true" style={{
@@ -312,7 +312,7 @@ export default function Footer() {
             <div style={{
               fontSize: '10px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)',
               background: 'var(--bg3)', border: '1px solid var(--border2)',
-              borderRadius: '5px', padding: '3px 9px', letterSpacing: '0.04em',
+              borderRadius: 'var(--r-sm)', padding: '3px 9px', letterSpacing: '0.04em',
               fontWeight: 300,
             }}>
               FQHC Partner Network

@@ -165,7 +165,7 @@ export default function CTA() {
                   background: 'var(--accent)',
                   color: 'var(--bg)',
                   border: 'none',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--r-md)',
                   padding: '14px 30px',
                   fontSize: '15px',
                   fontWeight: 600,
@@ -195,7 +195,7 @@ export default function CTA() {
                   background: 'transparent',
                   color: 'var(--text-2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--r-md)',
                   padding: '14px 26px',
                   fontSize: '15px',
                   fontWeight: 400,
@@ -261,7 +261,7 @@ export default function CTA() {
               <div className="cta-stat animated-border" style={{
                 gridColumn: '1 / -1',
                 background: 'linear-gradient(145deg, var(--bg2), var(--bg3))',
-                borderRadius: '20px',
+                borderRadius: 'var(--r-md)',
                 padding: '2rem 2.25rem',
                 position: 'relative',
                 overflow: 'hidden',
@@ -293,7 +293,7 @@ export default function CTA() {
               <div className="cta-stat" ref={stat1Ref} style={{
                 background: 'linear-gradient(145deg, var(--bg2), var(--bg3))',
                 border: '1px solid var(--border)',
-                borderRadius: '16px',
+                borderRadius: 'var(--r-md)',
                 padding: '1.5rem',
                 position: 'relative',
                 overflow: 'hidden',
@@ -320,7 +320,7 @@ export default function CTA() {
               <div className="cta-stat" ref={stat2Ref} style={{
                 background: 'linear-gradient(145deg, var(--bg2), var(--bg3))',
                 border: '1px solid var(--border)',
-                borderRadius: '16px',
+                borderRadius: 'var(--r-md)',
                 padding: '1.5rem',
                 position: 'relative',
                 overflow: 'hidden',
@@ -349,7 +349,7 @@ export default function CTA() {
                 gridColumn: '1 / -1',
                 background: 'rgba(74,144,217,0.05)',
                 border: '1px solid rgba(74,144,217,0.14)',
-                borderRadius: '16px',
+                borderRadius: 'var(--r-md)',
                 padding: '1.25rem 1.5rem',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               }}>

@@ -147,7 +147,7 @@ function Row({
   return (
     <div style={{
       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-      padding: '12px 14px', borderRadius: '10px',
+      padding: '12px 14px', borderRadius: 'var(--r-sm)',
       background: 'rgba(255,255,255,0.02)',
       border: '1px solid rgba(255,255,255,0.055)',
     }}>
@@ -202,7 +202,7 @@ function SegmentControl({
       display: 'inline-flex', gap: '2px',
       background: 'rgba(255,255,255,0.04)',
       border: '1px solid rgba(255,255,255,0.07)',
-      borderRadius: '9px', padding: '3px',
+      borderRadius: 'var(--r-sm)', padding: '3px',
     }}>
       {options.map(opt => (
         <button
@@ -335,7 +335,7 @@ export default function SettingsSidebar() {
             onClick={close}
             aria-label="Close settings"
             style={{
-              width: '30px', height: '30px', borderRadius: '8px',
+              width: '30px', height: '30px', borderRadius: 'var(--r-sm)',
               background: 'rgba(255,255,255,0.05)',
               border: '1px solid rgba(255,255,255,0.08)',
               cursor: 'pointer', color: 'rgba(255,255,255,0.4)',
@@ -364,7 +364,7 @@ export default function SettingsSidebar() {
               onClick={() => setSection(item.id)}
               style={{
                 display: 'flex', alignItems: 'center', gap: '10px',
-                padding: '8px 10px', borderRadius: '8px', border: 'none',
+                padding: '8px 10px', borderRadius: 'var(--r-sm)', border: 'none',
                 background: section === item.id ? 'rgba(74,144,217,0.10)' : 'transparent',
                 color: section === item.id ? 'rgba(74,144,217,0.90)' : 'rgba(255,255,255,0.40)',
                 cursor: 'pointer', textAlign: 'left', transition: 'all 0.14s',
@@ -400,7 +400,7 @@ export default function SettingsSidebar() {
                       key={t.id}
                       onClick={() => { setTheme(t.id); applyTheme(t.id) }}
                       style={{
-                        flex: 1, padding: '12px 10px', borderRadius: '10px', cursor: 'pointer',
+                        flex: 1, padding: '12px 10px', borderRadius: 'var(--r-sm)', cursor: 'pointer',
                         border: theme === t.id ? '1px solid rgba(74,144,217,0.40)' : '1px solid rgba(255,255,255,0.07)',
                         background: theme === t.id ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.02)',
                         textAlign: 'left', transition: 'all 0.15s', outline: 'none',
@@ -429,7 +429,7 @@ export default function SettingsSidebar() {
               <div>
                 <SectionLabel>About</SectionLabel>
                 <div style={{
-                  padding: '12px 14px', borderRadius: '10px',
+                  padding: '12px 14px', borderRadius: 'var(--r-sm)',
                   background: 'rgba(255,255,255,0.02)',
                   border: '1px solid rgba(255,255,255,0.055)',
                   display: 'flex', flexDirection: 'column', gap: '6px',
@@ -456,7 +456,7 @@ export default function SettingsSidebar() {
                   applyA11y(DEFAULT_A11Y)
                 }}
                 style={{
-                  padding: '10px 14px', borderRadius: '9px',
+                  padding: '10px 14px', borderRadius: 'var(--r-sm)',
                   border: '1px solid rgba(248,113,113,0.18)',
                   background: 'rgba(248,113,113,0.04)',
                   color: 'rgba(248,113,113,0.6)', fontSize: '12px',
@@ -488,7 +488,7 @@ export default function SettingsSidebar() {
                     onClick={() => setLanguage(l.code)}
                     style={{
                       display: 'flex', alignItems: 'center', gap: '8px',
-                      padding: '9px 11px', borderRadius: '9px',
+                      padding: '9px 11px', borderRadius: 'var(--r-sm)',
                       border: lang === l.code ? '1px solid rgba(74,144,217,0.40)' : '1px solid rgba(255,255,255,0.06)',
                       background: lang === l.code ? 'rgba(74,144,217,0.09)' : 'rgba(255,255,255,0.02)',
                       cursor: 'pointer', textAlign: 'left', transition: 'all 0.13s', outline: 'none',
@@ -522,7 +522,7 @@ export default function SettingsSidebar() {
               <div>
                 <SectionLabel>Text size</SectionLabel>
                 <div style={{
-                  padding: '14px', borderRadius: '10px',
+                  padding: '14px', borderRadius: 'var(--r-sm)',
                   background: 'rgba(255,255,255,0.02)',
                   border: '1px solid rgba(255,255,255,0.055)',
                 }}>
@@ -535,7 +535,7 @@ export default function SettingsSidebar() {
                         key={label}
                         onClick={() => updateA11y({ fontSize: i })}
                         style={{
-                          flex: 1, padding: '7px 4px', borderRadius: '8px',
+                          flex: 1, padding: '7px 4px', borderRadius: 'var(--r-sm)',
                           border: a11y.fontSize === i ? '1px solid rgba(74,144,217,0.4)' : '1px solid rgba(255,255,255,0.07)',
                           background: a11y.fontSize === i ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.02)',
                           color: a11y.fontSize === i ? 'rgba(74,144,217,0.9)' : 'rgba(255,255,255,0.40)',
@@ -566,7 +566,7 @@ export default function SettingsSidebar() {
               </div>
 
               <div style={{
-                padding: '12px 14px', borderRadius: '9px',
+                padding: '12px 14px', borderRadius: 'var(--r-sm)',
                 background: 'rgba(74,144,217,0.04)',
                 border: '1px solid rgba(74,144,217,0.10)',
               }}>
@@ -584,14 +584,14 @@ export default function SettingsSidebar() {
                 Get alerts about clinic availability and new programs in your area.
               </p>
               <div style={{
-                padding: '14px', borderRadius: '10px',
+                padding: '14px', borderRadius: 'var(--r-sm)',
                 background: 'rgba(255,255,255,0.02)',
                 border: '1px solid rgba(255,255,255,0.055)',
               }}>
                 <PushNotificationToggle />
               </div>
               <div style={{
-                padding: '12px 14px', borderRadius: '9px',
+                padding: '12px 14px', borderRadius: 'var(--r-sm)',
                 background: 'rgba(74,144,217,0.04)',
                 border: '1px solid rgba(74,144,217,0.10)',
               }}>
@@ -614,7 +614,7 @@ export default function SettingsSidebar() {
                     key={label}
                     style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      padding: '10px 13px', borderRadius: '9px',
+                      padding: '10px 13px', borderRadius: 'var(--r-sm)',
                       background: 'rgba(255,255,255,0.02)',
                       border: '1px solid rgba(255,255,255,0.05)',
                     }}
@@ -628,7 +628,7 @@ export default function SettingsSidebar() {
                           key={i}
                           style={{
                             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                            padding: '2px 6px', borderRadius: '5px', minWidth: '22px', height: '20px',
+                            padding: '2px 6px', borderRadius: 'var(--r-sm)', minWidth: '22px', height: '20px',
                             background: 'rgba(255,255,255,0.06)',
                             border: '1px solid rgba(255,255,255,0.10)',
                             borderBottom: '2px solid rgba(255,255,255,0.08)',
@@ -686,7 +686,7 @@ export default function SettingsSidebar() {
                       onClick={close}
                       style={{
                         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                        padding: '11px 13px', borderRadius: '9px',
+                        padding: '11px 13px', borderRadius: 'var(--r-sm)',
                         background: 'rgba(255,255,255,0.02)',
                         border: '1px solid rgba(255,255,255,0.055)',
                         fontSize: '12.5px', color: 'rgba(255,255,255,0.55)',
@@ -706,7 +706,7 @@ export default function SettingsSidebar() {
               </div>
 
               <div style={{
-                padding: '12px 14px', borderRadius: '9px',
+                padding: '12px 14px', borderRadius: 'var(--r-sm)',
                 background: 'rgba(74,217,144,0.04)',
                 border: '1px solid rgba(74,217,144,0.10)',
                 display: 'flex', gap: '10px', alignItems: 'flex-start',

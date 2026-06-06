@@ -398,7 +398,7 @@ export default function CommandPalette() {
           )}
           <kbd style={{
             background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)',
-            borderRadius: '5px', padding: '2px 7px',
+            borderRadius: 'var(--r-sm)', padding: '2px 7px',
             fontFamily: 'var(--font-mono),monospace', fontSize: '11px', color: 'var(--text-3)',
           }}>ESC</kbd>
         </div>

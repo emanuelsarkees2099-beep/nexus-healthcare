@@ -194,7 +194,7 @@ export default function MissionFreeze() {
             position: 'relative', width: '100%', height: '500px',
             background: 'linear-gradient(145deg, var(--bg2) 0%, var(--bg3) 100%)',
             border: '1px solid var(--border2)',
-            borderRadius: '24px', overflow: 'hidden',
+            borderRadius: 'var(--r-md)', overflow: 'hidden',
             boxShadow: `
               0 40px 100px rgba(0,0,0,0.55),
               0 0 0 1px rgba(74,144,217,0.06),
@@ -312,7 +312,7 @@ export default function MissionFreeze() {
                   bottom: '20px', left: '50%', transform: 'translateX(-50%)',
                   background: 'rgba(7,7,15,0.95)',
                   border: '1px solid rgba(74,144,217,0.28)',
-                  borderRadius: '10px', padding: '8px 14px',
+                  borderRadius: 'var(--r-sm)', padding: '8px 14px',
                   whiteSpace: 'nowrap',
                   boxShadow: '0 8px 32px rgba(0,0,0,0.55), 0 0 20px rgba(74,144,217,0.14)',
                   backdropFilter: 'blur(16px)', zIndex: 10,
@@ -339,7 +339,7 @@ export default function MissionFreeze() {
               <div key={s.label} style={{
                 background: 'rgba(7,7,15,0.88)',
                 border: '1px solid rgba(74,144,217,0.18)',
-                borderRadius: '12px', padding: '12px 16px',
+                borderRadius: 'var(--r-md)', padding: '12px 16px',
                 backdropFilter: 'blur(16px)', minWidth: '150px',
                 boxShadow: '0 8px 30px rgba(0,0,0,0.4), 0 0 20px rgba(74,144,217,0.07)',
               }}>
@@ -354,7 +354,7 @@ export default function MissionFreeze() {
             position: 'absolute', bottom: '20px', right: '20px',
             background: 'rgba(7,7,15,0.90)',
             border: '1px solid rgba(74,144,217,0.22)',
-            borderRadius: '14px', padding: '14px',
+            borderRadius: 'var(--r-md)', padding: '14px',
             backdropFilter: 'blur(20px)', width: '240px',
             zIndex: 5,
             boxShadow: '0 12px 40px rgba(0,0,0,0.55), 0 0 24px rgba(74,144,217,0.08)',
@@ -363,7 +363,7 @@ export default function MissionFreeze() {
             <div style={{
               display: 'flex', alignItems: 'center', gap: '7px',
               background: 'var(--bg3)', border: '1px solid var(--border2)',
-              borderRadius: '8px', padding: '7px 10px', marginBottom: '10px',
+              borderRadius: 'var(--r-sm)', padding: '7px 10px', marginBottom: '10px',
               fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)',
             }}>
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" aria-hidden="true">
@@ -383,7 +383,7 @@ export default function MissionFreeze() {
                 borderBottom: i < 2 ? '1px solid var(--border2)' : 'none',
               }}>
                 <div style={{
-                  width: '20px', height: '20px', borderRadius: '5px',
+                  width: '20px', height: '20px', borderRadius: 'var(--r-sm)',
                   background: 'var(--accent-dim)', border: '1px solid var(--border)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '8px', fontWeight: 600, color: 'var(--accent)',
@@ -394,7 +394,7 @@ export default function MissionFreeze() {
               </div>
             ))}
             <div style={{
-              marginTop: '10px', background: 'var(--accent)', borderRadius: '8px',
+              marginTop: '10px', background: 'var(--accent)', borderRadius: 'var(--r-sm)',
               padding: '9px', textAlign: 'center',
               fontSize: '11px', color: 'var(--bg)', fontWeight: 500, fontFamily: 'var(--font-inter)',
               boxShadow: '0 4px 16px rgba(74,144,217,0.30)', cursor: 'default',
@@ -405,7 +405,7 @@ export default function MissionFreeze() {
 
           {/* Edge vignette */}
           <div aria-hidden="true" style={{
-            position: 'absolute', inset: 0, borderRadius: '24px',
+            position: 'absolute', inset: 0, borderRadius: 'var(--r-md)',
             background: `
               linear-gradient(to right,  rgba(13,11,30,0.55) 0%,  transparent 9%,  transparent 91%,  rgba(13,11,30,0.55) 100%),
               linear-gradient(to bottom, rgba(13,11,30,0.30) 0%,  transparent 12%, transparent 88%, rgba(13,11,30,0.30) 100%)

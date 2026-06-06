@@ -126,7 +126,7 @@ function CounterOverlay() {
       <div style={{ fontSize: '10px', color: 'rgba(74,144,217,0.7)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px', fontFamily: 'var(--font-inter)' }}>
         Uninsured Americans
       </div>
-      <div style={{ fontSize: '28px', fontWeight: 800, color: '#fff', fontFamily: 'var(--font-orbitron)', letterSpacing: '-0.02em' }}>
+      <div style={{ fontSize: '28px', fontWeight: 800, color: '#fff', fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>
         {count.toLocaleString()}
       </div>
       <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', marginTop: '4px', fontFamily: 'var(--font-inter)' }}>
@@ -186,7 +186,7 @@ function ComparisonOverlay() {
         borderRadius: '12px', padding: '16px 24px', textAlign: 'center',
         backdropFilter: 'blur(12px)',
       }}>
-        <div style={{ fontSize: '32px', fontWeight: 800, color: '#f87171', fontFamily: 'var(--font-orbitron)' }}>47</div>
+        <div style={{ fontSize: '32px', fontWeight: 800, color: '#f87171', fontFamily: 'var(--font-display)' }}>47</div>
         <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '4px', fontFamily: 'var(--font-inter)' }}>calls. average</div>
       </div>
       <div style={{ fontSize: '22px', color: 'rgba(255,255,255,0.3)' }}>vs</div>
@@ -195,7 +195,7 @@ function ComparisonOverlay() {
         borderRadius: '12px', padding: '16px 24px', textAlign: 'center',
         backdropFilter: 'blur(12px)',
       }}>
-        <div style={{ fontSize: '32px', fontWeight: 800, color: '#4a90d9', fontFamily: 'var(--font-orbitron)' }}>12s</div>
+        <div style={{ fontSize: '32px', fontWeight: 800, color: '#4a90d9', fontFamily: 'var(--font-display)' }}>12s</div>
         <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '4px', fontFamily: 'var(--font-inter)' }}>with NEXUS</div>
       </div>
     </div>
@@ -218,7 +218,7 @@ function SavingsOverlay() {
         <div style={{ fontSize: '11px', color: 'rgba(74,144,217,0.7)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '10px', fontFamily: 'var(--font-inter)' }}>
           Maria saved this year
         </div>
-        <div style={{ fontSize: '48px', fontWeight: 800, color: '#fff', fontFamily: 'var(--font-orbitron)', letterSpacing: '-0.03em', lineHeight: 1 }}>
+        <div style={{ fontSize: '48px', fontWeight: 800, color: '#fff', fontFamily: 'var(--font-display)', letterSpacing: '-0.03em', lineHeight: 1 }}>
           $4,200
         </div>
         <div style={{ marginTop: '14px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -336,7 +336,7 @@ function Heartbeat({ bpm, visible }: { bpm: number; visible: boolean }) {
       </svg>
       <span style={{
         fontSize: '11px', color: bpm > 80 ? '#f87171' : '#4a90d9',
-        fontFamily: 'var(--font-orbitron)', letterSpacing: '0.05em',
+        fontFamily: 'var(--font-display)', letterSpacing: '0.05em',
       }}>
         {bpm} <span style={{ fontSize: '9px', opacity: 0.6 }}>BPM</span>
       </span>

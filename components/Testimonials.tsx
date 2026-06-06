@@ -80,7 +80,7 @@ function TestimonialCard({ card }: { card: CardData }) {
       style={{
         background: 'linear-gradient(145deg, var(--bg2), var(--bg3))',
         border: '1px solid var(--border2)',
-        borderRadius: '20px', padding: '1.5rem',
+        borderRadius: 'var(--r-md)', padding: '1.5rem',
         minWidth: '320px', maxWidth: '320px',
         position: 'relative', overflow: 'hidden', flexShrink: 0,
       }}

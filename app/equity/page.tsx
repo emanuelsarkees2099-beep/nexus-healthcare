@@ -434,7 +434,7 @@ export default function EquityPage() {
                   <div style={{
                     width: '116px', flexShrink: 0, paddingTop: '2px',
                     fontSize: '13px', fontWeight: 700, color: item.color,
-                    fontFamily: 'var(--font-orbitron)', letterSpacing: '0.05em',
+                    fontFamily: 'var(--font-mono)', letterSpacing: '0.04em',
                     textAlign: 'right',
                   }}>{item.year}</div>
                   {/* Dot */}

@@ -309,7 +309,7 @@ export default function OpenPage() {
                       }}
                     >
                       <div style={{
-                        fontFamily: 'var(--font-orbitron)', fontSize: '14px', fontWeight: 600,
+                        fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 500,
                         color: entry.color, letterSpacing: '0.05em', flexShrink: 0,
                         minWidth: '60px',
                       }}>

@@ -17,7 +17,7 @@ function BentoIcon({ icon, color = 'rgba(255,255,255,0.55)', bg = 'rgba(255,255,
   return (
     <div aria-hidden="true" style={{
       width: '40px', height: '40px', background: bg, border: `1px solid ${border}`,
-      borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+      borderRadius: 'var(--r-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center',
       marginBottom: '1.25rem', color, flexShrink: 0,
     }}>
       {icon}
@@ -33,7 +33,7 @@ function Tag({ children, color = 'rgba(255,255,255,0.30)', bg = 'rgba(255,255,25
       display: 'inline-block', marginTop: '1rem',
       fontSize: '10px', fontWeight: 500, letterSpacing: '0.12em',
       textTransform: 'uppercase', color, background: bg,
-      borderRadius: '5px', padding: '3px 9px',
+      borderRadius: 'var(--r-sm)', padding: '3px 9px',
       fontFamily: 'var(--font-inter)',
     }}>
       {children}
@@ -60,7 +60,7 @@ function ClinicMapMini() {
       marginTop: '1.25rem',
       background: 'rgba(0,0,0,0.25)',
       border: '1px solid rgba(74,144,217,0.08)',
-      borderRadius: '12px', padding: '12px',
+      borderRadius: 'var(--r-md)', padding: '12px',
       position: 'relative', overflow: 'hidden',
     }}>
       {/* Faint grid lines for map feel */}
@@ -68,7 +68,7 @@ function ClinicMapMini() {
         position: 'absolute', inset: 0,
         backgroundImage: 'linear-gradient(rgba(74,144,217,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(74,144,217,0.03) 1px, transparent 1px)',
         backgroundSize: '20px 20px',
-        borderRadius: '12px',
+        borderRadius: 'var(--r-md)',
       }} />
 
       <div style={{ fontSize: '10px', color: 'var(--text-3)', marginBottom: '8px', fontFamily: 'var(--font-inter)', position: 'relative' }}>
@@ -85,7 +85,7 @@ function ClinicMapMini() {
       ].map((c, i) => (
         <div key={c.name} style={{
           display: 'flex', alignItems: 'center', gap: '8px',
-          padding: '7px 9px', borderRadius: '8px', marginBottom: '4px',
+          padding: '7px 9px', borderRadius: 'var(--r-sm)', marginBottom: '4px',
           background: i === 0 ? 'rgba(74,144,217,0.06)' : 'rgba(255,255,255,0.02)',
           border: `1px solid ${i === 0 ? 'rgba(74,144,217,0.14)' : 'transparent'}`,
           fontFamily: 'var(--font-inter)', position: 'relative',
@@ -121,7 +121,7 @@ function ProgramsCounterMini() {
       <div style={{ display: 'flex', gap: '6px', marginTop: '12px', flexWrap: 'wrap' }}>
         {['Medicaid', 'ACA', 'HRSA', 'CHIP', '340B'].map(p => (
           <div key={p} style={{
-            padding: '3px 8px', borderRadius: '5px',
+            padding: '3px 8px', borderRadius: 'var(--r-sm)',
             background: 'rgba(252,211,77,0.07)', border: '1px solid rgba(252,211,77,0.15)',
             fontSize: '10px', color: 'var(--amber)', fontFamily: 'var(--font-inter)', fontWeight: 500,
           }}>
@@ -204,7 +204,7 @@ function CHWAvatarRow() {
       <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
         {['Spanish', 'Somali', 'Arabic', 'French'].map(lang => (
           <div key={lang} style={{
-            padding: '3px 8px', borderRadius: '5px',
+            padding: '3px 8px', borderRadius: 'var(--r-sm)',
             background: 'rgba(167,139,250,0.07)', border: '1px solid rgba(167,139,250,0.15)',
             fontSize: '10px', color: 'var(--violet)', fontFamily: 'var(--font-inter)', fontWeight: 500,
           }}>
@@ -229,7 +229,7 @@ function CalendarEventMini() {
       {events.map(ev => (
         <div key={ev.day} style={{
           display: 'flex', alignItems: 'center', gap: '10px',
-          padding: '8px 10px', borderRadius: '8px',
+          padding: '8px 10px', borderRadius: 'var(--r-sm)',
           background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)',
           fontFamily: 'var(--font-inter)',
         }}>
@@ -251,7 +251,7 @@ function PathwaysMini() {
       {steps.map((step, i) => (
         <div key={step} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <div style={{
-            padding: '5px 10px', borderRadius: '8px',
+            padding: '5px 10px', borderRadius: 'var(--r-sm)',
             background: i === 2 ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.03)',
             border: `1px solid ${i === 2 ? 'rgba(74,144,217,0.22)' : 'rgba(255,255,255,0.06)'}`,
             fontSize: '10px', fontWeight: i === 2 ? 600 : 400,
@@ -274,7 +274,7 @@ function PathwaysMini() {
 const cardBase: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border2)',
-  borderRadius: '20px',
+  borderRadius: 'var(--r-md)',
   padding: '2rem',
   position: 'relative',
   overflow: 'hidden',
