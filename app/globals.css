@@ -1,68 +1,104 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════════
-   NEXUS — DESIGN SYSTEM v3
-   Signature: Steel Blue  |  Void Black  |  Pure White
-   Competing with: Apple · Vercel · Linear
+   NEXUS — DESIGN SYSTEM v4
+   One accent. Three radii. Physical depth. No decoration without purpose.
+   Reference: Apple · Linear · Vercel · Stripe
    ═══════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* ── PALETTE ── */
-  --bg:  #040408;
-  --bg2: #08090F;
-  --bg3: #0C0D18;
-  --bg4: #111220;
+  /* ── CANVAS ── */
+  --bg:  #060608;
+  --bg2: #0A0B10;
+  --bg3: #0E0F17;
+  --bg4: #13141F;
 
-  /* Signature steel blue — #284F8F family, brightened for dark-bg contrast */
-  --accent:       #4A8FD4;
-  --accent2:      #7EB5E8;
-  --accent-dim:   rgba(74, 143, 212, 0.10);
-  --accent-glow:  rgba(74, 143, 212, 0.20);
+  /* ── ONE ACCENT — steel blue. Used only for interactive + key moments ── */
+  --accent:      #4F8EF0;
+  --accent2:     #82B4F8;
+  --accent-dim:  rgba(79, 142, 240, 0.09);
+  --accent-glow: rgba(79, 142, 240, 0.16);
 
-  /* Semantic accents */
-  --amber:        #FCD34D;
-  --amber-dim:    rgba(252, 211, 77, 0.10);
-  --coral:        #F87171;
-  --coral-dim:    rgba(248, 113, 113, 0.10);
-  --violet:       #A78BFA;
-  --violet-dim:   rgba(167, 139, 250, 0.10);
-  --blue-pulse:   #60A5FA;
-  --green-pulse:  #4ade80;
+  /* ── SEMANTIC ONLY — these signal meaning, never decoration ── */
+  --success:  #34D399;   /* positive states, open clinics, confirmed */
+  --warning:  #F59E0B;   /* caution, busy, sliding-scale */
+  --error:    #F87171;   /* critical, emergency, unavailable */
+  --info:     #60A5FA;   /* neutral informational */
 
-  /* Text — pure white hierarchy, no colour tint */
-  --text:   #FFFFFF;
-  --text-2: rgba(255, 255, 255, 0.60);
-  --text-3: rgba(255, 255, 255, 0.38);
+  /* Kept for backward compat — now alias to semantic */
+  --amber:      var(--warning);
+  --amber-dim:  rgba(245,158,11,0.09);
+  --coral:      var(--error);
+  --coral-dim:  rgba(248,113,113,0.09);
+  --violet:     #A78BFA;  /* kept for CHW / community contexts only */
+  --violet-dim: rgba(167,139,250,0.09);
+  --blue-pulse:   var(--info);
+  --green-pulse:  var(--success);
 
-  /* Borders */
-  --border:    rgba(74, 144, 217, 0.10);
-  --border2:   rgba(255, 255, 255, 0.05);
-  --border-hi: rgba(74, 144, 217, 0.24);
+  /* ── TEXT — pure white hierarchy ── */
+  --text:   #F8F9FF;
+  --text-2: rgba(248,249,255,0.55);
+  --text-3: rgba(248,249,255,0.32);
+  --text-4: rgba(248,249,255,0.18);
 
-  /* Easing */
+  /* ── BORDERS — one system, three strengths ── */
+  --border-subtle: rgba(255,255,255,0.06);
+  --border:        rgba(255,255,255,0.10);
+  --border-strong: rgba(79,142,240,0.28);
+  /* Backward compat aliases */
+  --border2:   var(--border-subtle);
+  --border-hi: var(--border-strong);
+
+  /* ── RADIUS — three values only ──
+     6px  → labels, badges, tags
+     12px → cards, inputs, dropdowns
+     100px → pills, CTAs, chips              */
+  --r-sm:  6px;
+  --r-md:  12px;
+  --r-lg:  100px;
+
+  /* ── EASING ── */
   --ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-out-expo:    cubic-bezier(0.16, 1, 0.30, 1);
   --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
+  --ease-standard:    cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* ── DEPTH TOKENS ── */
-  --shadow-sm:    0 2px 8px rgba(0,0,0,0.45), 0 1px 2px rgba(0,0,0,0.30);
-  --shadow-card:  0 4px 24px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.35);
-  --shadow-hover: 0 20px 60px rgba(0,0,0,0.65),
-                  0 0 0 1px rgba(74,144,217,0.18),
-                  0 0 40px rgba(74,144,217,0.08);
-  --shadow-glow:  0 0 40px rgba(74,144,217,0.14),
-                  0 0 80px rgba(74,144,217,0.06);
-  --shadow-amber: 0 0 30px rgba(252,211,77,0.12);
-  --shadow-coral: 0 0 30px rgba(248,113,113,0.12);
-  --shadow-violet:0 0 30px rgba(167,139,250,0.12);
+  /* ── DEPTH — physical shadows, not neon glows ──
+     Think: light source above, surface below. Not "glow."  */
+  --shadow-sm:
+    0 1px 2px rgba(0,0,0,0.24),
+    0 1px 0 rgba(255,255,255,0.03) inset;
+  --shadow-card:
+    0 2px 4px rgba(0,0,0,0.20),
+    0 8px 24px rgba(0,0,0,0.28),
+    0 1px 0 rgba(255,255,255,0.04) inset;
+  --shadow-hover:
+    0 4px 8px rgba(0,0,0,0.24),
+    0 16px 48px rgba(0,0,0,0.40),
+    0 1px 0 rgba(255,255,255,0.06) inset;
+  --shadow-elevated:
+    0 8px 16px rgba(0,0,0,0.32),
+    0 32px 64px rgba(0,0,0,0.48),
+    0 1px 0 rgba(255,255,255,0.08) inset;
+  /* Accent glow — reserved for primary CTA and focus rings only */
+  --shadow-glow:
+    0 0 0 1px rgba(79,142,240,0.20),
+    0 4px 24px rgba(79,142,240,0.14);
+  /* Semantic glows — errors and success states only */
+  --shadow-error:   0 0 0 1px rgba(248,113,113,0.25), 0 4px 16px rgba(248,113,113,0.10);
+  --shadow-success: 0 0 0 1px rgba(52,211,153,0.25),  0 4px 16px rgba(52,211,153,0.10);
+  /* Legacy aliases — point to --shadow-hover now */
+  --shadow-amber: var(--shadow-hover);
+  --shadow-coral: var(--shadow-error);
+  --shadow-violet: var(--shadow-hover);
 
   /* ── THEME FLAG ── */
   --theme: dark;
 
-  /* ── FLUID TYPE SCALE (#5) ── */
-  --text-xs:   clamp(9px,  0.9vw, 10px);
-  --text-sm:   clamp(11px, 1.1vw, 12px);
-  --text-base: clamp(13px, 1.3vw, 14px);
+  /* ── TYPE SCALE — 9 steps, fluid ── */
+  --text-xs:   clamp(10px, 0.9vw, 11px);
+  --text-sm:   clamp(12px, 1.1vw, 13px);
+  --text-base: clamp(13px, 1.2vw, 14px);
   --text-md:   clamp(14px, 1.4vw, 15px);
   --text-lg:   clamp(15px, 1.6vw, 17px);
   --text-xl:   clamp(18px, 2.0vw, 20px);
@@ -70,6 +106,21 @@
   --text-3xl:  clamp(28px, 3.8vw, 40px);
   --text-4xl:  clamp(40px, 5.5vw, 56px);
   --text-5xl:  clamp(52px, 7.0vw, 76px);
+
+  /* ── SPACING SCALE — 4px base grid ── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -401,85 +452,50 @@ h3              { font-weight: 600; }
 .skip-nav:focus { top: 1rem; }
 
 /* ═══════════════════════════════════════════════════════════════════
-   BENTO CARDS
+   CARD SYSTEM — flat dark surfaces, physical depth, no gradients
+   One hover behaviour: 2px lift + shadow upgrade + border brightens
    ═══════════════════════════════════════════════════════════════════ */
 
 .bento-card {
-  --mouse-x: -999px;
-  --mouse-y: -999px;
+  background: var(--bg2);
+  border-radius: var(--r-md);
   box-shadow: var(--shadow-card);
   transition:
-    transform 0.4s var(--ease-spring),
-    box-shadow 0.35s ease,
-    border-color 0.3s ease !important;
+    transform 0.28s var(--ease-out-expo),
+    box-shadow 0.28s ease,
+    border-color 0.22s ease !important;
 }
 
-.bento-card::before {
-  content: '';
-  position: absolute; inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(
-    280px circle at var(--mouse-x) var(--mouse-y),
-    rgba(74,144,217,0.07),
-    transparent 70%
-  );
-  opacity: 0; transition: opacity 0.4s;
-  pointer-events: none; z-index: 0;
-}
-
-.bento-card::after {
-  content: '';
-  position: absolute; inset: 0;
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 1px rgba(74,144,217,0);
-  transition: box-shadow 0.35s ease;
-  pointer-events: none; z-index: 0;
-}
-
-.bento-card:hover::before { opacity: 1; }
-.bento-card:hover::after { box-shadow: inset 0 0 0 1px rgba(74,144,217,0.18); }
 .bento-card:hover {
-  transform: translateY(-4px) !important;
+  transform: translateY(-2px) !important;
   box-shadow: var(--shadow-hover) !important;
-  border-color: rgba(74,144,217,0.22) !important;
+  border-color: var(--border) !important;
 }
 
-/* Immediate click feedback — card presses down before navigation */
 .bento-card:active,
 a:active > .bento-card {
-  transform: scale(0.98) translateY(0px) !important;
+  transform: scale(0.985) !important;
   box-shadow: var(--shadow-card) !important;
-  transition: transform 0.08s ease, box-shadow 0.08s ease !important;
+  transition: transform 0.07s ease, box-shadow 0.07s ease !important;
 }
 
-.bento-card > *:not(.card-depth-overlay) {
-  position: relative; z-index: 1;
-}
+.bento-card > *:not(.card-depth-overlay) { position: relative; z-index: 1; }
 
-.bento-card.card-mint   { background: linear-gradient(135deg, var(--bg2) 0%, rgba(74,144,217,0.05) 100%) !important; }
-.bento-card.card-amber  { background: linear-gradient(135deg, var(--bg2) 0%, rgba(217,119,6,0.05) 100%) !important; }
-.bento-card.card-violet { background: linear-gradient(135deg, var(--bg2) 0%, rgba(124,58,237,0.05) 100%) !important; }
-.bento-card.card-coral  { background: linear-gradient(135deg, var(--bg2) 0%, rgba(220,38,38,0.05) 100%) !important; }
+/* Color variants: colour ONLY on icon, never on card background */
+.bento-card.card-mint,
+.bento-card.card-amber,
+.bento-card.card-violet,
+.bento-card.card-coral { background: var(--bg2) !important; }
 
-/* ═══════════════════════════════════════════════════════════════════
-   TESTIMONIAL CARDS
-   ═══════════════════════════════════════════════════════════════════ */
-
+/* ── Testimonial cards ── same system */
 .t-card {
-  --mouse-x: -999px; --mouse-y: -999px;
   box-shadow: var(--shadow-card);
-  transition: transform 0.4s var(--ease-spring), box-shadow 0.35s ease, border-color 0.3s ease !important;
+  transition: transform 0.28s var(--ease-out-expo), box-shadow 0.28s ease, border-color 0.22s ease !important;
 }
-.t-card::before {
-  content: ''; position: absolute; inset: 0; border-radius: inherit;
-  background: radial-gradient(220px circle at var(--mouse-x) var(--mouse-y), rgba(74,144,217,0.06), transparent 70%);
-  opacity: 0; transition: opacity 0.45s; pointer-events: none; z-index: 0;
-}
-.t-card:hover::before { opacity: 1; }
 .t-card:hover {
-  transform: translateY(-4px) !important;
+  transform: translateY(-2px) !important;
   box-shadow: var(--shadow-hover) !important;
-  border-color: rgba(74,144,217,0.22) !important;
+  border-color: var(--border) !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -704,29 +720,35 @@ a:active > .bento-card {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   SECTION GLOWS
+   SECTION ATMOSPHERE — one source of light per section, not four
+   Rule: use at most ONE per section. Never stack them.
    ═══════════════════════════════════════════════════════════════════ */
 
-.section-glow-left {
-  position: absolute; left: -200px; width: 700px; height: 700px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(74,144,217,0.07) 0%, transparent 65%);
+/* The only glow that matters: a soft overhead accent light */
+.section-glow-top {
+  position: absolute; top: -120px; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 500px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(79,142,240,0.06) 0%, transparent 65%);
   filter: blur(80px); pointer-events: none; z-index: 0;
 }
+
+/* Side glows: dimmed to match the single-source approach */
+.section-glow-left {
+  position: absolute; left: -120px; width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(79,142,240,0.04) 0%, transparent 65%);
+  filter: blur(100px); pointer-events: none; z-index: 0;
+}
 .section-glow-right {
-  position: absolute; right: -200px; width: 700px; height: 700px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(74,144,217,0.055) 0%, transparent 65%);
-  filter: blur(90px); pointer-events: none; z-index: 0;
+  position: absolute; right: -120px; width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(79,142,240,0.03) 0%, transparent 65%);
+  filter: blur(100px); pointer-events: none; z-index: 0;
 }
-.section-glow-amber {
-  position: absolute; width: 500px; height: 500px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(252,211,77,0.04) 0%, transparent 65%);
-  filter: blur(80px); pointer-events: none;
-}
-.section-glow-violet {
-  position: absolute; width: 500px; height: 500px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(167,139,250,0.04) 0%, transparent 65%);
-  filter: blur(80px); pointer-events: none;
-}
+
+/* Coloured section glows removed — use semantic colour only in data contexts */
+.section-glow-amber  { display: none; }
+.section-glow-violet { display: none; }
+.section-glow-coral  { display: none; }
+.section-glow-emerald { display: none; }
 
 /* ═══════════════════════════════════════════════════════════════════
    NAV
@@ -906,56 +928,39 @@ a.animated-link:hover::after { width: 100%; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   GRADIENT BORDER SYSTEM (#1)
-   nexus-card: smooth gradient border reveal on hover — no pseudo-element conflicts
+   NEXUS-CARD — the universal interactive card
+   Flat. Dark. Physical depth on hover. No gradient borders.
    ═══════════════════════════════════════════════════════════════════ */
 
 .nexus-card {
   position: relative;
-  background-color: var(--bg2);
-  border: 1px solid transparent;
-  background-image:
-    linear-gradient(var(--bg2), var(--bg2)),
-    linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 100%);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
+  background: var(--bg2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-card);
   transition:
-    background-image 0.4s ease,
-    box-shadow 0.35s ease,
-    transform 0.3s var(--ease-spring);
+    border-color 0.22s ease,
+    box-shadow 0.28s ease,
+    transform 0.28s var(--ease-out-expo);
 }
 .nexus-card:hover {
-  background-image:
-    linear-gradient(var(--bg2), var(--bg2)),
-    linear-gradient(135deg, rgba(74,144,217,0.30) 0%, rgba(167,139,250,0.14) 55%, rgba(74,144,217,0.08) 100%);
+  border-color: var(--border);
   box-shadow: var(--shadow-hover);
-  transform: translateY(-3px);
+  transform: translateY(-2px);
 }
 
-/* Bento card: upgrade existing ::after ring to a gradient-tinted glow ── */
-.bento-card:hover::after {
-  box-shadow: inset 0 0 0 1px rgba(74,144,217,0.24),
-              inset 0 1px 0 rgba(74,144,217,0.08) !important;
-}
-
-/* Clinic card: get the nexus-card treatment ── */
+/* Clinic card — same system, slightly more compact */
 .clinic-card {
-  background-color: var(--bg2);
-  border: 1px solid transparent !important;
-  background-image:
-    linear-gradient(var(--bg2), var(--bg2)),
-    linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-  transition: background-image 0.4s ease, box-shadow 0.35s ease, transform 0.3s var(--ease-spring) !important;
+  background: var(--bg2) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: var(--r-md) !important;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.22s ease, box-shadow 0.28s ease, transform 0.28s var(--ease-out-expo) !important;
 }
 .clinic-card:hover {
-  background-image:
-    linear-gradient(var(--bg2), var(--bg2)),
-    linear-gradient(135deg, rgba(74,144,217,0.28) 0%, rgba(167,139,250,0.10) 55%, rgba(74,144,217,0.06) 100%) !important;
+  border-color: var(--border) !important;
   box-shadow: var(--shadow-hover) !important;
   transform: translateY(-2px) !important;
-  border-color: transparent !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -970,33 +975,14 @@ a[role="button"]:active {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   SECTION DEPTH BACKGROUNDS (#3)
+   SECTION DEPTH BACKGROUNDS
+   All colour variants neutralised — sections use plain var(--bg).
+   Visual separation comes from spacing and the dot grid, not colour.
    ═══════════════════════════════════════════════════════════════════ */
-
-.section-depth-emerald {
-  background:
-    radial-gradient(ellipse 70% 50% at 15% 50%, rgba(74,144,217,0.05) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 70% at 85% 50%, rgba(74,144,217,0.03) 0%, transparent 65%),
-    var(--bg);
-}
-.section-depth-violet {
-  background:
-    radial-gradient(ellipse 60% 50% at 20% 50%, rgba(167,139,250,0.05) 0%, transparent 65%),
-    radial-gradient(ellipse 40% 60% at 80% 50%, rgba(74,144,217,0.03) 0%, transparent 65%),
-    var(--bg);
-}
-.section-depth-coral {
-  background:
-    radial-gradient(ellipse 60% 50% at 15% 50%, rgba(248,113,113,0.04) 0%, transparent 65%),
-    radial-gradient(ellipse 40% 60% at 80% 40%, rgba(167,139,250,0.03) 0%, transparent 65%),
-    var(--bg);
-}
-.section-depth-amber {
-  background:
-    radial-gradient(ellipse 60% 50% at 85% 50%, rgba(252,211,77,0.04) 0%, transparent 65%),
-    radial-gradient(ellipse 40% 60% at 15% 50%, rgba(74,144,217,0.03) 0%, transparent 65%),
-    var(--bg);
-}
+.section-depth-emerald,
+.section-depth-violet,
+.section-depth-coral,
+.section-depth-amber { background: var(--bg); }
 
 /* ═══════════════════════════════════════════════════════════════════
    SECTION ANGLE DIVIDERS (#4)
