@@ -81,84 +81,92 @@ const LOGOS: Logo[] = [
   )},
 ]
 
-const ROW1 = LOGOS.slice(0, 6)
-const ROW2 = LOGOS.slice(6)
-
-function MarqueeRow({ items, reverse = false }: { items: Logo[]; reverse?: boolean }) {
-  const all = [...items, ...items]
-  return (
-    <div style={{
-      overflow: 'hidden',
-      maskImage: 'linear-gradient(90deg, transparent, black 10%, black 90%, transparent)',
-      WebkitMaskImage: 'linear-gradient(90deg, transparent, black 10%, black 90%, transparent)',
-    }}>
-      <div
-        aria-hidden="true"
-        style={{
-          display: 'flex', alignItems: 'center', gap: '0.75rem',
-          animation: `scroll-logos${reverse ? '-rev' : ''} ${reverse ? '36s' : '28s'} linear infinite`,
-          width: 'max-content',
-        }}
-        onMouseEnter={e => (e.currentTarget.style.animationPlayState = 'paused')}
-        onMouseLeave={e => (e.currentTarget.style.animationPlayState = 'running')}
-      >
-        {all.map((logo, i) => (
-          <div
-            key={`${logo.name}-${i}`}
-            className="logo-tile"
-          >
-            <div
-              style={{
-                color: 'var(--text-3)', padding: '0 1.25rem',
-                border: '1px solid var(--border2)', borderRadius: '8px',
-                height: '36px', display: 'flex', alignItems: 'center',
-                whiteSpace: 'nowrap', transition: 'color 0.2s, border-color 0.2s',
-                cursor: 'default', flexShrink: 0,
-              }}
-              onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.borderColor = 'rgba(74,144,217,0.2)' }}
-              onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-3)'; e.currentTarget.style.borderColor = 'var(--border2)' }}
-            >
-              {logo.svg}
-            </div>
-            <div className="logo-tile-tooltip">
-              <span style={{ fontWeight: 600, color: 'var(--text)' }}>{logo.name}</span>
-              <a
-                href={logo.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '3px',
-                  marginLeft: '8px', color: 'var(--accent)', fontSize: '10px',
-                  textDecoration: 'none', fontWeight: 500,
-                }}
-                onClick={e => e.stopPropagation()}
-              >
-                Visit →
-              </a>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
+/* Triple-clone the full list so the loop is seamless even at wide viewports */
+const MARQUEE_ITEMS = [...LOGOS, ...LOGOS, ...LOGOS]
 
 export default function LogoMarquee() {
   return (
     <div
       aria-label="Trusted partners and health networks"
-      style={{ position: 'relative', zIndex: 2, borderTop: '1px solid var(--border2)', borderBottom: '1px solid var(--border2)', padding: '2.5rem 0', overflow: 'hidden' }}
+      style={{
+        position: 'relative', zIndex: 2,
+        borderTop: '1px solid var(--border2)',
+        borderBottom: '1px solid var(--border2)',
+        padding: '2.5rem 0', overflow: 'hidden',
+      }}
     >
-      <div style={{ textAlign: 'center', fontSize: '11px', color: 'var(--text-3)', fontWeight: 400, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '1.75rem', fontFamily: 'var(--font-inter)' }}>
+      <div style={{
+        textAlign: 'center', fontSize: '11px', color: 'var(--text-3)',
+        fontWeight: 400, letterSpacing: '0.12em', textTransform: 'uppercase',
+        marginBottom: '1.75rem', fontFamily: 'var(--font-inter)',
+      }}>
         Trusted by clinics, CHWs, and health systems nationwide
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-        <MarqueeRow items={ROW1} />
-        <MarqueeRow items={ROW2} reverse />
+
+      {/* Fade edges */}
+      <div style={{
+        overflow: 'hidden',
+        maskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)',
+        WebkitMaskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)',
+      }}>
+        <div
+          aria-hidden="true"
+          style={{
+            display: 'flex', alignItems: 'center', gap: '0.75rem',
+            animation: 'scroll-logos-single 38s linear infinite',
+            width: 'max-content',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.animationPlayState = 'paused')}
+          onMouseLeave={e => (e.currentTarget.style.animationPlayState = 'running')}
+        >
+          {MARQUEE_ITEMS.map((logo, i) => (
+            <div key={`${logo.name}-${i}`} className="logo-tile">
+              <div
+                style={{
+                  color: 'var(--text-3)', padding: '0 1.25rem',
+                  border: '1px solid var(--border2)', borderRadius: '8px',
+                  height: '36px', display: 'flex', alignItems: 'center',
+                  whiteSpace: 'nowrap', transition: 'color 0.2s, border-color 0.2s',
+                  cursor: 'default', flexShrink: 0,
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.color = 'var(--accent)'
+                  e.currentTarget.style.borderColor = 'rgba(74,144,217,0.2)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.color = 'var(--text-3)'
+                  e.currentTarget.style.borderColor = 'var(--border2)'
+                }}
+              >
+                {logo.svg}
+              </div>
+              <div className="logo-tile-tooltip">
+                <span style={{ fontWeight: 600, color: 'var(--text)' }}>{logo.name}</span>
+                <a
+                  href={logo.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '3px',
+                    marginLeft: '8px', color: 'var(--accent)', fontSize: '10px',
+                    textDecoration: 'none', fontWeight: 500,
+                  }}
+                  onClick={e => e.stopPropagation()}
+                >
+                  Visit →
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
+
       <style>{`
-        @keyframes scroll-logos     { 0% { transform: translateX(0); }    100% { transform: translateX(-50%); } }
-        @keyframes scroll-logos-rev { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+        /* Single continuous scroll — translateX by 1/3 of total width (one full set of 12 logos) */
+        @keyframes scroll-logos-single {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(calc(-100% / 3)); }
+        }
       `}</style>
     </div>
   )

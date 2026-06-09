@@ -280,8 +280,8 @@ function PathwaysMini() {
 /* ── Main component ─────────────────────────────────────────────── */
 
 const cardBase: React.CSSProperties = {
-  background: 'var(--bg2)',
-  border: '1px solid var(--border2)',
+  background: 'rgba(255,255,255,0.038)',
+  border: '1px solid rgba(255,255,255,0.10)',
   borderRadius: 'var(--r-md)',
   padding: '2rem',
   position: 'relative',

@@ -292,7 +292,7 @@ export default function HowItWorks() {
                   borderBottom: i < STEPS.length - 1 ? '1px solid var(--border2)' : 'none',
                   borderLeft: active === i ? '2px solid var(--accent)' : '2px solid transparent',
                   cursor: 'pointer',
-                  opacity: active === i ? 1 : 0.5,
+                  opacity: active === i ? 1 : 0.62,
                   transition: 'opacity 0.3s ease, border-color 0.3s ease',
                   borderRadius: '0 8px 8px 0',
                   background: active === i ? 'rgba(79,142,240,0.04)' : 'transparent',

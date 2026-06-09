@@ -479,8 +479,8 @@ h3              { font-weight: 600; }
 }
 
 .bento-card {
-  background: var(--bg2);
-  border: 1px solid var(--border2);
+  background: rgba(255,255,255,0.038);
+  border: 1px solid rgba(255,255,255,0.10);
   border-radius: var(--r-md);
   box-shadow: var(--shadow-card);
   transition:
@@ -492,7 +492,8 @@ h3              { font-weight: 600; }
 .bento-card:hover {
   transform: translateY(-2px) !important;
   box-shadow: var(--shadow-hover) !important;
-  border-color: var(--border) !important;
+  border-color: rgba(79,142,240,0.28) !important;
+  background: rgba(255,255,255,0.052) !important;
 }
 
 .bento-card:active,
@@ -504,11 +505,11 @@ a:active > .bento-card {
 
 .bento-card > *:not(.card-depth-overlay) { position: relative; z-index: 1; }
 
-/* Color variants: colour ONLY on icon, never on card background */
+/* Color variants: shared surface, accent via icon only */
 .bento-card.card-mint,
 .bento-card.card-amber,
 .bento-card.card-violet,
-.bento-card.card-coral { background: var(--bg2) !important; }
+.bento-card.card-coral { background: rgba(255,255,255,0.038) !important; }
 
 /* ── Testimonial cards ── same system */
 .t-card {
@@ -3215,17 +3216,17 @@ button[aria-pressed="true"] {
 }
 
 .step-title {
-  font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+  font-size: clamp(0.82rem, 1.1vw, 0.96rem);
   font-weight: 700;
   line-height: 1.25;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
   color: var(--text);
   font-family: var(--font-display);
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
 }
 
 .step-body {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
   line-height: 1.7;
   color: var(--text-2);

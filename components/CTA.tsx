@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import gsap from 'gsap'
 import { registerGSAP } from '@/lib/gsap-st'
 import { TickCircle } from 'iconsax-react'
-import TextScramble from '@/components/TextScramble'
+import LuxeReveal from '@/components/LuxeReveal'
 registerGSAP()
 
 export default function CTA() {
@@ -103,11 +103,11 @@ export default function CTA() {
               marginBottom: 0,
             }}
           >
-            <TextScramble
+            <LuxeReveal
               text="Your health"
               trigger={inView}
               delay={200}
-              duration={600}
+              charDelay={32}
               style={{ fontFamily: 'inherit', fontWeight: 'inherit', letterSpacing: 'inherit' }}
             />
             {' '}
@@ -127,11 +127,11 @@ export default function CTA() {
               color: 'var(--text-2)',
             }}
           >
-            <TextScramble
+            <LuxeReveal
               text="Neither should you."
               trigger={inView}
-              delay={550}
-              duration={700}
+              delay={580}
+              charDelay={28}
               style={{ fontFamily: 'inherit', fontWeight: 'inherit', letterSpacing: 'inherit' }}
             />
           </h2>

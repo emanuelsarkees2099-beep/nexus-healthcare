@@ -129,17 +129,18 @@ export default function Hero() {
         .to(proofRef.current,   { opacity: 1, y: 0, duration: 0.6,  ease: 'power3.out' }, '-=0.4')
         .to(mockupRef.current,  { opacity: 1, y: 0, duration: 1.1,  ease: 'power3.out' }, '-=0.3')
 
-      /* Scroll-out: content lifts up, mockup settles down */
-      const pinTl = gsap.timeline({
+      /* Scroll-out: smooth fade as hero naturally exits viewport — no pin, no empty space */
+      const fadeTl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top top', end: '+=480',
-          scrub: 1.2, pin: true, pinSpacing: true, anticipatePin: 1,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.9,
         },
       })
-      pinTl
-        .to(contentRef.current, { y: -55, opacity: 0, scale: 0.97, duration: 0.55 }, 0)
-        .to(mockupRef.current,  { y: 30, opacity: 0, duration: 0.45 }, 0.08)
+      fadeTl
+        .to(contentRef.current, { y: -40, opacity: 0, scale: 0.97, ease: 'power1.inOut', duration: 0.6 }, 0)
+        .to(mockupRef.current,  { y: 24, opacity: 0, ease: 'power1.inOut', duration: 0.5 }, 0.05)
     }, sectionRef)
     return () => ctx.revert()
   }, [])

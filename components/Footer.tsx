@@ -119,7 +119,7 @@ export default function Footer() {
         {/* Main grid */}
         <div className="footer-grid" style={{
           display: 'grid',
-          gridTemplateColumns: '1.8fr 1fr 1fr 1fr 1fr',
+          gridTemplateColumns: '1.4fr 1fr 1fr 1fr 1fr 1fr',
           gap: 'clamp(1.5rem, 3vw, 3.5rem)', alignItems: 'start',
           marginBottom: '3rem',
           paddingTop: '3.5rem',
