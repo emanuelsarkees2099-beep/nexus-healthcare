@@ -6,6 +6,7 @@ import { registerGSAP } from '@/lib/gsap-st'
 import { useI18n } from '@/components/I18nContext'
 import SearchBar from '@/components/hero/SearchBar'
 import TrendingCarousel from '@/components/hero/TrendingCarousel'
+import HeroMockup from '@/components/hero/HeroMockup'
 import { Star1 } from 'iconsax-react'
 
 registerGSAP()
@@ -36,184 +37,13 @@ const SYMPTOM_PATTERNS = [
   /\b(blood|bleeding|wound|swelling)\b/i,
 ]
 
-/* ─────────────────────────────────────────────────────
-   LIVE PROOF PANEL — replaces the decorative 3D mockup
-   Shows real platform activity: honest social proof
-───────────────────────────────────────────────────── */
-const LIVE_ITEMS = [
-  { city: 'Chicago, IL',    action: 'found free dental',          time: '2s' },
-  { city: 'Houston, TX',    action: 'matched to FQHC nearby',     time: '7s' },
-  { city: 'Los Angeles',    action: 'saved $1,200 this visit',    time: '14s' },
-  { city: 'Miami, FL',      action: 'urgent care in 8 seconds',   time: '22s' },
-  { city: 'Phoenix, AZ',    action: 'Medicaid eligibility found', time: '31s' },
-  { city: 'Brooklyn, NY',   action: 'mental health matched',      time: '38s' },
-  { city: 'Dallas, TX',     action: 'free pediatric care found',  time: '46s' },
-  { city: 'Seattle, WA',    action: 'sliding-scale dental booked',time: '54s' },
-]
-
-function LiveProofPanel() {
-  const [idx, setIdx] = useState(0)
-  const [visible, setVisible] = useState(true)
-  const [counter, setCounter] = useState(284_291)
-
-  useEffect(() => {
-    const feed = setInterval(() => {
-      setVisible(false)
-      setTimeout(() => { setIdx(i => (i + 1) % LIVE_ITEMS.length); setVisible(true) }, 320)
-    }, 2600)
-    const count = setInterval(() => {
-      setCounter(c => c + Math.floor(Math.random() * 2))
-    }, 2400)
-    return () => { clearInterval(feed); clearInterval(count) }
-  }, [])
-
-  const item = LIVE_ITEMS[idx]
-
-  return (
-    <div style={{
-      display: 'flex', flexDirection: 'column', gap: '12px',
-      height: '100%', justifyContent: 'center',
-    }}>
-
-      {/* ── Main counter — the headline stat ── */}
-      <div style={{
-        background: 'var(--bg2)',
-        border: '1px solid var(--border-subtle)',
-        borderRadius: 'var(--r-md)',
-        padding: '28px 32px',
-        boxShadow: 'var(--shadow-card)',
-      }}>
-        <div style={{
-          fontSize: '11px', fontWeight: 500, letterSpacing: '0.10em',
-          textTransform: 'uppercase', color: 'var(--text-3)',
-          fontFamily: 'var(--font-inter)', marginBottom: '10px',
-        }}>
-          Patients helped this year
-        </div>
-        <div style={{
-          fontSize: 'clamp(2.6rem, 4vw, 3.8rem)',
-          fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1,
-          color: 'var(--text)',
-          fontFamily: 'var(--font-display)',
-          fontVariantNumeric: 'tabular-nums',
-        }}>
-          {counter.toLocaleString()}
-        </div>
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: '6px',
-          marginTop: '10px',
-        }}>
-          <span style={{
-            width: '6px', height: '6px', borderRadius: '50%',
-            background: 'var(--success)',
-            boxShadow: '0 0 8px rgba(52,211,153,0.6)',
-            animation: 'pulse-dot 2s ease-in-out infinite',
-          }} aria-hidden="true" />
-          <span style={{
-            fontSize: '12px', color: 'var(--text-3)',
-            fontFamily: 'var(--font-inter)', fontWeight: 300,
-          }}>
-            updating live
-          </span>
-        </div>
-      </div>
-
-      {/* ── Stats row ── */}
-      <div style={{
-        display: 'grid', gridTemplateColumns: '1fr 1fr',
-        gap: '10px',
-      }}>
-        {[
-          { val: '12K+', label: 'Free clinics', accent: false },
-          { val: '$0',   label: 'Cost to use',  accent: true  },
-          { val: '50',   label: 'States',        accent: false },
-          { val: '12s',  label: 'Avg. find',     accent: false },
-        ].map(({ val, label, accent }) => (
-          <div key={label} style={{
-            background: 'var(--bg2)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: 'var(--r-md)',
-            padding: '16px 18px',
-            boxShadow: 'var(--shadow-sm)',
-          }}>
-            <div style={{
-              fontSize: 'clamp(1.4rem, 2.5vw, 1.9rem)',
-              fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1,
-              color: accent ? 'var(--accent)' : 'var(--text)',
-              fontFamily: 'var(--font-display)',
-            }}>
-              {val}
-            </div>
-            <div style={{
-              fontSize: '11px', color: 'var(--text-3)',
-              fontFamily: 'var(--font-inter)', fontWeight: 300,
-              marginTop: '4px',
-            }}>
-              {label}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Live activity feed ── */}
-      <div style={{
-        background: 'var(--bg2)',
-        border: '1px solid var(--border-subtle)',
-        borderRadius: 'var(--r-md)',
-        padding: '14px 18px',
-        boxShadow: 'var(--shadow-sm)',
-      }}>
-        <div style={{
-          fontSize: '10px', color: 'var(--text-4)',
-          fontFamily: 'var(--font-inter)', fontWeight: 500,
-          letterSpacing: '0.10em', textTransform: 'uppercase',
-          marginBottom: '10px',
-        }}>
-          Live activity
-        </div>
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: '9px',
-          opacity: visible ? 1 : 0,
-          transform: visible ? 'translateY(0)' : 'translateY(-4px)',
-          transition: 'opacity 0.28s ease, transform 0.28s ease',
-        }}>
-          <span style={{
-            width: '6px', height: '6px', borderRadius: '50%',
-            background: 'var(--success)', flexShrink: 0,
-            boxShadow: '0 0 6px rgba(52,211,153,0.5)',
-            animation: 'pulse-dot 2s ease-in-out infinite',
-          }} aria-hidden="true" />
-          <span style={{
-            fontSize: '13px', color: 'var(--text-2)',
-            fontFamily: 'var(--font-inter)', fontWeight: 300,
-          }}>
-            <strong style={{ color: 'var(--text)', fontWeight: 500 }}>
-              {item.city}
-            </strong>
-            {' '}{item.action}
-          </span>
-          <span style={{
-            marginLeft: 'auto', fontSize: '11px',
-            color: 'var(--text-4)', fontFamily: 'var(--font-inter)',
-            flexShrink: 0,
-          }}>
-            {item.time} ago
-          </span>
-        </div>
-      </div>
-
-    </div>
-  )
-}
-
 /* ═══════════════════════════════════════════════════════════════════
-   HERO — Left-aligned, search-first, proof-driven
+   HERO — Centered, text-first, search-driven
    Design principles:
    • Eye enters at eyebrow → headline → search bar (the action)
-   • No decorative mockup — replaced with live honest data
-   • Two font families only: display (headings) + inter (everything else)
-   • One background texture: dot grid + single top gradient
-   • GSAP: entrance on load + scroll-pin fade-out
+   • Single centered column — maximum visual focus
+   • HeroMockup below as decorative social proof
+   • GSAP: staggered entrance from bottom + gentle scroll fade
 ═══════════════════════════════════════════════════════════════════ */
 export default function Hero() {
   const { t } = useI18n()
@@ -221,8 +51,8 @@ export default function Hero() {
 
   /* refs */
   const sectionRef = useRef<HTMLElement>(null)
-  const leftRef    = useRef<HTMLDivElement>(null)
-  const rightRef   = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const mockupRef  = useRef<HTMLDivElement>(null)
   const eyebrowRef = useRef<HTMLDivElement>(null)
   const h1Ref      = useRef<HTMLHeadingElement>(null)
   const subRef     = useRef<HTMLParagraphElement>(null)
@@ -280,14 +110,15 @@ export default function Hero() {
   useLayoutEffect(() => {
     gsap.set([eyebrowRef.current, h1Ref.current, subRef.current,
               searchRef.current, chipsRef.current, proofRef.current], {
-      opacity: 0, y: 20,
+      opacity: 0, y: 24,
     })
-    gsap.set(rightRef.current, { opacity: 0, x: 24 })
+    gsap.set(mockupRef.current, { opacity: 0, y: 48 })
   }, [])
 
-  /* ── GSAP: entrance + scroll-pin ── */
+  /* ── GSAP: entrance + scroll fade ── */
   useEffect(() => {
     const ctx = gsap.context(() => {
+      /* Staggered entrance — each element rises into view */
       const tl = gsap.timeline({ delay: 0.1 })
       tl
         .to(eyebrowRef.current, { opacity: 1, y: 0, duration: 0.65, ease: 'power3.out' })
@@ -296,19 +127,19 @@ export default function Hero() {
         .to(searchRef.current,  { opacity: 1, y: 0, duration: 0.7,  ease: 'power3.out' }, '-=0.5')
         .to(chipsRef.current,   { opacity: 1, y: 0, duration: 0.6,  ease: 'power3.out' }, '-=0.45')
         .to(proofRef.current,   { opacity: 1, y: 0, duration: 0.6,  ease: 'power3.out' }, '-=0.4')
-        .to(rightRef.current,   { opacity: 1, x: 0, duration: 0.85, ease: 'power3.out' }, '-=0.65')
+        .to(mockupRef.current,  { opacity: 1, y: 0, duration: 1.1,  ease: 'power3.out' }, '-=0.3')
 
-      /* Scroll-out: left fades up, right fades right */
+      /* Scroll-out: content lifts up, mockup settles down */
       const pinTl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top top', end: '+=520',
+          start: 'top top', end: '+=480',
           scrub: 1.2, pin: true, pinSpacing: true, anticipatePin: 1,
         },
       })
       pinTl
-        .to(leftRef.current,  { y: -60, opacity: 0, scale: 0.96, duration: 0.55 }, 0)
-        .to(rightRef.current, { x: 40,  opacity: 0,              duration: 0.45 }, 0.06)
+        .to(contentRef.current, { y: -55, opacity: 0, scale: 0.97, duration: 0.55 }, 0)
+        .to(mockupRef.current,  { y: 30, opacity: 0, duration: 0.45 }, 0.08)
     }, sectionRef)
     return () => ctx.revert()
   }, [])
@@ -357,48 +188,58 @@ export default function Hero() {
       style={{
         position: 'relative',
         minHeight: '100dvh',
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
+        display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
+        justifyContent: 'center',
         overflow: 'hidden',
+        paddingBottom: '48px',
       }}
     >
 
-      {/* ── Single background atmosphere ── */}
+      {/* ── Background atmosphere ── */}
       <div aria-hidden="true" style={{
         position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none',
       }}>
         {/* Dot grid */}
         <div className="dot-grid-bg" style={{ position: 'absolute', inset: 0, opacity: 0.65 }} />
-        {/* One top glow — single light source */}
+        {/* Top radial glow — single centred light source */}
         <div style={{
           position: 'absolute', top: '-80px', left: '50%', transform: 'translateX(-50%)',
-          width: '1000px', height: '500px', borderRadius: '50%',
+          width: '900px', height: '500px', borderRadius: '50%',
           background: 'radial-gradient(ellipse, rgba(79,142,240,0.07) 0%, transparent 65%)',
           filter: 'blur(70px)',
         }} />
       </div>
 
       {/* ════════════════════════════════════════
-          LEFT COLUMN — the message + the action
+          CENTRED CONTENT
       ════════════════════════════════════════ */}
       <div
-        ref={leftRef}
+        ref={contentRef}
         style={{
           position: 'relative', zIndex: 2,
-          padding: 'clamp(100px,12vh,140px) clamp(24px,4vw,80px) clamp(60px,8vh,80px) clamp(24px,5vw,96px)',
-          display: 'flex', flexDirection: 'column',
+          paddingTop: 'clamp(80px, 10vh, 120px)',
+          paddingLeft: 'clamp(20px, 4vw, 48px)',
+          paddingRight: 'clamp(20px, 4vw, 48px)',
+          paddingBottom: '0',
+          maxWidth: '780px',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
         }}
       >
 
-        {/* ── Eyebrow — one simple label, no icon clutter ── */}
+        {/* ── Eyebrow — thin rule + label ── */}
         <div ref={eyebrowRef} style={{
-          display: 'inline-flex', alignItems: 'center', gap: '8px',
-          marginBottom: '28px', width: 'fit-content',
+          display: 'inline-flex', alignItems: 'center', gap: '10px',
+          marginBottom: '28px',
         }}>
           <span aria-hidden="true" style={{
-            display: 'inline-block', width: '20px', height: '1px',
-            background: 'var(--accent)', opacity: 0.7,
+            display: 'inline-block', width: '24px', height: '1px',
+            background: 'var(--accent)', opacity: 0.6,
           }} />
           <span style={{
             fontSize: '12px', fontWeight: 400, letterSpacing: '0.12em',
@@ -407,6 +248,10 @@ export default function Hero() {
           }}>
             Free · Private · No insurance required
           </span>
+          <span aria-hidden="true" style={{
+            display: 'inline-block', width: '24px', height: '1px',
+            background: 'var(--accent)', opacity: 0.6,
+          }} />
         </div>
 
         {/* ── H1 — two lines, cycling accent word ── */}
@@ -415,52 +260,49 @@ export default function Hero() {
           id="hero-h1"
           style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.8rem, 5vw, 6rem)',
+            fontSize: 'clamp(2.8rem, 5.5vw, 6.5rem)',
             fontWeight: 800,
             lineHeight: 1.04,
             letterSpacing: '-0.04em',
             marginBottom: '20px',
+            textAlign: 'center',
           }}
         >
-          <span className="h1-word" style={{ display: 'block', overflow: 'hidden' }}>
-            <span style={{ display: 'block', color: 'var(--text)' }}>
-              Free healthcare,
-            </span>
+          <span style={{ display: 'block', color: 'var(--text)' }}>
+            Free healthcare,
           </span>
-          <span className="h1-word" style={{ display: 'block', overflow: 'hidden' }}>
-            <span style={{ display: 'block', color: 'var(--text)' }}>
-              <span style={{
-                display: 'inline-block', position: 'relative',
-                perspective: '500px', transformStyle: 'preserve-3d',
-              }}>
-                {/* Width locked to widest word — no layout shift */}
-                <span aria-hidden="true" style={{ visibility: 'hidden' }}>
-                  {CYCLE_WORDS.reduce((a, b) => a.length >= b.length ? a : b)}
-                </span>
-                <span
-                  key={cycleIdx}
-                  className={wordClass}
-                  style={{
-                    position: 'absolute', left: 0, right: 0, top: 0,
-                    color: 'var(--accent)', display: 'block', textAlign: 'left',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {CYCLE_WORDS[cycleIdx]}
-                </span>
+          <span style={{ display: 'block', color: 'var(--text)' }}>
+            <span style={{
+              display: 'inline-block', position: 'relative',
+              perspective: '500px', transformStyle: 'preserve-3d',
+            }}>
+              {/* Width locked to widest word — no layout shift */}
+              <span aria-hidden="true" style={{ visibility: 'hidden' }}>
+                {CYCLE_WORDS.reduce((a, b) => a.length >= b.length ? a : b)}
               </span>
-              {' '}in seconds.
+              <span
+                key={cycleIdx}
+                className={wordClass}
+                style={{
+                  position: 'absolute', left: 0, right: 0, top: 0,
+                  color: 'var(--accent)', display: 'block', textAlign: 'center',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {CYCLE_WORDS[cycleIdx]}
+              </span>
             </span>
+            {' '}in seconds.
           </span>
         </h1>
 
-        {/* ── Subtitle — Inter only, light weight ── */}
+        {/* ── Subtitle ── */}
         <p
           ref={subRef}
           style={{
             fontSize: 'clamp(0.9rem, 1.3vw, 1.05rem)',
             color: 'var(--text-2)',
-            maxWidth: '460px',
+            maxWidth: '520px',
             lineHeight: 1.75,
             fontWeight: 300,
             marginBottom: '28px',
@@ -473,7 +315,7 @@ export default function Hero() {
         {/* ── Search bar — the primary action ── */}
         <div
           ref={searchRef}
-          style={{ width: '100%', maxWidth: '620px', marginBottom: '16px' }}
+          style={{ width: '100%', maxWidth: '640px', marginBottom: '16px' }}
         >
           <SearchBar
             searchVal={searchVal}
@@ -493,8 +335,8 @@ export default function Hero() {
           role="group"
           aria-label="Quick search suggestions"
           style={{
-            display: 'flex', alignItems: 'center',
-            gap: '7px', flexWrap: 'wrap', marginBottom: '28px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            gap: '7px', flexWrap: 'wrap', marginBottom: '20px',
           }}
         >
           <span style={{
@@ -531,10 +373,11 @@ export default function Hero() {
         <div
           ref={proofRef}
           style={{
-            display: 'flex', alignItems: 'center', gap: '16px',
+            display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'center',
             paddingTop: '24px',
             borderTop: '1px solid var(--border-subtle)',
-            marginTop: '8px',
+            marginTop: '16px',
+            flexWrap: 'wrap',
           }}
         >
           {/* Avatar stack */}
@@ -563,6 +406,7 @@ export default function Hero() {
             </div>
             <div style={{
               display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px',
+              justifyContent: 'center',
             }}>
               <span style={{ display: 'flex', gap: '2px' }} aria-label="4.9 out of 5 stars">
                 {[1,2,3,4,5].map(s => (
@@ -581,33 +425,15 @@ export default function Hero() {
       </div>
 
       {/* ════════════════════════════════════════
-          RIGHT COLUMN — live proof, not decoration
+          HERO MOCKUP — decorative social proof
       ════════════════════════════════════════ */}
-      <div
-        ref={rightRef}
-        style={{
-          position: 'relative', zIndex: 2,
-          padding: 'clamp(100px,12vh,140px) clamp(24px,5vw,80px) clamp(60px,8vh,80px) clamp(16px,2vw,40px)',
-          height: '100%', display: 'flex', alignItems: 'center',
-        }}
-      >
-        <div style={{ width: '100%' }}>
-          <LiveProofPanel />
-        </div>
-      </div>
+      <HeroMockup mockupRef={mockupRef} />
 
       {/* ── Styles ── */}
       <style>{`
-        /* Mobile: single column */
-        @media (max-width: 900px) {
-          #hero {
-            grid-template-columns: 1fr !important;
-            min-height: auto !important;
-          }
-          #hero > div:last-of-type { display: none !important; }
-          #hero > div:first-of-type {
-            padding: 88px 1.25rem 48px !important;
-          }
+        /* Mobile tweaks */
+        @media (max-width: 768px) {
+          #hero { padding-bottom: 32px !important; }
           #hero h1 { font-size: clamp(2.4rem, 9vw, 3.6rem) !important; }
         }
         @media (max-width: 480px) {
@@ -637,12 +463,17 @@ export default function Hero() {
           background: rgba(255,255,255,0.06) !important;
         }
 
-        /* H1 word animation classes override */
-        .h1-word {
-          visibility: visible !important;
-          transform: none !important;
-          opacity: 1 !important;
+        /* Word cycle animation */
+        @keyframes word-in {
+          from { opacity: 0; transform: rotateX(-90deg) translateY(10px); }
+          to   { opacity: 1; transform: rotateX(0deg) translateY(0px); }
         }
+        @keyframes word-out {
+          from { opacity: 1; transform: rotateX(0deg) translateY(0px); }
+          to   { opacity: 0; transform: rotateX(90deg) translateY(-10px); }
+        }
+        .word-cycle-in  { animation: word-in  0.38s cubic-bezier(0.34,1.3,0.64,1) forwards; }
+        .word-cycle-out { animation: word-out 0.32s cubic-bezier(0.4,0,1,1) forwards; }
       `}</style>
     </section>
   )

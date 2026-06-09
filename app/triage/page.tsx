@@ -450,7 +450,7 @@ export default function TriagePage() {
 
             {/* Disclaimer */}
             <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', textAlign: 'center', lineHeight: 1.6 }}>
-              <InfoCircle size={10} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
+              <InfoCircle size={10} color="rgba(255,255,255,0.45)" style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
               Not a medical diagnosis. This tool helps you find appropriate care — always consult a healthcare professional. Nothing you enter leaves your device to third parties.
             </p>
           </form>

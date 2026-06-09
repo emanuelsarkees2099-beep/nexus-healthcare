@@ -1,7 +1,7 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { Location, Cpu, ReceiptText, Chart2, Profile2User, Calendar1, ArrowRight, TickCircle, Clock, Wifi, Activity } from 'iconsax-react'
+import { Location, Cpu, ReceiptText, Chart2, Profile2User, Calendar1, ArrowRight, TickCircle, Clock, Activity } from 'iconsax-react'
 import gsap from 'gsap'
 import { registerGSAP } from '@/lib/gsap-st'
 registerGSAP()
@@ -11,6 +11,13 @@ registerGSAP()
 function BentoIcon({ icon, color = 'rgba(255,255,255,0.55)', bg = 'rgba(255,255,255,0.04)', border = 'rgba(255,255,255,0.08)' }: {
   icon: React.ReactNode; color?: string; bg?: string; border?: string
 }) {
+  /* Inject explicit color prop — iconsax TwoTone/Linear use stroke="currentColor"
+     which can fail to cascade through React's SVG rendering in some environments.
+     cloneElement bypasses CSS inheritance and passes color as a direct React prop. */
+  const iconWithColor = React.isValidElement(icon)
+    ? React.cloneElement(icon as React.ReactElement<{ color?: string }>, { color })
+    : icon
+
   return (
     <div
       aria-hidden="true"
@@ -21,7 +28,7 @@ function BentoIcon({ icon, color = 'rgba(255,255,255,0.55)', bg = 'rgba(255,255,
         marginBottom: '1.25rem', color, flexShrink: 0,
       }}
     >
-      {icon}
+      {iconWithColor}
     </div>
   )
 }
@@ -49,7 +56,7 @@ function ExploreLink() {
       marginTop: '1rem', fontSize: '12px', color: 'var(--accent)',
       fontFamily: 'var(--font-inter)', fontWeight: 500, letterSpacing: '0.02em',
     }}>
-      Explore feature <ArrowRight size={12} variant="Linear" />
+      Explore feature <ArrowRight size={12} color="var(--accent)" variant="Linear" />
     </div>
   )
 }
@@ -260,7 +267,7 @@ function PathwaysMini() {
             fontFamily: 'var(--font-inter)',
             display: 'flex', alignItems: 'center', gap: '4px',
           }}>
-            {i === 2 && <TickCircle size={10} variant="Linear" />}
+            {i === 2 && <TickCircle size={10} color="var(--accent)" variant="Linear" />}
             {step}
           </div>
           {i < steps.length - 1 && <ArrowRight size={10} color="var(--text-3)" variant="Linear" />}
@@ -378,7 +385,7 @@ export default function Features() {
           background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.14)',
           borderRadius: '100px', padding: '5px 14px',
         }}>
-          <Activity size={11} variant="TwoTone" />
+          <Activity size={11} color="var(--accent)" variant="TwoTone" />
           What NEXUS offers
         </div>
         <h2
@@ -626,7 +633,7 @@ export default function Features() {
               e.currentTarget.style.background = 'rgba(74,144,217,0.05)'
             }}
           >
-            {item.label} <ArrowRight size={10} variant="Linear" />
+            {item.label} <ArrowRight size={10} color="var(--accent)" variant="Linear" />
           </Link>
         ))}
       </div>
