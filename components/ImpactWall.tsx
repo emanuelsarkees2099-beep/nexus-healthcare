@@ -1,7 +1,7 @@
-'use client'
+﻿'use client'
 import { useEffect, useRef, useState } from 'react'
 
-/* ── Deterministic fake-live data seeded by date ── */
+/* â”€â”€ Deterministic fake-live data seeded by date â”€â”€ */
 function seedRand(seed: number) {
   let s = seed
   return () => { s = (s * 16807 + 0) % 2147483647; return (s - 1) / 2147483646 }
@@ -61,7 +61,7 @@ function generateWins(count: number, seed: number): Win[] {
   }))
 }
 
-/* ── Animated counter ── */
+/* â”€â”€ Animated counter â”€â”€ */
 function Counter({ target, prefix = '', suffix = '' }: { target: number; prefix?: string; suffix?: string }) {
   const [val, setVal] = useState(0)
   const [visible, setVisible] = useState(false)
@@ -93,7 +93,7 @@ function Counter({ target, prefix = '', suffix = '' }: { target: number; prefix?
   )
 }
 
-/* ── Win card ── */
+/* â”€â”€ Win card â”€â”€ */
 function WinCard({ win }: { win: Win }) {
   return (
     <div
@@ -146,7 +146,7 @@ function WinCard({ win }: { win: Win }) {
   )
 }
 
-/* ── Scrolling marquee ── */
+/* â”€â”€ Scrolling marquee â”€â”€ */
 function WinMarquee({ wins, reverse = false }: { wins: Win[]; reverse?: boolean }) {
   return (
     <div style={{
@@ -164,7 +164,7 @@ function WinMarquee({ wins, reverse = false }: { wins: Win[]; reverse?: boolean 
   )
 }
 
-/* ── Stat bar ── */
+/* â”€â”€ Stat bar â”€â”€ */
 function StatBar({ label, value, color, pct }: { label: string; value: string; color: string; pct: number }) {
   const [w, setW] = useState(0)
   const [visible, setVisible] = useState(false)
@@ -270,7 +270,7 @@ export default function ImpactWall() {
           <p style={{
             fontSize: '16px', color: 'rgba(255,255,255,0.45)',
             maxWidth: '480px', lineHeight: 1.7,
-            fontFamily: 'var(--font-inter)', fontWeight: 300,
+            fontFamily: 'var(--font-inter)', fontWeight: 400,
           }}>
             Every minute, real people in your city use NEXUS to get care they couldn't afford before. Here's what's happening right now.
           </p>
@@ -386,3 +386,4 @@ export default function ImpactWall() {
     </section>
   )
 }
+

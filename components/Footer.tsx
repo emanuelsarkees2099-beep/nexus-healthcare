@@ -1,6 +1,7 @@
-'use client'
+﻿'use client'
 import { useState } from 'react'
 import Link from 'next/link'
+import { TickCircle, ExportSquare, ShieldTick } from 'iconsax-react'
 export default function Footer() {
   const [email, setEmail]       = useState('')
   const [subState, setSubState] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
@@ -32,17 +33,23 @@ export default function Footer() {
       role="contentinfo"
       style={{
         position: 'relative', zIndex: 2,
-        borderTop: '1px solid var(--border2)',
-        padding: '4rem 3rem 2.5rem',
+        padding: '0 3rem 2.5rem',
+        overflow: 'hidden',
       }}
     >
-      {/* Top ambient glow */}
+      {/* Full-width gradient separator — dramatic top rule */}
       <div aria-hidden="true" style={{
-        position: 'absolute', top: '-80px', left: '50%',
+        height: '1px',
+        background: 'linear-gradient(90deg, transparent 0%, rgba(79,142,240,0.22) 15%, rgba(79,142,240,0.45) 50%, rgba(79,142,240,0.22) 85%, transparent 100%)',
+        marginBottom: '0',
+      }} />
+      {/* Glow bloom on separator */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', top: '-1px', left: '50%',
         transform: 'translateX(-50%)',
-        width: '600px', height: '80px',
-        background: 'radial-gradient(ellipse, rgba(74,144,217,0.06) 0%, transparent 70%)',
-        filter: 'blur(30px)', pointerEvents: 'none',
+        width: '700px', height: '180px',
+        background: 'radial-gradient(ellipse at 50% 0%, rgba(79,142,240,0.09) 0%, transparent 65%)',
+        filter: 'blur(20px)', pointerEvents: 'none',
       }} />
 
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -60,13 +67,13 @@ export default function Footer() {
             <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '4px' }}>
               Stay informed on free healthcare access
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>
+            <div style={{ fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 400 }}>
               New programs, policy updates, and care resources. No spam.
             </div>
           </div>
           {subState === 'done' ? (
             <div style={{ fontSize: '13px', color: '#34d399', fontFamily: 'var(--font-inter)', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <TickCircle size={14} color="currentColor" variant="TwoTone" />
               You&apos;re subscribed!
             </div>
           ) : (
@@ -112,9 +119,10 @@ export default function Footer() {
         {/* Main grid */}
         <div className="footer-grid" style={{
           display: 'grid',
-          gridTemplateColumns: '1.2fr auto auto auto auto auto',
-          gap: '3rem', alignItems: 'start',
+          gridTemplateColumns: '1.8fr 1fr 1fr 1fr 1fr',
+          gap: 'clamp(1.5rem, 3vw, 3.5rem)', alignItems: 'start',
           marginBottom: '3rem',
+          paddingTop: '3.5rem',
         }}>
           {/* Brand column */}
           <div>
@@ -150,7 +158,7 @@ export default function Footer() {
             <p style={{
               fontSize: '12px', color: 'var(--text-3)',
               fontFamily: 'var(--font-inter)', lineHeight: 1.75,
-              maxWidth: '230px', fontWeight: 300,
+              maxWidth: '230px', fontWeight: 400,
             }}>
               Free healthcare access for every uninsured American.
               Built with care, not profit.
@@ -173,7 +181,7 @@ export default function Footer() {
               }} />
               <span style={{
                 fontSize: '11px', color: 'var(--text-3)',
-                fontFamily: 'var(--font-inter)', fontWeight: 300,
+                fontFamily: 'var(--font-inter)', fontWeight: 400,
               }}>
                 Built for the 30M uninsured in America
               </span>
@@ -254,7 +262,7 @@ export default function Footer() {
                         rel="noopener noreferrer"
                         style={{
                           fontSize: '13px', color: 'var(--text-3)', textDecoration: 'none',
-                          fontFamily: 'var(--font-inter)', fontWeight: 300,
+                          fontFamily: 'var(--font-inter)', fontWeight: 400,
                           transition: 'color 0.2s',
                           display: 'inline-flex', alignItems: 'center', gap: '5px',
                         }}
@@ -262,16 +270,14 @@ export default function Footer() {
                         onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-3)')}
                       >
                         {l.label}
-                        <svg width="9" height="9" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                          <path d="M3.5 1H11M11 1V8.5M11 1L1 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
+                        <ExportSquare size={9} color="currentColor" variant="Linear" aria-hidden="true" />
                       </a>
                     ) : (
                       <Link
                         href={l.href}
                         style={{
                           fontSize: '13px', color: 'var(--text-3)', textDecoration: 'none',
-                          fontFamily: 'var(--font-inter)', fontWeight: 300,
+                          fontFamily: 'var(--font-inter)', fontWeight: 400,
                           transition: 'color 0.2s',
                           display: 'inline-flex', alignItems: 'center', gap: '5px',
                         }}
@@ -289,34 +295,56 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div style={{
+        <div className="footer-bottom-bar" style={{
           paddingTop: '1.5rem',
           borderTop: '1px solid var(--border2)',
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
           flexWrap: 'wrap', gap: '1rem',
         }}>
-          <div style={{ fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>
-            © 2026{' '}
-            <Link href="/" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 400 }}>
-              NEXUS Health
-            </Link>
-            . A project for the 30 million uninsured.
-          </div>
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: '16px',
-          }}>
-            <span style={{ fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontStyle: 'italic', fontWeight: 300 }}>
-              Healthcare is a right.
-            </span>
-            {/* Three dot separator + FQHC badge */}
-            <div style={{
-              fontSize: '10px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)',
-              background: 'var(--bg3)', border: '1px solid var(--border2)',
-              borderRadius: 'var(--r-sm)', padding: '3px 9px', letterSpacing: '0.04em',
-              fontWeight: 300,
-            }}>
-              FQHC Partner Network
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+            <div style={{ fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 400 }}>
+              &copy; 2026{' '}
+              <Link href="/" style={{ color: 'var(--text-2)', textDecoration: 'none', fontWeight: 500 }}>
+                NEXUS Health
+              </Link>
+              {' '}&mdash; Free healthcare for every uninsured American.
             </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            {/* Live status indicator */}
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
+              fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 400,
+            }}>
+              <span aria-hidden="true" style={{
+                display: 'inline-block', width: '5px', height: '5px', borderRadius: '50%',
+                background: 'var(--success)', boxShadow: '0 0 6px rgba(52,211,153,0.6)',
+              }} />
+              All systems operational
+            </div>
+            <span aria-hidden="true" style={{ color: 'var(--border)' }}>|</span>
+            {/* HRSA Partner badge */}
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '5px',
+              fontSize: '10px', fontWeight: 600, color: 'var(--accent)',
+              background: 'rgba(79,142,240,0.07)', border: '1px solid rgba(79,142,240,0.18)',
+              borderRadius: 'var(--r-sm)', padding: '3px 10px',
+              letterSpacing: '0.04em', textTransform: 'uppercase',
+              fontFamily: 'var(--font-inter)',
+            }}>
+              <ShieldTick size={10} color="currentColor" variant="TwoTone" aria-hidden="true" />
+              HRSA Partner
+            </div>
+            <span aria-hidden="true" style={{ color: 'var(--border)' }}>|</span>
+            {/* Legal links */}
+            <Link href="/privacy" style={{ fontSize: '11px', color: 'var(--text-3)', textDecoration: 'none', fontFamily: 'var(--font-inter)', fontWeight: 400 }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--text-2)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
+            >Privacy</Link>
+            <Link href="/terms" style={{ fontSize: '11px', color: 'var(--text-3)', textDecoration: 'none', fontFamily: 'var(--font-inter)', fontWeight: 400 }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--text-2)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
+            >Terms</Link>
           </div>
         </div>
       </div>
@@ -324,28 +352,28 @@ export default function Footer() {
       <style>{`
         /* Tablet: 900px — 5-column squishes to unreadable; go 2-up */
         @media (max-width: 900px) {
-          footer > div > div:first-child {
+          .footer-grid {
             grid-template-columns: 1.2fr 1fr !important;
             gap: 2rem !important;
           }
           /* Brand column spans full width on its own row */
-          footer > div > div:first-child > div:first-child {
+          .footer-grid > div:first-child {
             grid-column: 1 / -1 !important;
           }
         }
         /* Mobile: go fully single-column */
         @media (max-width: 600px) {
           footer { padding: 2.5rem 1.25rem 2rem !important; }
-          footer > div > div:first-child {
+          .footer-grid {
             grid-template-columns: 1fr !important;
             gap: 2rem !important;
           }
-          footer > div > div:first-child > div:first-child {
+          .footer-grid > div:first-child {
             grid-column: unset !important;
           }
         }
         @media (max-width: 480px) {
-          footer > div > div:last-child {
+          .footer-bottom-bar {
             flex-direction: column !important;
             align-items: flex-start !important;
             gap: 0.75rem !important;
@@ -355,3 +383,4 @@ export default function Footer() {
     </footer>
   )
 }
+

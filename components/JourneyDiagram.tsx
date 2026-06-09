@@ -1,5 +1,8 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
+import { MessageQuestion, SearchNormal1, TickCircle, Map1, Hospital, MedalStar } from 'iconsax-react'
+
+type IconComponent = React.ComponentType<{ size?: number; color?: string; variant?: 'Bold' | 'Linear' | 'Outline' | 'Broken' | 'Bulk' | 'TwoTone' }>
 
 type Node = {
   id: string
@@ -8,16 +11,16 @@ type Node = {
   x: number
   y: number
   color: string
-  icon: string
+  Icon: IconComponent
 }
 
 const NODES: Node[] = [
-  { id: 'symptom',  label: 'Symptom',         sublabel: 'You notice something',       x: 80,  y: 50,  color: '#fbbf24', icon: '💭' },
-  { id: 'search',   label: 'Search',           sublabel: 'Find care options',          x: 240, y: 50,  color: '#818cf8', icon: '🔍' },
-  { id: 'match',    label: 'Match',            sublabel: 'AI finds best clinic',       x: 400, y: 50,  color: '#60a5fa', icon: '✅' },
-  { id: 'navigate', label: 'Navigate',         sublabel: 'GPS guides you there',       x: 560, y: 50,  color: '#38bdf8', icon: '🧭' },
-  { id: 'care',     label: 'Receive Care',     sublabel: 'Seen by a provider',         x: 720, y: 50,  color: '#f472b6', icon: '🏥' },
-  { id: 'outcome',  label: 'Outcome',          sublabel: 'You track & share',          x: 880, y: 50,  color: '#4a90d9', icon: '⭐' },
+  { id: 'symptom',  label: 'Symptom',         sublabel: 'You notice something',       x: 80,  y: 50,  color: '#fbbf24', Icon: MessageQuestion },
+  { id: 'search',   label: 'Search',           sublabel: 'Find care options',          x: 240, y: 50,  color: '#818cf8', Icon: SearchNormal1 },
+  { id: 'match',    label: 'Match',            sublabel: 'AI finds best clinic',       x: 400, y: 50,  color: '#60a5fa', Icon: TickCircle },
+  { id: 'navigate', label: 'Navigate',         sublabel: 'GPS guides you there',       x: 560, y: 50,  color: '#38bdf8', Icon: Map1 },
+  { id: 'care',     label: 'Receive Care',     sublabel: 'Seen by a provider',         x: 720, y: 50,  color: '#f472b6', Icon: Hospital },
+  { id: 'outcome',  label: 'Outcome',          sublabel: 'You track & share',          x: 880, y: 50,  color: '#4a90d9', Icon: MedalStar },
 ]
 
 const CONNECTIONS = [
@@ -123,6 +126,7 @@ export default function JourneyDiagram() {
         {NODES.map((node, i) => {
           const isActive = animated && i === activeNode
           const isPast = animated && i < activeNode
+          const NodeIcon = node.Icon
 
           return (
             <g key={node.id} transform={`translate(${node.x}, ${node.y})`}>
@@ -142,10 +146,16 @@ export default function JourneyDiagram() {
                 strokeWidth={isActive ? 2 : 1}
                 style={{ transition: 'all 0.5s' }}
               />
-              {/* Icon */}
-              <text x={20} y={30} textAnchor="middle" fontSize="14">
-                {node.icon}
-              </text>
+              {/* Icon via foreignObject — embeds React component inside SVG */}
+              <foreignObject x={10} y={14} width="20" height="20">
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '20px', height: '20px' }}>
+                  <NodeIcon
+                    size={14}
+                    color={isPast || isActive ? node.color : 'rgba(255,255,255,0.35)'}
+                    variant="TwoTone"
+                  />
+                </div>
+              </foreignObject>
               {/* Labels */}
               <text
                 x={20} y={60}

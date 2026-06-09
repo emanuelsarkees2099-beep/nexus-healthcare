@@ -3,11 +3,11 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import AppShell from '@/components/AppShell'
 import JsonLd, { ELIGIBILITY_FAQ_SCHEMA, breadcrumbSchema } from '@/components/JsonLd'
 import {
-  ShieldCheck, DollarSign, TrendingUp, Zap, Heart, Baby, Stethoscope,
-  ChevronRight, ChevronLeft, Check, AlertCircle, ExternalLink,
-  Info, MapPin, Users, Briefcase, Activity, ArrowRight, Sparkles,
-  RefreshCw, CheckCircle2
-} from 'lucide-react'
+  ShieldTick, DollarCircle, TrendUp, Flash, Heart, Profile, Hospital,
+  ArrowRight2, ArrowLeft2, TickCircle, InfoCircle, ExportSquare,
+  Location, Profile2User, Briefcase, Activity, ArrowRight, MagicStar,
+  RefreshCircle, Warning2,
+} from 'iconsax-react'
 
 /* ════════════════════════════════════════════════════════════
    STATE-SPECIFIC DATA  (2024)
@@ -165,11 +165,11 @@ interface WizardAnswers {
 }
 
 const EMPLOYMENT_OPTIONS = [
-  { value: 'employed',        label: 'Employed (W-2)',        icon: <Briefcase size={16} strokeWidth={1.5} /> },
-  { value: 'self-employed',   label: 'Self-employed / 1099',  icon: <Activity size={16} strokeWidth={1.5} /> },
-  { value: 'unemployed',      label: 'Unemployed',            icon: <AlertCircle size={16} strokeWidth={1.5} /> },
-  { value: 'retired',         label: 'Retired',               icon: <Heart size={16} strokeWidth={1.5} /> },
-  { value: 'student',         label: 'Student',               icon: <Sparkles size={16} strokeWidth={1.5} /> },
+  { value: 'employed',        label: 'Employed (W-2)',        icon: <Briefcase size={16} variant="Linear" /> },
+  { value: 'self-employed',   label: 'Self-employed / 1099',  icon: <Activity size={16} variant="Linear" /> },
+  { value: 'unemployed',      label: 'Unemployed',            icon: <InfoCircle size={16} variant="Linear" /> },
+  { value: 'retired',         label: 'Retired',               icon: <Heart size={16} variant="Linear" /> },
+  { value: 'student',         label: 'Student',               icon: <MagicStar size={16} variant="Linear" /> },
 ]
 
 const CARE_NEED_OPTIONS = [
@@ -256,7 +256,7 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
 
     programs.push({
       id: 'medicaid', name: 'Medicaid', tag: 'Federal / State',
-      color: '#60a5fa', icon: <ShieldCheck size={16} strokeWidth={1.5} />,
+      color: '#60a5fa', icon: <ShieldTick size={16} variant="Linear" />,
       match: Math.round(match),
       desc: 'Full health coverage: doctor visits, hospital stays, prescriptions, preventive care, and more. Covers most or all costs for qualifying individuals.',
       savings: '$0 premium · $0–$3 copays',
@@ -278,7 +278,7 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
 
     programs.push({
       id: 'chip', name: 'CHIP', tag: 'Federal / State',
-      color: '#a78bfa', icon: <Baby size={16} strokeWidth={1.5} />,
+      color: '#a78bfa', icon: <Profile size={16} variant="Linear" />,
       match: Math.round(chipMatch),
       desc: `Children's Health Insurance Program covers kids up to ${highChip ? '300%' : '200%'} FPL in ${STATES.find(s => s.abbr === a.state)?.name ?? a.state}. Includes well-child visits, immunizations, dental, and vision.`,
       savings: 'Low or $0 premiums · $0–$5 copays',
@@ -309,7 +309,7 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
     const hasStateExchange = a.state in STATE_ACA_URLS
     programs.push({
       id: 'aca', name: 'ACA Marketplace Subsidy', tag: 'Federal',
-      color: '#60a5fa', icon: <DollarSign size={16} strokeWidth={1.5} />,
+      color: '#60a5fa', icon: <DollarCircle size={16} variant="Linear" />,
       match: Math.round(acaMatch),
       desc: 'Premium tax credits reduce your monthly health insurance cost — potentially to $0. Plans cover doctor visits, prescriptions, hospitalizations, and preventive care.',
       savings: `~${monthlyEst}/month premium`,
@@ -333,7 +333,7 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
     const fqhcMatch = uninsured ? 96 : fplPct <= 200 ? 88 : fplPct <= 400 ? 74 : 60
     programs.push({
       id: 'fqhc', name: 'HRSA Federally Qualified Health Center', tag: 'Federal',
-      color: 'var(--accent)', icon: <Stethoscope size={16} strokeWidth={1.5} />,
+      color: 'var(--accent)', icon: <Hospital size={16} variant="Linear" />,
       match: Math.round(fqhcMatch),
       desc: 'FQHCs are federally funded and legally required to serve everyone regardless of ability to pay. Sliding-scale fees based on income — often $0–$20 per visit.',
       savings: '$0–$20/visit · sliding scale',
@@ -349,7 +349,7 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
     if (uninsured) rxMatch = Math.min(96, rxMatch + 10)
     programs.push({
       id: 'needy', name: 'Patient Assistance Programs (PAP)', tag: 'Rx',
-      color: '#f472b6', icon: <Zap size={16} strokeWidth={1.5} />,
+      color: '#f472b6', icon: <Flash size={16} variant="Linear" />,
       match: Math.round(rxMatch),
       desc: 'Pharmaceutical manufacturers provide brand-name medications at no or low cost for uninsured and low-income patients. Over 3,000 drugs covered across 1,800+ programs.',
       savings: 'Avg $200–$450/month in Rx',
@@ -364,7 +364,7 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
     const b340Match = fplPct <= 200 ? 80 : fplPct <= 300 ? 62 : 38
     programs.push({
       id: '340b', name: '340B Drug Pricing Program', tag: 'Federal',
-      color: '#fbbf24', icon: <RefreshCw size={16} strokeWidth={1.5} />,
+      color: '#fbbf24', icon: <RefreshCircle size={16} variant="Linear" />,
       match: Math.round(b340Match),
       desc: 'Get prescriptions at 25–50% below retail price at HRSA-participating clinics. Available at most FQHCs and covered entity pharmacies.',
       savings: '25–50% off all medications',
@@ -379,7 +379,7 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
     const medMatch = a.employment === 'retired' ? 85 : 40
     programs.push({
       id: 'medicare', name: 'Medicare', tag: 'Federal',
-      color: '#38bdf8', icon: <Heart size={16} strokeWidth={1.5} />,
+      color: '#38bdf8', icon: <Heart size={16} variant="Linear" />,
       match: Math.round(medMatch),
       desc: 'Federal health insurance for adults 65+ or those with qualifying disabilities. Part A (hospital) is usually free; Part B covers outpatient care.',
       savings: '$0 Part A · ~$174/month Part B',
@@ -393,7 +393,7 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
   if (fplPct <= 130) {
     programs.push({
       id: 'snap', name: 'SNAP (Food Assistance)', tag: 'Federal',
-      color: '#86efac', icon: <TrendingUp size={16} strokeWidth={1.5} />,
+      color: '#86efac', icon: <TrendUp size={16} variant="Linear" />,
       match: Math.round(fplPct <= 100 ? 90 : 75),
       desc: 'Supplemental Nutrition Assistance Program helps low-income individuals and families buy food. Qualifying for SNAP often fast-tracks Medicaid eligibility.',
       savings: `Avg $~${Math.round(200 / a.householdSize * 10) / 10}/month/person`,
@@ -577,7 +577,7 @@ export default function EligibilityPage() {
       case 0: return (
         <div>
           <StepHeader
-            icon={<MapPin size={20} strokeWidth={1.5} />}
+            icon={<Location size={20} variant="Linear" />}
             title="Where do you live?"
             subtitle="Eligibility rules vary significantly by state. We use your state to apply the correct Medicaid thresholds."
           />
@@ -620,12 +620,12 @@ export default function EligibilityPage() {
           </div>
           {answers.state && EXPANSION_STATES.has(answers.state) ? (
             <div style={{ marginTop: '16px', padding: '12px 16px', background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.2)', borderRadius: '12px', fontSize: '13px', color: 'rgba(255,255,255,0.6)', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-              <CheckCircle2 size={14} style={{ color: '#60a5fa', marginTop: '1px', flexShrink: 0 }} strokeWidth={1.5} />
+              <TickCircle size={14} style={{ color: '#60a5fa', marginTop: '1px', flexShrink: 0 }} variant="Linear" />
               <span><strong style={{ color: '#60a5fa' }}>{STATES.find(s => s.abbr === answers.state)?.name}</strong> expanded Medicaid — adults up to 138% FPL may qualify for full coverage.</span>
             </div>
           ) : answers.state ? (
             <div style={{ marginTop: '16px', padding: '12px 16px', background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.2)', borderRadius: '12px', fontSize: '13px', color: 'rgba(255,255,255,0.6)', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-              <AlertCircle size={14} style={{ color: '#fbbf24', marginTop: '1px', flexShrink: 0 }} strokeWidth={1.5} />
+              <InfoCircle size={14} style={{ color: '#fbbf24', marginTop: '1px', flexShrink: 0 }} variant="Linear" />
               <span><strong style={{ color: '#fbbf24' }}>{STATES.find(s => s.abbr === answers.state)?.name}</strong> has not expanded Medicaid. Adult eligibility is more limited, but other programs may help.</span>
             </div>
           ) : null}
@@ -636,7 +636,7 @@ export default function EligibilityPage() {
       case 1: return (
         <div>
           <StepHeader
-            icon={<Users size={20} strokeWidth={1.5} />}
+            icon={<Profile2User size={20} variant="Linear" />}
             title="Tell us about your household"
             subtitle="Include yourself and anyone you financially support, even if they're not on your tax return."
           />
@@ -666,8 +666,8 @@ export default function EligibilityPage() {
               Household includes
             </label>
             {[
-              { key: 'hasChildren', label: 'Children under 19 in household', icon: '👶' },
-              { key: 'hasPregnancy', label: 'Current or planned pregnancy', icon: '🤱' },
+              { key: 'hasChildren', label: 'Children under 19 in household', icon: <Profile size={20} color="currentColor" variant="TwoTone" /> },
+              { key: 'hasPregnancy', label: 'Current or planned pregnancy', icon: <Heart size={20} color="currentColor" variant="TwoTone" /> },
             ].map(opt => (
               <button key={opt.key}
                 onClick={() => setAnswers(a => ({ ...a, [opt.key]: !a[opt.key as keyof WizardAnswers] }))}
@@ -675,13 +675,13 @@ export default function EligibilityPage() {
                   borderColor: answers[opt.key as keyof WizardAnswers] ? 'var(--accent)' : 'rgba(255,255,255,0.08)',
                   background: answers[opt.key as keyof WizardAnswers] ? 'rgba(74,144,217,0.08)' : 'rgba(255,255,255,0.02)',
                 }}>
-                <span style={{ fontSize: '20px' }}>{opt.icon}</span>
+                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '20px', height: '20px', flexShrink: 0 }}>{opt.icon}</span>
                 <span style={{ fontSize: '15px', color: answers[opt.key as keyof WizardAnswers] ? 'var(--accent)' : 'rgba(255,255,255,0.7)', flex: 1 }}>{opt.label}</span>
                 <span style={{ width: '20px', height: '20px', borderRadius: '6px', border: '1px solid', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                   borderColor: answers[opt.key as keyof WizardAnswers] ? 'var(--accent)' : 'rgba(255,255,255,0.15)',
                   background: answers[opt.key as keyof WizardAnswers] ? 'var(--accent)' : 'transparent',
                 }}>
-                  {answers[opt.key as keyof WizardAnswers] && <Check size={11} color="#07070F" strokeWidth={3} />}
+                  {answers[opt.key as keyof WizardAnswers] && <TickCircle size={11} color="#07070F" variant="Linear" />}
                 </span>
               </button>
             ))}
@@ -689,7 +689,7 @@ export default function EligibilityPage() {
 
           {/* FPL preview */}
           <div style={{ padding: '14px 18px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', fontSize: '13px', color: 'rgba(255,255,255,0.4)', display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <Info size={13} strokeWidth={1.5} />
+            <InfoCircle size={13} variant="Linear" />
             <span>2024 Federal Poverty Level for household of <strong style={{ color: 'rgba(255,255,255,0.7)' }}>{answers.householdSize}</strong>: <strong style={{ color: 'var(--accent)' }}>${fpl.toLocaleString()}/year</strong></span>
           </div>
         </div>
@@ -699,7 +699,7 @@ export default function EligibilityPage() {
       case 2: return (
         <div>
           <StepHeader
-            icon={<DollarSign size={20} strokeWidth={1.5} />}
+            icon={<DollarCircle size={20} variant="Linear" />}
             title="Approximate annual household income"
             subtitle="Include wages, self-employment, Social Security, disability, and other income. Used only for eligibility — never stored."
           />
@@ -713,7 +713,7 @@ export default function EligibilityPage() {
                   background: answers.annualIncome === b.value ? 'rgba(74,144,217,0.08)' : 'rgba(255,255,255,0.02)',
                 }}>
                 <span style={{ fontSize: '15px', fontWeight: 600, color: answers.annualIncome === b.value ? 'var(--accent)' : 'rgba(255,255,255,0.7)' }}>{b.label}</span>
-                {answers.annualIncome === b.value && <Check size={14} style={{ color: 'var(--accent)' }} strokeWidth={2.5} />}
+                {answers.annualIncome === b.value && <TickCircle size={14} style={{ color: 'var(--accent)' }} variant="Linear" />}
               </button>
             ))}
           </div>
@@ -722,10 +722,10 @@ export default function EligibilityPage() {
           <div style={{ padding: '14px 18px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.12)', borderRadius: '12px', fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>
             <span>Your income is approximately <strong style={{ color: 'var(--accent)' }}>{fplPct}% of the Federal Poverty Level</strong> for a household of {answers.householdSize}.</span>
             {fplPct <= 138 && EXPANSION_STATES.has(answers.state) && (
-              <div style={{ marginTop: '8px', color: '#60a5fa' }}>✓ You may qualify for Medicaid in {STATES.find(s => s.abbr === answers.state)?.name}.</div>
+              <div style={{ marginTop: '8px', color: '#60a5fa', display: 'flex', alignItems: 'center', gap: '6px' }}><TickCircle size={12} variant="Linear" aria-hidden="true" /> You may qualify for Medicaid in {STATES.find(s => s.abbr === answers.state)?.name}.</div>
             )}
             {fplPct > 100 && fplPct <= 400 && (
-              <div style={{ marginTop: '8px', color: '#60a5fa' }}>✓ You likely qualify for ACA premium tax credits.</div>
+              <div style={{ marginTop: '8px', color: '#60a5fa', display: 'flex', alignItems: 'center', gap: '6px' }}><TickCircle size={12} variant="Linear" aria-hidden="true" /> You likely qualify for ACA premium tax credits.</div>
             )}
           </div>
         </div>
@@ -735,7 +735,7 @@ export default function EligibilityPage() {
       case 3: return (
         <div>
           <StepHeader
-            icon={<Briefcase size={20} strokeWidth={1.5} />}
+            icon={<Briefcase size={20} variant="Linear" />}
             title="What is your employment status?"
             subtitle="This affects which programs and enrollment periods are available to you."
           />
@@ -748,13 +748,13 @@ export default function EligibilityPage() {
                 }}>
                 <span style={{ color: answers.employment === opt.value ? 'var(--accent)' : 'rgba(255,255,255,0.35)', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{opt.icon}</span>
                 <span style={{ fontSize: '15px', fontWeight: 600, color: answers.employment === opt.value ? 'var(--accent)' : 'rgba(255,255,255,0.7)', flex: 1 }}>{opt.label}</span>
-                {answers.employment === opt.value && <Check size={15} style={{ color: 'var(--accent)' }} strokeWidth={2.5} />}
+                {answers.employment === opt.value && <TickCircle size={15} style={{ color: 'var(--accent)' }} variant="Linear" />}
               </button>
             ))}
           </div>
           {answers.employment === 'unemployed' && (
             <div style={{ marginTop: '16px', padding: '12px 16px', background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.2)', borderRadius: '12px', fontSize: '13px', color: 'rgba(255,255,255,0.55)', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-              <Info size={13} style={{ color: '#60a5fa', marginTop: '1px', flexShrink: 0 }} strokeWidth={1.5} />
+              <InfoCircle size={13} style={{ color: '#60a5fa', marginTop: '1px', flexShrink: 0 }} variant="Linear" />
               <span>Losing job-based coverage triggers a <strong style={{ color: '#60a5fa' }}>60-day Special Enrollment Period</strong> for ACA marketplace plans.</span>
             </div>
           )}
@@ -765,7 +765,7 @@ export default function EligibilityPage() {
       case 4: return (
         <div>
           <StepHeader
-            icon={<Activity size={20} strokeWidth={1.5} />}
+            icon={<Activity size={20} variant="Linear" />}
             title="Coverage & care needs"
             subtitle="Tell us your current insurance situation and what care you need most."
           />
@@ -783,7 +783,7 @@ export default function EligibilityPage() {
                     background: answers.currentCoverage === opt.value ? 'rgba(74,144,217,0.08)' : 'rgba(255,255,255,0.02)',
                   }}>
                   <span style={{ fontSize: '14px', color: answers.currentCoverage === opt.value ? 'var(--accent)' : 'rgba(255,255,255,0.7)' }}>{opt.label}</span>
-                  {answers.currentCoverage === opt.value && <Check size={13} style={{ color: 'var(--accent)' }} strokeWidth={2.5} />}
+                  {answers.currentCoverage === opt.value && <TickCircle size={13} style={{ color: 'var(--accent)' }} variant="Linear" />}
                 </button>
               ))}
             </div>
@@ -794,7 +794,7 @@ export default function EligibilityPage() {
             <label style={{ display: 'block', fontSize: '13px', color: 'rgba(255,255,255,0.5)', marginBottom: '12px', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
               Care you currently need <span style={{ fontWeight: 400, textTransform: 'none', color: 'rgba(255,255,255,0.3)' }}>(select all that apply)</span>
             </label>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '8px' }}>
+            <div className="elig-options-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '8px' }}>
               {CARE_NEED_OPTIONS.map(opt => {
                 const selected = answers.careNeeds.includes(opt.value)
                 return (
@@ -808,7 +808,7 @@ export default function EligibilityPage() {
                       borderColor: selected ? 'var(--accent)' : 'rgba(255,255,255,0.15)',
                       background: selected ? 'var(--accent)' : 'transparent',
                     }}>
-                      {selected && <Check size={9} color="#07070F" strokeWidth={3} />}
+                      {selected && <TickCircle size={9} color="#07070F" variant="Linear" />}
                     </span>
                     <span style={{ fontSize: '13px', color: selected ? 'var(--accent)' : 'rgba(255,255,255,0.6)' }}>{opt.label}</span>
                   </button>
@@ -825,7 +825,7 @@ export default function EligibilityPage() {
           {/* Results header */}
           <div style={{ marginBottom: '32px' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', borderRadius: '100px', fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.06em', marginBottom: '20px' }}>
-              <Sparkles size={10} strokeWidth={1.5} /> YOUR PERSONALIZED RESULTS
+              <MagicStar size={10} variant="Linear" /> YOUR PERSONALIZED RESULTS
             </div>
             <h2 style={{ fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '12px', color: '#fff' }}>
               {results.length > 0
@@ -841,15 +841,15 @@ export default function EligibilityPage() {
           </div>
 
           {/* Profile summary */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '28px' }}>
+          <div className="elig-tags-row" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '28px' }}>
             {[
-              { label: STATES.find(s => s.abbr === answers.state)?.name ?? answers.state, icon: '📍' },
-              { label: `${answers.householdSize === 1 ? 'Just me' : `${answers.householdSize} people`}`, icon: '👥' },
-              { label: `${fplPct}% FPL`, icon: '📊' },
-              { label: EMPLOYMENT_OPTIONS.find(e => e.value === answers.employment)?.label ?? '', icon: '💼' },
-              { label: EXPANSION_STATES.has(answers.state) ? 'Expansion state' : 'Non-expansion state', icon: EXPANSION_STATES.has(answers.state) ? '✅' : '⚠️' },
+              { label: STATES.find(s => s.abbr === answers.state)?.name ?? answers.state, icon: <Location size={12} color="currentColor" variant="TwoTone" /> },
+              { label: `${answers.householdSize === 1 ? 'Just me' : `${answers.householdSize} people`}`, icon: <Profile2User size={12} color="currentColor" variant="TwoTone" /> },
+              { label: `${fplPct}% FPL`, icon: <TrendUp size={12} color="currentColor" variant="TwoTone" /> },
+              { label: EMPLOYMENT_OPTIONS.find(e => e.value === answers.employment)?.label ?? '', icon: <Briefcase size={12} color="currentColor" variant="TwoTone" /> },
+              { label: EXPANSION_STATES.has(answers.state) ? 'Expansion state' : 'Non-expansion state', icon: EXPANSION_STATES.has(answers.state) ? <TickCircle size={12} color="#60a5fa" variant="TwoTone" /> : <Warning2 size={12} color="#fbbf24" variant="TwoTone" /> },
             ].filter(t => t.label).map(tag => (
-              <span key={tag.label} style={{ padding: '5px 12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '100px', fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>
+              <span key={tag.label} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '5px 12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '100px', fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>
                 {tag.icon} {tag.label}
               </span>
             ))}
@@ -878,7 +878,7 @@ export default function EligibilityPage() {
                       <div style={{ fontSize: '14px', color: prog.color, fontWeight: 600 }}>{prog.savings}</div>
                     </div>
 
-                    <ChevronRight size={16} style={{ color: 'rgba(255,255,255,0.25)', transform: expanded === prog.id ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s', flexShrink: 0 }} />
+                    <ArrowRight2 size={16} style={{ color: 'rgba(255,255,255,0.25)', transform: expanded === prog.id ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s', flexShrink: 0 }} />
                   </div>
 
                   {/* Expanded details */}
@@ -889,14 +889,14 @@ export default function EligibilityPage() {
                       </p>
                       {prog.stateNote && (
                         <div style={{ padding: '10px 14px', background: 'rgba(255,255,255,0.03)', borderRadius: '10px', fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginBottom: '14px', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-                          <Info size={13} style={{ color: prog.color, marginTop: '1px', flexShrink: 0 }} strokeWidth={1.5} />
+                          <InfoCircle size={13} style={{ color: prog.color, marginTop: '1px', flexShrink: 0 }} variant="Linear" />
                           {prog.stateNote}
                         </div>
                       )}
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '7px', marginBottom: '18px' }}>
                         {prog.highlights.map(h => (
-                          <span key={h} style={{ padding: '5px 10px', background: `${prog.color}10`, border: `1px solid ${prog.color}25`, borderRadius: '8px', fontSize: '12px', color: prog.color }}>
-                            ✓ {h}
+                          <span key={h} style={{ padding: '5px 10px', background: `${prog.color}10`, border: `1px solid ${prog.color}25`, borderRadius: '8px', fontSize: '12px', color: prog.color, display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                            <TickCircle size={9} color={prog.color} variant="Linear" aria-hidden="true" /> {h}
                           </span>
                         ))}
                       </div>
@@ -904,7 +904,7 @@ export default function EligibilityPage() {
                         style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 18px', background: prog.color, color: '#07070F', borderRadius: '10px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', transition: 'opacity 0.15s' }}
                         onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
                         onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
-                        Apply / Learn more <ExternalLink size={12} strokeWidth={2.5} />
+                        Apply / Learn more <ExportSquare size={12} variant="Linear" />
                       </a>
                     </div>
                   )}
@@ -915,7 +915,7 @@ export default function EligibilityPage() {
 
           {results.length === 0 && (
             <div style={{ padding: '40px', textAlign: 'center', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '18px', marginBottom: '28px' }}>
-              <AlertCircle size={32} style={{ color: 'rgba(255,255,255,0.2)', marginBottom: '16px' }} strokeWidth={1} />
+              <InfoCircle size={32} style={{ color: 'rgba(255,255,255,0.2)', marginBottom: '16px' }} variant="Linear" />
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.45)', marginBottom: '8px' }}>
                 Based on your profile, you may not qualify for the programs we track — but free clinic options are still available.
               </p>
@@ -929,12 +929,12 @@ export default function EligibilityPage() {
           {!results.some(r => r.id === 'fqhc') && (
             <Reveal>
               <div style={{ padding: '20px 24px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.15)', borderRadius: '16px', display: 'flex', gap: '16px', alignItems: 'flex-start', marginBottom: '16px' }}>
-                <Stethoscope size={20} style={{ color: 'var(--accent)', marginTop: '2px', flexShrink: 0 }} strokeWidth={1.5} />
+                <Hospital size={20} style={{ color: 'var(--accent)', marginTop: '2px', flexShrink: 0 }} variant="Linear" />
                 <div>
                   <div style={{ fontSize: '15px', fontWeight: 700, color: '#eef4f5', marginBottom: '4px' }}>Free clinics are always available</div>
                   <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.6, marginBottom: '12px' }}>FQHCs serve everyone regardless of income or insurance status — required by federal law.</div>
                   <a href="https://findahealthcenter.hrsa.gov" target="_blank" rel="noopener noreferrer" style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 600, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    Find a clinic near you <ExternalLink size={11} />
+                    Find a clinic near you <ExportSquare size={11} />
                   </a>
                 </div>
               </div>
@@ -946,7 +946,7 @@ export default function EligibilityPage() {
             <button onClick={reset} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 20px', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', color: 'rgba(255,255,255,0.4)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.2)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.7)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.4)' }}>
-              <RefreshCw size={13} /> Start over
+              <RefreshCircle size={13} /> Start over
             </button>
           </div>
         </div>
@@ -958,6 +958,17 @@ export default function EligibilityPage() {
 
   return (
     <AppShell>
+      <style>{`
+        @media (max-width: 768px) {
+          .elig-progress-header { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
+          .elig-step-content { padding: 20px !important; }
+          .elig-tags-row { flex-wrap: wrap !important; }
+        }
+        @media (max-width: 480px) {
+          .elig-step-content { padding: 16px !important; }
+          .elig-options-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
       {/* 5.9 — Structured Data */}
       <JsonLd schema={ELIGIBILITY_FAQ_SCHEMA} id="schema-faq-eligibility" />
       <JsonLd
@@ -973,7 +984,7 @@ export default function EligibilityPage() {
         <section style={{ padding: '60px 24px 48px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
           <div style={{ maxWidth: '680px', margin: '0 auto' }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', borderRadius: '100px', fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.06em', marginBottom: '24px' }}>
-              <ShieldCheck size={10} strokeWidth={1.5} /> ELIGIBILITY WIZARD
+              <ShieldTick size={10} variant="Linear" /> ELIGIBILITY WIZARD
             </span>
             <h1 style={{ fontSize: 'clamp(34px, 6vw, 60px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '20px', color: '#fff' }}>
               Find out what<br />
@@ -984,13 +995,13 @@ export default function EligibilityPage() {
             </p>
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle2 size={13} style={{ color: '#60a5fa' }} strokeWidth={1.5} /> No personal info required
+                <TickCircle size={13} style={{ color: '#60a5fa' }} variant="Linear" /> No personal info required
               </span>
               <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle2 size={13} style={{ color: '#60a5fa' }} strokeWidth={1.5} /> Never stored or shared
+                <TickCircle size={13} style={{ color: '#60a5fa' }} variant="Linear" /> Never stored or shared
               </span>
               <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle2 size={13} style={{ color: '#60a5fa' }} strokeWidth={1.5} /> State-specific thresholds
+                <TickCircle size={13} style={{ color: '#60a5fa' }} variant="Linear" /> State-specific thresholds
               </span>
             </div>
           </div>
@@ -1001,7 +1012,7 @@ export default function EligibilityPage() {
           <div style={{ maxWidth: '660px', margin: '0 auto' }}>
 
             {/* Progress bar */}
-            <div style={{ marginBottom: '40px' }}>
+            <div className="elig-progress-header" style={{ marginBottom: '40px' }}>
               {/* Step dots */}
               <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginBottom: '16px' }}>
                 {STEP_LABELS.map((label, i) => (
@@ -1012,7 +1023,7 @@ export default function EligibilityPage() {
                         background: i < step ? 'var(--accent)' : i === step ? 'rgba(74,144,217,0.15)' : 'transparent',
                       }}>
                         {i < step
-                          ? <Check size={12} color="#07070F" strokeWidth={3} />
+                          ? <TickCircle size={12} color="#07070F" variant="Linear" />
                           : <span style={{ fontSize: '11px', fontWeight: 700, color: i === step ? 'var(--accent)' : 'rgba(255,255,255,0.25)' }}>{i + 1}</span>
                         }
                       </div>
@@ -1029,7 +1040,7 @@ export default function EligibilityPage() {
             </div>
 
             {/* Step card */}
-            <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '24px', padding: 'clamp(24px, 5vw, 40px)' }}>
+            <div className="elig-step-content" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '24px', padding: 'clamp(24px, 5vw, 40px)' }}>
               <div key={`step-${step}`} style={{
                 opacity: 1,
                 animation: `stepIn 0.35s cubic-bezier(0.16,1,0.3,1)`,
@@ -1048,13 +1059,13 @@ export default function EligibilityPage() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '32px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
                   <button onClick={goBack} disabled={step === 0}
                     style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 18px', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', color: step === 0 ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.45)', fontSize: '14px', fontWeight: 600, cursor: step === 0 ? 'not-allowed' : 'pointer', fontFamily: 'inherit', transition: 'all 0.15s' }}>
-                    <ChevronLeft size={14} /> Back
+                    <ArrowLeft2 size={14} /> Back
                   </button>
 
                   <button onClick={goNext} disabled={!canProceed[step]}
                     style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '12px 24px', background: canProceed[step] ? 'var(--accent)' : 'rgba(255,255,255,0.05)', border: 'none', borderRadius: '12px', color: canProceed[step] ? '#07070F' : 'rgba(255,255,255,0.2)', fontSize: '14px', fontWeight: 700, cursor: canProceed[step] ? 'pointer' : 'not-allowed', fontFamily: 'inherit', transition: 'all 0.2s' }}>
                     {step === TOTAL_STEPS - 2 ? 'See my results' : 'Continue'}
-                    <ChevronRight size={14} />
+                    <ArrowRight2 size={14} />
                   </button>
                 </div>
               )}
@@ -1073,14 +1084,14 @@ export default function EligibilityPage() {
               </Reveal>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
                 {[
-                  { name: 'Medicaid',               color: '#60a5fa', desc: 'Full coverage for low-income adults and families. Federal + state.',   icon: <ShieldCheck size={16} strokeWidth={1.5} /> },
-                  { name: 'CHIP',                   color: '#a78bfa', desc: "Children's coverage up to 200–300% FPL depending on your state.",       icon: <Baby size={16} strokeWidth={1.5} /> },
-                  { name: 'ACA Marketplace',        color: '#60a5fa', desc: 'Tax credits that reduce or eliminate monthly premiums for marketplace plans.', icon: <DollarSign size={16} strokeWidth={1.5} /> },
-                  { name: 'FQHC / Free Clinics',    color: 'var(--accent)', desc: 'Federally-funded health centers that serve everyone regardless of income.', icon: <Stethoscope size={16} strokeWidth={1.5} /> },
-                  { name: 'Patient Assist. (PAP)',   color: '#f472b6', desc: 'Free or discounted brand-name medications from pharmaceutical manufacturers.', icon: <Zap size={16} strokeWidth={1.5} /> },
-                  { name: '340B Drug Pricing',       color: '#fbbf24', desc: '25–50% off prescriptions at HRSA-participating clinics.', icon: <RefreshCw size={16} strokeWidth={1.5} /> },
-                  { name: 'Medicare',                color: '#38bdf8', desc: 'Coverage for adults 65+ and qualifying disability recipients.', icon: <Heart size={16} strokeWidth={1.5} /> },
-                  { name: 'SNAP Food Assistance',    color: '#86efac', desc: 'Food benefits that often open a fast track to Medicaid enrollment.',  icon: <TrendingUp size={16} strokeWidth={1.5} /> },
+                  { name: 'Medicaid',               color: '#60a5fa', desc: 'Full coverage for low-income adults and families. Federal + state.',   icon: <ShieldTick size={16} variant="Linear" /> },
+                  { name: 'CHIP',                   color: '#a78bfa', desc: "Children's coverage up to 200–300% FPL depending on your state.",       icon: <Profile size={16} variant="Linear" /> },
+                  { name: 'ACA Marketplace',        color: '#60a5fa', desc: 'Tax credits that reduce or eliminate monthly premiums for marketplace plans.', icon: <DollarCircle size={16} variant="Linear" /> },
+                  { name: 'FQHC / Free Clinics',    color: 'var(--accent)', desc: 'Federally-funded health centers that serve everyone regardless of income.', icon: <Hospital size={16} variant="Linear" /> },
+                  { name: 'Patient Assist. (PAP)',   color: '#f472b6', desc: 'Free or discounted brand-name medications from pharmaceutical manufacturers.', icon: <Flash size={16} variant="Linear" /> },
+                  { name: '340B Drug Pricing',       color: '#fbbf24', desc: '25–50% off prescriptions at HRSA-participating clinics.', icon: <RefreshCircle size={16} variant="Linear" /> },
+                  { name: 'Medicare',                color: '#38bdf8', desc: 'Coverage for adults 65+ and qualifying disability recipients.', icon: <Heart size={16} variant="Linear" /> },
+                  { name: 'SNAP Food Assistance',    color: '#86efac', desc: 'Food benefits that often open a fast track to Medicaid enrollment.',  icon: <TrendUp size={16} variant="Linear" /> },
                 ].map((prog, i) => (
                   <Reveal key={prog.name} delay={i * 50}>
                     <div style={{ padding: '20px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px' }}>
@@ -1097,7 +1108,7 @@ export default function EligibilityPage() {
               {/* Privacy note */}
               <Reveal delay={100}>
                 <div style={{ marginTop: '40px', padding: '20px 24px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.12)', borderRadius: '14px', display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-                  <ShieldCheck size={18} style={{ color: 'var(--accent)', marginTop: '2px', flexShrink: 0 }} strokeWidth={1.5} />
+                  <ShieldTick size={18} style={{ color: 'var(--accent)', marginTop: '2px', flexShrink: 0 }} variant="Linear" />
                   <div>
                     <div style={{ fontSize: '14px', fontWeight: 700, color: '#eef4f5', marginBottom: '4px' }}>100% private — calculated in your browser</div>
                     <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.6 }}>

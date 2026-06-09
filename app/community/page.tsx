@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
-import { Car, MessageCircle, Baby, Heart, Globe, Users, ArrowRight, CheckCircle, Clock, MapPin, Star, Plus, ChevronRight } from 'lucide-react'
+import { Car, MessageCircle, Profile, Heart, Global, Profile2User, ArrowRight, TickCircle, Clock, Location, Star1, AddCircle, ArrowRight2 } from 'iconsax-react'
 
 /* ── Deterministic seed ── */
 function seeded(seed: number) {
@@ -58,8 +58,8 @@ function generateOffers(seed: number): HelpOffer[] {
 const typeConfig: Record<string, { label: string; color: string; bg: string; border: string; icon: React.ReactNode }> = {
   ride: { label: 'Ride Share', color: '#818cf8', bg: 'rgba(129,140,248,0.08)', border: 'rgba(129,140,248,0.25)', icon: <Car size={14} /> },
   nurse: { label: 'Ask a Nurse', color: '#60a5fa', bg: 'rgba(96,165,250,0.08)', border: 'rgba(96,165,250,0.25)', icon: <MessageCircle size={14} /> },
-  childcare: { label: 'Childcare Swap', color: '#f472b6', bg: 'rgba(244,114,182,0.08)', border: 'rgba(244,114,182,0.25)', icon: <Baby size={14} /> },
-  translator: { label: 'Translator', color: '#fb923c', bg: 'rgba(251,146,60,0.08)', border: 'rgba(251,146,60,0.25)', icon: <Globe size={14} /> },
+  childcare: { label: 'Childcare Swap', color: '#f472b6', bg: 'rgba(244,114,182,0.08)', border: 'rgba(244,114,182,0.25)', icon: <Profile size={14} /> },
+  translator: { label: 'Translator', color: '#fb923c', bg: 'rgba(251,146,60,0.08)', border: 'rgba(251,146,60,0.25)', icon: <Global size={14} /> },
   buddy: { label: 'Care Buddy', color: '#fbbf24', bg: 'rgba(251,191,36,0.08)', border: 'rgba(251,191,36,0.25)', icon: <Heart size={14} /> },
 }
 
@@ -77,7 +77,7 @@ const FEATURES = [
     color: '#60a5fa',
   },
   {
-    icon: <Baby size={20} />,
+    icon: <Profile size={20} />,
     title: 'Childcare During Visits',
     desc: 'Parents swap childcare during appointments. You watch theirs Tuesday, they watch yours Thursday.',
     color: '#f472b6',
@@ -89,13 +89,13 @@ const FEATURES = [
     color: '#f87171',
   },
   {
-    icon: <Globe size={20} />,
+    icon: <Global size={20} />,
     title: 'Translator Buddies',
     desc: 'Bilingual community members volunteer to interpret at appointments. 47 languages supported.',
     color: '#fb923c',
   },
   {
-    icon: <Users size={20} />,
+    icon: <Profile2User size={20} />,
     title: 'Bring a Friend',
     desc: 'Pair newcomers with someone who\'s used the same clinic. Makes the first visit 80% less scary.',
     color: '#fbbf24',
@@ -325,13 +325,13 @@ export default function CommunityPage() {
 
                   <div style={{ display: 'flex', gap: '12px', fontSize: '11px', color: 'rgba(255,255,255,0.35)', flexWrap: 'wrap', marginBottom: '14px' }}>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <MapPin size={10} /> {offer.location}
+                      <Location size={10} /> {offer.location}
                     </span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Star size={10} style={{ fill: '#fbbf24', color: '#fbbf24' }} /> {offer.rating}
+                      <Star1 size={10} style={{ fill: '#fbbf24', color: '#fbbf24' }} /> {offer.rating}
                     </span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <CheckCircle size={10} /> {offer.helps} helped
+                      <TickCircle size={10} /> {offer.helps} helped
                     </span>
                   </div>
 
@@ -373,7 +373,7 @@ export default function CommunityPage() {
             border: '1px solid rgba(244,114,182,0.18)',
             textAlign: 'center',
           }}>
-            <Plus size={28} color="#f472b6" style={{ marginBottom: '16px' }} />
+            <AddCircle size={28} color="#f472b6" style={{ marginBottom: '16px' }} />
             <h3 style={{ fontSize: 'clamp(20px, 3vw, 28px)', fontWeight: 700, letterSpacing: '-0.025em', marginBottom: '12px' }}>
               Join the network
             </h3>

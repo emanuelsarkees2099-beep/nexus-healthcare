@@ -1,13 +1,13 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { ChevronRight, MapPin, Heart, Shield, Users, ArrowRight, CheckCircle, Sparkles } from 'lucide-react'
+import { ArrowRight2, Location, Heart, Shield, Profile2User, ArrowRight, TickCircle, MagicStar, Hospital, Health, Activity, Eye, Danger, Buildings2, DollarCircle, Global, Clock, DocumentText, InfoCircle, Car } from 'iconsax-react'
 
 type Question = {
   id: string
   question: string
   subtext: string
-  options: { value: string; label: string; icon: string; insight?: string }[]
+  options: { value: string; label: string; icon: React.ReactNode; insight?: string }[]
   multi?: boolean
 }
 
@@ -17,10 +17,10 @@ const QUESTIONS: Question[] = [
     question: 'What best describes your situation?',
     subtext: 'This helps us find the right programs and clinics for you. You can always change this later.',
     options: [
-      { value: 'uninsured', label: 'I have no health insurance', icon: '🚫', insight: '30.4 million Americans are in the same situation. You are not alone.' },
-      { value: 'underinsured', label: 'My insurance doesn\'t cover enough', icon: '📋', insight: '44% of insured adults are "underinsured." NEXUS can still help with gaps.' },
-      { value: 'transition', label: 'I lost my coverage recently', icon: '⏳', insight: 'You may qualify for special enrollment. We\'ll check for you.' },
-      { value: 'helper', label: 'I\'m helping someone else find care', icon: '💚', insight: 'NEXUS works great for caregivers and family members helping others navigate.' },
+      { value: 'uninsured',    label: 'I have no health insurance',       icon: <Danger size={18} color="currentColor" variant="TwoTone" />,        insight: '30.4 million Americans are in the same situation. You are not alone.' },
+      { value: 'underinsured', label: 'My insurance doesn\'t cover enough', icon: <DocumentText size={18} color="currentColor" variant="TwoTone" />,  insight: '44% of insured adults are "underinsured." NEXUS can still help with gaps.' },
+      { value: 'transition',   label: 'I lost my coverage recently',       icon: <Clock size={18} color="currentColor" variant="TwoTone" />,          insight: 'You may qualify for special enrollment. We\'ll check for you.' },
+      { value: 'helper',       label: 'I\'m helping someone else find care', icon: <Heart size={18} color="currentColor" variant="TwoTone" />,         insight: 'NEXUS works great for caregivers and family members helping others navigate.' },
     ],
   },
   {
@@ -29,14 +29,14 @@ const QUESTIONS: Question[] = [
     subtext: 'Select all that apply.',
     multi: true,
     options: [
-      { value: 'primary', label: 'Primary / preventive care', icon: '🏥' },
-      { value: 'dental', label: 'Dental care', icon: '🦷' },
-      { value: 'mental', label: 'Mental health / therapy', icon: '🧠' },
-      { value: 'vision', label: 'Vision care', icon: '👁️' },
-      { value: 'prescriptions', label: 'Prescription medications', icon: '💊' },
-      { value: 'specialist', label: 'Specialist care', icon: '🔬' },
-      { value: 'pregnancy', label: 'Pregnancy / maternal care', icon: '🤱' },
-      { value: 'emergency', label: 'Emergency / urgent care', icon: '🚨' },
+      { value: 'primary',       label: 'Primary / preventive care',    icon: <Hospital size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'dental',        label: 'Dental care',                  icon: <Health size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'mental',        label: 'Mental health / therapy',      icon: <Activity size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'vision',        label: 'Vision care',                  icon: <Eye size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'prescriptions', label: 'Prescription medications',     icon: <Health size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'specialist',    label: 'Specialist care',              icon: <MagicStar size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'pregnancy',     label: 'Pregnancy / maternal care',    icon: <Heart size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'emergency',     label: 'Emergency / urgent care',      icon: <Danger size={18} color="currentColor" variant="TwoTone" /> },
     ],
   },
   {
@@ -44,10 +44,10 @@ const QUESTIONS: Question[] = [
     question: 'Where are you located?',
     subtext: 'We use this only to find nearby clinics — never stored or shared.',
     options: [
-      { value: 'urban', label: 'In a city', icon: '🏙️', insight: '93% of cities have at least one FQHC within 2 miles.' },
-      { value: 'suburban', label: 'Suburbs', icon: '🏘️', insight: 'Telehealth may expand your options significantly.' },
-      { value: 'rural', label: 'Rural area', icon: '🌾', insight: 'Rural Health Clinics and mobile health units specifically serve your area.' },
-      { value: 'tribal', label: 'Tribal land', icon: '🏔️', insight: 'IHS (Indian Health Service) facilities may be your primary resource.' },
+      { value: 'urban',    label: 'In a city',    icon: <Buildings2 size={18} color="currentColor" variant="TwoTone" />, insight: '93% of cities have at least one FQHC within 2 miles.' },
+      { value: 'suburban', label: 'Suburbs',      icon: <Location size={18} color="currentColor" variant="TwoTone" />,   insight: 'Telehealth may expand your options significantly.' },
+      { value: 'rural',    label: 'Rural area',   icon: <Location size={18} color="currentColor" variant="TwoTone" />,   insight: 'Rural Health Clinics and mobile health units specifically serve your area.' },
+      { value: 'tribal',   label: 'Tribal land',  icon: <Location size={18} color="currentColor" variant="TwoTone" />,   insight: 'IHS (Indian Health Service) facilities may be your primary resource.' },
     ],
   },
   {
@@ -56,14 +56,14 @@ const QUESTIONS: Question[] = [
     subtext: 'This helps us proactively address your specific challenges. No judgment.',
     multi: true,
     options: [
-      { value: 'cost', label: 'Cost / can\'t afford it', icon: '💰' },
-      { value: 'transport', label: 'Transportation', icon: '🚌' },
-      { value: 'language', label: 'Language barrier', icon: '🌍' },
-      { value: 'time', label: 'Work schedule / time', icon: '⏰' },
-      { value: 'fear', label: 'Fear or past bad experience', icon: '😔' },
-      { value: 'documentation', label: 'Concerns about documentation', icon: '📄' },
-      { value: 'knowledge', label: 'Didn\'t know options existed', icon: '❓' },
-      { value: 'none', label: 'None — just exploring', icon: '✨' },
+      { value: 'cost',          label: 'Cost / can\'t afford it',            icon: <DollarCircle size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'transport',     label: 'Transportation',                     icon: <Car size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'language',      label: 'Language barrier',                   icon: <Global size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'time',          label: 'Work schedule / time',               icon: <Clock size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'fear',          label: 'Fear or past bad experience',        icon: <Heart size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'documentation', label: 'Concerns about documentation',       icon: <DocumentText size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'knowledge',     label: 'Didn\'t know options existed',       icon: <InfoCircle size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'none',          label: 'None — just exploring',              icon: <MagicStar size={18} color="currentColor" variant="TwoTone" /> },
     ],
   },
   {
@@ -71,12 +71,12 @@ const QUESTIONS: Question[] = [
     question: 'What language do you prefer?',
     subtext: 'We\'ll filter for providers who speak your language.',
     options: [
-      { value: 'english', label: 'English', icon: '🇺🇸' },
-      { value: 'spanish', label: 'Spanish / Español', icon: '🇲🇽' },
-      { value: 'chinese', label: 'Chinese / 中文', icon: '🇨🇳' },
-      { value: 'arabic', label: 'Arabic / عربي', icon: '🇸🇦' },
-      { value: 'tagalog', label: 'Tagalog / Filipino', icon: '🇵🇭' },
-      { value: 'other', label: 'Other language', icon: '🌐' },
+      { value: 'english', label: 'English',             icon: <Global size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'spanish', label: 'Spanish / Español',   icon: <Global size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'chinese', label: 'Chinese / 中文',       icon: <Global size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'arabic',  label: 'Arabic / عربي',       icon: <Global size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'tagalog', label: 'Tagalog / Filipino',  icon: <Global size={18} color="currentColor" variant="TwoTone" /> },
+      { value: 'other',   label: 'Other language',      icon: <Global size={18} color="currentColor" variant="TwoTone" /> },
     ],
   },
 ]
@@ -187,7 +187,7 @@ export default function OnboardingPage() {
           background: 'radial-gradient(ellipse 70% 50% at 50% 40%, rgba(74,144,217,0.08) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
-        <Sparkles size={40} color="var(--accent)" style={{ marginBottom: '24px' }} />
+        <MagicStar size={40} color="var(--accent)" style={{ marginBottom: '24px' }} />
         <h1 style={{ fontSize: 'clamp(28px,5vw,48px)', fontWeight: 800, letterSpacing: '-0.03em', marginBottom: '16px' }}>
           Your personalized care plan is ready.
         </h1>
@@ -203,7 +203,7 @@ export default function OnboardingPage() {
           gap: '12px', maxWidth: '600px', width: '100%', marginBottom: '40px',
         }}>
           {[
-            { href: '/search', label: 'Find your clinic', icon: <MapPin size={16} />, color: '#60a5fa' },
+            { href: '/search', label: 'Find your clinic', icon: <Location size={16} />, color: '#60a5fa' },
             { href: '/programs', label: 'Check eligibility', icon: <Shield size={16} />, color: '#818cf8' },
             { href: '/triage', label: 'AI symptom check', icon: <Heart size={16} />, color: '#f472b6' },
             { href: '/gps', label: 'Step-by-step guide', icon: <ArrowRight size={16} />, color: '#fbbf24' },
@@ -236,7 +236,7 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div style={{
+    <div className="ob-panel" style={{
       minHeight: '100dvh', display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
       padding: '80px 24px', background: '#0d1117',
@@ -245,6 +245,13 @@ export default function OnboardingPage() {
       <style>{`
         .ob-option:hover { border-color: rgba(74,144,217,0.35) !important; background: rgba(74,144,217,0.04) !important; }
         .ob-option { transition: all 0.18s; }
+        @media (max-width: 600px) {
+          .ob-options-grid { grid-template-columns: 1fr !important; }
+          .ob-option { padding: 12px 14px !important; }
+        }
+        @media (max-width: 480px) {
+          .ob-panel { padding: 20px 16px !important; }
+        }
       `}</style>
 
       <div aria-hidden style={{
@@ -286,14 +293,17 @@ export default function OnboardingPage() {
               fontSize: '13px', color: 'rgba(74,144,217,0.9)', lineHeight: 1.65,
               animation: 'fadeIn 0.4s ease both',
             }}>
-              💡 {activeInsight}
+              <span style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                <InfoCircle size={14} color="rgba(74,144,217,0.9)" variant="TwoTone" style={{ flexShrink: 0, marginTop: '2px' }} aria-hidden="true" />
+                <span>{activeInsight}</span>
+              </span>
             </div>
           )}
 
           <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }`}</style>
 
           {/* Options */}
-          <div style={{
+          <div className="ob-options-grid" style={{
             display: 'grid',
             gridTemplateColumns: q.options.length > 4 ? 'repeat(auto-fill, minmax(240px, 1fr))' : '1fr',
             gap: '8px', marginBottom: '24px',
@@ -311,7 +321,7 @@ export default function OnboardingPage() {
                   cursor: 'pointer', fontFamily: 'inherit', color: 'inherit', width: '100%',
                 }}
               >
-                <span style={{ fontSize: '20px', flexShrink: 0 }}>{opt.icon}</span>
+                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '24px', height: '24px', flexShrink: 0 }}>{opt.icon}</span>
                 <span style={{
                   fontSize: '14px', fontWeight: isSelected(q.id, opt.value) ? 600 : 400,
                   color: isSelected(q.id, opt.value) ? 'var(--accent)' : '#f5f5f5',
@@ -320,7 +330,7 @@ export default function OnboardingPage() {
                   {opt.label}
                 </span>
                 {isSelected(q.id, opt.value) && (
-                  <CheckCircle size={16} color="var(--accent)" style={{ flexShrink: 0 }} />
+                  <TickCircle size={16} color="var(--accent)" style={{ flexShrink: 0 }} />
                 )}
               </button>
             ))}
@@ -340,7 +350,7 @@ export default function OnboardingPage() {
                 display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.2s',
               }}
             >
-              Continue <ChevronRight size={15} />
+              Continue <ArrowRight2 size={15} />
             </button>
           )}
         </div>

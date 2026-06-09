@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import gsap from 'gsap'
 import { registerGSAP } from '@/lib/gsap-st'
+import { ArrowRight } from 'iconsax-react'
 registerGSAP()
 
 const PROGRAMS = [
@@ -89,9 +90,7 @@ export default function Eligibility() {
             }}
           >
             Check my eligibility
-            <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
+            <ArrowRight size={15} color="currentColor" variant="Linear" aria-hidden="true" />
           </Link>
         </div>
 

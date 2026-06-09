@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClientClient } from '@/lib/auth-client'
 import Link from 'next/link'
+import { ArrowLeft, InfoCircle, TickCircle, Save2, Lock, Logout } from 'iconsax-react'
 
 type UserType = 'patient' | 'provider' | 'admin'
 
@@ -39,7 +40,7 @@ function Field({
   label, hint, children,
 }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: '16px', alignItems: 'start', padding: '14px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+    <div className="pf-field" style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: '16px', alignItems: 'start', padding: '14px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
       <div>
         <div style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.65)', fontFamily: 'var(--font-inter)' }}>{label}</div>
         {hint && <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-inter)', marginTop: '2px', lineHeight: 1.5 }}>{hint}</div>}
@@ -168,7 +169,7 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#07070F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ width: 28, height: 28, borderRadius: '50%', border: '2px solid rgba(74,144,217,0.2)', borderTopColor: '#4A8FD4', animation: 'spin 0.8s linear infinite' }} />
         <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
       </div>
@@ -179,7 +180,7 @@ export default function ProfilePage() {
   const typeMeta    = USER_TYPE_META[formData.userType]
 
   return (
-    <div style={{ minHeight: '100vh', background: '#07070F', fontFamily: 'var(--font-inter)' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'var(--font-inter)' }}>
 
       {/* ── Top bar ── */}
       <div style={{
@@ -197,9 +198,7 @@ export default function ProfilePage() {
           onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
           onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.38)')}
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-            <path d="M19 12H5M12 19l-7-7 7-7"/>
-          </svg>
+          <ArrowLeft size={14} color="currentColor" variant="Linear" />
           NEXUS
         </Link>
         <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-mono, monospace)' }}>
@@ -219,8 +218,8 @@ export default function ProfilePage() {
             display: 'flex', alignItems: 'center', gap: '8px',
           }}>
             {error
-              ? <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              : <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+              ? <InfoCircle size={13} color="currentColor" variant="TwoTone" style={{ flexShrink: 0 }} />
+              : <TickCircle size={13} color="currentColor" variant="TwoTone" style={{ flexShrink: 0 }} />
             }
             {error || success}
           </div>
@@ -378,7 +377,7 @@ export default function ProfilePage() {
             {saving ? (
               <><div style={{ width: 12, height: 12, borderRadius: '50%', border: '1.5px solid rgba(74,144,217,0.3)', borderTopColor: 'rgba(74,144,217,0.7)', animation: 'spin 0.7s linear infinite' }} />Saving…</>
             ) : (
-              <><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save changes</>
+              <><Save2 size={13} color="currentColor" variant="TwoTone" />Save changes</>
             )}
           </button>
         </form>
@@ -429,9 +428,7 @@ export default function ProfilePage() {
             onMouseEnter={e => { if (!savingPw && pwData.newPassword) e.currentTarget.style.background = 'rgba(255,255,255,0.07)' }}
             onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)' }}
           >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-            </svg>
+            <Lock size={13} color="currentColor" variant="TwoTone" />
             {savingPw ? 'Updating…' : 'Update password'}
           </button>
         </form>
@@ -453,9 +450,7 @@ export default function ProfilePage() {
               onMouseEnter={e => { e.currentTarget.style.background = 'rgba(248,113,113,0.10)'; e.currentTarget.style.color = 'rgba(248,113,113,0.95)' }}
               onMouseLeave={e => { e.currentTarget.style.background = 'rgba(248,113,113,0.05)'; e.currentTarget.style.color = 'rgba(248,113,113,0.7)' }}
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
-              </svg>
+              <Logout size={13} color="currentColor" variant="TwoTone" />
               Sign out
             </button>
           </div>

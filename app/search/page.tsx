@@ -10,11 +10,11 @@ import { useI18n } from '@/components/I18nContext'
 import { detectIntent, isOpenNow } from '@/lib/search-utils'
 import type { SearchIntent } from '@/lib/search-utils'
 import {
-  Search, MapPin, X, Stethoscope,
-  Heart, Brain, Eye, Pill, Baby,
-  AlertCircle, Map, List, Printer,
-  Clock, Zap, ArrowRight, Loader2,
-} from 'lucide-react'
+  SearchNormal1, Location, CloseCircle, Hospital,
+  Heart, Health, Eye, Profile,
+  InfoCircle, Map, RowVertical, Printer,
+  Clock, Flash, ArrowRight, RefreshCircle, ShieldTick, Global,
+} from 'iconsax-react'
 /* P3 — standardized skeleton */
 import { SkeletonClinicCard, SKELETON_STYLES } from '@/components/ui/Skeleton'
 
@@ -34,12 +34,12 @@ import type { Clinic, AffordabilityLabel } from '@/components/search/ClinicCard'
 /* ── Constants ────────────────────────────────────────────────────── */
 
 const SPECIALTY_FILTERS = [
-  { label: 'All',            icon: <Search size={13} />,      id: 'all'        },
-  { label: 'Primary care',   icon: <Stethoscope size={13} />, id: 'primary'    },
-  { label: 'Mental health',  icon: <Brain size={13} />,       id: 'mental'     },
-  { label: 'Dental',         icon: <Pill size={13} />,        id: 'dental'     },
+  { label: 'All',            icon: <SearchNormal1 size={13} />,      id: 'all'        },
+  { label: 'Primary care',   icon: <Hospital size={13} />, id: 'primary'    },
+  { label: 'Mental health',  icon: <Health size={13} />,       id: 'mental'     },
+  { label: 'Dental',         icon: <Health size={13} />,        id: 'dental'     },
   { label: "Women's health", icon: <Heart size={13} />,       id: 'womens'     },
-  { label: 'Pediatrics',     icon: <Baby size={13} />,        id: 'pediatrics' },
+  { label: 'Pediatrics',     icon: <Profile size={13} />,        id: 'pediatrics' },
   { label: 'Vision',         icon: <Eye size={13} />,         id: 'vision'     },
 ]
 
@@ -68,7 +68,7 @@ function IntentBanner({ intent, onApplySpecialty }: { intent: SearchIntent; onAp
       background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.12)',
       marginBottom: '12px',
     }}>
-      <Zap size={13} color="var(--accent)" />
+      <Flash size={13} color="var(--accent)" />
       <span style={{ fontSize: '12px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', fontWeight: 500 }}>
         Smart search detected:
       </span>
@@ -322,11 +322,11 @@ function SearchResults() {
     : results.length
 
   /* #41 — Rich source attribution badges with tooltips */
-  type SourceBadgeConfig = { label: string; icon: string; tooltip: string; color: string; borderColor: string; bg: string } | null
+  type SourceBadgeConfig = { label: string; icon: React.ReactNode; tooltip: string; color: string; borderColor: string; bg: string } | null
   const sourceBadge: SourceBadgeConfig = source === 'hrsa+nafc'
     ? {
         label: 'FQHC + Free Clinics',
-        icon: '🏥',
+        icon: <Hospital size={9} color="currentColor" variant="TwoTone" aria-hidden="true" />,
         tooltip: 'Results from HRSA-verified Federally Qualified Health Centers AND NAFC-registered free clinics. FQHCs are required by federal law to accept all patients regardless of ability to pay.',
         color: 'var(--accent)',
         borderColor: 'rgba(74,144,217,0.25)',
@@ -335,7 +335,7 @@ function SearchResults() {
     : source === 'hrsa'
     ? {
         label: 'HRSA Verified FQHCs',
-        icon: '🛡️',
+        icon: <ShieldTick size={9} color="currentColor" variant="TwoTone" aria-hidden="true" />,
         tooltip: 'Federally Qualified Health Centers verified by HRSA (Health Resources & Services Administration). All FQHCs receive federal funding and are required to serve every patient on a sliding-scale fee regardless of income.',
         color: '#60a5fa',
         borderColor: 'rgba(96,165,250,0.25)',
@@ -344,7 +344,7 @@ function SearchResults() {
     : source === 'nafc'
     ? {
         label: 'NAFC Free Clinics',
-        icon: '💚',
+        icon: <Heart size={9} color="currentColor" variant="TwoTone" aria-hidden="true" />,
         tooltip: 'Registered members of the National Association of Free & Charitable Clinics (NAFC). These clinics provide free or reduced-cost care to people in financial need.',
         color: 'var(--green-pulse,#4ade80)',
         borderColor: 'rgba(74,222,128,0.25)',
@@ -353,7 +353,7 @@ function SearchResults() {
     : source === 'osm'
     ? {
         label: 'Community-sourced',
-        icon: '🌐',
+        icon: <Global size={9} color="currentColor" variant="TwoTone" aria-hidden="true" />,
         tooltip: 'These clinics were contributed by the OpenStreetMap community. Data may be less verified — always call ahead to confirm.',
         color: '#a78bfa',
         borderColor: 'rgba(167,139,250,0.25)',
@@ -364,8 +364,23 @@ function SearchResults() {
   return (
     <AppShell>
       <style>{SKELETON_STYLES}</style>
+      <style>{`
+        @media (max-width: 768px) {
+          .search-sticky-header { padding: 10px 16px !important; top: 56px !important; }
+          .search-bar-row { flex-direction: column !important; gap: 6px !important; }
+          .search-bar-row > div { min-width: unset !important; width: 100% !important; }
+          .search-bar-row > button { width: 100% !important; padding: 12px !important; font-size: 14px !important; }
+          .sticky-filter-bar { margin: 0 -16px !important; padding-left: 16px !important; padding-right: 16px !important; }
+          .map-split { grid-template-columns: 1fr !important; }
+          .map-split > div:last-child { height: 320px !important; position: relative !important; top: auto !important; }
+        }
+        @media (max-width: 480px) {
+          .filter-pill-track { gap: 4px !important; }
+          .filter-pill { font-size: 11px !important; padding: 6px 12px !important; }
+        }
+      `}</style>
       {/* ── Sticky search header ── */}
-      <div style={{
+      <div className="search-sticky-header" style={{
         position: 'sticky', top: '62px', zIndex: 100,
         background: 'rgba(2,4,9,0.88)', backdropFilter: 'blur(20px)',
         borderBottom: '1px solid var(--border2)',
@@ -384,7 +399,7 @@ function SearchResults() {
                 onFocus={e => (e.currentTarget.style.borderColor = 'var(--border-hi)')}
                 onBlur={e => (e.currentTarget.style.borderColor = 'var(--border)')}
               >
-                <Search size={15} color="var(--text-3)" style={{ flexShrink: 0 }} />
+                <SearchNormal1 size={15} color="var(--text-3)" style={{ flexShrink: 0 }} />
                 <input
                   value={inputVal}
                   onChange={e => setInputVal(e.target.value)}
@@ -393,7 +408,7 @@ function SearchResults() {
                 />
                 {inputVal && (
                   <button type="button" onClick={() => { setInputVal(''); setIntent({}) }} style={{ background: 'rgba(255,255,255,0.06)', border: 'none', borderRadius: '5px', padding: '4px 6px', cursor: 'pointer', color: 'var(--text-3)', display: 'flex' }}>
-                    <X size={12} />
+                    <CloseCircle size={12} />
                   </button>
                 )}
               </div>
@@ -404,7 +419,7 @@ function SearchResults() {
                 background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)',
                 borderRadius: '12px', padding: '4px 14px', minWidth: '150px',
               }}>
-                <MapPin size={13} color="var(--accent)" style={{ flexShrink: 0 }} />
+                <Location size={13} color="var(--accent)" style={{ flexShrink: 0 }} />
                 <input
                   value={locationVal}
                   onChange={e => handleLocationChange(e.target.value)}
@@ -526,7 +541,7 @@ function SearchResults() {
                       display: 'flex', alignItems: 'center', gap: '4px', transition: 'all 0.18s',
                     }}
                   >
-                    {mode === 'list' ? <><List size={12} /> List</> : <><Map size={12} /> Map</>}
+                    {mode === 'list' ? <><RowVertical size={12} /> List</> : <><Map size={12} /> Map</>}
                   </button>
                 ))}
               </div>
@@ -554,9 +569,7 @@ function SearchResults() {
               }}
             >
               {sourceBadge.icon} {sourceBadge.label}
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ opacity: 0.5 }} aria-hidden="true">
-                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-              </svg>
+              <InfoCircle size={9} color="currentColor" variant="TwoTone" style={{ opacity: 0.5 }} aria-hidden="true" />
             </span>
           )}
           {!loading && Object.keys(sourceCounts).length > 0 && (
@@ -571,7 +584,7 @@ function SearchResults() {
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px 120px' }}>
         {fetchError && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 16px', background: 'var(--coral-dim)', border: '1px solid rgba(248,113,113,0.25)', borderRadius: '12px', marginBottom: '20px', color: 'var(--coral)', fontSize: '13px', fontFamily: 'var(--font-inter)' }}>
-            <AlertCircle size={16} /> {fetchError}
+            <InfoCircle size={16} /> {fetchError}
           </div>
         )}
 
@@ -626,7 +639,7 @@ function SearchResults() {
                 onClick={() => { document.querySelector<HTMLInputElement>('input[placeholder*="ZIP"]')?.focus() }}
               >
                 <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
-                  <MapPin size={16} color="var(--accent)" />
+                  <Location size={16} color="var(--accent)" />
                 </div>
                 <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px', fontFamily: 'var(--font-display)' }}>
                   Sliding-scale clinics
@@ -645,7 +658,7 @@ function SearchResults() {
                 borderRadius: '16px', padding: '20px',
               }}>
                 <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(248,113,113,0.10)', border: '1px solid rgba(248,113,113,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
-                  <AlertCircle size={16} color="var(--coral)" />
+                  <InfoCircle size={16} color="var(--coral)" />
                 </div>
                 <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px', fontFamily: 'var(--font-display)' }}>
                   Need help right now?
@@ -700,7 +713,7 @@ function SearchResults() {
         {/* List view — staggered entrance (#13) */}
         {!loading && results.length > 0 && viewMode === 'list' && (
           <>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div className="search-results-bottom-pad" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {pagedResults.map((clinic, i) => (
                 <div
                   key={clinic.id}
@@ -777,7 +790,7 @@ function SearchResults() {
             background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.12)',
             borderRadius: '14px', display: 'flex', alignItems: 'flex-start', gap: '10px',
           }}>
-            <Stethoscope size={15} color="var(--accent)" style={{ marginTop: '2px', flexShrink: 0 }} />
+            <Hospital size={15} color="var(--accent)" style={{ marginTop: '2px', flexShrink: 0 }} />
             <div style={{ fontSize: '12px', color: 'var(--text-2)', lineHeight: 1.75, fontFamily: 'var(--font-inter)' }}>
               <strong style={{ color: 'var(--text)', fontWeight: 600 }}>Results ranked by affordability score.</strong>{' '}
               <span style={{ color: 'var(--accent)' }}>Likely Free</span> = FQHCs and NAFC clinics with sliding-scale or no-cost care.{' '}
@@ -821,9 +834,7 @@ function SearchResults() {
           display: 'flex', alignItems: 'flex-start', gap: '14px',
         }}>
           <div style={{ width: '32px', height: '32px', borderRadius: '9px', background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--accent)' }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
+            <ShieldTick size={14} color="currentColor" variant="TwoTone" />
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '3px' }}>
@@ -852,7 +863,7 @@ export default function SearchPage() {
     <Suspense fallback={
       <AppShell>
         <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Loader2 size={28} color="var(--accent)" style={{ animation: 'spin-slow 0.8s linear infinite' }} />
+          <RefreshCircle size={28} color="var(--accent)" style={{ animation: 'spin-slow 0.8s linear infinite' }} />
         </div>
       </AppShell>
     }>

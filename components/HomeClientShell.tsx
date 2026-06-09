@@ -13,6 +13,7 @@ const ScrollProgress   = dynamic(() => import('@/components/ScrollProgress'),   
 const FloatingCTA      = dynamic(() => import('@/components/FloatingCTA'),      { ssr: false })
 const ExitIntent       = dynamic(() => import('@/components/ExitIntent'),       { ssr: false })
 const CrisisButton     = dynamic(() => import('@/components/CrisisButton'),     { ssr: false })
+const GlobalEffects    = dynamic(() => import('@/components/GlobalEffects'),    { ssr: false })
 
 export default function HomeClientShell() {
   return (
@@ -22,6 +23,7 @@ export default function HomeClientShell() {
       <FloatingCTA />
       <ExitIntent />
       <CrisisButton />
+      <GlobalEffects />
     </>
   )
 }

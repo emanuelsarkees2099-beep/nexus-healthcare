@@ -1,6 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { useI18n } from '@/components/I18nContext'
+import { ArrowDown2 } from 'iconsax-react'
 
 interface UserMenuProps {
   user: { full_name?: string | null; email?: string | null; user_type?: string | null } | null
@@ -65,13 +66,11 @@ export default function UserMenu({ user, showUserMenu, setShowUserMenu, onLogout
           {(user.full_name || user.email || 'U')[0].toUpperCase()}
         </div>
         {user.full_name?.split(' ')[0] || 'Account'}
-        <svg
-          width="10" height="10" viewBox="0 0 10 10" fill="none"
+        <ArrowDown2
+          size={10} color="currentColor" variant="Linear"
           aria-hidden="true"
           style={{ opacity: 0.5, transform: showUserMenu ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}
-        >
-          <path d="M2 3.5l3 3 3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
+        />
       </button>
 
       {showUserMenu && (

@@ -1,8 +1,16 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useI18n } from '@/components/I18nContext'
+import {
+  SearchNormal1, Location, Video, Danger,
+  ReceiptText, ShieldTick, Calendar1, Health,
+  Chart2, TrendUp, Book1, Judge,
+  Profile2User, Heart, Hospital, Buildings,
+  ClipboardText, Speaker, Global, MagicStar,
+  Routing2, Home, CloseCircle, SearchStatus,
+} from 'iconsax-react'
 
 type NavLink = { label: string; href: string }
 
@@ -15,12 +23,71 @@ interface MobileDrawerProps {
   onAnchor: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void
 }
 
+/* Mapping of hrefs to icons */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const LINK_ICONS: Record<string, React.ElementType<any>> = {
+  '/search':      SearchNormal1,
+  '/clinics':     Buildings,
+  '/programs':    ReceiptText,
+  '/pathways':    Routing2,
+  '/eligibility': ShieldTick,
+  '/calendar':    Calendar1,
+  '/medications': Health,
+  '/triage':      ClipboardText,
+  '/gps':         Location,
+  '/telehealth':  Video,
+  '/crisis':      Danger,
+  '/impact':      Chart2,
+  '/outcomes':    TrendUp,
+  '/stories':     Book1,
+  '/editorial':   ClipboardText,
+  '/equity':      Judge,
+  '/chw':         Profile2User,
+  '/community':   Heart,
+  '/provider':    Hospital,
+  '/rights':      ShieldTick,
+  '/advocacy':    Speaker,
+  '/open':        Global,
+  '/wrapped':     MagicStar,
+  '/about':       Global,
+  '/passport':    ShieldTick,
+  '/methodology': SearchStatus,
+  '#features':    Home,
+  '#how':         SearchStatus,
+  '#eligibility': ShieldTick,
+  '#testimonials':Book1,
+}
+
+/* Category groupings for drawer links */
+const CATEGORIES = [
+  { title: 'Find Care',  color: '#4F8EF0', hrefs: ['/search', '/clinics', '/triage', '/gps', '/telehealth', '/crisis'] },
+  { title: 'Programs',   color: '#34D399', hrefs: ['/programs', '/pathways', '/eligibility', '/calendar', '/medications'] },
+  { title: 'Explore',    color: '#A78BFA', hrefs: ['/impact', '/outcomes', '/stories', '/editorial', '/equity'] },
+  { title: 'Community',  color: '#F59E0B', hrefs: ['/chw', '/community', '/provider', '/rights', '/advocacy'] },
+  { title: 'More',       color: '#9CA3AF', hrefs: ['/open', '/passport', '/wrapped', '/about', '/methodology'] },
+]
+
 export default function MobileDrawer({ open, onClose, links, user, onLogout, onAnchor }: MobileDrawerProps) {
-  const { t } = useI18n()
-  const router   = useRouter()
-  const pathname = usePathname()
-  const drawerRef    = useRef<HTMLDivElement>(null)
-  const touchStartX  = useRef(0)
+  const { t }      = useI18n()
+  const router     = useRouter()
+  const pathname   = usePathname()
+  const drawerRef  = useRef<HTMLDivElement>(null)
+  const touchStartX = useRef(0)
+  const [query, setQuery] = useState('')
+
+  /* Build categorized links */
+  const isHome = links.some(l => l.href.startsWith('#'))
+
+  const categorizedLinks = !isHome
+    ? CATEGORIES.map(cat => ({
+        ...cat,
+        items: links.filter(l => cat.hrefs.includes(l.href)),
+      })).filter(cat => cat.items.length > 0)
+    : []
+
+  const filteredLinks = query.trim()
+    ? links.filter(l => l.label.toLowerCase().includes(query.toLowerCase()))
+    : null
 
   /* ── Focus trap ── */
   useEffect(() => {
@@ -64,16 +131,78 @@ export default function MobileDrawer({ open, onClose, links, user, onLogout, onA
     }
   }, [onClose])
 
+  /* Reset search on close */
+  useEffect(() => { if (!open) setQuery('') }, [open])
+
+  const renderLink = (l: NavLink, i: number, color?: string) => {
+    const isActive = !l.href.startsWith('#') && pathname === l.href
+    const IconComp = LINK_ICONS[l.href]
+    const accentColor = color || 'var(--accent)'
+
+    return (
+      <li key={l.href} style={{
+        opacity: open ? 1 : 0,
+        transform: open ? 'translateX(0)' : 'translateX(18px)',
+        transition: open
+          ? `opacity 0.4s ${0.06 + i * 0.03}s cubic-bezier(0.16,1,0.3,1), transform 0.4s ${0.06 + i * 0.03}s cubic-bezier(0.34,1.3,0.64,1)`
+          : 'opacity 0.12s ease, transform 0.12s ease',
+      }}>
+        {l.href.startsWith('#') ? (
+          <a
+            href={l.href}
+            onClick={e => { onAnchor(e, l.href); setQuery('') }}
+            className="drawer-nav-link"
+            style={{
+              display: 'flex', alignItems: 'center', gap: '10px',
+              color: 'rgba(255,255,255,0.65)', fontSize: '14px',
+              fontFamily: 'var(--font-inter)', fontWeight: 400,
+              textDecoration: 'none', padding: '9px 12px', borderRadius: '10px',
+              transition: 'background 0.2s, color 0.2s',
+            }}
+          >
+            {IconComp && <IconComp size={15} variant="Linear" color="rgba(255,255,255,0.35)" />}
+            {l.label}
+          </a>
+        ) : (
+          <Link
+            href={l.href}
+            onClick={() => { onClose(); setQuery('') }}
+            className="drawer-nav-link"
+            style={{
+              display: 'flex', alignItems: 'center', gap: '10px',
+              color: isActive ? '#F8F9FF' : 'rgba(255,255,255,0.65)',
+              fontSize: '14px', fontFamily: 'var(--font-inter)',
+              fontWeight: isActive ? 600 : 400,
+              textDecoration: 'none', padding: '9px 12px', borderRadius: '10px',
+              background: isActive ? `${accentColor}12` : 'transparent',
+              border: isActive ? `1px solid ${accentColor}20` : '1px solid transparent',
+              transition: 'background 0.2s, color 0.2s, border-color 0.2s',
+            }}
+          >
+            {IconComp && (
+              <IconComp
+                size={15}
+                variant={isActive ? 'Bold' : 'Linear'}
+                color={isActive ? accentColor : 'rgba(255,255,255,0.35)'}
+              />
+            )}
+            {l.label}
+          </Link>
+        )}
+      </li>
+    )
+  }
+
   return (
     <>
-      {/* Backdrop overlay */}
+      {/* Backdrop */}
       <div
         aria-hidden="true"
         onClick={onClose}
         style={{
           position: 'fixed', inset: 0, zIndex: 498,
-          background: 'rgba(0,0,0,0.6)',
-          backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
+          background: 'rgba(0,0,0,0.65)',
+          backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
           opacity: open ? 1 : 0,
           pointerEvents: open ? 'auto' : 'none',
           transition: 'opacity 0.35s cubic-bezier(0.32,0.72,0,1)',
@@ -89,25 +218,34 @@ export default function MobileDrawer({ open, onClose, links, user, onLogout, onA
         aria-hidden={!open}
         style={{
           position: 'fixed', top: '10px', right: '10px',
-          width: '290px', zIndex: 499,
-          background: 'rgba(8,10,22,0.97)',
-          backdropFilter: 'blur(48px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(48px) saturate(180%)',
-          border: '1px solid rgba(74,144,217,0.08)',
-          borderRadius: '20px', padding: '20px',
-          boxShadow: '0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04) inset',
-          transform: open ? 'scale(1) translateX(0) translateY(0)' : 'scale(0.92) translateX(24px) translateY(-8px)',
+          width: '310px', maxHeight: 'calc(100dvh - 20px)',
+          overflowY: 'auto', zIndex: 499,
+          background: 'rgba(7,8,18,0.98)',
+          backdropFilter: 'blur(56px) saturate(200%)',
+          WebkitBackdropFilter: 'blur(56px) saturate(200%)',
+          border: '1px solid rgba(255,255,255,0.09)',
+          borderRadius: '20px', padding: '16px',
+          boxShadow: '0 32px 80px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.04) inset',
+          transform: open ? 'scale(1) translateX(0) translateY(0)' : 'scale(0.92) translateX(20px) translateY(-8px)',
           opacity: open ? 1 : 0,
           pointerEvents: open ? 'auto' : 'none',
           transformOrigin: 'top right',
           transition: open
-            ? 'transform 0.5s cubic-bezier(0.34,1.3,0.64,1), opacity 0.3s ease'
-            : 'transform 0.3s cubic-bezier(0.4,0,1,1), opacity 0.2s ease',
+            ? 'transform 0.45s cubic-bezier(0.34,1.3,0.64,1), opacity 0.25s ease'
+            : 'transform 0.28s cubic-bezier(0.4,0,1,1), opacity 0.18s ease',
         }}
       >
-        {/* Drawer header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <span style={{ fontFamily: 'var(--font-orbitron)', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(255,255,255,0.6)', paddingRight: '0.4em' }}>NEXUS</span>
+        {/* ── Header ── */}
+        <div style={{
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          marginBottom: '14px',
+        }}>
+          <span style={{
+            fontFamily: 'var(--font-orbitron)', fontSize: '10px',
+            letterSpacing: '0.4em', color: 'rgba(255,255,255,0.55)', paddingRight: '0.4em',
+          }}>
+            NEXUS
+          </span>
           <button
             onClick={onClose}
             aria-label="Close navigation menu"
@@ -119,75 +257,128 @@ export default function MobileDrawer({ open, onClose, links, user, onLogout, onA
               transition: 'background 0.2s',
             }}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M18 6L6 18M6 6l12 12"/>
-            </svg>
+            <CloseCircle size={14} variant="Linear" />
           </button>
         </div>
 
-        {/* Nav link list */}
-        <ul role="list" style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '2px', margin: '0 0 16px', padding: 0 }}>
-          {links.map((l, i) => {
-            const isActive = !l.href.startsWith('#') && pathname === l.href
-            return (
-              <li key={l.href} style={{
-                opacity: open ? 1 : 0,
-                transform: open ? 'translateX(0)' : 'translateX(18px)',
-                transition: open
-                  ? `opacity 0.45s ${0.08 + i * 0.04}s cubic-bezier(0.16,1,0.3,1), transform 0.45s ${0.08 + i * 0.04}s cubic-bezier(0.34,1.3,0.64,1)`
-                  : 'opacity 0.15s ease, transform 0.15s ease',
-              }}>
-                {l.href.startsWith('#') ? (
-                  <a
-                    href={l.href}
-                    onClick={e => onAnchor(e, l.href)}
-                    className="drawer-nav-link"
-                    style={{ display: 'block', color: 'rgba(255,255,255,0.65)', fontSize: '14px', fontFamily: 'var(--font-inter)', fontWeight: 400, textDecoration: 'none', padding: '10px 12px', borderRadius: '9px', transition: 'background 0.2s, color 0.2s' }}
-                  >{l.label}</a>
-                ) : (
-                  <Link
-                    href={l.href}
-                    onClick={onClose}
-                    className="drawer-nav-link"
-                    style={{ display: 'block', color: isActive ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.65)', fontSize: '14px', fontFamily: 'var(--font-inter)', fontWeight: isActive ? 500 : 400, textDecoration: 'none', padding: '10px 12px', borderRadius: '9px', background: isActive ? 'rgba(255,255,255,0.07)' : 'transparent', transition: 'background 0.2s, color 0.2s' }}
-                  >{l.label}</Link>
-                )}
-              </li>
-            )
-          })}
-        </ul>
-
-        {/* Auth section */}
+        {/* ── Search bar ── */}
         <div style={{
-          borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '14px',
-          opacity: open ? 1 : 0, transform: open ? 'translateY(0)' : 'translateY(8px)',
+          position: 'relative', marginBottom: '16px',
+          opacity: open ? 1 : 0,
+          transform: open ? 'translateY(0)' : 'translateY(-6px)',
+          transition: 'opacity 0.3s 0.05s, transform 0.3s 0.05s cubic-bezier(0.16,1,0.3,1)',
+        }}>
+          <SearchNormal1
+            size={13}
+            variant="Linear"
+            color="rgba(255,255,255,0.3)"
+            style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
+          />
+          <input
+            type="text"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Search pages…"
+            style={{
+              width: '100%', boxSizing: 'border-box',
+              background: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: '10px', padding: '9px 12px 9px 34px',
+              color: 'rgba(255,255,255,0.85)', fontSize: '13px',
+              fontFamily: 'var(--font-inter)',
+              outline: 'none', transition: 'border-color 0.2s, background 0.2s',
+            }}
+            className="drawer-search"
+          />
+          {query && (
+            <button
+              onClick={() => setQuery('')}
+              style={{
+                position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)',
+                background: 'none', border: 'none', cursor: 'pointer', padding: '2px',
+                color: 'rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center',
+              }}
+            >
+              <CloseCircle size={13} variant="Linear" />
+            </button>
+          )}
+        </div>
+
+        {/* ── Link content ── */}
+        {filteredLinks ? (
+          /* Search results */
+          <ul role="list" style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '2px', margin: '0 0 16px', padding: 0 }}>
+            {filteredLinks.length > 0
+              ? filteredLinks.map((l, i) => renderLink(l, i))
+              : (
+                <li style={{ padding: '16px 12px', color: 'rgba(255,255,255,0.3)', fontSize: '13px', fontFamily: 'var(--font-inter)', textAlign: 'center' }}>
+                  No pages found
+                </li>
+              )
+            }
+          </ul>
+        ) : isHome ? (
+          /* Home anchor links */
+          <ul role="list" style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '2px', margin: '0 0 16px', padding: 0 }}>
+            {links.map((l, i) => renderLink(l, i))}
+          </ul>
+        ) : (
+          /* Categorized app links */
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '16px' }}>
+            {categorizedLinks.map(cat => (
+              <div key={cat.title}>
+                <div style={{
+                  fontSize: '9px', fontWeight: 700, letterSpacing: '0.12em',
+                  textTransform: 'uppercase', color: cat.color,
+                  marginBottom: '4px', paddingLeft: '12px',
+                  fontFamily: 'var(--font-inter)',
+                }}>
+                  {cat.title}
+                </div>
+                <ul role="list" style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1px', margin: 0, padding: 0 }}>
+                  {cat.items.map((l, i) => renderLink(l, i, cat.color))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* ── Auth section ── */}
+        <div style={{
+          borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '12px',
+          opacity: open ? 1 : 0,
+          transform: open ? 'translateY(0)' : 'translateY(8px)',
           transition: 'opacity 0.3s 0.22s, transform 0.3s 0.22s cubic-bezier(0.32,0.72,0,1)',
-          display: 'flex', flexDirection: 'column', gap: '8px',
+          display: 'flex', flexDirection: 'column', gap: '6px',
         }}>
           {user ? (
             <>
-              <div style={{ padding: '8px 12px', borderRadius: '9px', background: 'rgba(74,144,217,0.08)', marginBottom: '2px' }}>
+              <div style={{
+                padding: '9px 12px', borderRadius: '10px',
+                background: 'rgba(79,142,240,0.08)', marginBottom: '2px',
+                border: '1px solid rgba(79,142,240,0.12)',
+              }}>
                 <div style={{ fontSize: '12px', fontWeight: 600, color: '#eef4f5' }}>{user.full_name || 'User'}</div>
-                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>{user.email}</div>
+                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '1px' }}>{user.email}</div>
               </div>
               <button
                 onClick={() => { onClose(); router.push('/dashboard') }}
-                style={{ width: '100%', background: 'rgba(255,255,255,0.93)', color: '#08081a', border: 'none', borderRadius: '10px', padding: '12px', fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}
+                style={{ width: '100%', background: 'rgba(255,255,255,0.93)', color: '#08081a', border: 'none', borderRadius: '10px', padding: '11px', fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', transition: 'transform 0.2s' }}
               >{t('nav.dashboard')}</button>
               <button
                 onClick={() => { onClose(); onLogout() }}
-                style={{ width: '100%', background: 'rgba(255,107,107,0.1)', color: '#ff6b6b', border: '1px solid rgba(255,107,107,0.25)', borderRadius: '10px', padding: '11px', fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}
+                style={{ width: '100%', background: 'rgba(255,107,107,0.08)', color: '#ff6b6b', border: '1px solid rgba(255,107,107,0.20)', borderRadius: '10px', padding: '10px', fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}
               >{t('nav.signOut')}</button>
             </>
           ) : (
             <>
               <button
                 onClick={() => { onClose(); router.push('/login') }}
-                style={{ width: '100%', background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.8)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '10px', padding: '11px', fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 500, cursor: 'pointer' }}
+                style={{ width: '100%', background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.8)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '10px', padding: '10px', fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 500, cursor: 'pointer' }}
               >{t('nav.signIn')}</button>
               <button
                 onClick={() => { onClose(); router.push('/signup') }}
-                style={{ width: '100%', background: 'rgba(255,255,255,0.93)', color: '#08081a', border: 'none', borderRadius: '10px', padding: '12px', fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}
+                style={{ width: '100%', background: 'rgba(255,255,255,0.94)', color: '#08081a', border: 'none', borderRadius: '10px', padding: '11px', fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}
               >{t('nav.getStarted')}</button>
             </>
           )}
@@ -196,7 +387,19 @@ export default function MobileDrawer({ open, onClose, links, user, onLogout, onA
 
       <style>{`
         .drawer-close-btn:hover { background: rgba(255,255,255,0.12) !important; }
-        .drawer-nav-link:hover { background: rgba(255,255,255,0.06) !important; color: rgba(255,255,255,0.95) !important; }
+        .drawer-nav-link:hover {
+          background: rgba(255,255,255,0.06) !important;
+          color: rgba(255,255,255,0.95) !important;
+          border-color: rgba(255,255,255,0.06) !important;
+        }
+        .drawer-search:focus {
+          border-color: rgba(79,142,240,0.4) !important;
+          background: rgba(79,142,240,0.06) !important;
+        }
+        .drawer-search::placeholder { color: rgba(255,255,255,0.25); }
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
       `}</style>
     </>
   )

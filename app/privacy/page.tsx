@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
-import { Shield, Eye, Lock, Database, AlertCircle, CheckCircle, ChevronDown } from 'lucide-react'
+import { Shield, Eye, Lock, Data, InfoCircle, TickCircle, ArrowDown2 } from 'iconsax-react'
 
 const pill: React.CSSProperties = {
   display: 'inline-flex', alignItems: 'center', gap: '6px',
@@ -15,7 +15,7 @@ const pill: React.CSSProperties = {
 const SECTIONS = [
   {
     id: 'what-we-collect',
-    icon: <Database size={18} strokeWidth={1.5} />,
+    icon: <Data size={18} variant="Linear" />,
     title: 'What We Collect',
     content: `NEXUS is built on a core principle: we collect the minimum possible data to give you the best results.
 
@@ -31,7 +31,7 @@ We do not collect: Social Security numbers, health records, medical history, bio
   },
   {
     id: 'how-we-use',
-    icon: <Eye size={18} strokeWidth={1.5} />,
+    icon: <Eye size={18} variant="Linear" />,
     title: 'How We Use Your Data',
     content: `Your data is used exclusively to deliver the service you asked for.
 
@@ -45,7 +45,7 @@ Account data (if you create one) is used to pre-fill forms, save searches, and p
   },
   {
     id: 'third-parties',
-    icon: <Shield size={18} strokeWidth={1.5} />,
+    icon: <Shield size={18} variant="Linear" />,
     title: 'Third-Party Services',
     content: `NEXUS integrates with the following third-party services:
 
@@ -61,7 +61,7 @@ We do not use: Google Analytics, Facebook Pixel, advertising trackers, behaviora
   },
   {
     id: 'cookies',
-    icon: <Lock size={18} strokeWidth={1.5} />,
+    icon: <Lock size={18} variant="Linear" />,
     title: 'Cookies & Local Storage',
     content: `NEXUS uses minimal cookies and local storage.
 
@@ -75,7 +75,7 @@ You can clear all NEXUS local data by clearing your browser's storage for this d
   },
   {
     id: 'your-rights',
-    icon: <CheckCircle size={18} strokeWidth={1.5} />,
+    icon: <TickCircle size={18} variant="Linear" />,
     title: 'Your Rights',
     content: `You have the right to:
 
@@ -97,7 +97,7 @@ To exercise any right: email privacy@nexushealth.org with "Privacy Request" in t
   },
   {
     id: 'security',
-    icon: <AlertCircle size={18} strokeWidth={1.5} />,
+    icon: <InfoCircle size={18} variant="Linear" />,
     title: 'Security',
     content: `We take reasonable and industry-standard measures to protect your data.
 
@@ -127,7 +127,7 @@ export default function PrivacyPage() {
         }} />
 
         <div style={{ ...pill, marginBottom: '24px' }}>
-          <Lock size={10} strokeWidth={1.5} /> Privacy Policy
+          <Lock size={10} variant="Linear" /> Privacy Policy
         </div>
 
         <h1 style={{
@@ -159,10 +159,10 @@ export default function PrivacyPage() {
             gap: '12px',
           }}>
             {[
-              { icon: <Shield size={16} strokeWidth={1.5} />, label: 'Zero data sold', desc: 'We have never sold user data and never will' },
-              { icon: <Eye size={16} strokeWidth={1.5} />,    label: 'No ad trackers', desc: 'Zero third-party advertising or behavioral tracking' },
-              { icon: <Lock size={16} strokeWidth={1.5} />,   label: 'Anonymous by default', desc: 'Most features work without any account' },
-              { icon: <Database size={16} strokeWidth={1.5} />, label: 'Minimum collection', desc: 'We only store what the service requires' },
+              { icon: <Shield size={16} variant="Linear" />, label: 'Zero data sold', desc: 'We have never sold user data and never will' },
+              { icon: <Eye size={16} variant="Linear" />,    label: 'No ad trackers', desc: 'Zero third-party advertising or behavioral tracking' },
+              { icon: <Lock size={16} variant="Linear" />,   label: 'Anonymous by default', desc: 'Most features work without any account' },
+              { icon: <Data size={16} variant="Linear" />, label: 'Minimum collection', desc: 'We only store what the service requires' },
             ].map(item => (
               <div key={item.label} style={{
                 padding: '20px', borderRadius: '16px',
@@ -233,8 +233,9 @@ export default function PrivacyPage() {
                     </div>
                     <span style={{ fontSize: '15px', fontWeight: 600 }}>{sec.title}</span>
                   </div>
-                  <ChevronDown
+                  <ArrowDown2
                     size={16}
+                    variant="Linear"
                     style={{
                       flexShrink: 0, color: 'rgba(255,255,255,0.4)',
                       transform: openSection === sec.id ? 'rotate(180deg)' : 'none',

@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
-import { TrendingUp, CheckCircle, Clock, Zap, GitBranch, Globe, MessageSquare, ArrowRight, ExternalLink } from 'lucide-react'
+import { TrendUp, TickCircle, Clock, Flash, Routing, Global, MessageSquare, ArrowRight, ExportSquare, ArrowDown2, Lock, Heart, People, DocumentText } from 'iconsax-react'
 
 function useReveal(threshold = 0.12) {
   const ref = useRef<HTMLDivElement>(null)
@@ -138,11 +138,13 @@ const ROADMAP = [
   },
 ]
 
-const PRINCIPLES = [
-  { icon: '🔒', title: 'Privacy first', body: 'No ads. No data brokers. No selling anything ever. Everything you do is anonymous unless you create an account.' },
-  { icon: '🆓', title: 'Free forever', body: 'NEXUS will never charge patients. Funded by grants and mission-driven partners who believe in health equity.' },
-  { icon: '📊', title: 'Radical transparency', body: 'Every metric we publish is audited. Every methodology change is versioned. You\'re looking at it right now.' },
-  { icon: '🤝', title: 'Community-built', body: 'Clinics are verified by community members. Stories are real people. Improvement requests come from patients.' },
+type PrincipleIconType = React.ComponentType<{ size?: number; color?: string; variant?: 'Bold' | 'Linear' | 'Outline' | 'Broken' | 'Bulk' | 'TwoTone' }>
+
+const PRINCIPLES: Array<{ Icon: PrincipleIconType; title: string; body: string }> = [
+  { Icon: Lock,    title: 'Privacy first',         body: 'No ads. No data brokers. No selling anything ever. Everything you do is anonymous unless you create an account.' },
+  { Icon: Heart,   title: 'Free forever',           body: 'NEXUS will never charge patients. Funded by grants and mission-driven partners who believe in health equity.' },
+  { Icon: TrendUp, title: 'Radical transparency',  body: 'Every metric we publish is audited. Every methodology change is versioned. You\'re looking at it right now.' },
+  { Icon: People,  title: 'Community-built',        body: 'Clinics are verified by community members. Stories are real people. Improvement requests come from patients.' },
 ]
 
 const STATS = [
@@ -169,7 +171,7 @@ export default function OpenPage() {
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(74,144,217,0.07) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
         <Reveal>
-          <div style={{ ...pill, marginBottom: '24px' }}><GitBranch size={10} strokeWidth={1.5} /> Open Roadmap</div>
+          <div style={{ ...pill, marginBottom: '24px' }}><Routing size={10} variant="Linear" /> Open Roadmap</div>
         </Reveal>
         <Reveal delay={80}>
           <h1 style={{ fontSize: 'clamp(36px, 6.5vw, 76px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.08, marginBottom: '24px', maxWidth: '720px' }}>
@@ -206,18 +208,23 @@ export default function OpenPage() {
             </div>
           </Reveal>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
-            {PRINCIPLES.map((p, i) => (
+            {PRINCIPLES.map((p, i) => {
+              const PIcon = p.Icon
+              return (
               <Reveal key={p.title} delay={i * 80}>
                 <div style={{ padding: '28px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '20px', height: '100%', transition: 'border-color 0.3s, background 0.3s' }}
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,144,217,0.2)'; (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.03)' }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.06)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)' }}
                 >
-                  <div style={{ fontSize: '28px', marginBottom: '14px' }}>{p.icon}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.15)', marginBottom: '14px' }}>
+                    <PIcon size={20} color="var(--accent)" variant="TwoTone" aria-hidden="true" />
+                  </div>
                   <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '10px' }}>{p.title}</h3>
                   <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, margin: 0 }}>{p.body}</p>
                 </div>
               </Reveal>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
@@ -227,7 +234,7 @@ export default function OpenPage() {
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <Reveal>
             <div style={{ marginBottom: '56px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><TrendingUp size={10} strokeWidth={1.5} /> Roadmap</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><TrendUp size={10} variant="Linear" /> Roadmap</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Where we're headed</h2>
             </div>
           </Reveal>
@@ -254,16 +261,21 @@ export default function OpenPage() {
                         border: `1px solid ${r.status === 'live' ? r.color + '33' : r.status === 'building' ? 'rgba(252,211,77,0.25)' : 'rgba(255,255,255,0.08)'}`,
                         color: r.status === 'live' ? r.color : r.status === 'building' ? '#FCD34D' : 'rgba(255,255,255,0.35)',
                         fontFamily: 'var(--font-inter)',
+                        display: 'inline-flex', alignItems: 'center', gap: '4px',
                       }}>
-                        {r.status === 'live' ? '✓ Live' : r.status === 'building' ? '⚡ Building' : '○ Planned'}
+                        {r.status === 'live'
+                          ? <><TickCircle size={9} variant="Bold" aria-hidden="true" /> Live</>
+                          : r.status === 'building'
+                            ? <><Flash size={9} variant="Bold" aria-hidden="true" /> Building</>
+                            : <>○ Planned</>}
                       </span>
                     </div>
                     <h3 style={{ fontSize: '17px', fontWeight: 700, marginBottom: '16px' }}>{r.title}</h3>
                     <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                       {r.items.map(item => (
                         <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '13px', color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)' }}>
-                          <span style={{ color: r.status === 'live' ? r.color : r.status === 'building' ? '#FCD34D' : 'rgba(255,255,255,0.2)', flexShrink: 0, marginTop: '2px' }}>
-                            {r.status === 'live' ? '✓' : r.status === 'building' ? '·' : '○'}
+                          <span style={{ color: r.status === 'live' ? r.color : r.status === 'building' ? '#FCD34D' : 'rgba(255,255,255,0.2)', flexShrink: 0, marginTop: '2px', display: 'flex', alignItems: 'center' }}>
+                            {r.status === 'live' ? <TickCircle size={10} variant="Bold" aria-hidden="true" /> : r.status === 'building' ? '·' : '○'}
                           </span>
                           {item}
                         </li>
@@ -282,7 +294,7 @@ export default function OpenPage() {
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <Reveal>
             <div style={{ marginBottom: '56px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><Clock size={10} strokeWidth={1.5} /> Changelog</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Clock size={10} variant="Linear" /> Changelog</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>What we've shipped</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.4)', marginTop: '16px', lineHeight: 1.65 }}>Every release, every improvement, in reverse chronological order.</p>
             </div>
@@ -325,7 +337,7 @@ export default function OpenPage() {
                         fontFamily: 'var(--font-inter)', letterSpacing: '0.06em', flexShrink: 0,
                       }}>{entry.tag}</span>
                       <div style={{ color: 'rgba(255,255,255,0.3)', transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s', flexShrink: 0 }}>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m6 9 6 6 6-6"/></svg>
+                        <ArrowDown2 size={14} color="currentColor" variant="Linear" />
                       </div>
                     </button>
                     <div style={{ maxHeight: isOpen ? '600px' : '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.16,1,0.3,1)' }}>
@@ -365,7 +377,7 @@ export default function OpenPage() {
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <Reveal>
             <div style={{ marginBottom: '48px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><ExternalLink size={10} strokeWidth={1.5} /> Open API</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><ExportSquare size={10} variant="Linear" /> Open API</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '16px' }}>
                 Use our data
               </h2>
@@ -461,7 +473,7 @@ export default function OpenPage() {
                     </span>
                   </div>
 
-                  <div style={{ padding: '24px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                  <div className="open-rate-grid" style={{ padding: '24px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                     {/* Parameters */}
                     <div>
                       <div style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '12px', fontFamily: 'var(--font-inter)' }}>
@@ -522,24 +534,26 @@ export default function OpenPage() {
               }}>
                 {[
                   {
-                    icon: '⚡',
+                    Icon: Flash,
                     title: 'Rate limits',
                     color: '#fbbf24',
                     body: 'Public endpoints: 60 req/min. Research tier (free for non-profits & health departments): 600 req/min. Email data@nexus.health for a research key.',
                   },
                   {
-                    icon: '📐',
+                    Icon: Global,
                     title: 'Data methodology',
                     color: '#a78bfa',
                     body: 'Primary sources: HRSA\'s 1,400+ FQHCs, NAFC registry, state health department feeds, and community-submitted clinics. Data refreshed every 4 hours. Affordability scores use a 5-factor model published in our GitHub repo.',
                   },
                   {
-                    icon: '📜',
+                    Icon: DocumentText,
                     title: 'License',
                     color: '#60a5fa',
                     body: 'Clinic data is CC-BY 4.0. Attribution required: "Data sourced from NEXUS Health (nexus.health), HRSA, and NAFC." Commercial use restricted — contact us.',
                   },
-                ].map(card => (
+                ].map(card => {
+                  const CardIcon = card.Icon
+                  return (
                   <div
                     key={card.title}
                     style={{
@@ -547,11 +561,14 @@ export default function OpenPage() {
                       background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
                     }}
                   >
-                    <div style={{ fontSize: '22px', marginBottom: '10px' }}>{card.icon}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '9px', background: `${card.color}14`, border: `1px solid ${card.color}25`, marginBottom: '10px' }}>
+                      <CardIcon size={18} color={card.color} variant="TwoTone" aria-hidden="true" />
+                    </div>
                     <div style={{ fontSize: '14px', fontWeight: 700, marginBottom: '8px', color: card.color }}>{card.title}</div>
                     <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, margin: 0, fontFamily: 'var(--font-inter)' }}>{card.body}</p>
                   </div>
-                ))}
+                  )
+                })}
               </div>
             </Reveal>
           </div>
@@ -563,7 +580,7 @@ export default function OpenPage() {
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <Reveal>
             <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><MessageSquare size={10} strokeWidth={1.5} /> Get involved</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><MessageSquare size={10} variant="Linear" /> Get involved</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '16px' }}>
                 Help us build this
               </h2>
@@ -575,9 +592,9 @@ export default function OpenPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
             {[
-              { icon: <CheckCircle size={18} strokeWidth={1.5} />, title: 'Submit a feature request', body: 'Have an idea that could help someone get care? Tell us.', href: '/advocacy', color: '#4A90D9', cta: 'Submit idea' },
-              { icon: <Globe size={18} strokeWidth={1.5} />, title: 'Verify or add a clinic', body: 'Know a free clinic that isn\'t in our database? Help us add it.', href: '/search', color: '#60A5FA', cta: 'Add clinic' },
-              { icon: <Zap size={18} strokeWidth={1.5} />, title: 'Share your story', body: 'Your experience navigating care without insurance can help someone else.', href: '/stories', color: '#A78BFA', cta: 'Share story' },
+              { icon: <TickCircle size={18} variant="Linear" />, title: 'Submit a feature request', body: 'Have an idea that could help someone get care? Tell us.', href: '/advocacy', color: '#4A90D9', cta: 'Submit idea' },
+              { icon: <Global size={18} variant="Linear" />, title: 'Verify or add a clinic', body: 'Know a free clinic that isn\'t in our database? Help us add it.', href: '/search', color: '#60A5FA', cta: 'Add clinic' },
+              { icon: <Flash size={18} variant="Linear" />, title: 'Share your story', body: 'Your experience navigating care without insurance can help someone else.', href: '/stories', color: '#A78BFA', cta: 'Share story' },
             ].map((card, i) => (
               <Reveal key={card.title} delay={i * 80}>
                 <a href={card.href} style={{ textDecoration: 'none' }}>
@@ -595,7 +612,7 @@ export default function OpenPage() {
                     <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px', color: 'var(--text)' }}>{card.title}</h3>
                     <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.6, marginBottom: '16px' }}>{card.body}</p>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 600, color: card.color }}>
-                      {card.cta} <ArrowRight size={13} strokeWidth={2} />
+                      {card.cta} <ArrowRight size={13} variant="Linear" />
                     </div>
                   </div>
                 </a>

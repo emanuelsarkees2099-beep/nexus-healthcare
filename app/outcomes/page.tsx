@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
 import { smoothScrollTo } from '@/utils/smoothScroll'
-import { BarChart2, TrendingUp, BookOpen, Star, ArrowRight, Sparkles, Users, Clock, DollarSign, ChevronRight } from 'lucide-react'
+import { Chart2, TrendUp, Book1, Star1, ArrowRight, MagicStar, Profile2User, Clock, DollarCircle, ArrowRight2 } from 'iconsax-react'
 import { useLiveStats } from '@/hooks/useLiveStats'
 import { submitForm } from '@/utils/submitForm'
 
@@ -98,9 +98,9 @@ const BASELINES: Record<string, number> = {
 }
 
 const HERO_STATS_STATIC = [
-  { key: 'total',    prefix: '',  suffix: '',  decimals: 0, label: 'Total cases submitted',  icon: <BarChart2 size={15} strokeWidth={1.5} />, fallback: 0 },
-  { key: 'users',    prefix: '',  suffix: '',  decimals: 0, label: 'People served',          icon: <Users size={15} strokeWidth={1.5} />,    fallback: 0 },
-  { key: 'resolved', prefix: '',  suffix: '',  decimals: 0, label: 'Cases resolved',         icon: <TrendingUp size={15} strokeWidth={1.5} />, fallback: 0 },
+  { key: 'total',    prefix: '',  suffix: '',  decimals: 0, label: 'Total cases submitted',  icon: <Chart2 size={15} variant="Linear" />, fallback: 0 },
+  { key: 'users',    prefix: '',  suffix: '',  decimals: 0, label: 'People served',          icon: <Profile2User size={15} variant="Linear" />,    fallback: 0 },
+  { key: 'resolved', prefix: '',  suffix: '',  decimals: 0, label: 'Cases resolved',         icon: <TrendUp size={15} variant="Linear" />, fallback: 0 },
 ]
 
 const CHART_DATA = [
@@ -164,7 +164,7 @@ function OutcomeForm() {
   if (submitted) return (
     <div style={{ textAlign: 'center', padding: '40px 0', animation: 'fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both' }}>
       <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(96,165,250,0.12)', border: '1px solid rgba(96,165,250,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#60a5fa' }}>
-        <Star size={20} strokeWidth={1.5} />
+        <Star1 size={20} variant="Linear" />
       </div>
       <p style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px' }}>Thank you for logging your outcome</p>
       <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.38)' }}>Your feedback directly improves matches for the next person.</p>
@@ -200,8 +200,10 @@ function OutcomeForm() {
               onClick={() => setRating(n)}
               onMouseEnter={() => setHovered(n)}
               onMouseLeave={() => setHovered(0)}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '2px', fontSize: '28px', lineHeight: 1, transition: 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1)', transform: (hovered || rating) >= n ? 'scale(1.18)' : 'scale(1)' }}
-            >{(hovered || rating) >= n ? '★' : '☆'}</button>
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '2px', lineHeight: 1, transition: 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1)', transform: (hovered || rating) >= n ? 'scale(1.18)' : 'scale(1)', display: 'flex', alignItems: 'center' }}
+            >
+              <Star1 size={28} color={(hovered || rating) >= n ? '#fbbf24' : 'rgba(255,255,255,0.2)'} variant={(hovered || rating) >= n ? 'Bold' : 'Linear'} aria-hidden="true" />
+            </button>
           ))}
         </div>
       </div>
@@ -274,6 +276,15 @@ export default function OutcomesPage() {
 
   return (
     <AppShell>
+      <style>{`
+        @media (max-width: 768px) {
+          .outcomes-hero-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .outcomes-split { grid-template-columns: 1fr !important; gap: 24px !important; }
+        }
+        @media (max-width: 480px) {
+          .outcomes-hero-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
 
       {/* ── HERO ─────────────────────────────────────── */}
       <section style={{ minHeight: '85dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '80px 24px 60px', position: 'relative' }}>
@@ -281,7 +292,7 @@ export default function OutcomesPage() {
 
         <div style={{ maxWidth: '740px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}>
-            <span style={pill}><BarChart2 size={10} strokeWidth={1.5} /> Health outcomes</span>
+            <span style={pill}><Chart2 size={10} variant="Linear" /> Health outcomes</span>
           </div>
           <h1 style={{ fontSize: 'clamp(40px, 7vw, 78px)', fontWeight: 700, lineHeight: 1.08, letterSpacing: '-0.03em', marginBottom: '22px' }}>
             Real results.<br />Real people.
@@ -291,7 +302,7 @@ export default function OutcomesPage() {
           </p>
 
           {/* hero stats grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', maxWidth: '680px', margin: '0 auto' }}>
+          <div className="outcomes-hero-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', maxWidth: '680px', margin: '0 auto' }}>
             {HERO_STATS_STATIC.map((s, i) => {
               const live = (stats[s.key as keyof typeof stats] as number) ?? s.fallback
               const liveValue = (BASELINES[s.key] ?? 0) + live
@@ -313,9 +324,9 @@ export default function OutcomesPage() {
       <section style={{ padding: '80px 24px' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center' }}>
+            <div className="outcomes-split" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center' }}>
               <div>
-                <span style={pill}><TrendingUp size={10} strokeWidth={1.5} /> Growth</span>
+                <span style={pill}><TrendUp size={10} variant="Linear" /> Growth</span>
                 <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', marginBottom: '16px', lineHeight: 1.15 }}>
                   Users accessing care, month by month
                 </h2>
@@ -349,7 +360,7 @@ export default function OutcomesPage() {
       <section style={{ padding: '0 24px 80px' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center' }}>
+            <div className="outcomes-split" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center' }}>
               <div style={{ ...card }}>
                 <h3 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '24px', color: 'rgba(255,255,255,0.7)' }}>Care type breakdown</h3>
                 {CARE_BREAKDOWN.map((c, i) => (
@@ -366,7 +377,7 @@ export default function OutcomesPage() {
               </div>
 
               <div>
-                <span style={pill}><Sparkles size={10} strokeWidth={1.5} /> By the numbers</span>
+                <span style={pill}><MagicStar size={10} variant="Linear" /> By the numbers</span>
                 <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', marginBottom: '16px', lineHeight: 1.2 }}>
                   What care are people actually getting?
                 </h2>
@@ -374,7 +385,7 @@ export default function OutcomesPage() {
                   Primary care leads — but mental health and dental are growing fastest as NEXUS surfaces providers people didn't know existed.
                 </p>
                 <a href="#log" onClick={(e) => { e.preventDefault(); const el = document.getElementById('log'); smoothScrollTo(el) }} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: 'var(--accent)', textDecoration: 'none', fontWeight: 500 }}>
-                  Log your own outcome <ChevronRight size={13} strokeWidth={2} />
+                  Log your own outcome <ArrowRight2 size={13} variant="Linear" />
                 </a>
               </div>
             </div>
@@ -388,7 +399,7 @@ export default function OutcomesPage() {
           <RevealBlock>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '48px', flexWrap: 'wrap', gap: '16px' }}>
               <div>
-                <span style={pill}><BookOpen size={10} strokeWidth={1.5} /> Research</span>
+                <span style={pill}><Book1 size={10} variant="Linear" /> Research</span>
                 <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>What the data shows</h2>
               </div>
               <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)', maxWidth: '280px', lineHeight: 1.6 }}>Peer-reviewed studies from independent institutions using anonymized NEXUS outcome data.</p>
@@ -420,7 +431,7 @@ export default function OutcomesPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '52px' }}>
-              <span style={pill}><Star size={10} strokeWidth={1.5} /> Stories</span>
+              <span style={pill}><Star1 size={10} variant="Linear" /> Stories</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px' }}>
                 Behind every stat is a person
               </h2>
@@ -431,8 +442,8 @@ export default function OutcomesPage() {
             {TESTIMONIALS.map((t, i) => (
               <RevealBlock key={t.name} delay={i * 90}>
                 <div style={{ ...card, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <div style={{ fontSize: '13px', color: 'rgba(74,144,217,0.6)', marginBottom: '14px' }}>
-                    {'★'.repeat(5)}
+                  <div style={{ display: 'flex', gap: '2px', marginBottom: '14px' }}>
+                    {[1,2,3,4,5].map(s => <Star1 key={s} size={13} color="#4A90D9" variant="Bold" aria-hidden="true" />)}
                   </div>
                   <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, flexGrow: 1, marginBottom: '20px' }}>"{t.quote}"</p>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -454,7 +465,7 @@ export default function OutcomesPage() {
         <div style={{ maxWidth: '600px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '44px' }}>
-              <span style={pill}><Sparkles size={10} strokeWidth={1.5} /> Help others</span>
+              <span style={pill}><MagicStar size={10} variant="Linear" /> Help others</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', marginBottom: '12px' }}>Log your outcome</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65 }}>
                 Your experience improves the AI model for the next person. It takes 60 seconds.

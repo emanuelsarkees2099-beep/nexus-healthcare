@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
-import { BookOpen, Clock, ArrowRight, TrendingUp, Search, X } from 'lucide-react'
+import { Book1, Clock, ArrowRight, TrendUp, SearchNormal1, CloseCircle, Location, Buildings2 } from 'iconsax-react'
 
 function useReveal(threshold = 0.12) {
   const ref = useRef<HTMLDivElement>(null)
@@ -230,7 +230,7 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
             onMouseLeave={e => (e.currentTarget.style.background = `${article.color}15`)}
           >
             {expanded ? 'Collapse' : 'Read full story'}
-            <ArrowRight size={13} strokeWidth={2} style={{ transform: expanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.3s' }} />
+            <ArrowRight size={13} variant="Linear" style={{ transform: expanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.3s' }} />
           </button>
           <div style={{ marginTop: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)' }}>
             By {article.author}
@@ -258,7 +258,7 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ fontSize: '10px', fontWeight: 700, padding: '3px 10px', borderRadius: '100px', background: `${article.color}15`, border: `1px solid ${article.color}33`, color: article.color, fontFamily: 'var(--font-inter)', letterSpacing: '0.07em', textTransform: 'uppercase' }}>{article.tag}</span>
           <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Clock size={10} strokeWidth={2} /> {article.readTime}
+            <Clock size={10} variant="Linear" /> {article.readTime}
           </span>
         </div>
 
@@ -292,7 +292,7 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
           onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
         >
           {expanded ? 'Collapse' : 'Read more'}
-          <ArrowRight size={12} strokeWidth={2} style={{ transform: expanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.3s' }} />
+          <ArrowRight size={12} variant="Linear" style={{ transform: expanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.3s' }} />
         </button>
       </div>
 
@@ -327,7 +327,7 @@ export default function EditorialPage() {
       }}>
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(74,144,217,0.08) 0%, transparent 65%)', pointerEvents: 'none' }} />
         <Reveal>
-          <div style={{ ...pill, marginBottom: '24px' }}><BookOpen size={10} strokeWidth={1.5} /> Editorial</div>
+          <div style={{ ...pill, marginBottom: '24px' }}><Book1 size={10} variant="Linear" /> Editorial</div>
         </Reveal>
         <Reveal delay={80}>
           <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.08, marginBottom: '20px', maxWidth: '700px', margin: '0 auto 20px' }}>
@@ -373,7 +373,7 @@ export default function EditorialPage() {
 
               {/* Search box */}
               <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '100px', padding: '8px 14px', transition: 'border-color 0.2s' }}>
-                <Search size={13} strokeWidth={2} color="rgba(255,255,255,0.4)" />
+                <SearchNormal1 size={13} variant="Linear" color="rgba(255,255,255,0.4)" />
                 <input
                   type="search"
                   placeholder="Search articles…"
@@ -383,7 +383,7 @@ export default function EditorialPage() {
                 />
                 {search && (
                   <button onClick={() => setSearch('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', padding: '0', display: 'flex' }}>
-                    <X size={12} />
+                    <CloseCircle size={12} />
                   </button>
                 )}
               </div>
@@ -408,7 +408,9 @@ export default function EditorialPage() {
             </div>
           ) : (
             <div style={{ textAlign: 'center', padding: '60px 24px', color: 'rgba(255,255,255,0.4)' }}>
-              <div style={{ fontSize: '32px', marginBottom: '12px' }}>📰</div>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
+                <Book1 size={36} color="rgba(255,255,255,0.4)" variant="TwoTone" aria-hidden="true" />
+              </div>
               <div style={{ fontSize: '16px', fontWeight: 600, marginBottom: '8px', color: 'var(--text)' }}>No articles found</div>
               <div style={{ fontSize: '14px' }}>Try a different search term or category.</div>
             </div>
@@ -419,7 +421,7 @@ export default function EditorialPage() {
             <div style={{ marginTop: '80px', marginBottom: '48px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '24px' }}>
                 <div>
-                  <div style={{ ...pill, marginBottom: '12px' }}>📍 City Guides</div>
+                  <div style={{ ...pill, marginBottom: '12px' }}><Location size={10} variant="TwoTone" aria-hidden="true" /> City Guides</div>
                   <h2 style={{ fontSize: 'clamp(20px, 3vw, 30px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>Free care, by city</h2>
                   <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)', marginTop: '6px', lineHeight: 1.5 }}>
                     Guides to navigating free and low-cost healthcare in the cities where the need is greatest.
@@ -428,14 +430,14 @@ export default function EditorialPage() {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '12px' }}>
                 {[
-                  { city: 'Houston, TX',        zip: '77001', clinics: 148, pop: '2.3M uninsured', color: '#4A90D9', flag: '🏙️' },
-                  { city: 'Phoenix, AZ',         zip: '85001', clinics: 112, pop: '1.1M uninsured', color: '#A78BFA', flag: '🌵' },
-                  { city: 'Los Angeles, CA',     zip: '90001', clinics: 203, pop: '2.8M uninsured', color: '#FB923C', flag: '🌴' },
-                  { city: 'Dallas, TX',          zip: '75201', clinics: 97,  pop: '0.9M uninsured', color: '#60A5FA', flag: '⭐' },
-                  { city: 'Miami, FL',           zip: '33101', clinics: 88,  pop: '0.7M uninsured', color: '#F472B6', flag: '🌊' },
-                  { city: 'Chicago, IL',         zip: '60601', clinics: 134, pop: '1.2M uninsured', color: '#FCD34D', flag: '🌆' },
-                  { city: 'New York, NY',        zip: '10001', clinics: 187, pop: '1.5M uninsured', color: '#4ADE80', flag: '🗽' },
-                  { city: 'San Antonio, TX',     zip: '78201', clinics: 79,  pop: '0.6M uninsured', color: '#F87171', flag: '🤠' },
+                  { city: 'Houston, TX',        zip: '77001', clinics: 148, pop: '2.3M uninsured', color: '#4A90D9' },
+                  { city: 'Phoenix, AZ',         zip: '85001', clinics: 112, pop: '1.1M uninsured', color: '#A78BFA' },
+                  { city: 'Los Angeles, CA',     zip: '90001', clinics: 203, pop: '2.8M uninsured', color: '#FB923C' },
+                  { city: 'Dallas, TX',          zip: '75201', clinics: 97,  pop: '0.9M uninsured', color: '#60A5FA' },
+                  { city: 'Miami, FL',           zip: '33101', clinics: 88,  pop: '0.7M uninsured', color: '#F472B6' },
+                  { city: 'Chicago, IL',         zip: '60601', clinics: 134, pop: '1.2M uninsured', color: '#FCD34D' },
+                  { city: 'New York, NY',        zip: '10001', clinics: 187, pop: '1.5M uninsured', color: '#4ADE80' },
+                  { city: 'San Antonio, TX',     zip: '78201', clinics: 79,  pop: '0.6M uninsured', color: '#F87171' },
                 ].map(g => (
                   <a
                     key={g.city}
@@ -452,7 +454,9 @@ export default function EditorialPage() {
                       onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = `${g.color}33`; el.style.background = `${g.color}06`; el.style.transform = 'translateY(-2px)' }}
                       onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(255,255,255,0.07)'; el.style.background = 'rgba(255,255,255,0.02)'; el.style.transform = 'translateY(0)' }}
                     >
-                      <div style={{ fontSize: '20px', marginBottom: '8px' }}>{g.flag}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                        <Buildings2 size={22} color={g.color} variant="TwoTone" aria-hidden="true" />
+                      </div>
                       <div style={{ fontSize: '14px', fontWeight: 700, marginBottom: '4px', color: 'var(--text)' }}>{g.city}</div>
                       <div style={{ fontSize: '11px', color: g.color, fontWeight: 600, fontFamily: 'var(--font-mono)' }}>{g.clinics} free clinics</div>
                       <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', marginTop: '2px' }}>{g.pop}</div>
@@ -479,7 +483,7 @@ export default function EditorialPage() {
                 flexWrap: 'wrap', gap: '32px',
               }}>
                 <div>
-                  <div style={{ ...pill, marginBottom: '16px' }}><TrendingUp size={10} strokeWidth={1.5} /> Pitch us</div>
+                  <div style={{ ...pill, marginBottom: '16px' }}><TrendUp size={10} variant="Linear" /> Pitch us</div>
                   <h2 style={{ fontSize: 'clamp(22px, 3vw, 34px)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '12px' }}>Have a story to tell?</h2>
                   <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.45)', maxWidth: '440px', lineHeight: 1.65 }}>
                     We publish first-person healthcare navigation stories, policy analysis, and community guides. If you've navigated the system and learned something, we want to hear from you.
@@ -495,7 +499,7 @@ export default function EditorialPage() {
                   onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.03)')}
                   onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
                 >
-                  Submit your story <ArrowRight size={13} strokeWidth={2} />
+                  Submit your story <ArrowRight size={13} variant="Linear" />
                 </a>
               </div>
             </div>

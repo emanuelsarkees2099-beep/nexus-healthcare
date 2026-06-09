@@ -69,9 +69,9 @@ let nextConfig: NextConfig = {
   reactStrictMode: true,
 
   experimental: {
-    /* P4: Tree-shake lucide-react and gsap so only the named exports
+    /* P4: Tree-shake icon libraries and gsap so only the named exports
        that are actually imported end up in the JS bundle. */
-    optimizePackageImports: ['lucide-react', 'gsap'],
+    optimizePackageImports: ['iconsax-react', 'gsap'],
   },
 
   async headers() {

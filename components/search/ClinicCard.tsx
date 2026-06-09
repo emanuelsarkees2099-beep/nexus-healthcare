@@ -21,10 +21,11 @@
 import Link from 'next/link'
 import { useState, useCallback } from 'react'
 import {
-  MapPin, Phone, Globe, Bookmark, BookmarkCheck,
-  Loader2, Navigation, Clock, Zap, ArrowRight,
-  CalendarDays, Share2, Check, Star, X,
-} from 'lucide-react'
+  Location, Call, Global, Bookmark2,
+  RefreshCircle, Routing, Clock, Flash, ArrowRight,
+  Calendar1, ExportSquare, TickCircle, Star1, CloseCircle,
+  Message, ShieldTick,
+} from 'iconsax-react'
 import { useI18n } from '@/components/I18nContext'
 import AffordabilityBar from '@/components/AffordabilityBar'
 import { isOpenNow, computeEquityScore } from '@/lib/search-utils'
@@ -144,13 +145,15 @@ function ReviewModal({
             aria-label="Close review"
             style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', padding: '2px' }}
           >
-            <X size={18} />
+            <CloseCircle size={18} variant="Linear" />
           </button>
         </div>
 
         {done ? (
           <div style={{ textAlign: 'center', padding: '20px 0' }}>
-            <div style={{ fontSize: '32px', marginBottom: '10px' }}>🙏</div>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
+              <TickCircle size={40} color="#4ade80" variant="TwoTone" aria-hidden="true" />
+            </div>
             <div style={{ fontSize: '15px', fontWeight: 600, marginBottom: '6px' }}>Thank you!</div>
             <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-inter)' }}>
               Your review helps other uninsured patients find trusted care.
@@ -174,7 +177,7 @@ function ReviewModal({
                     transform: s <= (hover || stars) ? 'scale(1.18)' : 'scale(1)',
                   }}
                 >
-                  <Star size={28} fill={s <= (hover || stars) ? '#fbbf24' : 'none'} />
+                  <Star1 size={28} variant={s <= (hover || stars) ? 'Bold' : 'Linear'} color={s <= (hover || stars) ? '#fbbf24' : 'rgba(255,255,255,0.2)'} />
                 </button>
               ))}
             </div>
@@ -320,7 +323,7 @@ export default function ClinicCard({
     setTimeout(() => setBookmarkAnimating(false), 550)
     onBookmark(clinic)
     if (!isSaved) {
-      toast({ title: 'Clinic saved!', body: `${clinic.name} added to your list.`, variant: 'success', icon: <BookmarkCheck size={14} /> })
+      toast({ title: 'Clinic saved!', body: `${clinic.name} added to your list.`, variant: 'success', icon: <Bookmark2 size={14} variant="Bold" /> })
     }
   }, [saving, isSaved, clinic, onBookmark, toast])
 
@@ -359,7 +362,7 @@ export default function ClinicCard({
               {clinic.name}
             </Link>
             <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, color: 'var(--text-3)' }}>
-              <MapPin size={11} color="var(--text-3)" />
+              <Location size={11} color="var(--text-3)" variant="Linear" />
               {[clinic.address, clinic.city, clinic.state].filter(Boolean).join(', ') || 'Address unavailable'}
             </div>
           </div>
@@ -382,10 +385,10 @@ export default function ClinicCard({
               }}
             >
               {saving
-                ? <Loader2 size={14} style={{ animation: 'spin-slow 0.8s linear infinite' }} />
+                ? <RefreshCircle size={14} variant="Linear" style={{ animation: 'spin-slow 0.8s linear infinite' }} />
                 : isSaved
-                  ? <BookmarkCheck size={14} style={{ transition: 'transform 0.3s cubic-bezier(0.34,1.56,0.64,1)', transform: bookmarkAnimating ? 'scale(1.4)' : 'scale(1)' }} />
-                  : <Bookmark size={14} />
+                  ? <Bookmark2 size={14} variant="Bold" style={{ transition: 'transform 0.3s cubic-bezier(0.34,1.56,0.64,1)', transform: bookmarkAnimating ? 'scale(1.4)' : 'scale(1)' }} />
+                  : <Bookmark2 size={14} variant="Linear" />
               }
             </button>
 
@@ -402,7 +405,7 @@ export default function ClinicCard({
                 display: 'flex', alignItems: 'center', transition: 'all 0.18s',
               }}
             >
-              {shareCopied ? <Check size={14} /> : <Share2 size={14} />}
+              {shareCopied ? <TickCircle size={14} variant="Linear" /> : <ExportSquare size={14} variant="Linear" />}
             </button>
 
             {clinic.phone && (
@@ -415,7 +418,7 @@ export default function ClinicCard({
                 onMouseDown={e => (e.currentTarget.style.transform = 'scale(0.96)')}
                 onMouseUp={e => (e.currentTarget.style.transform = 'scale(1)')}
               >
-                <Phone size={12} /> {t('search.call')}
+                <Call size={12} variant="Linear" /> {t('search.call')}
               </a>
             )}
 
@@ -437,7 +440,7 @@ export default function ClinicCard({
                 onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,222,128,0.14)')}
                 onMouseLeave={e => (e.currentTarget.style.background = 'rgba(74,222,128,0.08)')}
               >
-                <CalendarDays size={12} /> Book
+                <Calendar1 size={12} variant="Linear" /> Book
               </button>
             )}
 
@@ -446,7 +449,7 @@ export default function ClinicCard({
               target="_blank" rel="noopener noreferrer"
               style={{ background: 'var(--accent)', color: 'var(--bg)', borderRadius: 9, padding: '8px 14px', fontSize: 12, fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}
             >
-              {clinic.url ? <><Globe size={12} /> {t('search.visit')}</> : <><Navigation size={12} /> {t('search.directions')}</>}
+              {clinic.url ? <><Global size={12} variant="Linear" /> {t('search.visit')}</> : <><Routing size={12} variant="Linear" /> {t('search.directions')}</>}
             </a>
           </div>
         </div>
@@ -461,12 +464,12 @@ export default function ClinicCard({
           )}
           {openStatus === false && (
             <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>
-              <Clock size={11} /> {t('search.closed')}
+              <Clock size={11} variant="Linear" /> {t('search.closed')}
             </span>
           )}
           {clinic.accepting && (
             <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--accent)', fontFamily: 'var(--font-inter)', fontWeight: 500 }}>
-              <Zap size={11} /> {t('search.accepting')}
+              <Flash size={11} variant="Linear" /> {t('search.accepting')}
             </span>
           )}
           {clinic.distance && (
@@ -480,7 +483,7 @@ export default function ClinicCard({
                 animation: parseFloat(String(clinic.distance)) < 1 ? 'distance-nearby-pulse 2s ease-in-out infinite' : 'none',
               }}
             >
-              <MapPin size={11} /> {clinic.distance} mi
+              <Location size={11} variant="Linear" /> {clinic.distance} mi
             </span>
           )}
           {clinic.phone && (
@@ -498,9 +501,7 @@ export default function ClinicCard({
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 600, letterSpacing: '0.04em', color: '#a78bfa', background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.22)', padding: '2px 8px', borderRadius: 5, fontFamily: 'var(--font-inter)', cursor: 'help' }}
               title="This clinic offers care in your language"
             >
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-              </svg>
+              <Message size={9} color="currentColor" variant="Linear" />
               Language match
             </span>
           )}
@@ -513,9 +514,7 @@ export default function ClinicCard({
             <span title="Federally Qualified Health Center — verified by HRSA. Required by law to accept all patients regardless of ability to pay."
               style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 600, letterSpacing: '0.04em', color: '#60A5FA', background: 'rgba(96,165,250,0.08)', border: '1px solid rgba(96,165,250,0.2)', padding: '2px 8px', borderRadius: 5, fontFamily: 'var(--font-inter)', cursor: 'help' }}
             >
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              </svg>
+              <ShieldTick size={9} color="currentColor" variant="Linear" />
               HRSA Verified
             </span>
           )}
@@ -523,9 +522,7 @@ export default function ClinicCard({
             <span title="This clinic accepts uninsured patients. No insurance card required."
               style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 600, color: '#60A5FA', background: 'rgba(96,165,250,0.07)', border: '1px solid rgba(96,165,250,0.2)', padding: '2px 8px', borderRadius: 5, fontFamily: 'var(--font-inter)', cursor: 'help' }}
             >
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
+              <TickCircle size={9} color="currentColor" variant="Linear" />
               Accepts uninsured
             </span>
           )}
@@ -579,9 +576,7 @@ export default function ClinicCard({
                 cursor: 'help',
               }}
             >
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-              </svg>
+              <Clock size={9} color="currentColor" variant="Linear" aria-hidden="true" />
               {freshness.label}
             </span>
           </div>
@@ -595,7 +590,7 @@ export default function ClinicCard({
             onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
           >
-            {t('search.viewDetails')} <ArrowRight size={10} />
+            {t('search.viewDetails')} <ArrowRight size={10} variant="Linear" />
           </Link>
           <Link
             href="/verify"
@@ -620,11 +615,11 @@ export default function ClinicCard({
               onMouseEnter={e => (e.currentTarget.style.color = '#fbbf24')}
               onMouseLeave={e => (e.currentTarget.style.color = 'rgba(251,191,36,0.65)')}
             >
-              <Star size={10} fill="currentColor" /> Rate this clinic
+              <Star1 size={10} variant="Bold" /> Rate this clinic
             </button>
           ) : (
             <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.2)', fontFamily: 'var(--font-inter)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-              <Star size={10} fill="#fbbf24" color="#fbbf24" /> Reviewed ✓
+              <Star1 size={10} variant="Bold" color="#fbbf24" /> Reviewed ✓
             </span>
           )}
         </div>

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 const TRENDING = [
   'Free dental Phoenix',
@@ -58,7 +58,7 @@ export default function TrendingCarousel({ onSelect }: TrendingCarouselProps) {
                 border: '1px solid var(--border2)',
                 borderRadius: '100px', padding: '4px 12px',
                 cursor: 'pointer', whiteSpace: 'nowrap',
-                fontFamily: 'var(--font-inter)', fontWeight: 300,
+                fontFamily: 'var(--font-inter)', fontWeight: 400,
                 transition: 'color 0.2s, border-color 0.2s, background 0.2s',
               }}
             >
@@ -70,3 +70,4 @@ export default function TrendingCarousel({ onSelect }: TrendingCarouselProps) {
     </div>
   )
 }
+

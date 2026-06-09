@@ -1,0 +1,991 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - navigation "Main navigation" [ref=e3]:
+    - link "NEXUS — home" [ref=e4] [cursor=pointer]:
+      - /url: "#"
+      - img [ref=e5]
+      - generic [ref=e10]: NEXUS
+    - list [ref=e11]:
+      - listitem [ref=e12]:
+        - link "Features" [ref=e13] [cursor=pointer]:
+          - /url: "#features"
+      - listitem [ref=e14]:
+        - link "How it works" [ref=e15] [cursor=pointer]:
+          - /url: "#how"
+      - listitem [ref=e16]:
+        - link "Eligibility" [ref=e17] [cursor=pointer]:
+          - /url: "#eligibility"
+      - listitem [ref=e18]:
+        - link "Stories" [ref=e19] [cursor=pointer]:
+          - /url: "#testimonials"
+    - generic [ref=e20]:
+      - button "Open command palette (⌘K)" [ref=e21] [cursor=pointer]:
+        - img [ref=e22]
+        - generic [ref=e25]: ⌘K
+      - button "Notifications" [ref=e27] [cursor=pointer]:
+        - img [ref=e28]
+      - button "Open settings" [ref=e31] [cursor=pointer]:
+        - img [ref=e32]
+      - generic [ref=e35]:
+        - button "Sign in" [ref=e36] [cursor=pointer]
+        - button "Get started" [ref=e37] [cursor=pointer]
+  - dialog:
+    - generic:
+      - generic: NEXUS
+      - button:
+        - img
+    - list:
+      - listitem:
+        - link:
+          - /url: "#features"
+          - text: Features
+      - listitem:
+        - link:
+          - /url: "#how"
+          - text: How it works
+      - listitem:
+        - link:
+          - /url: "#eligibility"
+          - text: Eligibility
+      - listitem:
+        - link:
+          - /url: "#testimonials"
+          - text: Stories
+    - generic:
+      - button: Sign in
+      - button: Get started
+  - main [ref=e38]:
+    - region [ref=e39]:
+      - generic [ref=e40]:
+        - generic [ref=e41]: Free. Private. No insurance required.
+        - heading [level=1] [ref=e43]
+        - generic [ref=e46]:
+          - generic [ref=e48]: Trending
+          - list "Trending healthcare searches" [ref=e51]:
+            - listitem [ref=e52] [cursor=pointer]: Free dental Phoenix
+            - listitem [ref=e53] [cursor=pointer]: Insulin help NYC
+            - listitem [ref=e54] [cursor=pointer]: Mental health LA
+            - listitem [ref=e55] [cursor=pointer]: Pediatrics Chicago
+            - listitem [ref=e56] [cursor=pointer]: Vaccines Houston
+            - listitem [ref=e57] [cursor=pointer]: Eye care Miami
+            - listitem [ref=e58] [cursor=pointer]: Cardiology Seattle
+            - listitem [ref=e59] [cursor=pointer]: Dental Dallas
+            - listitem [ref=e60] [cursor=pointer]: OB/GYN Austin
+            - listitem [ref=e61] [cursor=pointer]: Walk-in Denver
+            - listitem [ref=e62] [cursor=pointer]: Free dental Phoenix
+            - listitem [ref=e63] [cursor=pointer]: Insulin help NYC
+            - listitem [ref=e64] [cursor=pointer]: Mental health LA
+            - listitem [ref=e65] [cursor=pointer]: Pediatrics Chicago
+            - listitem [ref=e66] [cursor=pointer]: Vaccines Houston
+            - listitem [ref=e67] [cursor=pointer]: Eye care Miami
+            - listitem [ref=e68] [cursor=pointer]: Cardiology Seattle
+            - listitem [ref=e69] [cursor=pointer]: Dental Dallas
+            - listitem [ref=e70] [cursor=pointer]: OB/GYN Austin
+            - listitem [ref=e71] [cursor=pointer]: Walk-in Denver
+    - region "Key statistics" [ref=e72]:
+      - generic [ref=e73]:
+        - generic [ref=e74]:
+          - generic "Loading…" [ref=e76]
+          - generic [ref=e77]: Free clinics indexed
+        - generic [ref=e78]:
+          - generic "Loading…" [ref=e80]
+          - generic [ref=e81]: Stories & submissions
+        - generic [ref=e82]:
+          - generic [ref=e83]: "48"
+          - generic [ref=e84]: Languages supported
+        - generic [ref=e85]:
+          - generic [ref=e86]: $0
+          - generic [ref=e87]: Cost to use NEXUS
+    - generic [ref=e88]:
+      - generic [ref=e89]:
+        - generic [ref=e90]: Impact metrics
+        - heading "The difference NEXUS makes" [level=2] [ref=e92]
+        - paragraph [ref=e93]: Finding free care used to mean hours of calls and dead ends.
+      - generic [ref=e94]:
+        - generic [ref=e95]: Metric
+        - generic [ref=e96]: Before
+        - generic [ref=e98]: With NEXUS
+      - generic [ref=e100]:
+        - generic [ref=e101]: Calls to find a clinic
+        - generic [ref=e102]: 0 calls
+        - img [ref=e103]
+        - generic [ref=e105]: 0.0 calls
+        - generic [ref=e106]: ↑ 12×
+      - generic [ref=e107]:
+        - generic [ref=e108]: Time to appointment
+        - generic [ref=e109]: 0 days
+        - img [ref=e110]
+        - generic [ref=e112]: 0 hours
+        - generic [ref=e113]: ↑ 36×
+      - generic [ref=e114]:
+        - generic [ref=e115]: Out-of-pocket cost
+        - generic [ref=e116]: $0
+        - img [ref=e117]
+        - generic [ref=e119]: $0 to $40
+        - generic [ref=e120]: ↑ 98%
+      - generic [ref=e121]:
+        - generic [ref=e122]: Patients who found care
+        - generic [ref=e123]: 0 %
+        - img [ref=e124]
+        - generic [ref=e126]: 0 %
+        - generic [ref=e127]: ↑ 2.7×
+      - paragraph [ref=e128]: Based on internal platform data and published research on uninsured patient care-seeking behavior.
+    - region "Built for people the system overlooked" [ref=e129]:
+      - generic [ref=e130]:
+        - generic [ref=e131]: What NEXUS offers
+        - heading "Built for people the system overlooked" [level=2] [ref=e132]:
+          - text: Built for people the
+          - text: system
+          - emphasis [ref=e133]: overlooked
+        - paragraph [ref=e134]: "Every feature was designed around one question: what does an uninsured adult actually need to get care today?"
+      - list [ref=e135]:
+        - link "Clinic Finder 12,000+ federally qualified health centers, free clinics, and sliding-scale providers — searchable by specialty, language, and wait time. Core feature 3 clinics · Phoenix, AZ Clinica Adelante 1.2 mi Valle del Sol Health 2.8 mi Mountain Park Health 4.1 mi" [ref=e136] [cursor=pointer]:
+          - /url: /search
+          - listitem [ref=e137]:
+            - img [ref=e139]
+            - generic [ref=e142]: Clinic Finder
+            - generic [ref=e143]: 12,000+ federally qualified health centers, free clinics, and sliding-scale providers — searchable by specialty, language, and wait time.
+            - generic [ref=e144]: Core feature
+            - generic [ref=e145]:
+              - generic [ref=e148]: 3 clinics · Phoenix, AZ
+              - generic [ref=e150]:
+                - generic [ref=e152]: Clinica Adelante
+                - generic [ref=e153]: 1.2 mi
+              - generic [ref=e154]:
+                - generic [ref=e156]: Valle del Sol Health
+                - generic [ref=e157]: 2.8 mi
+              - generic [ref=e158]:
+                - generic [ref=e160]: Mountain Park Health
+                - generic [ref=e161]: 4.1 mi
+        - link "Smart Care Pathways Predicts which clinic will actually see you based on your symptoms, location, and situation — then routes you there. Symptom Triage Clinic Match Appointment Smart routing Explore feature" [ref=e162] [cursor=pointer]:
+          - /url: /pathways
+          - listitem [ref=e163]:
+            - generic [ref=e164]:
+              - img [ref=e166]
+              - generic [ref=e178]:
+                - generic [ref=e179]: Smart Care Pathways
+                - generic [ref=e180]: Predicts which clinic will actually see you based on your symptoms, location, and situation — then routes you there.
+                - generic [ref=e181]:
+                  - generic [ref=e182]:
+                    - generic [ref=e183]: Symptom
+                    - img [ref=e184]
+                  - generic [ref=e186]:
+                    - generic [ref=e187]: Triage
+                    - img [ref=e188]
+                  - generic [ref=e190]:
+                    - generic [ref=e191]:
+                      - img [ref=e192]
+                      - text: Clinic Match
+                    - img [ref=e195]
+                  - generic [ref=e198]: Appointment
+                - generic [ref=e199]:
+                  - generic [ref=e200]: Smart routing
+                  - generic [ref=e201]:
+                    - text: Explore feature
+                    - img [ref=e202]
+        - link "40+ Programs checked Medicaid, ACA, HRSA — scanned in under 60 seconds. Medicaid ACA HRSA CHIP 340B Clearinghouse Explore feature" [ref=e204] [cursor=pointer]:
+          - /url: /programs
+          - listitem [ref=e205]:
+            - img [ref=e207]
+            - generic [ref=e209]:
+              - generic [ref=e210]: 40+
+              - generic [ref=e211]: Programs checked
+              - generic [ref=e212]: Medicaid, ACA, HRSA — scanned in under 60 seconds.
+              - generic [ref=e213]:
+                - generic [ref=e214]: Medicaid
+                - generic [ref=e215]: ACA
+                - generic [ref=e216]: HRSA
+                - generic [ref=e217]: CHIP
+                - generic [ref=e218]: 340B
+            - generic [ref=e219]:
+              - generic [ref=e220]: Clearinghouse
+              - generic [ref=e221]:
+                - text: Explore feature
+                - img [ref=e222]
+        - link "Outcomes Tracker 47K+ Care visits tracked & powering research Research Explore feature" [ref=e224] [cursor=pointer]:
+          - /url: /outcomes
+          - listitem [ref=e225]:
+            - img [ref=e227]
+            - generic [ref=e228]: Outcomes Tracker
+            - generic [ref=e229]:
+              - generic [ref=e230]: 47K+
+              - generic [ref=e231]: Care visits tracked & powering research
+              - img [ref=e232]
+            - generic [ref=e235]:
+              - generic [ref=e236]: Research
+              - generic [ref=e237]:
+                - text: Explore feature
+                - img [ref=e238]
+        - link "CHW Network 340+ verified Community Health Workers. They speak your language and know the system. MA JR SP LC TK 340+ verified workers Spanish Somali Arabic French Human-powered Explore feature" [ref=e240] [cursor=pointer]:
+          - /url: /chw
+          - listitem [ref=e241]:
+            - generic [ref=e242]:
+              - img [ref=e244]
+              - generic [ref=e249]:
+                - generic [ref=e250]: CHW Network
+                - generic [ref=e251]: 340+ verified Community Health Workers. They speak your language and know the system.
+                - generic [ref=e252]:
+                  - generic [ref=e253]:
+                    - generic [ref=e254]: MA
+                    - generic [ref=e255]: JR
+                    - generic [ref=e256]: SP
+                    - generic [ref=e257]: LC
+                    - generic [ref=e258]: TK
+                    - generic [ref=e259]: 340+ verified workers
+                  - generic [ref=e260]:
+                    - generic [ref=e261]: Spanish
+                    - generic [ref=e262]: Somali
+                    - generic [ref=e263]: Arabic
+                    - generic [ref=e264]: French
+                - generic [ref=e265]:
+                  - generic [ref=e266]: Human-powered
+                  - generic [ref=e267]:
+                    - text: Explore feature
+                    - img [ref=e268]
+        - link "Preventive Care Calendar Personalized screening schedule + live free clinic events — dental days, mammography vans, vaccine drives. Mon Free Dental Day Wed Vaccine Drive Fri Mental Health Events Explore feature" [ref=e270] [cursor=pointer]:
+          - /url: /calendar
+          - listitem [ref=e271]:
+            - generic [ref=e272]:
+              - img [ref=e274]
+              - generic [ref=e276]:
+                - generic [ref=e277]: Preventive Care Calendar
+                - generic [ref=e278]: Personalized screening schedule + live free clinic events — dental days, mammography vans, vaccine drives.
+                - generic [ref=e279]:
+                  - generic [ref=e280]:
+                    - generic [ref=e281]: Mon
+                    - generic [ref=e283]: Free Dental Day
+                    - img [ref=e284]
+                  - generic [ref=e287]:
+                    - generic [ref=e288]: Wed
+                    - generic [ref=e290]: Vaccine Drive
+                    - img [ref=e291]
+                  - generic [ref=e294]:
+                    - generic [ref=e295]: Fri
+                    - generic [ref=e297]: Mental Health
+                    - img [ref=e298]
+                - generic [ref=e301]:
+                  - generic [ref=e302]: Events
+                  - generic [ref=e303]:
+                    - text: Explore feature
+                    - img [ref=e304]
+      - generic [ref=e306]:
+        - generic [ref=e307]: Also included
+        - link "Provider Dashboard" [ref=e309] [cursor=pointer]:
+          - /url: /provider
+          - text: Provider Dashboard
+          - img [ref=e310]
+        - link "Impact Dashboard" [ref=e312] [cursor=pointer]:
+          - /url: /impact
+          - text: Impact Dashboard
+          - img [ref=e313]
+        - link "Telehealth" [ref=e315] [cursor=pointer]:
+          - /url: /telehealth
+          - text: Telehealth
+          - img [ref=e316]
+        - link "Stories" [ref=e318] [cursor=pointer]:
+          - /url: /stories
+          - text: Stories
+          - img [ref=e319]
+        - link "Rights & Legal" [ref=e321] [cursor=pointer]:
+          - /url: /rights
+          - text: Rights & Legal
+          - img [ref=e322]
+        - link "Advocacy" [ref=e324] [cursor=pointer]:
+          - /url: /advocacy
+          - text: Advocacy
+          - img [ref=e325]
+        - link "Accessibility" [ref=e327] [cursor=pointer]:
+          - /url: /accessibility
+          - text: Accessibility
+          - img [ref=e328]
+    - region "Three steps to real care" [ref=e330]:
+      - generic:
+        - generic [ref=e331]:
+          - generic [ref=e332]:
+            - generic [ref=e333]: How it works
+            - heading "Three steps to real care" [level=2] [ref=e334]:
+              - text: Three steps to
+              - emphasis [ref=e335]: real
+              - text: care
+            - paragraph [ref=e336]: No account. No insurance card. No cost. Just type and go.
+          - tablist "How it works steps" [ref=e337]:
+            - tab "Search your location or symptom Enter your zip code, city, or describe what you're experiencing. Completely anonymous — no account required, ever." [selected] [ref=e338] [cursor=pointer]:
+              - generic [ref=e339]: "01"
+              - generic [ref=e340]:
+                - generic [ref=e341]: Search your location or symptom
+                - generic [ref=e342]: Enter your zip code, city, or describe what you're experiencing. Completely anonymous — no account required, ever.
+            - tab "Get matched to the right care Our AI surfaces the best options — free clinics, telehealth, eligibility programs — ranked by distance and fit." [ref=e343] [cursor=pointer]:
+              - generic [ref=e344]: "02"
+              - generic [ref=e345]:
+                - generic [ref=e346]: Get matched to the right care
+                - generic: Our AI surfaces the best options — free clinics, telehealth, eligibility programs — ranked by distance and fit.
+            - tab "Book, call, or walk in See live hours, wait times, and directions. Book directly or get turn-by-turn directions in your language." [ref=e347] [cursor=pointer]:
+              - generic [ref=e348]: "03"
+              - generic [ref=e349]:
+                - generic [ref=e350]: Book, call, or walk in
+                - generic: See live hours, wait times, and directions. Book directly or get turn-by-turn directions in your language.
+        - generic [ref=e353]:
+          - generic [ref=e356]: Search
+          - generic [ref=e362]:
+            - generic [ref=e363]: Describe what you're looking for
+            - generic [ref=e364]:
+              - img [ref=e365]
+              - generic [ref=e368]: Primary care near me...
+              - generic [ref=e369]: "|"
+            - generic [ref=e370]:
+              - img [ref=e371]
+              - text: Anonymous — no account needed
+    - region "The people NEXUS serves" [ref=e373]:
+      - generic [ref=e374]:
+        - generic [ref=e375]: Real stories
+        - heading "The people NEXUS serves" [level=2] [ref=e376]:
+          - text: The people
+          - emphasis [ref=e377]: NEXUS
+          - text: serves
+        - paragraph [ref=e378]: Real stories from people who found care they didn't know was possible.
+        - paragraph [ref=e379]: Stories are illustrative examples based on documented outcomes from FQHC and free clinic access programs. Names and identifying details are representative composites to protect privacy.
+      - generic [ref=e380]:
+        - generic [ref=e382]:
+          - generic [ref=e383]:
+            - generic "5 stars" [ref=e384]:
+              - img [ref=e385]
+              - img [ref=e387]
+              - img [ref=e389]
+              - img [ref=e391]
+              - img [ref=e393]
+            - paragraph [ref=e395]: “I hadn't seen a doctor in three years because I couldn't afford it. NEXUS found me a free clinic six blocks away. I had no idea it existed.”
+            - generic [ref=e396]:
+              - generic [ref=e397]: MR
+              - generic [ref=e398]:
+                - generic [ref=e399]: Maria R.
+                - generic [ref=e400]: Phoenix, AZ
+          - generic [ref=e401]:
+            - generic "5 stars" [ref=e402]:
+              - img [ref=e403]
+              - img [ref=e405]
+              - img [ref=e407]
+              - img [ref=e409]
+              - img [ref=e411]
+            - paragraph [ref=e413]: “The eligibility navigator showed my whole family qualifies for AHCCCS. I was paying out of pocket for years. This changed everything.”
+            - generic [ref=e414]:
+              - generic [ref=e415]: DT
+              - generic [ref=e416]:
+                - generic [ref=e417]: David T.
+                - generic [ref=e418]: Tucson, AZ
+          - generic [ref=e419]:
+            - generic "5 stars" [ref=e420]:
+              - img [ref=e421]
+              - img [ref=e423]
+              - img [ref=e425]
+              - img [ref=e427]
+              - img [ref=e429]
+            - paragraph [ref=e431]: “Found a free dental clinic in Houston I'd never heard of. Got a cleaning and two fillings at zero cost. NEXUS is incredible.”
+            - generic [ref=e432]:
+              - generic [ref=e433]: JW
+              - generic [ref=e434]:
+                - generic [ref=e435]: James W.
+                - generic [ref=e436]: Houston, TX
+          - generic [ref=e437]:
+            - generic "5 stars" [ref=e438]:
+              - img [ref=e439]
+              - img [ref=e441]
+              - img [ref=e443]
+              - img [ref=e445]
+              - img [ref=e447]
+            - paragraph [ref=e449]: “Prenatal care through NEXUS was a lifesaver. I was terrified about costs but they found a FQHC five minutes from my apartment.”
+            - generic [ref=e450]:
+              - generic [ref=e451]: PK
+              - generic [ref=e452]:
+                - generic [ref=e453]: Priya K.
+                - generic [ref=e454]: Chicago, IL
+          - generic [ref=e455]:
+            - generic "5 stars" [ref=e456]:
+              - img [ref=e457]
+              - img [ref=e459]
+              - img [ref=e461]
+              - img [ref=e463]
+              - img [ref=e465]
+            - paragraph [ref=e467]: “The medication assistance program saved me $400 a month on insulin. I had no idea I qualified. Every diabetic should know about this.”
+            - generic [ref=e468]:
+              - generic [ref=e469]: RM
+              - generic [ref=e470]:
+                - generic [ref=e471]: Robert M.
+                - generic [ref=e472]: Atlanta, GA
+          - generic [ref=e473]:
+            - generic "5 stars" [ref=e474]:
+              - img [ref=e475]
+              - img [ref=e477]
+              - img [ref=e479]
+              - img [ref=e481]
+              - img [ref=e483]
+            - paragraph [ref=e485]: “Encontré atención para mis hijos gratis y en español. No tenemos seguro y NEXUS lo cambió todo para nuestra familia.”
+            - generic [ref=e486]:
+              - generic [ref=e487]: AG
+              - generic [ref=e488]:
+                - generic [ref=e489]: Ana G.
+                - generic [ref=e490]: Miami, FL
+          - generic [ref=e491]:
+            - generic "5 stars" [ref=e492]:
+              - img [ref=e493]
+              - img [ref=e495]
+              - img [ref=e497]
+              - img [ref=e499]
+              - img [ref=e501]
+            - paragraph [ref=e503]: “Mental health services without insurance seemed impossible. NEXUS matched me with a sliding-scale therapist in under three minutes.”
+            - generic [ref=e504]:
+              - generic [ref=e505]: KL
+              - generic [ref=e506]:
+                - generic [ref=e507]: Kevin L.
+                - generic [ref=e508]: Denver, CO
+          - generic [ref=e509]:
+            - generic "5 stars" [ref=e510]:
+              - img [ref=e511]
+              - img [ref=e513]
+              - img [ref=e515]
+              - img [ref=e517]
+              - img [ref=e519]
+            - paragraph [ref=e521]: “As a community health worker I refer clients to NEXUS daily. It cuts my search time in half. The multilingual support is a real lifesaver.”
+            - generic [ref=e522]:
+              - generic [ref=e523]: SL
+              - generic [ref=e524]:
+                - generic [ref=e525]: Sofia L., CHW
+                - generic [ref=e526]: Yuma, AZ
+          - generic [ref=e527]:
+            - generic "5 stars" [ref=e528]:
+              - img [ref=e529]
+              - img [ref=e531]
+              - img [ref=e533]
+              - img [ref=e535]
+              - img [ref=e537]
+            - paragraph [ref=e539]: “I hadn't seen a doctor in three years because I couldn't afford it. NEXUS found me a free clinic six blocks away. I had no idea it existed.”
+            - generic [ref=e540]:
+              - generic [ref=e541]: MR
+              - generic [ref=e542]:
+                - generic [ref=e543]: Maria R.
+                - generic [ref=e544]: Phoenix, AZ
+          - generic [ref=e545]:
+            - generic "5 stars" [ref=e546]:
+              - img [ref=e547]
+              - img [ref=e549]
+              - img [ref=e551]
+              - img [ref=e553]
+              - img [ref=e555]
+            - paragraph [ref=e557]: “The eligibility navigator showed my whole family qualifies for AHCCCS. I was paying out of pocket for years. This changed everything.”
+            - generic [ref=e558]:
+              - generic [ref=e559]: DT
+              - generic [ref=e560]:
+                - generic [ref=e561]: David T.
+                - generic [ref=e562]: Tucson, AZ
+          - generic [ref=e563]:
+            - generic "5 stars" [ref=e564]:
+              - img [ref=e565]
+              - img [ref=e567]
+              - img [ref=e569]
+              - img [ref=e571]
+              - img [ref=e573]
+            - paragraph [ref=e575]: “Found a free dental clinic in Houston I'd never heard of. Got a cleaning and two fillings at zero cost. NEXUS is incredible.”
+            - generic [ref=e576]:
+              - generic [ref=e577]: JW
+              - generic [ref=e578]:
+                - generic [ref=e579]: James W.
+                - generic [ref=e580]: Houston, TX
+          - generic [ref=e581]:
+            - generic "5 stars" [ref=e582]:
+              - img [ref=e583]
+              - img [ref=e585]
+              - img [ref=e587]
+              - img [ref=e589]
+              - img [ref=e591]
+            - paragraph [ref=e593]: “Prenatal care through NEXUS was a lifesaver. I was terrified about costs but they found a FQHC five minutes from my apartment.”
+            - generic [ref=e594]:
+              - generic [ref=e595]: PK
+              - generic [ref=e596]:
+                - generic [ref=e597]: Priya K.
+                - generic [ref=e598]: Chicago, IL
+          - generic [ref=e599]:
+            - generic "5 stars" [ref=e600]:
+              - img [ref=e601]
+              - img [ref=e603]
+              - img [ref=e605]
+              - img [ref=e607]
+              - img [ref=e609]
+            - paragraph [ref=e611]: “The medication assistance program saved me $400 a month on insulin. I had no idea I qualified. Every diabetic should know about this.”
+            - generic [ref=e612]:
+              - generic [ref=e613]: RM
+              - generic [ref=e614]:
+                - generic [ref=e615]: Robert M.
+                - generic [ref=e616]: Atlanta, GA
+          - generic [ref=e617]:
+            - generic "5 stars" [ref=e618]:
+              - img [ref=e619]
+              - img [ref=e621]
+              - img [ref=e623]
+              - img [ref=e625]
+              - img [ref=e627]
+            - paragraph [ref=e629]: “Encontré atención para mis hijos gratis y en español. No tenemos seguro y NEXUS lo cambió todo para nuestra familia.”
+            - generic [ref=e630]:
+              - generic [ref=e631]: AG
+              - generic [ref=e632]:
+                - generic [ref=e633]: Ana G.
+                - generic [ref=e634]: Miami, FL
+          - generic [ref=e635]:
+            - generic "5 stars" [ref=e636]:
+              - img [ref=e637]
+              - img [ref=e639]
+              - img [ref=e641]
+              - img [ref=e643]
+              - img [ref=e645]
+            - paragraph [ref=e647]: “Mental health services without insurance seemed impossible. NEXUS matched me with a sliding-scale therapist in under three minutes.”
+            - generic [ref=e648]:
+              - generic [ref=e649]: KL
+              - generic [ref=e650]:
+                - generic [ref=e651]: Kevin L.
+                - generic [ref=e652]: Denver, CO
+          - generic [ref=e653]:
+            - generic "5 stars" [ref=e654]:
+              - img [ref=e655]
+              - img [ref=e657]
+              - img [ref=e659]
+              - img [ref=e661]
+              - img [ref=e663]
+            - paragraph [ref=e665]: “As a community health worker I refer clients to NEXUS daily. It cuts my search time in half. The multilingual support is a real lifesaver.”
+            - generic [ref=e666]:
+              - generic [ref=e667]: SL
+              - generic [ref=e668]:
+                - generic [ref=e669]: Sofia L., CHW
+                - generic [ref=e670]: Yuma, AZ
+        - generic [ref=e672]:
+          - generic [ref=e673]:
+            - generic [ref=e674]:
+              - img [ref=e675]
+              - img [ref=e677]
+              - img [ref=e679]
+              - img [ref=e681]
+              - img [ref=e683]
+            - paragraph [ref=e685]: “Pediatric care for my son within walking distance and completely free. NEXUS found the clinic — I just showed up. No paperwork drama.”
+            - generic [ref=e686]:
+              - generic [ref=e687]: PH
+              - generic [ref=e688]:
+                - generic [ref=e689]: Patricia H.
+                - generic [ref=e690]: Seattle, WA
+          - generic [ref=e691]:
+            - generic [ref=e692]:
+              - img [ref=e693]
+              - img [ref=e695]
+              - img [ref=e697]
+              - img [ref=e699]
+              - img [ref=e701]
+            - paragraph [ref=e703]: “Avoided an $1,800 ER bill thanks to the AI triage. It told me a free clinic could handle my infection. It was absolutely right.”
+            - generic [ref=e704]:
+              - generic [ref=e705]: MT
+              - generic [ref=e706]:
+                - generic [ref=e707]: Marcus T.
+                - generic [ref=e708]: New York, NY
+          - generic [ref=e709]:
+            - generic [ref=e710]:
+              - img [ref=e711]
+              - img [ref=e713]
+              - img [ref=e715]
+              - img [ref=e717]
+              - img [ref=e719]
+            - paragraph [ref=e721]: “I recommend NEXUS to every uninsured patient I see. It's the most practical healthcare tool I've encountered in 12 years of nursing.”
+            - generic [ref=e722]:
+              - generic [ref=e723]: LC
+              - generic [ref=e724]:
+                - generic [ref=e725]: Linda C., RN
+                - generic [ref=e726]: Boston, MA
+          - generic [ref=e727]:
+            - generic [ref=e728]:
+              - img [ref=e729]
+              - img [ref=e731]
+              - img [ref=e733]
+              - img [ref=e735]
+              - img [ref=e737]
+            - paragraph [ref=e739]: “Found Medicaid coverage for my whole family in under ten minutes. We thought we didn't qualify. Turns out we'd been eligible for years.”
+            - generic [ref=e740]:
+              - generic [ref=e741]: AF
+              - generic [ref=e742]:
+                - generic [ref=e743]: Ahmad F.
+                - generic [ref=e744]: Dallas, TX
+          - generic [ref=e745]:
+            - generic [ref=e746]:
+              - img [ref=e747]
+              - img [ref=e749]
+              - img [ref=e751]
+              - img [ref=e753]
+              - img [ref=e755]
+            - paragraph [ref=e757]: “Sliding scale care that works out to $8 a visit. NEXUS found the clinic and even told me exactly what to say when I called.”
+            - generic [ref=e758]:
+              - generic [ref=e759]: CR
+              - generic [ref=e760]:
+                - generic [ref=e761]: Carmen R.
+                - generic [ref=e762]: Los Angeles, CA
+          - generic [ref=e763]:
+            - generic [ref=e764]:
+              - img [ref=e765]
+              - img [ref=e767]
+              - img [ref=e769]
+              - img [ref=e771]
+              - img [ref=e773]
+            - paragraph [ref=e775]: “Free dental day was a game-changer. My kids got cleanings, X-rays, and sealants. NEXUS had it on the calendar before I thought to look.”
+            - generic [ref=e776]:
+              - generic [ref=e777]: JH
+              - generic [ref=e778]:
+                - generic [ref=e779]: Jamal H.
+                - generic [ref=e780]: Detroit, MI
+          - generic [ref=e781]:
+            - generic [ref=e782]:
+              - img [ref=e783]
+              - img [ref=e785]
+              - img [ref=e787]
+              - img [ref=e789]
+              - img [ref=e791]
+            - paragraph [ref=e793]: “The CHW connection was invaluable. She knew exactly which programs we qualified for and helped navigate every step of enrollment.”
+            - generic [ref=e794]:
+              - generic [ref=e795]: MP
+              - generic [ref=e796]:
+                - generic [ref=e797]: Miguel P.
+                - generic [ref=e798]: San Antonio, TX
+          - generic [ref=e799]:
+            - generic [ref=e800]:
+              - img [ref=e801]
+              - img [ref=e803]
+              - img [ref=e805]
+              - img [ref=e807]
+              - img [ref=e809]
+            - paragraph [ref=e811]: “I work two jobs and barely have time to research healthcare. NEXUS gave me everything I needed in one search. Genuinely impressed.”
+            - generic [ref=e812]:
+              - generic [ref=e813]: SB
+              - generic [ref=e814]:
+                - generic [ref=e815]: Sarah B.
+                - generic [ref=e816]: Phoenix, AZ
+          - generic [ref=e817]:
+            - generic [ref=e818]:
+              - img [ref=e819]
+              - img [ref=e821]
+              - img [ref=e823]
+              - img [ref=e825]
+              - img [ref=e827]
+            - paragraph [ref=e829]: “Pediatric care for my son within walking distance and completely free. NEXUS found the clinic — I just showed up. No paperwork drama.”
+            - generic [ref=e830]:
+              - generic [ref=e831]: PH
+              - generic [ref=e832]:
+                - generic [ref=e833]: Patricia H.
+                - generic [ref=e834]: Seattle, WA
+          - generic [ref=e835]:
+            - generic [ref=e836]:
+              - img [ref=e837]
+              - img [ref=e839]
+              - img [ref=e841]
+              - img [ref=e843]
+              - img [ref=e845]
+            - paragraph [ref=e847]: “Avoided an $1,800 ER bill thanks to the AI triage. It told me a free clinic could handle my infection. It was absolutely right.”
+            - generic [ref=e848]:
+              - generic [ref=e849]: MT
+              - generic [ref=e850]:
+                - generic [ref=e851]: Marcus T.
+                - generic [ref=e852]: New York, NY
+          - generic [ref=e853]:
+            - generic [ref=e854]:
+              - img [ref=e855]
+              - img [ref=e857]
+              - img [ref=e859]
+              - img [ref=e861]
+              - img [ref=e863]
+            - paragraph [ref=e865]: “I recommend NEXUS to every uninsured patient I see. It's the most practical healthcare tool I've encountered in 12 years of nursing.”
+            - generic [ref=e866]:
+              - generic [ref=e867]: LC
+              - generic [ref=e868]:
+                - generic [ref=e869]: Linda C., RN
+                - generic [ref=e870]: Boston, MA
+          - generic [ref=e871]:
+            - generic [ref=e872]:
+              - img [ref=e873]
+              - img [ref=e875]
+              - img [ref=e877]
+              - img [ref=e879]
+              - img [ref=e881]
+            - paragraph [ref=e883]: “Found Medicaid coverage for my whole family in under ten minutes. We thought we didn't qualify. Turns out we'd been eligible for years.”
+            - generic [ref=e884]:
+              - generic [ref=e885]: AF
+              - generic [ref=e886]:
+                - generic [ref=e887]: Ahmad F.
+                - generic [ref=e888]: Dallas, TX
+          - generic [ref=e889]:
+            - generic [ref=e890]:
+              - img [ref=e891]
+              - img [ref=e893]
+              - img [ref=e895]
+              - img [ref=e897]
+              - img [ref=e899]
+            - paragraph [ref=e901]: “Sliding scale care that works out to $8 a visit. NEXUS found the clinic and even told me exactly what to say when I called.”
+            - generic [ref=e902]:
+              - generic [ref=e903]: CR
+              - generic [ref=e904]:
+                - generic [ref=e905]: Carmen R.
+                - generic [ref=e906]: Los Angeles, CA
+          - generic [ref=e907]:
+            - generic [ref=e908]:
+              - img [ref=e909]
+              - img [ref=e911]
+              - img [ref=e913]
+              - img [ref=e915]
+              - img [ref=e917]
+            - paragraph [ref=e919]: “Free dental day was a game-changer. My kids got cleanings, X-rays, and sealants. NEXUS had it on the calendar before I thought to look.”
+            - generic [ref=e920]:
+              - generic [ref=e921]: JH
+              - generic [ref=e922]:
+                - generic [ref=e923]: Jamal H.
+                - generic [ref=e924]: Detroit, MI
+          - generic [ref=e925]:
+            - generic [ref=e926]:
+              - img [ref=e927]
+              - img [ref=e929]
+              - img [ref=e931]
+              - img [ref=e933]
+              - img [ref=e935]
+            - paragraph [ref=e937]: “The CHW connection was invaluable. She knew exactly which programs we qualified for and helped navigate every step of enrollment.”
+            - generic [ref=e938]:
+              - generic [ref=e939]: MP
+              - generic [ref=e940]:
+                - generic [ref=e941]: Miguel P.
+                - generic [ref=e942]: San Antonio, TX
+          - generic [ref=e943]:
+            - generic [ref=e944]:
+              - img [ref=e945]
+              - img [ref=e947]
+              - img [ref=e949]
+              - img [ref=e951]
+              - img [ref=e953]
+            - paragraph [ref=e955]: “I work two jobs and barely have time to research healthcare. NEXUS gave me everything I needed in one search. Genuinely impressed.”
+            - generic [ref=e956]:
+              - generic [ref=e957]: SB
+              - generic [ref=e958]:
+                - generic [ref=e959]: Sarah B.
+                - generic [ref=e960]: Phoenix, AZ
+    - generic "Nationwide clinic coverage map" [ref=e961]:
+      - generic [ref=e962]:
+        - generic [ref=e963]: Coverage
+        - heading "Free care, everywhere you are" [level=2] [ref=e965]:
+          - text: Free care,
+          - emphasis [ref=e966]: everywhere
+          - text: you are
+        - paragraph [ref=e967]: 12,000+ clinics across all 50 states. Wherever you live, care is closer than you think.
+      - generic [ref=e969]:
+        - img [ref=e971]
+        - 'button "Seattle, WA: 234 clinics" [ref=e1007] [cursor=pointer]'
+        - 'button "San Francisco, CA: 412 clinics" [ref=e1011] [cursor=pointer]'
+        - 'button "Los Angeles, CA: 687 clinics" [ref=e1015] [cursor=pointer]'
+        - 'button "Phoenix, AZ: 298 clinics" [ref=e1019] [cursor=pointer]'
+        - 'button "Denver, CO: 156 clinics" [ref=e1023] [cursor=pointer]'
+        - 'button "Dallas, TX: 445 clinics" [ref=e1027] [cursor=pointer]'
+        - 'button "Houston, TX: 523 clinics" [ref=e1031] [cursor=pointer]'
+        - 'button "Chicago, IL: 634 clinics" [ref=e1035] [cursor=pointer]'
+        - 'button "Detroit, MI: 178 clinics" [ref=e1039] [cursor=pointer]'
+        - 'button "Washington DC, DC: 289 clinics" [ref=e1043] [cursor=pointer]'
+        - 'button "New York, NY: 1240 clinics" [ref=e1047] [cursor=pointer]'
+        - 'button "Boston, MA: 312 clinics" [ref=e1051] [cursor=pointer]'
+        - 'button "Atlanta, GA: 367 clinics" [ref=e1055] [cursor=pointer]'
+        - 'button "Miami, FL: 445 clinics" [ref=e1059] [cursor=pointer]'
+        - 'button "Minneapolis, MN: 198 clinics" [ref=e1063] [cursor=pointer]'
+        - generic [ref=e1067]:
+          - generic [ref=e1068]:
+            - generic [ref=e1069]: 12K+
+            - generic [ref=e1070]: Clinics indexed
+          - generic [ref=e1071]:
+            - generic [ref=e1072]: "50"
+            - generic [ref=e1073]: States covered
+        - generic [ref=e1074]:
+          - generic [ref=e1075]:
+            - img [ref=e1076]
+            - text: Primary care · NY 10001
+          - generic [ref=e1079]: 4 results nearby
+          - generic [ref=e1080]:
+            - generic [ref=e1081]: BC
+            - generic [ref=e1082]: Bellevue Community Clinic
+            - generic [ref=e1083]: 0.4 mi
+          - generic [ref=e1084]:
+            - generic [ref=e1085]: WB
+            - generic [ref=e1086]: West Bronx Health
+            - generic [ref=e1087]: 1.1 mi
+          - generic [ref=e1088]:
+            - generic [ref=e1089]: CH
+            - generic [ref=e1090]: Community Health NYC
+            - generic [ref=e1091]: 1.8 mi
+          - generic [ref=e1092]: Find care near me →
+    - region "Your health doesn't wait. Neither should you." [ref=e1093]:
+      - generic [ref=e1096]:
+        - generic [ref=e1097]:
+          - generic [ref=e1100]:
+            - strong [ref=e1101]: 47,318
+            - text: found care this month
+          - heading "Your health doesn't wait. Neither should you." [level=2] [ref=e1102]:
+            - text: Your health
+            - emphasis [ref=e1103]: doesn't wait.
+            - text: Neither should you.
+          - paragraph [ref=e1104]: NEXUS finds free clinics, hidden programs, and real care within miles of you — in seconds. No insurance, no signup, no cost.
+          - generic [ref=e1105]:
+            - button "Find free care near you" [ref=e1106] [cursor=pointer]: Find free care near me
+            - button "How it works" [ref=e1107] [cursor=pointer]
+          - generic [ref=e1108]:
+            - generic [ref=e1109]:
+              - img [ref=e1110]
+              - text: No signup
+            - generic [ref=e1112]:
+              - img [ref=e1113]
+              - text: 100% anonymous
+            - generic [ref=e1115]:
+              - img [ref=e1116]
+              - text: Always free
+        - generic [ref=e1119]:
+          - generic [ref=e1120]:
+            - generic [ref=e1122]: 30M
+            - generic [ref=e1123]: uninsured Americans who deserve access to the care they need
+          - generic [ref=e1124]:
+            - generic [ref=e1126]: "0"
+            - generic [ref=e1127]: Free clinics mapped
+          - generic [ref=e1128]:
+            - generic [ref=e1130]: "0"
+            - generic [ref=e1131]: States covered
+          - generic [ref=e1132]:
+            - generic [ref=e1133]:
+              - generic [ref=e1134]: $0
+              - generic [ref=e1135]: Cost to use NEXUS
+            - generic [ref=e1136]: No insurance needed
+  - contentinfo [ref=e1137]:
+    - generic [ref=e1138]:
+      - generic [ref=e1139]:
+        - generic [ref=e1140]:
+          - generic [ref=e1141]: Stay informed on free healthcare access
+          - generic [ref=e1142]: New programs, policy updates, and care resources. No spam.
+        - generic [ref=e1143]:
+          - generic [ref=e1144]: Email address for newsletter
+          - textbox "Email address for newsletter" [ref=e1145]:
+            - /placeholder: your@email.com
+          - button "Subscribe" [ref=e1146] [cursor=pointer]
+      - generic [ref=e1147]:
+        - generic [ref=e1148]:
+          - generic [ref=e1152]: NEXUS
+          - paragraph [ref=e1154]: Free healthcare access for every uninsured American. Built with care, not profit.
+          - generic [ref=e1157]: Built for the 30M uninsured in America
+        - generic [ref=e1158]:
+          - generic [ref=e1159]: Product
+          - list [ref=e1160]:
+            - listitem [ref=e1161]:
+              - link "Clinic Finder" [ref=e1162] [cursor=pointer]:
+                - /url: /search
+            - listitem [ref=e1163]:
+              - link "AI Care Pathways" [ref=e1164] [cursor=pointer]:
+                - /url: /pathways
+            - listitem [ref=e1165]:
+              - link "Programs & Benefits" [ref=e1166] [cursor=pointer]:
+                - /url: /programs
+            - listitem [ref=e1167]:
+              - link "Preventive Calendar" [ref=e1168] [cursor=pointer]:
+                - /url: /calendar
+        - generic [ref=e1169]:
+          - generic [ref=e1170]: Community
+          - list [ref=e1171]:
+            - listitem [ref=e1172]:
+              - link "CHW Network" [ref=e1173] [cursor=pointer]:
+                - /url: /chw
+            - listitem [ref=e1174]:
+              - link "Stories" [ref=e1175] [cursor=pointer]:
+                - /url: /stories
+            - listitem [ref=e1176]:
+              - link "Rights & Legal" [ref=e1177] [cursor=pointer]:
+                - /url: /rights
+            - listitem [ref=e1178]:
+              - link "Advocacy Hub" [ref=e1179] [cursor=pointer]:
+                - /url: /advocacy
+        - generic [ref=e1180]:
+          - generic [ref=e1181]: Tools
+          - list [ref=e1182]:
+            - listitem [ref=e1183]:
+              - link "Symptom Guide" [ref=e1184] [cursor=pointer]:
+                - /url: /triage
+            - listitem [ref=e1185]:
+              - link "Healthcare GPS" [ref=e1186] [cursor=pointer]:
+                - /url: /gps
+            - listitem [ref=e1187]:
+              - link "Health Passport" [ref=e1188] [cursor=pointer]:
+                - /url: /passport
+            - listitem [ref=e1189]:
+              - link "Care Wrapped" [ref=e1190] [cursor=pointer]:
+                - /url: /wrapped
+            - listitem [ref=e1191]:
+              - link "Crisis Support" [ref=e1192] [cursor=pointer]:
+                - /url: /crisis
+            - listitem [ref=e1193]:
+              - link "Community Network" [ref=e1194] [cursor=pointer]:
+                - /url: /community
+        - generic [ref=e1195]:
+          - generic [ref=e1196]: Platform
+          - list [ref=e1197]:
+            - listitem [ref=e1198]:
+              - link "Impact Dashboard" [ref=e1199] [cursor=pointer]:
+                - /url: /impact
+            - listitem [ref=e1200]:
+              - link "Equity Lab" [ref=e1201] [cursor=pointer]:
+                - /url: /equity
+            - listitem [ref=e1202]:
+              - link "Editorial" [ref=e1203] [cursor=pointer]:
+                - /url: /editorial
+            - listitem [ref=e1204]:
+              - link "Open Roadmap" [ref=e1205] [cursor=pointer]:
+                - /url: /open
+            - listitem [ref=e1206]:
+              - link "Accessibility" [ref=e1207] [cursor=pointer]:
+                - /url: /accessibility
+            - listitem [ref=e1208]:
+              - link "For Providers" [ref=e1209] [cursor=pointer]:
+                - /url: /provider
+        - generic [ref=e1210]:
+          - generic [ref=e1211]: Resources
+          - list [ref=e1212]:
+            - listitem [ref=e1213]:
+              - link "Find a Health Center (HRSA)" [ref=e1214] [cursor=pointer]:
+                - /url: https://findahealthcenter.hrsa.gov
+                - text: Find a Health Center (HRSA)
+                - img [ref=e1215]
+            - listitem [ref=e1217]:
+              - link "211 — Local Help" [ref=e1218] [cursor=pointer]:
+                - /url: https://www.211.org
+                - text: 211 — Local Help
+                - img [ref=e1219]
+            - listitem [ref=e1221]:
+              - link "NeedyMeds" [ref=e1222] [cursor=pointer]:
+                - /url: https://www.needymeds.org
+                - text: NeedyMeds
+                - img [ref=e1223]
+            - listitem [ref=e1225]:
+              - link "GoodRx" [ref=e1226] [cursor=pointer]:
+                - /url: https://www.goodrx.com
+                - text: GoodRx
+                - img [ref=e1227]
+            - listitem [ref=e1229]:
+              - link "RxAssist" [ref=e1230] [cursor=pointer]:
+                - /url: https://www.rxassist.org
+                - text: RxAssist
+                - img [ref=e1231]
+            - listitem [ref=e1233]:
+              - link "Medication Finder" [ref=e1234] [cursor=pointer]:
+                - /url: /medications
+            - listitem [ref=e1235]:
+              - link "About NEXUS" [ref=e1236] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e1237]:
+              - link "Privacy" [ref=e1238] [cursor=pointer]:
+                - /url: /privacy
+      - generic [ref=e1239]:
+        - generic [ref=e1240]:
+          - text: © 2026
+          - link "NEXUS Health" [ref=e1241] [cursor=pointer]:
+            - /url: /
+          - text: . A project for the 30 million uninsured.
+        - generic [ref=e1242]:
+          - generic [ref=e1243]: Healthcare is a right.
+          - generic [ref=e1244]: FQHC Partner Network
+  - button "Open Next.js Dev Tools" [ref=e1250] [cursor=pointer]:
+    - img [ref=e1251]

@@ -5,7 +5,7 @@ import AppShell from '@/components/AppShell'
 import { smoothScrollTo } from '@/utils/smoothScroll'
 import { submitForm } from '@/utils/submitForm'
 import { createClientClient } from '@/lib/auth-client'
-import { BookOpen, Heart, MessageCircle, ArrowRight, ChevronUp, CheckCircle, Users, Link as LinkIcon } from 'lucide-react'
+import { Book1, Heart, MessageCircle, ArrowRight, ArrowUp2, TickCircle, Profile2User, Link2 as LinkIcon } from 'iconsax-react'
 import Link from 'next/link'
 
 function useReveal(threshold = 0.15) {
@@ -124,7 +124,7 @@ export default function StoriesPage() {
       <section style={{ minHeight: '80dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '100px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(74,144,217,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
-        <div style={{ ...pill, marginBottom: '24px' }}><BookOpen size={10} strokeWidth={1.5} /> Stories & Community</div>
+        <div style={{ ...pill, marginBottom: '24px' }}><Book1 size={10} variant="Linear" /> Stories & Community</div>
 
         <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.08, marginBottom: '24px', maxWidth: '820px' }}>
           {TITLE.map((w, i) => (
@@ -151,7 +151,7 @@ export default function StoriesPage() {
           onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(74,144,217,0.45)' }}
           onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(74,144,217,0.3)' }}
         >
-          <Heart size={14} strokeWidth={2} /> Share your story
+          <Heart size={14} variant="Linear" /> Share your story
         </button>
       </section>
 
@@ -204,7 +204,7 @@ export default function StoriesPage() {
         <div style={{ maxWidth: '860px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '40px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><MessageCircle size={10} strokeWidth={1.5} /> Community forum</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><MessageCircle size={10} variant="Linear" /> Community forum</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Questions answered by people who've been there</h2>
             </div>
           </RevealBlock>
@@ -245,9 +245,9 @@ export default function StoriesPage() {
                         onClick={() => setUpvotes(prev => ({ ...prev, [i]: !prev[i] }))}
                         style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '6px 12px', borderRadius: '100px', background: upvotes[i] ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.04)', border: `1px solid ${upvotes[i] ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)'}`, color: upvotes[i] ? 'var(--accent)' : 'rgba(255,255,255,0.4)', fontSize: '12px', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}
                       >
-                        <ChevronUp size={12} strokeWidth={2} /> {p.upvotes + (upvotes[i] ? 1 : 0)}
+                        <ArrowUp2 size={12} variant="Linear" /> {p.upvotes + (upvotes[i] ? 1 : 0)}
                       </button>
-                      <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', gap: '4px' }}><MessageCircle size={11} strokeWidth={1.5} /> {p.replies}</span>
+                      <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', gap: '4px' }}><MessageCircle size={11} variant="Linear" /> {p.replies}</span>
                     </div>
                   </div>
                 </div>
@@ -261,7 +261,7 @@ export default function StoriesPage() {
       <section ref={shareRef} style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '620px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ ...pill, marginBottom: '24px' }}><Heart size={10} strokeWidth={1.5} /> Share your story</div>
+            <div style={{ ...pill, marginBottom: '24px' }}><Heart size={10} variant="Linear" /> Share your story</div>
             <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '16px' }}>Your story might be someone else's lifeline</h2>
             <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65, marginBottom: '40px' }}>You don't need to write perfectly. Just honestly. Stories are reviewed by our team before publishing.</p>
           </RevealBlock>
@@ -269,7 +269,7 @@ export default function StoriesPage() {
           {submitted ? (
             <RevealBlock>
               <div style={{ textAlign: 'center', padding: '48px', background: 'rgba(96,165,250,0.04)', border: '1px solid rgba(96,165,250,0.15)', borderRadius: '20px' }}>
-                <CheckCircle size={40} strokeWidth={1.5} style={{ color: '#60a5fa', marginBottom: '16px' }} />
+                <TickCircle size={40} variant="Linear" style={{ color: '#60a5fa', marginBottom: '16px' }} />
                 <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Thank you, {form.name}</h3>
                 <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65 }}>Your story has been submitted for review. We'll reach out with any questions. Stories are typically published within 3–5 business days.</p>
               </div>
@@ -277,7 +277,7 @@ export default function StoriesPage() {
           ) : (
             <RevealBlock delay={100}>
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div className="stories-form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                   <StoryField label="First name" placeholder="Maria" value={form.name} onChange={v => setForm(p => ({ ...p, name: v }))} />
                   <StoryField label="City, State" placeholder="Phoenix, AZ" value={form.location} onChange={v => setForm(p => ({ ...p, location: v }))} />
                 </div>
@@ -339,9 +339,9 @@ export default function StoriesPage() {
           </RevealBlock>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
             {[
-              { icon: <Heart size={18} strokeWidth={1.5} />, title: 'Mental Health Crisis Line', desc: 'Call or text 988 anytime. Free, confidential, multilingual crisis support.', action: () => window.open('tel:988'), label: 'Call 988' },
-              { icon: <Users size={18} strokeWidth={1.5} />, title: 'Patient Advocate Finder', desc: 'Match with an AI care navigator to find the right clinic for your situation.', action: () => window.location.href = '/pathways', label: 'Find a pathway' },
-              { icon: <LinkIcon size={18} strokeWidth={1.5} />, title: 'Community Health Workers', desc: 'Connect with a real person in your community who speaks your language.', action: () => window.location.href = '/chw', label: 'Find a CHW' },
+              { icon: <Heart size={18} variant="Linear" />, title: 'Mental Health Crisis Line', desc: 'Call or text 988 anytime. Free, confidential, multilingual crisis support.', action: () => window.open('tel:988'), label: 'Call 988' },
+              { icon: <Profile2User size={18} variant="Linear" />, title: 'Patient Advocate Finder', desc: 'Match with an AI care navigator to find the right clinic for your situation.', action: () => window.location.href = '/pathways', label: 'Find a pathway' },
+              { icon: <LinkIcon size={18} variant="Linear" />, title: 'Community Health Workers', desc: 'Connect with a real person in your community who speaks your language.', action: () => window.location.href = '/chw', label: 'Find a CHW' },
             ].map((r, i) => (
               <RevealBlock key={r.title} delay={i * 80}>
                 <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(74,144,217,0.18), rgba(74,144,217,0.04))', borderRadius: '18px' }}>
@@ -353,7 +353,7 @@ export default function StoriesPage() {
                       onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.2)')}
                       onMouseLeave={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.1)')}
                     >
-                      {r.label} <ArrowRight size={12} strokeWidth={2} />
+                      {r.label} <ArrowRight size={12} variant="Linear" />
                     </button>
                   </div>
                 </div>

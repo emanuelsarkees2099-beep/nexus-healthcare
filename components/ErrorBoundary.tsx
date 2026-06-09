@@ -1,5 +1,6 @@
 'use client'
 import React from 'react'
+import { Warning2 } from 'iconsax-react'
 
 interface Props {
   children: React.ReactNode
@@ -49,7 +50,9 @@ export default class ErrorBoundary extends React.Component<Props, State> {
             textAlign: 'center',
           }}
         >
-          <div style={{ fontSize: '28px', marginBottom: '10px' }} aria-hidden="true">⚠️</div>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
+            <Warning2 size={32} color="#f87171" variant="Bold" aria-hidden="true" />
+          </div>
           <p style={{
             fontSize: '14px', fontWeight: 600,
             color: '#f87171',

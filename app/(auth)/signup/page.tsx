@@ -6,8 +6,9 @@ import { createClientClient } from '@/lib/auth-client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-/* ─────────────────────────── tiny SVG primitives ─────────────────────────── */
+import { Eye, EyeSlash, InfoCircle, Sms, TickCircle } from 'iconsax-react'
 
+/* ── Spinner — no iconsax equivalent; keep as SVG ── */
 const Spinner = () => (
   <svg
     width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -19,32 +20,12 @@ const Spinner = () => (
   </svg>
 )
 
-const EyeIcon = ({ show }: { show: boolean }) =>
-  show ? (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
-      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
-      <line x1="1" y1="1" x2="23" y2="23"/>
-    </svg>
-  ) : (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-      <circle cx="12" cy="12" r="3"/>
-    </svg>
-  )
-
 const GoogleIcon = () => (
   <svg width="17" height="17" viewBox="0 0 24 24">
     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
     <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
     <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-  </svg>
-)
-
-const CheckIcon = () => (
-  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2" strokeLinecap="round">
-    <polyline points="20 6 9 17 4 12"/>
   </svg>
 )
 
@@ -176,40 +157,44 @@ export default function SignupPage() {
       alignItems: 'center',
       justifyContent: 'center',
       padding: '40px 16px',
-      background: '#07070F',
+      background: 'var(--bg)',
       position: 'relative',
       overflow: 'hidden',
     }}>
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(18px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes scaleIn {
-          from { opacity: 0; transform: scale(0.88); }
-          to   { opacity: 1; transform: scale(1); }
-        }
-        .auth-card { animation: fadeUp 0.55s cubic-bezier(0.16,1,0.3,1) both; }
+        .auth-card { animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
         .success-card { animation: scaleIn 0.5s cubic-bezier(0.16,1,0.3,1) both; }
         .auth-btn-primary:hover:not(:disabled) {
           background: #5a9fe6 !important;
           transform: translateY(-1px);
-          box-shadow: 0 8px 24px rgba(74,144,217,0.28);
+          box-shadow: 0 8px 24px rgba(79,142,240,0.32);
         }
-        .auth-btn-primary:active:not(:disabled) { transform: translateY(0); }
+        .auth-btn-primary:active:not(:disabled) { transform: scale(0.97) !important; }
         .auth-btn-google:hover:not(:disabled) {
           background: rgba(255,255,255,0.07) !important;
-          border-color: rgba(255,255,255,0.17) !important;
+          border-color: rgba(255,255,255,0.18) !important;
+          transform: translateY(-1px);
         }
         .role-chip:hover { opacity: 0.85; }
       `}</style>
 
-      {/* Top glow */}
+      {/* Aurora background */}
+      <div className="aurora-bg" aria-hidden="true">
+        <div className="aurora-orb-3" />
+      </div>
+
+      {/* Dot grid */}
+      <div aria-hidden="true" className="dot-grid dot-grid--fade" style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+      }} />
+
+      {/* Top glow bloom */}
       <div style={{
-        position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
-        width: '600px', height: '300px',
-        background: 'radial-gradient(ellipse at top, rgba(74,144,217,0.07) 0%, transparent 70%)',
+        position: 'absolute', top: '-80px', left: '50%', transform: 'translateX(-50%)',
+        width: '700px', height: '400px',
+        background: 'radial-gradient(ellipse at 50% 0%, rgba(79,142,240,0.10) 0%, transparent 65%)',
+        filter: 'blur(20px)',
         pointerEvents: 'none',
       }} />
 
@@ -250,10 +235,7 @@ export default function SignupPage() {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               margin: '0 auto 20px',
             }}>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4a90d9" strokeWidth="1.5" strokeLinecap="round">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                <polyline points="22,6 12,13 2,6"/>
-              </svg>
+              <Sms size={28} color="#4a90d9" variant="TwoTone" />
             </div>
             <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#fff', marginBottom: '8px', letterSpacing: '-0.02em' }}>
               Check your inbox
@@ -280,7 +262,7 @@ export default function SignupPage() {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               margin: '0 auto 20px',
             }}>
-              <CheckIcon />
+              <TickCircle size={36} color="#34d399" variant="TwoTone" />
             </div>
             <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#fff', marginBottom: '8px', letterSpacing: '-0.02em' }}>
               Account created!
@@ -293,10 +275,13 @@ export default function SignupPage() {
 
         /* ── Signup form ── */
         <div style={{
-          background: 'rgba(255,255,255,0.02)',
-          border: '1px solid rgba(255,255,255,0.07)',
+          background: 'rgba(10,11,20,0.60)',
+          backdropFilter: 'blur(24px) saturate(160%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(160%)',
+          border: '1px solid rgba(255,255,255,0.09)',
           borderRadius: '16px',
           padding: '32px',
+          boxShadow: '0 32px 80px rgba(0,0,0,0.50), inset 0 1px 0 rgba(255,255,255,0.07)',
         }}>
           <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#fff', marginBottom: '4px', letterSpacing: '-0.02em' }}>
             Create account
@@ -314,11 +299,7 @@ export default function SignupPage() {
               borderRadius: '9px', padding: '11px 13px',
               marginBottom: '20px', color: '#f87171', fontSize: '13px',
             }}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ flexShrink: 0 }}>
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="12" y1="8" x2="12" y2="12"/>
-                <line x1="12" y1="16" x2="12.01" y2="16"/>
-              </svg>
+              <InfoCircle size={15} color="#f87171" variant="TwoTone" style={{ flexShrink: 0 }} />
               {error}
             </div>
           )}
@@ -421,7 +402,10 @@ export default function SignupPage() {
                   onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}
                   tabIndex={-1}
                 >
-                  <EyeIcon show={showPass} />
+                  {showPass
+                    ? <EyeSlash size={16} color="currentColor" variant="Linear" />
+                    : <Eye      size={16} color="currentColor" variant="Linear" />
+                  }
                 </button>
               </div>
               {/* Strength bar */}
@@ -479,7 +463,10 @@ export default function SignupPage() {
                   onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}
                   tabIndex={-1}
                 >
-                  <EyeIcon show={showConfirm} />
+                  {showConfirm
+                    ? <EyeSlash size={16} color="currentColor" variant="Linear" />
+                    : <Eye      size={16} color="currentColor" variant="Linear" />
+                  }
                 </button>
               </div>
             </div>
@@ -507,7 +494,7 @@ export default function SignupPage() {
               <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.55)', marginBottom: '10px' }}>
                 I am a
               </label>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
+              <div className="signup-role-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
                 {(['patient', 'provider', 'admin'] as UserType[]).map(type => {
                   const active = userType === type
                   const colors: Record<UserType, string> = {

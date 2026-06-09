@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { Map1 } from 'iconsax-react'
 
 export default function OfflinePage() {
   const [cachedClinics, setCachedClinics] = useState<{ name: string; address: string; phone: string }[]>([])
@@ -41,10 +42,7 @@ export default function OfflinePage() {
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         marginBottom: '1.75rem', position: 'relative', zIndex: 1,
       }}>
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4A90D9" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/>
-          <path d="M8 2v16M16 6v16"/>
-        </svg>
+        <Map1 size={32} color="#4A90D9" variant="TwoTone" aria-hidden="true" />
       </div>
 
       <div style={{

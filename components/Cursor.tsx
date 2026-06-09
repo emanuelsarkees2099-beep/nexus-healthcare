@@ -2,13 +2,14 @@
 import { useEffect, useRef } from 'react'
 
 export default function Cursor() {
-  const dotRef  = useRef<HTMLDivElement>(null)
-  const ringRef = useRef<HTMLDivElement>(null)
-  const spotRef = useRef<HTMLDivElement>(null)
-  const mouseRef  = useRef({ x: 0, y: 0 })
-  const ringPos   = useRef({ x: 0, y: 0 })
-  const rafRef    = useRef<number>(0)
-  const frameSkip = useRef(0)
+  const dotRef       = useRef<HTMLDivElement>(null)
+  const ringRef      = useRef<HTMLDivElement>(null)
+  const spotRef      = useRef<HTMLDivElement>(null)
+  const mouseRef     = useRef({ x: 0, y: 0 })
+  const ringPos      = useRef({ x: 0, y: 0 })
+  const rafRef       = useRef<number>(0)
+  const frameSkip    = useRef(0)
+  const lastTrailRef = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
     // Automatically disable custom cursor for users who prefer reduced motion
@@ -26,12 +27,32 @@ export default function Cursor() {
     const spot = spotRef.current
     if (!dot || !ring || !spot) return
 
+    const TRAIL_THRESHOLD = 28 // px of movement before spawning a trail dot
+
+    const spawnTrailDot = (x: number, y: number) => {
+      const el = document.createElement('div')
+      el.className = 'cursor-trail-dot'
+      const size = 2 + Math.random() * 2.5
+      el.style.cssText = `left:${x}px;top:${y}px;width:${size}px;height:${size}px;`
+      document.body.appendChild(el)
+      // Clean up after the 500ms animation completes
+      setTimeout(() => el.remove(), 520)
+    }
+
     const onMove = (e: MouseEvent) => {
       mouseRef.current = { x: e.clientX, y: e.clientY }
       dot.style.left  = e.clientX + 'px'
       dot.style.top   = e.clientY + 'px'
       spot.style.left = e.clientX + 'px'
       spot.style.top  = e.clientY + 'px'
+
+      // Spawn a trail dot if mouse has moved far enough from last trail point
+      const dx = e.clientX - lastTrailRef.current.x
+      const dy = e.clientY - lastTrailRef.current.y
+      if (Math.sqrt(dx * dx + dy * dy) > TRAIL_THRESHOLD) {
+        lastTrailRef.current = { x: e.clientX, y: e.clientY }
+        spawnTrailDot(e.clientX, e.clientY)
+      }
     }
 
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t
@@ -49,20 +70,22 @@ export default function Cursor() {
     }
 
     const onEnterLink = () => {
-      dot.style.width  = '14px'
-      dot.style.height = '14px'
-      dot.style.background   = 'var(--accent2)'
-      ring.style.width       = '50px'
-      ring.style.height      = '50px'
-      ring.style.borderColor = 'rgba(74,144,217,0.35)'
+      dot.style.width      = '12px'
+      dot.style.height     = '12px'
+      dot.style.background = 'var(--accent2)'
+      dot.style.boxShadow  = '0 0 14px rgba(130,180,248,0.95), 0 0 32px rgba(130,180,248,0.55)'
+      ring.style.width       = '52px'
+      ring.style.height      = '52px'
+      ring.style.borderColor = 'rgba(79,142,240,0.50)'
     }
     const onLeaveLink = () => {
-      dot.style.width  = '8px'
-      dot.style.height = '8px'
-      dot.style.background   = 'var(--accent)'
+      dot.style.width      = '8px'
+      dot.style.height     = '8px'
+      dot.style.background = 'var(--accent)'
+      dot.style.boxShadow  = '0 0 10px rgba(79,142,240,0.9), 0 0 24px rgba(79,142,240,0.45)'
       ring.style.width       = '36px'
       ring.style.height      = '36px'
-      ring.style.borderColor = 'rgba(74,144,217,0.40)'
+      ring.style.borderColor = 'rgba(79,142,240,0.45)'
     }
 
     const bindLinks = () => {
@@ -101,7 +124,8 @@ export default function Cursor() {
           pointerEvents: 'none',
           zIndex: 9999,
           transform: 'translate(-50%,-50%)',
-          transition: 'width 0.2s var(--ease-spring), height 0.2s var(--ease-spring), background 0.2s',
+          boxShadow: '0 0 10px rgba(79,142,240,0.9), 0 0 24px rgba(79,142,240,0.45)',
+          transition: 'width 0.2s var(--ease-spring), height 0.2s var(--ease-spring), background 0.2s, box-shadow 0.2s',
         }}
       />
       {/* Trailing ring */}
@@ -111,26 +135,28 @@ export default function Cursor() {
         style={{
           position: 'fixed',
           width: '36px', height: '36px',
-          border: '1px solid rgba(74,144,217,0.40)',
+          border: '1.5px solid rgba(79,142,240,0.45)',
           borderRadius: '50%',
           pointerEvents: 'none',
           zIndex: 9998,
           transform: 'translate(-50%,-50%)',
+          backdropFilter: 'blur(1px)',
           transition: 'width 0.3s var(--ease-spring), height 0.3s var(--ease-spring), border-color 0.2s',
         }}
       />
-      {/* Ambient spot glow — smaller for performance */}
+      {/* Ambient spot glow — soft, large */}
       <div
         ref={spotRef}
         aria-hidden="true"
         style={{
           position: 'fixed',
-          width: '340px', height: '340px',
+          width: '420px', height: '420px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(74,144,217,0.06) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(79,142,240,0.055) 0%, rgba(79,142,240,0.015) 40%, transparent 70%)',
           pointerEvents: 'none',
           zIndex: 1,
           transform: 'translate(-50%,-50%)',
+          filter: 'blur(2px)',
         }}
       />
     </>

@@ -1,10 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
-import {
-  MapPin, BrainCircuit, ReceiptText, BarChart2, Users, CalendarDays,
-  ArrowRight, CheckCircle2, Clock, Wifi, Activity,
-} from 'lucide-react'
+import { Location, Cpu, ReceiptText, Chart2, Profile2User, Calendar1, ArrowRight, TickCircle, Clock, Wifi, Activity } from 'iconsax-react'
 import gsap from 'gsap'
 import { registerGSAP } from '@/lib/gsap-st'
 registerGSAP()
@@ -15,11 +12,15 @@ function BentoIcon({ icon, color = 'rgba(255,255,255,0.55)', bg = 'rgba(255,255,
   icon: React.ReactNode; color?: string; bg?: string; border?: string
 }) {
   return (
-    <div aria-hidden="true" style={{
-      width: '40px', height: '40px', background: bg, border: `1px solid ${border}`,
-      borderRadius: 'var(--r-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-      marginBottom: '1.25rem', color, flexShrink: 0,
-    }}>
+    <div
+      aria-hidden="true"
+      className="bento-icon-wrap"
+      style={{
+        width: '40px', height: '40px', background: bg, border: `1px solid ${border}`,
+        borderRadius: 'var(--r-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        marginBottom: '1.25rem', color, flexShrink: 0,
+      }}
+    >
       {icon}
     </div>
   )
@@ -48,7 +49,7 @@ function ExploreLink() {
       marginTop: '1rem', fontSize: '12px', color: 'var(--accent)',
       fontFamily: 'var(--font-inter)', fontWeight: 500, letterSpacing: '0.02em',
     }}>
-      Explore feature <ArrowRight size={12} strokeWidth={2} />
+      Explore feature <ArrowRight size={12} variant="Linear" />
     </div>
   )
 }
@@ -236,7 +237,7 @@ function CalendarEventMini() {
           <span style={{ fontSize: '10px', color: 'var(--text-3)', width: '28px', flexShrink: 0, fontFamily: 'var(--font-mono),monospace' }}>{ev.day}</span>
           <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: colors[ev.type], flexShrink: 0 }} />
           <span style={{ fontSize: '11px', color: 'var(--text-2)', flex: 1 }}>{ev.event}</span>
-          <Clock size={10} color="var(--text-3)" />
+          <Clock size={10} color="var(--text-3)" variant="Linear" />
         </div>
       ))}
     </div>
@@ -259,10 +260,10 @@ function PathwaysMini() {
             fontFamily: 'var(--font-inter)',
             display: 'flex', alignItems: 'center', gap: '4px',
           }}>
-            {i === 2 && <CheckCircle2 size={10} />}
+            {i === 2 && <TickCircle size={10} variant="Linear" />}
             {step}
           </div>
-          {i < steps.length - 1 && <ArrowRight size={10} color="var(--text-3)" />}
+          {i < steps.length - 1 && <ArrowRight size={10} color="var(--text-3)" variant="Linear" />}
         </div>
       ))}
     </div>
@@ -291,7 +292,29 @@ export default function Features() {
     const ctx = gsap.context(() => {
       gsap.from('.section-intro', {
         y: 40, opacity: 0, duration: 0.8, ease: 'power3.out',
-        scrollTrigger: { trigger: '.section-intro', start: 'top 85%' },
+        scrollTrigger: { trigger: '.section-intro', start: 'top 85%', once: true },
+      })
+
+      /* ── Word-by-word masked h2 reveal (mask-reveal technique) ── */
+      gsap.set('.reveal-word-inner', { y: '115%', opacity: 0 })
+      gsap.to('.reveal-word-inner', {
+        y: '0%', opacity: 1,
+        duration: 0.75, ease: 'power3.out', stagger: 0.065,
+        scrollTrigger: { trigger: '.reveal-h2', start: 'top 86%', once: true },
+      })
+
+      /* ── Eyebrow pill clip-wipe entrance ── */
+      gsap.from('.features-eyebrow', {
+        clipPath: 'inset(0 100% 0 0)', opacity: 0, duration: 0.7, ease: 'power3.out',
+        scrollTrigger: { trigger: '.features-eyebrow', start: 'top 90%', once: true },
+      })
+
+      /* ── BentoIcon bounce-in ── */
+      gsap.from('.bento-icon-wrap', {
+        scale: 0.5, opacity: 0, rotation: -20,
+        duration: 0.55, ease: 'back.out(2)',
+        stagger: 0.07,
+        scrollTrigger: { trigger: '.bento-grid', start: 'top 82%', once: true },
       })
 
       const cardDefs = [
@@ -347,7 +370,7 @@ export default function Features() {
 
       {/* Section header */}
       <div className="section-intro" style={{ marginBottom: '4rem' }}>
-        <div style={{
+        <div className="features-eyebrow" style={{
           display: 'inline-flex', alignItems: 'center', gap: '8px',
           fontSize: '11px', fontWeight: 500, letterSpacing: '0.14em',
           textTransform: 'uppercase', color: 'var(--accent)',
@@ -355,20 +378,33 @@ export default function Features() {
           background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.14)',
           borderRadius: '100px', padding: '5px 14px',
         }}>
-          <Activity size={11} strokeWidth={2} />
+          <Activity size={11} variant="TwoTone" />
           What NEXUS offers
         </div>
         <h2
           id="features-title"
+          className="reveal-h2"
           style={{
             fontFamily: 'var(--font-display)',
             fontSize: 'clamp(2.2rem,4vw,3.5rem)',
-            fontWeight: 700, lineHeight: 0.98, letterSpacing: '-0.03em',
+            fontWeight: 700, lineHeight: 1.05, letterSpacing: '-0.03em',
             marginBottom: '1.25rem',
           }}
         >
-          Built for people the<br />
-          system <em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>overlooked</em>
+          {['Built', 'for', 'people', 'the'].map(w => (
+            <span key={w} className="reveal-word" style={{ marginRight: '0.28em' }}>
+              <span className="reveal-word-inner">{w}</span>
+            </span>
+          ))}
+          <br />
+          <span className="reveal-word" style={{ marginRight: '0.28em' }}>
+            <span className="reveal-word-inner">system</span>
+          </span>
+          <span className="reveal-word">
+            <span className="reveal-word-inner">
+              <em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>overlooked</em>
+            </span>
+          </span>
         </h2>
         <p style={{ fontSize: '15px', color: 'var(--text-2)', maxWidth: '480px', fontWeight: 400, lineHeight: 1.85, fontFamily: 'var(--font-inter)' }}>
           Every feature was designed around one question: what does an uninsured adult actually need to get care today?
@@ -395,7 +431,7 @@ export default function Features() {
           >
             <div className="card-depth-overlay" aria-hidden="true" />
             <BentoIcon
-              icon={<MapPin size={18} strokeWidth={1.5} />}
+              icon={<Location size={18} variant="TwoTone" />}
               color="var(--accent)"
               bg="rgba(74,144,217,0.10)"
               border="rgba(74,144,217,0.18)"
@@ -421,7 +457,7 @@ export default function Features() {
             <div className="card-depth-overlay" aria-hidden="true" />
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem' }}>
               <BentoIcon
-                icon={<BrainCircuit size={18} strokeWidth={1.5} />}
+                icon={<Cpu size={18} variant="TwoTone" />}
                 color="var(--violet)"
                 bg="rgba(167,139,250,0.10)"
                 border="rgba(167,139,250,0.18)"
@@ -452,7 +488,7 @@ export default function Features() {
           <div className="bento-card nexus-card card-amber" role="listitem" style={{ ...cardBase }}>
             <div className="card-depth-overlay" aria-hidden="true" />
             <BentoIcon
-              icon={<ReceiptText size={18} strokeWidth={1.5} />}
+              icon={<ReceiptText size={18} variant="TwoTone" />}
               color="var(--amber)"
               bg="rgba(252,211,77,0.10)"
               border="rgba(252,211,77,0.18)"
@@ -473,7 +509,7 @@ export default function Features() {
         >
           <div className="bento-card nexus-card" role="listitem" style={{ ...cardBase }}>
             <div className="card-depth-overlay" aria-hidden="true" />
-            <BentoIcon icon={<BarChart2 size={18} strokeWidth={1.5} />} />
+            <BentoIcon icon={<Chart2 size={18} variant="TwoTone" />} />
             <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.3rem', fontFamily: 'var(--font-display)' }}>
               Outcomes Tracker
             </div>
@@ -495,7 +531,7 @@ export default function Features() {
             <div className="card-depth-overlay" aria-hidden="true" />
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem' }}>
               <BentoIcon
-                icon={<Users size={18} strokeWidth={1.5} />}
+                icon={<Profile2User size={18} variant="TwoTone" />}
                 color="var(--violet)"
                 bg="rgba(167,139,250,0.10)"
                 border="rgba(167,139,250,0.18)"
@@ -527,7 +563,7 @@ export default function Features() {
             <div className="card-depth-overlay" aria-hidden="true" />
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem' }}>
               <BentoIcon
-                icon={<CalendarDays size={18} strokeWidth={1.5} />}
+                icon={<Calendar1 size={18} variant="TwoTone" />}
                 color="var(--accent)"
                 bg="rgba(74,144,217,0.10)"
                 border="rgba(74,144,217,0.18)"
@@ -590,12 +626,28 @@ export default function Features() {
               e.currentTarget.style.background = 'rgba(74,144,217,0.05)'
             }}
           >
-            {item.label} <ArrowRight size={10} strokeWidth={1.5} />
+            {item.label} <ArrowRight size={10} variant="Linear" />
           </Link>
         ))}
       </div>
 
       <style>{`
+        /* ── Word reveal: outer = overflow clip, inner = sliding element ── */
+        .reveal-word {
+          display: inline-block;
+          overflow: hidden;
+          vertical-align: bottom;
+          padding-bottom: 0.06em;
+          margin-bottom: -0.06em;
+        }
+        .reveal-word-inner {
+          display: inline-block;
+        }
+        /* Eyebrow: clip-path wipe base state */
+        .features-eyebrow {
+          clip-path: inset(0 0% 0 0);
+          overflow: hidden;
+        }
         @media (max-width: 768px) {
           .bento-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
           .bc-1,.bc-2,.bc-3,.bc-4,.bc-5,.bc-6 {

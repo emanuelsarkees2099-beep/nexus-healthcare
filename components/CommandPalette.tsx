@@ -2,11 +2,11 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import {
-  Search, MapPin, Users, ReceiptText, BarChart2, CalendarDays,
-  BookOpen, Scale, Megaphone, Accessibility, Zap, ArrowRight,
-  BrainCircuit, Phone, Heart, X, Mic, MicOff, Globe, TrendingUp,
-  Navigation, Shield, Sparkles, AlertTriangle,
-} from 'lucide-react'
+  SearchNormal1, Location, Profile2User, ReceiptText, Chart2, Calendar1,
+  Book1, Judge, Speaker, Eye, Flash, ArrowRight,
+  Cpu, Call, Heart, CloseCircle, Microphone, MicrophoneSlash, Global, TrendUp,
+  Routing, ShieldTick, MagicStar, Danger,
+} from 'iconsax-react'
 
 /* ── SpeechRecognition types ── */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -34,7 +34,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Find a Free Clinic',
     description: 'Search 12,000+ free and sliding-scale clinics',
     href: '/search',
-    icon: <MapPin size={15} />,
+    icon: <Location size={15} variant="Linear" />,
     category: 'Core',
     keywords: ['clinic', 'doctor', 'free', 'find', 'search', 'near me', 'hospital'],
   },
@@ -43,7 +43,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Programs & Eligibility',
     description: 'Check Medicaid, ACA, HRSA and 40+ programs',
     href: '/programs',
-    icon: <ReceiptText size={15} />,
+    icon: <ReceiptText size={15} variant="Linear" />,
     category: 'Core',
     keywords: ['programs', 'medicaid', 'aca', 'insurance', 'qualify', 'benefits', 'eligibility'],
   },
@@ -52,7 +52,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Community Health Workers',
     description: 'Connect with a verified CHW who speaks your language',
     href: '/chw',
-    icon: <Users size={15} />,
+    icon: <Profile2User size={15} variant="Linear" />,
     category: 'Core',
     keywords: ['chw', 'community', 'worker', 'navigator', 'help', 'language', 'spanish'],
   },
@@ -61,7 +61,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Care Pathways',
     description: 'AI-powered routes to care based on your needs',
     href: '/pathways',
-    icon: <BrainCircuit size={15} />,
+    icon: <Cpu size={15} variant="Linear" />,
     category: 'Features',
     keywords: ['pathway', 'route', 'care', 'ai', 'smart', 'navigate'],
   },
@@ -70,7 +70,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Outcomes Tracker',
     description: 'Track and report your care experience',
     href: '/outcomes',
-    icon: <BarChart2 size={15} />,
+    icon: <Chart2 size={15} variant="Linear" />,
     category: 'Features',
     keywords: ['outcomes', 'track', 'data', 'report', 'experience'],
   },
@@ -79,7 +79,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Preventive Care Calendar',
     description: 'Free clinic events, vaccine drives, dental days',
     href: '/calendar',
-    icon: <CalendarDays size={15} />,
+    icon: <Calendar1 size={15} variant="Linear" />,
     category: 'Features',
     keywords: ['calendar', 'events', 'vaccine', 'dental', 'mammography', 'preventive'],
   },
@@ -88,7 +88,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Telehealth',
     description: 'Free and low-cost virtual care options',
     href: '/telehealth',
-    icon: <Phone size={15} />,
+    icon: <Call size={15} variant="Linear" />,
     category: 'Features',
     keywords: ['telehealth', 'virtual', 'online', 'remote', 'video', 'call'],
   },
@@ -97,7 +97,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Stories',
     description: 'Read and share healthcare navigation experiences',
     href: '/stories',
-    icon: <BookOpen size={15} />,
+    icon: <Book1 size={15} variant="Linear" />,
     category: 'Community',
     keywords: ['stories', 'share', 'experience', 'community', 'read'],
   },
@@ -106,7 +106,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Know Your Rights',
     description: 'Legal protections, EMTALA, Title VI explained',
     href: '/rights',
-    icon: <Scale size={15} />,
+    icon: <Judge size={15} variant="Linear" />,
     category: 'Community',
     keywords: ['rights', 'legal', 'law', 'emtala', 'discrimination', 'title vi'],
   },
@@ -115,7 +115,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Advocacy',
     description: 'Campaigns, petitions and policy action',
     href: '/advocacy',
-    icon: <Megaphone size={15} />,
+    icon: <Speaker size={15} variant="Linear" />,
     category: 'Community',
     keywords: ['advocacy', 'petition', 'policy', 'campaign', 'vote', 'change'],
   },
@@ -124,7 +124,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Impact Dashboard',
     description: 'NEXUS by the numbers — searches, matches, coverage',
     href: '/impact',
-    icon: <Zap size={15} />,
+    icon: <Flash size={15} variant="Linear" />,
     category: 'Info',
     keywords: ['impact', 'stats', 'data', 'dashboard', 'numbers'],
   },
@@ -133,7 +133,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Accessibility',
     description: 'Accommodations, ADA information, report barriers',
     href: '/accessibility',
-    icon: <Accessibility size={15} />,
+    icon: <Eye size={15} variant="Linear" />,
     category: 'Info',
     keywords: ['accessibility', 'ada', 'disability', 'wheelchair', 'accommodations'],
   },
@@ -142,7 +142,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'My Health Wallet',
     description: 'Your saved clinics, programs and appointments',
     href: '/dashboard',
-    icon: <Heart size={15} />,
+    icon: <Heart size={15} variant="Linear" />,
     category: 'Account',
     keywords: ['dashboard', 'wallet', 'saved', 'bookmarks', 'appointments', 'profile'],
   },
@@ -151,7 +151,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Healthcare Equity Lab',
     description: 'Interactive maps, equity data, and healthcare disparities',
     href: '/equity',
-    icon: <Globe size={15} />,
+    icon: <Global size={15} variant="Linear" />,
     category: 'Info',
     keywords: ['equity', 'data', 'map', 'disparities', 'race', 'income', 'zip code', 'lab'],
   },
@@ -160,7 +160,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Open Roadmap',
     description: 'Public changelog, upcoming features, and our mission',
     href: '/open',
-    icon: <TrendingUp size={15} />,
+    icon: <TrendUp size={15} variant="Linear" />,
     category: 'Info',
     keywords: ['roadmap', 'changelog', 'open', 'developer', 'updates', 'features', 'api'],
   },
@@ -169,7 +169,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Editorial',
     description: 'In-depth healthcare journalism and guides',
     href: '/editorial',
-    icon: <BookOpen size={15} />,
+    icon: <Book1 size={15} variant="Linear" />,
     category: 'Community',
     keywords: ['editorial', 'article', 'magazine', 'journalism', 'guide', 'read', 'long-form'],
   },
@@ -178,7 +178,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'AI Triage Co-Pilot',
     description: 'Describe symptoms — AI helps you find the right care',
     href: '/triage',
-    icon: <BrainCircuit size={15} />,
+    icon: <Cpu size={15} variant="Linear" />,
     category: 'Features',
     keywords: ['triage', 'symptoms', 'ai', 'chest', 'pain', 'diagnosis', 'hurt', 'sick'],
   },
@@ -187,7 +187,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Healthcare GPS',
     description: 'Step-by-step guide to getting care — phone scripts included',
     href: '/gps',
-    icon: <Navigation size={15} />,
+    icon: <Routing size={15} variant="Linear" />,
     category: 'Features',
     keywords: ['gps', 'guide', 'steps', 'navigate', 'clinic visit', 'appointment', 'help'],
   },
@@ -196,7 +196,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Health Passport',
     description: 'Your encrypted health record — allergies, meds, QR check-in',
     href: '/passport',
-    icon: <Shield size={15} />,
+    icon: <ShieldTick size={15} variant="Linear" />,
     category: 'Account',
     keywords: ['passport', 'health record', 'allergies', 'medications', 'qr', 'encrypted'],
   },
@@ -205,7 +205,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Community Care Network',
     description: 'Rides, childcare swaps, translator buddies, and nurse Q&A',
     href: '/community',
-    icon: <Users size={15} />,
+    icon: <Profile2User size={15} variant="Linear" />,
     category: 'Community',
     keywords: ['community', 'ride', 'translate', 'childcare', 'nurse', 'mutual aid', 'volunteer'],
   },
@@ -214,7 +214,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Crisis Support',
     description: '988 lifeline, nearest ER, mental health walk-ins — right now',
     href: '/crisis',
-    icon: <AlertTriangle size={15} />,
+    icon: <Danger size={15} variant="Linear" />,
     category: 'Core',
     keywords: ['crisis', '988', 'emergency', 'mental health', 'help now', 'hurt', 'overdose'],
   },
@@ -223,7 +223,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Care Wrapped',
     description: 'Your year in healthcare — savings, clinics found, impact',
     href: '/wrapped',
-    icon: <Sparkles size={15} />,
+    icon: <MagicStar size={15} variant="Linear" />,
     category: 'Account',
     keywords: ['wrapped', 'year', 'impact', 'savings', 'statistics', 'annual'],
   },
@@ -232,7 +232,7 @@ const CMD_ITEMS: CmdItem[] = [
     label: 'Get Started',
     description: 'Personalized care plan based on your situation',
     href: '/onboarding',
-    icon: <ArrowRight size={15} />,
+    icon: <ArrowRight size={15} variant="Linear" />,
     category: 'Core',
     keywords: ['start', 'onboarding', 'new', 'personalized', 'plan', 'setup'],
   },
@@ -356,7 +356,7 @@ export default function CommandPalette() {
       <div className="cmd-panel" onClick={e => e.stopPropagation()}>
         {/* Search input */}
         <div className="cmd-input-row">
-          <Search size={16} color="var(--text-3)" strokeWidth={2} />
+          <SearchNormal1 size={16} color="var(--text-3)" variant="Linear" />
           <input
             ref={inputRef}
             className="cmd-input"
@@ -374,7 +374,7 @@ export default function CommandPalette() {
               style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-3)', padding: '2px', display: 'flex' }}
               aria-label="Clear search"
             >
-              <X size={14} />
+              <CloseCircle size={14} variant="Linear" />
             </button>
           )}
           {voiceSupported && (
@@ -393,7 +393,7 @@ export default function CommandPalette() {
               aria-label={listening ? 'Stop voice search' : 'Start voice search'}
               title={listening ? 'Listening… click to stop' : 'Voice search'}
             >
-              {listening ? <MicOff size={14} /> : <Mic size={14} />}
+              {listening ? <MicrophoneSlash size={14} variant="Linear" /> : <Microphone size={14} variant="Linear" />}
             </button>
           )}
           <kbd style={{
@@ -450,7 +450,7 @@ export default function CommandPalette() {
                             {item.description}
                           </div>
                         </div>
-                        <ArrowRight size={12} color="var(--text-3)" />
+                        <ArrowRight size={12} color="var(--text-3)" variant="Linear" />
                       </div>
                     )
                   })}

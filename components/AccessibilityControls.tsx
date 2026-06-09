@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Type, Contrast, RotateCcw } from 'lucide-react'
+import { TextBlock, Sun, RotateLeft } from 'iconsax-react'
 
 type Mode = 'normal' | 'large-text' | 'high-contrast'
 
@@ -40,7 +40,7 @@ export default function AccessibilityControls() {
         onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.45)')}
         onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.2)')}
       >
-        <Type size={16} strokeWidth={1.5} />
+        <TextBlock size={16} variant="Linear" />
       </button>
 
       {/* Panel */}
@@ -55,9 +55,9 @@ export default function AccessibilityControls() {
           <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: '14px' }}>Display</div>
 
           {([
-            { id: 'normal',        label: 'Default',      desc: 'Standard view', icon: <RotateCcw size={14} strokeWidth={1.5} /> },
-            { id: 'large-text',    label: 'Large text',   desc: 'Bigger type, easier to read', icon: <Type size={14} strokeWidth={1.5} /> },
-            { id: 'high-contrast', label: 'High contrast', desc: 'Maximum visibility', icon: <Contrast size={14} strokeWidth={1.5} /> },
+            { id: 'normal',        label: 'Default',      desc: 'Standard view', icon: <RotateLeft size={14} variant="Linear" /> },
+            { id: 'large-text',    label: 'Large text',   desc: 'Bigger type, easier to read', icon: <TextBlock size={14} variant="Linear" /> },
+            { id: 'high-contrast', label: 'High contrast', desc: 'Maximum visibility', icon: <Sun size={14} variant="Linear" /> },
           ] as { id: Mode; label: string; desc: string; icon: React.ReactNode }[]).map(opt => (
             <button
               key={opt.id}

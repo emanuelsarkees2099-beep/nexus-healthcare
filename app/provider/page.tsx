@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
 import { smoothScrollTo } from '@/utils/smoothScroll'
 import { submitForm } from '@/utils/submitForm'
-import { Stethoscope, TrendingUp, Users, BarChart2, ArrowRight, CheckCircle, ShieldCheck, DollarSign, Zap, Star, ChevronDown, Phone, Mail, Clock, Globe, Camera, Calendar, Edit3, MapPin, AlertCircle } from 'lucide-react'
+import { Hospital, TrendUp, Profile2User, Chart2, ArrowRight, TickCircle, ShieldTick, DollarCircle, Flash, Star1, ArrowDown2, Call, Sms, Clock, Global, Camera, Calendar1, Edit, Location, InfoCircle } from 'iconsax-react'
 
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
@@ -66,27 +66,27 @@ const cardInner: React.CSSProperties = {
 }
 
 const METRICS = [
-  { label: 'Patients Seen This Month', value: 1247, suffix: '', icon: <Users size={16} strokeWidth={1.5} /> },
-  { label: 'Revenue Recovery Rate',   value: 87,   suffix: '%', icon: <DollarSign size={16} strokeWidth={1.5} /> },
-  { label: 'Community Health Score',  value: 94,   suffix: '/100', icon: <Star size={16} strokeWidth={1.5} /> },
-  { label: 'Appointments Scheduled',  value: 312,  suffix: '', icon: <BarChart2 size={16} strokeWidth={1.5} /> },
+  { label: 'Patients Seen This Month', value: 1247, suffix: '', icon: <Profile2User size={16} variant="Linear" /> },
+  { label: 'Revenue Recovery Rate',   value: 87,   suffix: '%', icon: <DollarCircle size={16} variant="Linear" /> },
+  { label: 'Community Health Score',  value: 94,   suffix: '/100', icon: <Star1 size={16} variant="Linear" /> },
+  { label: 'Appointments Scheduled',  value: 312,  suffix: '', icon: <Chart2 size={16} variant="Linear" /> },
 ]
 
 const FEATURES = [
   {
-    icon: <Zap size={20} strokeWidth={1.5} />,
+    icon: <Flash size={20} variant="Linear" />,
     title: 'Patient Matching Engine',
     desc: "Routes patients who need exactly the services your clinic offers. No more mismatched visits that drain staff time. Our model weighs specialty, language, insurance, and distance.",
     tag: 'AI-powered',
   },
   {
-    icon: <DollarSign size={20} strokeWidth={1.5} />,
+    icon: <DollarCircle size={20} variant="Linear" />,
     title: 'Revenue Recovery Tools',
     desc: "Identify missed billing opportunities, facilitate retroactive Medicaid enrollment, and connect uninsured patients to programs that cover their visit — before they leave.",
     tag: 'Financial',
   },
   {
-    icon: <BarChart2 size={20} strokeWidth={1.5} />,
+    icon: <Chart2 size={20} variant="Linear" />,
     title: 'Outcome Reporting Suite',
     desc: "HEDIS-aligned outcome tracking, community benefit reporting for non-profit status, and exportable dashboards for grant applications and board reporting.",
     tag: 'Analytics',
@@ -196,7 +196,7 @@ export default function ProviderPage() {
       <section style={{ minHeight: '88dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '100px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(74,144,217,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
-        <div style={{ ...pill, marginBottom: '24px' }}><Stethoscope size={10} strokeWidth={1.5} /> For Healthcare Providers</div>
+        <div style={{ ...pill, marginBottom: '24px' }}><Hospital size={10} variant="Linear" /> For Healthcare Providers</div>
 
         <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.08, marginBottom: '24px', maxWidth: '800px' }}>
           {TITLE.map((w, i) => (
@@ -223,7 +223,7 @@ export default function ProviderPage() {
           onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.25)' }}
           onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '' }}
         >
-          Join as a Provider <ArrowRight size={14} strokeWidth={2} />
+          Join as a Provider <ArrowRight size={14} variant="Linear" />
         </button>
       </section>
 
@@ -232,7 +232,7 @@ export default function ProviderPage() {
         <div style={{ maxWidth: '860px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><Edit3 size={10} strokeWidth={1.5} /> Already a partner?</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Edit size={10} variant="Linear" /> Already a partner?</div>
               <h2 style={{ fontSize: 'clamp(24px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '12px' }}>
                 Manage your NEXUS listing
               </h2>
@@ -245,10 +245,10 @@ export default function ProviderPage() {
           {/* Tabs */}
           <div style={{ display: 'flex', gap: '4px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', padding: '4px', marginBottom: '24px' }}>
             {([
-              { id: 'claim',        label: 'Claim listing',     icon: <ShieldCheck size={13} /> },
-              { id: 'edit',         label: 'Edit listing',      icon: <Edit3 size={13} />,        disabled: claimStep !== 'verified' },
-              { id: 'analytics',   label: 'Analytics',         icon: <BarChart2 size={13} />,    disabled: claimStep !== 'verified' },
-              { id: 'appointments', label: 'Appointments',      icon: <Calendar size={13} />,     disabled: claimStep !== 'verified' },
+              { id: 'claim',        label: 'Claim listing',     icon: <ShieldTick size={13} /> },
+              { id: 'edit',         label: 'Edit listing',      icon: <Edit size={13} />,        disabled: claimStep !== 'verified' },
+              { id: 'analytics',   label: 'Analytics',         icon: <Chart2 size={13} />,    disabled: claimStep !== 'verified' },
+              { id: 'appointments', label: 'Appointments',      icon: <Calendar1 size={13} />,     disabled: claimStep !== 'verified' },
             ] as { id: ManageTab; label: string; icon: React.ReactNode; disabled?: boolean }[]).map(tab => (
               <button
                 key={tab.id}
@@ -273,7 +273,7 @@ export default function ProviderPage() {
             <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', padding: '32px' }}>
               {claimStep === 'verified' ? (
                 <div style={{ textAlign: 'center', padding: '24px 0' }}>
-                  <CheckCircle size={40} color="#60a5fa" strokeWidth={1.5} style={{ marginBottom: '16px' }} />
+                  <TickCircle size={40} color="#60a5fa" variant="Linear" style={{ marginBottom: '16px' }} />
                   <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Listing claimed</h3>
                   <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)' }}>You now have full control. Use the tabs above to update your listing.</p>
                   <button onClick={() => setManageTab('edit')} style={{ marginTop: '20px', padding: '10px 24px', borderRadius: '100px', background: 'var(--accent)', color: '#07070F', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 700, fontFamily: 'inherit' }}>
@@ -316,7 +316,7 @@ export default function ProviderPage() {
                         key={m} onClick={() => setClaimMethod(m)}
                         style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px', padding: '10px', borderRadius: '9px', fontSize: '13px', fontFamily: 'inherit', cursor: 'pointer', transition: 'all 0.2s', border: `1px solid ${claimMethod === m ? 'rgba(74,144,217,0.35)' : 'rgba(255,255,255,0.09)'}`, background: claimMethod === m ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.03)', color: claimMethod === m ? 'var(--accent)' : 'rgba(255,255,255,0.55)' }}
                       >
-                        {m === 'email' ? <Mail size={13} /> : <Phone size={13} />}
+                        {m === 'email' ? <Sms size={13} /> : <Call size={13} />}
                         {m === 'email' ? 'Email' : 'Phone'}
                       </button>
                     ))}
@@ -533,7 +533,7 @@ export default function ProviderPage() {
               </div>
 
               <div style={{ padding: '14px 18px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.14)', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <AlertCircle size={14} color="var(--accent)" />
+                <InfoCircle size={14} color="var(--accent)" />
                 <p style={{ fontSize: '12px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', lineHeight: 1.5, margin: 0 }}>
                   Analytics update daily at midnight UTC. Historical data available for the past 12 months. Export as CSV from your provider dashboard.
                 </p>
@@ -591,7 +591,7 @@ export default function ProviderPage() {
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><BarChart2 size={10} strokeWidth={1.5} /> Live dashboard</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Chart2 size={10} variant="Linear" /> Live dashboard</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Your clinic's performance,<br /><em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>at a glance</em></h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', marginTop: '16px', maxWidth: '400px', margin: '16px auto 0', lineHeight: 1.65 }}>Every metric your team needs — from patient volume to revenue recovery — in one real-time dashboard.</p>
             </div>
@@ -620,7 +620,7 @@ export default function ProviderPage() {
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><CheckCircle size={10} strokeWidth={1.5} /> Setup process</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><TickCircle size={10} variant="Linear" /> Setup process</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, maxWidth: '500px' }}>Four steps to full integration</h2>
             </div>
           </RevealBlock>
@@ -647,7 +647,7 @@ export default function ProviderPage() {
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><Zap size={10} strokeWidth={1.5} /> Platform features</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Flash size={10} variant="Linear" /> Platform features</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, maxWidth: '500px' }}>Everything a community clinic needs</h2>
             </div>
           </RevealBlock>
@@ -674,7 +674,7 @@ export default function ProviderPage() {
       <section ref={formRef} style={{ padding: '100px 24px 120px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '620px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ ...pill, marginBottom: '24px' }}><ShieldCheck size={10} strokeWidth={1.5} /> Join as a provider</div>
+            <div style={{ ...pill, marginBottom: '24px' }}><ShieldTick size={10} variant="Linear" /> Join as a provider</div>
             <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '16px' }}>Ready to connect with your community?</h2>
             <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65, marginBottom: '40px' }}>Tell us about your clinic. We'll reach out within 2 business days to set up your provider dashboard.</p>
           </RevealBlock>
@@ -682,7 +682,7 @@ export default function ProviderPage() {
           {submitted ? (
             <RevealBlock>
               <div style={{ textAlign: 'center', padding: '48px', background: 'rgba(96,165,250,0.04)', border: '1px solid rgba(96,165,250,0.15)', borderRadius: '20px' }}>
-                <CheckCircle size={40} strokeWidth={1.5} style={{ color: '#60a5fa', marginBottom: '16px' }} />
+                <TickCircle size={40} variant="Linear" style={{ color: '#60a5fa', marginBottom: '16px' }} />
                 <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Application received</h3>
                 <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65 }}>We'll reach out to <strong style={{ color: '#eef4f5' }}>{form.email}</strong> within 2 business days to schedule your onboarding.</p>
               </div>

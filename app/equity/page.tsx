@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
-import { Globe, TrendingUp, BarChart2, AlertTriangle, ArrowRight, ChevronDown } from 'lucide-react'
+import { Global, TrendUp, Chart2, Danger, ArrowRight, ArrowDown2 } from 'iconsax-react'
 
 /* ── reveal helper ── */
 function useReveal(threshold = 0.12) {
@@ -202,7 +202,7 @@ export default function EquityPage() {
 
         <Reveal>
           <div style={{ ...pill, background: 'rgba(248,113,113,0.08)', borderColor: 'rgba(248,113,113,0.25)', color: '#f87171', marginBottom: '24px' }}>
-            <Globe size={10} strokeWidth={1.5} /> Healthcare Equity Lab
+            <Global size={10} variant="Linear" /> Healthcare Equity Lab
           </div>
         </Reveal>
 
@@ -257,7 +257,7 @@ export default function EquityPage() {
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <Reveal>
             <div style={{ marginBottom: '48px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><BarChart2 size={10} strokeWidth={1.5} /> State-by-State Data</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Chart2 size={10} variant="Linear" /> State-by-State Data</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '16px' }}>
                 How every state stacks up
               </h2>
@@ -311,7 +311,7 @@ export default function EquityPage() {
           <Reveal>
             <div style={{ marginBottom: '48px' }}>
               <div style={{ ...pill, background: 'rgba(248,113,113,0.08)', borderColor: 'rgba(248,113,113,0.2)', color: '#f87171', marginBottom: '20px' }}>
-                <AlertTriangle size={10} strokeWidth={1.5} /> Racial Disparities
+                <Danger size={10} variant="Linear" /> Racial Disparities
               </div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '16px' }}>
                 Race and insurance: the numbers
@@ -324,7 +324,7 @@ export default function EquityPage() {
               <Reveal key={i} delay={i * 100}>
                 <div style={{ padding: '28px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '20px' }}>
                   <div style={{ fontSize: '14px', fontWeight: 600, marginBottom: '20px', color: 'rgba(255,255,255,0.7)' }}>{d.label}</div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                  <div className="equity-bar-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
                     <div>
                       <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', marginBottom: '8px', fontFamily: 'var(--font-inter)' }}>White Americans</div>
                       <Bar pct={d.white * 5} color="#60a5fa" label={`${d.white}% uninsured`} value={`${d.white}%`} />
@@ -401,7 +401,7 @@ export default function EquityPage() {
                       onMouseEnter={e => (e.currentTarget.style.gap = '10px')}
                       onMouseLeave={e => (e.currentTarget.style.gap = '6px')}
                     >
-                      Read the story <ArrowRight size={13} strokeWidth={2} />
+                      Read the story <ArrowRight size={13} variant="Linear" />
                     </a>
                   </div>
                 </div>
@@ -416,7 +416,7 @@ export default function EquityPage() {
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <Reveal>
             <div style={{ marginBottom: '56px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><TrendingUp size={10} strokeWidth={1.5} /> Policy Timeline</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><TrendUp size={10} variant="Linear" /> Policy Timeline</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>
                 The laws that shaped the gap
               </h2>
@@ -488,7 +488,7 @@ export default function EquityPage() {
                   onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.2)')}
                   onMouseLeave={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.12)')}
                 >
-                  <BarChart2 size={13} /> CSV Dataset
+                  <Chart2 size={13} /> CSV Dataset
                 </a>
                 <a
                   href="/api/equity-data?format=json"
@@ -503,7 +503,7 @@ export default function EquityPage() {
                   onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}
                   onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.04)')}
                 >
-                  <Globe size={13} /> JSON API
+                  <Global size={13} /> JSON API
                 </a>
               </div>
             </div>
@@ -541,7 +541,7 @@ export default function EquityPage() {
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.03)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 40px rgba(74,144,217,0.3)' }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 0 40px rgba(74,144,217,0.15)' }}
                 >
-                  Find free care now <ArrowRight size={14} strokeWidth={2} />
+                  Find free care now <ArrowRight size={14} variant="Linear" />
                 </a>
               </div>
             </div>

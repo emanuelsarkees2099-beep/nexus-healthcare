@@ -5,7 +5,7 @@ import AppShell from '@/components/AppShell'
 import { smoothScrollTo } from '@/utils/smoothScroll'
 import { submitForm } from '@/utils/submitForm'
 import { createClientClient } from '@/lib/auth-client'
-import { Scale, Shield, AlertCircle, CheckCircle, ChevronDown, Phone, ArrowRight, FileText, Search } from 'lucide-react'
+import { Judge, Shield, InfoCircle, TickCircle, ArrowDown2, Call, ArrowRight, ReceiptText, SearchNormal1 } from 'iconsax-react'
 
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
@@ -170,7 +170,7 @@ export default function RightsPage() {
       <section style={{ minHeight: '80dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '100px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(74,144,217,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
-        <div style={{ ...pill, marginBottom: '24px' }}><Scale size={10} strokeWidth={1.5} /> Rights & Legal Aid</div>
+        <div style={{ ...pill, marginBottom: '24px' }}><Judge size={10} variant="Linear" /> Rights & Legal Aid</div>
 
         <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.08, marginBottom: '24px', maxWidth: '700px' }}>
           {TITLE.map((w, i) => (
@@ -198,7 +198,7 @@ export default function RightsPage() {
             onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
             onMouseLeave={e => (e.currentTarget.style.transform = '')}
           >
-            <Search size={14} strokeWidth={2} /> Find legal aid
+            <SearchNormal1 size={14} variant="Linear" /> Find legal aid
           </button>
           <button
             onClick={() => formRef.current && smoothScrollTo(formRef.current)}
@@ -216,7 +216,7 @@ export default function RightsPage() {
         <div style={{ maxWidth: '760px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '48px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><Shield size={10} strokeWidth={1.5} /> Your rights</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Shield size={10} variant="Linear" /> Your rights</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Federal protections that apply to you</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', marginTop: '16px', lineHeight: 1.65 }}>These rights exist regardless of your insurance status, income, or immigration status.</p>
             </div>
@@ -234,7 +234,7 @@ export default function RightsPage() {
                       <span style={{ fontSize: '11px', padding: '3px 9px', borderRadius: '100px', background: 'rgba(74,144,217,0.1)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.2)', fontWeight: 600, flexShrink: 0 }}>{r.badge}</span>
                       <span style={{ fontSize: '15px', fontWeight: 600, lineHeight: 1.35 }}>{r.title}</span>
                     </div>
-                    <ChevronDown size={16} style={{ flexShrink: 0, color: 'rgba(255,255,255,0.4)', transform: openRight === i ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s' }} />
+                    <ArrowDown2 size={16} style={{ flexShrink: 0, color: 'rgba(255,255,255,0.4)', transform: openRight === i ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s' }} />
                   </button>
                   <div style={{ maxHeight: openRight === i ? '600px' : '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.16,1,0.3,1)' }}>
                     <div style={{ padding: '0 24px 24px' }}>
@@ -256,7 +256,7 @@ export default function RightsPage() {
         <div style={{ maxWidth: '860px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '48px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><Search size={10} strokeWidth={1.5} /> Legal aid finder</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><SearchNormal1 size={10} variant="Linear" /> Legal aid finder</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Find free legal help near you</h2>
             </div>
           </RevealBlock>
@@ -278,7 +278,7 @@ export default function RightsPage() {
                     <h3 style={{ fontSize: '15px', fontWeight: 700, lineHeight: 1.3 }}>{org.name}</h3>
                     <p style={{ fontSize: '13px', color: 'var(--accent)', margin: 0 }}>{org.specialty}</p>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                      <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', display: 'flex', alignItems: 'center', gap: '6px' }}><Phone size={12} strokeWidth={1.5} />{org.phone}</span>
+                      <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', display: 'flex', alignItems: 'center', gap: '6px' }}><Call size={12} variant="Linear" />{org.phone}</span>
                       <button onClick={() => window.open(`tel:${org.phone.replace(/[-()]/g, '')}`)} style={{ padding: '7px 14px', borderRadius: '100px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', color: 'var(--accent)', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'background 0.2s' }}
                         onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.2)')}
                         onMouseLeave={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.1)')}
@@ -333,7 +333,7 @@ export default function RightsPage() {
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {relevantRights.map((r, i) => (
                     <li key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', fontSize: '14px', color: 'rgba(255,255,255,0.55)' }}>
-                      <CheckCircle size={14} strokeWidth={2} style={{ color: '#60a5fa', flexShrink: 0, marginTop: '2px' }} />
+                      <TickCircle size={14} variant="Linear" style={{ color: '#60a5fa', flexShrink: 0, marginTop: '2px' }} />
                       {r}
                     </li>
                   ))}
@@ -373,7 +373,7 @@ export default function RightsPage() {
       <section ref={formRef} style={{ padding: '100px 24px 120px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '580px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ ...pill, marginBottom: '24px' }}><FileText size={10} strokeWidth={1.5} /> Get legal help</div>
+            <div style={{ ...pill, marginBottom: '24px' }}><ReceiptText size={10} variant="Linear" /> Get legal help</div>
             <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '16px' }}>We'll connect you with a legal aid partner</h2>
             <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65, marginBottom: '36px' }}>Describe your issue and we'll match you with the right legal aid organization within 24 hours.</p>
           </RevealBlock>
@@ -381,7 +381,7 @@ export default function RightsPage() {
           {submitted ? (
             <RevealBlock>
               <div style={{ textAlign: 'center', padding: '48px', background: 'rgba(96,165,250,0.04)', border: '1px solid rgba(96,165,250,0.15)', borderRadius: '20px' }}>
-                <CheckCircle size={40} strokeWidth={1.5} style={{ color: '#60a5fa', marginBottom: '16px' }} />
+                <TickCircle size={40} variant="Linear" style={{ color: '#60a5fa', marginBottom: '16px' }} />
                 <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Request received</h3>
                 <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65 }}>We'll connect you with a legal aid partner within 24 hours at <strong style={{ color: '#eef4f5' }}>{form.email}</strong>.</p>
               </div>

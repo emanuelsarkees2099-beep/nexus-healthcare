@@ -1,4 +1,5 @@
 'use client'
+import { Logout } from 'iconsax-react'
 /**
  * QuickExit — WCAG A6
  * A visible "Leave quickly" button for sensitive pages (crisis, triage, DV resources).
@@ -22,15 +23,7 @@ export default function QuickExit() {
       aria-label="Leave this page quickly and go to a safe site"
       title="Click to quickly leave this page"
     >
-      <svg
-        width="12" height="12" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-        <polyline points="16 17 21 12 16 7" />
-        <line x1="21" y1="12" x2="9" y2="12" />
-      </svg>
+      <Logout size={12} color="currentColor" variant="Linear" aria-hidden="true" />
       Leave quickly
     </button>
   )

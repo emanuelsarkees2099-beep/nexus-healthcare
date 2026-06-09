@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { Bell, BellRing, X, CheckCheck, Clock, Zap, Star, Calendar } from 'lucide-react'
+import { Notification as NotificationIcon, NotificationBing, CloseCircle, TickSquare, Clock, Flash, Star1, Calendar } from 'iconsax-react'
 
 export type NexusNotification = {
   id: string
@@ -76,11 +76,11 @@ function timeAgo(iso: string): string {
 }
 
 const TYPE_ICON: Record<NexusNotification['type'], React.ReactNode> = {
-  digest:        <Star size={13} />,
-  clinic_update: <Clock size={13} />,
-  new_program:   <Zap size={13} />,
-  reminder:      <Calendar size={13} />,
-  system:        <Bell size={13} />,
+  digest:        <Star1 size={13} variant="Linear" />,
+  clinic_update: <Clock size={13} variant="Linear" />,
+  new_program:   <Flash size={13} variant="Linear" />,
+  reminder:      <Calendar size={13} variant="Linear" />,
+  system:        <NotificationIcon size={13} variant="Linear" />,
 }
 
 const TYPE_COLOR: Record<NexusNotification['type'], string> = {
@@ -196,7 +196,7 @@ export default function NotificationBell() {
         onMouseEnter={e => { e.currentTarget.style.background = 'rgba(74,144,217,0.18)'; e.currentTarget.style.color = 'var(--accent)' }}
         onMouseLeave={e => { e.currentTarget.style.background = unread > 0 ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = unread > 0 ? 'var(--accent)' : 'rgba(255,255,255,0.45)' }}
       >
-        {unread > 0 ? <BellRing size={15} /> : <Bell size={15} />}
+        {unread > 0 ? <NotificationBing size={15} variant="Linear" /> : <NotificationIcon size={15} variant="Linear" />}
         {unread > 0 && (
           <span style={{
             position: 'absolute', top: '-4px', right: '-4px',
@@ -247,7 +247,7 @@ export default function NotificationBell() {
                   onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
                   onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.4)')}
                 >
-                  <CheckCheck size={14} />
+                  <TickSquare size={14} variant="Linear" />
                 </button>
               )}
               <button onClick={() => setOpen(false)}
@@ -255,7 +255,7 @@ export default function NotificationBell() {
                 onMouseEnter={e => (e.currentTarget.style.color = 'var(--text)')}
                 onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.4)')}
               >
-                <X size={14} />
+                <CloseCircle size={14} variant="Linear" />
               </button>
             </div>
           </div>
@@ -264,7 +264,7 @@ export default function NotificationBell() {
           <div style={{ overflowY: 'auto', flex: 1, scrollbarWidth: 'thin' }}>
             {notifications.length === 0 ? (
               <div style={{ padding: '36px 16px', textAlign: 'center' }}>
-                <Bell size={24} color="rgba(255,255,255,0.12)" style={{ margin: '0 auto 10px', display: 'block' }} />
+                <NotificationIcon size={24} color="rgba(255,255,255,0.12)" variant="Linear" style={{ margin: '0 auto 10px', display: 'block' }} />
                 <p style={{ fontSize: '13px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>No notifications yet</p>
               </div>
             ) : notifications.map(notif => (
@@ -381,7 +381,7 @@ function NotifRow({ notif, onRead, onDismiss, onClose }: {
           onMouseEnter={e => (e.currentTarget.style.color = '#f87171')}
           onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.5)')}
         >
-          <X size={11} />
+          <CloseCircle size={11} variant="Linear" />
         </button>
       )}
     </div>

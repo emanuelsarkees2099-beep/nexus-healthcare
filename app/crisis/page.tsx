@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import AppShell from '@/components/AppShell'
 import JsonLd, { medicalPageSchema, breadcrumbSchema } from '@/components/JsonLd'
 import Link from 'next/link'
-import { Phone, MapPin, Heart, AlertTriangle, ChevronRight, Clock, Navigation } from 'lucide-react'
+import { Call, Location, Heart, Danger, ArrowRight2, Clock, Routing } from 'iconsax-react'
 import QuickExit from '@/components/QuickExit'
 import DotGrid from '@/components/DotGrid'
 
@@ -173,6 +173,9 @@ export default function CrisisPage() {
         @keyframes spin { to { transform: rotate(360deg); } }
         .crisis-call-btn:hover { transform: scale(1.03) !important; }
         .crisis-resource:hover { border-color: rgba(255,255,255,0.2) !important; background: rgba(255,255,255,0.04) !important; }
+        @media (max-width: 768px) {
+          .crisis-resources-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+        }
       `}</style>
 
       {/* Hero — stark, immediate */}
@@ -239,7 +242,7 @@ export default function CrisisPage() {
           }}
           aria-label="Call 988 Crisis Lifeline"
         >
-          <Phone size={24} fill="white" />
+          <Call size={24} fill="white" />
           Call 988 Now
         </a>
 
@@ -322,7 +325,7 @@ export default function CrisisPage() {
                   <span style={{ fontSize: '13px', fontWeight: 600, color: r.color, letterSpacing: '0.01em' }}>
                     {r.name}
                   </span>
-                  <Phone size={14} color={r.color} style={{ flexShrink: 0, marginTop: '1px' }} />
+                  <Call size={14} color={r.color} style={{ flexShrink: 0, marginTop: '1px' }} />
                 </div>
                 <div style={{ fontSize: '18px', fontWeight: 800, color: '#f5f5f5', letterSpacing: '-0.01em' }}>
                   {r.number}
@@ -353,14 +356,14 @@ export default function CrisisPage() {
           }}>
             {geo.loading ? (
               <>
-                <Navigation size={13} color="rgba(255,255,255,0.4)" style={{ flexShrink: 0, animation: 'spin 1.5s linear infinite' }} />
+                <Routing size={13} color="rgba(255,255,255,0.4)" style={{ flexShrink: 0, animation: 'spin 1.5s linear infinite' }} />
                 <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>
                   Detecting your location to find nearest centers…
                 </span>
               </>
             ) : geo.location ? (
               <>
-                <Navigation size={13} color="var(--accent)" style={{ flexShrink: 0 }} />
+                <Routing size={13} color="var(--accent)" style={{ flexShrink: 0 }} />
                 <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', fontFamily: 'var(--font-inter)' }}>
                   Your location: <strong style={{ color: '#eef4f5' }}>{geo.location}</strong>
                 </span>
@@ -383,7 +386,7 @@ export default function CrisisPage() {
               </>
             ) : geo.denied ? (
               <>
-                <Navigation size={13} color="rgba(255,255,255,0.25)" style={{ flexShrink: 0 }} />
+                <Routing size={13} color="rgba(255,255,255,0.25)" style={{ flexShrink: 0 }} />
                 <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>
                   Location access denied. Showing general resources.{' '}
                   <a href="https://findtreatment.gov" target="_blank" rel="noopener noreferrer"
@@ -394,7 +397,7 @@ export default function CrisisPage() {
               </>
             ) : (
               <>
-                <Navigation size={13} color="rgba(255,255,255,0.25)" style={{ flexShrink: 0 }} />
+                <Routing size={13} color="rgba(255,255,255,0.25)" style={{ flexShrink: 0 }} />
                 <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>
                   Allow location access above to find the 3 nearest in-person crisis centers.{' '}
                   <a href="https://www.211.org" target="_blank" rel="noopener noreferrer"
@@ -406,7 +409,7 @@ export default function CrisisPage() {
             )}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
+          <div className="crisis-resources-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
             {/* Emergency Rooms */}
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
@@ -415,7 +418,7 @@ export default function CrisisPage() {
                   background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <AlertTriangle size={15} color="#f87171" />
+                  <Danger size={15} color="#f87171" />
                 </div>
                 <h3 style={{ fontSize: '16px', fontWeight: 700 }}>Nearest Emergency Rooms</h3>
               </div>
@@ -432,7 +435,7 @@ export default function CrisisPage() {
                     }}
                   >
                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <MapPin size={16} color="#f87171" />
+                      <Location size={16} color="#f87171" />
                     </div>
                     <div>
                       <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5', marginBottom: '3px' }}>Emergency Rooms Near You</div>
@@ -450,7 +453,7 @@ export default function CrisisPage() {
                     }}>
                       <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5' }}>{er.name}</div>
                       <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Navigation size={10} /> {er.dist}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Routing size={10} /> {er.dist}</span>
                         <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={10} /> {er.wait} wait</span>
                         <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><PulsingDot color="#60a5fa" /> Open now</span>
                       </div>
@@ -508,7 +511,7 @@ export default function CrisisPage() {
                         fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.6)',
                       }}
                     >
-                      <MapPin size={13} color="#818cf8" />
+                      <Location size={13} color="#818cf8" />
                       Also search Google Maps for crisis centers near you →
                     </a>
                   </>
@@ -521,7 +524,7 @@ export default function CrisisPage() {
                     }}>
                       <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5' }}>{mh.name}</div>
                       <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Navigation size={10} /> {mh.dist}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Routing size={10} /> {mh.dist}</span>
                         <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={10} /> {mh.hours}</span>
                       </div>
                     </div>
@@ -558,7 +561,7 @@ export default function CrisisPage() {
                 color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
                 textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px',
               }}>
-                <MapPin size={13} /> Find a free clinic near me
+                <Location size={13} /> Find a free clinic near me
               </Link>
               <Link href="/chw" style={{
                 padding: '10px 22px', borderRadius: '100px',

@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
-import { Shield, Plus, Pill, AlertTriangle, Heart, User, Download, Share2, QrCode, Lock, Eye, EyeOff, ChevronRight, CheckCircle, X } from 'lucide-react'
+import { Shield, AddCircle, Health, Danger, Heart, Profile, DocumentDownload, ExportSquare, Scan, Lock, Eye, EyeSlash, ArrowRight2, TickCircle, CloseCircle } from 'iconsax-react'
 
 type Allergy = { name: string; severity: 'mild' | 'moderate' | 'severe' }
 type Medication = { name: string; dose: string; frequency: string }
@@ -86,7 +86,7 @@ function AddModal({ onClose, onAdd }: { onClose: () => void; onAdd: (item: strin
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
           <span style={{ fontSize: '16px', fontWeight: 700 }}>Add entry</span>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)' }}>
-            <X size={18} />
+            <CloseCircle size={18} />
           </button>
         </div>
         <input
@@ -285,7 +285,7 @@ export default function PassportPage() {
                 display: 'flex', alignItems: 'center', gap: '6px',
               }}
             >
-              {masked ? <Eye size={12} /> : <EyeOff size={12} />}
+              {masked ? <Eye size={12} /> : <EyeSlash size={12} />}
               {masked ? 'Unmask' : 'Mask data'}
             </button>
             <button
@@ -297,7 +297,7 @@ export default function PassportPage() {
                 display: 'flex', alignItems: 'center', gap: '6px',
               }}
             >
-              <QrCode size={12} /> {showQR ? 'Hide QR' : 'Clinic QR code'}
+              <Scan size={12} /> {showQR ? 'Hide QR' : 'Clinic QR code'}
             </button>
           </div>
         </div>
@@ -335,7 +335,7 @@ export default function PassportPage() {
                   display: 'inline-flex', alignItems: 'center', gap: '6px',
                 }}
               >
-                <QrCode size={11} /> Show full-screen at clinic
+                <Scan size={11} /> Show full-screen at clinic
               </button>
             </div>
           </div>
@@ -353,7 +353,7 @@ export default function PassportPage() {
           <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <AlertTriangle size={14} color="#f87171" />
+                <Danger size={14} color="#f87171" />
                 <span style={{ fontSize: '13px', fontWeight: 600 }}>Allergies</span>
               </div>
               <button
@@ -364,7 +364,7 @@ export default function PassportPage() {
                   cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '4px',
                 }}
               >
-                <Plus size={11} /> Add
+                <AddCircle size={11} /> Add
               </button>
             </div>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -376,7 +376,7 @@ export default function PassportPage() {
                   fontSize: '12px', fontWeight: 600, color: severityColors[a.severity].color,
                   display: 'flex', alignItems: 'center', gap: '6px',
                 }}>
-                  <AlertTriangle size={10} />
+                  <Danger size={10} />
                   {masked ? '••••••' : a.name}
                   <span style={{ opacity: 0.6, fontWeight: 400, textTransform: 'capitalize' }}>({a.severity})</span>
                 </div>
@@ -388,7 +388,7 @@ export default function PassportPage() {
           <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Pill size={14} color="#818cf8" />
+                <Health size={14} color="#818cf8" />
                 <span style={{ fontSize: '13px', fontWeight: 600 }}>Current medications</span>
               </div>
               <button
@@ -399,7 +399,7 @@ export default function PassportPage() {
                   cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '4px',
                 }}
               >
-                <Plus size={11} /> Add
+                <AddCircle size={11} /> Add
               </button>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -435,7 +435,7 @@ export default function PassportPage() {
                   cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '4px',
                 }}
               >
-                <Plus size={11} /> Add
+                <AddCircle size={11} /> Add
               </button>
             </div>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -456,7 +456,7 @@ export default function PassportPage() {
           {/* Emergency contact */}
           <div style={{ padding: '20px 24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-              <User size={14} color="#fbbf24" />
+              <Profile size={14} color="#fbbf24" />
               <span style={{ fontSize: '13px', fontWeight: 600 }}>Emergency contact</span>
             </div>
             <div style={{
@@ -492,7 +492,7 @@ export default function PassportPage() {
               display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s',
             }}
           >
-            {saved ? <><CheckCircle size={13} /> Saved!</> : 'Save passport'}
+            {saved ? <><TickCircle size={13} /> Saved!</> : 'Save passport'}
           </button>
           <button
             onClick={handlePrint}
@@ -504,7 +504,7 @@ export default function PassportPage() {
               display: 'flex', alignItems: 'center', gap: '6px',
             }}
           >
-            <Download size={13} /> Print / Save PDF
+            <DocumentDownload size={13} /> Print / Save PDF
           </button>
           <button style={{
             padding: '11px 22px', borderRadius: '100px',
@@ -513,7 +513,7 @@ export default function PassportPage() {
             cursor: 'pointer', fontFamily: 'inherit',
             display: 'flex', alignItems: 'center', gap: '6px',
           }}>
-            <Share2 size={13} /> Share with caregiver
+            <ExportSquare size={13} /> Share with caregiver
           </button>
         </div>
 
@@ -533,7 +533,7 @@ export default function PassportPage() {
               fontSize: '12px', color: 'var(--accent)', textDecoration: 'none',
               display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '8px',
             }}>
-              Full privacy policy <ChevronRight size={11} />
+              Full privacy policy <ArrowRight2 size={11} />
             </Link>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
+import { Heart, Clock, People, Lock, TickCircle, CloseCircle } from 'iconsax-react'
 
 export const metadata: Metadata = {
   title: 'About — NEXUS Healthcare Platform',
@@ -9,38 +10,22 @@ export const metadata: Metadata = {
 
 const TEAM_VALUES = [
   {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-      </svg>
-    ),
+    Icon: Heart,
     title: 'Built for people, not profit',
     body: 'NEXUS is a mission-driven project with zero venture capital, no advertising, and no data monetization. Our only goal is connecting uninsured Americans to the care they are legally entitled to.',
   },
   {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
-      </svg>
-    ),
+    Icon: Clock,
     title: 'Radical transparency',
     body: 'Every stat we show is verified. Every number is sourced. When data is unavailable we show a dash — we would rather show nothing than mislead you. Our open roadmap is public.',
   },
   {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-      </svg>
-    ),
+    Icon: People,
     title: 'Community health workers first',
     body: 'Real Community Health Workers (CHWs) are embedded in the platform. They know local resources, speak your language, and provide human guidance that no algorithm can replicate.',
   },
   {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-      </svg>
-    ),
+    Icon: Lock,
     title: 'Your privacy is non-negotiable',
     body: 'Nothing you enter into symptom tools, search, or forms leaves your device in an identifiable form. We do not sell data, we do not share with insurers, and we never will.',
   },
@@ -222,7 +207,9 @@ export default function AboutPage() {
             gap: '1.5rem',
           }}
         >
-          {TEAM_VALUES.map(v => (
+          {TEAM_VALUES.map(v => {
+            const IconComp = v.Icon
+            return (
             <div key={v.title} className="about-card">
               <div style={{
                 width: '40px', height: '40px', borderRadius: '10px', flexShrink: 0,
@@ -230,7 +217,7 @@ export default function AboutPage() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 color: 'var(--accent)', marginBottom: '18px',
               }}>
-                {v.icon}
+                <IconComp size={20} color="var(--accent)" variant="TwoTone" />
               </div>
               <h3 style={{
                 fontFamily: 'var(--font-display)',
@@ -248,7 +235,7 @@ export default function AboutPage() {
                 {v.body}
               </p>
             </div>
-          ))}
+          )})}
         </div>
       </section>
 
@@ -273,7 +260,8 @@ export default function AboutPage() {
           >
             {[
               {
-                label: '✓ NEXUS is',
+                label: 'NEXUS is',
+                icon: <TickCircle size={13} variant="Bold" />,
                 color: 'var(--accent)',
                 items: [
                   'A directory of verified free & sliding-scale clinics',
@@ -285,7 +273,8 @@ export default function AboutPage() {
                 ],
               },
               {
-                label: '✗ NEXUS is not',
+                label: 'NEXUS is not',
+                icon: <CloseCircle size={13} variant="Bold" />,
                 color: '#f87171',
                 items: [
                   'A licensed medical provider or telemedicine service',
@@ -301,8 +290,9 @@ export default function AboutPage() {
                   fontSize: '11px', fontWeight: 600, color: col.color,
                   fontFamily: 'var(--font-inter)', letterSpacing: '0.08em',
                   textTransform: 'uppercase', marginBottom: '16px',
+                  display: 'flex', alignItems: 'center', gap: '5px',
                 }}>
-                  {col.label}
+                  {col.icon} {col.label}
                 </div>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {col.items.map(item => (

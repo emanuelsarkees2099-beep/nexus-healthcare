@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Bricolage_Grotesque, Inter, Orbitron, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -73,6 +73,9 @@ export const metadata: Metadata = {
     description: 'Find free clinics, sliding-scale care, and eligibility programs near you. No insurance required.',
     images: [`${process.env.NEXT_PUBLIC_APP_URL ?? 'https://nexus-healthcare.vercel.app'}/api/og`],
   },
+}
+
+export const viewport: Viewport = {
   themeColor: [
     { media: '(prefers-color-scheme: dark)',  color: '#040408' },
     { media: '(prefers-color-scheme: light)', color: '#040408' },

@@ -2,18 +2,20 @@
 import React, { useState, useMemo } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
-import { Pill, Search, ExternalLink, ChevronRight, AlertCircle, DollarSign, Heart, Info, Zap, CheckCircle2 } from 'lucide-react'
+import { Health, SearchNormal1, ExportSquare, ArrowRight2, InfoCircle, DollarCircle, Heart, Flash, TickCircle, Hospital, Profile2User, ShieldTick, Map1 } from 'iconsax-react'
 import DotGrid from '@/components/DotGrid'
 
 /* ── Medication assistance programs ─────────────────────────── */
-const PROGRAMS = [
+type ProgramIconType = React.ComponentType<{ size?: number; color?: string; variant?: 'Bold' | 'Linear' | 'Outline' | 'Broken' | 'Bulk' | 'TwoTone' }>
+
+const PROGRAMS: Array<{ name: string; url: string; desc: string; tags: string[]; color: string; Icon: ProgramIconType }> = [
   {
     name: 'NeedyMeds',
     url: 'https://www.needymeds.org',
     desc: 'Largest database of patient assistance programs. Search by drug name to find free or low-cost options from manufacturers.',
     tags: ['Free', 'All drugs', 'No income limit required'],
     color: '#4A8FD4',
-    icon: '💊',
+    Icon: Health,
   },
   {
     name: 'RxAssist',
@@ -21,7 +23,7 @@ const PROGRAMS = [
     desc: 'Directory of pharmaceutical company patient assistance programs. Many brand-name drugs available free with proof of financial need.',
     tags: ['Free', 'Brand-name', 'Apply directly'],
     color: '#34d399',
-    icon: '🏥',
+    Icon: Hospital,
   },
   {
     name: 'GoodRx',
@@ -29,7 +31,7 @@ const PROGRAMS = [
     desc: 'Compare prices at nearby pharmacies. Free coupons can reduce costs by up to 80% — no sign-up required.',
     tags: ['Discounted', 'Instant coupon', 'No enrollment'],
     color: '#60a5fa',
-    icon: '🎟️',
+    Icon: DollarCircle,
   },
   {
     name: 'Partnership for Prescription Assistance',
@@ -37,7 +39,7 @@ const PROGRAMS = [
     desc: 'Connects patients to over 475 public and private programs providing free or low-cost medications.',
     tags: ['Free', 'Multiple programs', 'Uninsured'],
     color: '#a78bfa',
-    icon: '🤝',
+    Icon: Profile2User,
   },
   {
     name: 'Medicare Extra Help (Low Income Subsidy)',
@@ -45,7 +47,7 @@ const PROGRAMS = [
     desc: 'For Medicare beneficiaries who need help paying for Part D prescription drug costs.',
     tags: ['Medicare', 'Income-based', 'Federal program'],
     color: '#fbbf24',
-    icon: '🏛️',
+    Icon: ShieldTick,
   },
   {
     name: 'State Pharmaceutical Assistance Programs',
@@ -53,7 +55,7 @@ const PROGRAMS = [
     desc: 'Many states offer additional prescription assistance beyond federal programs. Search your state\'s offerings.',
     tags: ['State-specific', 'Variable', 'Income-based'],
     color: '#f87171',
-    icon: '🗺️',
+    Icon: Map1,
   },
 ]
 
@@ -134,6 +136,10 @@ export default function MedicationsPage() {
         .med-card:hover { border-color: rgba(74,144,217,0.3) !important; transform: translateY(-2px); }
         .med-tip { transition: background 0.15s; }
         .med-tip:hover { background: rgba(255,255,255,0.03) !important; }
+        @media (max-width: 600px) {
+          .med-filter-row { flex-wrap: wrap !important; gap: 6px !important; }
+          .med-filter-row button { font-size: 11px !important; padding: 6px 12px !important; }
+        }
       `}</style>
 
       {/* Hero */}
@@ -141,7 +147,7 @@ export default function MedicationsPage() {
         <DotGrid opacity={0.3} />
         <div style={{ position: 'relative', zIndex: 1, maxWidth: 720, margin: '0 auto' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '5px 14px', borderRadius: 100, background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)', fontSize: 11, fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 24 }}>
-            <Pill size={12} />
+            <Health size={12} />
             Medication Access
           </div>
           <h1 style={{ fontSize: 'clamp(32px,6vw,56px)', fontWeight: 800, fontFamily: 'var(--font-display)', letterSpacing: '-0.03em', color: 'var(--text)', marginBottom: 16, lineHeight: 1.1 }}>
@@ -154,7 +160,7 @@ export default function MedicationsPage() {
 
           {/* Disclaimer */}
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '12px 16px', borderRadius: 12, background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.2)', maxWidth: 520, margin: '0 auto 24px', textAlign: 'left' }}>
-            <AlertCircle size={15} color="#fbbf24" style={{ flexShrink: 0, marginTop: 1 }} />
+            <InfoCircle size={15} color="#fbbf24" style={{ flexShrink: 0, marginTop: 1 }} />
             <p style={{ fontSize: 12, color: 'rgba(255,200,60,0.8)', fontFamily: 'var(--font-inter)', margin: 0, lineHeight: 1.6 }}>
               Always consult your healthcare provider before changing medications. This is a resource guide, not medical advice.
             </p>
@@ -162,7 +168,7 @@ export default function MedicationsPage() {
 
           {/* Search */}
           <div style={{ position: 'relative', maxWidth: 440, margin: '0 auto' }}>
-            <Search size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--accent)', opacity: 0.6 }} />
+            <SearchNormal1 size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--accent)', opacity: 0.6 }} />
             <label htmlFor="med-search" className="sr-only">Search medication programs</label>
             <input
               id="med-search"
@@ -181,7 +187,9 @@ export default function MedicationsPage() {
       {/* Programs grid */}
       <section style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px 60px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 20, marginBottom: 60 }}>
-          {filtered.map(p => (
+          {filtered.map(p => {
+            const PIcon = p.Icon
+            return (
             <a
               key={p.name}
               href={p.url}
@@ -193,10 +201,12 @@ export default function MedicationsPage() {
               <div style={{ position: 'absolute', top: 0, left: 0, width: 3, height: '100%', background: p.color, borderRadius: '16px 0 0 16px' }} />
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <span style={{ fontSize: 24 }}>{p.icon}</span>
+                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', flexShrink: 0 }}>
+                    <PIcon size={24} color={p.color} variant="TwoTone" aria-hidden="true" />
+                  </span>
                   <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>{p.name}</span>
                 </div>
-                <ExternalLink size={14} style={{ color: 'rgba(255,255,255,0.3)', flexShrink: 0 }} />
+                <ExportSquare size={14} style={{ color: 'rgba(255,255,255,0.3)', flexShrink: 0 }} />
               </div>
               <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)', lineHeight: 1.6, marginBottom: 14, fontWeight: 300 }}>{p.desc}</p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
@@ -207,7 +217,8 @@ export default function MedicationsPage() {
                 ))}
               </div>
             </a>
-          ))}
+            )
+          })}
           {filtered.length === 0 && (
             <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '48px 24px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>
               No programs match your search. Try a different term.
@@ -220,7 +231,7 @@ export default function MedicationsPage() {
           {/* Section header */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
             <div style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(96,165,250,0.12)', border: '1px solid rgba(96,165,250,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Zap size={16} color="#60a5fa" />
+              <Flash size={16} color="#60a5fa" />
             </div>
             <div>
               <h2 style={{ fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', color: 'var(--text)', margin: 0 }}>
@@ -235,7 +246,7 @@ export default function MedicationsPage() {
           {/* Search + category filter row */}
           <div style={{ display: 'flex', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
             <div style={{ position: 'relative', flex: '1 1 260px' }}>
-              <Search size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.3)' }} />
+              <SearchNormal1 size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.3)' }} />
               <label htmlFor="pap-search" className="sr-only">Search drug name or brand</label>
               <input
                 id="pap-search"
@@ -251,7 +262,7 @@ export default function MedicationsPage() {
           </div>
 
           {/* Category pills */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 20 }}>
+          <div className="med-filter-row" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 20 }}>
             {PAP_CATEGORIES.map(cat => (
               <button
                 key={cat}
@@ -306,7 +317,7 @@ export default function MedicationsPage() {
 
                 {/* Manufacturer row */}
                 <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <CheckCircle2 size={11} style={{ flexShrink: 0, color: 'rgba(255,255,255,0.25)' }} />
+                  <TickCircle size={11} style={{ flexShrink: 0, color: 'rgba(255,255,255,0.25)' }} />
                   {drug.manufacturer}
                 </div>
 
@@ -325,7 +336,7 @@ export default function MedicationsPage() {
                     onMouseEnter={e => (e.currentTarget.style.background = 'rgba(96,165,250,0.18)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'rgba(96,165,250,0.1)')}
                   >
-                    <Zap size={12} />
+                    <Flash size={12} />
                     PAP / Free
                   </a>
                   <a
@@ -336,7 +347,7 @@ export default function MedicationsPage() {
                     onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
                   >
-                    <DollarSign size={12} />
+                    <DollarCircle size={12} />
                     Compare prices
                   </a>
                 </div>
@@ -353,16 +364,16 @@ export default function MedicationsPage() {
           {/* Link to full NeedyMeds search */}
           <div style={{ marginTop: 16, textAlign: 'center' }}>
             <a href="https://www.needymeds.org/pap" target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: 'var(--accent)', textDecoration: 'none', fontFamily: 'var(--font-inter)', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-              <Info size={13} />
+              <InfoCircle size={13} />
               Search full NeedyMeds database for any drug not listed here
-              <ExternalLink size={12} />
+              <ExportSquare size={12} />
             </a>
           </div>
         </div>
 
         {/* 340B tip */}
         <div style={{ padding: '24px 28px', borderRadius: 16, background: 'rgba(74,144,217,0.05)', border: '1px solid rgba(74,144,217,0.15)', marginBottom: 48, display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-          <DollarSign size={22} color="var(--accent)" style={{ flexShrink: 0, marginTop: 2 }} />
+          <DollarCircle size={22} color="var(--accent)" style={{ flexShrink: 0, marginTop: 2 }} />
           <div>
             <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: 6 }}>
               Free Prescriptions at FQHCs via the 340B Drug Program
@@ -371,7 +382,7 @@ export default function MedicationsPage() {
               Federally Qualified Health Centers participate in the 340B drug pricing program, which allows them to purchase medications at up to 50% discount and pass those savings on to uninsured patients. Many dispense medications free or for $1–$5 per prescription.
             </p>
             <Link href={FQHC_LINK} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 600, color: 'var(--accent)', textDecoration: 'none', fontFamily: 'var(--font-inter)' }}>
-              Find FQHCs near me <ChevronRight size={14} />
+              Find FQHCs near me <ArrowRight2 size={14} />
             </Link>
           </div>
         </div>
@@ -401,7 +412,7 @@ export default function MedicationsPage() {
             Find free and sliding-scale clinics near you for ongoing care alongside free medications.
           </p>
           <Link href="/search" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '13px 28px', borderRadius: 12, background: 'var(--accent)', color: '#07070F', fontSize: 14, fontWeight: 600, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}>
-            Find Free Clinics Near Me <ChevronRight size={16} />
+            Find Free Clinics Near Me <ArrowRight2 size={16} />
           </Link>
         </div>
       </section>

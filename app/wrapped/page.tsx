@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
-import { Sparkles, TrendingUp, MapPin, Heart, Users, Shield, Download, Share2, ChevronRight, Star, Award } from 'lucide-react'
+import { MagicStar, TrendUp, Location, Heart, Profile2User, Shield, DocumentDownload, ExportSquare, ArrowRight2, Star1, Award, Hospital } from 'iconsax-react'
 
 function useCounter(target: number, duration: number, active: boolean) {
   const [value, setValue] = useState(0)
@@ -35,9 +35,9 @@ const WRAPPED_DATA = {
   totalUsers: 284000,
   totalSaved: 127341205,
   badges: [
-    { icon: '🏥', label: 'Clinic Navigator', desc: 'Found 4+ clinics this year' },
-    { icon: '💚', label: 'Community Hero', desc: 'Helped 12+ friends find care' },
-    { icon: '🛡️', label: 'Prevention Champion', desc: 'Completed 8 preventive screenings' },
+    { Icon: Hospital, label: 'Clinic Navigator',     desc: 'Found 4+ clinics this year' },
+    { Icon: Heart,    label: 'Community Hero',        desc: 'Helped 12+ friends find care' },
+    { Icon: Shield,   label: 'Prevention Champion',   desc: 'Completed 8 preventive screenings' },
   ],
 }
 
@@ -113,7 +113,9 @@ export default function WrappedPage() {
       accent: '#818cf8',
       content: (
         <div>
-          <div style={{ fontSize: '64px', marginBottom: '20px', lineHeight: 1 }}>✨</div>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+            <MagicStar size={64} color="#818cf8" variant="TwoTone" aria-hidden="true" />
+          </div>
           <div style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#818cf8', marginBottom: '16px' }}>
             Your {WRAPPED_DATA.year} in Care
           </div>
@@ -132,7 +134,7 @@ export default function WrappedPage() {
       accent: '#60a5fa',
       content: (
         <div>
-          <MapPin size={40} color="#60a5fa" style={{ marginBottom: '20px' }} />
+          <Location size={40} color="#60a5fa" style={{ marginBottom: '20px' }} />
           <div style={{ fontSize: 'clamp(72px,15vw,110px)', fontWeight: 900, letterSpacing: '-0.05em', color: '#60a5fa', lineHeight: 1, marginBottom: '8px' }}>
             {WRAPPED_DATA.clinicsFound}
           </div>
@@ -180,7 +182,7 @@ export default function WrappedPage() {
       accent: '#f472b6',
       content: (
         <div>
-          <Users size={36} color="#f472b6" style={{ marginBottom: '20px' }} />
+          <Profile2User size={36} color="#f472b6" style={{ marginBottom: '20px' }} />
           <div style={{ fontSize: 'clamp(72px,15vw,110px)', fontWeight: 900, letterSpacing: '-0.05em', color: '#f472b6', lineHeight: 1, marginBottom: '8px' }}>
             {WRAPPED_DATA.friendsHelped}
           </div>
@@ -225,20 +227,25 @@ export default function WrappedPage() {
             Badges earned
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '320px', margin: '0 auto 24px' }}>
-            {WRAPPED_DATA.badges.map(b => (
+            {WRAPPED_DATA.badges.map(b => {
+              const BIcon = b.Icon
+              return (
               <div key={b.label} style={{
                 display: 'flex', gap: '14px', alignItems: 'center',
                 padding: '12px 16px', borderRadius: '12px',
                 background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
                 textAlign: 'left',
               }}>
-                <span style={{ fontSize: '24px', flexShrink: 0 }}>{b.icon}</span>
+                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', flexShrink: 0 }}>
+                  <BIcon size={24} color="#60a5fa" variant="TwoTone" aria-hidden="true" />
+                </span>
                 <div>
                   <div style={{ fontSize: '13px', fontWeight: 700 }}>{b.label}</div>
                   <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.45)' }}>{b.desc}</div>
                 </div>
               </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       ),
@@ -249,7 +256,7 @@ export default function WrappedPage() {
       accent: '#818cf8',
       content: (
         <div>
-          <Sparkles size={36} color="#818cf8" style={{ marginBottom: '20px' }} />
+          <MagicStar size={36} color="#818cf8" style={{ marginBottom: '20px' }} />
           <h3 style={{ fontSize: 'clamp(22px, 4vw, 34px)', fontWeight: 800, letterSpacing: '-0.03em', marginBottom: '12px' }}>
             {WRAPPED_DATA.year} was your year.
           </h3>
@@ -263,7 +270,7 @@ export default function WrappedPage() {
               color: '#818cf8', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
               display: 'flex', alignItems: 'center', gap: '6px',
             }}>
-              <Share2 size={13} /> Share Wrapped
+              <ExportSquare size={13} /> Share Wrapped
             </button>
             <button style={{
               padding: '11px 22px', borderRadius: '100px',
@@ -271,7 +278,7 @@ export default function WrappedPage() {
               color: 'rgba(255,255,255,0.5)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit',
               display: 'flex', alignItems: 'center', gap: '6px',
             }}>
-              <Download size={13} /> Save as image
+              <DocumentDownload size={13} /> Save as image
             </button>
           </div>
         </div>
@@ -292,7 +299,9 @@ export default function WrappedPage() {
             background: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(129,140,248,0.1) 0%, transparent 70%)',
             pointerEvents: 'none',
           }} />
-          <div style={{ fontSize: '80px', marginBottom: '24px', lineHeight: 1 }}>✨</div>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+            <MagicStar size={80} color="#818cf8" variant="TwoTone" aria-hidden="true" />
+          </div>
           <div style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#818cf8', marginBottom: '16px' }}>
             NEXUS Wrapped
           </div>
@@ -323,7 +332,7 @@ export default function WrappedPage() {
             onMouseEnter={e => (e.currentTarget as HTMLElement).style.transform = 'scale(1.04)'}
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.transform = 'scale(1)'}
           >
-            See your {WRAPPED_DATA.year} Wrapped ✨
+            See your {WRAPPED_DATA.year} Wrapped <MagicStar size={16} color="#c7d2fe" variant="Bold" style={{ marginLeft: '4px', verticalAlign: 'middle' }} aria-hidden="true" />
           </button>
         </div>
       </AppShell>
@@ -414,7 +423,7 @@ export default function WrappedPage() {
                 animation: 'fadeSlideUp 0.4s cubic-bezier(0.16,1,0.3,1) both',
               }}
             >
-              <Share2 size={14} />
+              <ExportSquare size={14} />
               {shareCopied ? 'Copied! Share with friends ✓' : `Share your ${WRAPPED_DATA.year} Wrapped`}
             </button>
           )}

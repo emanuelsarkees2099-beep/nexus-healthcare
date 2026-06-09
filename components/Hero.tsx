@@ -6,6 +6,7 @@ import { registerGSAP } from '@/lib/gsap-st'
 import { useI18n } from '@/components/I18nContext'
 import SearchBar from '@/components/hero/SearchBar'
 import TrendingCarousel from '@/components/hero/TrendingCarousel'
+import { Star1 } from 'iconsax-react'
 
 registerGSAP()
 
@@ -565,10 +566,7 @@ export default function Hero() {
             }}>
               <span style={{ display: 'flex', gap: '2px' }} aria-label="4.9 out of 5 stars">
                 {[1,2,3,4,5].map(s => (
-                  <svg key={s} width="10" height="10" viewBox="0 0 24 24"
-                    fill="var(--warning)" stroke="none" aria-hidden="true">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
+                  <Star1 key={s} size={10} color="var(--warning)" variant="Bold" aria-hidden="true" />
                 ))}
               </span>
               <span style={{

@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
+import { Warning2, Call, SearchNormal1, TickCircle } from 'iconsax-react'
 
 /* ─────────────────────────────────────────────
    SCENE DEFINITIONS
@@ -73,28 +74,28 @@ const MOBILE_FRAMES = [
   {
     bg: 'rgba(248,113,113,0.06)',
     border: 'rgba(248,113,113,0.2)',
-    icon: '😰',
+    icon: <Warning2 size={24} color="rgba(248,113,113,0.85)" variant="TwoTone" />,
     title: '"I had chest pain."',
     body: 'No insurance. No idea where to go. 47 million Americans face this every year.',
   },
   {
     bg: 'rgba(251,146,60,0.06)',
     border: 'rgba(251,146,60,0.2)',
-    icon: '📞',
+    icon: <Call size={24} color="rgba(251,146,60,0.85)" variant="TwoTone" />,
     title: '47 calls. 0 answers.',
     body: '"$1,800 minimum." "Medicaid only." "Try the ER." — over and over.',
   },
   {
     bg: 'rgba(74,144,217,0.06)',
     border: 'rgba(74,144,217,0.2)',
-    icon: '🔍',
+    icon: <SearchNormal1 size={24} color="rgba(74,144,217,0.85)" variant="TwoTone" />,
     title: '12 seconds with NEXUS.',
     body: 'One search. Free clinic 2 miles away. Walk-ins welcome.',
   },
   {
     bg: 'rgba(96,165,250,0.06)',
     border: 'rgba(96,165,250,0.2)',
-    icon: '💚',
+    icon: <TickCircle size={24} color="rgba(96,165,250,0.85)" variant="TwoTone" />,
     title: 'Cost: $0.',
     body: 'She saw a real doctor. Her chest pain was anxiety. NEXUS saved her $4,200 this year.',
   },
@@ -451,7 +452,7 @@ function MobileFallback() {
               animation: `cinematic-fadein 0.5s ${i * 0.12}s ease both`,
             }}
           >
-            <div style={{ fontSize: '22px', marginBottom: '8px' }}>{frame.icon}</div>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px', height: '28px' }}>{frame.icon}</div>
             <div style={{ fontSize: '15px', fontWeight: 700, color: '#fff', marginBottom: '6px', fontFamily: 'var(--font-inter)' }}>
               {frame.title}
             </div>

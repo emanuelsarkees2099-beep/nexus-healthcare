@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { Warning2 } from 'iconsax-react'
 
 export const metadata: Metadata = {
   title: 'Terms of Service — NEXUS',
@@ -48,8 +49,8 @@ export default function TermsPage() {
 
         {/* ── CRITICAL MEDICAL DISCLAIMER — must be first visible section ── */}
         <div style={{ padding: '22px 24px', background: 'rgba(248,113,113,0.06)', border: '1px solid rgba(248,113,113,0.22)', borderRadius: '14px', marginBottom: '48px' }}>
-          <p style={{ fontSize: '13px', fontWeight: 700, color: '#f87171', letterSpacing: '0.08em', marginBottom: '10px' }}>
-            ⚠️ NOT MEDICAL ADVICE
+          <p style={{ fontSize: '13px', fontWeight: 700, color: '#f87171', letterSpacing: '0.08em', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Warning2 size={14} color="#f87171" variant="Bold" aria-hidden="true" /> NOT MEDICAL ADVICE
           </p>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: 'rgba(255,255,255,0.65)' }}>
             NEXUS is a <strong style={{ color: 'rgba(255,255,255,0.85)' }}>healthcare navigation tool</strong>, not a medical provider. Nothing on NEXUS — including AI-generated responses, clinic listings, program descriptions, or any other content — constitutes medical advice, diagnosis, or treatment. Always seek the advice of a qualified healthcare provider for any medical concerns. If you believe you are experiencing a medical emergency, call <strong style={{ color: 'rgba(255,255,255,0.85)' }}>911 immediately</strong>.

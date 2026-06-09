@@ -1,7 +1,8 @@
-'use client'
+﻿'use client'
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { registerGSAP } from '@/lib/gsap-st'
+import { SearchNormal1 } from 'iconsax-react'
 registerGSAP()
 
 const MAJOR_CITIES = [
@@ -44,7 +45,7 @@ export default function MissionFreeze() {
   const [hoveredCity, setHoveredCity]     = useState<string | null>(null)
   const [containerSize, setContainerSize] = useState({ w: 1140, h: 500 })
 
-  /* ── Canvas animated dot-grid + regional glows ── */
+  /* â”€â”€ Canvas animated dot-grid + regional glows â”€â”€ */
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -122,16 +123,16 @@ export default function MissionFreeze() {
     }
   }, [])
 
-  /* ── Scroll reveal ── */
+  /* â”€â”€ Scroll reveal â”€â”€ */
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(headerRef.current, {
         y: 40, opacity: 0, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: headerRef.current, start: 'top 85%' },
+        scrollTrigger: { trigger: headerRef.current, start: 'top 85%', once: true },
       })
       gsap.from(mapRef.current, {
         y: 60, opacity: 0, scale: 0.97, duration: 1.1, ease: 'power3.out',
-        scrollTrigger: { trigger: mapRef.current, start: 'top 82%' },
+        scrollTrigger: { trigger: mapRef.current, start: 'top 82%', once: true },
       })
     }, sectionRef)
     return () => ctx.revert()
@@ -155,7 +156,7 @@ export default function MissionFreeze() {
         filter: 'blur(80px)', pointerEvents: 'none',
       }} />
 
-      {/* ── Header ── */}
+      {/* â”€â”€ Header â”€â”€ */}
       <div ref={headerRef} style={{ textAlign: 'center', maxWidth: '1200px', margin: '0 auto 4rem', padding: '0 3rem' }}>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '8px',
@@ -178,7 +179,7 @@ export default function MissionFreeze() {
         </h2>
         <p style={{
           fontSize: '15px', color: 'var(--text-2)',
-          fontFamily: 'var(--font-inter)', fontWeight: 300,
+          fontFamily: 'var(--font-inter)', fontWeight: 400,
           lineHeight: 1.85, maxWidth: '460px', margin: '0 auto',
         }}>
           12,000+ clinics across all 50 states. Wherever you live,
@@ -186,7 +187,7 @@ export default function MissionFreeze() {
         </p>
       </div>
 
-      {/* ── Map ── */}
+      {/* â”€â”€ Map â”€â”€ */}
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 3rem' }}>
         <div
           ref={mapRef}
@@ -321,7 +322,7 @@ export default function MissionFreeze() {
                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-display)', letterSpacing: '-0.01em' }}>
                     {city.name}, {city.state}
                   </div>
-                  <div style={{ fontSize: '11px', color: 'var(--accent)', fontFamily: 'var(--font-inter)', fontWeight: 300, marginTop: '2px' }}>
+                  <div style={{ fontSize: '11px', color: 'var(--accent)', fontFamily: 'var(--font-inter)', fontWeight: 400, marginTop: '2px' }}>
                     {city.clinics.toLocaleString()} free clinics
                   </div>
                 </div>
@@ -344,7 +345,7 @@ export default function MissionFreeze() {
                 boxShadow: '0 8px 30px rgba(0,0,0,0.4), 0 0 20px rgba(74,144,217,0.07)',
               }}>
                 <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.02em', lineHeight: 1, marginBottom: '3px' }}>{s.n}</div>
-                <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>{s.label}</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 400 }}>{s.label}</div>
               </div>
             ))}
           </div>
@@ -366,12 +367,10 @@ export default function MissionFreeze() {
               borderRadius: 'var(--r-sm)', padding: '7px 10px', marginBottom: '10px',
               fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)',
             }}>
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" aria-hidden="true">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-              </svg>
+              <SearchNormal1 size={11} color="var(--accent)" variant="Linear" aria-hidden="true" />
               Primary care · NY 10001
             </div>
-            <div style={{ fontSize: '10px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300, marginBottom: '8px' }}>4 results nearby</div>
+            <div style={{ fontSize: '10px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 400, marginBottom: '8px' }}>4 results nearby</div>
             {[
               { initials: 'BC', name: 'Bellevue Community Clinic', dist: '0.4 mi' },
               { initials: 'WB', name: 'West Bronx Health',          dist: '1.1 mi' },
@@ -389,7 +388,7 @@ export default function MissionFreeze() {
                   fontSize: '8px', fontWeight: 600, color: 'var(--accent)',
                   fontFamily: 'var(--font-display)', flexShrink: 0,
                 }}>{r.initials}</div>
-                <div style={{ flex: 1, fontSize: '11px', color: 'var(--text)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>{r.name}</div>
+                <div style={{ flex: 1, fontSize: '11px', color: 'var(--text)', fontFamily: 'var(--font-inter)', fontWeight: 400 }}>{r.name}</div>
                 <div style={{ fontSize: '10px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>{r.dist}</div>
               </div>
             ))}
@@ -399,7 +398,7 @@ export default function MissionFreeze() {
               fontSize: '11px', color: 'var(--bg)', fontWeight: 500, fontFamily: 'var(--font-inter)',
               boxShadow: '0 4px 16px rgba(74,144,217,0.30)', cursor: 'default',
             }}>
-              Find care near me →
+              Find care near me â†’
             </div>
           </div>
 
@@ -417,3 +416,4 @@ export default function MissionFreeze() {
     </div>
   )
 }
+

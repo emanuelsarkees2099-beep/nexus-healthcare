@@ -1,18 +1,14 @@
-'use client'
+﻿'use client'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
+import { Home2, SearchNormal1, People, Setting2, Category2, Lock1 } from 'iconsax-react'
 
 const SIDEBAR_ITEMS = [
-  { label: 'Home', active: true,
-    icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> },
-  { label: 'Clinic Search', active: false,
-    icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> },
-  { label: 'Care Team', active: false,
-    icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> },
-  { label: 'Settings', active: false,
-    icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> },
-  { label: 'Programs', active: false,
-    icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> },
+  { label: 'Home',         active: true,  icon: <Home2         size={13} color="currentColor" variant="Linear" /> },
+  { label: 'Clinic Search',active: false, icon: <SearchNormal1 size={13} color="currentColor" variant="Linear" /> },
+  { label: 'Care Team',    active: false, icon: <People        size={13} color="currentColor" variant="Linear" /> },
+  { label: 'Settings',     active: false, icon: <Setting2      size={13} color="currentColor" variant="Linear" /> },
+  { label: 'Programs',     active: false, icon: <Category2     size={13} color="currentColor" variant="Linear" /> },
 ]
 
 const RESULTS = [
@@ -100,15 +96,13 @@ export default function HeroMockup({ mockupRef }: HeroMockupProps) {
           <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#28C840', flexShrink: 0 }} aria-hidden="true" />
           <div style={{
             flex: 1, background: 'var(--bg4)', borderRadius: '6px', padding: '5px 12px',
-            margin: '0 12px', fontSize: '11px', color: 'var(--text-3)', fontWeight: 300,
+            margin: '0 12px', fontSize: '11px', color: 'var(--text-3)', fontWeight: 400,
             display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-inter)',
           }}>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <rect width="11" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-            </svg>
+            <Lock1 size={10} color="currentColor" variant="Linear" aria-hidden="true" />
             nexus.health/dashboard
           </div>
-          <div style={{ fontSize: '10px', color: 'var(--text-3)', fontWeight: 300, fontFamily: 'var(--font-inter)' }}>v1.0</div>
+          <div style={{ fontSize: '10px', color: 'var(--text-3)', fontWeight: 400, fontFamily: 'var(--font-inter)' }}>v1.0</div>
         </div>
 
         {/* Sidebar + Main */}
@@ -128,7 +122,7 @@ export default function HeroMockup({ mockupRef }: HeroMockupProps) {
               <div key={item.label} aria-hidden="true" style={{
                 display: 'flex', alignItems: 'center', gap: '8px',
                 padding: '7px 10px', borderRadius: '8px',
-                fontSize: '12px', fontFamily: 'var(--font-inter)', fontWeight: 300,
+                fontSize: '12px', fontFamily: 'var(--font-inter)', fontWeight: 400,
                 color: item.active ? 'var(--accent)' : 'var(--text-3)',
                 background: item.active ? 'rgba(74,144,217,0.10)' : 'transparent',
                 cursor: 'default',
@@ -162,7 +156,7 @@ export default function HeroMockup({ mockupRef }: HeroMockupProps) {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.1rem' }}>
               <div>
                 <div style={{ fontFamily: 'var(--font-display)', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '2px', letterSpacing: '-0.01em' }}>Dashboard</div>
-                <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>Free care near you · Phoenix, AZ</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 400 }}>Free care near you · Phoenix, AZ</div>
               </div>
               <div style={{ display: 'flex', gap: '6px' }}>
                 <div style={{ fontSize: '10px', color: 'var(--text-3)', background: 'var(--bg4)', border: '1px solid var(--border2)', borderRadius: '6px', padding: '4px 10px', fontFamily: 'var(--font-inter)' }}>Apr 8 – Apr 15</div>
@@ -183,15 +177,15 @@ export default function HeroMockup({ mockupRef }: HeroMockupProps) {
                 }}>
                   <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '2px', background: 'linear-gradient(90deg, var(--accent), transparent)', opacity: 0.35 }} />
                   <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1 }}>{s.n}</div>
-                  <div style={{ fontSize: '9px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300, marginTop: '3px' }}>{s.label}</div>
+                  <div style={{ fontSize: '9px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 400, marginTop: '3px' }}>{s.label}</div>
                   <div style={{ fontSize: '9px', color: '#60A5FA', fontFamily: 'var(--font-inter)', fontWeight: 500, marginTop: '4px' }}>{s.delta}</div>
                 </div>
               ))}
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>Clinics Near You</div>
-              <div style={{ fontSize: '10px', color: 'var(--accent)', fontFamily: 'var(--font-inter)' }}>See all →</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 400 }}>Clinics Near You</div>
+              <div style={{ fontSize: '10px', color: 'var(--accent)', fontFamily: 'var(--font-inter)' }}>See all â†’</div>
             </div>
 
             {RESULTS.map((r, i) => (
@@ -211,7 +205,7 @@ export default function HeroMockup({ mockupRef }: HeroMockupProps) {
                 }}>{r.initials}</div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: '12px', fontWeight: 400, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>{r.name}</div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 300 }}>{r.dist} · {r.wait}</div>
+                  <div style={{ fontSize: '10px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 400 }}>{r.dist} · {r.wait}</div>
                 </div>
                 <div style={{
                   fontSize: '9px', fontWeight: 500,
@@ -232,7 +226,7 @@ export default function HeroMockup({ mockupRef }: HeroMockupProps) {
         pointerEvents: 'none', zIndex: 2,
       }} />
 
-      {/* Mobile cards (shown on ≤768px via CSS) */}
+      {/* Mobile cards (shown on â‰¤768px via CSS) */}
       <div className="hero-mobile-cards" aria-hidden="true">
         <div style={{
           fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)',
@@ -266,9 +260,10 @@ export default function HeroMockup({ mockupRef }: HeroMockupProps) {
           fontSize: '11px', color: 'var(--accent)', fontFamily: 'var(--font-inter)',
           opacity: 0.8, animationDelay: '0.7s',
         }}>
-          + 47 more clinics found →
+          + 47 more clinics found â†’
         </div>
       </div>
     </div>
   )
 }
+

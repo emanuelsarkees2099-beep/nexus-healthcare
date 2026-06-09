@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { CloseSquare, Global } from 'iconsax-react'
 
 const STORAGE_KEY = 'nexus_language'
 
@@ -104,9 +105,7 @@ export default function LanguageSelector() {
           onMouseEnter={e => (e.currentTarget.style.color = 'rgba(232,240,241,0.7)')}
           onMouseLeave={e => (e.currentTarget.style.color = 'rgba(232,240,241,0.3)')}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <path d="M18 6L6 18M6 6l12 12" />
-          </svg>
+          <CloseSquare size={16} color="currentColor" variant="Linear" />
         </button>
 
         {/* Header */}
@@ -118,9 +117,7 @@ export default function LanguageSelector() {
             border: '1px solid rgba(74,144,217,0.14)',
             marginBottom: '16px',
           }}>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round">
-              <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-            </svg>
+            <Global size={10} color="var(--accent)" variant="Linear" />
             <span style={{ fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.08em', fontFamily: 'var(--font-inter)' }}>NEXUS · 12 languages</span>
           </div>
 

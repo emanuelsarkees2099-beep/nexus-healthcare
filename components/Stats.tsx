@@ -4,6 +4,7 @@ import gsap from 'gsap'
 import { registerGSAP } from '@/lib/gsap-st'
 import { createClientClient } from '@/lib/auth-client'
 import { killAllIfReduced } from '@/lib/motion'
+import { Clock } from 'iconsax-react'
 registerGSAP()
 
 /**
@@ -269,10 +270,7 @@ export default function Stats() {
           <span style={{
             display: 'inline-flex', alignItems: 'center', gap: '5px',
           }}>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-            </svg>
+            <Clock size={10} color="currentColor" variant="Linear" />
             Last verified: {formatVerifiedAt(verifiedAt)}
           </span>
         </div>

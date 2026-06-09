@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
-import { Navigation, CheckCircle, Circle, Clock, FileText, Users, Phone, ChevronRight, Download, Share2, AlertCircle, MapPin, Printer } from 'lucide-react'
+import { Routing, TickCircle, RecordCircle, Clock, ReceiptText, Profile2User, Call, ArrowRight2, DocumentDownload, ExportSquare, InfoCircle, Location, Printer, MedalStar, Warning2 } from 'iconsax-react'
 
 type StepStatus = 'pending' | 'active' | 'complete' | 'stuck'
 
@@ -24,7 +24,7 @@ const STEPS: GPSStep[] = [
     id: 1,
     title: 'Confirm walk-in availability',
     time: '~4 min',
-    icon: <Phone size={16} />,
+    icon: <Call size={16} />,
     description: 'Call Mountain Park Health Center before you go to confirm they can see you today.',
     substeps: [
       'Call (602) 243-7011',
@@ -55,7 +55,7 @@ const STEPS: GPSStep[] = [
     id: 2,
     title: 'Gather your documents',
     time: '~10 min',
-    icon: <FileText size={16} />,
+    icon: <ReceiptText size={16} />,
     description: 'Bring these to your appointment. Missing items can slow you down but rarely stop you from being seen.',
     docs: [
       'Photo ID (driver\'s license, passport, or any government ID)',
@@ -70,7 +70,7 @@ const STEPS: GPSStep[] = [
     id: 3,
     title: 'Travel to the clinic',
     time: '~12 min',
-    icon: <Navigation size={16} />,
+    icon: <Routing size={16} />,
     description: 'Mountain Park Health Center — 1 E Dunlap Ave, Phoenix, AZ 85020',
     substeps: [
       'By car: Take I-17 N to Exit 207B (Dunlap Ave). Turn right on Dunlap. Clinic is on the left.',
@@ -84,7 +84,7 @@ const STEPS: GPSStep[] = [
     id: 4,
     title: 'Check in at the front desk',
     time: '~15 min',
-    icon: <Users size={16} />,
+    icon: <Profile2User size={16} />,
     description: 'What to say and expect when you arrive at check-in.',
     substeps: [
       'Tell the receptionist: "I\'m here for a walk-in appointment. I called ahead."',
@@ -107,7 +107,7 @@ const STEPS: GPSStep[] = [
     id: 5,
     title: 'At your appointment',
     time: '~25 min',
-    icon: <CheckCircle size={16} />,
+    icon: <TickCircle size={16} />,
     description: 'How to make the most of your visit and advocate for yourself.',
     substeps: [
       'Describe your symptoms clearly: when they started, how severe (1-10), what makes it better or worse',
@@ -122,7 +122,7 @@ const STEPS: GPSStep[] = [
     id: 6,
     title: 'Handle billing after your visit',
     time: '~5 min',
-    icon: <FileText size={16} />,
+    icon: <ReceiptText size={16} />,
     description: 'Don\'t leave without understanding what you owe and how to pay.',
     substeps: [
       'Ask to speak with the financial counselor or billing department',
@@ -137,7 +137,7 @@ const STEPS: GPSStep[] = [
     id: 7,
     title: 'Follow up and next steps',
     time: '~3 min',
-    icon: <CheckCircle size={16} />,
+    icon: <TickCircle size={16} />,
     description: 'After your visit, take these steps to protect your health and stay connected.',
     substeps: [
       'Schedule any follow-up appointments before you leave',
@@ -210,7 +210,7 @@ function StepCard({
           border: `1px solid ${status === 'complete' ? 'rgba(96,165,250,0.35)' : status === 'active' ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)'}`,
           color: status === 'complete' ? '#60a5fa' : status === 'active' ? 'var(--accent)' : 'rgba(255,255,255,0.35)',
         }}>
-          {status === 'complete' ? <CheckCircle size={15} /> : status === 'pending' ? <Circle size={15} /> : step.icon}
+          {status === 'complete' ? <TickCircle size={15} /> : status === 'pending' ? <RecordCircle size={15} /> : step.icon}
         </div>
 
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -222,10 +222,10 @@ function StepCard({
               Step {step.id}
             </span>
             {status === 'complete' && (
-              <span style={{ fontSize: '10px', color: '#60a5fa', fontWeight: 600 }}>✓ Done</span>
+              <span style={{ fontSize: '10px', color: '#60a5fa', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '3px' }}><TickCircle size={9} variant="Bold" aria-hidden="true" /> Done</span>
             )}
             {status === 'stuck' && (
-              <span style={{ fontSize: '10px', color: '#fbbf24', fontWeight: 600 }}>⚠ Need help</span>
+              <span style={{ fontSize: '10px', color: '#fbbf24', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '3px' }}><Warning2 size={9} variant="Bold" aria-hidden="true" /> Need help</span>
             )}
           </div>
           <div style={{ fontSize: '15px', fontWeight: 600, color: '#f5f5f5', marginTop: '2px' }}>
@@ -300,7 +300,7 @@ function StepCard({
                     transition: 'all 0.2s',
                   }}
                 >
-                  {generating ? <><span style={{ animation: 'spin 1s linear infinite', display: 'inline-block' }}>⟳</span> Generating…</> : generated ? <><CheckCircle size={12} /> Self-attestation form ready — Download PDF</> : <><Download size={12} /> Generate self-attestation form (if no pay stub)</>}
+                  {generating ? <><span style={{ animation: 'spin 1s linear infinite', display: 'inline-block' }}>⟳</span> Generating…</> : generated ? <><TickCircle size={12} /> Self-attestation form ready — Download PDF</> : <><DocumentDownload size={12} /> Generate self-attestation form (if no pay stub)</>}
                 </button>
               )}
             </div>
@@ -318,7 +318,7 @@ function StepCard({
                   display: 'flex', alignItems: 'center', gap: '6px',
                 }}
               >
-                <Phone size={12} /> {showScript ? 'Hide' : 'Show'} phone script &amp; responses
+                <Call size={12} /> {showScript ? 'Hide' : 'Show'} phone script &amp; responses
               </button>
               {showScript && (
                 <div style={{
@@ -354,7 +354,7 @@ function StepCard({
               border: '1px solid rgba(251,191,36,0.18)',
               fontSize: '12px', color: 'rgba(255,214,91,0.8)', lineHeight: 1.6,
             }}>
-              <AlertCircle size={13} color="#fbbf24" style={{ flexShrink: 0, marginTop: '1px' }} />
+              <InfoCircle size={13} color="#fbbf24" style={{ flexShrink: 0, marginTop: '1px' }} />
               {step.tip}
             </div>
           )}
@@ -375,8 +375,8 @@ function StepCard({
                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(96,165,250,0.2)'}
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'rgba(96,165,250,0.12)'}
               >
-                <CheckCircle size={13} />
-                {isLast ? 'Complete journey 🎉' : 'Mark complete'}
+                <TickCircle size={13} />
+                {isLast ? 'Complete journey' : 'Mark complete'}
               </button>
               <button
                 onClick={onStuck}
@@ -438,7 +438,9 @@ export default function GPSPage() {
           alignItems: 'center', justifyContent: 'center', textAlign: 'center',
           padding: '80px 24px',
         }}>
-          <div style={{ fontSize: '64px', marginBottom: '24px' }}>🎉</div>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+            <MedalStar size={72} color="var(--accent)" variant="TwoTone" aria-hidden="true" />
+          </div>
           <h1 style={{ fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 800, letterSpacing: '-0.03em', marginBottom: '16px' }}>
             You did it.
           </h1>
@@ -484,7 +486,7 @@ export default function GPSPage() {
           marginBottom: '24px', fontSize: '11px', fontWeight: 600,
           color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase',
         }}>
-          <Navigation size={11} /> Healthcare GPS
+          <Routing size={11} /> Healthcare GPS
         </div>
         <h1 style={{
           fontSize: 'clamp(28px, 5vw, 52px)', fontWeight: 800,
@@ -510,7 +512,7 @@ export default function GPSPage() {
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <MapPin size={15} color="var(--accent)" />
+              <Location size={15} color="var(--accent)" />
               <span style={{ fontSize: '14px', fontWeight: 600 }}>Mountain Park Health Center</span>
             </div>
             <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)' }}>
@@ -533,7 +535,7 @@ export default function GPSPage() {
                 fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '5px',
               }}
             >
-              <Share2 size={11} /> Share with caregiver
+              <ExportSquare size={11} /> Share with caregiver
             </button>
             <button
               style={{
@@ -572,7 +574,7 @@ export default function GPSPage() {
             background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.25)',
             display: 'flex', gap: '16px', alignItems: 'center',
           }}>
-            <AlertCircle size={18} color="#fbbf24" style={{ flexShrink: 0 }} />
+            <InfoCircle size={18} color="#fbbf24" style={{ flexShrink: 0 }} />
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: '14px', fontWeight: 600, marginBottom: '4px' }}>
                 Looks like you hit a snag
@@ -587,7 +589,7 @@ export default function GPSPage() {
               color: '#fbbf24', fontSize: '12px', fontWeight: 600, textDecoration: 'none',
               display: 'flex', alignItems: 'center', gap: '6px',
             }}>
-              Get CHW help <ChevronRight size={12} />
+              Get CHW help <ArrowRight2 size={12} />
             </Link>
           </div>
         )}

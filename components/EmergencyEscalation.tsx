@@ -1,8 +1,6 @@
 'use client'
 import { useState } from 'react'
-import {
-  AlertTriangle, Phone, MapPin, MessageSquare, Pill, Brain, X, ChevronRight,
-} from 'lucide-react'
+import { Danger, Call, Location, MessageText1, Health, Cpu, CloseCircle, ArrowRight2 } from 'iconsax-react'
 
 const RESOURCES = [
   {
@@ -13,7 +11,7 @@ const RESOURCES = [
     color: 'var(--coral)',
     bg: 'rgba(248,113,113,0.10)',
     border: 'rgba(248,113,113,0.25)',
-    icon: <Phone size={16} strokeWidth={2} />,
+    icon: <Call size={16} variant="Linear" />,
   },
   {
     id: 'er',
@@ -23,7 +21,7 @@ const RESOURCES = [
     color: 'var(--amber)',
     bg: 'rgba(252,211,77,0.10)',
     border: 'rgba(252,211,77,0.25)',
-    icon: <MapPin size={16} strokeWidth={2} />,
+    icon: <Location size={16} variant="Linear" />,
   },
   {
     id: '988',
@@ -33,7 +31,7 @@ const RESOURCES = [
     color: 'var(--violet)',
     bg: 'rgba(167,139,250,0.10)',
     border: 'rgba(167,139,250,0.25)',
-    icon: <Brain size={16} strokeWidth={2} />,
+    icon: <Cpu size={16} variant="Linear" />,
   },
   {
     id: 'crisis-text',
@@ -43,7 +41,7 @@ const RESOURCES = [
     color: 'var(--violet)',
     bg: 'rgba(167,139,250,0.10)',
     border: 'rgba(167,139,250,0.25)',
-    icon: <MessageSquare size={16} strokeWidth={2} />,
+    icon: <MessageText1 size={16} variant="Linear" />,
   },
   {
     id: 'poison',
@@ -53,7 +51,7 @@ const RESOURCES = [
     color: 'var(--accent)',
     bg: 'rgba(74,144,217,0.10)',
     border: 'rgba(74,144,217,0.25)',
-    icon: <Pill size={16} strokeWidth={2} />,
+    icon: <Health size={16} variant="Linear" />,
   },
 ]
 
@@ -73,7 +71,7 @@ export default function EmergencyEscalation({ compact = false }: Props) {
         aria-expanded={open}
         aria-controls="emergency-panel"
       >
-        <AlertTriangle size={14} strokeWidth={2.5} />
+        <Danger size={14} variant="Linear" />
         {compact ? 'Help Now' : 'I need help now'}
       </button>
 
@@ -99,7 +97,7 @@ export default function EmergencyEscalation({ compact = false }: Props) {
             marginBottom: '14px',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <AlertTriangle size={15} color="var(--coral)" strokeWidth={2.5} />
+              <Danger size={15} color="var(--coral)" variant="Linear" />
               <span style={{
                 fontSize: '13px', fontWeight: 700, color: 'var(--coral)',
                 fontFamily: 'var(--font-inter),sans-serif', letterSpacing: '0.02em',
@@ -112,7 +110,7 @@ export default function EmergencyEscalation({ compact = false }: Props) {
               style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-3)', padding: '2px', display: 'flex' }}
               aria-label="Close emergency panel"
             >
-              <X size={14} />
+              <CloseCircle size={14} variant="Linear" />
             </button>
           </div>
 
@@ -153,7 +151,7 @@ export default function EmergencyEscalation({ compact = false }: Props) {
                       {r.description}
                     </div>
                   </div>
-                  <ChevronRight size={13} color="var(--text-3)" />
+                  <ArrowRight2 size={13} color="var(--text-3)" variant="Linear" />
                 </button>
               )
             })}

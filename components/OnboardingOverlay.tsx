@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { MapPin, ReceiptText, Users, AlertTriangle, X, Heart, ArrowRight, ChevronLeft, Check, DollarSign, Stethoscope } from 'lucide-react'
+import { Location, ReceiptText, Profile2User, Danger, CloseCircle, Heart, ArrowRight, ArrowLeft2, TickCircle, DollarCircle, Hospital, MedalStar } from 'iconsax-react'
 
 const STORAGE_KEY = 'nexus_onboarded_v3'
 
@@ -16,12 +16,12 @@ interface WizardData {
 }
 
 const INTENTS = [
-  { id: 'clinic',     label: 'Find a free clinic',         icon: <MapPin size={16} />,        href: '/search',        color: 'var(--accent)' },
-  { id: 'programs',   label: 'Check my eligibility',       icon: <ReceiptText size={16} />,   href: '/eligibility',   color: '#fbbf24' },
-  { id: 'crisis',     label: 'Mental health crisis help',  icon: <Heart size={16} />,         href: '/crisis',        color: '#f87171' },
-  { id: 'chw',        label: 'Talk to a health worker',    icon: <Users size={16} />,         href: '/chw',           color: '#a78bfa' },
-  { id: 'urgent',     label: 'I need help right now',      icon: <AlertTriangle size={16} />, href: '/crisis',        color: '#fb923c' },
-  { id: 'meds',       label: 'Free medication help',       icon: <Stethoscope size={16} />,   href: '/medications',   color: '#34d399' },
+  { id: 'clinic',     label: 'Find a free clinic',         icon: <Location size={16} variant="Linear" />,      href: '/search',        color: 'var(--accent)' },
+  { id: 'programs',   label: 'Check my eligibility',       icon: <ReceiptText size={16} variant="Linear" />,   href: '/eligibility',   color: '#fbbf24' },
+  { id: 'crisis',     label: 'Mental health crisis help',  icon: <Heart size={16} variant="Linear" />,         href: '/crisis',        color: '#f87171' },
+  { id: 'chw',        label: 'Talk to a health worker',    icon: <Profile2User size={16} variant="Linear" />,  href: '/chw',           color: '#a78bfa' },
+  { id: 'urgent',     label: 'I need help right now',      icon: <Danger size={16} variant="Linear" />,        href: '/crisis',        color: '#fb923c' },
+  { id: 'meds',       label: 'Free medication help',       icon: <Hospital size={16} variant="Linear" />,      href: '/medications',   color: '#34d399' },
 ]
 
 export default function OnboardingOverlay() {
@@ -108,18 +108,18 @@ export default function OnboardingOverlay() {
                 onMouseEnter={e => (e.currentTarget.style.color = 'var(--text-2)')}
                 onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
               >
-                <ChevronLeft size={16} />
+                <ArrowLeft2 size={16} variant="Linear" />
               </button>
             )}
             <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-              <Heart size={11} color="var(--accent)" />
+              <Heart size={11} color="var(--accent)" variant="Linear" />
               <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--accent)', fontFamily: 'var(--font-inter)' }}>
                 {step} of 5
               </span>
             </div>
           </div>
           <button onClick={dismiss} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-3)', padding: 4, display: 'flex', borderRadius: 6 }} aria-label="Close">
-            <X size={16} />
+            <CloseCircle size={16} variant="Linear" />
           </button>
         </div>
 
@@ -150,7 +150,7 @@ export default function OnboardingOverlay() {
                   >
                     <div className="ob-icon" style={{ color: intent.color }}>{intent.icon}</div>
                     <div style={{ flex: 1, fontSize: 13, fontWeight: 500, color: 'var(--text)' }}>{intent.label}</div>
-                    <ArrowRight size={13} style={{ color: 'var(--text-3)', flexShrink: 0 }} />
+                    <ArrowRight size={13} color="var(--text-3)" variant="Linear" style={{ flexShrink: 0 }} />
                   </button>
                 ))}
               </nav>
@@ -223,7 +223,7 @@ export default function OnboardingOverlay() {
                     <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{opt.label}</div>
                     <div style={{ fontSize: 11, color: 'var(--text-2)', marginTop: 2 }}>{opt.sub}</div>
                   </div>
-                  {data.insured === opt.id && <Check size={14} style={{ color: 'var(--accent)', flexShrink: 0 }} />}
+                  {data.insured === opt.id && <TickCircle size={14} color="var(--accent)" variant="Linear" style={{ flexShrink: 0 }} />}
                 </button>
               ))}
               <button onClick={nextStep} style={{ width: '100%', padding: '10px', marginTop: 4, borderRadius: 10, background: 'none', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.4)', fontSize: 12, cursor: 'pointer', fontFamily: 'var(--font-inter)' }}>
@@ -244,14 +244,14 @@ export default function OnboardingOverlay() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
                 {getEligibilityHints().map((hint, i) => (
                   <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'center', padding: '12px 14px', borderRadius: 12, background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.15)' }}>
-                    <Check size={14} color="var(--accent)" style={{ flexShrink: 0 }} />
+                    <TickCircle size={14} color="var(--accent)" variant="Linear" style={{ flexShrink: 0 }} />
                     <span style={{ fontSize: 13, color: 'var(--text)', fontFamily: 'var(--font-inter)', lineHeight: 1.4 }}>{hint}</span>
                   </div>
                 ))}
               </div>
               <div style={{ padding: '12px 14px', borderRadius: 12, background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.15)', marginBottom: 20 }}>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                  <DollarSign size={14} color="#fbbf24" style={{ flexShrink: 0 }} />
+                  <DollarCircle size={14} color="#fbbf24" variant="Linear" style={{ flexShrink: 0 }} />
                   <span style={{ fontSize: 12, color: 'rgba(255,200,60,0.8)', fontFamily: 'var(--font-inter)', lineHeight: 1.5 }}>
                     For a precise eligibility check, enter your income and household size on the next screen.
                   </span>
@@ -261,7 +261,7 @@ export default function OnboardingOverlay() {
                 onClick={nextStep}
                 style={{ width: '100%', padding: '13px', borderRadius: 12, background: 'var(--accent)', border: 'none', color: '#07070F', fontSize: 14, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-inter)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
               >
-                See my personalized plan <ArrowRight size={14} />
+                See my personalized plan <ArrowRight size={14} variant="Linear" />
               </button>
             </>
           )}
@@ -269,8 +269,9 @@ export default function OnboardingOverlay() {
           {/* STEP 5 — Personalized plan */}
           {step === 5 && (
             <>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.2rem,4vw,1.5rem)', fontWeight: 700, letterSpacing: '-0.025em', color: 'var(--text)', marginBottom: 6 }}>
-                Your personalized next steps 🎯
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.2rem,4vw,1.5rem)', fontWeight: 700, letterSpacing: '-0.025em', color: 'var(--text)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 8 }}>
+                Your personalized next steps
+                <MedalStar size={18} color="var(--accent)" variant="TwoTone" aria-hidden="true" />
               </h2>
               <p style={{ fontSize: 13, color: 'var(--text-2)', fontFamily: 'var(--font-inter)', fontWeight: 300, marginBottom: 18, lineHeight: 1.5 }}>
                 Here&apos;s where to start based on your situation:
@@ -297,7 +298,7 @@ export default function OnboardingOverlay() {
                     }}
                   >
                     {action.label}
-                    <ArrowRight size={14} style={{ flexShrink: 0 }} />
+                    <ArrowRight size={14} variant="Linear" style={{ flexShrink: 0 }} />
                   </button>
                 ))}
               </div>

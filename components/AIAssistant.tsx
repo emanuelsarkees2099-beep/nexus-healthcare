@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { X, Send, Sparkles, Bot, AlertCircle, ChevronDown } from 'lucide-react'
+import { CloseCircle, Send, MagicStar, Cpu, InfoCircle, ArrowDown2 } from 'iconsax-react'
 
 type Message = {
   id: string
@@ -255,7 +255,7 @@ export default function AIAssistant() {
         aria-label={open ? 'Close healthcare navigator' : 'Open healthcare navigator'}
         aria-expanded={open}
       >
-        {open ? <ChevronDown size={18} /> : <Sparkles size={18} />}
+        {open ? <ArrowDown2 size={18} variant="Linear" /> : <MagicStar size={18} variant="Linear" />}
         {unread > 0 && !open && (
           <span style={{
             position: 'absolute', top: -4, right: -4,
@@ -286,7 +286,7 @@ export default function AIAssistant() {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0,
             }}>
-              <Bot size={16} color="#fff" />
+              <Cpu size={16} color="#fff" variant="Linear" />
             </div>
             <div>
               <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>
@@ -303,7 +303,7 @@ export default function AIAssistant() {
               onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
               onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.35)')}
             >
-              <X size={16} />
+              <CloseCircle size={16} variant="Linear" />
             </button>
           </div>
 
@@ -319,7 +319,7 @@ export default function AIAssistant() {
               <>
                 <div className="ai-msg-assistant">
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-                    <AlertCircle size={13} color="rgba(255,200,60,0.8)" />
+                    <InfoCircle size={13} color="rgba(255,200,60,0.8)" variant="Linear" />
                     <span style={{ fontSize: 11, color: 'rgba(255,200,60,0.7)', fontWeight: 600, fontFamily: 'var(--font-inter)' }}>Not medical advice</span>
                   </div>
                   {DISCLAIMER}
@@ -400,7 +400,7 @@ export default function AIAssistant() {
                 transition: 'background 0.2s, color 0.2s',
               }}
             >
-              <Send size={15} />
+              <Send size={15} variant="Linear" />
             </button>
           </div>
         </div>

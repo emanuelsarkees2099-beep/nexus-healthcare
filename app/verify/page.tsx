@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
-import { CheckCircle, Clock, Globe, DollarSign, Users, MapPin, Star, ChevronRight, ArrowRight, Plus, Shield } from 'lucide-react'
+import { TickCircle, Clock, Global, DollarCircle, Profile2User, Location, Star1, ArrowRight2, ArrowRight, AddCircle, Shield } from 'iconsax-react'
 
 type VerifyField = {
   id: string
@@ -87,7 +87,7 @@ function StarRating({ value, onChange }: { value: number; onChange: (v: number) 
             transition: 'color 0.15s',
           }}
         >
-          <Star size={24} fill={s <= (hover || value) ? '#fbbf24' : 'transparent'} />
+          <Star1 size={24} fill={s <= (hover || value) ? '#fbbf24' : 'transparent'} />
         </button>
       ))}
     </div>
@@ -122,7 +122,9 @@ export default function VerifyPage() {
           alignItems: 'center', justifyContent: 'center', textAlign: 'center',
           padding: '80px 24px',
         }}>
-          <div style={{ fontSize: '64px', marginBottom: '24px' }}>🌟</div>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+            <Star1 size={72} color="#fbbf24" variant="Bold" aria-hidden="true" />
+          </div>
           <h2 style={{ fontSize: 'clamp(24px,4vw,40px)', fontWeight: 800, letterSpacing: '-0.03em', marginBottom: '12px' }}>
             Verification submitted!
           </h2>
@@ -180,7 +182,7 @@ export default function VerifyPage() {
                     border: `1px solid ${i < submitStep ? 'rgba(96,165,250,0.4)' : 'rgba(255,255,255,0.1)'}`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
-                    {i < submitStep ? <CheckCircle size={12} color="#60a5fa" /> : <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'rgba(255,255,255,0.3)' }} />}
+                    {i < submitStep ? <TickCircle size={12} color="#60a5fa" /> : <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'rgba(255,255,255,0.3)' }} />}
                   </div>
                   <span style={{ fontSize: '14px', color: i <= submitStep ? '#f5f5f5' : 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-mono, monospace)', transition: 'color 0.4s' }}>
                     {s.label}
@@ -231,13 +233,13 @@ export default function VerifyPage() {
       {step === 'intro' && (
         <section style={{ padding: '40px 24px 120px', maxWidth: '680px', margin: '0 auto' }}>
           {/* Impact preview */}
-          <div style={{
+          <div className="verify-stats-grid" style={{
             display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '32px',
           }}>
             {[
               { icon: <Clock size={18} color="#818cf8" />, label: '~30 sec', desc: 'Time it takes' },
-              { icon: <Users size={18} color="#fbbf24" />, label: '47 people', desc: 'Will see your update' },
-              { icon: <Star size={18} color="#60a5fa" />, label: `+${totalPoints || 100} karma`, desc: 'You earn for helping' },
+              { icon: <Profile2User size={18} color="#fbbf24" />, label: '47 people', desc: 'Will see your update' },
+              { icon: <Star1 size={18} color="#60a5fa" />, label: `+${totalPoints || 100} karma`, desc: 'You earn for helping' },
             ].map(item => (
               <div key={item.label} style={{
                 padding: '16px', borderRadius: '14px',
@@ -263,7 +265,7 @@ export default function VerifyPage() {
             onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(96,165,250,0.18)'}
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'rgba(96,165,250,0.1)'}
           >
-            <CheckCircle size={18} /> Start verification (30 sec)
+            <TickCircle size={18} /> Start verification (30 sec)
           </button>
 
           <div style={{
@@ -271,7 +273,7 @@ export default function VerifyPage() {
             background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
             display: 'flex', gap: '12px', alignItems: 'flex-start',
           }}>
-            <Plus size={14} color="rgba(255,255,255,0.3)" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <AddCircle size={14} color="rgba(255,255,255,0.3)" style={{ flexShrink: 0, marginTop: '2px' }} />
             <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.7 }}>
               <strong style={{ color: 'rgba(255,255,255,0.7)' }}>Clinic not in our database?</strong>{' '}
               <Link href="/add-clinic" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
@@ -294,7 +296,7 @@ export default function VerifyPage() {
               {Object.keys(answers).length} of {FIELDS.length} answered
             </span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Star size={13} color="#fbbf24" />
+              <Star1 size={13} color="#fbbf24" />
               <span style={{ fontSize: '13px', color: '#fbbf24', fontWeight: 600 }}>
                 +{totalPoints} karma earned
               </span>
@@ -392,7 +394,7 @@ export default function VerifyPage() {
               transition: 'all 0.2s',
             }}
           >
-            <CheckCircle size={18} />
+            <TickCircle size={18} />
             Submit verification (+{totalPoints} karma)
           </button>
 

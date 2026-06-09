@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { CheckCircle2, MinusCircle, ChevronDown, ChevronUp } from 'lucide-react'
+import { TickCircle, MinusCirlce, ArrowDown2, ArrowUp2 } from 'iconsax-react'
 
 type AffordabilityLabel = 'likely-free' | 'low-cost' | 'standard'
 
@@ -144,7 +144,7 @@ export default function AffordabilityBar({ score, label, reasons, compact = fals
           aria-label={expanded ? 'Hide score breakdown' : 'Show score breakdown'}
         >
           Why?
-          {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+          {expanded ? <ArrowUp2 size={12} variant="Linear" /> : <ArrowDown2 size={12} variant="Linear" />}
         </button>
       </div>
 
@@ -179,8 +179,8 @@ export default function AffordabilityBar({ score, label, reasons, compact = fals
             return (
               <div key={i} className="aff-reason-row">
                 {isPositive
-                  ? <CheckCircle2 size={12} className="aff-check" />
-                  : <MinusCircle size={12} style={{ color: 'var(--text-3)', flexShrink: 0 }} />
+                  ? <TickCircle size={12} variant="Linear" className="aff-check" />
+                  : <MinusCirlce size={12} variant="Linear" style={{ color: 'var(--text-3)', flexShrink: 0 }} />
                 }
                 <span>{reason}</span>
                 {isPositive && <span className="aff-pts">+{pts}</span>}

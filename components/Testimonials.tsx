@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { registerGSAP } from '@/lib/gsap-st'
+import { Star1 } from 'iconsax-react'
 registerGSAP()
 
 const ROW_1 = [
@@ -49,9 +50,7 @@ function StarRow({ count }: { count: number }) {
   return (
     <div style={{ display: 'flex', gap: '3px', marginBottom: '0.9rem' }} aria-label={`${count} stars`}>
       {Array.from({ length: count }).map((_, i) => (
-        <svg key={i} width="12" height="12" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true">
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-        </svg>
+        <Star1 key={i} size={12} color="var(--accent)" variant="Bold" aria-hidden="true" />
       ))}
     </div>
   )
@@ -78,7 +77,7 @@ function TestimonialCard({ card }: { card: CardData }) {
       ref={cardRef}
       className="t-card"
       style={{
-        background: 'linear-gradient(145deg, var(--bg2), var(--bg3))',
+        background: 'var(--bg2)',
         border: '1px solid var(--border2)',
         borderRadius: 'var(--r-md)', padding: '1.5rem',
         minWidth: '320px', maxWidth: '320px',
@@ -87,7 +86,7 @@ function TestimonialCard({ card }: { card: CardData }) {
     >
       <StarRow count={card.stars} />
       <p style={{
-        fontSize: '13px', color: 'var(--text-2)', lineHeight: 1.8, fontWeight: 300,
+        fontSize: '13px', color: 'var(--text-2)', lineHeight: 1.8, fontWeight: 400,
         marginBottom: '1.25rem', fontFamily: 'var(--font-inter)',
         position: 'relative', zIndex: 1,
       }}>
@@ -119,7 +118,7 @@ function TestimonialCard({ card }: { card: CardData }) {
 function MarqueeRow({ cards, reverse = false, speed = 44 }: { cards: CardData[]; reverse?: boolean; speed?: number }) {
   const all = [...cards, ...cards]
   return (
-    <div style={{
+    <div className="marquee-row-wrapper" style={{
       overflow: 'hidden',
       maskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)',
       WebkitMaskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)',
@@ -149,10 +148,43 @@ export default function Testimonials() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      /* ── Header block entrance ── */
       gsap.from(headerRef.current, {
         y: 40, opacity: 0, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: headerRef.current, start: 'top 85%' },
+        scrollTrigger: { trigger: headerRef.current, start: 'top 85%', once: true },
       })
+
+      /* ── Eyebrow pill clip-wipe from left ── */
+      gsap.from('.stories-eyebrow', {
+        clipPath: 'inset(0 100% 0 0)', opacity: 0, duration: 0.65, ease: 'power3.out',
+        scrollTrigger: { trigger: headerRef.current, start: 'top 88%', once: true },
+      })
+
+      /* ── Word-by-word masked h2 reveal ── */
+      gsap.set('.reveal-word-inner', { y: '115%', opacity: 0 })
+      gsap.to('.reveal-word-inner', {
+        y: '0%', opacity: 1, duration: 0.72, ease: 'power3.out', stagger: 0.07,
+        scrollTrigger: { trigger: '.reveal-h2', start: 'top 86%', once: true },
+      })
+
+      /* ── Sub-copy fade-up ── */
+      gsap.from('.stories-copy', {
+        y: 20, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1,
+        scrollTrigger: { trigger: headerRef.current, start: 'top 78%', once: true },
+      })
+
+      /* ── Marquee rows: subtle counter-scroll depth parallax ── */
+      const rows = sectionRef.current?.querySelectorAll<HTMLElement>('.marquee-row-wrapper')
+      if (rows?.length === 2) {
+        gsap.to(rows[0], {
+          x: -24,
+          scrollTrigger: { trigger: sectionRef.current, start: 'top bottom', end: 'bottom top', scrub: 2 },
+        })
+        gsap.to(rows[1], {
+          x: 24,
+          scrollTrigger: { trigger: sectionRef.current, start: 'top bottom', end: 'bottom top', scrub: 2 },
+        })
+      }
     }, sectionRef)
     return () => ctx.revert()
   }, [])
@@ -171,35 +203,39 @@ export default function Testimonials() {
 
       {/* Header */}
       <div ref={headerRef} style={{ maxWidth: '1200px', margin: '0 auto 4rem', padding: '0 3rem' }}>
-        <div style={{
-          display: 'inline-flex', alignItems: 'center', gap: '8px',
-          fontSize: '11px', fontWeight: 400, letterSpacing: '0.14em',
-          textTransform: 'uppercase', color: 'var(--accent)',
-          marginBottom: '1.25rem', fontFamily: 'var(--font-inter)',
-        }}>
-          <span style={{ display: 'inline-block', width: '16px', height: '1px', background: 'var(--accent)' }} aria-hidden="true" />
+        <div className="section-eyebrow stories-eyebrow">
           Real stories
         </div>
-        <h2 id="stories-title" style={{
+        <h2 id="stories-title" className="reveal-h2" style={{
           fontFamily: 'var(--font-display)',
           fontSize: 'clamp(2.4rem, 4vw, 3.5rem)',
           fontWeight: 700, lineHeight: 1.05,
           letterSpacing: '-0.03em', marginBottom: '0.75rem',
         }}>
-          The people{' '}
-          <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>NEXUS</em>{' '}
-          serves
+          {['The', 'people'].map(w => (
+            <span key={w} className="reveal-word" style={{ marginRight: '0.25em' }}>
+              <span className="reveal-word-inner">{w}</span>
+            </span>
+          ))}
+          <span className="reveal-word" style={{ marginRight: '0.25em' }}>
+            <span className="reveal-word-inner">
+              <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>NEXUS</em>
+            </span>
+          </span>
+          <span className="reveal-word">
+            <span className="reveal-word-inner">serves</span>
+          </span>
         </h2>
-        <p style={{
+        <p className="stories-copy" style={{
           fontSize: '15px', color: 'var(--text-2)',
-          fontFamily: 'var(--font-inter)', fontWeight: 300,
+          fontFamily: 'var(--font-inter)', fontWeight: 400,
           lineHeight: 1.8, maxWidth: '440px',
         }}>
           Real stories from people who found care they didn&apos;t know was possible.
         </p>
-        <p style={{
+        <p className="stories-copy" style={{
           fontSize: '11px', color: 'var(--text-3)',
-          fontFamily: 'var(--font-inter)', fontWeight: 300,
+          fontFamily: 'var(--font-inter)', fontWeight: 400,
           lineHeight: 1.6, maxWidth: '440px',
           marginTop: '0.75rem', opacity: 0.65,
         }}>
@@ -212,6 +248,32 @@ export default function Testimonials() {
         <MarqueeRow cards={ROW_1} reverse={false} speed={44} />
         <MarqueeRow cards={ROW_2} reverse={true}  speed={50} />
       </div>
+
+      <style>{`
+        /* ── Card spotlight cursor-follow glow ── */
+        .t-card::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(
+            180px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+            rgba(79,142,240,0.09) 0%,
+            transparent 65%
+          );
+          opacity: 0;
+          transition: opacity 0.35s ease;
+          border-radius: inherit;
+          pointer-events: none;
+          z-index: 0;
+        }
+        .t-card:hover::before { opacity: 1; }
+        .t-card:hover {
+          border-color: rgba(79,142,240,0.22) !important;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.28), 0 0 0 1px rgba(79,142,240,0.1);
+          transform: translateY(-2px);
+          transition: transform 0.25s var(--ease-spring), box-shadow 0.25s, border-color 0.25s;
+        }
+      `}</style>
     </section>
   )
 }

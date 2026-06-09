@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
 import { smoothScrollTo } from '@/utils/smoothScroll'
-import { CalendarDays, Bell, MapPin, Clock, ChevronRight, User, Activity, Shield, Stethoscope, AlertTriangle, CheckCircle, ArrowRight, Sparkles, Heart } from 'lucide-react'
+import { Calendar1, Notification, Location, Clock, ArrowRight2, Profile, Activity, Shield, Hospital, Danger, TickCircle, ArrowRight, MagicStar, Heart } from 'iconsax-react'
 
 /* ─── reveal hook ─────────────────────────────────── */
 function useReveal(threshold = 0.15) {
@@ -87,50 +87,50 @@ function buildScreenings(age: string, sex: string, lastCheckup: string, conditio
   // Annual physical / wellness visit
   const physicalStatus: Screening['status'] = hadRecentCheckup ? 'upcoming' : longOverdue ? 'due' : 'upcoming'
   const physicalDue = hadRecentCheckup ? '1 year from last visit' : longOverdue ? 'Schedule now' : 'Within 6 months'
-  screenings.push({ name: 'Annual wellness visit', freq: 'Annually', lastDone: hadRecentCheckup ? 'Within 1 year' : 'Unknown', due: physicalDue, status: physicalStatus, priority: 'medium', icon: <Stethoscope size={14} strokeWidth={1.5} />, link: '/pathways' })
+  screenings.push({ name: 'Annual wellness visit', freq: 'Annually', lastDone: hadRecentCheckup ? 'Within 1 year' : 'Unknown', due: physicalDue, status: physicalStatus, priority: 'medium', icon: <Hospital size={14} variant="Linear" />, link: '/pathways' })
 
   // Blood pressure — every year 18+
   const bpStatus: Screening['status'] = hadRecentCheckup ? 'upcoming' : 'due'
-  screenings.push({ name: 'Blood pressure check', freq: 'Annually', lastDone: hadRecentCheckup ? 'Within 1 year' : 'Unknown', due: hadRecentCheckup ? '1 year from last visit' : 'Schedule now', status: bpStatus, priority: 'medium', icon: <Activity size={14} strokeWidth={1.5} />, link: '/pathways' })
+  screenings.push({ name: 'Blood pressure check', freq: 'Annually', lastDone: hadRecentCheckup ? 'Within 1 year' : 'Unknown', due: hadRecentCheckup ? '1 year from last visit' : 'Schedule now', status: bpStatus, priority: 'medium', icon: <Activity size={14} variant="Linear" />, link: '/pathways' })
 
   // Cholesterol — every 4–6 years 20+, sooner with risk factors
   if (ageN >= 20) {
     const hasHeartRisk = conditions.includes('Heart disease')
     const cholStatus: Screening['status'] = (longOverdue || hasHeartRisk) ? 'due' : 'upcoming'
-    screenings.push({ name: 'Cholesterol panel', freq: hasHeartRisk ? 'Annually (high risk)' : 'Every 4–6 years', lastDone: 'Unknown', due: hasHeartRisk || longOverdue ? 'Schedule now' : 'Within 2 years', status: cholStatus, priority: hasHeartRisk ? 'high' : 'medium', icon: <Shield size={14} strokeWidth={1.5} />, link: '/pathways' })
+    screenings.push({ name: 'Cholesterol panel', freq: hasHeartRisk ? 'Annually (high risk)' : 'Every 4–6 years', lastDone: 'Unknown', due: hasHeartRisk || longOverdue ? 'Schedule now' : 'Within 2 years', status: cholStatus, priority: hasHeartRisk ? 'high' : 'medium', icon: <Shield size={14} variant="Linear" />, link: '/pathways' })
   }
 
   // Diabetes — 35+ or overweight/metabolic risk
   if (ageN >= 35 || conditions.includes('Diabetes')) {
     const diabStatus: Screening['status'] = conditions.includes('Diabetes') ? 'due' : longOverdue ? 'due' : 'upcoming'
-    screenings.push({ name: 'Diabetes screening (A1C)', freq: conditions.includes('Diabetes') ? 'Every 3–6 months' : 'Every 3 years', lastDone: 'Unknown', due: diabStatus === 'due' ? 'Schedule now' : 'Within 1 year', status: diabStatus, priority: conditions.includes('Diabetes') ? 'high' : 'medium', icon: <AlertTriangle size={14} strokeWidth={1.5} />, link: '/pathways' })
+    screenings.push({ name: 'Diabetes screening (A1C)', freq: conditions.includes('Diabetes') ? 'Every 3–6 months' : 'Every 3 years', lastDone: 'Unknown', due: diabStatus === 'due' ? 'Schedule now' : 'Within 1 year', status: diabStatus, priority: conditions.includes('Diabetes') ? 'high' : 'medium', icon: <Danger size={14} variant="Linear" />, link: '/pathways' })
   }
 
   // Female-specific
   if (sex === 'Female' || sex === 'Prefer not to say') {
     if (ageN >= 21) {
       const papStatus: Screening['status'] = (longOverdue || hadCheckup2yr) ? 'due' : 'upcoming'
-      screenings.push({ name: 'Pap smear / HPV test', freq: 'Every 3 years (21–65)', lastDone: 'Unknown', due: papStatus === 'due' ? 'Schedule now' : 'Within 1–2 years', status: papStatus, priority: 'high', icon: <Heart size={14} strokeWidth={1.5} />, link: '/pathways' })
+      screenings.push({ name: 'Pap smear / HPV test', freq: 'Every 3 years (21–65)', lastDone: 'Unknown', due: papStatus === 'due' ? 'Schedule now' : 'Within 1–2 years', status: papStatus, priority: 'high', icon: <Heart size={14} variant="Linear" />, link: '/pathways' })
     }
     if (ageN >= 40) {
-      screenings.push({ name: 'Mammogram', freq: 'Annually (40+)', lastDone: 'Unknown', due: 'Schedule now', status: 'due', priority: 'high', icon: <Heart size={14} strokeWidth={1.5} />, link: '/pathways' })
+      screenings.push({ name: 'Mammogram', freq: 'Annually (40+)', lastDone: 'Unknown', due: 'Schedule now', status: 'due', priority: 'high', icon: <Heart size={14} variant="Linear" />, link: '/pathways' })
     }
   }
 
   // Colorectal — 45+
   if (ageN >= 45) {
-    screenings.push({ name: 'Colorectal cancer screen', freq: 'Every 10 years (colonoscopy)', lastDone: 'Unknown', due: 'Schedule this year', status: 'due', priority: 'high', icon: <Activity size={14} strokeWidth={1.5} />, link: '/pathways' })
+    screenings.push({ name: 'Colorectal cancer screen', freq: 'Every 10 years (colonoscopy)', lastDone: 'Unknown', due: 'Schedule this year', status: 'due', priority: 'high', icon: <Activity size={14} variant="Linear" />, link: '/pathways' })
   }
 
   // Flu vaccine — everyone 6 months+
   const fluStatus: Screening['status'] = hadRecentCheckup ? 'upcoming' : 'due'
-  screenings.push({ name: 'Flu vaccine', freq: 'Annually (every fall)', lastDone: hadRecentCheckup ? 'Recent' : 'Unknown', due: 'This coming October', status: fluStatus, priority: 'medium', icon: <Shield size={14} strokeWidth={1.5} />, link: '/pathways' })
+  screenings.push({ name: 'Flu vaccine', freq: 'Annually (every fall)', lastDone: hadRecentCheckup ? 'Recent' : 'Unknown', due: 'This coming October', status: fluStatus, priority: 'medium', icon: <Shield size={14} variant="Linear" />, link: '/pathways' })
 
   // Dental — everyone
-  screenings.push({ name: 'Dental cleaning', freq: 'Every 6 months', lastDone: 'Unknown', due: 'Schedule now', status: 'due', priority: 'medium', icon: <CheckCircle size={14} strokeWidth={1.5} />, link: '/pathways' })
+  screenings.push({ name: 'Dental cleaning', freq: 'Every 6 months', lastDone: 'Unknown', due: 'Schedule now', status: 'due', priority: 'medium', icon: <TickCircle size={14} variant="Linear" />, link: '/pathways' })
 
   // Vision — 18+
-  screenings.push({ name: 'Vision exam', freq: 'Every 1–2 years', lastDone: 'Unknown', due: 'Within 1–2 years', status: 'upcoming', priority: 'low', icon: <User size={14} strokeWidth={1.5} />, link: '/pathways' })
+  screenings.push({ name: 'Vision exam', freq: 'Every 1–2 years', lastDone: 'Unknown', due: 'Within 1–2 years', status: 'upcoming', priority: 'low', icon: <Profile size={14} variant="Linear" />, link: '/pathways' })
 
   return screenings
 }
@@ -207,7 +207,7 @@ export default function CalendarPage() {
 
         <div style={{ maxWidth: '720px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}>
-            <span style={pill}><CalendarDays size={10} strokeWidth={1.5} /> Preventive care</span>
+            <span style={pill}><Calendar1 size={10} variant="Linear" /> Preventive care</span>
           </div>
           <h1 style={{ fontSize: 'clamp(38px, 5.5vw, 68px)', fontWeight: 700, lineHeight: 1.08, letterSpacing: '-0.03em', marginBottom: '22px', animation: 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both' }}>
             Your health calendar,<br />built around you.
@@ -247,7 +247,7 @@ export default function CalendarPage() {
         <div style={{ maxWidth: '640px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-              <span style={pill}><User size={10} strokeWidth={1.5} /> Your profile</span>
+              <span style={pill}><Profile size={10} variant="Linear" /> Your profile</span>
               <h2 style={{ fontSize: 'clamp(24px, 4vw, 40px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', marginBottom: '10px' }}>
                 Build your screening plan
               </h2>
@@ -257,7 +257,7 @@ export default function CalendarPage() {
             </div>
 
             <div style={{ ...card, display: 'flex', flexDirection: 'column', gap: '22px' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div className="calendar-week-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <Field label="Age">
                   <InputField value={age} onChange={setAge} placeholder="e.g. 42" type="number" />
                 </Field>
@@ -302,7 +302,7 @@ export default function CalendarPage() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                 }}
               >
-                Generate my screening plan <ChevronRight size={15} />
+                Generate my screening plan <ArrowRight2 size={15} variant="Linear" />
               </button>
             </div>
           </RevealBlock>
@@ -349,15 +349,15 @@ export default function CalendarPage() {
                           <span style={{ fontSize: '11px', padding: '2px 8px', borderRadius: '100px', background: meta.bg, color: meta.color, border: `1px solid ${meta.border}` }}>{meta.label}</span>
                         </div>
                         <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={10} strokeWidth={1.5} />{s.freq}</span>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><CalendarDays size={10} strokeWidth={1.5} />Due: {s.due}</span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={10} variant="Linear" />{s.freq}</span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Calendar1 size={10} variant="Linear" />Due: {s.due}</span>
                         </div>
                       </div>
                       {s.status !== 'done' && (
                         <a href={s.link} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px', borderRadius: '100px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', color: 'rgba(255,255,255,0.6)', fontSize: '12px', fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap', transition: 'all 0.22s cubic-bezier(0.16,1,0.3,1)' }}
                           onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
                           onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
-                        >Find clinic <ChevronRight size={11} strokeWidth={2} /></a>
+                        >Find clinic <ArrowRight2 size={11} variant="Linear" /></a>
                       )}
                     </div>
                   </RevealBlock>
@@ -370,7 +370,7 @@ export default function CalendarPage() {
               <div style={{ ...card, background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.14)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                   <div style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}>
-                    <Bell size={15} strokeWidth={1.5} />
+                    <Notification size={15} variant="Linear" />
                   </div>
                   <div>
                     <h3 style={{ fontSize: '15px', fontWeight: 600 }}>Set up reminders</h3>
@@ -380,7 +380,7 @@ export default function CalendarPage() {
 
                 {!remSet ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                    <div className="calendar-week-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                       <Field label="Email">
                         <InputField value={remEmail} onChange={setRemEmail} placeholder="you@example.com" />
                       </Field>
@@ -402,7 +402,7 @@ export default function CalendarPage() {
                   </div>
                 ) : (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', animation: 'fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both' }}>
-                    <CheckCircle size={16} strokeWidth={1.5} style={{ color: '#60a5fa' }} />
+                    <TickCircle size={16} variant="Linear" style={{ color: '#60a5fa' }} />
                     <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)' }}>Reminders set for <strong style={{ color: 'var(--text)' }}>{remEmail}</strong> · {remFreq.toLowerCase()}</span>
                   </div>
                 )}
@@ -418,7 +418,7 @@ export default function CalendarPage() {
           <RevealBlock>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px', flexWrap: 'wrap', gap: '16px' }}>
               <div>
-                <span style={pill}><MapPin size={10} strokeWidth={1.5} /> Near you</span>
+                <span style={pill}><Location size={10} variant="Linear" /> Near you</span>
                 <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Free screenings this month</h2>
               </div>
               <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)', maxWidth: '240px', lineHeight: 1.6 }}>No appointment needed for most of these events.</p>
@@ -433,14 +433,14 @@ export default function CalendarPage() {
                     <div>
                       <div style={{ fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>{ev.title}</div>
                       <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.38)', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><CalendarDays size={11} strokeWidth={1.5} />{ev.date}</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={11} strokeWidth={1.5} />{ev.time}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Calendar1 size={11} variant="Linear" />{ev.date}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={11} variant="Linear" />{ev.time}</span>
                       </div>
                     </div>
                     <span style={{ fontSize: '11px', padding: '3px 9px', borderRadius: '100px', background: 'rgba(96,165,250,0.1)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.2)', whiteSpace: 'nowrap' }}>{ev.badge}</span>
                   </div>
                   <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    <MapPin size={11} strokeWidth={1.5} />{ev.loc}
+                    <Location size={11} variant="Linear" />{ev.loc}
                   </div>
                   <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: 'auto' }}>
                     {ev.tags.map(t => <span key={t} style={{ fontSize: '12px', padding: '3px 9px', borderRadius: '100px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.45)' }}>{t}</span>)}
@@ -448,7 +448,7 @@ export default function CalendarPage() {
                   <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '10px', borderRadius: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)', fontSize: '13px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.22s cubic-bezier(0.16,1,0.3,1)' }}
                     onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.09)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
-                  >Get directions <ArrowRight size={12} strokeWidth={1.5} /></button>
+                  >Get directions <ArrowRight size={12} variant="Linear" /></button>
                 </div>
               </RevealBlock>
             ))}
@@ -463,7 +463,7 @@ export default function CalendarPage() {
             <div style={{ borderRadius: '28px', padding: '3px', background: 'linear-gradient(135deg, rgba(74,144,217,0.22), rgba(167,210,190,0.06))' }}>
               <div style={{ borderRadius: '26px', padding: '56px 52px', background: 'rgba(10,9,22,0.97)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '28px', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.04)' }}>
                 <div>
-                  <span style={pill}><Sparkles size={10} strokeWidth={1.5} /> Stay ahead</span>
+                  <span style={pill}><MagicStar size={10} variant="Linear" /> Stay ahead</span>
                   <h2 style={{ fontSize: 'clamp(22px, 3vw, 36px)', fontWeight: 700, letterSpacing: '-0.02em', margin: '16px 0 10px', lineHeight: 1.2 }}>Prevention is the cheapest healthcare</h2>
                   <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', maxWidth: '420px', lineHeight: 1.65 }}>Most conditions that land people in the ER were preventable with a $0 screening a year earlier. Your plan is ready when you are.</p>
                 </div>
@@ -474,7 +474,7 @@ export default function CalendarPage() {
                   onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
                 >
                   {step === 'timeline' ? 'Update my plan' : 'Build my plan'}
-                  <span style={{ width: '26px', height: '26px', borderRadius: '100%', background: 'rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><ArrowRight size={12} strokeWidth={2} /></span>
+                  <span style={{ width: '26px', height: '26px', borderRadius: '100%', background: 'rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><ArrowRight size={12} variant="Linear" /></span>
                 </button>
               </div>
             </div>

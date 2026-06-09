@@ -1,5 +1,6 @@
 'use client'
 import { useEffect } from 'react'
+import { Warning2, Home2 } from 'iconsax-react'
 
 export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
@@ -7,37 +8,101 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
   }, [error])
 
   return (
-    <div style={{ minHeight: '100vh', background: '#07070F', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '40px 24px' }}>
-      <div style={{ marginBottom: '40px' }}>
-        <span style={{ fontFamily: 'var(--font-orbitron, monospace)', fontSize: '13px', fontWeight: 400, letterSpacing: '0.45em', color: 'rgba(255,255,255,0.6)' }}>NEXUS</span>
+    <div style={{
+      minHeight: '100vh',
+      background: 'var(--bg)',
+      display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
+      textAlign: 'center', padding: '40px 24px',
+    }}>
+      {/* Aurora glow */}
+      <div aria-hidden="true" style={{
+        position: 'fixed', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(ellipse 55% 40% at 50% 0%, rgba(248,113,113,0.06) 0%, transparent 65%)',
+      }} />
+
+      <div style={{ marginBottom: '40px', position: 'relative', zIndex: 1 }}>
+        <span style={{
+          fontFamily: 'var(--font-orbitron, monospace)',
+          fontSize: '13px', fontWeight: 400,
+          letterSpacing: '0.45em', color: 'rgba(255,255,255,0.6)',
+        }}>NEXUS</span>
       </div>
 
-      <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(255,107,107,0.1)', border: '1px solid rgba(255,107,107,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-          <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-        </svg>
+      <div style={{
+        width: '64px', height: '64px', borderRadius: '50%',
+        background: 'rgba(248,113,113,0.10)',
+        border: '1px solid rgba(248,113,113,0.25)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        marginBottom: '24px', position: 'relative', zIndex: 1,
+      }}>
+        <Warning2 size={28} color="#f87171" variant="TwoTone" />
       </div>
 
-      <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#fff', marginBottom: '12px' }}>Something went wrong</h1>
-      <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', maxWidth: '360px', lineHeight: 1.65, marginBottom: '8px' }}>
+      <h1 style={{
+        fontSize: '28px', fontWeight: 700,
+        color: 'var(--text)', marginBottom: '12px',
+        fontFamily: 'var(--font-display)', letterSpacing: '-0.025em',
+        position: 'relative', zIndex: 1,
+      }}>
+        Something went wrong
+      </h1>
+      <p style={{
+        fontSize: '14px', color: 'var(--text-3)',
+        maxWidth: '360px', lineHeight: 1.65, marginBottom: '8px',
+        fontFamily: 'var(--font-inter)',
+        position: 'relative', zIndex: 1,
+      }}>
         An unexpected error occurred. Our team has been notified.
       </p>
       {error.digest && (
-        <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.2)', fontFamily: 'monospace', marginBottom: '32px' }}>
+        <p style={{
+          fontSize: '11px', color: 'var(--text-3)', opacity: 0.5,
+          fontFamily: 'monospace', marginBottom: '32px',
+          position: 'relative', zIndex: 1,
+        }}>
           Error ID: {error.digest}
         </p>
       )}
 
-      <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '16px' }}>
+      <div style={{
+        display: 'flex', gap: '12px', flexWrap: 'wrap',
+        justifyContent: 'center', marginTop: '24px',
+        position: 'relative', zIndex: 1,
+      }}>
         <button
           onClick={reset}
-          style={{ padding: '12px 24px', background: '#6d9197', color: '#07070F', borderRadius: '10px', border: 'none', fontWeight: 700, fontSize: '14px', cursor: 'pointer', fontFamily: 'inherit' }}
+          style={{
+            padding: '12px 24px',
+            background: 'var(--accent)', color: '#fff',
+            borderRadius: '10px', border: 'none',
+            fontWeight: 700, fontSize: '14px',
+            cursor: 'pointer', fontFamily: 'inherit',
+            boxShadow: '0 4px 14px rgba(79,142,240,0.35)',
+            transition: 'transform 0.18s, box-shadow 0.18s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(79,142,240,0.45)' }}
+          onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 14px rgba(79,142,240,0.35)' }}
         >
           Try again
         </button>
-        <a href="/dashboard" style={{ padding: '12px 24px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.75)', borderRadius: '10px', textDecoration: 'none', fontWeight: 600, fontSize: '14px' }}>
-          Dashboard
+        <a
+          href="/"
+          style={{
+            padding: '12px 24px',
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.09)',
+            color: 'var(--text-2)',
+            borderRadius: '10px', textDecoration: 'none',
+            fontWeight: 600, fontSize: '14px',
+            display: 'inline-flex', alignItems: 'center', gap: '7px',
+            transition: 'background 0.18s, border-color 0.18s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)' }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)' }}
+        >
+          <Home2 size={14} color="currentColor" variant="Linear" />
+          Home
         </a>
       </div>
     </div>

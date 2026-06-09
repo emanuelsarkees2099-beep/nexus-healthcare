@@ -3,11 +3,11 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import AppShell from '@/components/AppShell'
 import {
-  Search, MapPin, Phone, ChevronRight,
-  Filter, X, Loader2, ArrowRight, Building2,
-  Heart, Baby, Brain, Eye, Pill, Stethoscope,
-  Navigation, Zap,
-} from 'lucide-react'
+  SearchNormal1, Location, Call, ArrowRight2,
+  Filter, CloseCircle, RefreshCircle, ArrowRight, Buildings2,
+  Heart, Eye, Health, Hospital, Profile,
+  Routing, Warning2,
+} from 'iconsax-react'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -48,14 +48,14 @@ type FilterState = {
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const FEATURED_CITIES = [
-  { city: 'Houston',     state: 'TX', emoji: '🌆' },
-  { city: 'New York',    state: 'NY', emoji: '🗽' },
-  { city: 'Los Angeles', state: 'CA', emoji: '🌴' },
-  { city: 'Chicago',     state: 'IL', emoji: '🏙️' },
-  { city: 'Phoenix',     state: 'AZ', emoji: '☀️' },
-  { city: 'Miami',       state: 'FL', emoji: '🌊' },
-  { city: 'Dallas',      state: 'TX', emoji: '⭐' },
-  { city: 'Atlanta',     state: 'GA', emoji: '🍑' },
+  { city: 'Houston',     state: 'TX' },
+  { city: 'New York',    state: 'NY' },
+  { city: 'Los Angeles', state: 'CA' },
+  { city: 'Chicago',     state: 'IL' },
+  { city: 'Phoenix',     state: 'AZ' },
+  { city: 'Miami',       state: 'FL' },
+  { city: 'Dallas',      state: 'TX' },
+  { city: 'Atlanta',     state: 'GA' },
 ]
 
 const CLINIC_TYPES = [
@@ -66,12 +66,12 @@ const CLINIC_TYPES = [
 ]
 
 const SERVICE_CATEGORIES = [
-  { label: 'Primary Care',    icon: Stethoscope, keyword: 'primary' },
-  { label: 'Mental Health',   icon: Brain,       keyword: 'mental'  },
-  { label: "Women's Health",  icon: Heart,       keyword: 'women'   },
-  { label: 'Pediatrics',      icon: Baby,        keyword: 'pediatric'},
-  { label: 'Vision Care',     icon: Eye,         keyword: 'vision'  },
-  { label: 'Pharmacy',        icon: Pill,        keyword: 'pharmacy'},
+  { label: 'Primary Care',   icon: <Hospital size={20} color="var(--accent)" variant="Linear" />, keyword: 'primary'   },
+  { label: 'Mental Health',  icon: <Health   size={20} color="var(--accent)" variant="Linear" />, keyword: 'mental'    },
+  { label: "Women's Health", icon: <Heart    size={20} color="var(--accent)" variant="Linear" />, keyword: 'women'     },
+  { label: 'Pediatrics',     icon: <Profile  size={20} color="var(--accent)" variant="Linear" />, keyword: 'pediatric' },
+  { label: 'Vision Care',    icon: <Eye      size={20} color="var(--accent)" variant="Linear" />, keyword: 'vision'    },
+  { label: 'Pharmacy',       icon: <Health   size={20} color="var(--accent)" variant="Linear" />, keyword: 'pharmacy'  },
 ]
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -120,7 +120,7 @@ function ClinicRow({ clinic }: { clinic: Clinic }) {
         background: 'rgba(74,144,217,0.08)',
         display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
       }}>
-        <Building2 size={18} color="var(--accent)" />
+        <Buildings2 size={18} color="var(--accent)" variant="Linear" />
       </div>
 
       {/* Info */}
@@ -136,7 +136,7 @@ function ClinicRow({ clinic }: { clinic: Clinic }) {
           fontSize: '12px', color: 'var(--text-2)',
           fontFamily: 'var(--font-inter)', display: 'flex', alignItems: 'center', gap: '6px',
         }}>
-          <MapPin size={11} />
+          <Location size={11} variant="Linear" />
           <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             {clinic.address}, {clinic.city}, {clinic.state}
           </span>
@@ -178,11 +178,11 @@ function ClinicRow({ clinic }: { clinic: Clinic }) {
               fontFamily: 'var(--font-inter)', textDecoration: 'none',
             }}
           >
-            <Phone size={11} />
+            <Call size={11} variant="Linear" />
             Call
           </a>
         )}
-        <ChevronRight size={14} color="var(--text-3)" />
+        <ArrowRight2 size={14} color="var(--text-3)" variant="Linear" />
       </div>
     </Link>
   )
@@ -317,7 +317,7 @@ export default function ClinicsPage() {
               color: 'var(--accent)', fontSize: '12px', fontWeight: 600,
               marginBottom: '20px', letterSpacing: '0.04em', textTransform: 'uppercase' as const,
             }}>
-              <MapPin size={12} />
+              <Location size={12} variant="Linear" />
               Clinic Directory
             </div>
 
@@ -350,7 +350,7 @@ export default function ClinicsPage() {
                     onClick={() => setSelectedService(null)}
                     style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--accent)', display: 'flex', padding: 0 }}
                   >
-                    <X size={12} />
+                    <CloseCircle size={12} variant="Linear" />
                   </button>
                 </span>
               </div>
@@ -363,7 +363,7 @@ export default function ClinicsPage() {
                 padding: '0 16px', borderRadius: '14px',
                 background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border-hi)',
               }}>
-                <Search size={16} color="var(--text-3)" />
+                <SearchNormal1 size={16} color="var(--text-3)" variant="Linear" />
                 <input
                   ref={inputRef}
                   type="text"
@@ -382,7 +382,7 @@ export default function ClinicsPage() {
                     onClick={() => { setQuery(''); setClinics([]); setHasSearched(false) }}
                     style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-3)', display: 'flex' }}
                   >
-                    <X size={14} />
+                    <CloseCircle size={14} variant="Linear" />
                   </button>
                 )}
               </div>
@@ -400,8 +400,8 @@ export default function ClinicsPage() {
                 }}
               >
                 {loading
-                  ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
-                  : <Search size={16} />
+                  ? <RefreshCircle size={16} variant="Linear" style={{ animation: 'spin-slow 0.8s linear infinite' }} />
+                  : <SearchNormal1 size={16} variant="Linear" />
                 }
                 Search
               </button>
@@ -409,11 +409,12 @@ export default function ClinicsPage() {
 
             {/* Featured cities */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginTop: '20px' }}>
-              {FEATURED_CITIES.map(({ city, state, emoji }) => (
+              {FEATURED_CITIES.map(({ city, state }) => (
                 <button
                   key={`${city}-${state}`}
                   onClick={() => { setQuery(`${city}, ${state}`); runSearch(`${city}, ${state}`) }}
                   style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '5px',
                     padding: '6px 14px', borderRadius: '20px',
                     background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
                     color: 'var(--text-2)', fontSize: '12px', fontWeight: 500,
@@ -428,7 +429,8 @@ export default function ClinicsPage() {
                     ;(e.currentTarget as HTMLElement).style.color = 'var(--text-2)'
                   }}
                 >
-                  {emoji} {city}
+                  <Buildings2 size={11} variant="Linear" color="currentColor" aria-hidden="true" />
+                  {city}
                 </button>
               ))}
             </div>
@@ -444,7 +446,7 @@ export default function ClinicsPage() {
             Browse by service
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '12px' }}>
-            {SERVICE_CATEGORIES.map(({ label, icon: Icon, keyword }) => {
+            {SERVICE_CATEGORIES.map(({ label, icon, keyword }) => {
               const active = selectedService === keyword
               return (
                 <button
@@ -477,7 +479,7 @@ export default function ClinicsPage() {
                     background: active ? 'rgba(74,144,217,0.18)' : 'rgba(74,144,217,0.08)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
-                    <Icon size={20} color="var(--accent)" />
+                    {icon}
                   </div>
                   <span style={{ fontSize: '12px', fontWeight: 600, color: active ? 'var(--accent)' : 'var(--text-2)' }}>
                     {label}
@@ -495,7 +497,7 @@ export default function ClinicsPage() {
               fontSize: '13px', color: 'var(--accent)', fontFamily: 'var(--font-inter)',
               display: 'flex', alignItems: 'center', gap: '8px',
             }}>
-              <Search size={14} />
+              <SearchNormal1 size={14} variant="Linear" />
               Now enter your city or ZIP above to find{' '}
               <strong>{SERVICE_CATEGORIES.find(s => s.keyword === selectedService)?.label}</strong> clinics near you.
             </div>
@@ -529,7 +531,7 @@ export default function ClinicsPage() {
                 }}
               >
                 Advanced search
-                <ArrowRight size={16} />
+                <ArrowRight size={16} variant="Linear" />
               </Link>
             </div>
           )}
@@ -575,7 +577,7 @@ export default function ClinicsPage() {
                     fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-inter)',
                   }}
                 >
-                  <Filter size={13} />
+                  <Filter size={13} variant="Linear" />
                   Filters
                 </button>
                 <Link
@@ -588,7 +590,7 @@ export default function ClinicsPage() {
                     textDecoration: 'none', fontFamily: 'var(--font-inter)',
                   }}
                 >
-                  <Navigation size={13} />
+                  <Routing size={13} variant="Linear" />
                   Map view
                 </Link>
               </div>
@@ -654,7 +656,9 @@ export default function ClinicsPage() {
                   textAlign: 'center', padding: '48px 24px', borderRadius: '16px',
                   background: 'rgba(255,255,255,0.01)', border: '1px dashed rgba(255,255,255,0.08)',
                 }}>
-                  <div style={{ fontSize: '28px', marginBottom: '12px' }}>⚠️</div>
+                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
+                    <Warning2 size={36} color="#f87171" variant="TwoTone" aria-hidden="true" />
+                  </div>
                   <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px' }}>
                     Search failed
                   </div>
@@ -676,7 +680,9 @@ export default function ClinicsPage() {
                   textAlign: 'center', padding: '48px 24px', borderRadius: '16px',
                   background: 'rgba(255,255,255,0.01)', border: '1px dashed rgba(255,255,255,0.08)',
                 }}>
-                  <div style={{ fontSize: '28px', marginBottom: '12px' }}>🔍</div>
+                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
+                    <SearchNormal1 size={36} color="var(--text-3)" variant="TwoTone" aria-hidden="true" />
+                  </div>
                   <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px' }}>
                     No clinics found
                   </div>
@@ -730,7 +736,7 @@ export default function ClinicsPage() {
                   }}
                 >
                   View on map &amp; advanced filters
-                  <ArrowRight size={16} />
+                  <ArrowRight size={16} variant="Linear" />
                 </Link>
               </div>
             )}

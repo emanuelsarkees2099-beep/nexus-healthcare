@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import { Heart, X, Phone } from 'lucide-react'
+import { Heart, CloseCircle, Call } from 'iconsax-react'
 import { useI18n } from '@/components/I18nContext'
 
 export default function CrisisButton() {
@@ -48,7 +48,7 @@ export default function CrisisButton() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
               <span style={{ fontSize: '13px', fontWeight: 700, color: '#f87171' }}>{t('emergency.helpNow')}</span>
               <button onClick={() => setExpanded(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)' }}>
-                <X size={16} />
+                <CloseCircle size={16} variant="Linear" />
               </button>
             </div>
 
@@ -63,7 +63,7 @@ export default function CrisisButton() {
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(248,113,113,0.18)'}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'rgba(248,113,113,0.1)'}
             >
-              <Phone size={18} color="#f87171" />
+              <Call size={18} color="#f87171" variant="Linear" />
               <div>
                 <div style={{ fontSize: '15px', fontWeight: 700, color: '#f87171' }}>{t('emergency.call988')}</div>
                 <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>{t('emergency.desc.988')}</div>
@@ -79,7 +79,7 @@ export default function CrisisButton() {
                 textDecoration: 'none',
               }}
             >
-              <Phone size={16} color="#818cf8" />
+              <Call size={16} color="#818cf8" variant="Linear" />
               <div>
                 <div style={{ fontSize: '13px', fontWeight: 600, color: '#818cf8' }}>{t('emergency.crisisText')}</div>
                 <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>{t('emergency.desc.crisisText')}</div>
@@ -125,7 +125,7 @@ export default function CrisisButton() {
           color: '#fff',
         }}
       >
-        {expanded ? <X size={16} /> : <Heart size={16} fill="white" />}
+        {expanded ? <CloseCircle size={16} variant="Linear" /> : <Heart size={16} variant="Bold" color="white" />}
       </button>
     </>
   )

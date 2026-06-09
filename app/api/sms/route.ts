@@ -171,7 +171,7 @@ export async function POST(req: NextRequest) {
 
   // Emergency keywords — highest priority
   if (/\b(emergency|911|dying|can't breathe|chest pain|stroke|overdose)\b/i.test(incomingBody)) {
-    return twiml('⚠️ If this is a medical emergency, CALL 911 NOW. For free ER rights info after: nexushealth.org/rights')
+    return twiml('EMERGENCY: If this is a medical emergency, CALL 911 NOW. For free ER rights info after: nexushealth.org/rights')
   }
 
   // Crisis keywords

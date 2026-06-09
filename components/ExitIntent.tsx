@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { CloseSquare, Location } from 'iconsax-react'
 
 const SESSION_KEY = 'nexus_exit_shown'
 
@@ -91,9 +92,7 @@ export default function ExitIntent() {
           onMouseEnter={e => (e.currentTarget.style.color = 'var(--text)')}
           onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <path d="M18 6L6 18M6 6l12 12" />
-          </svg>
+          <CloseSquare size={16} color="currentColor" variant="Linear" />
         </button>
 
         {/* Icon */}
@@ -103,10 +102,7 @@ export default function ExitIntent() {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           marginBottom: '1.25rem', color: 'var(--accent)',
         }}>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z" />
-            <circle cx="12" cy="10" r="3" />
-          </svg>
+          <Location size={22} color="currentColor" variant="TwoTone" />
         </div>
 
         {/* Content */}

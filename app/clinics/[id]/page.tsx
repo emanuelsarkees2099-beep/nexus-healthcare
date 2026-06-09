@@ -7,12 +7,13 @@ import AppShell from '@/components/AppShell'
 import AffordabilityBar from '@/components/AffordabilityBar'
 import EmergencyEscalation from '@/components/EmergencyEscalation'
 import {
-  MapPin, Phone, Globe, Clock, ArrowLeft, Bookmark, BookmarkCheck,
-  CheckCircle2, Stethoscope, Brain, Baby, Eye, Heart, Pill,
-  Accessibility, Languages, Car, Bus, Loader2, Share2, Printer,
-  Navigation, ChevronRight, Shield, Award, AlertCircle, ExternalLink,
-  MessageCircle, Copy, Check, CalendarDays, ShieldCheck, Star, X,
-} from 'lucide-react'
+  Location, Call, Global, Clock, ArrowLeft, Bookmark2,
+  TickCircle, Hospital, Health, Eye, Heart,
+  LanguageSquare, Car, Bus, RefreshCircle, ExportSquare, Printer,
+  Routing, ArrowRight2, Shield, Award, InfoCircle,
+  MessageCircle, Copy, Calendar1, ShieldTick, Star1, CloseCircle,
+  Profile,
+} from 'iconsax-react'
 import { createClientClient } from '@/lib/auth-client'
 import { computeEquityScore } from '@/lib/search-utils'
 
@@ -32,19 +33,19 @@ type Clinic = {
 }
 
 const SERVICE_ICONS: Record<string, React.ReactNode> = {
-  primary:    <Stethoscope size={14} strokeWidth={2} />,
-  mental:     <Brain size={14} strokeWidth={2} />,
-  pediatrics: <Baby size={14} strokeWidth={2} />,
-  vision:     <Eye size={14} strokeWidth={2} />,
-  dental:     <Pill size={14} strokeWidth={2} />,
-  womens:     <Heart size={14} strokeWidth={2} />,
+  primary:    <Hospital size={14} variant="Linear" />,
+  mental:     <Health size={14} variant="Linear" />,
+  pediatrics: <Profile size={14} variant="Linear" />,
+  vision:     <Eye size={14} variant="Linear" />,
+  dental:     <Health size={14} variant="Linear" />,
+  womens:     <Heart size={14} variant="Linear" />,
 }
 
 const WHAT_TO_BRING = [
-  { text: 'Photo ID (if you have one — not always required)', icon: <Shield size={14} /> },
-  { text: 'List of current medications', icon: <Pill size={14} /> },
-  { text: 'Previous medical records (optional)', icon: <CheckCircle2 size={14} /> },
-  { text: 'Payment is based on your income — ask at the desk', icon: <Heart size={14} /> },
+  { text: 'Photo ID (if you have one — not always required)', icon: <Shield size={14} variant="Linear" /> },
+  { text: 'List of current medications', icon: <Health size={14} variant="Linear" /> },
+  { text: 'Previous medical records (optional)', icon: <TickCircle size={14} variant="Linear" /> },
+  { text: 'Payment is based on your income — ask at the desk', icon: <Heart size={14} variant="Linear" /> },
 ]
 
 export default function ClinicDetailPage() {
@@ -163,7 +164,7 @@ export default function ClinicDetailPage() {
       <AppShell>
         <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-            <Loader2 size={24} color="var(--accent)" style={{ animation: 'spin-slow 1s linear infinite' }} />
+            <RefreshCircle size={24} color="var(--accent)" variant="Linear" style={{ animation: 'spin-slow 0.8s linear infinite' }} />
             <span style={{ color: 'var(--text-3)', fontSize: '13px', fontFamily: 'var(--font-inter)' }}>
               Loading clinic details...
             </span>
@@ -178,7 +179,7 @@ export default function ClinicDetailPage() {
     return (
       <AppShell>
         <div style={{ maxWidth: '600px', margin: '80px auto', padding: '0 24px', textAlign: 'center' }}>
-          <AlertCircle size={40} color="var(--coral)" style={{ marginBottom: '16px' }} />
+          <InfoCircle size={40} color="var(--coral)" variant="Linear" style={{ marginBottom: '16px' }} />
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 700, marginBottom: '12px', color: 'var(--text)' }}>
             Clinic not found
           </h1>
@@ -192,7 +193,7 @@ export default function ClinicDetailPage() {
             textDecoration: 'none', fontWeight: 600, fontSize: '14px',
             fontFamily: 'var(--font-inter)',
           }}>
-            <MapPin size={15} /> Find Another Clinic
+            <Location size={15} variant="Linear" /> Find Another Clinic
           </Link>
           <div style={{ marginTop: '24px' }}>
             <EmergencyEscalation />
@@ -283,10 +284,10 @@ export default function ClinicDetailPage() {
             aria-label="Dismiss"
             style={{ position: 'absolute', top: 10, right: 10, background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.3)', display: 'flex', padding: 2 }}
           >
-            <X size={14} />
+            <CloseCircle size={14} variant="Linear" />
           </button>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-            <ShieldCheck size={16} color="var(--accent)" />
+            <ShieldTick size={16} color="var(--accent)" variant="Linear" />
             <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>
               Clinic saved!
             </span>
@@ -298,7 +299,7 @@ export default function ClinicDetailPage() {
             href="/eligibility"
             style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.28)', color: 'var(--accent)', fontSize: 12, fontWeight: 600, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}
           >
-            Check coverage <ChevronRight size={12} />
+            Check coverage <ArrowRight2 size={12} variant="Linear" />
           </Link>
         </div>
       )}
@@ -318,7 +319,7 @@ export default function ClinicDetailPage() {
             onMouseEnter={e => (e.currentTarget.style.color = 'var(--text-2)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
           >
-            <ArrowLeft size={14} /> Back to results
+            <ArrowLeft size={14} variant="Linear" /> Back to results
           </button>
         </div>
 
@@ -345,7 +346,7 @@ export default function ClinicDetailPage() {
                 borderRadius: '100px', padding: '4px 10px',
                 fontSize: '11px', fontWeight: 600, color: 'var(--accent)', fontFamily: 'var(--font-inter)',
               }}>
-                <CheckCircle2 size={11} /> Free care available
+                <TickCircle size={11} variant="Linear" /> Free care available
               </div>
             )}
             {clinic.sliding_scale && (
@@ -405,7 +406,7 @@ export default function ClinicDetailPage() {
                 fontFamily: 'var(--font-inter)', cursor: 'default',
               }}
             >
-              <Star size={10} fill={equity.color} stroke="none" />
+              <Star1 size={10} variant="Bold" color={equity.color} />
               Equity: {equity.label}
             </div>
           </div>
@@ -446,7 +447,7 @@ export default function ClinicDetailPage() {
                   fontFamily: 'var(--font-inter)',
                 }}
               >
-                <Phone size={15} /> Call Now
+                <Call size={15} variant="Linear" /> Call Now
               </a>
             )}
             <button
@@ -461,7 +462,7 @@ export default function ClinicDetailPage() {
               onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.09)')}
               onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
             >
-              <Navigation size={15} /> Get Directions
+              <Routing size={15} variant="Linear" /> Get Directions
             </button>
             <button
               onClick={toggleBookmark}
@@ -476,7 +477,7 @@ export default function ClinicDetailPage() {
                 transition: 'background 0.2s, border-color 0.2s',
               }}
             >
-              {bookmarked ? <BookmarkCheck size={15} /> : <Bookmark size={15} />}
+              {bookmarked ? <Bookmark2 size={15} variant="Bold" /> : <Bookmark2 size={15} variant="Linear" />}
               {bookmarked ? 'Saved' : 'Save'}
             </button>
             <button
@@ -491,7 +492,7 @@ export default function ClinicDetailPage() {
               title="Text me this clinic"
               aria-label="Text clinic info to yourself"
             >
-              <MessageCircle size={14} />
+              <MessageCircle size={14} variant="Linear" />
             </button>
             <button
               onClick={handleShare}
@@ -506,7 +507,7 @@ export default function ClinicDetailPage() {
               title={copied ? 'Copied!' : 'Share clinic'}
               aria-label={copied ? 'Link copied to clipboard' : 'Share clinic'}
             >
-              {copied ? <Check size={14} /> : <Share2 size={14} />}
+              {copied ? <TickCircle size={14} variant="Bold" /> : <ExportSquare size={14} variant="Linear" />}
             </button>
             <button
               onClick={handlePrint}
@@ -520,7 +521,7 @@ export default function ClinicDetailPage() {
               title="Print clinic info"
               aria-label="Print clinic info"
             >
-              <Printer size={14} />
+              <Printer size={14} variant="Linear" />
             </button>
           </div>
         </div>
@@ -535,7 +536,7 @@ export default function ClinicDetailPage() {
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                <MapPin size={15} color="var(--accent)" style={{ flexShrink: 0, marginTop: '1px' }} />
+                <Location size={15} color="var(--accent)" variant="Linear" style={{ flexShrink: 0, marginTop: '1px' }} />
                 <a
                   href={googleMapsUrl}
                   target="_blank"
@@ -549,7 +550,7 @@ export default function ClinicDetailPage() {
               </div>
               {clinic.phone && (
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                  <Phone size={15} color="var(--accent)" style={{ flexShrink: 0 }} />
+                  <Call size={15} color="var(--accent)" variant="Linear" style={{ flexShrink: 0 }} />
                   <a href={`tel:${clinic.phone}`} style={{ fontSize: '13px', color: 'var(--text-2)', textDecoration: 'none', fontFamily: 'var(--font-mono),monospace', transition: 'color 0.2s' }}
                     onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
                     onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-2)')}>
@@ -559,17 +560,17 @@ export default function ClinicDetailPage() {
               )}
               {clinic.url && (
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                  <Globe size={15} color="var(--accent)" style={{ flexShrink: 0 }} />
+                  <Global size={15} color="var(--accent)" variant="Linear" style={{ flexShrink: 0 }} />
                   <a href={clinic.url} target="_blank" rel="noreferrer" style={{ fontSize: '13px', color: 'var(--text-2)', textDecoration: 'none', fontFamily: 'var(--font-inter)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', transition: 'color 0.2s' }}
                     onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
                     onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-2)')}>
-                    Website <ChevronRight size={12} style={{ display: 'inline', verticalAlign: 'middle' }} />
+                    Website <ArrowRight2 size={12} variant="Linear" style={{ display: 'inline', verticalAlign: 'middle' }} />
                   </a>
                 </div>
               )}
               {clinic.hours && (
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                  <Clock size={15} color="var(--amber)" style={{ flexShrink: 0, marginTop: '1px' }} />
+                  <Clock size={15} color="var(--amber)" variant="Linear" style={{ flexShrink: 0, marginTop: '1px' }} />
                   <span style={{ fontSize: '13px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', lineHeight: 1.6 }}>
                     {clinic.hours}
                   </span>
@@ -592,7 +593,7 @@ export default function ClinicDetailPage() {
                     background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.12)',
                     fontSize: '12px', color: 'var(--accent)', fontFamily: 'var(--font-inter)', fontWeight: 500,
                   }}>
-                    {SERVICE_ICONS[svc] || <Stethoscope size={12} />}
+                    {SERVICE_ICONS[svc] || <Hospital size={12} variant="Linear" />}
                     {svc.charAt(0).toUpperCase() + svc.slice(1)}
                   </div>
                 ))}
@@ -605,7 +606,7 @@ export default function ClinicDetailPage() {
         {clinic.languages && clinic.languages.length > 0 && (
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border2)', borderRadius: '16px', padding: '22px 24px', marginBottom: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-              <Languages size={14} color="var(--violet)" />
+              <LanguageSquare size={14} color="var(--violet)" variant="Linear" />
               <h2 style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', margin: 0 }}>
                 Languages Spoken
               </h2>
@@ -618,7 +619,7 @@ export default function ClinicDetailPage() {
                   background: 'rgba(167,139,250,0.06)', border: '1px solid rgba(167,139,250,0.18)',
                   fontSize: '12px', color: 'var(--violet)', fontFamily: 'var(--font-inter)', fontWeight: 500,
                 }}>
-                  <Globe size={11} />
+                  <Global size={11} variant="Linear" />
                   {lang.charAt(0).toUpperCase() + lang.slice(1)}
                 </div>
               ))}
@@ -656,7 +657,7 @@ export default function ClinicDetailPage() {
         <div style={{ background: 'var(--bg2)', border: '1px solid var(--border2)', borderRadius: '16px', padding: '22px 24px', marginBottom: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
             <div style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <CalendarDays size={15} color="var(--accent)" />
+              <Calendar1 size={15} color="var(--accent)" variant="Linear" />
             </div>
             <h2 style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', margin: 0 }}>
               Book an Appointment
@@ -698,7 +699,7 @@ export default function ClinicDetailPage() {
                     href={`tel:${clinic.phone}`}
                     style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '11px 20px', borderRadius: 10, background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.25)', color: 'var(--accent)', fontSize: 14, fontWeight: 700, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}
                   >
-                    <Phone size={15} /> Call to Book
+                    <Call size={15} variant="Linear" /> Call to Book
                   </a>
                 )}
                 {clinic.url && (
@@ -708,14 +709,15 @@ export default function ClinicDetailPage() {
                     rel="noopener noreferrer"
                     style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '11px 20px', borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', color: 'var(--text-2)', fontSize: 14, fontWeight: 600, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}
                   >
-                    <Globe size={14} /> Visit Website
+                    <Global size={14} variant="Linear" /> Visit Website
                   </a>
                 )}
               </div>
               {/* Tips for the call */}
               <div style={{ padding: '12px 16px', borderRadius: 10, background: 'rgba(251,191,36,0.05)', border: '1px solid rgba(251,191,36,0.12)' }}>
-                <p style={{ fontSize: 12, color: 'rgba(251,191,36,0.75)', fontFamily: 'var(--font-inter)', margin: 0, lineHeight: 1.65, fontWeight: 300 }}>
-                  💡 <strong style={{ fontWeight: 600 }}>Tip when calling:</strong> Ask about sliding-scale fees, bring your income information, and confirm they accept uninsured patients. Most clinics are required to say yes.
+                <p style={{ fontSize: 12, color: 'rgba(251,191,36,0.75)', fontFamily: 'var(--font-inter)', margin: 0, lineHeight: 1.65, fontWeight: 300, display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
+                  <InfoCircle size={13} color="rgba(251,191,36,0.75)" variant="TwoTone" style={{ flexShrink: 0, marginTop: '1px' }} aria-hidden="true" />
+                  <span><strong style={{ fontWeight: 600 }}>Tip when calling:</strong> Ask about sliding-scale fees, bring your income information, and confirm they accept uninsured patients. Most clinics are required to say yes.</span>
                 </p>
               </div>
             </div>
@@ -729,7 +731,7 @@ export default function ClinicDetailPage() {
             borderRadius: '16px', padding: '18px 22px', marginBottom: '16px',
             display: 'flex', alignItems: 'flex-start', gap: '14px',
           }}>
-            <Award size={20} color="var(--amber)" style={{ flexShrink: 0, marginTop: '1px' }} />
+            <Award size={20} color="var(--amber)" variant="Linear" style={{ flexShrink: 0, marginTop: '1px' }} />
             <div>
               <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--amber)', fontFamily: 'var(--font-inter)', marginBottom: '3px' }}>
                 HRSA-Funded Health Center
@@ -765,7 +767,7 @@ export default function ClinicDetailPage() {
             onMouseEnter={e => (e.currentTarget.style.color = 'var(--text-2)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
           >
-            <AlertCircle size={12} />
+            <InfoCircle size={12} variant="Linear" />
             Report outdated or incorrect information
           </a>
         </div>

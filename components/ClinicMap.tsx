@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import type { Map as LeafletMap, Marker as LeafletMarker, LatLngBounds } from 'leaflet'
+import { SearchNormal1, CloseSquare, Call, Routing } from 'iconsax-react'
 
 type Clinic = {
   id: string; name: string; address: string; city: string; state: string
@@ -144,9 +145,7 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
           onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.12)')}
           onMouseLeave={e => (e.currentTarget.style.background = 'rgba(8,13,26,0.92)')}
         >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-          </svg>
+          <SearchNormal1 size={12} color="currentColor" variant="Linear" />
           Search this area
         </button>
       )}
@@ -184,9 +183,7 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
           >
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M18 6L6 18M6 6l12 12"/>
-            </svg>
+            <CloseSquare size={10} color="currentColor" variant="Linear" />
           </button>
 
           {/* Status badge */}
@@ -245,9 +242,7 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
                   fontFamily: 'var(--font-inter)',
                 }}
               >
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
-                </svg>
+                <Call size={10} color="currentColor" variant="Linear" />
                 Call
               </a>
             )}
@@ -264,9 +259,7 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
                 fontFamily: 'var(--font-inter)',
               }}
             >
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <polygon points="3 11 22 2 13 21 11 13 3 11"/>
-              </svg>
+              <Routing size={10} color="currentColor" variant="Linear" />
               Directions
             </a>
             {onSelectClinic && (

@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { DollarSquare, Building, Clock, Activity } from 'iconsax-react'
 
 type Condition = {
   id: string
@@ -156,7 +157,7 @@ export default function CostCalculator() {
           fontFamily: 'var(--font-inter)', letterSpacing: '0.06em',
           textTransform: 'uppercase', marginBottom: '24px',
         }}>
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <DollarSquare size={10} color="currentColor" variant="Linear" />
           Cost Calculator
         </div>
         <h2 style={{
@@ -224,9 +225,7 @@ export default function CostCalculator() {
                   background: 'rgba(248,113,113,0.12)', border: '1px solid rgba(248,113,113,0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f87171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
-                  </svg>
+                  <Building size={16} color="#f87171" variant="TwoTone" />
                 </div>
               </div>
               <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.08em', color: '#f87171', textTransform: 'uppercase', fontFamily: 'var(--font-inter)' }}>Emergency Room</span>
@@ -245,7 +244,7 @@ export default function CostCalculator() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)' }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f87171" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <Clock size={14} color="#f87171" variant="Linear" />
                 Wait time: <strong style={{ color: 'var(--text)' }}>{condition.erTime}</strong>
               </div>
               <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', lineHeight: 1.55, padding: '10px 12px', background: 'rgba(248,113,113,0.05)', borderRadius: '10px', borderLeft: '2px solid rgba(248,113,113,0.3)' }}>
@@ -277,9 +276,7 @@ export default function CostCalculator() {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4A90D9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-                </svg>
+                <Activity size={16} color="#4A90D9" variant="Linear" />
               </div>
               <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.08em', color: '#4A90D9', textTransform: 'uppercase', fontFamily: 'var(--font-inter)' }}>Free Clinic / FQHC</span>
             </div>
@@ -297,7 +294,7 @@ export default function CostCalculator() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)' }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A90D9" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <Clock size={14} color="#4A90D9" variant="Linear" />
                 Wait time: <strong style={{ color: 'var(--text)' }}>{condition.freeTime}</strong>
               </div>
               <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', lineHeight: 1.55, padding: '10px 12px', background: 'rgba(74,144,217,0.05)', borderRadius: '10px', borderLeft: '2px solid rgba(74,144,217,0.3)' }}>

@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
 import { submitForm } from '@/utils/submitForm'
-import { Megaphone, Users, FileText, CheckCircle, ArrowRight, MapPin, TrendingUp, Globe, Mail, ChevronDown, ExternalLink, Heart, Share2, Copy, X as XIcon, Search, Bell, AlertCircle, ChevronRight, Zap, BookOpen, Link2 } from 'lucide-react'
+import { Speaker, ReceiptText, TickCircle, ArrowRight, Location, TrendUp, Global, Sms, ArrowDown2, ExportSquare, Heart, CloseCircle, SearchNormal1, Notification, ArrowRight2, Flash, Book1, Link2 } from 'iconsax-react'
 
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
@@ -241,7 +241,7 @@ export default function AdvocacyPage() {
         <div style={{ position: 'absolute', top: '50%', right: '10%', width: '300px', height: '300px', background: 'radial-gradient(ellipse, rgba(167,139,250,0.07) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
         <div style={{ maxWidth: '760px', position: 'relative' }}>
-          <div style={{ marginBottom: '28px' }}><span style={pill}><Megaphone size={10} strokeWidth={1.5} /> Advocacy & Action</span></div>
+          <div style={{ marginBottom: '28px' }}><span style={pill}><Speaker size={10} variant="Linear" /> Advocacy & Action</span></div>
           <h1 style={{ fontSize: 'clamp(40px, 7vw, 84px)', fontWeight: 800, lineHeight: 1.0, letterSpacing: '-0.035em', marginBottom: '24px', animation: 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both' }}>
             Turn frustration<br /><span style={{ color: 'var(--accent)' }}>into legislation.</span>
           </h1>
@@ -264,7 +264,7 @@ export default function AdvocacyPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '48px' }}>
-              <span style={pill}><FileText size={10} strokeWidth={1.5} /> Active petitions</span>
+              <span style={pill}><ReceiptText size={10} variant="Linear" /> Active petitions</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Sign what matters</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '400px', lineHeight: 1.6 }}>Each petition is delivered to relevant congressional committees when it hits its goal.</p>
             </div>
@@ -310,7 +310,7 @@ export default function AdvocacyPage() {
                             style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', fontFamily: 'inherit' }}
                             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.18)'; (e.currentTarget as HTMLElement).style.color = '#fff' }}
                             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.4)' }}>
-                            <XIcon size={13} strokeWidth={2.5} />
+                            <CloseCircle size={13} variant="Linear" />
                           </button>
                           <button
                             onClick={() => shareOnFacebook(pet.id)}
@@ -318,18 +318,18 @@ export default function AdvocacyPage() {
                             style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', fontFamily: 'inherit' }}
                             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(96,165,250,0.3)'; (e.currentTarget as HTMLElement).style.color = '#60a5fa' }}
                             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.4)' }}>
-                            <Share2 size={13} strokeWidth={2} />
+                            <ExportSquare size={13} variant="Linear" />
                           </button>
                           <button
                             onClick={() => handleCopyLink(pet.id, pet.title)}
                             title="Copy link"
                             style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid', background: copiedId === pet.id ? 'rgba(74,144,217,0.1)' : 'rgba(255,255,255,0.03)', color: copiedId === pet.id ? 'var(--accent)' : 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', borderColor: copiedId === pet.id ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)', fontFamily: 'inherit' }}>
-                            {copiedId === pet.id ? <CheckCircle size={13} strokeWidth={2} /> : <Link2 size={13} strokeWidth={2} />}
+                            {copiedId === pet.id ? <TickCircle size={13} variant="Linear" /> : <Link2 size={13} variant="Linear" />}
                           </button>
                           {/* Sign button */}
                           {signed ? (
                             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: pet.color, fontWeight: 600 }}>
-                              <CheckCircle size={14} strokeWidth={2} /> Signed — thank you
+                              <TickCircle size={14} variant="Linear" /> Signed — thank you
                             </span>
                           ) : (
                             <button
@@ -339,7 +339,7 @@ export default function AdvocacyPage() {
                               onMouseEnter={e => (e.currentTarget.style.background = `${pet.color}25`)}
                               onMouseLeave={e => (e.currentTarget.style.background = `${pet.color}15`)}
                             >
-                              {signingId === pet.id ? 'Signing…' : <><Heart size={12} strokeWidth={2} /> Sign this petition</>}
+                              {signingId === pet.id ? 'Signing…' : <><Heart size={12} variant="Linear" /> Sign this petition</>}
                             </button>
                           )}
                         </div>
@@ -358,7 +358,7 @@ export default function AdvocacyPage() {
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '40px' }}>
-              <span style={pill}><Mail size={10} strokeWidth={1.5} /> Contact your representative</span>
+              <span style={pill}><Sms size={10} variant="Linear" /> Contact your representative</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>One letter can change a vote</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '460px', lineHeight: 1.6 }}>
                 Congressional staffers track constituent letters. A personalized letter carries more weight than any form email. Edit this template and make it yours.
@@ -369,7 +369,7 @@ export default function AdvocacyPage() {
           {letterState === 'sent' ? (
             <RevealBlock>
               <div style={{ textAlign: 'center', padding: '56px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.15)', borderRadius: '20px' }}>
-                <CheckCircle size={44} strokeWidth={1.5} style={{ color: 'var(--accent)', marginBottom: '16px' }} />
+                <TickCircle size={44} variant="Linear" style={{ color: 'var(--accent)', marginBottom: '16px' }} />
                 <h3 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>Letter sent</h3>
                 <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, maxWidth: '360px', margin: '0 auto 24px' }}>
                   Your letter has been logged. Remember: you can also send it directly to your representatives at <a href="https://www.congress.gov/members/find-your-member" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none' }}>congress.gov/members</a>.
@@ -423,7 +423,7 @@ export default function AdvocacyPage() {
                       onMouseEnter={e => (e.currentTarget.style.opacity = '0.88')}
                       onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
                     >
-                      <Mail size={14} strokeWidth={2} /> Send letter
+                      <Sms size={14} variant="Linear" /> Send letter
                     </button>
                     <a
                       href="https://www.congress.gov/members/find-your-member"
@@ -432,7 +432,7 @@ export default function AdvocacyPage() {
                       onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.2)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.8)' }}
                       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.5)' }}
                     >
-                      <ExternalLink size={13} strokeWidth={1.5} /> Find your rep
+                      <ExportSquare size={13} variant="Linear" /> Find your rep
                     </a>
                   </div>
                 </div>
@@ -447,7 +447,7 @@ export default function AdvocacyPage() {
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '36px' }}>
-              <span style={pill}><Search size={10} strokeWidth={1.5} /> Find your representatives</span>
+              <span style={pill}><SearchNormal1 size={10} variant="Linear" /> Find your representatives</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Know who represents you</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '460px', lineHeight: 1.6 }}>
                 Enter your ZIP code to find your House representative and two senators — the exact people whose votes decide your healthcare coverage.
@@ -473,14 +473,14 @@ export default function AdvocacyPage() {
                 onClick={handleRepLookup}
                 disabled={repZip.length < 5}
                 style={{ padding: '14px 24px', borderRadius: '12px', border: 'none', background: repZip.length >= 5 ? 'var(--accent)' : 'rgba(255,255,255,0.06)', color: repZip.length >= 5 ? '#07070F' : 'rgba(255,255,255,0.2)', fontSize: '14px', fontWeight: 700, cursor: repZip.length >= 5 ? 'pointer' : 'not-allowed', fontFamily: 'inherit', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Search size={14} /> Find my reps
+                <SearchNormal1 size={14} variant="Linear" /> Find my reps
               </button>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
               {[
-                { label: 'Find on Congress.gov', desc: 'Official congressional rep lookup by address', url: 'https://www.congress.gov/members/find-your-member', color: '#60a5fa', icon: <BookOpen size={14} strokeWidth={1.5} /> },
-                { label: 'Find on OpenStates', desc: 'State legislators — governor, state senate & house', url: 'https://openstates.org/find_your_legislator/', color: '#a78bfa', icon: <MapPin size={14} strokeWidth={1.5} /> },
-                { label: 'USA.gov Rep Finder', desc: 'All elected officials at federal, state, and local level', url: 'https://www.usa.gov/elected-officials', color: 'var(--accent)', icon: <Globe size={14} strokeWidth={1.5} /> },
+                { label: 'Find on Congress.gov', desc: 'Official congressional rep lookup by address', url: 'https://www.congress.gov/members/find-your-member', color: '#60a5fa', icon: <Book1 size={14} variant="Linear" /> },
+                { label: 'Find on OpenStates', desc: 'State legislators — governor, state senate & house', url: 'https://openstates.org/find_your_legislator/', color: '#a78bfa', icon: <Location size={14} variant="Linear" /> },
+                { label: 'USA.gov Rep Finder', desc: 'All elected officials at federal, state, and local level', url: 'https://www.usa.gov/elected-officials', color: 'var(--accent)', icon: <Global size={14} variant="Linear" /> },
               ].map(link => (
                 <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer"
                   style={{ padding: '16px 18px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px', textDecoration: 'none', display: 'flex', flexDirection: 'column', gap: '6px', transition: 'all 0.2s' }}
@@ -489,7 +489,7 @@ export default function AdvocacyPage() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span style={{ color: link.color }}>{link.icon}</span>
                     <span style={{ fontSize: '14px', fontWeight: 700, color: '#eef4f5' }}>{link.label}</span>
-                    <ExternalLink size={11} style={{ color: 'rgba(255,255,255,0.25)', marginLeft: 'auto' }} />
+                    <ExportSquare size={11} variant="Linear" style={{ color: 'rgba(255,255,255,0.25)', marginLeft: 'auto' }} />
                   </div>
                   <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.38)', lineHeight: 1.5 }}>{link.desc}</span>
                 </a>
@@ -504,7 +504,7 @@ export default function AdvocacyPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '48px' }}>
-              <span style={pill}><Zap size={10} strokeWidth={1.5} /> Legislation tracker</span>
+              <span style={pill}><Flash size={10} variant="Linear" /> Legislation tracker</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Bills that affect you right now</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '480px', lineHeight: 1.6 }}>
                 Real legislation moving through Congress — or just passed — that directly affects free clinic funding, Medicaid, drug pricing, and patient protections.
@@ -539,7 +539,7 @@ export default function AdvocacyPage() {
                       <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#eef4f5', marginBottom: '4px', lineHeight: 1.35 }}>{bill.title}</h3>
                       <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', margin: 0 }}>Last action: {bill.lastAction} — <span style={{ color: bill.statusColor }}>{bill.lastDate}</span></p>
                     </div>
-                    <ChevronRight size={15} style={{ color: 'rgba(255,255,255,0.25)', transform: expandedBill === bill.id ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s', flexShrink: 0, marginTop: '2px' }} />
+                    <ArrowRight2 size={15} variant="Linear" style={{ color: 'rgba(255,255,255,0.25)', transform: expandedBill === bill.id ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s', flexShrink: 0, marginTop: '2px' }} />
                   </div>
 
                   {/* Expanded details */}
@@ -551,12 +551,12 @@ export default function AdvocacyPage() {
                           style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '9px 16px', background: `${bill.statusColor}15`, border: `1px solid ${bill.statusColor}30`, borderRadius: '10px', color: bill.statusColor, fontSize: '13px', fontWeight: 600, textDecoration: 'none', transition: 'opacity 0.15s' }}
                           onMouseEnter={e => (e.currentTarget.style.opacity = '0.8')}
                           onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
-                          <BookOpen size={12} /> View on Congress.gov <ExternalLink size={11} />
+                          <Book1 size={12} variant="Linear" /> View on Congress.gov <ExportSquare size={11} variant="Linear" />
                         </a>
                         <button
                           onClick={() => handleBillAlert(bill.id)}
                           style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '9px 16px', background: billAlert === bill.id ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.03)', border: `1px solid ${billAlert === bill.id ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)'}`, borderRadius: '10px', color: billAlert === bill.id ? 'var(--accent)' : 'rgba(255,255,255,0.45)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}>
-                          {billAlert === bill.id ? <><CheckCircle size={12} /> Alert set!</> : <><Bell size={12} /> Get action alerts</>}
+                          {billAlert === bill.id ? <><TickCircle size={12} variant="Linear" /> Alert set!</> : <><Notification size={12} variant="Linear" /> Get action alerts</>}
                         </button>
                       </div>
                     </div>
@@ -586,7 +586,7 @@ export default function AdvocacyPage() {
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: 'rgba(255,255,255,0.35)', textDecoration: 'none', transition: 'color 0.15s' }}
                 onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
                 onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.35)')}>
-                Full tracker at Congress.gov <ExternalLink size={10} />
+                Full tracker at Congress.gov <ExportSquare size={10} variant="Linear" />
               </a>
             </div>
           </RevealBlock>
@@ -598,7 +598,7 @@ export default function AdvocacyPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '48px' }}>
-              <span style={pill}><MapPin size={10} strokeWidth={1.5} /> Policy wins</span>
+              <span style={pill}><Location size={10} variant="Linear" /> Policy wins</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>What advocacy has already moved</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '400px', lineHeight: 1.6 }}>These wins happened because people organized, wrote letters, and showed up. Every state below was a "never" at some point.</p>
             </div>
@@ -615,7 +615,7 @@ export default function AdvocacyPage() {
                   <div>
                     <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '4px' }}>{w.name}</div>
                     <div style={{ fontSize: '13px', color: w.color, fontWeight: 500, marginBottom: '4px' }}>{w.win}</div>
-                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', gap: '4px' }}><CheckCircle size={10} strokeWidth={2} /> Won {w.year}</div>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', gap: '4px' }}><TickCircle size={10} variant="Linear" /> Won {w.year}</div>
                   </div>
                 </div>
               </RevealBlock>
@@ -629,7 +629,7 @@ export default function AdvocacyPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-              <span style={pill}><TrendingUp size={10} strokeWidth={1.5} /> Movement metrics</span>
+              <span style={pill}><TrendUp size={10} variant="Linear" /> Movement metrics</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px' }}>The numbers are moving</h2>
             </div>
           </RevealBlock>
@@ -658,7 +658,7 @@ export default function AdvocacyPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '40px' }}>
-              <span style={pill}><Globe size={10} strokeWidth={1.5} /> Partner organizations</span>
+              <span style={pill}><Global size={10} variant="Linear" /> Partner organizations</span>
               <h2 style={{ fontSize: 'clamp(22px, 3vw, 36px)', fontWeight: 700, letterSpacing: '-0.02em', marginTop: '20px' }}>In good company</h2>
             </div>
           </RevealBlock>
@@ -673,7 +673,7 @@ export default function AdvocacyPage() {
                     <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.38)' }}>{p.desc}</div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--accent)', fontSize: '12px', fontWeight: 500, flexShrink: 0 }}>
-                    Visit <ArrowRight size={12} strokeWidth={2} />
+                    Visit <ArrowRight size={12} variant="Linear" />
                   </div>
                 </a>
               </RevealBlock>
@@ -702,7 +702,7 @@ export default function AdvocacyPage() {
                 <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 22px', background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontFamily: 'inherit', textAlign: 'left', gap: '16px' }}>
                   <span style={{ fontSize: '15px', fontWeight: 500, lineHeight: 1.4 }}>{f.q}</span>
-                  <ChevronDown size={15} style={{ flexShrink: 0, color: 'rgba(255,255,255,0.4)', transform: openFaq === i ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s' }} />
+                  <ArrowDown2 size={15} variant="Linear" style={{ flexShrink: 0, color: 'rgba(255,255,255,0.4)', transform: openFaq === i ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s' }} />
                 </button>
                 <div style={{ maxHeight: openFaq === i ? '300px' : '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.16,1,0.3,1)' }}>
                   <p style={{ padding: '0 22px 18px', fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.75, margin: 0 }}>{f.a}</p>

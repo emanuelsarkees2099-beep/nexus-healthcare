@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
+import { Sun1, Global, Profile, Notification, Keyboard, ShieldTick, CloseCircle, Trash, TickCircle, ExportSquare } from 'iconsax-react'
 const PushNotificationToggle = dynamic(() => import('@/components/PushNotificationToggle'), { ssr: false })
 
 /* ── Storage keys ── */
@@ -69,60 +70,12 @@ function applyA11y(s: A11ySettings) {
 type Section = 'appearance' | 'language' | 'accessibility' | 'notifications' | 'privacy' | 'shortcuts'
 
 const NAV_ITEMS: { id: Section; label: string; icon: React.ReactNode }[] = [
-  {
-    id: 'appearance',
-    label: 'Appearance',
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-        <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'language',
-    label: 'Language',
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-        <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'accessibility',
-    label: 'Accessibility',
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-        <circle cx="12" cy="4" r="1.5"/><path d="M9 9h6m-3 0v10M6 9l3 0M18 9l-3 0"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'notifications',
-    label: 'Notifications',
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'shortcuts',
-    label: 'Shortcuts',
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-        <rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10M7 12h6M7 15h4"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'privacy',
-    label: 'Privacy & Data',
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-      </svg>
-    ),
-  },
+  { id: 'appearance',    label: 'Appearance',    icon: <Sun1      size={14} color="currentColor" variant="Linear" /> },
+  { id: 'language',      label: 'Language',      icon: <Global    size={14} color="currentColor" variant="Linear" /> },
+  { id: 'accessibility', label: 'Accessibility', icon: <Profile   size={14} color="currentColor" variant="Linear" /> },
+  { id: 'notifications', label: 'Notifications', icon: <Notification size={14} color="currentColor" variant="Linear" /> },
+  { id: 'shortcuts',     label: 'Shortcuts',     icon: <Keyboard  size={14} color="currentColor" variant="Linear" /> },
+  { id: 'privacy',       label: 'Privacy & Data',icon: <ShieldTick size={14} color="currentColor" variant="Linear" /> },
 ]
 
 /* ── Reusable sub-components ── */
@@ -345,9 +298,7 @@ export default function SettingsSidebar() {
             onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.09)'; e.currentTarget.style.color = 'rgba(255,255,255,0.75)' }}
             onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'rgba(255,255,255,0.4)' }}
           >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M18 6L6 18M6 6l12 12"/>
-            </svg>
+            <CloseCircle size={14} color="currentColor" variant="Linear" />
           </button>
         </div>
 
@@ -467,9 +418,7 @@ export default function SettingsSidebar() {
                 onMouseEnter={e => { e.currentTarget.style.background = 'rgba(248,113,113,0.09)'; e.currentTarget.style.color = 'rgba(248,113,113,0.85)' }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'rgba(248,113,113,0.04)'; e.currentTarget.style.color = 'rgba(248,113,113,0.6)' }}
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <path d="M3 6h18M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/>
-                </svg>
+                <Trash size={13} color="currentColor" variant="Linear" />
                 Reset all preferences
               </button>
             </>
@@ -506,9 +455,7 @@ export default function SettingsSidebar() {
                       {l.native}
                     </span>
                     {lang === l.code && (
-                      <svg style={{ marginLeft: 'auto', flexShrink: 0 }} width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(74,144,217,0.8)" strokeWidth="2.5" strokeLinecap="round">
-                        <path d="M20 6L9 17l-5-5"/>
-                      </svg>
+                      <TickCircle size={11} color="rgba(74,144,217,0.8)" variant="TwoTone" style={{ marginLeft: 'auto', flexShrink: 0 }} />
                     )}
                   </button>
                 ))}
@@ -697,9 +644,7 @@ export default function SettingsSidebar() {
                       onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}
                     >
                       {link.label}
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{ opacity: 0.4 }}>
-                        <path d="M7 17L17 7M17 7H7M17 7v10"/>
-                      </svg>
+                      <ExportSquare size={12} color="currentColor" variant="Linear" style={{ opacity: 0.4 }} />
                     </Link>
                   ))}
                 </div>
@@ -711,9 +656,7 @@ export default function SettingsSidebar() {
                 border: '1px solid rgba(74,217,144,0.10)',
                 display: 'flex', gap: '10px', alignItems: 'flex-start',
               }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(74,217,144,0.6)" strokeWidth="2" strokeLinecap="round" style={{ flexShrink: 0, marginTop: '2px' }}>
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                </svg>
+                <ShieldTick size={14} color="rgba(74,217,144,0.6)" variant="TwoTone" style={{ flexShrink: 0, marginTop: '2px' }} />
                 <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.32)', fontFamily: 'var(--font-inter)', lineHeight: 1.65, margin: 0 }}>
                   NEXUS never sells your data. We are an open-source, non-profit platform built for the uninsured.
                 </p>

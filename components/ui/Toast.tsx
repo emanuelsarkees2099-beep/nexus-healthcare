@@ -10,7 +10,7 @@
  * ToastContainer is mounted once in GlobalClientComponents.
  */
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { X } from 'lucide-react'
+import { CloseCircle } from 'iconsax-react'
 
 /* ── Types ─────────────────────────────────────────────────────────────────── */
 export type ToastVariant = 'default' | 'success' | 'error' | 'warning' | 'info'
@@ -221,7 +221,7 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: string)
         onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
         onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.25)')}
       >
-        <X size={13} />
+        <CloseCircle size={13} variant="Linear" />
       </button>
 
       {/* Progress bar */}

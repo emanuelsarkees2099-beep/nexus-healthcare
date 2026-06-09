@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
-import { TrendingUp, BarChart2, Globe, Database, Download, ChevronDown, CheckCircle } from 'lucide-react'
+import { TrendUp, Chart2, Global, Data, DocumentDownload, ArrowDown2, TickCircle } from 'iconsax-react'
 import { useLiveStats } from '@/hooks/useLiveStats'
 
 function useReveal(threshold = 0.15) {
@@ -158,7 +158,7 @@ export default function ImpactPage() {
       {/* Toast */}
       {toastMsg && (
         <div style={{ position: 'fixed', bottom: '32px', left: '50%', transform: 'translateX(-50%)', zIndex: 999, background: 'rgba(74,144,217,0.15)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '100px', padding: '12px 24px', fontSize: '13px', color: '#eef4f5', backdropFilter: 'blur(20px)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <CheckCircle size={14} strokeWidth={1.5} style={{ color: '#60a5fa' }} />
+          <TickCircle size={14} variant="Linear" style={{ color: '#60a5fa' }} />
           {toastMsg}
         </div>
       )}
@@ -167,7 +167,7 @@ export default function ImpactPage() {
       <section style={{ minHeight: '80dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '100px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(74,144,217,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
-        <div style={{ ...pill, marginBottom: '24px' }}><TrendingUp size={10} strokeWidth={1.5} /> Impact Dashboard</div>
+        <div style={{ ...pill, marginBottom: '24px' }}><TrendUp size={10} variant="Linear" /> Impact Dashboard</div>
 
         <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.08, marginBottom: '24px', maxWidth: '700px' }}>
           {TITLE.map((w, i) => (
@@ -186,7 +186,7 @@ export default function ImpactPage() {
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><BarChart2 size={10} strokeWidth={1.5} /> Live data</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Chart2 size={10} variant="Linear" /> Live data</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>The numbers as they stand <em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>today</em></h2>
             </div>
           </RevealBlock>
@@ -263,7 +263,7 @@ export default function ImpactPage() {
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><Globe size={10} strokeWidth={1.5} /> Regional breakdown</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Global size={10} variant="Linear" /> Regional breakdown</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Coverage across the country</h2>
             </div>
           </RevealBlock>
@@ -306,7 +306,7 @@ export default function ImpactPage() {
                     style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 24px', background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontFamily: 'inherit', textAlign: 'left', gap: '16px' }}
                   >
                     <span style={{ fontSize: '15px', fontWeight: 600 }}>{m.title}</span>
-                    <ChevronDown size={16} style={{ flexShrink: 0, color: 'rgba(255,255,255,0.4)', transform: openMethod === i ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s' }} />
+                    <ArrowDown2 size={16} style={{ flexShrink: 0, color: 'rgba(255,255,255,0.4)', transform: openMethod === i ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s' }} />
                   </button>
                   <div style={{ maxHeight: openMethod === i ? '300px' : '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.16,1,0.3,1)' }}>
                     <p style={{ padding: '0 24px 20px', fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.75, margin: 0 }}>{m.body}</p>
@@ -323,7 +323,7 @@ export default function ImpactPage() {
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '48px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><Database size={10} strokeWidth={1.5} /> Open data</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Data size={10} variant="Linear" /> Open data</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Download our public dataset</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', marginTop: '16px', maxWidth: '480px', lineHeight: 1.65 }}>Researchers, journalists, and advocates are welcome to use this data. No login required.</p>
             </div>
@@ -352,7 +352,7 @@ export default function ImpactPage() {
                         onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.2)')}
                         onMouseLeave={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.1)')}
                       >
-                        <Download size={12} strokeWidth={2} /> Download
+                        <DocumentDownload size={12} variant="Linear" /> Download
                       </button>
                     </div>
                   </div>

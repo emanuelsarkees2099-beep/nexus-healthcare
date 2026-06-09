@@ -1,6 +1,7 @@
-'use client'
+﻿'use client'
 import { useEffect, useRef, useState } from 'react'
 import { useI18n } from '@/components/I18nContext'
+import { SearchNormal1, Location, Gps } from 'iconsax-react'
 
 // U2 — Typeahead suggestion pool
 const TYPEAHEAD_POOL = [
@@ -39,7 +40,7 @@ export default function SearchBar({
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [suggestionIdx, setSuggestionIdx]   = useState(-1)
 
-  /* ── Typeahead: instant static filter + 300ms debounced API suggestions ── */
+  /* â”€â”€ Typeahead: instant static filter + 300ms debounced API suggestions â”€â”€ */
   useEffect(() => {
     const q = searchVal.trim().toLowerCase()
     if (!q) { setSuggestions([]); setShowSuggestions(false); return }
@@ -172,11 +173,7 @@ export default function SearchBar({
         }}
       >
         {/* Search icon */}
-        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"
-          stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-          style={{ flexShrink: 0, opacity: 0.5 }}>
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-        </svg>
+        <SearchNormal1 aria-hidden="true" size={18} color="var(--accent)" variant="Linear" style={{ flexShrink: 0, opacity: 0.5 }} />
 
         {/* Main input */}
         <label htmlFor="main-search" className="sr-only">Search for free healthcare near you</label>
@@ -196,7 +193,7 @@ export default function SearchBar({
           style={{
             flex: 1, background: 'none', border: 'none', outline: 'none',
             color: 'var(--text)', fontFamily: 'var(--font-inter)',
-            fontSize: '15px', fontWeight: 300, padding: '9px 0', cursor: 'text',
+            fontSize: '15px', fontWeight: 400, padding: '9px 0', cursor: 'text',
           }}
         />
 
@@ -208,11 +205,7 @@ export default function SearchBar({
           style={{ display: 'flex', alignItems: 'center', gap: '7px', flexShrink: 0, padding: '0 4px' }}
           onClick={() => { setEditingLoc(true); setTimeout(() => locationRef.current?.focus(), 50) }}
         >
-          <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none"
-            stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-            style={{ flexShrink: 0, opacity: 0.6 }}>
-            <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
-          </svg>
+          <Location aria-hidden="true" size={12} color="var(--accent)" variant="Linear" style={{ flexShrink: 0, opacity: 0.6 }} />
           <input
             ref={locationRef}
             value={locationVal}
@@ -225,7 +218,7 @@ export default function SearchBar({
             style={{
               background: 'none', border: 'none', outline: 'none',
               color: editingLoc ? 'var(--text)' : 'var(--text-2)',
-              fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 300,
+              fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 400,
               width: editingLoc ? '110px' : `${Math.max(70, locationVal.length * 7.5)}px`,
               cursor: 'text', transition: 'width 0.2s, color 0.2s',
               whiteSpace: 'nowrap',
@@ -264,10 +257,7 @@ export default function SearchBar({
               transition: 'opacity 0.2s', flexShrink: 0,
             }}
           >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="3"/>
-              <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
-            </svg>
+            <Gps size={12} color="currentColor" variant="Linear" />
           </button>
         </div>
 
@@ -287,7 +277,7 @@ export default function SearchBar({
             transition: 'box-shadow 0.2s',
           }}
         >
-          {t('home.hero.cta')} →
+          {t('home.hero.cta')} â†’
         </button>
       </div>
 
@@ -330,7 +320,7 @@ export default function SearchBar({
                 border: 'none',
                 borderBottom: i < suggestions.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
                 color: i === suggestionIdx ? 'var(--accent)' : 'var(--text-2)',
-                fontSize: '14px', fontFamily: 'var(--font-inter)', fontWeight: 300,
+                fontSize: '14px', fontFamily: 'var(--font-inter)', fontWeight: 400,
                 cursor: 'pointer', transition: 'background 0.12s, color 0.12s',
               }}
               onMouseEnter={e => {
@@ -345,10 +335,7 @@ export default function SearchBar({
                 }
               }}
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5, flexShrink: 0 }}>
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-              </svg>
+              <SearchNormal1 size={13} color="currentColor" variant="Linear" style={{ opacity: 0.5, flexShrink: 0 }} />
               {s}
             </button>
           ))}
@@ -357,3 +344,4 @@ export default function SearchBar({
     </div>
   )
 }
+

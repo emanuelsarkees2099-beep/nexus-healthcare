@@ -1,12 +1,12 @@
 'use client'
 import { useState } from 'react'
 import AppShell from '@/components/AppShell'
-import { Video, Phone, MessageCircle, Clock, Shield, Globe, ChevronRight, ExternalLink, CheckCircle, AlertCircle, Hospital, Pill, Landmark, Brain, PhoneCall, HeartPulse, Calendar, Copy, ChevronDown, Sparkles, BookOpen, Users } from 'lucide-react'
+import { Video, Call, MessageCircle, Clock, Shield, Global, ArrowRight2, ExportSquare, TickCircle, InfoCircle, Hospital, Health, Buildings, CallCalling, HeartCircle, Calendar1, Copy, ArrowDown2, MagicStar, Book1, Profile2User } from 'iconsax-react'
 
 const PROVIDERS = [
   {
     name: 'Teladoc Health',
-    logo: <Hospital size={22} strokeWidth={1.5} />,
+    logo: <Hospital size={22} variant="Linear" />,
     cost: 'Free – $75',
     wait: '< 10 min',
     available: '24/7',
@@ -21,7 +21,7 @@ const PROVIDERS = [
   },
   {
     name: 'MDLIVE',
-    logo: <Pill size={22} strokeWidth={1.5} />,
+    logo: <Health size={22} variant="Linear" />,
     cost: 'Free – $82',
     wait: '< 15 min',
     available: '24/7',
@@ -36,7 +36,7 @@ const PROVIDERS = [
   },
   {
     name: 'Federally Qualified Health Centers (FQHC)',
-    logo: <Landmark size={22} strokeWidth={1.5} />,
+    logo: <Buildings size={22} variant="Linear" />,
     cost: '$0 – sliding scale',
     wait: '1–3 days',
     available: 'By appointment',
@@ -51,7 +51,7 @@ const PROVIDERS = [
   },
   {
     name: 'Open Path Collective',
-    logo: <Brain size={22} strokeWidth={1.5} />,
+    logo: <Health size={22} variant="Linear" />,
     cost: '$30 – $80 per session',
     wait: '2–5 days',
     available: 'By appointment',
@@ -66,7 +66,7 @@ const PROVIDERS = [
   },
   {
     name: 'Planned Parenthood Telehealth',
-    logo: <Users size={22} strokeWidth={1.5} />,
+    logo: <Profile2User size={22} variant="Linear" />,
     cost: 'Free – sliding scale',
     wait: 'Same day – 1 day',
     available: 'Mon–Sat',
@@ -81,7 +81,7 @@ const PROVIDERS = [
   },
   {
     name: 'Crisis Text Line',
-    logo: <HeartPulse size={22} strokeWidth={1.5} />,
+    logo: <HeartCircle size={22} variant="Linear" />,
     cost: 'Free',
     wait: 'Instant',
     available: '24/7',
@@ -96,7 +96,7 @@ const PROVIDERS = [
   },
   {
     name: 'SAMHSA Helpline',
-    logo: <PhoneCall size={22} strokeWidth={1.5} />,
+    logo: <CallCalling size={22} variant="Linear" />,
     cost: 'Free',
     wait: 'Instant',
     available: '24/7 365 days',
@@ -161,10 +161,10 @@ const SCRIPTS = [
 ]
 
 const HOW_IT_WORKS = [
-  { step: '01', icon: <Globe size={18} strokeWidth={1.5} />, title: 'Choose a provider', body: 'Browse real telehealth services that accept uninsured and low-income patients. Every provider listed is verified.' },
-  { step: '02', icon: <Shield size={18} strokeWidth={1.5} />, title: 'Confirm eligibility', body: 'Most services accept patients regardless of insurance. FQHC clinics are federally required to serve everyone.' },
-  { step: '03', icon: <Video size={18} strokeWidth={1.5} />, title: 'Connect from anywhere', body: 'Visit by phone, video, or secure message. No commute, no waiting room — just care from where you are.' },
-  { step: '04', icon: <CheckCircle size={18} strokeWidth={1.5} />, title: 'Follow-up support', body: 'After your visit, your CHW can help you understand prescriptions, referrals, and next steps.' },
+  { step: '01', icon: <Global size={18} variant="Linear" />, title: 'Choose a provider', body: 'Browse real telehealth services that accept uninsured and low-income patients. Every provider listed is verified.' },
+  { step: '02', icon: <Shield size={18} variant="Linear" />, title: 'Confirm eligibility', body: 'Most services accept patients regardless of insurance. FQHC clinics are federally required to serve everyone.' },
+  { step: '03', icon: <Video size={18} variant="Linear" />, title: 'Connect from anywhere', body: 'Visit by phone, video, or secure message. No commute, no waiting room — just care from where you are.' },
+  { step: '04', icon: <TickCircle size={18} variant="Linear" />, title: 'Follow-up support', body: 'After your visit, your CHW can help you understand prescriptions, referrals, and next steps.' },
 ]
 
 const EMERGENCY = {
@@ -212,7 +212,7 @@ export default function TelehealthPage() {
         <section style={{ padding: '60px 24px 40px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
           <div style={{ maxWidth: '700px', margin: '0 auto' }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', borderRadius: '100px', fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.06em', marginBottom: '24px' }}>
-              <Video size={10} strokeWidth={1.5} /> TELEHEALTH ACCESS
+              <Video size={10} variant="Linear" /> TELEHEALTH ACCESS
             </span>
             <h1 style={{ fontSize: 'clamp(34px, 6vw, 64px)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '20px', color: '#fff' }}>
               See a doctor.<br />
@@ -226,7 +226,7 @@ export default function TelehealthPage() {
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '20px' }}>
               {Object.values(EMERGENCY).map(e => (
                 <a key={e.label} href={e.href} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', background: `${e.color}15`, border: `1px solid ${e.color}40`, borderRadius: '10px', textDecoration: 'none', color: e.color, fontSize: '13px', fontWeight: 600 }}>
-                  <AlertCircle size={13} /> {e.label} — {e.action}
+                  <InfoCircle size={13} /> {e.label} — {e.action}
                 </a>
               ))}
             </div>
@@ -269,7 +269,7 @@ export default function TelehealthPage() {
               {/* #29 — Language filter row */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                 <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <Globe size={11} /> Language:
+                  <Global size={11} /> Language:
                 </span>
                 {LANG_FILTERS.map(l => (
                   <button
@@ -302,7 +302,7 @@ export default function TelehealthPage() {
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                         <span style={{ fontSize: '16px', fontWeight: 700, color: '#eef4f5' }}>{p.name}</span>
-                        {p.verified && <span style={{ fontSize: '10px', color: '#60a5fa', background: 'rgba(96,165,250,0.1)', padding: '2px 7px', borderRadius: '100px', border: '1px solid rgba(96,165,250,0.2)' }}>✓ Verified</span>}
+                        {p.verified && <span style={{ fontSize: '10px', color: '#60a5fa', background: 'rgba(96,165,250,0.1)', padding: '2px 7px', borderRadius: '100px', border: '1px solid rgba(96,165,250,0.2)', display: 'inline-flex', alignItems: 'center', gap: '3px' }}><TickCircle size={9} variant="Bold" aria-hidden="true" /> Verified</span>}
                       </div>
                       <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
                         <span style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 600 }}>{p.cost}</span>
@@ -310,7 +310,7 @@ export default function TelehealthPage() {
                         <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>{p.available}</span>
                       </div>
                     </div>
-                    <ChevronRight size={16} style={{ color: 'rgba(255,255,255,0.3)', transform: expanded === i ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }} />
+                    <ArrowRight2 size={16} style={{ color: 'rgba(255,255,255,0.3)', transform: expanded === i ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }} />
                   </div>
 
                   {/* Expanded details */}
@@ -343,14 +343,14 @@ export default function TelehealthPage() {
                             style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '11px 20px', background: 'var(--accent)', color: '#07070F', borderRadius: '9px', textDecoration: 'none', fontWeight: 700, fontSize: '14px', transition: 'opacity 0.15s' }}
                             onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
                             onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
-                            <Calendar size={14} strokeWidth={2} /> Book a visit <ExternalLink size={12} />
+                            <Calendar1 size={14} variant="Linear" /> Book a visit <ExportSquare size={12} />
                           </a>
                         )}
                         <a href={p.url} target="_blank" rel="noopener noreferrer"
                           style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '11px 18px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.6)', borderRadius: '9px', textDecoration: 'none', fontWeight: 600, fontSize: '14px', transition: 'all 0.15s' }}
                           onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.2)'; (e.currentTarget as HTMLElement).style.color = '#fff' }}
                           onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.6)' }}>
-                          Learn more <ExternalLink size={12} />
+                          Learn more <ExportSquare size={12} />
                         </a>
                       </div>
                     </div>
@@ -366,7 +366,7 @@ export default function TelehealthPage() {
           <div style={{ maxWidth: '960px', margin: '0 auto' }}>
             <div style={{ marginBottom: '36px' }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.2)', borderRadius: '100px', fontSize: '11px', color: '#fbbf24', letterSpacing: '0.06em', marginBottom: '20px' }}>
-                <Sparkles size={10} strokeWidth={1.5} /> WHAT TO SAY
+                <MagicStar size={10} variant="Linear" /> WHAT TO SAY
               </span>
               <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#fff', marginBottom: '8px' }}>
                 Calling without insurance? Use these scripts.
@@ -390,7 +390,7 @@ export default function TelehealthPage() {
                       </div>
                       <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)' }}>{script.steps.length} talking points</span>
                     </div>
-                    <ChevronDown size={15} style={{ color: 'rgba(255,255,255,0.3)', transform: expandedScript === script.id ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s', flexShrink: 0 }} />
+                    <ArrowDown2 size={15} style={{ color: 'rgba(255,255,255,0.3)', transform: expandedScript === script.id ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s', flexShrink: 0 }} />
                   </div>
 
                   {expandedScript === script.id && (
@@ -408,14 +408,14 @@ export default function TelehealthPage() {
                                 onClick={() => copyScript(`${script.id}-${si}`, step.script)}
                                 title="Copy to clipboard"
                                 style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid', background: copiedScript === `${script.id}-${si}` ? 'rgba(74,144,217,0.1)' : 'rgba(255,255,255,0.03)', color: copiedScript === `${script.id}-${si}` ? 'var(--accent)' : 'rgba(255,255,255,0.35)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', borderColor: copiedScript === `${script.id}-${si}` ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)', flexShrink: 0, fontFamily: 'inherit' }}>
-                                {copiedScript === `${script.id}-${si}` ? <CheckCircle size={13} strokeWidth={2} /> : <Copy size={13} strokeWidth={2} />}
+                                {copiedScript === `${script.id}-${si}` ? <TickCircle size={13} variant="Linear" /> : <Copy size={13} variant="Linear" />}
                               </button>
                             </div>
                           </div>
                         ))}
                       </div>
                       <div style={{ marginTop: '14px', padding: '10px 14px', background: 'rgba(251,191,36,0.04)', border: '1px solid rgba(251,191,36,0.12)', borderRadius: '10px', fontSize: '12px', color: 'rgba(255,255,255,0.4)', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-                        <BookOpen size={13} style={{ color: '#fbbf24', marginTop: '1px', flexShrink: 0 }} strokeWidth={1.5} />
+                        <Book1 size={13} style={{ color: '#fbbf24', marginTop: '1px', flexShrink: 0 }} variant="Linear" />
                         <span>These scripts are based on patient rights under federal law. FQHCs are required to offer sliding-scale fees under Section 330 of the Public Health Service Act.</span>
                       </div>
                     </div>
@@ -448,7 +448,7 @@ export default function TelehealthPage() {
                     <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}>{c.label}</div>
                     <div style={{ fontSize: '15px', fontWeight: 700, color: c.color }}>{c.number}</div>
                   </div>
-                  <Phone size={16} style={{ color: c.color, opacity: 0.6 }} />
+                  <Call size={16} style={{ color: c.color, opacity: 0.6 }} />
                 </a>
               ))}
             </div>

@@ -1,8 +1,9 @@
-'use client'
+﻿'use client'
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import gsap from 'gsap'
 import { registerGSAP } from '@/lib/gsap-st'
+import { SearchNormal1, ShieldTick } from 'iconsax-react'
 registerGSAP()
 
 const STEPS = [
@@ -34,9 +35,7 @@ function Panel0() {
         background: 'var(--bg3)', border: '1px solid rgba(74,144,217,0.18)',
         borderRadius: 'var(--r-md)', padding: '12px 16px', marginBottom: '1rem',
       }}>
-        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.7, flexShrink: 0 }}>
-          <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-        </svg>
+        <SearchNormal1 size={14} color="var(--accent)" variant="Linear" aria-hidden="true" style={{ opacity: 0.7, flexShrink: 0 }} />
         <span style={{ fontSize: '13px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', flex: 1 }}>
           Primary care near me...
         </span>
@@ -48,10 +47,8 @@ function Panel0() {
         borderRadius: 'var(--r-sm)', padding: '8px 12px',
         fontSize: '12px', color: 'var(--accent)', fontFamily: 'var(--font-inter)',
       }}>
-        <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-        </svg>
-        Anonymous — no account needed
+        <ShieldTick size={12} color="currentColor" variant="Linear" aria-hidden="true" />
+        Anonymous &mdash; no account needed
       </div>
     </div>
   )
@@ -80,7 +77,7 @@ function Panel1() {
           NEXUS recommends
         </div>
         <div style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 500, marginBottom: '4px', fontFamily: 'var(--font-inter)' }}>
-          Free clinic visit — not an ER
+          Free clinic visit &mdash; not an ER
         </div>
         <div style={{ fontSize: '12px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)' }}>
           Avg ER cost $1,500 vs $0 at a FQHC
@@ -130,7 +127,7 @@ function Panel2() {
           fontFamily: 'var(--font-inter)', marginBottom: '10px',
           boxShadow: '0 4px 16px rgba(74,144,217,0.25)',
         }}>
-        Book appointment →
+        Book appointment &rarr;
       </button>
       <div style={{ textAlign: 'center', fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>
         Available in 48 languages
@@ -180,20 +177,37 @@ export default function HowItWorks() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Stagger steps in from left
-      gsap.from('.hiw-step', {
-        x: -30, opacity: 0, duration: 0.7, stagger: 0.12, ease: 'power3.out',
-        scrollTrigger: { trigger: stepsRef.current, start: 'top 80%' },
-      })
-      // Panel slides in from right
-      gsap.from(panelRef.current, {
-        x: 30, opacity: 0, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: stepsRef.current, start: 'top 80%' },
-      })
       // Section header
       gsap.from('.hiw-header', {
         y: 30, opacity: 0, duration: 0.8, ease: 'power3.out',
-        scrollTrigger: { trigger: sectionRef.current, start: 'top 82%' },
+        scrollTrigger: { trigger: sectionRef.current, start: 'top 82%', once: true },
+      })
+
+      /* ── Word-by-word masked reveal on the h2 ── */
+      gsap.set('.reveal-word-inner', { y: '115%', opacity: 0 })
+      gsap.to('.reveal-word-inner', {
+        y: '0%', opacity: 1,
+        duration: 0.75, ease: 'power3.out', stagger: 0.07,
+        scrollTrigger: { trigger: '.reveal-h2', start: 'top 86%', once: true },
+      })
+
+      // Stagger steps in from left with spring
+      gsap.from('.hiw-step', {
+        x: -36, opacity: 0, duration: 0.7, stagger: 0.12, ease: 'power3.out',
+        scrollTrigger: { trigger: stepsRef.current, start: 'top 82%', once: true },
+      })
+
+      // Panel slides in from right
+      gsap.from(panelRef.current, {
+        x: 40, opacity: 0, scale: 0.97, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: stepsRef.current, start: 'top 82%', once: true },
+      })
+
+      /* ── Step number badges: pop-in stagger ── */
+      gsap.from('.step-num', {
+        scale: 0.4, opacity: 0,
+        duration: 0.5, ease: 'back.out(2.2)', stagger: 0.12,
+        scrollTrigger: { trigger: stepsRef.current, start: 'top 82%', once: true },
       })
     }, sectionRef)
     return () => ctx.revert()
@@ -218,30 +232,35 @@ export default function HowItWorks() {
         alignItems: 'center',
       }}>
 
-        {/* ── LEFT: steps ── */}
+        {/* â"€â"€ LEFT: steps â"€â"€ */}
         <div>
           <div className="hiw-header" style={{ marginBottom: '2.5rem' }}>
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '8px',
-              fontSize: '11px', fontWeight: 400, letterSpacing: '0.14em',
-              textTransform: 'uppercase', color: 'var(--accent)',
-              marginBottom: '1.25rem', fontFamily: 'var(--font-inter)',
-            }}>
-              <span style={{ display: 'inline-block', width: '16px', height: '1px', background: 'var(--accent)' }} aria-hidden="true" />
+            <div className="section-eyebrow">
               How it works
             </div>
-            <h2 id="how-title" style={{
+            <h2 id="how-title" className="reveal-h2" style={{
               fontFamily: 'var(--font-display)',
               fontSize: 'clamp(2rem, 3.8vw, 3.2rem)',
-              fontWeight: 600, lineHeight: 1.1, letterSpacing: '-0.02em',
+              fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.03em',
               marginBottom: '1rem',
             }}>
-              Three steps to{' '}
-              <em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>real</em> care
+              {['Three', 'steps', 'to'].map(w => (
+                <span key={w} className="reveal-word" style={{ marginRight: '0.28em' }}>
+                  <span className="reveal-word-inner">{w}</span>
+                </span>
+              ))}
+              <span className="reveal-word" style={{ marginRight: '0.28em' }}>
+                <span className="reveal-word-inner">
+                  <em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>real</em>
+                </span>
+              </span>
+              <span className="reveal-word">
+                <span className="reveal-word-inner">care</span>
+              </span>
             </h2>
             <p style={{
               fontSize: '15px', color: 'var(--text-2)', maxWidth: '440px',
-              fontWeight: 300, lineHeight: 1.85, fontFamily: 'var(--font-inter)',
+              fontWeight: 400, lineHeight: 1.85, fontFamily: 'var(--font-inter)',
             }}>
               No account. No insurance card. No cost. Just type and go.
             </p>
@@ -268,42 +287,41 @@ export default function HowItWorks() {
                   }
                 }}
                 style={{
-                  display: 'grid', gridTemplateColumns: '48px 1fr',
-                  gap: '1.25rem', padding: '1.5rem 0',
+                  display: 'flex', flexDirection: 'column',
+                  gap: '0.3rem', padding: '1.25rem 1.25rem 1.25rem 1rem',
                   borderBottom: i < STEPS.length - 1 ? '1px solid var(--border2)' : 'none',
+                  borderLeft: active === i ? '2px solid var(--accent)' : '2px solid transparent',
                   cursor: 'pointer',
-                  opacity: active === i ? 1 : 0.55,
-                  transition: 'opacity 0.3s',
+                  opacity: active === i ? 1 : 0.5,
+                  transition: 'opacity 0.3s ease, border-color 0.3s ease',
+                  borderRadius: '0 8px 8px 0',
+                  background: active === i ? 'rgba(79,142,240,0.04)' : 'transparent',
                 }}
               >
-                <div style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '1.1rem', fontWeight: 400,
-                  color: active === i ? 'var(--accent)' : 'var(--text-3)',
-                  lineHeight: 1.2, transition: 'color 0.3s', paddingTop: '2px',
-                  letterSpacing: '0.05em',
-                }} aria-hidden="true">
-                  {s.num}
+                {/* Small accent badge number */}
+                <div className="step-num" aria-hidden="true"
+                  style={{
+                    background: active === i ? 'rgba(79,142,240,0.14)' : 'rgba(79,142,240,0.06)',
+                    borderColor: active === i ? 'rgba(79,142,240,0.35)' : 'rgba(79,142,240,0.14)',
+                    color: active === i ? 'var(--accent)' : 'var(--text-3)',
+                    transition: 'all 0.3s ease',
+                  }}>
+                  {i + 1}
                 </div>
-                <div>
-                  <div style={{
-                    fontSize: '15px', fontWeight: 500,
-                    color: active === i ? 'var(--text)' : 'var(--text-2)',
-                    transition: 'color 0.3s', fontFamily: 'var(--font-inter)',
-                    marginBottom: 0,
-                  }}>
-                    {s.title}
-                  </div>
-                  <div style={{
-                    fontSize: '13px', color: 'var(--text-3)',
-                    lineHeight: 1.75, fontFamily: 'var(--font-inter)',
-                    maxHeight: active === i ? '80px' : '0',
-                    overflow: 'hidden',
-                    transition: 'max-height 0.45s ease, margin-top 0.3s',
-                    marginTop: active === i ? '0.5rem' : '0',
-                  }}>
-                    {s.body}
-                  </div>
+                {/* Title is now the visual primary */}
+                <div className="step-title" style={{
+                  color: active === i ? 'var(--text)' : 'var(--text-2)',
+                  transition: 'color 0.3s',
+                }}>
+                  {s.title}
+                </div>
+                <div className="step-body" style={{
+                  maxHeight: active === i ? '80px' : '0',
+                  overflow: 'hidden',
+                  transition: 'max-height 0.45s ease, opacity 0.3s',
+                  opacity: active === i ? 1 : 0,
+                }}>
+                  {s.body}
                 </div>
               </div>
             ))}
@@ -323,8 +341,8 @@ export default function HowItWorks() {
           </div>
         </div>
 
-        {/* ── RIGHT: dynamic panel ── */}
-        <div ref={panelRef} style={{ position: 'relative' }}>
+        {/* â"€â"€ RIGHT: dynamic panel â"€â"€ */}
+        <div ref={panelRef} className="hiw-mockup" style={{ position: 'relative' }}>
           {/* Ambient glow */}
           <div aria-hidden="true" style={{
             position: 'absolute', top: '50%', left: '50%',
@@ -395,3 +413,5 @@ export default function HowItWorks() {
     </section>
   )
 }
+
+

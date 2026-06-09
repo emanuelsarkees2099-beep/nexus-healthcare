@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
-import { Stethoscope, AlertTriangle, CheckCircle, MapPin, ChevronRight, Loader2, Info, ArrowRight, Clock, Sparkles } from 'lucide-react'
+import { Hospital, Danger, TickCircle, Location, ArrowRight2, RefreshCircle, InfoCircle, ArrowRight, Clock, MagicStar, Activity, Flash, Heart, Health } from 'iconsax-react'
 import QuickExit from '@/components/QuickExit'
 
 type Step = {
@@ -58,7 +58,7 @@ const SCENARIOS: Record<string, { steps: Step[]; result: TriageResult }> = {
   emergency: {
     steps: [
       { type: 'thinking', text: 'Analyzing symptom description…', delay: 400 },
-      { type: 'warning', text: '⚠ Potential emergency symptom detected — accelerating triage…', delay: 900 },
+      { type: 'warning', text: '! Potential emergency symptom detected — accelerating triage…', delay: 900 },
       { type: 'checking', text: 'Checking nearest emergency facilities…', delay: 1500 },
       { type: 'result', text: 'Emergency guidance ready.', delay: 2200 },
     ],
@@ -123,15 +123,16 @@ export default function TriagePage() {
   ]
 
   // F2 — Symptom category quick-pick
-  const SYMPTOM_CATEGORIES = [
-    { emoji: '💨', label: 'Breathing', preset: 'chest hurts when I breathe, shortness of breath' },
-    { emoji: '🤕', label: 'Head pain', preset: 'bad headache lasting several days, no fever' },
-    { emoji: '🦷', label: 'Dental', preset: 'severe tooth pain, need free dental care, no insurance' },
-    { emoji: '🧠', label: 'Mental health', preset: 'anxiety and depression, need mental health support, uninsured' },
-    { emoji: '🤒', label: 'Fever / cold', preset: 'fever, sore throat, and body aches for 5 days' },
-    { emoji: '🩺', label: 'General care', preset: 'need a general checkup and primary care, no insurance' },
-    { emoji: '🦴', label: 'Pain / injury', preset: 'joint or muscle pain, need evaluation, no insurance' },
-    { emoji: '💊', label: 'Medication', preset: 'need help affording my prescription medications' },
+  type SymptomCategory = { Icon: React.ComponentType<{ size?: number; color?: string; variant?: 'Bold' | 'Linear' | 'Outline' | 'Broken' | 'Bulk' | 'TwoTone' }>; label: string; preset: string }
+  const SYMPTOM_CATEGORIES: SymptomCategory[] = [
+    { Icon: Activity, label: 'Breathing',     preset: 'chest hurts when I breathe, shortness of breath' },
+    { Icon: Flash,    label: 'Head pain',     preset: 'bad headache lasting several days, no fever' },
+    { Icon: Health,   label: 'Dental',        preset: 'severe tooth pain, need free dental care, no insurance' },
+    { Icon: Heart,    label: 'Mental health', preset: 'anxiety and depression, need mental health support, uninsured' },
+    { Icon: Danger,   label: 'Fever / cold',  preset: 'fever, sore throat, and body aches for 5 days' },
+    { Icon: Hospital, label: 'General care',  preset: 'need a general checkup and primary care, no insurance' },
+    { Icon: Flash,    label: 'Pain / injury', preset: 'joint or muscle pain, need evaluation, no insurance' },
+    { Icon: Health,   label: 'Medication',    preset: 'need help affording my prescription medications' },
   ]
 
   /* ── Core triage logic: real AI with keyword-match fallback ── */
@@ -156,7 +157,7 @@ export default function TriagePage() {
     const STEPS: Step[] = isEmergency
       ? [
           { type: 'thinking', text: 'Analyzing symptom description…', delay: 400 },
-          { type: 'warning', text: '⚠ Potential emergency symptom detected — accelerating triage…', delay: 900 },
+          { type: 'warning', text: '! Potential emergency symptom detected — accelerating triage…', delay: 900 },
           { type: 'checking', text: 'Cross-referencing ACC/AHA emergency triage guidelines…', delay: 1500 },
           { type: 'result', text: 'Emergency guidance ready.', delay: 2200 },
         ]
@@ -258,6 +259,13 @@ export default function TriagePage() {
         .triage-result { animation: fadeSlideUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
         .triage-ta:focus { outline: none !important; border-color: rgba(74,144,217,0.4) !important; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 600px) {
+          .triage-category-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .triage-ta { font-size: 16px !important; }
+        }
+        @media (max-width: 480px) {
+          .triage-category-grid button { padding: 12px 6px !important; font-size: 10px !important; }
+        }
       `}</style>
 
       {/* Header */}
@@ -277,7 +285,7 @@ export default function TriagePage() {
           marginBottom: '24px', fontSize: '11px', fontWeight: 600,
           color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase',
         }}>
-          <Stethoscope size={11} /> Symptom Guide
+          <Hospital size={11} /> Symptom Guide
         </div>
 
         <h1 style={{
@@ -303,7 +311,7 @@ export default function TriagePage() {
           background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.2)',
           maxWidth: '520px', margin: '0 auto 48px', textAlign: 'left',
         }}>
-          <Info size={14} color="#fbbf24" style={{ flexShrink: 0, marginTop: '1px' }} />
+          <InfoCircle size={14} color="#fbbf24" style={{ flexShrink: 0, marginTop: '1px' }} />
           <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, margin: 0, fontFamily: 'var(--font-inter)' }}>
             <strong style={{ color: 'rgba(251,191,36,0.9)', fontWeight: 600 }}>This is not a medical diagnosis.</strong>{' '}
             This tool uses AI analysis and published guidelines (CDC, AAFP, AHA) to suggest appropriate care settings. It cannot examine you, review your medical history, or replace a licensed provider. In any emergency, call 911.
@@ -322,37 +330,43 @@ export default function TriagePage() {
               <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', marginBottom: 10, textAlign: 'center', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                 Quick start — select a category
               </p>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
-                {SYMPTOM_CATEGORIES.map(cat => (
+              <div className="triage-category-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+                {SYMPTOM_CATEGORIES.map(cat => {
+                  const CatIcon = cat.Icon
+                  const isActive = query === cat.preset
+                  return (
                   <button
                     key={cat.label}
                     type="button"
                     onClick={() => setQuery(cat.preset)}
                     style={{
                       padding: '10px 8px', borderRadius: 12, textAlign: 'center',
-                      background: query === cat.preset ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.02)',
-                      border: `1px solid ${query === cat.preset ? 'rgba(74,144,217,0.35)' : 'rgba(255,255,255,0.07)'}`,
-                      color: query === cat.preset ? 'var(--accent)' : 'rgba(255,255,255,0.5)',
+                      background: isActive ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.02)',
+                      border: `1px solid ${isActive ? 'rgba(74,144,217,0.35)' : 'rgba(255,255,255,0.07)'}`,
+                      color: isActive ? 'var(--accent)' : 'rgba(255,255,255,0.5)',
                       cursor: 'pointer', fontFamily: 'var(--font-inter)',
                       transition: 'all 0.15s',
                     }}
                     onMouseEnter={e => {
-                      if (query !== cat.preset) {
+                      if (!isActive) {
                         e.currentTarget.style.borderColor = 'rgba(74,144,217,0.2)'
                         e.currentTarget.style.color = 'rgba(255,255,255,0.7)'
                       }
                     }}
                     onMouseLeave={e => {
-                      if (query !== cat.preset) {
+                      if (!isActive) {
                         e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'
                         e.currentTarget.style.color = 'rgba(255,255,255,0.5)'
                       }
                     }}
                   >
-                    <div style={{ fontSize: 18, marginBottom: 4 }}>{cat.emoji}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 24, marginBottom: 4 }}>
+                      <CatIcon size={18} color={isActive ? 'var(--accent)' : 'rgba(255,255,255,0.5)'} variant="TwoTone" aria-hidden="true" />
+                    </div>
                     <div style={{ fontSize: 11, fontWeight: 500 }}>{cat.label}</div>
                   </button>
-                ))}
+                  )
+                })}
               </div>
             </div>
 
@@ -430,13 +444,13 @@ export default function TriagePage() {
                 gap: '10px', transition: 'all 0.2s',
               }}
             >
-              <Stethoscope size={16} />
+              <Hospital size={16} />
               Find care pathway
             </button>
 
             {/* Disclaimer */}
             <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', textAlign: 'center', lineHeight: 1.6 }}>
-              <Info size={10} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
+              <InfoCircle size={10} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
               Not a medical diagnosis. This tool helps you find appropriate care — always consult a healthcare professional. Nothing you enter leaves your device to third parties.
             </p>
           </form>
@@ -466,7 +480,7 @@ export default function TriagePage() {
             }}>
               {/* Header row */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                <Stethoscope size={14} color="var(--accent)" />
+                <Hospital size={14} color="var(--accent)" />
                 <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
                   Matching care pathway
                 </span>
@@ -478,11 +492,11 @@ export default function TriagePage() {
                     background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)',
                     color: 'rgba(74,144,217,0.8)',
                   }}>
-                    <Sparkles size={9} /> AI-analyzed
+                    <MagicStar size={9} /> AI-analyzed
                   </span>
                 )}
                 {phase === 'thinking' && (
-                  <Loader2 size={12} color="var(--accent)" style={{ animation: 'spin 1s linear infinite', marginLeft: 'auto' }} />
+                  <RefreshCircle size={12} color="var(--accent)" style={{ animation: 'spin 1s linear infinite', marginLeft: 'auto' }} />
                 )}
               </div>
 
@@ -528,7 +542,7 @@ export default function TriagePage() {
                   display: 'flex', alignItems: 'center', gap: '10px',
                   fontSize: '14px', fontWeight: 600, color: urgencyConfig[result.urgency].color,
                 }}>
-                  {result.urgency === 'emergency' ? <AlertTriangle size={16} /> : <CheckCircle size={16} />}
+                  {result.urgency === 'emergency' ? <Danger size={16} /> : <TickCircle size={16} />}
                   {urgencyConfig[result.urgency].label}
                 </div>
 
@@ -541,7 +555,7 @@ export default function TriagePage() {
                     fontSize: '13px', color: '#fca5a5', lineHeight: 1.65,
                     display: 'flex', gap: '10px', alignItems: 'flex-start',
                   }}>
-                    <AlertTriangle size={15} color="#f87171" style={{ flexShrink: 0, marginTop: '1px' }} />
+                    <Danger size={15} color="#f87171" style={{ flexShrink: 0, marginTop: '1px' }} />
                     {result.erAlert}
                   </div>
                 )}
@@ -560,9 +574,12 @@ export default function TriagePage() {
                     <>
                       <div style={{ fontSize: '20px', fontWeight: 700, marginBottom: '10px' }}>{result.clinic.name}</div>
                       <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', fontSize: '13px', color: 'rgba(255,255,255,0.55)', marginBottom: '16px' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><MapPin size={12} /> {result.clinic.dist}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><Location size={12} /> {result.clinic.dist}</span>
                         <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><Clock size={12} /> {result.clinic.wait}</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#60a5fa', fontWeight: 600 }}>💚 {result.clinic.cost}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#4ade80', fontWeight: 600 }}>
+                          <TickCircle size={12} color="#4ade80" variant="Bold" aria-hidden="true" />
+                          {result.clinic.cost}
+                        </span>
                       </div>
                     </>
                   ) : (
@@ -580,7 +597,7 @@ export default function TriagePage() {
                       color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
                       textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px',
                     }}>
-                      <MapPin size={12} />
+                      <Location size={12} />
                       {result.clinic ? 'Get directions' : 'Search free clinics near me'}
                     </Link>
                     <Link href="/gps" style={{
@@ -589,7 +606,7 @@ export default function TriagePage() {
                       color: 'rgba(255,255,255,0.6)', fontSize: '13px',
                       textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px',
                     }}>
-                      Step-by-step guide <ChevronRight size={12} />
+                      Step-by-step guide <ArrowRight2 size={12} />
                     </Link>
                   </div>
                 </div>
@@ -631,7 +648,7 @@ export default function TriagePage() {
                     padding: '0',
                   }}
                 >
-                  <Info size={12} />
+                  <InfoCircle size={12} />
                   {showWork ? 'Hide' : 'Show'} reasoning &amp; citations
                 </button>
 

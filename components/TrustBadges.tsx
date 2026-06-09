@@ -3,72 +3,45 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import gsap from 'gsap'
 import { registerGSAP } from '@/lib/gsap-st'
+import {
+  ShieldTick, SecuritySafe, Eye, Profile2User,
+  Star1, SecurityUser,
+} from 'iconsax-react'
 registerGSAP()
 
 const BADGES = [
   {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        <path d="m9 12 2 2 4-4"/>
-      </svg>
-    ),
+    icon: ShieldTick,
     label: 'HRSA Data Source',
     desc: 'Clinic data sourced directly from HRSA federal API',
     color: 'var(--accent)',
   },
   {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <rect width="20" height="14" x="2" y="5" rx="2"/>
-        <path d="M2 10h20"/>
-        <path d="M6 15h2"/>
-        <path d="M11 15h4"/>
-      </svg>
-    ),
+    icon: SecuritySafe,
     label: 'Zero Data Sold',
     desc: 'We have never sold user data and structurally cannot',
     color: '#60a5fa',
   },
   {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M12 8v4l3 3"/>
-      </svg>
-    ),
+    icon: Eye,
     label: '100% Anonymous',
     desc: 'No account required. Searches leave no trace.',
     color: '#60a5fa',
   },
   {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-        <polyline points="9 22 9 12 15 12 15 22"/>
-      </svg>
-    ),
+    icon: Profile2User,
     label: 'NACHC Network',
     desc: 'Aligned with National Assoc. of Community Health Centers',
     color: '#a78bfa',
   },
   {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-      </svg>
-    ),
+    icon: Star1,
     label: 'Always Free',
     desc: 'NEXUS will never charge patients. Ever.',
     color: '#fbbf24',
   },
   {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M3 12h1m16 0h1m-9-9v1m0 16v1M5.6 5.6l.7.7m11.4-.7-.7.7m-11.4 11.4.7-.7m11.4.7-.7-.7"/>
-      </svg>
-    ),
+    icon: SecurityUser,
     label: 'HIPAA-Aligned',
     desc: 'Built to the standard for health information privacy',
     color: '#f472b6',
@@ -86,10 +59,26 @@ export default function TrustBadges() {
         y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
         scrollTrigger: { trigger: headerRef.current, start: 'top 88%', once: true },
       })
-      gsap.set('.trust-badge', { y: 24, opacity: 0 })
+      /* Badge entrance: scale+translate-Y reveal with spring stagger */
+      gsap.set('.trust-badge', { y: 36, opacity: 0, scale: 0.88 })
       gsap.to('.trust-badge', {
-        y: 0, opacity: 1, duration: 0.65, ease: 'power3.out', stagger: 0.08,
+        y: 0, opacity: 1, scale: 1,
+        duration: 0.7, ease: 'back.out(1.6)', stagger: 0.075,
         scrollTrigger: { trigger: sectionRef.current, start: 'top 82%', once: true },
+      })
+
+      /* Icon bounce-in: fires slightly after the badge itself */
+      gsap.from('.trust-badge-icon', {
+        scale: 0.35, rotation: -25, opacity: 0,
+        duration: 0.55, ease: 'back.out(2.5)', stagger: 0.075,
+        delay: 0.12,
+        scrollTrigger: { trigger: sectionRef.current, start: 'top 82%', once: true },
+      })
+
+      /* Attribution row: clip-wipe from left */
+      gsap.from('.trust-attribution', {
+        clipPath: 'inset(0 100% 0 0)', opacity: 0, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: '.trust-attribution', start: 'top 92%', once: true },
       })
     }, sectionRef)
     return () => ctx.revert()
@@ -133,12 +122,12 @@ export default function TrustBadges() {
           </h2>
           <p style={{
             fontSize: '14px', color: 'var(--text-2)',
-            fontFamily: 'var(--font-inter)', fontWeight: 300,
+            fontFamily: 'var(--font-inter)', fontWeight: 400,
             lineHeight: 1.7, maxWidth: '420px', margin: '0 auto',
           }}>
             Your health searches are anonymous, your data is not sold, and the entire system is built to protect — not exploit — the people who need help most.{' '}
             <Link href="/privacy" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 400 }}>
-              Full privacy policy →
+              Full privacy policy &rarr;
             </Link>
           </p>
         </div>
@@ -149,68 +138,75 @@ export default function TrustBadges() {
           gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
           gap: '12px',
         }}>
-          {BADGES.map(b => (
-            <div
-              key={b.label}
-              className="trust-badge"
-              style={{
-                background: 'linear-gradient(145deg, var(--bg2), var(--bg3))',
-                border: '1px solid var(--border2)',
-                borderRadius: '16px',
-                padding: '1.25rem',
-                display: 'flex', flexDirection: 'column', gap: '10px',
-                transition: 'border-color 0.25s, transform 0.25s var(--ease-spring), box-shadow 0.25s',
-                cursor: 'default',
-              }}
-              onMouseEnter={e => {
-                const el = e.currentTarget
-                el.style.borderColor = `${b.color}33`
-                el.style.transform = 'translateY(-3px)'
-                el.style.boxShadow = `0 12px 32px rgba(0,0,0,0.3), 0 0 0 1px ${b.color}18`
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget
-                el.style.borderColor = 'var(--border2)'
-                el.style.transform = ''
-                el.style.boxShadow = ''
-              }}
-            >
-              <div style={{
-                width: '36px', height: '36px', borderRadius: '10px',
-                background: `${b.color}14`,
-                border: `1px solid ${b.color}28`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                color: b.color, flexShrink: 0,
-              }}>
-                {b.icon}
-              </div>
-              <div>
-                <div style={{
-                  fontSize: '13px', fontWeight: 600, color: 'var(--text)',
-                  fontFamily: 'var(--font-inter)', marginBottom: '4px',
-                }}>
-                  {b.label}
+          {BADGES.map(b => {
+            const IconComp = b.icon
+            return (
+              <div
+                key={b.label}
+                className="trust-badge"
+                style={{
+                  background: 'linear-gradient(145deg, var(--bg2), var(--bg3))',
+                  border: '1px solid var(--border2)',
+                  borderRadius: '16px',
+                  padding: '1.25rem',
+                  display: 'flex', flexDirection: 'column', gap: '10px',
+                  transition: 'border-color 0.25s, transform 0.25s var(--ease-spring), box-shadow 0.25s',
+                  cursor: 'default',
+                }}
+                onMouseEnter={e => {
+                  const el = e.currentTarget
+                  el.style.borderColor = `${b.color}33`
+                  el.style.transform = 'translateY(-3px)'
+                  el.style.boxShadow = `0 12px 32px rgba(0,0,0,0.3), 0 0 0 1px ${b.color}18`
+                }}
+                onMouseLeave={e => {
+                  const el = e.currentTarget
+                  el.style.borderColor = 'var(--border2)'
+                  el.style.transform = ''
+                  el.style.boxShadow = ''
+                }}
+              >
+                <div
+                  className="trust-badge-icon"
+                  style={{
+                    width: '36px', height: '36px', borderRadius: '10px',
+                    background: `${b.color}14`,
+                    border: `1px solid ${b.color}28`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: 0,
+                  }}
+                >
+                  <IconComp size={18} color={b.color} variant="TwoTone" />
                 </div>
-                <div style={{
-                  fontSize: '11px', color: 'var(--text-3)',
-                  fontFamily: 'var(--font-inter)', fontWeight: 300,
-                  lineHeight: 1.5,
-                }}>
-                  {b.desc}
+                <div>
+                  <div style={{
+                    fontSize: '13px', fontWeight: 600, color: 'var(--text)',
+                    fontFamily: 'var(--font-inter)', marginBottom: '4px',
+                  }}>
+                    {b.label}
+                  </div>
+                  <div style={{
+                    fontSize: '11px', color: 'var(--text-3)',
+                    fontFamily: 'var(--font-inter)', fontWeight: 400,
+                    lineHeight: 1.5,
+                  }}>
+                    {b.desc}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
         {/* Government data attribution */}
-        <div style={{
+        <div className="trust-attribution" style={{
           marginTop: '2.5rem',
           padding: '1rem 1.5rem',
           background: 'rgba(74,144,217,0.03)',
           border: '1px solid rgba(74,144,217,0.10)',
           borderRadius: '12px',
           display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap',
+          clipPath: 'inset(0 0% 0 0)',
         }}>
           <div style={{
             width: '6px', height: '6px', borderRadius: '50%',
@@ -220,7 +216,7 @@ export default function TrustBadges() {
           }} aria-hidden="true" />
           <p style={{
             fontSize: '12px', color: 'var(--text-3)',
-            fontFamily: 'var(--font-inter)', fontWeight: 300,
+            fontFamily: 'var(--font-inter)', fontWeight: 400,
             lineHeight: 1.7, margin: 0, flex: 1,
           }}>
             Clinic data is sourced from{' '}

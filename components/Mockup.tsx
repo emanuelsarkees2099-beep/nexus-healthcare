@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { registerGSAP } from '@/lib/gsap-st'
+import { Lock1, SearchNormal1 } from 'iconsax-react'
 registerGSAP()
 
 const CLINICS = [
@@ -183,10 +184,7 @@ export default function Mockup() {
               color: 'var(--text-3)', fontFamily: 'var(--font-inter)',
               display: 'flex', alignItems: 'center', gap: '8px',
             }} aria-label="nexus.health/find">
-              <svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" style={{ opacity: 0.7 }}>
-                <rect width="11" height="11" x="3" y="11" rx="2" />
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              </svg>
+              <Lock1 aria-hidden="true" size={11} color="var(--accent)" variant="Linear" style={{ opacity: 0.7 }} />
               nexus.health/find
             </div>
             <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }} aria-hidden="true">v1.0</div>
@@ -201,12 +199,7 @@ export default function Mockup() {
               background: 'var(--bg3)', border: '1px solid rgba(109,145,151,0.22)',
               borderRadius: '12px', padding: '12px 16px', marginBottom: '1.5rem',
             }}>
-              <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                style={{ opacity: 0.7, flexShrink: 0 }}>
-                <circle cx="11" cy="11" r="8" />
-                <path d="m21 21-4.35-4.35" />
-              </svg>
+              <SearchNormal1 aria-hidden="true" size={15} color="var(--accent)" variant="Linear" style={{ opacity: 0.7, flexShrink: 0 }} />
               <span
                 aria-label="Search query: Primary care in Phoenix, AZ"
                 style={{ flex: 1, fontSize: '14px', color: 'var(--text)', fontFamily: 'var(--font-inter)', fontWeight: 400 }}

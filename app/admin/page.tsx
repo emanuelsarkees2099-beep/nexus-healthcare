@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { createClientClient } from '@/lib/auth-client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { TickCircle, CloseCircle } from 'iconsax-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -147,7 +148,7 @@ export default function AdminPage() {
   // Render nothing until server confirms admin role — prevents content flash
   if (!authChecked) {
     return (
-      <div style={{ minHeight: '100vh', background: '#07070F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(74,144,217,0.7)" strokeWidth="2" strokeLinecap="round" style={{ animation: 'spin 0.9s linear infinite' }}>
           <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.08)" />
           <path d="M12 2 A10 10 0 0 1 22 12" />
@@ -158,7 +159,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#07070F', paddingTop: '100px', paddingBottom: '60px' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: '100px', paddingBottom: '60px' }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 24px' }}>
 
         {/* Header */}
@@ -282,12 +283,12 @@ export default function AdminPage() {
                       {sub.status === 'pending_review' ? (
                         <>
                           <button onClick={() => updateStatus(sub.id, 'published')} disabled={updating}
-                            style={{ padding: '5px 10px', borderRadius: '6px', border: '1px solid #60a5fa60', background: 'rgba(96,165,250,0.1)', color: '#60a5fa', fontSize: '11px', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 700 }}>
-                            ✓ Approve
+                            style={{ padding: '5px 10px', borderRadius: '6px', border: '1px solid #60a5fa60', background: 'rgba(96,165,250,0.1)', color: '#60a5fa', fontSize: '11px', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <TickCircle size={10} variant="Bold" aria-hidden="true" /> Approve
                           </button>
                           <button onClick={() => updateStatus(sub.id, 'archived')} disabled={updating}
-                            style={{ padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(248,113,113,0.4)', background: 'rgba(248,113,113,0.1)', color: '#f87171', fontSize: '11px', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 700 }}>
-                            ✗ Reject
+                            style={{ padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(248,113,113,0.4)', background: 'rgba(248,113,113,0.1)', color: '#f87171', fontSize: '11px', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <CloseCircle size={10} variant="Bold" aria-hidden="true" /> Reject
                           </button>
                         </>
                       ) : (
