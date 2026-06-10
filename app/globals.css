@@ -6,6 +6,36 @@
    Reference: Apple · Linear · Vercel · Stripe
    ═══════════════════════════════════════════════════════════════════ */
 
+/* ── ICONSAX GLOBAL VISIBILITY FIX ──────────────────────────────────
+   iconsax uses stroke/fill="currentColor". When parent CSS color is
+   ultra-faint (e.g. rgba(255,255,255,0.06)), icons become invisible.
+   Force every SVG icon to inherit a visible minimum color.
+   Explicit color= props on individual icons always override this.
+   ────────────────────────────────────────────────────────────────── */
+svg[aria-hidden="true"] path,
+svg[aria-hidden="true"] circle,
+svg[aria-hidden="true"] rect,
+svg[aria-hidden="true"] polyline,
+svg[aria-hidden="true"] polygon,
+svg[aria-hidden="true"] line {
+  color: inherit;
+}
+/* Prevent icons from being invisible when parent color < 35% white */
+.nav-link-pill svg,
+.dock-item svg,
+.cmd-result-item svg,
+button svg,
+a svg,
+[role="listitem"] svg,
+[role="option"] svg,
+li svg,
+label svg,
+.badge svg,
+.pill svg,
+.tag svg {
+  color: var(--icon-color, rgba(248,249,255,0.65));
+}
+
 :root {
   /* ── CANVAS ── */
   --bg:  #060608;
