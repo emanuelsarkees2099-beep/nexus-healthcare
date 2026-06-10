@@ -51,6 +51,7 @@ export default function Hero() {
   /* refs */
   const sectionRef = useRef<HTMLElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
+  const bgRef      = useRef<HTMLDivElement>(null)
   const mockupRef  = useRef<HTMLDivElement>(null)
   const eyebrowRef = useRef<HTMLDivElement>(null)
   const h1Ref      = useRef<HTMLHeadingElement>(null)
@@ -126,20 +127,46 @@ export default function Hero() {
         .to(proofRef.current,   { opacity: 1, y: 0, duration: 0.6,  ease: 'power3.out' }, '-=0.45')
         .to(mockupRef.current,  { opacity: 1, y: 0, duration: 1.1,  ease: 'power3.out' }, '-=0.35')
 
-      /* Scroll-out: smooth fade as hero naturally exits viewport — no pin, no empty space */
+      /* Scroll-out: each element departs at its own speed — parallax split */
       const fadeTl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
           end: 'bottom top',
-          scrub: 0.9,
+          scrub: 1.4,
         },
       })
       fadeTl
-        .to(contentRef.current, { y: -40, opacity: 0, scale: 0.97, ease: 'power1.inOut', duration: 0.6 }, 0)
-        .to(mockupRef.current,  { y: 24, opacity: 0, ease: 'power1.inOut', duration: 0.5 }, 0.05)
+        /* Eyebrow — lightest, exits first and fastest */
+        .to(eyebrowRef.current, { y: -90,  opacity: 0, ease: 'power2.in', duration: 0.45 }, 0)
+        /* H1 — heaviest element, lags behind, falls furthest */
+        .to(h1Ref.current,      { y: -140, opacity: 0, scale: 0.91, ease: 'power3.in', duration: 0.62 }, 0.03)
+        /* Subtitle trails after headline */
+        .to(subRef.current,     { y: -70,  opacity: 0, ease: 'power2.in', duration: 0.48 }, 0.08)
+        /* Search bar lifts more gently */
+        .to(searchRef.current,  { y: -45,  opacity: 0, ease: 'power2.in', duration: 0.42 }, 0.13)
+        /* Proof is last text element to leave */
+        .to(proofRef.current,   { y: -28,  opacity: 0, ease: 'power2.in', duration: 0.35 }, 0.18)
+        /* Mockup falls away downward — opposite direction, dramatic parallax */
+        .to(mockupRef.current,  { y: 110,  opacity: 0, scale: 0.88, ease: 'power3.in', duration: 0.6 }, 0)
     }, sectionRef)
     return () => ctx.revert()
+  }, [])
+
+  /* ── Scroll parallax on hero background layer ── */
+  useEffect(() => {
+    const bg = bgRef.current
+    if (!bg) return
+    let rafId = 0
+    const onScroll = () => {
+      cancelAnimationFrame(rafId)
+      rafId = requestAnimationFrame(() => {
+        const y = window.scrollY * 0.15
+        if (bg) bg.style.transform = `translateY(${y}px)`
+      })
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(rafId) }
   }, [])
 
   /* ── Magnetic CTA ── */
@@ -195,9 +222,10 @@ export default function Hero() {
       }}
     >
 
-      {/* ── Background atmosphere ── */}
-      <div aria-hidden="true" style={{
-        position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none',
+      {/* ── Background atmosphere (parallax layer) ── */}
+      <div ref={bgRef} aria-hidden="true" style={{
+        position: 'absolute', inset: '-20% 0', zIndex: 0, pointerEvents: 'none',
+        willChange: 'transform',
       }}>
         {/* Dot grid */}
         <div className="dot-grid-bg" style={{ position: 'absolute', inset: 0, opacity: 0.65 }} />

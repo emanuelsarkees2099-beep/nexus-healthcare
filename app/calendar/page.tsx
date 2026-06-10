@@ -474,7 +474,7 @@ export default function CalendarPage() {
                   onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
                 >
                   {step === 'timeline' ? 'Update my plan' : 'Build my plan'}
-                  <span style={{ width: '26px', height: '26px', borderRadius: '100%', background: 'rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><ArrowRight size={12} variant="Linear" /></span>
+                  <span style={{ width: '26px', height: '26px', borderRadius: '100%', background: 'rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><ArrowRight size={12} color="#07070F" variant="Linear" /></span>
                 </button>
               </div>
             </div>

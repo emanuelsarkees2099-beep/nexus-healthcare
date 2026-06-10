@@ -146,7 +146,7 @@ export default function Nav({ initialUser }: NavProps = {}) {
     let rafId = 0
     const onScroll = () => {
       cancelAnimationFrame(rafId)
-      rafId = requestAnimationFrame(() => setScrolled(window.scrollY > 48))
+      rafId = requestAnimationFrame(() => setScrolled(window.scrollY > 80))
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     onScroll()
@@ -216,16 +216,16 @@ export default function Nav({ initialUser }: NavProps = {}) {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '0 16px',
           borderRadius: '14px',
-          background: scrolled ? 'rgba(6,6,12,0.92)' : 'rgba(6,6,12,0.60)',
-          backdropFilter: 'blur(24px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+          background: scrolled ? 'rgba(6,6,12,0.88)' : 'rgba(6,6,12,0.04)',
+          backdropFilter: scrolled ? 'blur(24px) saturate(180%)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(24px) saturate(180%)' : 'none',
           border: scrolled
             ? '1px solid rgba(255,255,255,0.10)'
-            : '1px solid rgba(255,255,255,0.07)',
+            : '1px solid rgba(255,255,255,0.00)',
           boxShadow: scrolled
             ? '0 8px 32px rgba(0,0,0,0.40), 0 1px 0 rgba(255,255,255,0.05) inset'
-            : '0 4px 16px rgba(0,0,0,0.20)',
-          transition: 'background 0.5s cubic-bezier(0.32,0.72,0,1), border-color 0.5s, box-shadow 0.5s',
+            : 'none',
+          transition: 'background 0.6s cubic-bezier(0.32,0.72,0,1), backdrop-filter 0.6s, -webkit-backdrop-filter 0.6s, border-color 0.5s, box-shadow 0.5s',
           /* Entrance animation */
           opacity: mounted ? 1 : 0,
           transform: mounted ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(-12px)',

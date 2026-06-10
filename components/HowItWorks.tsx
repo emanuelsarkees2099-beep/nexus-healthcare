@@ -288,14 +288,16 @@ export default function HowItWorks() {
                 }}
                 style={{
                   display: 'flex', flexDirection: 'column',
-                  gap: '0.3rem', padding: '1.25rem 1.25rem 1.25rem 1rem',
+                  gap: '0.3rem', padding: '0.7rem 0.9rem 0.7rem 0.75rem',
                   borderBottom: i < STEPS.length - 1 ? '1px solid var(--border2)' : 'none',
                   borderLeft: active === i ? '2px solid var(--accent)' : '2px solid transparent',
                   cursor: 'pointer',
-                  opacity: active === i ? 1 : 0.62,
-                  transition: 'opacity 0.3s ease, border-color 0.3s ease',
-                  borderRadius: '0 8px 8px 0',
-                  background: active === i ? 'rgba(79,142,240,0.04)' : 'transparent',
+                  opacity: active === i ? 1 : 0.52,
+                  transform: active === i ? 'translateX(6px) scale(1)' : 'translateX(0) scale(0.98)',
+                  transition: 'opacity 0.5s cubic-bezier(0.34,1.56,0.64,1), border-color 0.4s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1), background 0.4s',
+                  borderRadius: '0 10px 10px 0',
+                  background: active === i ? 'rgba(79,142,240,0.06)' : 'transparent',
+                  boxShadow: active === i ? 'inset 0 0 0 1px rgba(79,142,240,0.10)' : 'none',
                 }}
               >
                 {/* Small accent badge number */}
@@ -390,8 +392,10 @@ export default function HowItWorks() {
               </div>
             </div>
 
-            <div key={panelKey} style={{ animation: 'panel-in 0.4s var(--ease-out-expo)' }}>
-              {PANELS[active]}
+            <div style={{ perspective: '900px' }}>
+              <div key={panelKey} className="panel-animate">
+                {PANELS[active]}
+              </div>
             </div>
           </div>
         </div>
@@ -399,8 +403,13 @@ export default function HowItWorks() {
 
       <style>{`
         @keyframes panel-in {
-          from { opacity: 0; transform: translateY(10px); }
-          to   { opacity: 1; transform: translateY(0); }
+          0%   { opacity: 0; transform: translateY(44px) scale(0.86) rotateX(10deg); filter: blur(8px); }
+          55%  { filter: blur(0px); }
+          100% { opacity: 1; transform: translateY(0) scale(1) rotateX(0deg); filter: blur(0px); }
+        }
+        .panel-animate {
+          animation: panel-in 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+          transform-style: preserve-3d;
         }
         @keyframes cursor-blink {
           0%, 100% { opacity: 1; }

@@ -1,84 +1,52 @@
 'use client'
 import { useEffect, useRef } from 'react'
-import Link from 'next/link'
 import gsap from 'gsap'
 import { registerGSAP } from '@/lib/gsap-st'
-import {
-  ShieldTick, SecuritySafe, Eye, Profile2User,
-  Star1, SecurityUser,
-} from 'iconsax-react'
 registerGSAP()
 
-const BADGES = [
-  {
-    icon: ShieldTick,
-    label: 'HRSA Data Source',
-    desc: 'Clinic data sourced directly from HRSA federal API',
-    color: 'var(--accent)',
-  },
-  {
-    icon: SecuritySafe,
-    label: 'Zero Data Sold',
-    desc: 'We have never sold user data and structurally cannot',
-    color: '#60a5fa',
-  },
-  {
-    icon: Eye,
-    label: '100% Anonymous',
-    desc: 'No account required. Searches leave no trace.',
-    color: '#60a5fa',
-  },
-  {
-    icon: Profile2User,
-    label: 'NACHC Network',
-    desc: 'Aligned with National Assoc. of Community Health Centers',
-    color: '#a78bfa',
-  },
-  {
-    icon: Star1,
-    label: 'Always Free',
-    desc: 'NEXUS will never charge patients. Ever.',
-    color: '#fbbf24',
-  },
-  {
-    icon: SecurityUser,
-    label: 'HIPAA-Aligned',
-    desc: 'Built to the standard for health information privacy',
-    color: '#f472b6',
-  },
+const STATS = [
+  { num: '30M+',   label: 'Americans without coverage',  color: 'var(--accent)' },
+  { num: '18,400', label: 'free clinics mapped',          color: 'var(--success)' },
+  { num: '$0',     label: 'forever — for every patient',  color: 'var(--text)' },
 ]
+
+/* Split headline into words with line breaks preserved */
+const LINE_1 = ['30', 'million', 'Americans']
+const LINE_2 = ["can't", 'afford', 'healthcare.']
+const LINE_3_PREFIX = ['This', 'is', 'for']
+const LINE_3_ACCENT = 'them.'
 
 export default function TrustBadges() {
   const sectionRef = useRef<HTMLElement>(null)
-  const headerRef  = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.set(headerRef.current, { y: 30, opacity: 0 })
-      gsap.to(headerRef.current, {
-        y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
-        scrollTrigger: { trigger: headerRef.current, start: 'top 88%', once: true },
-      })
-      /* Badge entrance: scale+translate-Y reveal with spring stagger */
-      gsap.set('.trust-badge', { y: 36, opacity: 0, scale: 0.88 })
-      gsap.to('.trust-badge', {
-        y: 0, opacity: 1, scale: 1,
-        duration: 0.7, ease: 'back.out(1.6)', stagger: 0.075,
+      /* Eyebrow rule fades in */
+      gsap.from('.impact-eyebrow', {
+        opacity: 0, y: 18, duration: 0.7, ease: 'power3.out',
         scrollTrigger: { trigger: sectionRef.current, start: 'top 82%', once: true },
       })
 
-      /* Icon bounce-in: fires slightly after the badge itself */
-      gsap.from('.trust-badge-icon', {
-        scale: 0.35, rotation: -25, opacity: 0,
-        duration: 0.55, ease: 'back.out(2.5)', stagger: 0.075,
-        delay: 0.12,
-        scrollTrigger: { trigger: sectionRef.current, start: 'top 82%', once: true },
+      /* Words materialise: blur-in + rise, staggered */
+      gsap.set('.impact-word', { opacity: 0, y: 36, filter: 'blur(10px)' })
+      gsap.to('.impact-word', {
+        opacity: 1, y: 0, filter: 'blur(0px)',
+        duration: 0.95, ease: 'power4.out', stagger: 0.055,
+        scrollTrigger: { trigger: '.impact-headline', start: 'top 82%', once: true },
       })
 
-      /* Attribution row: clip-wipe from left */
-      gsap.from('.trust-attribution', {
-        clipPath: 'inset(0 100% 0 0)', opacity: 0, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: '.trust-attribution', start: 'top 92%', once: true },
+      /* Stats pop up with spring */
+      gsap.from('.impact-stat', {
+        opacity: 0, y: 48, scale: 0.82,
+        duration: 0.9, ease: 'back.out(1.7)', stagger: 0.12,
+        scrollTrigger: { trigger: '.impact-stats-row', start: 'top 86%', once: true },
+      })
+
+      /* Divider lines wipe from center */
+      gsap.from('.impact-divider', {
+        scaleX: 0, opacity: 0, duration: 1.1, ease: 'power3.out',
+        transformOrigin: 'center',
+        scrollTrigger: { trigger: '.impact-stats-row', start: 'top 88%', once: true },
       })
     }, sectionRef)
     return () => ctx.revert()
@@ -87,160 +55,137 @@ export default function TrustBadges() {
   return (
     <section
       ref={sectionRef}
-      aria-labelledby="trust-title"
-      style={{ position: 'relative', zIndex: 2, padding: '80px 2rem' }}
+      aria-labelledby="impact-title"
+      style={{
+        position: 'relative', zIndex: 2,
+        padding: 'clamp(80px, 10vw, 130px) clamp(1.5rem, 4vw, 3rem)',
+        textAlign: 'center', overflow: 'hidden',
+      }}
     >
-      {/* Top separator line */}
+      {/* Ambient top glow */}
       <div aria-hidden="true" style={{
-        maxWidth: '1200px', margin: '0 auto 60px',
-        height: '1px',
-        background: 'linear-gradient(90deg, transparent, rgba(74,144,217,0.18) 30%, rgba(74,144,217,0.18) 70%, transparent)',
+        position: 'absolute', top: '20%', left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '700px', height: '400px',
+        background: 'radial-gradient(ellipse, rgba(79,142,240,0.055) 0%, transparent 70%)',
+        filter: 'blur(80px)', pointerEvents: 'none',
       }} />
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        {/* Header */}
-        <div ref={headerRef} style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            fontSize: '11px', fontWeight: 400, letterSpacing: '0.14em',
-            textTransform: 'uppercase', color: 'var(--accent)',
-            marginBottom: '1rem', fontFamily: 'var(--font-inter)',
-          }}>
-            <span style={{ display: 'inline-block', width: '16px', height: '1px', background: 'var(--accent)' }} aria-hidden="true" />
-            Built with trust
-            <span style={{ display: 'inline-block', width: '16px', height: '1px', background: 'var(--accent)' }} aria-hidden="true" />
-          </div>
-          <h2 id="trust-title" style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(1.6rem, 2.8vw, 2.2rem)',
-            fontWeight: 700, lineHeight: 1.1,
-            letterSpacing: '-0.025em',
-            marginBottom: '0.6rem',
-          }}>
-            Privacy isn&apos;t a feature.{' '}
-            <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>It&apos;s the foundation.</em>
-          </h2>
-          <p style={{
-            fontSize: '14px', color: 'var(--text-2)',
-            fontFamily: 'var(--font-inter)', fontWeight: 400,
-            lineHeight: 1.7, maxWidth: '420px', margin: '0 auto',
-          }}>
-            Your health searches are anonymous, your data is not sold, and the entire system is built to protect — not exploit — the people who need help most.{' '}
-            <Link href="/privacy" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 400 }}>
-              Full privacy policy &rarr;
-            </Link>
-          </p>
-        </div>
+      {/* Eyebrow */}
+      <div className="impact-eyebrow" style={{
+        display: 'inline-flex', alignItems: 'center', gap: '14px',
+        marginBottom: '3.5rem',
+      }}>
+        <span aria-hidden="true" style={{
+          display: 'block', width: '36px', height: '1px',
+          background: 'linear-gradient(90deg, transparent, var(--border))',
+        }} />
+        <span style={{
+          fontSize: '11px', fontWeight: 400, letterSpacing: '0.16em',
+          textTransform: 'uppercase', color: 'var(--text-3)',
+          fontFamily: 'var(--font-inter)',
+        }}>
+          The mission
+        </span>
+        <span aria-hidden="true" style={{
+          display: 'block', width: '36px', height: '1px',
+          background: 'linear-gradient(90deg, var(--border), transparent)',
+        }} />
+      </div>
 
-        {/* Badges grid */}
+      {/* Headline */}
+      <div
+        id="impact-title"
+        className="impact-headline"
+        style={{ maxWidth: '960px', margin: '0 auto 5rem' }}
+      >
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-          gap: '12px',
+          fontFamily: 'var(--font-display)',
+          fontSize: 'clamp(2.6rem, 6.5vw, 6rem)',
+          fontWeight: 800,
+          lineHeight: 1.0,
+          letterSpacing: '-0.04em',
         }}>
-          {BADGES.map(b => {
-            const IconComp = b.icon
-            return (
-              <div
-                key={b.label}
-                className="trust-badge"
-                style={{
-                  background: 'linear-gradient(145deg, var(--bg2), var(--bg3))',
-                  border: '1px solid var(--border2)',
-                  borderRadius: '16px',
-                  padding: '1.25rem',
-                  display: 'flex', flexDirection: 'column', gap: '10px',
-                  transition: 'border-color 0.25s, transform 0.25s var(--ease-spring), box-shadow 0.25s',
-                  cursor: 'default',
-                }}
-                onMouseEnter={e => {
-                  const el = e.currentTarget
-                  el.style.borderColor = `${b.color}33`
-                  el.style.transform = 'translateY(-3px)'
-                  el.style.boxShadow = `0 12px 32px rgba(0,0,0,0.3), 0 0 0 1px ${b.color}18`
-                }}
-                onMouseLeave={e => {
-                  const el = e.currentTarget
-                  el.style.borderColor = 'var(--border2)'
-                  el.style.transform = ''
-                  el.style.boxShadow = ''
-                }}
-              >
-                <div
-                  className="trust-badge-icon"
-                  style={{
-                    width: '36px', height: '36px', borderRadius: '10px',
-                    background: `${b.color}14`,
-                    border: `1px solid ${b.color}28`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    flexShrink: 0,
-                  }}
-                >
-                  <IconComp size={18} color={b.color} variant="TwoTone" />
-                </div>
-                <div>
-                  <div style={{
-                    fontSize: '13px', fontWeight: 600, color: 'var(--text)',
-                    fontFamily: 'var(--font-inter)', marginBottom: '4px',
-                  }}>
-                    {b.label}
-                  </div>
-                  <div style={{
-                    fontSize: '11px', color: 'var(--text-3)',
-                    fontFamily: 'var(--font-inter)', fontWeight: 400,
-                    lineHeight: 1.5,
-                  }}>
-                    {b.desc}
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-
-        {/* Government data attribution */}
-        <div className="trust-attribution" style={{
-          marginTop: '2.5rem',
-          padding: '1rem 1.5rem',
-          background: 'rgba(74,144,217,0.03)',
-          border: '1px solid rgba(74,144,217,0.10)',
-          borderRadius: '12px',
-          display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap',
-          clipPath: 'inset(0 0% 0 0)',
-        }}>
-          <div style={{
-            width: '6px', height: '6px', borderRadius: '50%',
-            background: 'var(--accent)', flexShrink: 0,
-            boxShadow: '0 0 8px rgba(74,144,217,0.6)',
-            animation: 'pulse-dot 2s ease-in-out infinite',
-          }} aria-hidden="true" />
-          <p style={{
-            fontSize: '12px', color: 'var(--text-3)',
-            fontFamily: 'var(--font-inter)', fontWeight: 400,
-            lineHeight: 1.7, margin: 0, flex: 1,
-          }}>
-            Clinic data is sourced from{' '}
-            <a href="https://findahealthcenter.hrsa.gov" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 400 }}>
-              HRSA&apos;s federal FQHC directory
-            </a>
-            {' '}(14,000+ federally qualified health centers),{' '}
-            <a href="https://www.nafcclinics.org" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 400 }}>
-              NAFC&apos;s free clinic network
-            </a>
-            , and OpenStreetMap community-maintained health data.
-            All data is cross-verified and updated weekly.
-          </p>
+          {/* Line 1 */}
+          <div style={{ overflow: 'hidden', marginBottom: '0.06em', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '0.22em' }}>
+            {LINE_1.map((w, i) => (
+              <span key={i} className="impact-word" style={{ display: 'inline-block', color: 'var(--text)' }}>
+                {w}
+              </span>
+            ))}
+          </div>
+          {/* Line 2 */}
+          <div style={{ overflow: 'hidden', marginBottom: '0.06em', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '0.22em' }}>
+            {LINE_2.map((w, i) => (
+              <span key={i} className="impact-word" style={{ display: 'inline-block', color: 'rgba(248,249,255,0.48)' }}>
+                {w}
+              </span>
+            ))}
+          </div>
+          {/* Line 3 */}
+          <div style={{ overflow: 'hidden', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '0.22em' }}>
+            {LINE_3_PREFIX.map((w, i) => (
+              <span key={i} className="impact-word" style={{ display: 'inline-block', color: 'rgba(248,249,255,0.48)' }}>
+                {w}
+              </span>
+            ))}
+            <span className="impact-word" style={{ display: 'inline-block', color: 'var(--accent)', fontStyle: 'italic' }}>
+              {LINE_3_ACCENT}
+            </span>
+          </div>
         </div>
       </div>
 
+      {/* Stats strip */}
+      <div className="impact-stats-row" style={{
+        display: 'flex', justifyContent: 'center', alignItems: 'center',
+        gap: '0', flexWrap: 'wrap',
+        maxWidth: '680px', margin: '0 auto',
+      }}>
+        {STATS.map((s, i) => (
+          <div key={s.num} style={{ display: 'flex', alignItems: 'center' }}>
+            <div className="impact-stat" style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'center',
+              gap: '6px', padding: '0 clamp(1.5rem, 4vw, 3rem)',
+            }}>
+              <div style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)',
+                fontWeight: 700, letterSpacing: '-0.04em', lineHeight: 1,
+                color: s.color,
+              }}>
+                {s.num}
+              </div>
+              <div style={{
+                fontSize: '13px', color: 'var(--text-3)',
+                fontFamily: 'var(--font-inter)', fontWeight: 400,
+                letterSpacing: '0.01em', lineHeight: 1.4,
+                maxWidth: '120px', textAlign: 'center',
+              }}>
+                {s.label}
+              </div>
+            </div>
+            {/* Vertical divider between stats */}
+            {i < STATS.length - 1 && (
+              <div className="impact-divider" aria-hidden="true" style={{
+                width: '1px', height: '48px', flexShrink: 0,
+                background: 'linear-gradient(180deg, transparent, var(--border), transparent)',
+              }} />
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Bottom rule */}
+      <div className="impact-divider" aria-hidden="true" style={{
+        height: '1px', maxWidth: '240px', margin: '4.5rem auto 0',
+        background: 'linear-gradient(90deg, transparent, var(--border), transparent)',
+      }} />
+
       <style>{`
-        @media (max-width: 768px) {
-          .trust-badge { padding: 1rem !important; }
-        }
-        @media (max-width: 480px) {
-          [aria-labelledby="trust-title"] > div > div:nth-child(2) {
-            grid-template-columns: 1fr 1fr !important;
-          }
+        @media (max-width: 600px) {
+          .impact-stats-row { flex-direction: column; gap: 2rem; }
+          .impact-stats-row [aria-hidden="true"] { display: none; }
         }
       `}</style>
     </section>

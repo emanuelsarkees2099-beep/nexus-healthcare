@@ -20,11 +20,10 @@ const bricolage = Bricolage_Grotesque({
   adjustFontFallback: false,
 })
 
-// Inter: 300 (light body) + 500 (medium labels) cover all use cases.
-// 400 and 600 removed — they're visually indistinguishable from neighbours.
+// Inter Variable: full 100–900 weight axis from a single font file.
+// Removes the need for separate static-weight font requests.
 const inter = Inter({
   subsets: ['latin'],
-  weight: ['300', '500'],
   variable: '--font-inter',
   display: 'swap',
   adjustFontFallback: false,

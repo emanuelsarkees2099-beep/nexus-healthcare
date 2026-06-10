@@ -1,18 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 
-type DotColor = 'mint' | 'violet' | 'amber'
-interface Dot {
-  x: number; y: number
-  baseAlpha: number; alpha: number
-  phase: number; speed: number
-  color: DotColor
-}
-
-/* ── P1: prefers-reduced-motion guard ────────────────────────────
-   If the user has requested reduced motion we skip the canvas entirely.
-   This also eliminates the JS cost — not just the visual output.
-   ─────────────────────────────────────────────────────────────── */
 function useReducedMotion(): boolean {
   const [reduced, setReduced] = useState(() => {
     if (typeof window === 'undefined') return false
@@ -27,16 +15,28 @@ function useReducedMotion(): boolean {
   return reduced
 }
 
+interface Orb {
+  x: number; y: number
+  vx: number; vy: number
+  r: number
+  phaseX: number; phaseY: number
+  speedX: number; speedY: number
+  r1: string; r2: string; r3: string // rgb values for gradient stops
+}
+
+const ORBS: Orb[] = [
+  { x: 0.20, y: 0.30, vx: 0, vy: 0, r: 0.50, phaseX: 0.00, phaseY: 1.10, speedX: 0.00028, speedY: 0.00022, r1: '42,82,190', r2: '59,106,212',  r3: '79,142,240' },
+  { x: 0.75, y: 0.20, vx: 0, vy: 0, r: 0.45, phaseX: 2.10, phaseY: 0.50, speedX: 0.00021, speedY: 0.00031, r1: '72,52,170', r2: '99,78,220',   r3: '130,100,240' },
+  { x: 0.55, y: 0.65, vx: 0, vy: 0, r: 0.42, phaseX: 4.20, phaseY: 3.10, speedX: 0.00033, speedY: 0.00018, r1: '20,90,160', r2: '40,120,200',  r3: '70,160,230' },
+  { x: 0.10, y: 0.75, vx: 0, vy: 0, r: 0.35, phaseX: 1.50, phaseY: 5.40, speedX: 0.00019, speedY: 0.00027, r1: '90,40,130', r2: '110,60,170',  r3: '140,90,210' },
+]
+
 export default function BackgroundCanvas() {
   const reducedMotion = useReducedMotion()
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const dotsRef   = useRef<Dot[]>([])
-  const mouseRef  = useRef({ x: -9999, y: -9999 })
   const rafRef    = useRef<number>(0)
-  const pausedRef = useRef(false)
-  const GRID = 44
+  const orbsRef   = useRef<Orb[]>(ORBS.map(o => ({ ...o })))
 
-  /* P1: skip entirely when reduced motion is active */
   if (reducedMotion) return null
 
   useEffect(() => {
@@ -45,94 +45,45 @@ export default function BackgroundCanvas() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    // 80% mint, 12% violet, 8% amber — richer atmosphere (#26)
-    const pickColor = (): DotColor => {
-      const r = Math.random()
-      if (r < 0.80) return 'mint'
-      if (r < 0.92) return 'violet'
-      return 'amber'
-    }
-
-    const buildDots = () => {
-      dotsRef.current = []
-      const cols = Math.ceil(canvas.width  / GRID)
-      const rows = Math.ceil(canvas.height / GRID)
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          dotsRef.current.push({
-            x: c * GRID + GRID / 2,
-            y: r * GRID + GRID / 2,
-            baseAlpha: 0.04 + Math.random() * 0.04,
-            alpha: 0,
-            phase: Math.random() * Math.PI * 2,
-            speed: 0.002 + Math.random() * 0.003,
-            color: pickColor(),
-          })
-        }
-      }
-    }
-
     const resize = () => {
       canvas.width  = window.innerWidth
-      canvas.height = document.documentElement.scrollHeight
-      buildDots()
+      canvas.height = window.innerHeight
     }
 
     const draw = () => {
-      if (!pausedRef.current) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        const scrollY = window.scrollY
-        for (const d of dotsRef.current) {
-          d.phase += d.speed
-          d.alpha = d.baseAlpha + Math.sin(d.phase) * 0.025
-          const screenY = d.y - scrollY
-          const dx = d.x - mouseRef.current.x
-          const dy = screenY - mouseRef.current.y
-          const dist = Math.sqrt(dx * dx + dy * dy)
-          const glow = Math.max(0, 1 - dist / 260)
-          const finalAlpha = Math.min(d.alpha + glow * 0.32, 0.65)
-          // Multi-color dots: mint / violet / amber (#26)
-          const rgb = d.color === 'violet' ? '167,139,250'
-                    : d.color === 'amber'  ? '252,211,77'
-                    : '110,231,183'
-          ctx.beginPath()
-          ctx.arc(d.x, d.y, 1.2, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(${rgb},${finalAlpha})`
-          ctx.fill()
-        }
+      const W = canvas.width
+      const H = canvas.height
+      ctx.clearRect(0, 0, W, H)
+
+      for (const orb of orbsRef.current) {
+        orb.phaseX += orb.speedX
+        orb.phaseY += orb.speedY
+
+        const cx = (orb.x + Math.sin(orb.phaseX) * 0.22) * W
+        const cy = (orb.y + Math.cos(orb.phaseY) * 0.18) * H
+        const radius = orb.r * Math.min(W, H)
+
+        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius)
+        grad.addColorStop(0,    `rgba(${orb.r3},0.055)`)
+        grad.addColorStop(0.35, `rgba(${orb.r2},0.030)`)
+        grad.addColorStop(0.70, `rgba(${orb.r1},0.012)`)
+        grad.addColorStop(1,    `rgba(${orb.r1},0)`)
+
+        ctx.fillStyle = grad
+        ctx.fillRect(0, 0, W, H)
       }
+
       rafRef.current = requestAnimationFrame(draw)
     }
 
-    const onMouse = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY }
-    }
-
-    /* ── Pause RAF when canvas is not in the viewport ── */
-    const visObs = new IntersectionObserver(
-      ([entry]) => { pausedRef.current = !entry.isIntersecting },
-      { rootMargin: '300px' }
-    )
-    visObs.observe(canvas)
-
-    /* ── P1: defer canvas boot until after first paint ─────────────
-       requestIdleCallback fires after the browser has painted and the
-       main thread is free, eliminating LCP blocking. Fallback to
-       setTimeout(200) in Safari which lacks rIC.
-       ─────────────────────────────────────────────────────────────── */
     let cleanupFn: (() => void) | null = null
-
     const boot = () => {
       resize()
       window.addEventListener('resize', resize, { passive: true })
-      window.addEventListener('mousemove', onMouse, { passive: true })
       rafRef.current = requestAnimationFrame(draw)
-
       cleanupFn = () => {
         cancelAnimationFrame(rafRef.current)
         window.removeEventListener('resize', resize)
-        window.removeEventListener('mousemove', onMouse)
-        visObs.disconnect()
       }
     }
 

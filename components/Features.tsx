@@ -324,18 +324,22 @@ export default function Features() {
         scrollTrigger: { trigger: '.bento-grid', start: 'top 82%', once: true },
       })
 
+      /* Spring-eased card entrances — once:true, no scrub, large offsets for drama */
       const cardDefs = [
-        { sel: '.bc-1', from: { x: -60, y: 30, opacity: 0 } },
-        { sel: '.bc-2', from: { x: 40,  y: -30, opacity: 0 } },
-        { sel: '.bc-3', from: { x: 60,  y: 20, opacity: 0 } },
-        { sel: '.bc-4', from: { x: -40, y: 40, opacity: 0 } },
-        { sel: '.bc-5', from: { x: -50, y: -20, opacity: 0 } },
-        { sel: '.bc-6', from: { x: 60,  y: 10, opacity: 0 } },
+        { sel: '.bc-1', from: { x: -100, y: 80,  scale: 0.82, opacity: 0, rotation: -3 }, delay: 0.00 },
+        { sel: '.bc-2', from: { x:  80,  y: -70, scale: 0.82, opacity: 0, rotation:  2 }, delay: 0.08 },
+        { sel: '.bc-3', from: { x:  110, y:  60, scale: 0.82, opacity: 0, rotation:  3 }, delay: 0.14 },
+        { sel: '.bc-4', from: { x: -80,  y:  90, scale: 0.82, opacity: 0, rotation: -2 }, delay: 0.20 },
+        { sel: '.bc-5', from: { x: -90,  y: -55, scale: 0.82, opacity: 0, rotation: -2 }, delay: 0.26 },
+        { sel: '.bc-6', from: { x:  100, y:  35, scale: 0.82, opacity: 0, rotation:  2 }, delay: 0.32 },
       ]
-      cardDefs.forEach(({ sel, from }) => {
+      cardDefs.forEach(({ sel, from, delay }) => {
         gsap.from(sel, {
           ...from,
-          scrollTrigger: { trigger: '.bento-grid', start: 'top 82%', end: 'top 30%', scrub: 1 },
+          duration: 1.05,
+          ease: 'back.out(1.5)',
+          delay,
+          scrollTrigger: { trigger: '.bento-grid', start: 'top 78%', once: true },
         })
       })
 
