@@ -5,7 +5,58 @@ import gsap from 'gsap'
 import { registerGSAP } from '@/lib/gsap-st'
 import { TickCircle } from 'iconsax-react'
 import LuxeReveal from '@/components/LuxeReveal'
+import { useCountUp } from '@/hooks/useCountUp'
 registerGSAP()
+
+/* ── Animated stat number ───────────────────────────────────────────── */
+function ProofStat({ value, label, isLast }: { value: string; label: string; isLast: boolean }) {
+  // Parse the value into numeric + prefix/suffix
+  // e.g. "30M" → target=30, suffix="M"
+  //      "12,400+" → target=12400, suffix="+"
+  //      "$0"  → target=0, prefix="$"
+  //      "50"  → target=50
+  const numMatch = value.match(/^([^0-9]*)([0-9,.]+)([^0-9]*)$/)
+  const prefix  = numMatch ? numMatch[1] : ''
+  const rawNum  = numMatch ? parseFloat(numMatch[2].replace(/,/g, '')) : 0
+  const suffix  = numMatch ? numMatch[3] : ''
+
+  const { ref, displayValue } = useCountUp({
+    target: rawNum,
+    duration: 1600,
+    prefix,
+    suffix,
+    decimals: 0,
+    easing: 'expo',
+  })
+
+  return (
+    <div className="cta-proof" style={{
+      textAlign: 'center', padding: '0 2.5rem',
+      borderRight: !isLast ? '1px solid var(--border-subtle)' : 'none',
+    }}>
+      <div
+        ref={ref}
+        style={{
+          fontSize: 'clamp(1.6rem, 2.8vw, 2.4rem)',
+          fontFamily: 'var(--font-display)',
+          fontWeight: 700,
+          letterSpacing: '-0.03em',
+          color: 'var(--text)',
+          lineHeight: 1,
+          marginBottom: '0.35rem',
+          fontVariantNumeric: 'tabular-nums',
+        }}
+      >
+        {displayValue}
+      </div>
+      <div style={{
+        fontSize: '12px', color: 'var(--text-3)',
+        fontFamily: 'var(--font-inter)', fontWeight: 400,
+        letterSpacing: '0.01em',
+      }}>{label}</div>
+    </div>
+  )
+}
 
 export default function CTA() {
   const router      = useRouter()
@@ -205,37 +256,19 @@ export default function CTA() {
           </button>
         </div>
 
-        {/* Proof strip */}
+        {/* Proof strip — numbers count up when scrolled into view */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           gap: '0', marginTop: '4rem',
           flexWrap: 'wrap',
         }}>
           {[
-            { value: '30M',    label: 'uninsured Americans we serve' },
-            { value: '12,400+', label: 'free clinics mapped' },
-            { value: '50',     label: 'states covered' },
-            { value: '$0',     label: 'cost to use NEXUS' },
+            { value: '30M',     label: 'uninsured Americans we serve' },
+            { value: '12400+',  label: 'free clinics mapped' },
+            { value: '50',      label: 'states covered' },
+            { value: '$0',      label: 'cost to use NEXUS' },
           ].map((stat, i, arr) => (
-            <div key={stat.value} className="cta-proof" style={{
-              textAlign: 'center', padding: '0 2.5rem',
-              borderRight: i < arr.length - 1 ? '1px solid var(--border-subtle)' : 'none',
-            }}>
-              <div style={{
-                fontSize: 'clamp(1.6rem, 2.8vw, 2.4rem)',
-                fontFamily: 'var(--font-display)',
-                fontWeight: 700,
-                letterSpacing: '-0.03em',
-                color: 'var(--text)',
-                lineHeight: 1,
-                marginBottom: '0.35rem',
-              }}>{stat.value}</div>
-              <div style={{
-                fontSize: '12px', color: 'var(--text-3)',
-                fontFamily: 'var(--font-inter)', fontWeight: 400,
-                letterSpacing: '0.01em',
-              }}>{stat.label}</div>
-            </div>
+            <ProofStat key={stat.value} value={stat.value} label={stat.label} isLast={i === arr.length - 1} />
           ))}
         </div>
 

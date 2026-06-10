@@ -40,7 +40,7 @@ export default function AccessibilityControls() {
         onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.45)')}
         onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.2)')}
       >
-        <TextBlock size={16} variant="Linear" />
+        <TextBlock size={16} variant="Linear" color="var(--accent)" />
       </button>
 
       {/* Panel */}
@@ -55,9 +55,9 @@ export default function AccessibilityControls() {
           <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: '14px' }}>Display</div>
 
           {([
-            { id: 'normal',        label: 'Default',      desc: 'Standard view', icon: <RotateLeft size={14} variant="Linear" /> },
-            { id: 'large-text',    label: 'Large text',   desc: 'Bigger type, easier to read', icon: <TextBlock size={14} variant="Linear" /> },
-            { id: 'high-contrast', label: 'High contrast', desc: 'Maximum visibility', icon: <Sun size={14} variant="Linear" /> },
+            { id: 'normal',        label: 'Default',      desc: 'Standard view', icon: <RotateLeft size={14} variant="Linear" color="currentColor" /> },
+            { id: 'large-text',    label: 'Large text',   desc: 'Bigger type, easier to read', icon: <TextBlock size={14} variant="Linear" color="currentColor" /> },
+            { id: 'high-contrast', label: 'High contrast', desc: 'Maximum visibility', icon: <Sun size={14} variant="Linear" color="currentColor" /> },
           ] as { id: Mode; label: string; desc: string; icon: React.ReactNode }[]).map(opt => (
             <button
               key={opt.id}

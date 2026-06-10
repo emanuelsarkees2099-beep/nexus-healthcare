@@ -281,7 +281,7 @@ export default function Nav({ initialUser }: NavProps = {}) {
                       textDecoration: 'none', transition: 'color 0.2s, background 0.2s',
                     }}
                   >
-                    <IconComp size={13} variant="Linear" />
+                    <IconComp size={13} variant="Linear" color="rgba(255,255,255,0.50)" />
                     {l.label}
                   </a>
                 ) : (
@@ -302,7 +302,7 @@ export default function Nav({ initialUser }: NavProps = {}) {
                     <IconComp
                       size={13}
                       variant={isActive ? 'Bold' : 'Linear'}
-                      color={isActive ? 'var(--accent)' : undefined}
+                      color={isActive ? 'var(--accent)' : 'rgba(255,255,255,0.50)'}
                     />
                     {l.label}
                     {/* Active dot */}
@@ -343,6 +343,7 @@ export default function Nav({ initialUser }: NavProps = {}) {
                 <ArrowDown2
                   size={12}
                   variant="Linear"
+                  color={megaOpen ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.50)'}
                   style={{
                     transition: 'transform 0.25s cubic-bezier(0.34,1.3,0.64,1)',
                     transform: megaOpen ? 'rotate(180deg)' : 'rotate(0deg)',
@@ -376,7 +377,7 @@ export default function Nav({ initialUser }: NavProps = {}) {
               transition: 'background 0.2s, border-color 0.2s, color 0.2s',
             }}
           >
-            <SearchNormal1 size={12} variant="Linear" />
+            <SearchNormal1 size={12} variant="Linear" color="rgba(255,255,255,0.40)" />
             <span style={{ opacity: 0.6 }}>⌘K</span>
           </button>
 
@@ -455,21 +456,33 @@ export default function Nav({ initialUser }: NavProps = {}) {
           .nav-hamburger { display: none !important; }
         }
 
-        /* Link hover */
+        /* Link hover — accent-tinted glass pill */
         .nav-link-pill { text-decoration: none; }
         .nav-link-pill:hover {
-          color: rgba(255,255,255,0.90) !important;
-          background: rgba(255,255,255,0.06) !important;
+          color: rgba(255,255,255,0.92) !important;
+          background: rgba(79,142,240,0.10) !important;
+          transition: color 0.16s ease, background 0.16s ease !important;
         }
         .nav-link-pill.active:hover {
-          background: rgba(255,255,255,0.08) !important;
+          background: rgba(79,142,240,0.14) !important;
+        }
+        /* Subtle scale on click */
+        .nav-link-pill:active {
+          transform: scale(0.96) !important;
+          transition: transform 0.08s ease !important;
+        }
+        /* Explore button same hover */
+        .nav-explore-btn:hover {
+          color: rgba(255,255,255,0.92) !important;
+          background: rgba(79,142,240,0.10) !important;
         }
 
         /* Icon button hover */
         .nav-icon-btn:hover {
           background: rgba(255,255,255,0.09) !important;
-          border-color: rgba(255,255,255,0.13) !important;
+          border-color: rgba(79,142,240,0.22) !important;
           color: rgba(255,255,255,0.80) !important;
+          box-shadow: 0 0 0 1px rgba(79,142,240,0.12) !important;
         }
 
         /* User menu buttons */

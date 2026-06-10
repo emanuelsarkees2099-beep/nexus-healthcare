@@ -193,7 +193,7 @@ export default function ClinicDetailPage() {
             textDecoration: 'none', fontWeight: 600, fontSize: '14px',
             fontFamily: 'var(--font-inter)',
           }}>
-            <Location size={15} variant="Linear" /> Find Another Clinic
+            <Location size={15} color="var(--bg)" variant="Linear" /> Find Another Clinic
           </Link>
           <div style={{ marginTop: '24px' }}>
             <EmergencyEscalation />
@@ -284,7 +284,7 @@ export default function ClinicDetailPage() {
             aria-label="Dismiss"
             style={{ position: 'absolute', top: 10, right: 10, background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.3)', display: 'flex', padding: 2 }}
           >
-            <CloseCircle size={14} variant="Linear" />
+            <CloseCircle size={14} color="rgba(255,255,255,0.5)" variant="Linear" />
           </button>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
             <ShieldTick size={16} color="var(--accent)" variant="Linear" />
@@ -319,7 +319,7 @@ export default function ClinicDetailPage() {
             onMouseEnter={e => (e.currentTarget.style.color = 'var(--text-2)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
           >
-            <ArrowLeft size={14} variant="Linear" /> Back to results
+            <ArrowLeft size={14} color="rgba(255,255,255,0.5)" variant="Linear" /> Back to results
           </button>
         </div>
 
@@ -447,7 +447,7 @@ export default function ClinicDetailPage() {
                   fontFamily: 'var(--font-inter)',
                 }}
               >
-                <Call size={15} variant="Linear" /> Call Now
+                <Call size={15} color="var(--bg)" variant="Linear" /> Call Now
               </a>
             )}
             <button

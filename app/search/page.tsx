@@ -34,13 +34,13 @@ import type { Clinic, AffordabilityLabel } from '@/components/search/ClinicCard'
 /* ── Constants ────────────────────────────────────────────────────── */
 
 const SPECIALTY_FILTERS = [
-  { label: 'All',            icon: <SearchNormal1 size={13} />,      id: 'all'        },
-  { label: 'Primary care',   icon: <Hospital size={13} />, id: 'primary'    },
-  { label: 'Mental health',  icon: <Health size={13} />,       id: 'mental'     },
-  { label: 'Dental',         icon: <Health size={13} />,        id: 'dental'     },
-  { label: "Women's health", icon: <Heart size={13} />,       id: 'womens'     },
-  { label: 'Pediatrics',     icon: <Profile size={13} />,        id: 'pediatrics' },
-  { label: 'Vision',         icon: <Eye size={13} />,         id: 'vision'     },
+  { label: 'All',            Icon: SearchNormal1, id: 'all'        },
+  { label: 'Primary care',   Icon: Hospital,      id: 'primary'    },
+  { label: 'Mental health',  Icon: Health,        id: 'mental'     },
+  { label: 'Dental',         Icon: Health,        id: 'dental'     },
+  { label: "Women's health", Icon: Heart,         id: 'womens'     },
+  { label: 'Pediatrics',     Icon: Profile,       id: 'pediatrics' },
+  { label: 'Vision',         Icon: Eye,           id: 'vision'     },
 ]
 
 const RADIUS_OPTIONS = [
@@ -399,7 +399,7 @@ function SearchResults() {
                 onFocus={e => (e.currentTarget.style.borderColor = 'var(--border-hi)')}
                 onBlur={e => (e.currentTarget.style.borderColor = 'var(--border)')}
               >
-                <SearchNormal1 size={15} color="var(--text-3)" style={{ flexShrink: 0 }} />
+                <SearchNormal1 size={15} color="rgba(255,255,255,0.45)" style={{ flexShrink: 0 }} />
                 <input
                   value={inputVal}
                   onChange={e => setInputVal(e.target.value)}
@@ -408,7 +408,7 @@ function SearchResults() {
                 />
                 {inputVal && (
                   <button type="button" onClick={() => { setInputVal(''); setIntent({}) }} style={{ background: 'rgba(255,255,255,0.06)', border: 'none', borderRadius: '5px', padding: '4px 6px', cursor: 'pointer', color: 'var(--text-3)', display: 'flex' }}>
-                    <CloseCircle size={12} />
+                    <CloseCircle size={12} color="rgba(255,255,255,0.5)" />
                   </button>
                 )}
               </div>
@@ -463,7 +463,7 @@ function SearchResults() {
               className={`filter-pill${activeFilter === f.id ? ' active' : ''}`}
               style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}
             >
-              {f.icon} {f.label}
+              <f.Icon size={13} color={activeFilter === f.id ? 'var(--accent)' : 'rgba(255,255,255,0.50)'} variant="Linear" /> {f.label}
             </button>
           ))}
         </div>
@@ -505,7 +505,7 @@ function SearchResults() {
             >
               {openNowFilter
                 ? <><div className="open-pulse" style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--green-pulse)' }} /> Open right now</>
-                : <><Clock size={11} /> Open right now</>
+                : <><Clock size={11} color="rgba(255,255,255,0.5)" /> Open right now</>
               }
             </button>
           </div>
@@ -524,7 +524,7 @@ function SearchResults() {
                 onMouseEnter={e => { e.currentTarget.style.color = 'var(--text-2)'; e.currentTarget.style.background = 'rgba(255,255,255,0.06)' }}
                 onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-3)'; e.currentTarget.style.background = 'rgba(255,255,255,0.03)' }}
               >
-                <Printer size={12} /> Print
+                <Printer size={12} color="rgba(255,255,255,0.5)" /> Print
               </button>
             )}
             {geoCenter && (
@@ -541,7 +541,7 @@ function SearchResults() {
                       display: 'flex', alignItems: 'center', gap: '4px', transition: 'all 0.18s',
                     }}
                   >
-                    {mode === 'list' ? <><RowVertical size={12} /> List</> : <><Map size={12} /> Map</>}
+                    {mode === 'list' ? <><RowVertical size={12} color={viewMode === mode ? 'var(--accent)' : 'rgba(255,255,255,0.50)'} /> List</> : <><Map size={12} color={viewMode === mode ? 'var(--accent)' : 'rgba(255,255,255,0.50)'} /> Map</>}
                   </button>
                 ))}
               </div>
@@ -584,7 +584,7 @@ function SearchResults() {
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px 120px' }}>
         {fetchError && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 16px', background: 'var(--coral-dim)', border: '1px solid rgba(248,113,113,0.25)', borderRadius: '12px', marginBottom: '20px', color: 'var(--coral)', fontSize: '13px', fontFamily: 'var(--font-inter)' }}>
-            <InfoCircle size={16} /> {fetchError}
+            <InfoCircle size={16} color="var(--coral,#f87171)" /> {fetchError}
           </div>
         )}
 
@@ -674,10 +674,40 @@ function SearchResults() {
           </div>
         )}
 
-        {/* Loading skeletons */}
+        {/* Loading state — animated "Searching..." banner + skeleton cards */}
         {loading && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[1, 2, 3, 4, 5].map(i => <SkeletonClinicCard key={i} />)}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {/* Searching indicator */}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: '12px',
+              padding: '14px 18px', borderRadius: '12px',
+              background: 'rgba(79,142,240,0.06)',
+              border: '1px solid rgba(79,142,240,0.14)',
+              marginBottom: '4px',
+            }}>
+              <RefreshCircle size={16} color="var(--accent)" style={{ animation: 'spin 0.9s linear infinite', flexShrink: 0 }} />
+              <div>
+                <div style={{
+                  fontSize: '13px', fontWeight: 600,
+                  color: 'var(--accent)', fontFamily: 'var(--font-inter)',
+                }}>
+                  Searching nearby clinics…
+                </div>
+                <div style={{
+                  fontSize: '11px', color: 'var(--text-3)',
+                  fontFamily: 'var(--font-inter)', marginTop: '2px',
+                }}>
+                  Checking availability and free care options near you
+                </div>
+              </div>
+            </div>
+            {/* Staggered skeleton cards */}
+            {[0, 0.05, 0.10, 0.15, 0.20].map((delay, i) => (
+              <div key={i} style={{ animationDelay: `${delay}s`, opacity: 0, animation: `fadeSlideUp 0.4s ${delay}s cubic-bezier(0.16,1,0.3,1) both` }}>
+                <SkeletonClinicCard />
+              </div>
+            ))}
+            <style>{`@keyframes fadeSlideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}} @keyframes spin{to{transform:rotate(360deg)}}`}</style>
           </div>
         )}
 

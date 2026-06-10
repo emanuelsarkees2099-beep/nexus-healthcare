@@ -198,7 +198,7 @@ export default function ProfilePage() {
           onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
           onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.38)')}
         >
-          <ArrowLeft size={14} color="currentColor" variant="Linear" />
+          <ArrowLeft size={14} color="rgba(255,255,255,0.5)" variant="Linear" />
           NEXUS
         </Link>
         <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-mono, monospace)' }}>

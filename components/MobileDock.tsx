@@ -50,7 +50,7 @@ export default function MobileDock() {
                 <IconComp
                   size={20}
                   variant={isActive ? 'Bold' : 'Linear'}
-                  color={isActive ? 'var(--accent)' : undefined}
+                  color={isActive ? 'var(--accent)' : 'rgba(255,255,255,0.42)'}
                 />
               </span>
               <span style={{

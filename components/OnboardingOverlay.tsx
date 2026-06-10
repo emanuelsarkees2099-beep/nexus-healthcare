@@ -108,7 +108,7 @@ export default function OnboardingOverlay() {
                 onMouseEnter={e => (e.currentTarget.style.color = 'var(--text-2)')}
                 onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
               >
-                <ArrowLeft2 size={16} variant="Linear" />
+                <ArrowLeft2 size={16} color="rgba(255,255,255,0.5)" variant="Linear" />
               </button>
             )}
             <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
@@ -119,7 +119,7 @@ export default function OnboardingOverlay() {
             </div>
           </div>
           <button onClick={dismiss} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-3)', padding: 4, display: 'flex', borderRadius: 6 }} aria-label="Close">
-            <CloseCircle size={16} variant="Linear" />
+            <CloseCircle size={16} color="rgba(255,255,255,0.5)" variant="Linear" />
           </button>
         </div>
 
@@ -150,7 +150,7 @@ export default function OnboardingOverlay() {
                   >
                     <div className="ob-icon" style={{ color: intent.color }}>{intent.icon}</div>
                     <div style={{ flex: 1, fontSize: 13, fontWeight: 500, color: 'var(--text)' }}>{intent.label}</div>
-                    <ArrowRight size={13} color="var(--text-3)" variant="Linear" style={{ flexShrink: 0 }} />
+                    <ArrowRight size={13} color="rgba(255,255,255,0.45)" variant="Linear" style={{ flexShrink: 0 }} />
                   </button>
                 ))}
               </nav>

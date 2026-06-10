@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import AppShell from '@/components/AppShell'
 import JsonLd, { ELIGIBILITY_FAQ_SCHEMA, breadcrumbSchema } from '@/components/JsonLd'
+import EmptyState from '@/components/ui/EmptyState'
 import {
   ShieldTick, DollarCircle, TrendUp, Flash, Heart, Profile, Hospital,
   ArrowRight2, ArrowLeft2, TickCircle, InfoCircle, ExportSquare,
@@ -666,8 +667,8 @@ export default function EligibilityPage() {
               Household includes
             </label>
             {[
-              { key: 'hasChildren', label: 'Children under 19 in household', icon: <Profile size={20} color="currentColor" variant="TwoTone" /> },
-              { key: 'hasPregnancy', label: 'Current or planned pregnancy', icon: <Heart size={20} color="currentColor" variant="TwoTone" /> },
+              { key: 'hasChildren', label: 'Children under 19 in household', icon: <Profile size={20} color="rgba(255,255,255,0.5)" variant="TwoTone" /> },
+              { key: 'hasPregnancy', label: 'Current or planned pregnancy', icon: <Heart size={20} color="rgba(255,255,255,0.5)" variant="TwoTone" /> },
             ].map(opt => (
               <button key={opt.key}
                 onClick={() => setAnswers(a => ({ ...a, [opt.key]: !a[opt.key as keyof WizardAnswers] }))}
@@ -746,9 +747,9 @@ export default function EligibilityPage() {
                   borderColor: answers.employment === opt.value ? 'var(--accent)' : 'rgba(255,255,255,0.08)',
                   background: answers.employment === opt.value ? 'rgba(74,144,217,0.08)' : 'rgba(255,255,255,0.02)',
                 }}>
-                <span style={{ color: answers.employment === opt.value ? 'var(--accent)' : 'rgba(255,255,255,0.35)', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{opt.icon}</span>
+                <span style={{ color: answers.employment === opt.value ? 'var(--accent)' : 'rgba(255,255,255,0.5)', width: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{opt.icon}</span>
                 <span style={{ fontSize: '15px', fontWeight: 600, color: answers.employment === opt.value ? 'var(--accent)' : 'rgba(255,255,255,0.7)', flex: 1 }}>{opt.label}</span>
-                {answers.employment === opt.value && <TickCircle size={15} style={{ color: 'var(--accent)' }} variant="Linear" />}
+                {answers.employment === opt.value && <TickCircle size={15} color="var(--accent)" variant="Linear" />}
               </button>
             ))}
           </div>
@@ -914,14 +915,16 @@ export default function EligibilityPage() {
           </div>
 
           {results.length === 0 && (
-            <div style={{ padding: '40px', textAlign: 'center', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '18px', marginBottom: '28px' }}>
-              <InfoCircle size={32} style={{ color: 'rgba(255,255,255,0.2)', marginBottom: '16px' }} variant="Linear" />
-              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.45)', marginBottom: '8px' }}>
-                Based on your profile, you may not qualify for the programs we track — but free clinic options are still available.
-              </p>
-              <a href="/search" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 18px', background: 'var(--accent)', color: '#07070F', borderRadius: '10px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', marginTop: '12px' }}>
-                Find free clinics near you <ArrowRight size={12} />
-              </a>
+            <div style={{ marginBottom: '28px', borderRadius: '18px', border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)', overflow: 'hidden' }}>
+              <EmptyState
+                variant="programs"
+                title="No programs matched your profile"
+                description="Based on your answers, you may not qualify for the programs we track — but free clinic care is still available to you."
+                action={{
+                  label: 'Find free clinics near you',
+                  onClick: () => { window.location.href = '/search' },
+                }}
+              />
             </div>
           )}
 

@@ -292,8 +292,8 @@ export default function ResetPasswordPage() {
                     aria-label={showPass ? 'Hide password' : 'Show password'}
                   >
                     {showPass
-                      ? <EyeSlash size={15} color="currentColor" variant="Linear" />
-                      : <Eye      size={15} color="currentColor" variant="Linear" />
+                      ? <EyeSlash size={15} color="rgba(255,255,255,0.5)" variant="Linear" />
+                      : <Eye      size={15} color="rgba(255,255,255,0.5)" variant="Linear" />
                     }
                   </button>
                 </div>
@@ -343,8 +343,8 @@ export default function ResetPasswordPage() {
                     aria-label={showConfirm ? 'Hide password' : 'Show password'}
                   >
                     {showConfirm
-                      ? <EyeSlash size={15} color="currentColor" variant="Linear" />
-                      : <Eye      size={15} color="currentColor" variant="Linear" />
+                      ? <EyeSlash size={15} color="rgba(255,255,255,0.5)" variant="Linear" />
+                      : <Eye      size={15} color="rgba(255,255,255,0.5)" variant="Linear" />
                     }
                   </button>
                 </div>
@@ -363,7 +363,7 @@ export default function ResetPasswordPage() {
 
             <div style={{ marginTop: '20px', textAlign: 'center' }}>
               <Link href="/login" className="rp-back-link">
-                <ArrowLeft size={14} color="currentColor" variant="Linear" />
+                <ArrowLeft size={14} color="rgba(255,255,255,0.5)" variant="Linear" />
                 Back to sign in
               </Link>
             </div>

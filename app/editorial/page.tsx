@@ -258,7 +258,7 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ fontSize: '10px', fontWeight: 700, padding: '3px 10px', borderRadius: '100px', background: `${article.color}15`, border: `1px solid ${article.color}33`, color: article.color, fontFamily: 'var(--font-inter)', letterSpacing: '0.07em', textTransform: 'uppercase' }}>{article.tag}</span>
           <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Clock size={10} variant="Linear" /> {article.readTime}
+            <Clock size={10} color="rgba(255,255,255,0.45)" variant="Linear" /> {article.readTime}
           </span>
         </div>
 
@@ -383,7 +383,7 @@ export default function EditorialPage() {
                 />
                 {search && (
                   <button onClick={() => setSearch('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', padding: '0', display: 'flex' }}>
-                    <CloseCircle size={12} />
+                    <CloseCircle size={12} color="rgba(255,255,255,0.5)" />
                   </button>
                 )}
               </div>

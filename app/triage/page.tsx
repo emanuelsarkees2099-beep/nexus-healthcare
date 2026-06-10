@@ -88,6 +88,7 @@ export default function TriagePage() {
   const [result, setResult] = useState<TriageResult | null>(null)
   const [showWork, setShowWork] = useState(false)
   const [isRealAI, setIsRealAI] = useState(false)
+  const [totalSteps, setTotalSteps] = useState(5)
   const inputRef    = useRef<HTMLTextAreaElement>(null)
   const timerIds    = useRef<ReturnType<typeof setTimeout>[]>([])
   const runTriageRef = useRef<((input: string) => void) | null>(null)
@@ -152,6 +153,8 @@ export default function TriagePage() {
       q.includes('shortness of breath') ||
       (q.includes('chest') && q.includes('sweat'))
     const isHeadache = !isEmergency && (q.includes('headache') || q.includes('head pain'))
+    // Set total steps for the progress counter
+    setTotalSteps(isEmergency ? 4 : 5)
 
     // Choose animated step sequence based on symptom urgency
     const STEPS: Step[] = isEmergency
@@ -444,7 +447,7 @@ export default function TriagePage() {
                 gap: '10px', transition: 'all 0.2s',
               }}
             >
-              <Hospital size={16} />
+              <Hospital size={16} color={query.trim() ? 'var(--accent)' : 'rgba(255,255,255,0.3)'} />
               Find care pathway
             </button>
 
@@ -499,6 +502,70 @@ export default function TriagePage() {
                   <RefreshCircle size={12} color="var(--accent)" style={{ animation: 'spin 1s linear infinite', marginLeft: 'auto' }} />
                 )}
               </div>
+
+              {/* ── Persistent step counter + progress bar ── */}
+              {phase === 'thinking' && (
+                <div style={{ marginBottom: '4px' }}>
+                  {/* Counter row */}
+                  <div style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    marginBottom: '8px',
+                  }}>
+                    <span style={{
+                      fontSize: '11px', color: 'var(--text-3)',
+                      fontFamily: 'var(--font-mono), monospace',
+                      fontWeight: 500, letterSpacing: '0.04em',
+                    }}>
+                      Step {Math.min(visibleSteps.length, totalSteps)} of {totalSteps}
+                    </span>
+                    <span style={{
+                      fontSize: '11px', color: 'var(--accent)',
+                      fontFamily: 'var(--font-inter)', fontWeight: 500,
+                    }}>
+                      {Math.round((visibleSteps.length / totalSteps) * 100)}%
+                    </span>
+                  </div>
+                  {/* Progress track */}
+                  <div style={{
+                    height: '3px', borderRadius: '100px',
+                    background: 'rgba(255,255,255,0.06)', overflow: 'hidden',
+                    position: 'relative',
+                  }}>
+                    <div style={{
+                      position: 'absolute', left: 0, top: 0, bottom: 0,
+                      borderRadius: '100px',
+                      width: `${(visibleSteps.length / totalSteps) * 100}%`,
+                      background: 'linear-gradient(90deg, var(--accent), var(--accent2))',
+                      transition: 'width 0.6s cubic-bezier(0.16,1,0.3,1)',
+                      boxShadow: '0 0 8px rgba(79,142,240,0.5)',
+                    }} />
+                  </div>
+                </div>
+              )}
+              {phase === 'done' && (
+                <div style={{ marginBottom: '4px' }}>
+                  {/* Completed bar */}
+                  <div style={{
+                    height: '3px', borderRadius: '100px',
+                    background: 'rgba(52,211,153,0.15)', overflow: 'hidden',
+                  }}>
+                    <div style={{
+                      height: '100%', width: '100%',
+                      background: 'linear-gradient(90deg, var(--success), rgba(52,211,153,0.7))',
+                      borderRadius: '100px',
+                      boxShadow: '0 0 8px rgba(52,211,153,0.4)',
+                    }} />
+                  </div>
+                  <div style={{
+                    marginTop: '6px', fontSize: '11px', color: 'var(--success)',
+                    fontFamily: 'var(--font-inter)', fontWeight: 500,
+                    display: 'flex', alignItems: 'center', gap: '5px',
+                  }}>
+                    <TickCircle size={10} color="var(--success)" variant="Bold" />
+                    Analysis complete
+                  </div>
+                </div>
+              )}
 
               {visibleSteps.map((step, i) => (
                 <div
@@ -648,7 +715,7 @@ export default function TriagePage() {
                     padding: '0',
                   }}
                 >
-                  <InfoCircle size={12} />
+                  <InfoCircle size={12} color="rgba(255,255,255,0.45)" />
                   {showWork ? 'Hide' : 'Show'} reasoning &amp; citations
                 </button>
 
@@ -683,7 +750,7 @@ export default function TriagePage() {
                               fontSize: '12px', color: 'rgba(255,255,255,0.4)',
                               display: 'flex', alignItems: 'center', gap: '6px',
                             }}>
-                              <ArrowRight size={10} /> {c}
+                              <ArrowRight size={10} color="rgba(255,255,255,0.5)" /> {c}
                             </div>
                           ))}
                         </div>

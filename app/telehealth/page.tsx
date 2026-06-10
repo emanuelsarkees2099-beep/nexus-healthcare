@@ -269,7 +269,7 @@ export default function TelehealthPage() {
               {/* #29 — Language filter row */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                 <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <Global size={11} /> Language:
+                  <Global size={11} color="rgba(255,255,255,0.45)" /> Language:
                 </span>
                 {LANG_FILTERS.map(l => (
                   <button
@@ -343,7 +343,7 @@ export default function TelehealthPage() {
                             style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '11px 20px', background: 'var(--accent)', color: '#07070F', borderRadius: '9px', textDecoration: 'none', fontWeight: 700, fontSize: '14px', transition: 'opacity 0.15s' }}
                             onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
                             onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
-                            <Calendar1 size={14} variant="Linear" /> Book a visit <ExportSquare size={12} />
+                            <Calendar1 size={14} color="#07070F" variant="Linear" /> Book a visit <ExportSquare size={12} color="#07070F" />
                           </a>
                         )}
                         <a href={p.url} target="_blank" rel="noopener noreferrer"
@@ -408,7 +408,7 @@ export default function TelehealthPage() {
                                 onClick={() => copyScript(`${script.id}-${si}`, step.script)}
                                 title="Copy to clipboard"
                                 style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid', background: copiedScript === `${script.id}-${si}` ? 'rgba(74,144,217,0.1)' : 'rgba(255,255,255,0.03)', color: copiedScript === `${script.id}-${si}` ? 'var(--accent)' : 'rgba(255,255,255,0.35)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', borderColor: copiedScript === `${script.id}-${si}` ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)', flexShrink: 0, fontFamily: 'inherit' }}>
-                                {copiedScript === `${script.id}-${si}` ? <TickCircle size={13} variant="Linear" /> : <Copy size={13} variant="Linear" />}
+                                {copiedScript === `${script.id}-${si}` ? <TickCircle size={13} color="var(--accent)" variant="Linear" /> : <Copy size={13} color="rgba(255,255,255,0.45)" variant="Linear" />}
                               </button>
                             </div>
                           </div>

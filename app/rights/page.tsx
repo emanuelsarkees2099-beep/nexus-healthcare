@@ -198,7 +198,7 @@ export default function RightsPage() {
             onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
             onMouseLeave={e => (e.currentTarget.style.transform = '')}
           >
-            <SearchNormal1 size={14} variant="Linear" /> Find legal aid
+            <SearchNormal1 size={14} color="#07070F" variant="Linear" /> Find legal aid
           </button>
           <button
             onClick={() => formRef.current && smoothScrollTo(formRef.current)}

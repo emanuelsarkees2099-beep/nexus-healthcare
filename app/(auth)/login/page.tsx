@@ -349,8 +349,8 @@ export default function LoginPage() {
                   aria-label={showPass ? 'Hide password' : 'Show password'}
                 >
                   {showPass
-                    ? <EyeSlash size={15} color="currentColor" variant="Linear" />
-                    : <Eye      size={15} color="currentColor" variant="Linear" />
+                    ? <EyeSlash size={15} color="rgba(255,255,255,0.5)" variant="Linear" />
+                    : <Eye      size={15} color="rgba(255,255,255,0.5)" variant="Linear" />
                   }
                 </button>
               </div>

@@ -92,7 +92,7 @@ export default function ExitIntent() {
           onMouseEnter={e => (e.currentTarget.style.color = 'var(--text)')}
           onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
         >
-          <CloseSquare size={16} color="currentColor" variant="Linear" />
+          <CloseSquare size={16} color="var(--text-2)" variant="Linear" />
         </button>
 
         {/* Icon */}

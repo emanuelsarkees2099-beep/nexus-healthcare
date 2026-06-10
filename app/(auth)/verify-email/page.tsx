@@ -149,7 +149,7 @@ export default function VerifyPage() {
               The link may have expired or already been used. Try requesting a new one.
             </p>
             <Link href="/login" className="ve-back-link">
-              <ArrowLeft size={14} color="currentColor" variant="Linear" />
+              <ArrowLeft size={14} color="rgba(255,255,255,0.5)" variant="Linear" />
               Back to sign in
             </Link>
           </div>
@@ -187,7 +187,7 @@ export default function VerifyPage() {
               </span>
             </p>
             <Link href="/login" className="ve-back-link">
-              <ArrowLeft size={14} color="currentColor" variant="Linear" />
+              <ArrowLeft size={14} color="rgba(255,255,255,0.5)" variant="Linear" />
               Back to sign in
             </Link>
           </div>

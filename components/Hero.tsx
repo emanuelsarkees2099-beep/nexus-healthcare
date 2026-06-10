@@ -5,7 +5,6 @@ import gsap from 'gsap'
 import { registerGSAP } from '@/lib/gsap-st'
 import { useI18n } from '@/components/I18nContext'
 import SearchBar from '@/components/hero/SearchBar'
-import TrendingCarousel from '@/components/hero/TrendingCarousel'
 import HeroMockup from '@/components/hero/HeroMockup'
 import { Star1 } from 'iconsax-react'
 
@@ -57,7 +56,6 @@ export default function Hero() {
   const h1Ref      = useRef<HTMLHeadingElement>(null)
   const subRef     = useRef<HTMLParagraphElement>(null)
   const searchRef  = useRef<HTMLDivElement>(null)
-  const chipsRef   = useRef<HTMLDivElement>(null)
   const proofRef   = useRef<HTMLDivElement>(null)
   const inputRef   = useRef<HTMLInputElement>(null)
   const ctaBtnRef  = useRef<HTMLButtonElement>(null)
@@ -109,7 +107,7 @@ export default function Hero() {
   /* ── GSAP: set initial states ── */
   useLayoutEffect(() => {
     gsap.set([eyebrowRef.current, h1Ref.current, subRef.current,
-              searchRef.current, chipsRef.current, proofRef.current], {
+              searchRef.current, proofRef.current], {
       opacity: 0, y: 24,
     })
     gsap.set(mockupRef.current, { opacity: 0, y: 48 })
@@ -125,9 +123,8 @@ export default function Hero() {
         .to(h1Ref.current,      { opacity: 1, y: 0, duration: 0.85, ease: 'power4.out' }, '-=0.45')
         .to(subRef.current,     { opacity: 1, y: 0, duration: 0.7,  ease: 'power3.out' }, '-=0.55')
         .to(searchRef.current,  { opacity: 1, y: 0, duration: 0.7,  ease: 'power3.out' }, '-=0.5')
-        .to(chipsRef.current,   { opacity: 1, y: 0, duration: 0.6,  ease: 'power3.out' }, '-=0.45')
-        .to(proofRef.current,   { opacity: 1, y: 0, duration: 0.6,  ease: 'power3.out' }, '-=0.4')
-        .to(mockupRef.current,  { opacity: 1, y: 0, duration: 1.1,  ease: 'power3.out' }, '-=0.3')
+        .to(proofRef.current,   { opacity: 1, y: 0, duration: 0.6,  ease: 'power3.out' }, '-=0.45')
+        .to(mockupRef.current,  { opacity: 1, y: 0, duration: 1.1,  ease: 'power3.out' }, '-=0.35')
 
       /* Scroll-out: smooth fade as hero naturally exits viewport — no pin, no empty space */
       const fadeTl = gsap.timeline({
@@ -316,7 +313,7 @@ export default function Hero() {
         {/* ── Search bar — the primary action ── */}
         <div
           ref={searchRef}
-          style={{ width: '100%', maxWidth: '640px', marginBottom: '16px' }}
+          style={{ width: '100%', maxWidth: '640px', marginBottom: '24px' }}
         >
           <SearchBar
             searchVal={searchVal}
@@ -330,97 +327,88 @@ export default function Hero() {
           />
         </div>
 
-        {/* ── Quick chips ── */}
-        <div
-          ref={chipsRef}
-          role="group"
-          aria-label="Quick search suggestions"
-          style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            gap: '7px', flexWrap: 'wrap', marginBottom: '20px',
-          }}
-        >
-          <span style={{
-            fontSize: '11px', color: 'var(--text-4)',
-            fontFamily: 'var(--font-inter)',
-          }} aria-hidden="true">
-            Try:
-          </span>
-          {['Primary care', 'Dental', 'Mental health', "Women's health", 'Pediatrics'].map(label => (
-            <button
-              key={label}
-              type="button"
-              onClick={() => setSearchVal(label)}
-              className="chip-pill"
-              style={{
-                fontSize: '12px', color: 'var(--text-3)',
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid var(--border-subtle)',
-                borderRadius: 'var(--r-sm)',
-                padding: '5px 12px', cursor: 'pointer',
-                fontFamily: 'var(--font-inter)', fontWeight: 300,
-                transition: 'all 0.22s var(--ease-out-expo)',
-              }}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        {/* ── Trending carousel ── */}
-        <TrendingCarousel onSelect={q => setSearchVal(q)} />
-
-        {/* ── Social proof strip ── */}
+        {/* ── Social proof — directly under search, no separator ── */}
         <div
           ref={proofRef}
           style={{
             display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'center',
-            paddingTop: '24px',
-            borderTop: '1px solid var(--border-subtle)',
-            marginTop: '16px',
             flexWrap: 'wrap',
           }}
         >
-          {/* Avatar stack */}
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            {(['#4F8EF0', '#4a7c84', '#82B4F8', '#5a9099'] as const).map((bg, i) => (
-              <div key={i} aria-hidden="true" style={{
-                width: '28px', height: '28px', borderRadius: '50%',
-                background: `linear-gradient(135deg, ${bg}, ${bg}99)`,
-                border: '2px solid var(--bg)',
-                marginLeft: i === 0 ? 0 : '-9px',
-                zIndex: 4 - i, position: 'relative',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '10px', fontWeight: 600, color: '#fff',
-                fontFamily: 'var(--font-inter)',
+          {/* Social proof pill */}
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '12px',
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px solid var(--border-subtle)',
+            borderRadius: 'var(--r-lg)',
+            padding: '8px 16px 8px 10px',
+          }}>
+            {/* Avatar stack */}
+            <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+              {(['#4F8EF0', '#4a7c84', '#82B4F8', '#5a9099'] as const).map((bg, i) => (
+                <div key={i} aria-hidden="true" style={{
+                  width: '26px', height: '26px', borderRadius: '50%',
+                  background: `linear-gradient(135deg, ${bg}, ${bg}99)`,
+                  border: '2px solid var(--bg2)',
+                  marginLeft: i === 0 ? 0 : '-8px',
+                  zIndex: 4 - i, position: 'relative',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '9px', fontWeight: 700, color: '#fff',
+                  fontFamily: 'var(--font-inter)',
+                }}>
+                  {['J', 'M', 'A', 'S'][i]}
+                </div>
+              ))}
+            </div>
+
+            {/* Text */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
+              <div style={{
+                fontSize: '12.5px', fontWeight: 600,
+                color: 'var(--text)', fontFamily: 'var(--font-inter)',
+                lineHeight: 1.2,
               }}>
-                {['J', 'M', 'A', 'S'][i]}
+                284,000+ patients helped
               </div>
-            ))}
-          </div>
-          <div>
-            <div style={{
-              fontSize: '13px', fontWeight: 500,
-              color: 'var(--text)', fontFamily: 'var(--font-display)',
-            }}>
-              284,000+ patients helped
-            </div>
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px',
-              justifyContent: 'center',
-            }}>
-              <span style={{ display: 'flex', gap: '2px' }} aria-label="4.9 out of 5 stars">
-                {[1,2,3,4,5].map(s => (
-                  <Star1 key={s} size={10} color="var(--warning)" variant="Bold" aria-hidden="true" />
-                ))}
-              </span>
-              <span style={{
-                fontSize: '11px', color: 'var(--text-4)',
-                fontFamily: 'var(--font-inter)',
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: '5px',
               }}>
-                4.9 · 12K reviews · Free always
-              </span>
+                <span style={{ display: 'flex', gap: '1px' }} aria-label="4.9 out of 5 stars">
+                  {[1,2,3,4,5].map(s => (
+                    <Star1 key={s} size={9} color="var(--warning)" variant="Bold" aria-hidden="true" />
+                  ))}
+                </span>
+                <span style={{
+                  fontSize: '10.5px', color: 'var(--text-3)',
+                  fontFamily: 'var(--font-inter)',
+                }}>
+                  4.9 · 12K reviews
+                </span>
+              </div>
             </div>
+          </div>
+
+          {/* Separator dot */}
+          <span aria-hidden="true" style={{ width: '3px', height: '3px', borderRadius: '50%', background: 'var(--border)', flexShrink: 0 }} />
+
+          {/* Free pill */}
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '6px',
+            background: 'rgba(52,211,153,0.08)',
+            border: '1px solid rgba(52,211,153,0.20)',
+            borderRadius: 'var(--r-lg)',
+            padding: '6px 12px',
+          }}>
+            <span style={{
+              width: '6px', height: '6px', borderRadius: '50%',
+              background: 'var(--success)', flexShrink: 0,
+            }} aria-hidden="true" />
+            <span style={{
+              fontSize: '11px', color: 'var(--success)',
+              fontFamily: 'var(--font-inter)', fontWeight: 500,
+            }}>
+              Always free
+            </span>
           </div>
         </div>
       </div>
@@ -442,27 +430,14 @@ export default function Hero() {
           #hero p  { font-size: 0.9rem !important; }
         }
 
-        /* Chip hover */
-        .chip-pill:hover {
-          color: var(--accent) !important;
-          border-color: rgba(79,142,240,0.28) !important;
-          background: var(--accent-dim) !important;
-        }
-
         /* Search submit hover */
         .search-submit:hover {
           box-shadow: var(--shadow-glow) !important;
+          transform: scale(1.04) !important;
         }
 
         /* Geo button hover */
         .geo-btn:hover { opacity: 1 !important; }
-
-        /* Trending pill hover */
-        .trending-pill:hover {
-          color: var(--text-2) !important;
-          border-color: var(--border) !important;
-          background: rgba(255,255,255,0.06) !important;
-        }
 
         /* Word cycle animation */
         @keyframes word-in {

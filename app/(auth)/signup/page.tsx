@@ -403,8 +403,8 @@ export default function SignupPage() {
                   tabIndex={-1}
                 >
                   {showPass
-                    ? <EyeSlash size={16} color="currentColor" variant="Linear" />
-                    : <Eye      size={16} color="currentColor" variant="Linear" />
+                    ? <EyeSlash size={16} color="rgba(255,255,255,0.5)" variant="Linear" />
+                    : <Eye      size={16} color="rgba(255,255,255,0.5)" variant="Linear" />
                   }
                 </button>
               </div>
@@ -464,8 +464,8 @@ export default function SignupPage() {
                   tabIndex={-1}
                 >
                   {showConfirm
-                    ? <EyeSlash size={16} color="currentColor" variant="Linear" />
-                    : <Eye      size={16} color="currentColor" variant="Linear" />
+                    ? <EyeSlash size={16} color="rgba(255,255,255,0.5)" variant="Linear" />
+                    : <Eye      size={16} color="rgba(255,255,255,0.5)" variant="Linear" />
                   }
                 </button>
               </div>

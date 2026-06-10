@@ -257,7 +257,7 @@ export default function MobileDrawer({ open, onClose, links, user, onLogout, onA
               transition: 'background 0.2s',
             }}
           >
-            <CloseCircle size={14} variant="Linear" />
+            <CloseCircle size={14} variant="Linear" color="rgba(255,255,255,0.5)" />
           </button>
         </div>
 
@@ -299,7 +299,7 @@ export default function MobileDrawer({ open, onClose, links, user, onLogout, onA
                 color: 'rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center',
               }}
             >
-              <CloseCircle size={13} variant="Linear" />
+              <CloseCircle size={13} variant="Linear" color="rgba(255,255,255,0.35)" />
             </button>
           )}
         </div>

@@ -145,7 +145,7 @@ function ReviewModal({
             aria-label="Close review"
             style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', padding: '2px' }}
           >
-            <CloseCircle size={18} variant="Linear" />
+            <CloseCircle size={18} color="rgba(255,255,255,0.5)" variant="Linear" />
           </button>
         </div>
 
@@ -362,7 +362,7 @@ export default function ClinicCard({
               {clinic.name}
             </Link>
             <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, color: 'var(--text-3)' }}>
-              <Location size={11} color="var(--text-3)" variant="Linear" />
+              <Location size={11} color="rgba(255,255,255,0.45)" variant="Linear" />
               {[clinic.address, clinic.city, clinic.state].filter(Boolean).join(', ') || 'Address unavailable'}
             </div>
           </div>
@@ -385,10 +385,10 @@ export default function ClinicCard({
               }}
             >
               {saving
-                ? <RefreshCircle size={14} variant="Linear" style={{ animation: 'spin-slow 0.8s linear infinite' }} />
+                ? <RefreshCircle size={14} color={isSaved ? 'var(--accent)' : 'rgba(255,255,255,0.45)'} variant="Linear" style={{ animation: 'spin-slow 0.8s linear infinite' }} />
                 : isSaved
-                  ? <Bookmark2 size={14} variant="Bold" style={{ transition: 'transform 0.3s cubic-bezier(0.34,1.56,0.64,1)', transform: bookmarkAnimating ? 'scale(1.4)' : 'scale(1)' }} />
-                  : <Bookmark2 size={14} variant="Linear" />
+                  ? <Bookmark2 size={14} color="var(--accent)" variant="Bold" style={{ transition: 'transform 0.3s cubic-bezier(0.34,1.56,0.64,1)', transform: bookmarkAnimating ? 'scale(1.4)' : 'scale(1)' }} />
+                  : <Bookmark2 size={14} color="rgba(255,255,255,0.45)" variant="Linear" />
               }
             </button>
 
@@ -405,7 +405,7 @@ export default function ClinicCard({
                 display: 'flex', alignItems: 'center', transition: 'all 0.18s',
               }}
             >
-              {shareCopied ? <TickCircle size={14} variant="Linear" /> : <ExportSquare size={14} variant="Linear" />}
+              {shareCopied ? <TickCircle size={14} color="var(--green-pulse,#4ade80)" variant="Linear" /> : <ExportSquare size={14} color="rgba(255,255,255,0.45)" variant="Linear" />}
             </button>
 
             {clinic.phone && (
@@ -418,7 +418,7 @@ export default function ClinicCard({
                 onMouseDown={e => (e.currentTarget.style.transform = 'scale(0.96)')}
                 onMouseUp={e => (e.currentTarget.style.transform = 'scale(1)')}
               >
-                <Call size={12} variant="Linear" /> {t('search.call')}
+                <Call size={12} color="var(--accent)" variant="Linear" /> {t('search.call')}
               </a>
             )}
 
@@ -464,7 +464,7 @@ export default function ClinicCard({
           )}
           {openStatus === false && (
             <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>
-              <Clock size={11} variant="Linear" /> {t('search.closed')}
+              <Clock size={11} color="rgba(255,255,255,0.45)" variant="Linear" /> {t('search.closed')}
             </span>
           )}
           {clinic.accepting && (
@@ -483,7 +483,7 @@ export default function ClinicCard({
                 animation: parseFloat(String(clinic.distance)) < 1 ? 'distance-nearby-pulse 2s ease-in-out infinite' : 'none',
               }}
             >
-              <Location size={11} variant="Linear" /> {clinic.distance} mi
+              <Location size={11} color={parseFloat(String(clinic.distance)) < 1 ? 'var(--accent)' : 'rgba(255,255,255,0.45)'} variant="Linear" /> {clinic.distance} mi
             </span>
           )}
           {clinic.phone && (
@@ -590,7 +590,7 @@ export default function ClinicCard({
             onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
           >
-            {t('search.viewDetails')} <ArrowRight size={10} variant="Linear" />
+            {t('search.viewDetails')} <ArrowRight size={10} color="rgba(255,255,255,0.45)" variant="Linear" />
           </Link>
           <Link
             href="/verify"
@@ -615,7 +615,7 @@ export default function ClinicCard({
               onMouseEnter={e => (e.currentTarget.style.color = '#fbbf24')}
               onMouseLeave={e => (e.currentTarget.style.color = 'rgba(251,191,36,0.65)')}
             >
-              <Star1 size={10} variant="Bold" /> Rate this clinic
+              <Star1 size={10} color="rgba(251,191,36,0.8)" variant="Bold" /> Rate this clinic
             </button>
           ) : (
             <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.2)', fontFamily: 'var(--font-inter)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>

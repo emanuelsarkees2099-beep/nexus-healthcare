@@ -242,7 +242,7 @@ export default function MegaMenu({ open, onClose }: MegaMenuProps) {
             }}
             className="mega-quick-link"
           >
-            <q.icon size={11} variant="Linear" />
+            <q.icon size={11} variant="Linear" color="rgba(255,255,255,0.5)" />
             {q.label}
           </Link>
         ))}

@@ -100,7 +100,7 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: string)
 
   const dismiss = useCallback(() => {
     setExiting(true)
-    setTimeout(() => onDismiss(toast.id), 300)
+    setTimeout(() => onDismiss(toast.id), 260)
   }, [toast.id, onDismiss])
 
   useEffect(() => {
@@ -150,10 +150,10 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: string)
         boxShadow: `0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03), 0 0 20px ${vs.glow}`,
         backdropFilter: 'blur(20px)',
         overflow: 'hidden',
-        transform: exiting ? 'translateX(110%)' : 'translateX(0)',
+        transform: exiting ? 'translateX(120%) scale(0.94)' : 'translateX(0) scale(1)',
         opacity: exiting ? 0 : 1,
-        transition: 'transform 0.28s cubic-bezier(0.4,0,1,1), opacity 0.28s ease',
-        animation: 'toast-enter 0.32s cubic-bezier(0.16,1,0.3,1) both',
+        transition: 'transform 0.24s cubic-bezier(0.55,0,1,0.7), opacity 0.22s ease',
+        animation: 'toast-enter 0.48s cubic-bezier(0.34,1.56,0.64,1) both',
       }}
     >
       {/* Icon */}
@@ -221,17 +221,19 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: string)
         onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
         onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.25)')}
       >
-        <CloseCircle size={13} variant="Linear" />
+        <CloseCircle size={13} variant="Linear" color="rgba(255,255,255,0.25)" />
       </button>
 
-      {/* Progress bar */}
+      {/* Progress bar — gradient glow matching variant */}
       <div style={{
         position: 'absolute', bottom: 0, left: 0,
         height: 2,
         width: `${progress}%`,
-        background: vs.border,
+        background: `linear-gradient(90deg, ${vs.border}, ${vs.iconColor})`,
+        boxShadow: `0 0 6px ${vs.glow}`,
         transition: 'width 0.05s linear',
-        borderRadius: '0 0 0 14px',
+        borderRadius: '0 1px 0 14px',
+        opacity: 0.9,
       }} aria-hidden="true" />
     </div>
   )
@@ -257,8 +259,15 @@ export function ToastContainer() {
     <>
       <style>{`
         @keyframes toast-enter {
-          from { opacity: 0; transform: translateX(110%); }
-          to   { opacity: 1; transform: translateX(0); }
+          0%   { opacity: 0; transform: translateX(100%) translateY(8px) scale(0.90); }
+          60%  { opacity: 1; }
+          100% { opacity: 1; transform: translateX(0)    translateY(0)   scale(1);    }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          @keyframes toast-enter {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+          }
         }
       `}</style>
       <div

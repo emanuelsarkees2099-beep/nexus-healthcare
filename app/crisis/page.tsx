@@ -265,7 +265,7 @@ export default function CrisisPage() {
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.25)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.8)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.5)' }}
             >
-              <Heart size={14} /> Start guided breathing exercise
+              <Heart size={14} color="rgba(255,255,255,0.5)" /> Start guided breathing exercise
             </button>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
@@ -453,8 +453,8 @@ export default function CrisisPage() {
                     }}>
                       <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5' }}>{er.name}</div>
                       <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Routing size={10} /> {er.dist}</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={10} /> {er.wait} wait</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Routing size={10} color="rgba(255,255,255,0.45)" /> {er.dist}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={10} color="rgba(255,255,255,0.45)" /> {er.wait} wait</span>
                         <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><PulsingDot color="#60a5fa" /> Open now</span>
                       </div>
                     </div>
@@ -524,8 +524,8 @@ export default function CrisisPage() {
                     }}>
                       <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5' }}>{mh.name}</div>
                       <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Routing size={10} /> {mh.dist}</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={10} /> {mh.hours}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Routing size={10} color="rgba(255,255,255,0.45)" /> {mh.dist}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={10} color="rgba(255,255,255,0.45)" /> {mh.hours}</span>
                       </div>
                     </div>
                   ))

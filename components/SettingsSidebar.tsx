@@ -70,12 +70,12 @@ function applyA11y(s: A11ySettings) {
 type Section = 'appearance' | 'language' | 'accessibility' | 'notifications' | 'privacy' | 'shortcuts'
 
 const NAV_ITEMS: { id: Section; label: string; icon: React.ReactNode }[] = [
-  { id: 'appearance',    label: 'Appearance',    icon: <Sun1      size={14} color="currentColor" variant="Linear" /> },
-  { id: 'language',      label: 'Language',      icon: <Global    size={14} color="currentColor" variant="Linear" /> },
-  { id: 'accessibility', label: 'Accessibility', icon: <Profile   size={14} color="currentColor" variant="Linear" /> },
-  { id: 'notifications', label: 'Notifications', icon: <Notification size={14} color="currentColor" variant="Linear" /> },
-  { id: 'shortcuts',     label: 'Shortcuts',     icon: <Keyboard  size={14} color="currentColor" variant="Linear" /> },
-  { id: 'privacy',       label: 'Privacy & Data',icon: <ShieldTick size={14} color="currentColor" variant="Linear" /> },
+  { id: 'appearance',    label: 'Appearance',    icon: <Sun1      size={14} color="rgba(255,255,255,0.55)" variant="Linear" /> },
+  { id: 'language',      label: 'Language',      icon: <Global    size={14} color="rgba(255,255,255,0.55)" variant="Linear" /> },
+  { id: 'accessibility', label: 'Accessibility', icon: <Profile   size={14} color="rgba(255,255,255,0.55)" variant="Linear" /> },
+  { id: 'notifications', label: 'Notifications', icon: <Notification size={14} color="rgba(255,255,255,0.55)" variant="Linear" /> },
+  { id: 'shortcuts',     label: 'Shortcuts',     icon: <Keyboard  size={14} color="rgba(255,255,255,0.55)" variant="Linear" /> },
+  { id: 'privacy',       label: 'Privacy & Data',icon: <ShieldTick size={14} color="rgba(255,255,255,0.55)" variant="Linear" /> },
 ]
 
 /* ── Reusable sub-components ── */
@@ -298,7 +298,7 @@ export default function SettingsSidebar() {
             onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.09)'; e.currentTarget.style.color = 'rgba(255,255,255,0.75)' }}
             onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'rgba(255,255,255,0.4)' }}
           >
-            <CloseCircle size={14} color="currentColor" variant="Linear" />
+            <CloseCircle size={14} color="rgba(255,255,255,0.4)" variant="Linear" />
           </button>
         </div>
 
@@ -418,7 +418,7 @@ export default function SettingsSidebar() {
                 onMouseEnter={e => { e.currentTarget.style.background = 'rgba(248,113,113,0.09)'; e.currentTarget.style.color = 'rgba(248,113,113,0.85)' }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'rgba(248,113,113,0.04)'; e.currentTarget.style.color = 'rgba(248,113,113,0.6)' }}
               >
-                <Trash size={13} color="currentColor" variant="Linear" />
+                <Trash size={13} color="rgba(248,113,113,0.6)" variant="Linear" />
                 Reset all preferences
               </button>
             </>
@@ -644,7 +644,7 @@ export default function SettingsSidebar() {
                       onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}
                     >
                       {link.label}
-                      <ExportSquare size={12} color="currentColor" variant="Linear" style={{ opacity: 0.4 }} />
+                      <ExportSquare size={12} color="rgba(255,255,255,0.55)" variant="Linear" style={{ opacity: 0.4 }} />
                     </Link>
                   ))}
                 </div>

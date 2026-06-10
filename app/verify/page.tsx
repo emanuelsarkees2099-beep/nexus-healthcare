@@ -273,7 +273,7 @@ export default function VerifyPage() {
             background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
             display: 'flex', gap: '12px', alignItems: 'flex-start',
           }}>
-            <AddCircle size={14} color="rgba(255,255,255,0.3)" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <AddCircle size={14} color="rgba(255,255,255,0.45)" style={{ flexShrink: 0, marginTop: '2px' }} />
             <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.7 }}>
               <strong style={{ color: 'rgba(255,255,255,0.7)' }}>Clinic not in our database?</strong>{' '}
               <Link href="/add-clinic" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
@@ -394,7 +394,7 @@ export default function VerifyPage() {
               transition: 'all 0.2s',
             }}
           >
-            <TickCircle size={18} />
+            <TickCircle size={18} color={Object.keys(answers).length >= 3 ? '#60a5fa' : 'rgba(255,255,255,0.45)'} />
             Submit verification (+{totalPoints} karma)
           </button>
 

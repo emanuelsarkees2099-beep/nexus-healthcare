@@ -176,7 +176,7 @@ function SavingsReveal({ programs }: { programs: Array<{ name: string; color: st
     <div ref={ref} style={{ borderRadius: '24px', padding: '3px', background: 'linear-gradient(135deg, rgba(74,144,217,0.3), rgba(251,191,36,0.15), transparent)', marginBottom: '40px', opacity: revealed ? 1 : 0, transform: revealed ? 'none' : 'translateY(24px)', transition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)' }}>
       <div style={{ borderRadius: '22px', padding: '36px 32px', background: 'rgba(8,10,20,0.98)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.04)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-          <TrendUp size={14} variant="Linear" style={{ color: 'var(--accent)' }} />
+          <TrendUp size={14} color="var(--accent)" variant="Linear" />
           <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)' }}>Based on your answers…</span>
         </div>
         <h3 style={{ fontSize: 'clamp(16px, 2.5vw, 20px)', fontWeight: 700, marginBottom: '28px', color: 'rgba(255,255,255,0.75)', lineHeight: 1.3 }}>You likely qualify for:</h3>
@@ -304,6 +304,110 @@ function getProfilePreFill(): { answers: string[]; firstSelected: string; fromPr
       ...({ _q3Hint: q3 } as Record<string, string>),
     } as { answers: string[]; firstSelected: string; fromProfile: boolean }
   } catch { return null }
+}
+
+/* ─── Animated eligibility checklist (shown during the 'running' state) ── */
+const CHECKLIST_ITEMS = [
+  { label: 'Checking Medicaid eligibility…', delay: 0,    doneAt: 350  },
+  { label: 'Scanning ACA subsidy programs…', delay: 280,  doneAt: 620  },
+  { label: 'Verifying HRSA free clinic access…', delay: 540, doneAt: 860 },
+  { label: 'Matching 340B pharmacy discounts…', delay: 780, doneAt: 1040 },
+  { label: 'Checking NeedyMeds PAP options…', delay: 980, doneAt: 1180 },
+  { label: 'Scanning state-specific programs…', delay: 1180, doneAt: 1380 },
+  { label: 'Applying income thresholds…', delay: 1350, doneAt: 1550 },
+  { label: 'Ranking by match confidence…', delay: 1520, doneAt: 1900 },
+]
+
+function EligibilityChecklist() {
+  const [visible, setVisible] = useState<boolean[]>(new Array(CHECKLIST_ITEMS.length).fill(false))
+  const [done, setDone]       = useState<boolean[]>(new Array(CHECKLIST_ITEMS.length).fill(false))
+
+  useEffect(() => {
+    const timers: ReturnType<typeof setTimeout>[] = []
+    CHECKLIST_ITEMS.forEach((item, i) => {
+      timers.push(setTimeout(() => setVisible(v => { const n=[...v]; n[i]=true; return n }), item.delay))
+      timers.push(setTimeout(() => setDone(d => { const n=[...d]; n[i]=true; return n }), item.doneAt))
+    })
+    return () => timers.forEach(clearTimeout)
+  }, [])
+
+  return (
+    <div style={{ padding: '32px 0 24px', animation: 'fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
+        <div style={{
+          width: '36px', height: '36px', borderRadius: '50%',
+          border: '2px solid rgba(96,165,250,0.15)', borderTopColor: '#60a5fa',
+          animation: 'spin 0.9s linear infinite', flexShrink: 0,
+        }} />
+        <div>
+          <div style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text)' }}>
+            Checking eligibility…
+          </div>
+          <div style={{ fontSize: '12px', color: 'var(--text-3)', marginTop: '2px' }}>
+            Scanning 40+ federal and state programs
+          </div>
+        </div>
+      </div>
+
+      {/* Animated checklist */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        {CHECKLIST_ITEMS.map((item, i) => (
+          <div
+            key={i}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '12px',
+              opacity: visible[i] ? 1 : 0,
+              transform: visible[i] ? 'translateX(0)' : 'translateX(-16px)',
+              padding: '10px 14px', borderRadius: '10px',
+              background: done[i] ? 'rgba(52,211,153,0.04)' : 'rgba(255,255,255,0.02)',
+              border: `1px solid ${done[i] ? 'rgba(52,211,153,0.14)' : 'rgba(255,255,255,0.06)'}`,
+              transition: 'opacity 0.35s cubic-bezier(0.16,1,0.3,1), transform 0.35s cubic-bezier(0.16,1,0.3,1), border-color 0.3s ease, background 0.3s ease',
+            }}
+          >
+            {/* Status icon */}
+            <div style={{
+              width: '18px', height: '18px', borderRadius: '50%', flexShrink: 0,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: done[i] ? 'rgba(52,211,153,0.12)' : 'rgba(255,255,255,0.05)',
+              border: `1.5px solid ${done[i] ? 'rgba(52,211,153,0.35)' : 'rgba(255,255,255,0.12)'}`,
+              transition: 'all 0.25s ease',
+            }}>
+              {done[i] ? (
+                <TickCircle size={11} color="var(--success)" variant="Bold" />
+              ) : visible[i] ? (
+                <div style={{
+                  width: '6px', height: '6px', borderRadius: '50%',
+                  background: 'var(--accent)',
+                  animation: 'pulse-dot 1s ease-in-out infinite',
+                }} />
+              ) : null}
+            </div>
+            {/* Label */}
+            <span style={{
+              fontSize: '13px',
+              color: done[i] ? 'var(--success)' : visible[i] ? 'var(--text-2)' : 'transparent',
+              fontFamily: 'var(--font-inter)',
+              transition: 'color 0.3s ease',
+            }}>
+              {item.label}
+            </span>
+            {/* Done indicator */}
+            {done[i] && (
+              <span style={{
+                marginLeft: 'auto', fontSize: '10px',
+                color: 'var(--success)', fontWeight: 500,
+                fontFamily: 'var(--font-mono), monospace',
+                opacity: 0.7,
+              }}>
+                ✓
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 /* ─── page ────────────────────────────────────────── */
@@ -458,7 +562,7 @@ export default function ProgramsPage() {
                       }}
                     >
                       {opt}
-                      {selected === opt && <TickCircle size={16} variant="Linear" style={{ color: '#60a5fa', flexShrink: 0 }} />}
+                      {selected === opt && <TickCircle size={16} color="#60a5fa" variant="Linear" style={{ flexShrink: 0 }} />}
                     </button>
                   ))}
                 </div>
@@ -466,7 +570,7 @@ export default function ProgramsPage() {
                 <div style={{ display: 'flex', gap: '10px' }}>
                   {qIdx > 0 && (
                     <button onClick={back} style={{ flex: '0 0 auto', padding: '14px 20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'transparent', color: 'rgba(255,255,255,0.45)', fontSize: '14px', cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <ArrowLeft2 size={14} /> Back
+                      <ArrowLeft2 size={14} color="rgba(255,255,255,0.45)" /> Back
                     </button>
                   )}
                   <button onClick={next} disabled={!selected}
@@ -479,16 +583,12 @@ export default function ProgramsPage() {
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                     }}
                   >
-                    {qIdx < QUIZ.length - 1 ? 'Next' : 'Find my programs'} <ArrowRight2 size={15} />
+                    {qIdx < QUIZ.length - 1 ? 'Next' : 'Find my programs'} <ArrowRight2 size={15} color={selected ? '#0a0a0a' : 'rgba(255,255,255,0.45)'} />
                   </button>
                 </div>
               </div>
             ) : (
-              <div style={{ textAlign: 'center', padding: '60px 0', animation: 'fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both' }}>
-                <div style={{ width: '52px', height: '52px', borderRadius: '50%', border: '2px solid rgba(96,165,250,0.15)', borderTopColor: '#60a5fa', margin: '0 auto 24px', animation: 'spin 0.9s linear infinite' }} />
-                <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.55)' }}>Checking 40+ federal and state programs…</p>
-                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.25)', marginTop: '8px' }}>Medicaid · ACA · 340B · NeedyMeds · State programs</p>
-              </div>
+              <EligibilityChecklist />
             )}
           </div>
         </section>
@@ -505,7 +605,7 @@ export default function ProgramsPage() {
                   <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)', marginTop: '4px' }}>Ranked by match confidence · Updated daily</p>
                 </div>
                 <button onClick={restart} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 16px', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: 'rgba(255,255,255,0.5)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit' }}>
-                  <RefreshCircle size={12} variant="Linear" /> Re-check
+                  <RefreshCircle size={12} color="rgba(255,255,255,0.5)" variant="Linear" /> Re-check
                 </button>
               </div>
             </RevealBlock>
@@ -577,7 +677,7 @@ export default function ProgramsPage() {
             {/* enrollment alerts */}
             <RevealBlock delay={80}>
               <div>
-                <h3 style={{ fontWeight: 600, fontSize: '16px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><InfoCircle size={15} variant="Linear" style={{ color: 'var(--accent)' }} /> Enrollment windows</h3>
+                <h3 style={{ fontWeight: 600, fontSize: '16px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><InfoCircle size={15} color="var(--accent)" variant="Linear" /> Enrollment windows</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {ALERTS.map(a => (
                     <div key={a.title} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', flexWrap: 'wrap', gap: '8px' }}>

@@ -151,7 +151,7 @@ export default function StoriesPage() {
           onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(74,144,217,0.45)' }}
           onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(74,144,217,0.3)' }}
         >
-          <Heart size={14} variant="Linear" /> Share your story
+          <Heart size={14} color="#07070F" variant="Linear" /> Share your story
         </button>
       </section>
 
@@ -245,9 +245,9 @@ export default function StoriesPage() {
                         onClick={() => setUpvotes(prev => ({ ...prev, [i]: !prev[i] }))}
                         style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '6px 12px', borderRadius: '100px', background: upvotes[i] ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.04)', border: `1px solid ${upvotes[i] ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)'}`, color: upvotes[i] ? 'var(--accent)' : 'rgba(255,255,255,0.4)', fontSize: '12px', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}
                       >
-                        <ArrowUp2 size={12} variant="Linear" /> {p.upvotes + (upvotes[i] ? 1 : 0)}
+                        <ArrowUp2 size={12} color={upvotes[i] ? 'var(--accent)' : 'rgba(255,255,255,0.45)'} variant="Linear" /> {p.upvotes + (upvotes[i] ? 1 : 0)}
                       </button>
-                      <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', gap: '4px' }}><MessageCircle size={11} variant="Linear" /> {p.replies}</span>
+                      <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', gap: '4px' }}><MessageCircle size={11} color="rgba(255,255,255,0.45)" variant="Linear" /> {p.replies}</span>
                     </div>
                   </div>
                 </div>

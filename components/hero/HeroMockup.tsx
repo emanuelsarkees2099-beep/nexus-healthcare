@@ -4,11 +4,11 @@ import gsap from 'gsap'
 import { Home2, SearchNormal1, People, Setting2, Category2, Lock1 } from 'iconsax-react'
 
 const SIDEBAR_ITEMS = [
-  { label: 'Home',         active: true,  icon: <Home2         size={13} color="currentColor" variant="Linear" /> },
-  { label: 'Clinic Search',active: false, icon: <SearchNormal1 size={13} color="currentColor" variant="Linear" /> },
-  { label: 'Care Team',    active: false, icon: <People        size={13} color="currentColor" variant="Linear" /> },
-  { label: 'Settings',     active: false, icon: <Setting2      size={13} color="currentColor" variant="Linear" /> },
-  { label: 'Programs',     active: false, icon: <Category2     size={13} color="currentColor" variant="Linear" /> },
+  { label: 'Home',         active: true,  icon: <Home2         size={13} color="var(--accent)"            variant="Linear" /> },
+  { label: 'Clinic Search',active: false, icon: <SearchNormal1 size={13} color="rgba(255,255,255,0.45)"   variant="Linear" /> },
+  { label: 'Care Team',    active: false, icon: <People        size={13} color="rgba(255,255,255,0.45)"   variant="Linear" /> },
+  { label: 'Settings',     active: false, icon: <Setting2      size={13} color="rgba(255,255,255,0.45)"   variant="Linear" /> },
+  { label: 'Programs',     active: false, icon: <Category2     size={13} color="rgba(255,255,255,0.45)"   variant="Linear" /> },
 ]
 
 const RESULTS = [
@@ -99,7 +99,7 @@ export default function HeroMockup({ mockupRef }: HeroMockupProps) {
             margin: '0 12px', fontSize: '11px', color: 'var(--text-3)', fontWeight: 400,
             display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-inter)',
           }}>
-            <Lock1 size={10} color="currentColor" variant="Linear" aria-hidden="true" />
+            <Lock1 size={10} color="rgba(255,255,255,0.45)" variant="Linear" aria-hidden="true" />
             nexus.health/dashboard
           </div>
           <div style={{ fontSize: '10px', color: 'var(--text-3)', fontWeight: 400, fontFamily: 'var(--font-inter)' }}>v1.0</div>

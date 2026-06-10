@@ -147,7 +147,7 @@ export default function MedicationsPage() {
         <DotGrid opacity={0.3} />
         <div style={{ position: 'relative', zIndex: 1, maxWidth: 720, margin: '0 auto' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '5px 14px', borderRadius: 100, background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)', fontSize: 11, fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 24 }}>
-            <Health size={12} />
+            <Health size={12} color="var(--accent)" />
             Medication Access
           </div>
           <h1 style={{ fontSize: 'clamp(32px,6vw,56px)', fontWeight: 800, fontFamily: 'var(--font-display)', letterSpacing: '-0.03em', color: 'var(--text)', marginBottom: 16, lineHeight: 1.1 }}>
@@ -206,7 +206,7 @@ export default function MedicationsPage() {
                   </span>
                   <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>{p.name}</span>
                 </div>
-                <ExportSquare size={14} style={{ color: 'rgba(255,255,255,0.3)', flexShrink: 0 }} />
+                <ExportSquare size={14} color="rgba(255,255,255,0.45)" style={{ flexShrink: 0 }} />
               </div>
               <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)', lineHeight: 1.6, marginBottom: 14, fontWeight: 300 }}>{p.desc}</p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
@@ -246,7 +246,7 @@ export default function MedicationsPage() {
           {/* Search + category filter row */}
           <div style={{ display: 'flex', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
             <div style={{ position: 'relative', flex: '1 1 260px' }}>
-              <SearchNormal1 size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.3)' }} />
+              <SearchNormal1 size={14} color="rgba(255,255,255,0.45)" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }} />
               <label htmlFor="pap-search" className="sr-only">Search drug name or brand</label>
               <input
                 id="pap-search"
@@ -317,7 +317,7 @@ export default function MedicationsPage() {
 
                 {/* Manufacturer row */}
                 <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <TickCircle size={11} style={{ flexShrink: 0, color: 'rgba(255,255,255,0.25)' }} />
+                  <TickCircle size={11} color="rgba(255,255,255,0.45)" style={{ flexShrink: 0 }} />
                   {drug.manufacturer}
                 </div>
 
@@ -336,7 +336,7 @@ export default function MedicationsPage() {
                     onMouseEnter={e => (e.currentTarget.style.background = 'rgba(96,165,250,0.18)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'rgba(96,165,250,0.1)')}
                   >
-                    <Flash size={12} />
+                    <Flash size={12} color="#60a5fa" />
                     PAP / Free
                   </a>
                   <a
@@ -347,7 +347,7 @@ export default function MedicationsPage() {
                     onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
                   >
-                    <DollarCircle size={12} />
+                    <DollarCircle size={12} color="rgba(255,255,255,0.5)" />
                     Compare prices
                   </a>
                 </div>
@@ -364,9 +364,9 @@ export default function MedicationsPage() {
           {/* Link to full NeedyMeds search */}
           <div style={{ marginTop: 16, textAlign: 'center' }}>
             <a href="https://www.needymeds.org/pap" target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: 'var(--accent)', textDecoration: 'none', fontFamily: 'var(--font-inter)', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-              <InfoCircle size={13} />
+              <InfoCircle size={13} color="var(--accent)" />
               Search full NeedyMeds database for any drug not listed here
-              <ExportSquare size={12} />
+              <ExportSquare size={12} color="var(--accent)" />
             </a>
           </div>
         </div>
@@ -382,7 +382,7 @@ export default function MedicationsPage() {
               Federally Qualified Health Centers participate in the 340B drug pricing program, which allows them to purchase medications at up to 50% discount and pass those savings on to uninsured patients. Many dispense medications free or for $1–$5 per prescription.
             </p>
             <Link href={FQHC_LINK} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 600, color: 'var(--accent)', textDecoration: 'none', fontFamily: 'var(--font-inter)' }}>
-              Find FQHCs near me <ArrowRight2 size={14} />
+              Find FQHCs near me <ArrowRight2 size={14} color="var(--accent)" />
             </Link>
           </div>
         </div>
@@ -412,7 +412,7 @@ export default function MedicationsPage() {
             Find free and sliding-scale clinics near you for ongoing care alongside free medications.
           </p>
           <Link href="/search" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '13px 28px', borderRadius: 12, background: 'var(--accent)', color: '#07070F', fontSize: 14, fontWeight: 600, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}>
-            Find Free Clinics Near Me <ArrowRight2 size={16} />
+            Find Free Clinics Near Me <ArrowRight2 size={16} color="#07070F" />
           </Link>
         </div>
       </section>

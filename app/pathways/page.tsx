@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react'
 import AppShell from '@/components/AppShell'
 import { smoothScrollTo } from '@/utils/smoothScroll'
 import { useRouter } from 'next/navigation'
+import EmptyState from '@/components/ui/EmptyState'
 import { Location, Hospital, Cpu, ArrowRight, TickCircle, ArrowRight2, Wifi, Clock, Star1, LanguageSquare, MagicStar, SearchStatus, Routing2, Call, InfoCircle } from 'iconsax-react'
 
 /* ─── reveal hook ─────────────────────────────────── */
@@ -477,15 +478,16 @@ export default function PathwaysPage() {
                 )}
                 {/* Empty state */}
                 {!resultsError && clinicResults.length === 0 && (
-                  <div style={{ padding: '40px 24px', textAlign: 'center', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '20px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
-                    <SearchStatus size={36} color="var(--text-3)" variant="TwoTone" aria-hidden="true" />
-                  </div>
-                    <div style={{ fontSize: '16px', fontWeight: 600, marginBottom: '8px' }}>No clinics found near {location}</div>
-                    <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', marginBottom: '20px' }}>Try a broader location (e.g. city name) or check the telehealth tab for virtual care options.</div>
-                    <button onClick={() => setTab('telehealth')} style={{ padding: '10px 22px', borderRadius: '100px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.25)', color: 'var(--accent)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>
-                      See telehealth options instead
-                    </button>
+                  <div style={{ borderRadius: '20px', border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)', overflow: 'hidden' }}>
+                    <EmptyState
+                      variant="search"
+                      title={`No clinics found near ${location}`}
+                      description="Try a broader location (e.g. city name) or switch to telehealth for virtual care options."
+                      action={{
+                        label: 'See telehealth options',
+                        onClick: () => setTab('telehealth'),
+                      }}
+                    />
                   </div>
                 )}
                 {/* Real results — show first 3 only */}
@@ -586,12 +588,12 @@ export default function PathwaysPage() {
                         <div>
                           <div style={{ fontWeight: 600, fontSize: '16px', marginBottom: '6px' }}>{t.name}</div>
                           <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={11} variant="Linear" />{t.wait}</span>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><LanguageSquare size={11} variant="Linear" />{t.langs}</span>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={11} color="rgba(255,255,255,0.5)" variant="Linear" />{t.wait}</span>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><LanguageSquare size={11} color="rgba(255,255,255,0.5)" variant="Linear" />{t.langs}</span>
                           </div>
                           {t.note && (
                             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '6px' }}>
-                              <InfoCircle size={11} color="currentColor" variant="Linear" style={{ flexShrink: 0, marginTop: '1px' }} aria-hidden="true" />
+                              <InfoCircle size={11} color="rgba(255,255,255,0.5)" variant="Linear" style={{ flexShrink: 0, marginTop: '1px' }} aria-hidden="true" />
                               {t.note}
                             </div>
                           )}

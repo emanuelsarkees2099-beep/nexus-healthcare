@@ -86,7 +86,7 @@ function AddModal({ onClose, onAdd }: { onClose: () => void; onAdd: (item: strin
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
           <span style={{ fontSize: '16px', fontWeight: 700 }}>Add entry</span>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)' }}>
-            <CloseCircle size={18} />
+            <CloseCircle size={18} color="rgba(255,255,255,0.5)" />
           </button>
         </div>
         <input
@@ -253,7 +253,7 @@ export default function PassportPage() {
           display: 'inline-flex', alignItems: 'center', gap: '6px',
           fontSize: '12px', color: 'rgba(255,255,255,0.3)',
         }}>
-          <Lock size={11} /> End-to-end encrypted · Stored on your device only
+          <Lock size={11} color="rgba(255,255,255,0.45)" /> End-to-end encrypted · Stored on your device only
         </div>
       </section>
 

@@ -11,7 +11,7 @@ const RESOURCES = [
     color: 'var(--coral)',
     bg: 'rgba(248,113,113,0.10)',
     border: 'rgba(248,113,113,0.25)',
-    icon: <Call size={16} variant="Linear" />,
+    icon: <Call size={16} variant="Linear" color="var(--coral)" />,
   },
   {
     id: 'er',
@@ -21,7 +21,7 @@ const RESOURCES = [
     color: 'var(--amber)',
     bg: 'rgba(252,211,77,0.10)',
     border: 'rgba(252,211,77,0.25)',
-    icon: <Location size={16} variant="Linear" />,
+    icon: <Location size={16} variant="Linear" color="var(--amber)" />,
   },
   {
     id: '988',
@@ -31,7 +31,7 @@ const RESOURCES = [
     color: 'var(--violet)',
     bg: 'rgba(167,139,250,0.10)',
     border: 'rgba(167,139,250,0.25)',
-    icon: <Cpu size={16} variant="Linear" />,
+    icon: <Cpu size={16} variant="Linear" color="var(--violet)" />,
   },
   {
     id: 'crisis-text',
@@ -41,7 +41,7 @@ const RESOURCES = [
     color: 'var(--violet)',
     bg: 'rgba(167,139,250,0.10)',
     border: 'rgba(167,139,250,0.25)',
-    icon: <MessageText1 size={16} variant="Linear" />,
+    icon: <MessageText1 size={16} variant="Linear" color="var(--violet)" />,
   },
   {
     id: 'poison',
@@ -51,7 +51,7 @@ const RESOURCES = [
     color: 'var(--accent)',
     bg: 'rgba(74,144,217,0.10)',
     border: 'rgba(74,144,217,0.25)',
-    icon: <Health size={16} variant="Linear" />,
+    icon: <Health size={16} variant="Linear" color="var(--accent)" />,
   },
 ]
 
@@ -71,7 +71,7 @@ export default function EmergencyEscalation({ compact = false }: Props) {
         aria-expanded={open}
         aria-controls="emergency-panel"
       >
-        <Danger size={14} variant="Linear" />
+        <Danger size={14} variant="Linear" color="currentColor" />
         {compact ? 'Help Now' : 'I need help now'}
       </button>
 
@@ -110,7 +110,7 @@ export default function EmergencyEscalation({ compact = false }: Props) {
               style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-3)', padding: '2px', display: 'flex' }}
               aria-label="Close emergency panel"
             >
-              <CloseCircle size={14} variant="Linear" />
+              <CloseCircle size={14} variant="Linear" color="var(--text-3)" />
             </button>
           </div>
 

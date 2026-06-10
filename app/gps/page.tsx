@@ -24,7 +24,7 @@ const STEPS: GPSStep[] = [
     id: 1,
     title: 'Confirm walk-in availability',
     time: '~4 min',
-    icon: <Call size={16} />,
+    icon: <Call size={16} color="var(--accent)" />,
     description: 'Call Mountain Park Health Center before you go to confirm they can see you today.',
     substeps: [
       'Call (602) 243-7011',
@@ -55,7 +55,7 @@ const STEPS: GPSStep[] = [
     id: 2,
     title: 'Gather your documents',
     time: '~10 min',
-    icon: <ReceiptText size={16} />,
+    icon: <ReceiptText size={16} color="var(--accent)" />,
     description: 'Bring these to your appointment. Missing items can slow you down but rarely stop you from being seen.',
     docs: [
       'Photo ID (driver\'s license, passport, or any government ID)',
@@ -70,7 +70,7 @@ const STEPS: GPSStep[] = [
     id: 3,
     title: 'Travel to the clinic',
     time: '~12 min',
-    icon: <Routing size={16} />,
+    icon: <Routing size={16} color="var(--accent)" />,
     description: 'Mountain Park Health Center — 1 E Dunlap Ave, Phoenix, AZ 85020',
     substeps: [
       'By car: Take I-17 N to Exit 207B (Dunlap Ave). Turn right on Dunlap. Clinic is on the left.',
@@ -84,7 +84,7 @@ const STEPS: GPSStep[] = [
     id: 4,
     title: 'Check in at the front desk',
     time: '~15 min',
-    icon: <Profile2User size={16} />,
+    icon: <Profile2User size={16} color="var(--accent)" />,
     description: 'What to say and expect when you arrive at check-in.',
     substeps: [
       'Tell the receptionist: "I\'m here for a walk-in appointment. I called ahead."',
@@ -107,7 +107,7 @@ const STEPS: GPSStep[] = [
     id: 5,
     title: 'At your appointment',
     time: '~25 min',
-    icon: <TickCircle size={16} />,
+    icon: <TickCircle size={16} color="var(--accent)" />,
     description: 'How to make the most of your visit and advocate for yourself.',
     substeps: [
       'Describe your symptoms clearly: when they started, how severe (1-10), what makes it better or worse',
@@ -122,7 +122,7 @@ const STEPS: GPSStep[] = [
     id: 6,
     title: 'Handle billing after your visit',
     time: '~5 min',
-    icon: <ReceiptText size={16} />,
+    icon: <ReceiptText size={16} color="var(--accent)" />,
     description: 'Don\'t leave without understanding what you owe and how to pay.',
     substeps: [
       'Ask to speak with the financial counselor or billing department',
@@ -137,7 +137,7 @@ const STEPS: GPSStep[] = [
     id: 7,
     title: 'Follow up and next steps',
     time: '~3 min',
-    icon: <TickCircle size={16} />,
+    icon: <TickCircle size={16} color="var(--accent)" />,
     description: 'After your visit, take these steps to protect your health and stay connected.',
     substeps: [
       'Schedule any follow-up appointments before you leave',
@@ -210,7 +210,7 @@ function StepCard({
           border: `1px solid ${status === 'complete' ? 'rgba(96,165,250,0.35)' : status === 'active' ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)'}`,
           color: status === 'complete' ? '#60a5fa' : status === 'active' ? 'var(--accent)' : 'rgba(255,255,255,0.35)',
         }}>
-          {status === 'complete' ? <TickCircle size={15} /> : status === 'pending' ? <RecordCircle size={15} /> : step.icon}
+          {status === 'complete' ? <TickCircle size={15} color="#60a5fa" /> : status === 'pending' ? <RecordCircle size={15} color="rgba(255,255,255,0.35)" /> : step.icon}
         </div>
 
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -237,7 +237,7 @@ function StepCard({
           display: 'flex', alignItems: 'center', gap: '6px',
           fontSize: '12px', color: 'rgba(255,255,255,0.3)', flexShrink: 0,
         }}>
-          <Clock size={11} /> {step.time}
+          <Clock size={11} color="rgba(255,255,255,0.45)" /> {step.time}
         </div>
       </button>
 
@@ -535,7 +535,7 @@ export default function GPSPage() {
                 fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '5px',
               }}
             >
-              <ExportSquare size={11} /> Share with caregiver
+              <ExportSquare size={11} color="rgba(255,255,255,0.45)" /> Share with caregiver
             </button>
             <button
               style={{
@@ -545,7 +545,7 @@ export default function GPSPage() {
                 fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '5px',
               }}
             >
-              <Printer size={11} /> Print checklist
+              <Printer size={11} color="rgba(255,255,255,0.45)" /> Print checklist
             </button>
           </div>
         </div>

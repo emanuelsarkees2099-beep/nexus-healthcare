@@ -32,8 +32,13 @@ li svg,
 label svg,
 .badge svg,
 .pill svg,
-.tag svg {
-  color: var(--icon-color, rgba(248,249,255,0.65));
+.tag svg,
+.btn svg,
+.nexus-card svg,
+.bento-card svg,
+.onboarding-option svg,
+[class*="card"] svg {
+  color: var(--icon-color, rgba(248,249,255,0.72));
 }
 
 :root {
@@ -67,31 +72,54 @@ label svg,
 
   /* ── TEXT — pure white hierarchy ── */
   --text:   #F8F9FF;
-  --text-2: rgba(248,249,255,0.55);
-  --text-3: rgba(248,249,255,0.32);
-  --text-4: rgba(248,249,255,0.18);
+  --text-2: rgba(248,249,255,0.62);
+  --text-3: rgba(248,249,255,0.42);
+  --text-4: rgba(248,249,255,0.22);
 
   /* ── BORDERS — one system, three strengths ── */
-  --border-subtle: rgba(255,255,255,0.06);
-  --border:        rgba(255,255,255,0.10);
-  --border-strong: rgba(79,142,240,0.28);
+  --border-subtle: rgba(255,255,255,0.10);
+  --border:        rgba(255,255,255,0.14);
+  --border-strong: rgba(79,142,240,0.32);
   /* Backward compat aliases */
   --border2:   var(--border-subtle);
   --border-hi: var(--border-strong);
 
-  /* ── RADIUS — three values only ──
-     6px  → labels, badges, tags
-     12px → cards, inputs, dropdowns
-     100px → pills, CTAs, chips              */
-  --r-sm:  6px;
-  --r-md:  12px;
-  --r-lg:  100px;
+  /* ── RADIUS — full 6-step scale ──
+     xs  → micro tags, tight labels
+     sm  → badges, chips, small elements
+     md  → cards, inputs, dropdowns
+     card→ large panels, modals, feature cards
+     xl  → sheets, hero panels
+     pill→ pill-shaped CTAs, buttons, nav chips    */
+  --r-xs:   4px;
+  --r-sm:   8px;
+  --r-md:   12px;
+  --r-card: 16px;
+  --r-xl:   24px;
+  --r-lg:   100px;   /* pill — kept as-is for backwards compat */
+  --r-pill: 100px;
 
   /* ── EASING ── */
   --ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-out-expo:    cubic-bezier(0.16, 1, 0.30, 1);
   --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
   --ease-standard:    cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-decelerate:  cubic-bezier(0.0, 0.0, 0.2, 1);
+  --ease-accelerate:  cubic-bezier(0.4, 0.0, 1.0, 1);
+
+  /* ── MOTION DURATION SCALE — consistent animation timing ── */
+  --dur-instant:  80ms;
+  --dur-fast:     140ms;
+  --dur-base:     220ms;
+  --dur-medium:   360ms;
+  --dur-slow:     500ms;
+  --dur-enter:    420ms;
+  --dur-exit:     200ms;
+
+  /* ── ICON COLOR — minimum visible tint for SVG icons ── */
+  --icon-color:   rgba(248,249,255,0.72);
+  --icon-muted:   rgba(248,249,255,0.45);
+  --icon-active:  var(--accent);
 
   /* ── DEPTH — physical shadows, not neon glows ──
      Think: light source above, surface below. Not "glow."  */
@@ -520,10 +548,10 @@ h3              { font-weight: 600; }
 }
 
 .bento-card:hover {
-  transform: translateY(-2px) !important;
+  transform: translateY(-4px) !important;
   box-shadow: var(--shadow-hover) !important;
-  border-color: rgba(79,142,240,0.28) !important;
-  background: rgba(255,255,255,0.052) !important;
+  border-color: rgba(79,142,240,0.32) !important;
+  background: rgba(255,255,255,0.055) !important;
 }
 
 .bento-card:active,
@@ -868,6 +896,105 @@ a:active > .bento-card {
    ANIMATIONS
    ═══════════════════════════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════
+   SECTION REVEAL ANIMATIONS — premium scroll-triggered entrance
+   Applied via JS: add .reveal-ready to trigger, use IntersectionObserver
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Fade + rise: the universal reveal */
+.reveal-fade {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity var(--dur-enter) var(--ease-out-expo),
+    transform var(--dur-enter) var(--ease-out-expo);
+}
+.reveal-fade.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Clip from bottom: text headline reveal */
+.reveal-clip {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path var(--dur-enter) var(--ease-out-expo);
+}
+.reveal-clip.revealed {
+  clip-path: inset(0 0 0% 0);
+}
+
+/* Scale in from 96% */
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.96);
+  transition:
+    opacity var(--dur-enter) var(--ease-out-expo),
+    transform var(--dur-enter) var(--ease-spring);
+}
+.reveal-scale.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Slide from left */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-32px);
+  transition:
+    opacity var(--dur-enter) var(--ease-out-expo),
+    transform var(--dur-enter) var(--ease-out-expo);
+}
+.reveal-left.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Slide from right */
+.reveal-right {
+  opacity: 0;
+  transform: translateX(32px);
+  transition:
+    opacity var(--dur-enter) var(--ease-out-expo),
+    transform var(--dur-enter) var(--ease-out-expo);
+}
+.reveal-right.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Stagger helpers — add data-stagger="N" for N*80ms delay */
+.reveal-fade[data-stagger="1"], .reveal-clip[data-stagger="1"],
+.reveal-scale[data-stagger="1"] { transition-delay: 80ms; }
+.reveal-fade[data-stagger="2"], .reveal-clip[data-stagger="2"],
+.reveal-scale[data-stagger="2"] { transition-delay: 160ms; }
+.reveal-fade[data-stagger="3"], .reveal-clip[data-stagger="3"],
+.reveal-scale[data-stagger="3"] { transition-delay: 240ms; }
+.reveal-fade[data-stagger="4"], .reveal-clip[data-stagger="4"],
+.reveal-scale[data-stagger="4"] { transition-delay: 320ms; }
+.reveal-fade[data-stagger="5"], .reveal-clip[data-stagger="5"],
+.reveal-scale[data-stagger="5"] { transition-delay: 400ms; }
+.reveal-fade[data-stagger="6"], .reveal-clip[data-stagger="6"],
+.reveal-scale[data-stagger="6"] { transition-delay: 480ms; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-fade, .reveal-clip, .reveal-scale,
+  .reveal-left, .reveal-right {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;
+  }
+}
+
+/* ── LuxeReveal keyframe (used by LuxeReveal.tsx) ── */
+@keyframes luxe-gleam {
+  0%   { left: -90%; opacity: 0; }
+  10%  { opacity: 0.6; }
+  85%  { opacity: 0.45; }
+  100% { left: 115%; opacity: 0; }
+}
+
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 @keyframes grid-fade { 0%,100%{opacity:0.05} 50%{opacity:0.10} }
 @keyframes cursor-blink { 0%,100%{opacity:1} 50%{opacity:0} }
@@ -924,6 +1051,67 @@ a:active > .bento-card {
   50%      { transform: scale(1.6); opacity: 0.4; }
 }
 .pulse-dot { animation: pulse-dot 1.8s ease-in-out infinite; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   FOCUS RING SYSTEM — keyboard navigation made beautiful
+   Only shows on keyboard (:focus-visible), never on click.
+   ═══════════════════════════════════════════════════════════════════ */
+
+*:focus { outline: none; }
+
+*:focus-visible {
+  outline: 2px solid rgba(79,142,240,0.85);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Inputs get a box-shadow glow instead of outline */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 1px rgba(79,142,240,0.50),
+    0 0 0 4px rgba(79,142,240,0.15),
+    var(--shadow-sm) !important;
+}
+
+/* Buttons get a ring with gap */
+button:focus-visible,
+[role="button"]:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid rgba(79,142,240,0.85);
+  outline-offset: 3px;
+  border-radius: var(--r-lg);
+}
+
+/* Links */
+a:focus-visible {
+  outline: 2px solid rgba(79,142,240,0.70);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* ── Skip to main content link (accessibility) ── */
+.skip-to-main {
+  position: fixed;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 10px 20px;
+  background: var(--accent);
+  color: white;
+  border-radius: 0 0 var(--r-md) var(--r-md);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  transition: top 0.2s;
+  text-decoration: none;
+}
+.skip-to-main:focus-visible {
+  top: 0;
+  outline: none;
+}
 
 /* Search bar gravity — the most important element on the page */
 .hero-search-gravity {
@@ -1029,7 +1217,7 @@ a.animated-link:hover::after { width: 100%; }
 .nexus-card:hover {
   border-color: var(--border);
   box-shadow: var(--shadow-hover);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
 }
 
 /* Clinic card — same system, slightly more compact */
@@ -1043,7 +1231,7 @@ a.animated-link:hover::after { width: 100%; }
 .clinic-card:hover {
   border-color: var(--border) !important;
   box-shadow: var(--shadow-hover) !important;
-  transform: translateY(-2px) !important;
+  transform: translateY(-4px) !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1056,6 +1244,137 @@ a[role="button"]:active {
   transform: scale(0.96) !important;
   transition: transform 0.08s ease !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   NEXUS BUTTON SYSTEM — 3 variants, 2 sizes, full state machine
+   Usage:  <button class="btn btn-primary">...</button>
+           <button class="btn btn-secondary btn-sm">...</button>
+           <button class="btn btn-ghost">...</button>
+   ═══════════════════════════════════════════════════════════════════ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--r-lg);
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  cursor: pointer;
+  border: 1px solid transparent;
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+  transition:
+    background var(--dur-fast) var(--ease-standard),
+    box-shadow  var(--dur-base) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    transform   var(--dur-fast) var(--ease-standard),
+    opacity     var(--dur-fast) ease;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.btn:active:not(:disabled) {
+  transform: scale(0.96) !important;
+  transition: transform 0.08s ease !important;
+}
+.btn:disabled { opacity: 0.42; cursor: not-allowed; pointer-events: none; }
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ── Sizes ── */
+.btn-sm { padding: 7px 14px; font-size: var(--text-xs); gap: 5px; }
+.btn-lg { padding: 13px 28px; font-size: var(--text-md); gap: 10px; }
+.btn-xl { padding: 16px 36px; font-size: var(--text-lg); gap: 12px; }
+
+/* ── Primary — filled accent, strongest CTAs ── */
+.btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 0 0 0 rgba(79,142,240,0);
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+.btn-primary:hover {
+  background: #5F9EF9;
+  box-shadow: 0 4px 16px rgba(79,142,240,0.40), 0 1px 4px rgba(0,0,0,0.20);
+}
+.btn-primary:active { background: #3E7EDF; }
+
+/* ── Secondary — outlined, secondary actions ── */
+.btn-secondary {
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  border-color: var(--border);
+  box-shadow: var(--shadow-sm);
+}
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(79,142,240,0.32);
+  box-shadow: 0 0 0 1px rgba(79,142,240,0.16), var(--shadow-sm);
+  color: var(--accent2);
+}
+.btn-secondary:active {
+  background: rgba(255,255,255,0.06);
+  border-color: var(--border);
+}
+
+/* ── Ghost — text-only, minimal chrome for nav/inline actions ── */
+.btn-ghost {
+  background: transparent;
+  color: var(--text-2);
+  border-color: transparent;
+  box-shadow: none;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  border-color: transparent;
+}
+.btn-ghost:active { background: rgba(255,255,255,0.04); }
+
+/* ── Danger variant ── */
+.btn-danger {
+  background: rgba(248,113,113,0.10);
+  color: var(--coral);
+  border-color: rgba(248,113,113,0.25);
+}
+.btn-danger:hover {
+  background: rgba(248,113,113,0.18);
+  border-color: rgba(248,113,113,0.45);
+  box-shadow: var(--shadow-error);
+}
+
+/* ── Loading state ── */
+.btn.loading {
+  pointer-events: none;
+}
+.btn.loading::after {
+  content: '';
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: btn-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes btn-spin { to { transform: rotate(360deg); } }
 
 /* ═══════════════════════════════════════════════════════════════════
    SECTION DEPTH BACKGROUNDS
@@ -2891,6 +3210,257 @@ button[aria-pressed="true"] {
     inset 0 1px 0 rgba(255,255,255,0.12),
     0 2px 8px rgba(79,142,240,0.25) !important;
   transition: transform 0.08s ease, box-shadow 0.08s ease !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   BADGE / CHIP / TAG SYSTEM — standardized micro-labels
+   Three sizes, semantic variants, consistent anatomy.
+   Usage: <span class="badge badge-accent">Free</span>
+   ═══════════════════════════════════════════════════════════════════ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: var(--r-sm);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  white-space: nowrap;
+  user-select: none;
+  /* Default: subtle surface */
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: var(--text-2);
+}
+
+/* ── Sizes ── */
+.badge-xs { font-size: 9.5px; padding: 2px 7px; }
+.badge-sm { font-size: 11px; padding: 3px 9px; }       /* default */
+.badge-md { font-size: 12.5px; padding: 4px 11px; }
+.badge-lg { font-size: 13px; padding: 5px 13px; border-radius: var(--r-md); }
+
+/* ── Semantic color variants ── */
+.badge-accent {
+  background: var(--accent-dim);
+  border-color: rgba(79,142,240,0.22);
+  color: var(--accent2);
+}
+.badge-success {
+  background: rgba(52,211,153,0.08);
+  border-color: rgba(52,211,153,0.22);
+  color: var(--success);
+}
+.badge-warning {
+  background: rgba(245,158,11,0.08);
+  border-color: rgba(245,158,11,0.22);
+  color: var(--warning);
+}
+.badge-error {
+  background: rgba(248,113,113,0.08);
+  border-color: rgba(248,113,113,0.22);
+  color: var(--error);
+}
+.badge-violet {
+  background: rgba(167,139,250,0.08);
+  border-color: rgba(167,139,250,0.22);
+  color: var(--violet);
+}
+/* Neutral — slightly brighter surface */
+.badge-neutral {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.08);
+  color: var(--text-3);
+}
+/* Solid — for high-priority labels */
+.badge-solid-accent {
+  background: var(--accent);
+  border-color: transparent;
+  color: #fff;
+}
+.badge-solid-success {
+  background: var(--success);
+  border-color: transparent;
+  color: #042;
+}
+
+/* ── Pill variant (fully rounded) ── */
+.badge-pill { border-radius: var(--r-lg); }
+
+/* ── Dot indicator inside badge ── */
+.badge-dot::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+/* Animated pulse dot — for "live" status */
+.badge-live::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}
+
+/* ── Section eyebrow pill ── */
+.eyebrow-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: var(--r-lg);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  background: rgba(79,142,240,0.07);
+  border: 1px solid rgba(79,142,240,0.18);
+  color: var(--accent2);
+  margin-bottom: 1.25rem;
+}
+.eyebrow-badge::before {
+  content: '';
+  width: 14px; height: 1px;
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   NEXUS FORM SYSTEM — floating labels, consistent inputs
+   Usage:
+     <div class="field">
+       <input class="field-input" type="text" placeholder=" " id="email" />
+       <label class="field-label" for="email">Email address</label>
+     </div>
+   ═══════════════════════════════════════════════════════════════════ */
+
+.field {
+  position: relative;
+  width: 100%;
+}
+
+.field-input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 20px 16px 8px;
+  color: var(--text);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  outline: none;
+  transition:
+    border-color var(--dur-base) ease,
+    box-shadow   var(--dur-base) ease,
+    background   var(--dur-base) ease;
+  appearance: none;
+}
+
+.field-input::placeholder { color: transparent; }
+
+.field-label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-3);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  pointer-events: none;
+  transition:
+    top     var(--dur-base) var(--ease-out-expo),
+    font-size var(--dur-base) var(--ease-out-expo),
+    color   var(--dur-base) ease,
+    transform var(--dur-base) var(--ease-out-expo);
+  transform-origin: left center;
+}
+
+/* Float the label up when focused or filled */
+.field-input:focus + .field-label,
+.field-input:not(:placeholder-shown) + .field-label {
+  top: 10px;
+  transform: translateY(0) scale(0.78);
+  color: var(--accent2);
+  font-size: 14px; /* scale handles visual reduction */
+}
+
+/* Focus state */
+.field-input:focus {
+  border-color: rgba(79,142,240,0.50);
+  background: rgba(255,255,255,0.06);
+  box-shadow:
+    0 0 0 3px rgba(79,142,240,0.12),
+    var(--shadow-sm);
+}
+
+/* Error state */
+.field.field-error .field-input {
+  border-color: rgba(248,113,113,0.50);
+}
+.field.field-error .field-input:focus {
+  box-shadow: 0 0 0 3px rgba(248,113,113,0.12);
+}
+.field.field-error .field-label { color: var(--error); }
+
+/* Success state */
+.field.field-success .field-input {
+  border-color: rgba(52,211,153,0.50);
+}
+
+/* Field hint / error message */
+.field-hint {
+  font-size: 11.5px;
+  color: var(--text-3);
+  font-family: var(--font-inter), sans-serif;
+  margin-top: 5px;
+  margin-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.field-hint.error { color: var(--error); }
+.field-hint.success { color: var(--success); }
+
+/* Textarea variant */
+.field-textarea.field-input {
+  padding-top: 24px;
+  resize: vertical;
+  min-height: 96px;
+}
+.field-textarea + .field-label { top: 20px; transform: none; }
+.field-textarea:focus + .field-label,
+.field-textarea:not(:placeholder-shown) + .field-label {
+  top: 8px;
+  transform: scale(0.78);
+  transform-origin: left top;
+}
+
+/* ── Standard non-floating input for simpler contexts ── */
+.nexus-input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 10px 14px;
+  color: var(--text);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  outline: none;
+  transition: border-color var(--dur-base) ease, box-shadow var(--dur-base) ease;
+}
+.nexus-input::placeholder { color: var(--text-3); }
+.nexus-input:focus {
+  border-color: rgba(79,142,240,0.50);
+  box-shadow: 0 0 0 3px rgba(79,142,240,0.12);
 }
 
 /* Ghost variant (secondary CTA) */

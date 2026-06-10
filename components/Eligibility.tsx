@@ -90,7 +90,7 @@ export default function Eligibility() {
             }}
           >
             Check my eligibility
-            <ArrowRight size={15} color="currentColor" variant="Linear" aria-hidden="true" />
+            <ArrowRight size={15} color="var(--bg)" variant="Linear" aria-hidden="true" />
           </Link>
         </div>
 

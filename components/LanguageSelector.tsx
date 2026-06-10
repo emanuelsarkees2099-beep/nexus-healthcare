@@ -105,7 +105,7 @@ export default function LanguageSelector() {
           onMouseEnter={e => (e.currentTarget.style.color = 'rgba(232,240,241,0.7)')}
           onMouseLeave={e => (e.currentTarget.style.color = 'rgba(232,240,241,0.3)')}
         >
-          <CloseSquare size={16} color="currentColor" variant="Linear" />
+          <CloseSquare size={16} color="rgba(232,240,241,0.5)" variant="Linear" />
         </button>
 
         {/* Header */}

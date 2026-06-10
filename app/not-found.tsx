@@ -36,13 +36,13 @@ export default function NotFound() {
           href="/search"
           style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '13px 26px', background: 'var(--accent, #4A90D9)', color: '#020409', borderRadius: '100px', textDecoration: 'none', fontWeight: 700, fontSize: '14px', transition: 'opacity 0.2s' }}
         >
-          <SearchNormal1 size={14} variant="Linear" /> Find a clinic
+          <SearchNormal1 size={14} color="#020409" variant="Linear" /> Find a clinic
         </Link>
         <Link
           href="/"
           style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '13px 24px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', color: 'rgba(255,255,255,0.7)', borderRadius: '100px', textDecoration: 'none', fontWeight: 600, fontSize: '14px' }}
         >
-          <Home size={14} variant="Linear" /> Home
+          <Home size={14} color="rgba(255,255,255,0.7)" variant="Linear" /> Home
         </Link>
       </div>
 

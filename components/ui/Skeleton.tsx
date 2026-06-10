@@ -20,11 +20,21 @@ import React from 'react'
 
 /* ── Shared keyframes — inject via <style> once per skeleton-using page ── */
 export const SKELETON_STYLES = `
-  @keyframes skel-pulse {
-    0%, 100% { opacity: 0.5; }
-    50%       { opacity: 1;   }
+  @keyframes skel-shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
   }
-  .skel { animation: skel-pulse 1.5s ease-in-out infinite; background: rgba(255,255,255,0.05); border-radius: 6px; }
+  .skel {
+    border-radius: 6px;
+    background: linear-gradient(
+      90deg,
+      rgba(255,255,255,0.03) 0px,
+      rgba(255,255,255,0.08) 80px,
+      rgba(255,255,255,0.03) 160px
+    );
+    background-size: 400px 100%;
+    animation: skel-shimmer 1.6s ease-in-out infinite;
+  }
 `
 
 /* ── Primitives ─────────────────────────────────────────────────── */

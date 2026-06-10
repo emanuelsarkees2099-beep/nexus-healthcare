@@ -337,7 +337,7 @@ export default function OpenPage() {
                         fontFamily: 'var(--font-inter)', letterSpacing: '0.06em', flexShrink: 0,
                       }}>{entry.tag}</span>
                       <div style={{ color: 'rgba(255,255,255,0.3)', transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s', flexShrink: 0 }}>
-                        <ArrowDown2 size={14} color="currentColor" variant="Linear" />
+                        <ArrowDown2 size={14} color="rgba(255,255,255,0.5)" variant="Linear" />
                       </div>
                     </button>
                     <div style={{ maxHeight: isOpen ? '600px' : '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.16,1,0.3,1)' }}>

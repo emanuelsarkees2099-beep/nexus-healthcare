@@ -144,7 +144,7 @@ export default function AffordabilityBar({ score, label, reasons, compact = fals
           aria-label={expanded ? 'Hide score breakdown' : 'Show score breakdown'}
         >
           Why?
-          {expanded ? <ArrowUp2 size={12} variant="Linear" /> : <ArrowDown2 size={12} variant="Linear" />}
+          {expanded ? <ArrowUp2 size={12} variant="Linear" color="var(--text-3)" /> : <ArrowDown2 size={12} variant="Linear" color="var(--text-3)" />}
         </button>
       </div>
 
@@ -179,7 +179,7 @@ export default function AffordabilityBar({ score, label, reasons, compact = fals
             return (
               <div key={i} className="aff-reason-row">
                 {isPositive
-                  ? <TickCircle size={12} variant="Linear" className="aff-check" />
+                  ? <TickCircle size={12} variant="Linear" color={cfg.color} className="aff-check" />
                   : <MinusCirlce size={12} variant="Linear" style={{ color: 'var(--text-3)', flexShrink: 0 }} />
                 }
                 <span>{reason}</span>

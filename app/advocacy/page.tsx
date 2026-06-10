@@ -310,7 +310,7 @@ export default function AdvocacyPage() {
                             style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', fontFamily: 'inherit' }}
                             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.18)'; (e.currentTarget as HTMLElement).style.color = '#fff' }}
                             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.4)' }}>
-                            <CloseCircle size={13} variant="Linear" />
+                            <CloseCircle size={13} color="rgba(255,255,255,0.5)" variant="Linear" />
                           </button>
                           <button
                             onClick={() => shareOnFacebook(pet.id)}
@@ -318,13 +318,13 @@ export default function AdvocacyPage() {
                             style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', fontFamily: 'inherit' }}
                             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(96,165,250,0.3)'; (e.currentTarget as HTMLElement).style.color = '#60a5fa' }}
                             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.4)' }}>
-                            <ExportSquare size={13} variant="Linear" />
+                            <ExportSquare size={13} color="rgba(255,255,255,0.5)" variant="Linear" />
                           </button>
                           <button
                             onClick={() => handleCopyLink(pet.id, pet.title)}
                             title="Copy link"
                             style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid', background: copiedId === pet.id ? 'rgba(74,144,217,0.1)' : 'rgba(255,255,255,0.03)', color: copiedId === pet.id ? 'var(--accent)' : 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', borderColor: copiedId === pet.id ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)', fontFamily: 'inherit' }}>
-                            {copiedId === pet.id ? <TickCircle size={13} variant="Linear" /> : <Link2 size={13} variant="Linear" />}
+                            {copiedId === pet.id ? <TickCircle size={13} color="var(--accent)" variant="Linear" /> : <Link2 size={13} color="rgba(255,255,255,0.5)" variant="Linear" />}
                           </button>
                           {/* Sign button */}
                           {signed ? (

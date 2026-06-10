@@ -541,7 +541,7 @@ export default function EquityPage() {
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.03)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 40px rgba(74,144,217,0.3)' }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 0 40px rgba(74,144,217,0.15)' }}
                 >
-                  Find free care now <ArrowRight size={14} variant="Linear" />
+                  Find free care now <ArrowRight size={14} color="#07070F" variant="Linear" />
                 </a>
               </div>
             </div>

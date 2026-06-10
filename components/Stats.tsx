@@ -270,7 +270,7 @@ export default function Stats() {
           <span style={{
             display: 'inline-flex', alignItems: 'center', gap: '5px',
           }}>
-            <Clock size={10} color="currentColor" variant="Linear" />
+            <Clock size={10} color="var(--text-2)" variant="Linear" />
             Last verified: {formatVerifiedAt(verifiedAt)}
           </span>
         </div>

@@ -48,7 +48,7 @@ export default function CrisisButton() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
               <span style={{ fontSize: '13px', fontWeight: 700, color: '#f87171' }}>{t('emergency.helpNow')}</span>
               <button onClick={() => setExpanded(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)' }}>
-                <CloseCircle size={16} variant="Linear" />
+                <CloseCircle size={16} variant="Linear" color="rgba(255,255,255,0.4)" />
               </button>
             </div>
 
@@ -125,7 +125,7 @@ export default function CrisisButton() {
           color: '#fff',
         }}
       >
-        {expanded ? <CloseCircle size={16} variant="Linear" /> : <Heart size={16} variant="Bold" color="white" />}
+        {expanded ? <CloseCircle size={16} variant="Linear" color="#fff" /> : <Heart size={16} variant="Bold" color="white" />}
       </button>
     </>
   )

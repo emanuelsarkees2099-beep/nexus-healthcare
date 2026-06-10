@@ -190,7 +190,7 @@ export default function ForgotPasswordPage() {
               Click it to choose a new password.
             </p>
             <Link href="/login" className="fp-back-link">
-              <ArrowLeft size={14} color="currentColor" variant="Linear" />
+              <ArrowLeft size={14} color="rgba(255,255,255,0.5)" variant="Linear" />
               Back to sign in
             </Link>
           </div>

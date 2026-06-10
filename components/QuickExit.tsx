@@ -23,7 +23,7 @@ export default function QuickExit() {
       aria-label="Leave this page quickly and go to a safe site"
       title="Click to quickly leave this page"
     >
-      <Logout size={12} color="currentColor" variant="Linear" aria-hidden="true" />
+      <Logout size={12} color="var(--text)" variant="Linear" aria-hidden="true" />
       Leave quickly
     </button>
   )

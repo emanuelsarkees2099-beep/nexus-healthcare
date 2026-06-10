@@ -302,7 +302,7 @@ export default function CalendarPage() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                 }}
               >
-                Generate my screening plan <ArrowRight2 size={15} variant="Linear" />
+                Generate my screening plan <ArrowRight2 size={15} color="inherit" variant="Linear" />
               </button>
             </div>
           </RevealBlock>
@@ -349,15 +349,15 @@ export default function CalendarPage() {
                           <span style={{ fontSize: '11px', padding: '2px 8px', borderRadius: '100px', background: meta.bg, color: meta.color, border: `1px solid ${meta.border}` }}>{meta.label}</span>
                         </div>
                         <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={10} variant="Linear" />{s.freq}</span>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Calendar1 size={10} variant="Linear" />Due: {s.due}</span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={10} color="rgba(255,255,255,0.45)" variant="Linear" />{s.freq}</span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Calendar1 size={10} color="rgba(255,255,255,0.45)" variant="Linear" />Due: {s.due}</span>
                         </div>
                       </div>
                       {s.status !== 'done' && (
                         <a href={s.link} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px', borderRadius: '100px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', color: 'rgba(255,255,255,0.6)', fontSize: '12px', fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap', transition: 'all 0.22s cubic-bezier(0.16,1,0.3,1)' }}
                           onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
                           onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
-                        >Find clinic <ArrowRight2 size={11} variant="Linear" /></a>
+                        >Find clinic <ArrowRight2 size={11} color="rgba(255,255,255,0.6)" variant="Linear" /></a>
                       )}
                     </div>
                   </RevealBlock>
@@ -402,7 +402,7 @@ export default function CalendarPage() {
                   </div>
                 ) : (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', animation: 'fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both' }}>
-                    <TickCircle size={16} variant="Linear" style={{ color: '#60a5fa' }} />
+                    <TickCircle size={16} color="#60a5fa" variant="Linear" />
                     <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)' }}>Reminders set for <strong style={{ color: 'var(--text)' }}>{remEmail}</strong> · {remFreq.toLowerCase()}</span>
                   </div>
                 )}
@@ -433,14 +433,14 @@ export default function CalendarPage() {
                     <div>
                       <div style={{ fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>{ev.title}</div>
                       <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.38)', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Calendar1 size={11} variant="Linear" />{ev.date}</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={11} variant="Linear" />{ev.time}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Calendar1 size={11} color="rgba(255,255,255,0.45)" variant="Linear" />{ev.date}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={11} color="rgba(255,255,255,0.45)" variant="Linear" />{ev.time}</span>
                       </div>
                     </div>
                     <span style={{ fontSize: '11px', padding: '3px 9px', borderRadius: '100px', background: 'rgba(96,165,250,0.1)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.2)', whiteSpace: 'nowrap' }}>{ev.badge}</span>
                   </div>
                   <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    <Location size={11} variant="Linear" />{ev.loc}
+                    <Location size={11} color="rgba(255,255,255,0.45)" variant="Linear" />{ev.loc}
                   </div>
                   <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: 'auto' }}>
                     {ev.tags.map(t => <span key={t} style={{ fontSize: '12px', padding: '3px 9px', borderRadius: '100px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.45)' }}>{t}</span>)}

@@ -2,6 +2,7 @@
 import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
 import { ToastContainer } from '@/components/ui/Toast'
+import ScrollReveal from '@/components/ScrollReveal'
 
 const CommandPalette              = dynamic(() => import('@/components/CommandPalette'),              { ssr: false })
 const ServiceWorkerRegistration   = dynamic(() => import('@/components/ServiceWorkerRegistration'),  { ssr: false })
@@ -10,6 +11,7 @@ const CookieConsent               = dynamic(() => import('@/components/CookieCon
 const SentryInit                  = dynamic(() => import('@/components/SentryInit'),                 { ssr: false })
 const PostHogProvider             = dynamic(() => import('@/components/PostHogProvider'),            { ssr: false })
 const MobileDock                  = dynamic(() => import('@/components/MobileDock'),                 { ssr: false })
+const CustomCursor                = dynamic(() => import('@/components/CustomCursor'),                { ssr: false })
 
 export default function GlobalClientComponents() {
   /* #37 — Low-bandwidth mode: restore persisted preference on mount */
@@ -36,6 +38,10 @@ export default function GlobalClientComponents() {
       <MobileDock />
       {/* #35 — Centralized toast notification system */}
       <ToastContainer />
+      {/* Scroll-reveal: auto-reveals elements with .reveal-fade/.reveal-clip etc. */}
+      <ScrollReveal />
+      {/* Premium cursor — desktop only, respects prefers-reduced-motion */}
+      <CustomCursor />
     </>
   )
 }

@@ -15,7 +15,7 @@ const pill: React.CSSProperties = {
 const SECTIONS = [
   {
     id: 'what-we-collect',
-    icon: <Data size={18} variant="Linear" />,
+    icon: <Data size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'What We Collect',
     content: `NEXUS is built on a core principle: we collect the minimum possible data to give you the best results.
 
@@ -31,7 +31,7 @@ We do not collect: Social Security numbers, health records, medical history, bio
   },
   {
     id: 'how-we-use',
-    icon: <Eye size={18} variant="Linear" />,
+    icon: <Eye size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'How We Use Your Data',
     content: `Your data is used exclusively to deliver the service you asked for.
 
@@ -45,7 +45,7 @@ Account data (if you create one) is used to pre-fill forms, save searches, and p
   },
   {
     id: 'third-parties',
-    icon: <Shield size={18} variant="Linear" />,
+    icon: <Shield size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'Third-Party Services',
     content: `NEXUS integrates with the following third-party services:
 
@@ -61,7 +61,7 @@ We do not use: Google Analytics, Facebook Pixel, advertising trackers, behaviora
   },
   {
     id: 'cookies',
-    icon: <Lock size={18} variant="Linear" />,
+    icon: <Lock size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'Cookies & Local Storage',
     content: `NEXUS uses minimal cookies and local storage.
 
@@ -75,7 +75,7 @@ You can clear all NEXUS local data by clearing your browser's storage for this d
   },
   {
     id: 'your-rights',
-    icon: <TickCircle size={18} variant="Linear" />,
+    icon: <TickCircle size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'Your Rights',
     content: `You have the right to:
 
@@ -97,7 +97,7 @@ To exercise any right: email privacy@nexushealth.org with "Privacy Request" in t
   },
   {
     id: 'security',
-    icon: <InfoCircle size={18} variant="Linear" />,
+    icon: <InfoCircle size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'Security',
     content: `We take reasonable and industry-standard measures to protect your data.
 

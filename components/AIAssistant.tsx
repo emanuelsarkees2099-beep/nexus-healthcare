@@ -255,7 +255,7 @@ export default function AIAssistant() {
         aria-label={open ? 'Close healthcare navigator' : 'Open healthcare navigator'}
         aria-expanded={open}
       >
-        {open ? <ArrowDown2 size={18} variant="Linear" /> : <MagicStar size={18} variant="Linear" />}
+        {open ? <ArrowDown2 size={18} variant="Linear" color="#fff" /> : <MagicStar size={18} variant="Linear" color="#fff" />}
         {unread > 0 && !open && (
           <span style={{
             position: 'absolute', top: -4, right: -4,
@@ -303,7 +303,7 @@ export default function AIAssistant() {
               onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
               onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.35)')}
             >
-              <CloseCircle size={16} variant="Linear" />
+              <CloseCircle size={16} variant="Linear" color="rgba(255,255,255,0.35)" />
             </button>
           </div>
 
@@ -400,7 +400,7 @@ export default function AIAssistant() {
                 transition: 'background 0.2s, color 0.2s',
               }}
             >
-              <Send size={15} variant="Linear" />
+              <Send size={15} variant="Linear" color={input.trim() && !loading ? '#07070F' : 'rgba(255,255,255,0.3)'} />
             </button>
           </div>
         </div>
