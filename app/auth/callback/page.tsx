@@ -19,8 +19,10 @@ export default function AuthCallbackPage() {
     const supabase = createClientClient()
 
     const params = new URLSearchParams(window.location.search)
-    const code   = params.get('code')
-    const error  = params.get('error')
+    const code     = params.get('code')
+    const error    = params.get('error')
+    const next     = params.get('next') ?? '/dashboard'
+    const safeNext = next.startsWith('/') ? next : '/dashboard'
 
     // OAuth error returned (e.g. user denied access)
     if (error) {
@@ -37,7 +39,7 @@ export default function AuthCallbackPage() {
             setErrorMsg(err.message)
             setStatus('error')
           } else {
-            window.location.href = '/'
+            window.location.href = safeNext
           }
         })
         .catch(err => {
@@ -52,14 +54,14 @@ export default function AuthCallbackPage() {
     const timer = setTimeout(async () => {
       const { data } = await supabase.auth.getSession()
       if (data.session) {
-        window.location.href = '/'
+        window.location.href = safeNext
       } else {
         // Listen for the SIGNED_IN event the SDK fires after processing the hash
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
           (event, session) => {
             if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session) {
               subscription.unsubscribe()
-              window.location.href = '/'
+              window.location.href = safeNext
             }
           }
         )

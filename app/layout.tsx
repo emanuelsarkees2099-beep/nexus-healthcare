@@ -7,6 +7,8 @@ import SettingsSidebar from '@/components/SettingsSidebar'
 import GlobalClientComponents from '@/components/GlobalClientComponents'
 import { I18nProvider } from '@/components/I18nContext'
 import JsonLd, { WEB_APP_SCHEMA, ORG_SCHEMA } from '@/components/JsonLd'
+import { AuthProvider } from '@/contexts/AuthContext'
+import { IdleTimeout } from '@/components/IdleTimeout'
 
 /* ── Font subsetting (#32): latin-only, swap, no fallback shift ─── */
 // Weights trimmed to exactly what the design system uses (globals.css comment):
@@ -112,13 +114,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <JsonLd schema={ORG_SCHEMA} id="schema-org" />
       </head>
       <body suppressHydrationWarning>
-        <I18nProvider>
-          {children}
-          <GlobalClientComponents />
-          <LanguageSelector />
-          <SettingsSidebar />
-          <SpeedInsights />
-        </I18nProvider>
+        <AuthProvider>
+          <I18nProvider>
+            {children}
+            <GlobalClientComponents />
+            <LanguageSelector />
+            <SettingsSidebar />
+            <IdleTimeout />
+            <SpeedInsights />
+          </I18nProvider>
+        </AuthProvider>
       </body>
     </html>
   )

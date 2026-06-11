@@ -18,7 +18,7 @@ export function useRequireAuth() {
     const supabase = createClientClient()
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
-        window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`
+        window.location.href = `/login?next=${encodeURIComponent(window.location.pathname)}`
         return
       }
       setUserId(session.user.id)

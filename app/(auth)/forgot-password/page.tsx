@@ -39,14 +39,14 @@ export default function ForgotPasswordPage() {
     if (!email.trim()) { setError('Please enter your email address.'); return }
     setLoading(true); setError('')
     try {
-      const { error: err } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      // Always show success regardless of whether the email exists — prevents account enumeration
+      await supabase.auth.resetPasswordForEmail(email.trim(), {
         redirectTo: `${window.location.origin}/reset-password`,
       })
-      if (err) throw err
+    } catch {
+      // Intentionally swallowed — same UX for valid and invalid emails
+    } finally {
       setSent(true)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to send reset email. Please try again.')
-      setLoading(false)
     }
   }
 
