@@ -103,8 +103,8 @@ export function createSupabaseAdminClient(): SupabaseClient<Database> {
 export async function getServerUser(cookieStore: ReadonlyCookieStore) {
   try {
     const supabase = createSupabaseServerClient(cookieStore)
-    const { data: { session } } = await supabase.auth.getSession()
-    return session?.user ?? null
+    const { data: { user } } = await supabase.auth.getUser()
+    return user ?? null
   } catch {
     return null
   }

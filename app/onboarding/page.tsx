@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowRight2, Location, Heart, Shield, Profile2User, ArrowRight, TickCircle, MagicStar, Hospital, Health, Activity, Eye, Danger, Buildings2, DollarCircle, Global, Clock, DocumentText, InfoCircle, Car } from 'iconsax-react'
+import { createClientClient } from '@/lib/auth-client'
 
 type Question = {
   id: string
@@ -114,6 +115,48 @@ function ProgressRing({ step, total }: { step: number; total: number }) {
 }
 
 export default function OnboardingPage() {
+  // Profile step — shown before questionnaire if full_name is missing
+  const [profileDone,    setProfileDone]    = useState(false)
+  const [profileChecked, setProfileChecked] = useState(false)
+  const [fullName,       setFullName]       = useState('')
+  const [phone,          setPhone]          = useState('')
+  const [profileLoading, setProfileLoading] = useState(false)
+  const [profileError,   setProfileError]   = useState('')
+  const [userId,         setUserId]         = useState<string | null>(null)
+
+  useEffect(() => {
+    const supabase = createClientClient()
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) { setProfileDone(true); setProfileChecked(true); return }
+      setUserId(user.id)
+      supabase.from('user_profiles').select('full_name').eq('id', user.id).single()
+        .then(({ data }) => {
+          // Skip profile step if they already have a name
+          if (data?.full_name) setProfileDone(true)
+          setProfileChecked(true)
+        })
+    })
+  }, [])
+
+  const saveProfile = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!fullName.trim()) { setProfileError('Please enter your name.'); return }
+    if (!userId) { setProfileDone(true); return }
+    setProfileLoading(true); setProfileError('')
+    try {
+      const supabase = createClientClient()
+      await supabase.from('user_profiles').update({
+        full_name: fullName.trim(),
+        phone: phone.trim() || null,
+      }).eq('id', userId)
+      setProfileDone(true)
+    } catch {
+      setProfileError('Failed to save. Please try again.')
+    } finally {
+      setProfileLoading(false)
+    }
+  }
+
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({})
   const [transitioning, setTransitioning] = useState(false)
@@ -171,6 +214,66 @@ export default function OnboardingPage() {
       setDone(true)
     }
   }
+
+  // Show profile form while checking or if profile incomplete
+  if (!profileChecked) return null
+  if (!profileDone) return (
+    <div style={{
+      minHeight: '100dvh', display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
+      padding: '40px 24px', background: '#0d1117',
+    }}>
+      <div style={{ width: '100%', maxWidth: '420px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+            <Profile2User size={24} color="var(--accent, #4F8EF0)" variant="TwoTone" />
+          </div>
+          <h1 style={{ fontSize: '24px', fontWeight: 700, color: '#f5f5f5', letterSpacing: '-0.025em', marginBottom: '6px' }}>
+            Complete your profile
+          </h1>
+          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.55 }}>
+            Takes 10 seconds — helps providers identify you
+          </p>
+        </div>
+
+        <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '14px', padding: '28px' }}>
+          {profileError && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(248,113,113,0.08)', border: '1px solid rgba(248,113,113,0.2)', borderRadius: '8px', padding: '10px 12px', marginBottom: '16px', color: '#f87171', fontSize: '13px' }}>
+              <InfoCircle size={14} color="#f87171" variant="TwoTone" />
+              {profileError}
+            </div>
+          )}
+          <form onSubmit={saveProfile} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.5)', marginBottom: '6px' }}>
+                Full name <span style={{ color: '#f87171' }}>*</span>
+              </label>
+              <input type="text" value={fullName} onChange={e => { setFullName(e.target.value); setProfileError('') }}
+                placeholder="Maria Garcia" autoComplete="name" autoFocus
+                style={{ width: '100%', padding: '11px 14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '9px', color: '#f5f5f5', fontSize: '14px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box', caretColor: '#4F8EF0' }} />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.5)', marginBottom: '6px' }}>
+                Phone <span style={{ color: 'rgba(255,255,255,0.25)', fontWeight: 400 }}>(optional)</span>
+              </label>
+              <input type="tel" value={phone} onChange={e => setPhone(e.target.value)}
+                placeholder="(555) 000-0000" autoComplete="tel"
+                style={{ width: '100%', padding: '11px 14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '9px', color: '#f5f5f5', fontSize: '14px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box', caretColor: '#4F8EF0' }} />
+            </div>
+            <button type="submit" disabled={profileLoading}
+              style={{ padding: '12px 16px', background: 'var(--accent, #4F8EF0)', color: '#fff', border: 'none', borderRadius: '9px', fontWeight: 600, fontSize: '14px', fontFamily: 'inherit', cursor: profileLoading ? 'not-allowed' : 'pointer', opacity: profileLoading ? 0.7 : 1, marginTop: '4px' }}>
+              {profileLoading ? 'Saving…' : 'Continue →'}
+            </button>
+          </form>
+        </div>
+        <p style={{ textAlign: 'center', marginTop: '16px' }}>
+          <button onClick={() => setProfileDone(true)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.3)', fontSize: '12px', cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'underline' }}>
+            Skip for now
+          </button>
+        </p>
+      </div>
+    </div>
+  )
 
   if (done) {
     const topNeeds = (answers['needs'] as string[] | undefined) || []

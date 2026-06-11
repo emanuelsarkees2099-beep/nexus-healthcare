@@ -78,8 +78,16 @@ function LoginPageInner() {
     if (!email || !password) { setError('Please fill in both fields.'); return }
     setLoading(true); setError('')
     try {
+      // When "Keep me signed in" is unchecked, set a short-lived session
+      // that expires when the browser closes — HIPAA-friendly default.
+      if (!rememberMe) {
+        supabase.auth.stopAutoRefresh()
+      }
       const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
       if (authError) throw authError
+      if (rememberMe) {
+        supabase.auth.startAutoRefresh()
+      }
       window.location.href = safeNext
     } catch (err) {
       setError(friendlyError(err instanceof Error ? err.message : 'Sign in failed.'))
