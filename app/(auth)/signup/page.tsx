@@ -1,7 +1,7 @@
 'use client'
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { createClientClient } from '@/lib/auth-client'
 import Link from 'next/link'
 
@@ -55,7 +55,11 @@ export default function SignupPage() {
   const [mounted,     setMounted]     = useState(false)
   const [focused,     setFocused]     = useState<string | null>(null)
 
-  const emailRef = useRef<HTMLInputElement>(null)
+  const emailRef        = useRef<HTMLInputElement>(null)
+  const emailWrapRef    = useRef<HTMLDivElement>(null)
+  const passwordWrapRef = useRef<HTMLDivElement>(null)
+  const confirmWrapRef  = useRef<HTMLDivElement>(null)
+  const [errorFields, setErrorFields] = useState<Set<string>>(new Set())
   const supabase = createClientClient()
   const strength = pwStrength(password)
 
@@ -78,12 +82,27 @@ export default function SignupPage() {
     }
   }
 
+  const shake = useCallback((fields: string[], wrapRefs: Array<{ current: HTMLDivElement | null }>) => {
+    setErrorFields(new Set(fields))
+    wrapRefs.forEach(ref => {
+      const el = ref.current
+      if (!el) return
+      el.classList.remove('input-shake')
+      void el.offsetWidth
+      el.classList.add('input-shake')
+    })
+    setTimeout(() => {
+      setErrorFields(new Set())
+      wrapRefs.forEach(ref => ref.current?.classList.remove('input-shake'))
+    }, 520)
+  }, [])
+
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!email || !password || !confirmPass) { setError('Please fill in all fields.'); return }
-    if (password !== confirmPass)             { setError('Passwords do not match.'); return }
-    if (password.length < 8)                 { setError('Password must be at least 8 characters.'); return }
-    if (strength.score < 2)                  { setError('Please choose a stronger password.'); return }
+    if (!email || !password || !confirmPass) { setError('Please fill in all fields.'); shake(['email', 'password', 'confirm'], [emailWrapRef, passwordWrapRef, confirmWrapRef]); return }
+    if (password !== confirmPass)             { setError('Passwords do not match.'); shake(['password', 'confirm'], [passwordWrapRef, confirmWrapRef]); return }
+    if (password.length < 8)                 { setError('Password must be at least 8 characters.'); shake(['password'], [passwordWrapRef]); return }
+    if (strength.score < 2)                  { setError('Please choose a stronger password.'); shake(['password'], [passwordWrapRef]); return }
     if (!agreed)                             { setError('You must agree to the Terms and Privacy Policy to continue.'); return }
 
     setLoading(true); setError('')
@@ -112,29 +131,35 @@ export default function SignupPage() {
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign up failed.')
+      shake(['email'], [emailWrapRef])
       setLoading(false)
     }
   }
 
   if (!mounted) return null
 
-  const inputStyle = (field: string): React.CSSProperties => ({
-    width: '100%',
-    padding: '12px 15px',
-    background: focused === field ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.03)',
-    border: `1px solid ${focused === field ? 'rgba(79,142,240,0.55)' : 'rgba(255,255,255,0.10)'}`,
-    borderRadius: '10px',
-    color: 'var(--text)',
-    fontSize: '14px',
-    fontFamily: 'inherit',
-    outline: 'none',
-    boxSizing: 'border-box' as const,
-    caretColor: '#4F8EF0',
-    boxShadow: focused === field
-      ? '0 0 0 3px rgba(79,142,240,0.12), inset 0 1px 0 rgba(255,255,255,0.04)'
-      : 'inset 0 1px 0 rgba(255,255,255,0.03)',
-    transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease',
-  })
+  const inputStyle = (field: string): React.CSSProperties => {
+    const hasErr = errorFields.has(field)
+    return {
+      width: '100%',
+      padding: '12px 15px',
+      background: focused === field ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.03)',
+      border: `1px solid ${hasErr ? 'rgba(248,113,113,0.60)' : focused === field ? 'rgba(79,142,240,0.55)' : 'rgba(255,255,255,0.10)'}`,
+      borderRadius: '10px',
+      color: 'var(--text)',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      outline: 'none',
+      boxSizing: 'border-box' as const,
+      caretColor: '#4F8EF0',
+      boxShadow: hasErr
+        ? '0 0 0 3px rgba(248,113,113,0.12)'
+        : focused === field
+          ? '0 0 0 3px rgba(79,142,240,0.12), inset 0 1px 0 rgba(255,255,255,0.04)'
+          : 'inset 0 1px 0 rgba(255,255,255,0.03)',
+      transition: hasErr ? 'none' : 'border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease',
+    }
+  }
 
   return (
     <div style={{
@@ -145,6 +170,14 @@ export default function SignupPage() {
     }}>
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes input-shake {
+          0%,100% { transform: translateX(0); }
+          20% { transform: translateX(-7px); }
+          40% { transform: translateX(7px); }
+          60% { transform: translateX(-4px); }
+          80% { transform: translateX(4px); }
+        }
+        .input-shake { animation: input-shake 0.42s cubic-bezier(0.36,0.07,0.19,0.97) both; }
         .auth-card    { animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
         .success-card { animation: scaleIn 0.5s cubic-bezier(0.16,1,0.3,1) both; }
         .su-google:hover:not(:disabled) { background: rgba(255,255,255,0.07) !important; border-color: rgba(255,255,255,0.18) !important; transform: translateY(-1px); }
@@ -276,7 +309,7 @@ export default function SignupPage() {
             <form onSubmit={handleSignup} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
 
               {/* Email */}
-              <div>
+              <div ref={emailWrapRef}>
                 <label htmlFor="su-email" style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: 'var(--text-3)', marginBottom: '7px' }}>
                   Email address
                 </label>
@@ -288,7 +321,7 @@ export default function SignupPage() {
               </div>
 
               {/* Password */}
-              <div>
+              <div ref={passwordWrapRef}>
                 <label htmlFor="su-password" style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: 'var(--text-3)', marginBottom: '7px' }}>
                   Password
                 </label>
@@ -321,7 +354,7 @@ export default function SignupPage() {
               </div>
 
               {/* Confirm password */}
-              <div>
+              <div ref={confirmWrapRef}>
                 <label htmlFor="su-confirm" style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: 'var(--text-3)', marginBottom: '7px' }}>
                   Confirm password
                 </label>

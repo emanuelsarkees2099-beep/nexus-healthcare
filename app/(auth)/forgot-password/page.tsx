@@ -26,8 +26,10 @@ export default function ForgotPasswordPage() {
   const [mounted,      setMounted]      = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
 
-  const supabase = createClientClient()
-  const emailRef = useRef<HTMLInputElement>(null)
+  const supabase     = createClientClient()
+  const emailRef     = useRef<HTMLInputElement>(null)
+  const emailWrapRef = useRef<HTMLDivElement>(null)
+  const [emailError, setEmailError] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -36,7 +38,14 @@ export default function ForgotPasswordPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!email.trim()) { setError('Please enter your email address.'); return }
+    if (!email.trim()) {
+      setError('Please enter your email address.')
+      setEmailError(true)
+      const el = emailWrapRef.current
+      if (el) { el.classList.remove('input-shake'); void el.offsetWidth; el.classList.add('input-shake') }
+      setTimeout(() => { setEmailError(false); emailWrapRef.current?.classList.remove('input-shake') }, 520)
+      return
+    }
     setLoading(true); setError('')
     try {
       // Always show success regardless of whether the email exists — prevents account enumeration
@@ -68,6 +77,14 @@ export default function ForgotPasswordPage() {
     }}>
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes input-shake {
+          0%,100% { transform: translateX(0); }
+          20% { transform: translateX(-7px); }
+          40% { transform: translateX(7px); }
+          60% { transform: translateX(-4px); }
+          80% { transform: translateX(4px); }
+        }
+        .input-shake { animation: input-shake 0.42s cubic-bezier(0.36,0.07,0.19,0.97) both; }
         .auth-card { animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
         .success-card { animation: scaleIn 0.5s cubic-bezier(0.16,1,0.3,1) both; }
         .fp-submit-btn {
@@ -234,7 +251,7 @@ export default function ForgotPasswordPage() {
             )}
 
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              <div>
+              <div ref={emailWrapRef}>
                 <label htmlFor="fp-email" style={{
                   display: 'block', fontSize: '12px', fontWeight: 500,
                   color: 'var(--text-3)', marginBottom: '7px', letterSpacing: '0.01em',
@@ -256,7 +273,7 @@ export default function ForgotPasswordPage() {
                     width: '100%',
                     padding: '12px 15px',
                     background: inputFocused ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.03)',
-                    border: `1px solid ${inputFocused ? 'rgba(79,142,240,0.55)' : 'rgba(255,255,255,0.10)'}`,
+                    border: `1px solid ${emailError ? 'rgba(248,113,113,0.60)' : inputFocused ? 'rgba(79,142,240,0.55)' : 'rgba(255,255,255,0.10)'}`,
                     borderRadius: '10px',
                     color: 'var(--text)',
                     fontSize: '14px',
@@ -264,10 +281,12 @@ export default function ForgotPasswordPage() {
                     outline: 'none',
                     boxSizing: 'border-box' as const,
                     caretColor: '#4F8EF0',
-                    boxShadow: inputFocused
-                      ? '0 0 0 3px rgba(79,142,240,0.12), inset 0 1px 0 rgba(255,255,255,0.04)'
-                      : 'inset 0 1px 0 rgba(255,255,255,0.03)',
-                    transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease',
+                    boxShadow: emailError
+                      ? '0 0 0 3px rgba(248,113,113,0.12)'
+                      : inputFocused
+                        ? '0 0 0 3px rgba(79,142,240,0.12), inset 0 1px 0 rgba(255,255,255,0.04)'
+                        : 'inset 0 1px 0 rgba(255,255,255,0.03)',
+                    transition: emailError ? 'none' : 'border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease',
                   }}
                 />
               </div>

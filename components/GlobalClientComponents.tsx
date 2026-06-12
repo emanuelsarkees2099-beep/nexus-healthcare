@@ -11,6 +11,7 @@ const CookieConsent               = dynamic(() => import('@/components/CookieCon
 const SentryInit                  = dynamic(() => import('@/components/SentryInit'),                 { ssr: false })
 const PostHogProvider             = dynamic(() => import('@/components/PostHogProvider'),            { ssr: false })
 const MobileDock                  = dynamic(() => import('@/components/MobileDock'),                 { ssr: false })
+const ScrollToTop                 = dynamic(() => import('@/components/ScrollToTop'),                 { ssr: false })
 
 export default function GlobalClientComponents() {
   /* #37 — Low-bandwidth mode: restore persisted preference on mount */
@@ -80,6 +81,8 @@ export default function GlobalClientComponents() {
       <ToastContainer />
       {/* Scroll-reveal: auto-reveals elements with .reveal-fade/.reveal-clip etc. */}
       <ScrollReveal />
+      {/* Scroll-to-top button — appears after 400px scroll, bottom-left */}
+      <ScrollToTop />
     </>
   )
 }
