@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from 'next/server'
 const PROTECTED_PATHS = [
   '/dashboard',
   '/patient',
-  '/provider',
   '/admin',
   '/settings',
   '/passport',
@@ -63,14 +62,6 @@ export async function proxy(request: NextRequest) {
     // Admin-only routes
     if ((pathname === '/admin' || pathname.startsWith('/admin/')) &&
         role !== 'admin' && role !== 'super_admin') {
-      const url = request.nextUrl.clone()
-      url.pathname = '/dashboard'
-      return NextResponse.redirect(url)
-    }
-
-    // Provider-only routes
-    if ((pathname === '/provider' || pathname.startsWith('/provider/')) &&
-        role !== 'provider' && role !== 'admin' && role !== 'super_admin') {
       const url = request.nextUrl.clone()
       url.pathname = '/dashboard'
       return NextResponse.redirect(url)

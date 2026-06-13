@@ -211,12 +211,9 @@ export default function Footer() {
             {
               title: 'Tools',
               links: [
-                { label: 'Symptom Guide',       href: '/triage' },
-                { label: 'Healthcare GPS',     href: '/gps' },
-                { label: 'Health Passport',    href: '/passport' },
-                { label: 'Care Wrapped',       href: '/wrapped' },
-                { label: 'Crisis Support',     href: '/crisis' },
-                { label: 'Community Network',  href: '/community' },
+                { label: 'Symptom Guide',  href: '/triage' },
+                { label: 'Health Passport',href: '/passport' },
+                { label: 'Crisis Support', href: '/crisis' },
               ],
             },
             {
@@ -226,7 +223,6 @@ export default function Footer() {
                 { label: 'Equity Lab',       href: '/equity' },
                 { label: 'Editorial',        href: '/editorial' },
                 { label: 'Open Roadmap',     href: '/open' },
-                { label: 'Accessibility',    href: '/accessibility' },
                 { label: 'For Providers',    href: '/provider' },
               ],
             },

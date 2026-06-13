@@ -46,11 +46,8 @@ const ALL_APP_LINK_DEFS = [
   { labelKey: null,                       href: '/open',        fallback: 'Open' },
   { labelKey: 'nav.methodology' as const, href: '/methodology', fallback: 'Methodology' },
   { labelKey: null,                       href: '/triage',      fallback: 'Symptom Guide' },
-  { labelKey: null,                       href: '/gps',         fallback: 'Healthcare GPS' },
   { labelKey: null,                       href: '/passport',    fallback: 'Health Passport' },
-  { labelKey: null,                       href: '/community',   fallback: 'Community' },
   { labelKey: null,                       href: '/crisis',      fallback: 'Crisis Help' },
-  { labelKey: null,                       href: '/wrapped',     fallback: 'Wrapped' },
   { labelKey: null,                       href: '/about',       fallback: 'About NEXUS' },
 ]
 

@@ -3,10 +3,10 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  SearchNormal1, Location, Video, Danger,
+  SearchNormal1, Video, Danger,
   ReceiptText, ShieldTick, Calendar1, Health,
   Chart2, TrendUp, Book1, Judge,
-  Profile2User, Heart, Hospital, Buildings,
+  Profile2User, Hospital,
   ClipboardText, Speaker, Global, MagicStar,
 } from 'iconsax-react'
 
@@ -21,7 +21,6 @@ const SECTIONS = [
     color: '#4F8EF0',
     items: [
       { label: 'Find Clinics',    href: '/search',    icon: SearchNormal1, desc: 'Search 12,000+ free clinics' },
-      { label: 'Healthcare GPS',  href: '/gps',       icon: Location,      desc: 'Step-by-step care navigation' },
       { label: 'Telehealth',      href: '/telehealth',icon: Video,         desc: 'Virtual & phone care' },
       { label: 'Crisis Help',     href: '/crisis',    icon: Danger,        desc: '24/7 emergency resources' },
     ],
@@ -51,7 +50,6 @@ const SECTIONS = [
     color: '#F59E0B',
     items: [
       { label: 'CHW Network',    href: '/chw',       icon: Profile2User, desc: 'Community health workers' },
-      { label: 'Community',      href: '/community', icon: Heart,        desc: 'Events & support groups' },
       { label: 'Provider Hub',   href: '/provider',  icon: Hospital,     desc: 'For healthcare teams' },
       { label: 'Your Rights',    href: '/rights',    icon: ShieldTick,   desc: 'EMTALA, ADA & more' },
     ],

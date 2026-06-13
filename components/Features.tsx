@@ -610,7 +610,6 @@ export default function Features() {
           { href: '/stories',       label: 'Stories'            },
           { href: '/rights',        label: 'Rights & Legal'     },
           { href: '/advocacy',      label: 'Advocacy'           },
-          { href: '/accessibility', label: 'Accessibility'      },
         ].map(item => (
           <Link
             key={item.href}

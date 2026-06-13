@@ -134,13 +134,6 @@ export const PAGE_META = {
     { title: 'For Healthcare Providers', sub: 'Join 2,400+ partner clinics. Patient matching. Revenue recovery.' },
   ),
 
-  community: meta(
-    'Community Stories',
-    'Real stories from Americans who found free healthcare through NEXUS. Read how others navigated the system — and share your own experience.',
-    ['healthcare stories', 'patient stories', 'community', 'uninsured experience'],
-    { title: 'Community Stories', sub: 'Real people. Real care. Real results.' },
-  ),
-
   /* ── Account & personal ──────────────────────────────────────── */
   dashboard: meta(
     'Your Dashboard',
@@ -206,20 +199,6 @@ export const PAGE_META = {
     { title: 'Equity Report', sub: 'Healthcare access gaps — race, income, geography, status.' },
   ),
 
-  wrapped: meta(
-    'Your Health Year Wrapped',
-    'A personalized look at your year using NEXUS — care found, money saved, and your healthcare journey.',
-    ['health wrapped', 'year review', 'healthcare journey', 'NEXUS wrapped'],
-    { title: 'Your Health Year Wrapped', sub: 'Care found, money saved, journey tracked.' },
-  ),
-
-  gps: meta(
-    'Care GPS — Navigate Your Healthcare',
-    'Step-by-step guidance for navigating the US healthcare system without insurance. From urgent care to specialists, we map the path for you.',
-    ['navigate healthcare', 'healthcare guide', 'uninsured guide', 'care navigation'],
-    { title: 'Care GPS', sub: 'Navigate the US healthcare system without insurance.' },
-  ),
-
   editorial: meta(
     'Healthcare News & Guides',
     'Evidence-based healthcare guides, policy updates, and practical tips for uninsured and underinsured Americans.',
@@ -246,13 +225,6 @@ export const PAGE_META = {
     'Connect with trained community health workers who can guide you to local resources, navigate enrollment, and provide support in your language.',
     ['community health worker', 'CHW', 'promotora', 'health navigator', 'patient advocate'],
     { title: 'Community Health Workers', sub: 'Trained navigators in your language and community.' },
-  ),
-
-  accessibility: meta(
-    'Accessibility & Language Access',
-    'NEXUS is committed to full accessibility. Report barriers, request language support, or find resources in your language.',
-    ['accessibility', 'language access', 'ADA', 'translation services', 'disability healthcare'],
-    { title: 'Accessibility', sub: 'Language access, ADA compliance, and disability resources.' },
   ),
 
   stories: meta(

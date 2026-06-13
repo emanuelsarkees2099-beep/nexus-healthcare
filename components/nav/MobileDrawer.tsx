@@ -4,11 +4,11 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useI18n } from '@/components/I18nContext'
 import {
-  SearchNormal1, Location, Video, Danger,
+  SearchNormal1, Video, Danger,
   ReceiptText, ShieldTick, Calendar1, Health,
   Chart2, TrendUp, Book1, Judge,
-  Profile2User, Heart, Hospital, Buildings,
-  ClipboardText, Speaker, Global, MagicStar,
+  Profile2User, Hospital, Buildings,
+  ClipboardText, Speaker, Global,
   Routing2, Home, CloseCircle, SearchStatus,
 } from 'iconsax-react'
 
@@ -34,7 +34,6 @@ const LINK_ICONS: Record<string, React.ElementType<any>> = {
   '/calendar':    Calendar1,
   '/medications': Health,
   '/triage':      ClipboardText,
-  '/gps':         Location,
   '/telehealth':  Video,
   '/crisis':      Danger,
   '/impact':      Chart2,
@@ -43,12 +42,10 @@ const LINK_ICONS: Record<string, React.ElementType<any>> = {
   '/editorial':   ClipboardText,
   '/equity':      Judge,
   '/chw':         Profile2User,
-  '/community':   Heart,
   '/provider':    Hospital,
   '/rights':      ShieldTick,
   '/advocacy':    Speaker,
   '/open':        Global,
-  '/wrapped':     MagicStar,
   '/about':       Global,
   '/passport':    ShieldTick,
   '/methodology': SearchStatus,
@@ -60,11 +57,11 @@ const LINK_ICONS: Record<string, React.ElementType<any>> = {
 
 /* Category groupings for drawer links */
 const CATEGORIES = [
-  { title: 'Find Care',  color: '#4F8EF0', hrefs: ['/search', '/clinics', '/triage', '/gps', '/telehealth', '/crisis'] },
+  { title: 'Find Care',  color: '#4F8EF0', hrefs: ['/search', '/clinics', '/triage', '/telehealth', '/crisis'] },
   { title: 'Programs',   color: '#34D399', hrefs: ['/programs', '/pathways', '/eligibility', '/calendar', '/medications'] },
   { title: 'Explore',    color: '#A78BFA', hrefs: ['/impact', '/outcomes', '/stories', '/editorial', '/equity'] },
-  { title: 'Community',  color: '#F59E0B', hrefs: ['/chw', '/community', '/provider', '/rights', '/advocacy'] },
-  { title: 'More',       color: '#9CA3AF', hrefs: ['/open', '/passport', '/wrapped', '/about', '/methodology'] },
+  { title: 'Community',  color: '#F59E0B', hrefs: ['/chw', '/provider', '/rights', '/advocacy'] },
+  { title: 'More',       color: '#9CA3AF', hrefs: ['/open', '/passport', '/about', '/methodology'] },
 ]
 
 export default function MobileDrawer({ open, onClose, links, user, onLogout, onAnchor }: MobileDrawerProps) {
