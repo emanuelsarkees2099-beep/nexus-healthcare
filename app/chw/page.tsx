@@ -159,6 +159,57 @@ const CHWS = [
 
 const LANGUAGES = ['All', 'Español', 'Haitian Creole', 'Somali', 'Arabic', 'Tagalog', '普通话', 'Polish', 'Amharic', 'Navajo']
 
+const SPECIALTY_OPTIONS = [
+  'Insurance enrollment', 'Chronic disease', 'Diabetes', 'Hypertension',
+  'Mental health', 'Maternal health', 'Pediatrics', 'HIV/AIDS',
+  'Substance use', 'Dental access', 'Cancer screening', 'Environmental health',
+]
+
+/* ─── Phase 6.2: CHW Match Engine ─────────────────── */
+type ChwEntry = typeof CHWS[number]
+interface ChwMatchScore {
+  total: number        // 0–100
+  langScore: number    // 0–40
+  specScore: number    // 0–35
+  availScore: number   // 0–15
+  ratingScore: number  // 0–10
+  tier: 'excellent' | 'good' | 'fair'
+}
+
+function computeChwMatch(chw: ChwEntry, prefLang: string, prefSpecs: Set<string>): ChwMatchScore {
+  // Language (40 pts) — exact match = full credit, interpreter = partial
+  let langScore = 0
+  if (!prefLang || prefLang === 'All' || prefLang === 'English') {
+    langScore = 20  // English-only baseline
+  } else if (chw.languages.some(l => l.toLowerCase().includes(prefLang.toLowerCase()))) {
+    langScore = 40
+  } else if (chw.languages.some(l => /interpret|multilin/i.test(l))) {
+    langScore = 10
+  }
+
+  // Specialty (35 pts) — proportional to matches
+  let specScore = 0
+  if (prefSpecs.size === 0) {
+    specScore = 17  // no preference — partial credit
+  } else {
+    const matched = [...prefSpecs].filter(ps =>
+      chw.specialties.some(cs => cs.toLowerCase().includes(ps.toLowerCase().split(' ')[0]))
+    )
+    specScore = Math.round((matched.length / prefSpecs.size) * 35)
+  }
+
+  // Availability (15 pts)
+  const availScore = chw.available ? 15 : 5
+
+  // Rating (10 pts) — scale from 4.0–5.0
+  const ratingScore = Math.round(((chw.rating - 4.0) / 1.0) * 10)
+
+  const total = Math.min(100, langScore + specScore + availScore + ratingScore)
+  const tier: ChwMatchScore['tier'] = total >= 75 ? 'excellent' : total >= 50 ? 'good' : 'fair'
+
+  return { total, langScore, specScore, availScore, ratingScore, tier }
+}
+
 const HOW_STEPS = [
   { n: '01', icon: <SearchNormal1 size={16} variant="Linear" />,       title: 'Find your CHW',           body: 'Browse by language, specialty, or location. Every CHW is trained, vetted, and community-based.' },
   { n: '02', icon: <MessageCircle size={16} variant="Linear" />, title: 'Connect directly',        body: 'Send a message or request a call. Most CHWs respond within 2 hours.' },
@@ -219,13 +270,28 @@ export default function CHWPage() {
   const [formSubmitting, setFormSubmitting] = useState(false)
   const [formError, setFormError]   = useState('')
 
-  const filtered = CHWS.filter(c => {
-    const matchLang = langFilter === 'All' || c.languages.includes(langFilter)
-    const matchQ    = !query || c.name.toLowerCase().includes(query.toLowerCase()) ||
-                      c.specialties.some(s => s.toLowerCase().includes(query.toLowerCase())) ||
-                      c.loc.toLowerCase().includes(query.toLowerCase())
-    return matchLang && matchQ
-  })
+  // Phase 6.2 — match preference state
+  const [prefLang, setPrefLang]     = useState('All')
+  const [prefSpecs, setPrefSpecs]   = useState<Set<string>>(new Set())
+  const [showMatchPrefs, setShowMatchPrefs] = useState(false)
+  const hasPrefs = prefLang !== 'All' || prefSpecs.size > 0
+
+  const toggleSpec = (s: string) => {
+    setPrefSpecs(prev => { const n = new Set(prev); if (n.has(s)) n.delete(s); else n.add(s); return n })
+  }
+
+  const scored = CHWS
+    .filter(c => {
+      const matchLang = langFilter === 'All' || c.languages.includes(langFilter)
+      const matchQ    = !query || c.name.toLowerCase().includes(query.toLowerCase()) ||
+                        c.specialties.some(s => s.toLowerCase().includes(query.toLowerCase())) ||
+                        c.loc.toLowerCase().includes(query.toLowerCase())
+      return matchLang && matchQ
+    })
+    .map(c => ({ ...c, _match: computeChwMatch(c, prefLang, prefSpecs) }))
+    .sort((a, b) => hasPrefs ? b._match.total - a._match.total : 0)
+
+  const filtered = scored
 
   const pill: React.CSSProperties = {
     display: 'inline-flex', alignItems: 'center', gap: '6px',
@@ -332,6 +398,34 @@ export default function CHWPage() {
                 </div>
               </div>
 
+              {/* Match preferences panel */}
+              <div style={{ marginBottom: 14 }}>
+                <button onClick={() => setShowMatchPrefs(v => !v)} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 100, border: `1px solid ${hasPrefs ? 'rgba(79,142,240,0.3)' : 'rgba(255,255,255,0.08)'}`, background: hasPrefs ? 'rgba(79,142,240,0.08)' : 'rgba(255,255,255,0.03)', color: hasPrefs ? 'var(--accent)' : 'rgba(255,255,255,0.5)', fontSize: 12, fontWeight: hasPrefs ? 600 : 400, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}>
+                  <MagicStar size={11} color="currentColor" /> {hasPrefs ? `Personalized match (${prefSpecs.size + (prefLang !== 'All' ? 1 : 0)} prefs)` : 'Personalize your match'} <ArrowRight2 size={10} color="currentColor" style={{ transform: showMatchPrefs ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
+                </button>
+                {showMatchPrefs && (
+                  <div style={{ marginTop: 12, padding: '18px', borderRadius: 14, background: 'rgba(79,142,240,0.04)', border: '1px solid rgba(79,142,240,0.14)', display: 'flex', flexDirection: 'column', gap: 14 }}>
+                    <div>
+                      <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: 8 }}>My preferred language</div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+                        {['All', 'English', 'Español', 'Haitian Creole', 'Somali', 'Arabic', 'Tagalog', '普通话', 'Amharic'].map(l => (
+                          <button key={l} onClick={() => setPrefLang(l)} style={{ padding: '5px 12px', borderRadius: 100, border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 12, background: prefLang === l ? 'rgba(79,142,240,0.15)' : 'rgba(255,255,255,0.04)', color: prefLang === l ? 'var(--accent)' : 'rgba(255,255,255,0.45)', outline: prefLang === l ? '1.5px solid rgba(79,142,240,0.3)' : '1.5px solid rgba(255,255,255,0.07)', transition: 'all 0.14s' }}>{l}</button>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: 8 }}>My health needs</div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+                        {SPECIALTY_OPTIONS.map(s => (
+                          <button key={s} onClick={() => toggleSpec(s)} style={{ padding: '5px 12px', borderRadius: 100, border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 12, background: prefSpecs.has(s) ? 'rgba(167,139,250,0.12)' : 'rgba(255,255,255,0.04)', color: prefSpecs.has(s) ? '#a78bfa' : 'rgba(255,255,255,0.45)', outline: prefSpecs.has(s) ? '1.5px solid rgba(167,139,250,0.28)' : '1.5px solid rgba(255,255,255,0.07)', transition: 'all 0.14s' }}>{s}</button>
+                        ))}
+                      </div>
+                    </div>
+                    {hasPrefs && <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', margin: 0 }}>CHWs are sorted by best match based on your preferences.</p>}
+                  </div>
+                )}
+              </div>
+
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {LANGUAGES.map(l => (
                   <button key={l} onClick={() => setLangFilter(l)}
@@ -362,10 +456,20 @@ export default function CHWPage() {
                       <div style={{ flex: 1 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
                           <span style={{ fontWeight: 600, fontSize: '15px' }}>{chw.name}</span>
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', padding: '3px 9px', borderRadius: '100px', background: chw.available ? 'rgba(74,144,217,0.1)' : 'rgba(255,255,255,0.05)', color: chw.available ? 'var(--accent)' : 'rgba(255,255,255,0.3)', border: `1px solid ${chw.available ? 'rgba(74,144,217,0.25)' : 'rgba(255,255,255,0.08)'}` }}>
-                            {chw.available && <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--accent)', animation: 'open-pulse 2s ease-in-out infinite', display: 'inline-block' }} />}
-                            {chw.available ? 'Available' : 'Busy'}
-                          </span>
+                          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                            {hasPrefs && (
+                              <span style={{
+                                fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 100,
+                                background: chw._match.tier === 'excellent' ? 'rgba(52,211,153,0.1)' : chw._match.tier === 'good' ? 'rgba(79,142,240,0.1)' : 'rgba(245,158,11,0.1)',
+                                color: chw._match.tier === 'excellent' ? '#34d399' : chw._match.tier === 'good' ? 'var(--accent)' : '#f59e0b',
+                                border: `1px solid ${chw._match.tier === 'excellent' ? 'rgba(52,211,153,0.2)' : chw._match.tier === 'good' ? 'rgba(79,142,240,0.2)' : 'rgba(245,158,11,0.2)'}`,
+                              }}>{chw._match.total}% match</span>
+                            )}
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', padding: '3px 9px', borderRadius: '100px', background: chw.available ? 'rgba(74,144,217,0.1)' : 'rgba(255,255,255,0.05)', color: chw.available ? 'var(--accent)' : 'rgba(255,255,255,0.3)', border: `1px solid ${chw.available ? 'rgba(74,144,217,0.25)' : 'rgba(255,255,255,0.08)'}` }}>
+                              {chw.available && <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--accent)', animation: 'open-pulse 2s ease-in-out infinite', display: 'inline-block' }} />}
+                              {chw.available ? 'Available' : 'Busy'}
+                            </span>
+                          </div>
                         </div>
                         <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
                           <Location size={10} variant="Linear" />{chw.loc}

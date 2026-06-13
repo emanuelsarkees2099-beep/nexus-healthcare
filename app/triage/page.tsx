@@ -4,6 +4,7 @@ import AppShell from '@/components/AppShell'
 import Link from 'next/link'
 import { Hospital, Danger, TickCircle, Location, ArrowRight2, RefreshCircle, InfoCircle, ArrowRight, Clock, MagicStar, Activity, Flash, Heart, Health } from 'iconsax-react'
 import QuickExit from '@/components/QuickExit'
+import CrisisDetectionBanner from '@/components/CrisisDetectionBanner'
 
 type Step = {
   type: 'thinking' | 'checking' | 'result' | 'warning'
@@ -410,6 +411,9 @@ export default function TriagePage() {
                 ⌘↵ to analyze
               </div>
             </div>
+
+            {/* Crisis detection — surfaces 988 banner for crisis language */}
+            <CrisisDetectionBanner text={query} />
 
             {/* Suggestions */}
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>

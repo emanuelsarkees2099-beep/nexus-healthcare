@@ -1,11 +1,29 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import AppShell from '@/components/AppShell'
 import JsonLd, { medicalPageSchema, breadcrumbSchema } from '@/components/JsonLd'
 import Link from 'next/link'
-import { Call, Location, Heart, Danger, ArrowRight2, Clock, Routing } from 'iconsax-react'
+import { Call, Location, Heart, Danger, ArrowRight2, Clock, Routing, TickCircle, AddCircle, DocumentDownload, Shield } from 'iconsax-react'
 import QuickExit from '@/components/QuickExit'
 import DotGrid from '@/components/DotGrid'
+
+const SAFETY_KEY = 'nexus_safety_plan'
+
+type SafetySection = {
+  id: string
+  title: string
+  placeholder: string
+  items: string[]
+}
+
+const DEFAULT_PLAN: SafetySection[] = [
+  { id: 'warning', title: '1. My warning signs', placeholder: 'What thoughts, feelings, or behaviors mean a crisis might be coming?', items: [] },
+  { id: 'internal', title: '2. Internal coping strategies', placeholder: 'Things I can do on my own to take my mind off problems (walk, music, distraction)…', items: [] },
+  { id: 'social', title: '3. People & places that provide distraction', placeholder: 'People I can call to talk about something other than the crisis…', items: [] },
+  { id: 'help', title: '4. People I can ask for help', placeholder: 'Name and phone number of someone who can support me…', items: [] },
+  { id: 'professionals', title: '5. Professionals & agencies to contact', placeholder: 'Therapist, crisis line, emergency services, clinic…', items: [] },
+  { id: 'environment', title: '6. Making my environment safe', placeholder: 'Steps to reduce access to means (medications, firearms, other)…', items: [] },
+]
 
 const CRISIS_RESOURCES = [
   {
@@ -100,6 +118,35 @@ export default function CrisisPage() {
   const [breathePhase, setBreathePhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale')
   const [breatheCount, setBreatheCount] = useState(0)
   const [showBreathe, setShowBreathe] = useState(false)
+
+  /* ── Safety planning tool ── */
+  const [showSafetyPlan, setShowSafetyPlan] = useState(false)
+  const [plan, setPlan] = useState<SafetySection[]>(() => {
+    try {
+      if (typeof window === 'undefined') return DEFAULT_PLAN
+      const raw = localStorage.getItem(SAFETY_KEY)
+      return raw ? JSON.parse(raw) as SafetySection[] : DEFAULT_PLAN
+    } catch { return DEFAULT_PLAN }
+  })
+  const [inputs, setInputs] = useState<Record<string, string>>({})
+  const [planSaved, setPlanSaved] = useState(false)
+
+  const addItem = useCallback((sectionId: string) => {
+    const text = (inputs[sectionId] ?? '').trim()
+    if (!text) return
+    setPlan(prev => prev.map(s => s.id === sectionId ? { ...s, items: [...s.items, text] } : s))
+    setInputs(prev => ({ ...prev, [sectionId]: '' }))
+  }, [inputs])
+
+  const removeItem = useCallback((sectionId: string, idx: number) => {
+    setPlan(prev => prev.map(s => s.id === sectionId ? { ...s, items: s.items.filter((_, i) => i !== idx) } : s))
+  }, [])
+
+  const savePlan = useCallback(() => {
+    try { localStorage.setItem(SAFETY_KEY, JSON.stringify(plan)) } catch { /* ignore */ }
+    setPlanSaved(true)
+    setTimeout(() => setPlanSaved(false), 2500)
+  }, [plan])
 
   /* ── GPS-based nearest center detection ── */
   const [geo, setGeo] = useState<GeoState>({ loading: false, lat: null, lon: null, location: null, denied: false })
@@ -535,6 +582,140 @@ export default function CrisisPage() {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Safety Planning Tool (Stanley-Brown SPI) ───────────────────── */}
+      <section style={{ padding: '0 24px 80px' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <div style={{
+            borderRadius: 20,
+            background: 'rgba(129,140,248,0.04)', border: '1px solid rgba(129,140,248,0.16)',
+            overflow: 'hidden',
+          }}>
+            {/* Header — toggle */}
+            <button
+              onClick={() => setShowSafetyPlan(v => !v)}
+              style={{
+                width: '100%', display: 'flex', alignItems: 'center', gap: 14,
+                padding: '24px 28px', background: 'none', border: 'none', cursor: 'pointer',
+                textAlign: 'left', fontFamily: 'inherit',
+              }}
+            >
+              <div style={{
+                width: 40, height: 40, borderRadius: 12, flexShrink: 0,
+                background: 'rgba(129,140,248,0.10)', border: '1px solid rgba(129,140,248,0.25)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Shield size={18} color="#818cf8" />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)', marginBottom: 3 }}>
+                  Personal Safety Plan
+                </div>
+                <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)' }}>
+                  Based on the Stanley-Brown Safety Planning Intervention · Saved privately on your device
+                </div>
+              </div>
+              <ArrowRight2
+                size={14} color="rgba(255,255,255,0.3)"
+                style={{ transform: showSafetyPlan ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s', flexShrink: 0 }}
+              />
+            </button>
+
+            {showSafetyPlan && (
+              <div style={{ padding: '0 28px 28px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, margin: '20px 0 24px' }}>
+                  A safety plan is a prioritized list of coping strategies and sources of support you can use during a crisis. Fill in as much or as little as you&apos;re comfortable with. It saves automatically to your device — no account needed.
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                  {plan.map((section) => (
+                    <div key={section.id} style={{
+                      borderRadius: 14,
+                      background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)',
+                      padding: '18px 20px',
+                    }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: 'rgba(129,140,248,0.9)', marginBottom: 12 }}>
+                        {section.title}
+                      </div>
+
+                      {/* Existing items */}
+                      {section.items.length > 0 && (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 12 }}>
+                          {section.items.map((item, idx) => (
+                            <div key={idx} style={{
+                              display: 'flex', alignItems: 'center', gap: 10,
+                              padding: '8px 12px', borderRadius: 8,
+                              background: 'rgba(129,140,248,0.06)', border: '1px solid rgba(129,140,248,0.14)',
+                            }}>
+                              <TickCircle size={13} color="rgba(129,140,248,0.7)" variant="Bold" style={{ flexShrink: 0 }} />
+                              <span style={{ flex: 1, fontSize: 13, color: 'var(--text-2)' }}>{item}</span>
+                              <button
+                                onClick={() => removeItem(section.id, idx)}
+                                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2, color: 'rgba(255,255,255,0.25)', fontFamily: 'inherit', fontSize: 13, lineHeight: 1 }}
+                                aria-label="Remove item"
+                              >×</button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Add item input */}
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <input
+                          type="text"
+                          value={inputs[section.id] ?? ''}
+                          onChange={e => setInputs(prev => ({ ...prev, [section.id]: e.target.value }))}
+                          onKeyDown={e => { if (e.key === 'Enter') addItem(section.id) }}
+                          placeholder={section.placeholder}
+                          style={{
+                            flex: 1, padding: '9px 12px', borderRadius: 8,
+                            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)',
+                            color: 'var(--text)', fontSize: 13, fontFamily: 'inherit', outline: 'none',
+                          }}
+                        />
+                        <button
+                          onClick={() => addItem(section.id)}
+                          style={{
+                            padding: '9px 12px', borderRadius: 8, border: 'none', cursor: 'pointer',
+                            background: 'rgba(129,140,248,0.12)', color: 'rgba(129,140,248,0.9)',
+                            display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600,
+                            fontFamily: 'inherit',
+                          }}
+                          aria-label="Add item"
+                        >
+                          <AddCircle size={14} color="currentColor" /> Add
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ display: 'flex', gap: 10, marginTop: 24, flexWrap: 'wrap' }}>
+                  <button
+                    onClick={savePlan}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 7,
+                      padding: '11px 20px', borderRadius: 10, border: 'none', cursor: 'pointer',
+                      background: planSaved ? 'rgba(52,211,153,0.12)' : 'rgba(129,140,248,0.15)',
+                      color: planSaved ? '#34d399' : 'rgba(129,140,248,0.95)',
+                      fontSize: 13, fontWeight: 600, fontFamily: 'inherit',
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    {planSaved
+                      ? <><TickCircle size={14} color="currentColor" variant="Bold" /> Saved!</>
+                      : <><DocumentDownload size={14} color="currentColor" /> Save my plan</>
+                    }
+                  </button>
+                  <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', margin: 'auto 0', lineHeight: 1.5 }}>
+                    Stored only on this device. Share with your care team at your next appointment.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>

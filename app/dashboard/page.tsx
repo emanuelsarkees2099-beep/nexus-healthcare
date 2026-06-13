@@ -8,7 +8,7 @@ import {
   Location, Health, Heart, DocumentText, Category,
   Setting2, Logout, ArrowRight2, Profile2User,
   Flash, ShieldTick, ArrowRight, InfoCircle,
-  Notification, Calendar1,
+  Notification, Calendar1, Activity, Danger, MagicStar, MessageCircle,
 } from 'iconsax-react'
 import {
   computeEligibility,
@@ -17,6 +17,7 @@ import {
   type IncomeBracket,
   type ProgramResult,
 } from '@/lib/eligibility'
+import { computeHealthScore, type HealthScoreBreakdown } from '@/lib/health-score'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -333,6 +334,158 @@ function EligibilitySourceBadge() {
   )
 }
 
+// ─── Personalized Feed (Phase 8.1) ───────────────────────────────────────
+
+interface FeedItem {
+  id: string
+  type: 'program' | 'screening' | 'passport' | 'clinic' | 'tip' | 'chw'
+  priority: number      // 0–100 (higher = shown first)
+  title: string
+  body: string
+  cta: string
+  href: string
+  color: string
+  bg: string
+  icon: React.ReactNode
+  dismissKey?: string   // localStorage key for dismissal
+}
+
+function buildFeedItems(
+  programs: ProgramResult[],
+  dueScreenings: number,
+  hasSavedClinic: boolean,
+  passportPct: number,
+  hasEligData: boolean,
+): FeedItem[] {
+  const items: FeedItem[] = []
+
+  // High-confidence un-enrolled programs
+  const topProgram = programs.find(p => p.confidence === 'likely')
+  if (topProgram) {
+    items.push({
+      id: `prog-${topProgram.id}`,
+      type: 'program',
+      priority: 88,
+      title: `You likely qualify for ${topProgram.name}`,
+      body: topProgram.description,
+      cta: 'See how to enroll',
+      href: topProgram.href,
+      color: topProgram.accentColor,
+      bg: `${topProgram.accentColor}08`,
+      icon: <ShieldTick size={15} color={topProgram.accentColor} variant="TwoTone" />,
+    })
+  }
+
+  // Due screenings
+  if (dueScreenings > 0) {
+    items.push({
+      id: 'screenings-due',
+      type: 'screening',
+      priority: 85,
+      title: `${dueScreenings} preventive screening${dueScreenings !== 1 ? 's' : ''} recommended`,
+      body: 'Based on your age and health profile. Most are free with Medicaid or ACA coverage.',
+      cta: 'View your calendar',
+      href: '/calendar',
+      color: '#f59e0b',
+      bg: 'rgba(245,158,11,0.06)',
+      icon: <Calendar1 size={15} color="#f59e0b" variant="TwoTone" />,
+    })
+  }
+
+  // Incomplete passport
+  if (passportPct < 100) {
+    items.push({
+      id: 'passport-incomplete',
+      type: 'passport',
+      priority: 60,
+      title: `Your health passport is ${passportPct}% complete`,
+      body: 'A complete passport helps providers understand your needs and speeds up care.',
+      cta: 'Complete passport',
+      href: '/passport',
+      color: '#34d399',
+      bg: 'rgba(52,211,153,0.06)',
+      icon: <Health size={15} color="#34d399" variant="TwoTone" />,
+    })
+  }
+
+  // No clinic saved yet
+  if (!hasSavedClinic) {
+    items.push({
+      id: 'find-clinic',
+      type: 'clinic',
+      priority: 55,
+      title: 'Find a free or low-cost clinic near you',
+      body: 'NEXUS connects you to 13,000+ FQHCs, free clinics, and sliding-scale providers.',
+      cta: 'Search clinics',
+      href: '/search',
+      color: 'var(--accent)',
+      bg: 'rgba(79,142,240,0.06)',
+      icon: <Location size={15} color="var(--accent)" variant="TwoTone" />,
+    })
+  }
+
+  // No eligibility data — nudge to complete
+  if (!hasEligData) {
+    items.push({
+      id: 'elig-nudge',
+      type: 'program',
+      priority: 70,
+      title: 'Find out what programs you qualify for',
+      body: 'Answer 7 quick questions to unlock personalized program recommendations.',
+      cta: 'Check eligibility',
+      href: '/onboarding',
+      color: '#60a5fa',
+      bg: 'rgba(96,165,250,0.06)',
+      icon: <MagicStar size={15} color="#60a5fa" variant="TwoTone" />,
+    })
+  }
+
+  return items.sort((a, b) => b.priority - a.priority).slice(0, 4)
+}
+
+function PersonalizedFeed({
+  programs, dueScreenings, hasSavedClinic, passportPct, hasEligData, loading,
+}: {
+  programs: ProgramResult[]; dueScreenings: number; hasSavedClinic: boolean
+  passportPct: number; hasEligData: boolean; loading: boolean
+}) {
+  const items = buildFeedItems(programs, dueScreenings, hasSavedClinic, passportPct, hasEligData)
+  if (loading || items.length === 0) return null
+
+  return (
+    <section className="db-fade db-fade-4" style={{ marginBottom: 32 }} aria-label="Personalized recommendations">
+      <SectionLabel label="For You" />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {items.map(item => (
+          <Link key={item.id} href={item.href} style={{ textDecoration: 'none', display: 'block' }}>
+            <div style={{
+              padding: '14px 18px', borderRadius: 14, cursor: 'pointer',
+              background: item.bg, border: `1px solid ${item.color}18`,
+              display: 'flex', alignItems: 'center', gap: 14,
+              transition: 'border-color 0.15s, background 0.15s',
+            }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = `${item.color}30`; el.style.background = `${item.color}10` }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = `${item.color}18`; el.style.background = item.bg }}
+            >
+              <div style={{ width: 32, height: 32, borderRadius: 9, flexShrink: 0, background: `${item.color}10`, border: `1px solid ${item.color}20`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {item.icon}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 2, letterSpacing: '-0.01em' }}>{item.title}</div>
+                <div style={{ fontSize: 12, color: 'var(--text-4)', lineHeight: 1.45, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.body}</div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
+                <span style={{ fontSize: 11, fontWeight: 600, color: item.color }}>{item.cta}</span>
+                <ArrowRight2 size={10} color={item.color} variant="Linear" />
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 // ─── Main page ────────────────────────────────────────────────────────────
 
 export default function DashboardPage() {
@@ -353,6 +506,7 @@ export default function DashboardPage() {
   const [pendingNotifications, setPendingNotifications] = useState<Array<{ clinicName: string; clinicId: string; ts: number }>>([])
   const [dueScreeningsCount, setDueScreeningsCount] = useState(0)
   const [calendarSetUp, setCalendarSetUp] = useState(false)
+  const [healthScore, setHealthScore] = useState<HealthScoreBreakdown | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -402,6 +556,32 @@ export default function DashboardPage() {
 
       const computed = computeEligibility({ incomeBracket: bracket, householdSize: hhSize, careNeeds, situation })
       setPrograms(computed)
+
+      // Recompute health score with Supabase-provided eligibility data merged in
+      try {
+        const passportRaw = typeof window !== 'undefined' ? localStorage.getItem('nexus_passport') : null
+        let pp = { allergies: [] as unknown[], medications: [] as unknown[], conditions: [] as unknown[], emergencyContact: null as {name?: string} | null }
+        try { if (passportRaw) pp = JSON.parse(passportRaw) } catch { /* ignore */ }
+        const notifCount = typeof window !== 'undefined'
+          ? Array.from({ length: localStorage.length }, (_, i) => localStorage.key(i)).filter(k => k?.startsWith('nexus_notify_')).length
+          : 0
+        const calPrefsRaw = typeof window !== 'undefined' ? localStorage.getItem('nexus_calendar_prefs') : null
+        const calPrefs = calPrefsRaw ? JSON.parse(calPrefsRaw) : null
+        const calUp = !!(calPrefs?.age && calPrefs?.sex && calPrefs.sex !== 'Select')
+        setHealthScore(computeHealthScore({
+          hasEligibilityData: !!bracket,
+          programCount: computed.length,
+          passportAllergies: (pp.allergies?.length ?? 0),
+          passportMedications: (pp.medications?.length ?? 0),
+          passportConditions: (pp.conditions?.length ?? 0),
+          passportHasEmergencyContact: !!(pp.emergencyContact as {name?: string} | null)?.name,
+          hasSavedClinic: notifCount > 0,
+          calendarSetUp: calUp,
+          dueScreeningsCount: 0,
+          notificationCount: notifCount,
+          hasMedications: (pp.medications?.length ?? 0) > 0,
+        }))
+      } catch { /* ignore */ }
       setLoading(false)
     }
     load()
@@ -454,6 +634,25 @@ export default function DashboardPage() {
           if (!recent) n++ // flu
           n++ // dental (always due)
           setDueScreeningsCount(n)
+
+          // Compute health score with everything we know from localStorage
+          const passportRaw = localStorage.getItem('nexus_passport')
+          let passportData = { allergies: [] as unknown[], medications: [] as unknown[], conditions: [] as unknown[], emergencyContact: null as unknown }
+          try { if (passportRaw) passportData = JSON.parse(passportRaw) } catch { /* ignore */ }
+          const score = computeHealthScore({
+            hasEligibilityData: false, // will be updated by Supabase effect
+            programCount: 0,
+            passportAllergies: (passportData.allergies as unknown[])?.length ?? 0,
+            passportMedications: (passportData.medications as unknown[])?.length ?? 0,
+            passportConditions: (passportData.conditions as unknown[])?.length ?? 0,
+            passportHasEmergencyContact: !!(passportData.emergencyContact as {name?: string} | null)?.name,
+            hasSavedClinic: notifs.length > 0,
+            calendarSetUp: true,
+            dueScreeningsCount: n,
+            notificationCount: notifs.length,
+            hasMedications: ((passportData.medications as unknown[])?.length ?? 0) > 0,
+          })
+          setHealthScore(score)
         }
       }
     } catch { /* ignore */ }
@@ -545,6 +744,7 @@ export default function DashboardPage() {
           .db-grid-2   { grid-template-columns: 1fr !important; }
           .db-grid-4   { grid-template-columns: 1fr 1fr !important; }
           .db-grid-act { grid-template-columns: 1fr !important; }
+          .qa-grid     { grid-template-columns: 1fr 1fr !important; }
         }
         @media (max-width: 380px) {
           .db-grid-4 { grid-template-columns: 1fr !important; }
@@ -674,37 +874,77 @@ export default function DashboardPage() {
       {/* ── Main ────────────────────────────────────────────────────────── */}
       <main style={{ maxWidth: 960, margin: '0 auto', padding: '52px 24px 96px' }}>
 
-        {/* ── Greeting ──────────────────────────────────────────────────── */}
-        <header className="db-fade" style={{ marginBottom: 44 }}>
-          {loading ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <Skel w="240px" h={38} br={8} />
-              <Skel w="150px" h={14} br={5} />
-            </div>
-          ) : (
-            <>
-              <h1 style={{
-                margin: 0,
-                fontSize: 'clamp(26px, 4vw, 36px)',
-                fontWeight: 700, letterSpacing: '-0.03em',
-                color: 'var(--text)', lineHeight: 1.15,
-                fontFamily: 'var(--font-display, var(--font-inter))',
-                marginBottom: 9,
-              }}>
-                {timeGreeting()}{displayName !== 'there' ? `, ${firstName}` : ''}.
-              </h1>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <p style={{ margin: 0, fontSize: 13, color: 'var(--text-3)' }}>{todayLabel()}</p>
-                {isProvider && (
-                  <span style={{
-                    fontSize: 10, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase',
-                    padding: '2px 7px', borderRadius: 4,
-                    background: 'rgba(52,211,153,0.09)', border: '1px solid rgba(52,211,153,0.20)',
-                    color: 'rgba(52,211,153,0.75)',
-                  }}>Provider</span>
-                )}
+        {/* ── Greeting + Health Score ───────────────────────────────────── */}
+        <header className="db-fade" style={{ marginBottom: 44, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap' }}>
+          <div style={{ flex: 1 }}>
+            {loading ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <Skel w="240px" h={38} br={8} />
+                <Skel w="150px" h={14} br={5} />
               </div>
-            </>
+            ) : (
+              <>
+                <h1 style={{
+                  margin: 0,
+                  fontSize: 'clamp(26px, 4vw, 36px)',
+                  fontWeight: 700, letterSpacing: '-0.03em',
+                  color: 'var(--text)', lineHeight: 1.15,
+                  fontFamily: 'var(--font-display, var(--font-inter))',
+                  marginBottom: 9,
+                }}>
+                  {timeGreeting()}{displayName !== 'there' ? `, ${firstName}` : ''}.
+                </h1>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <p style={{ margin: 0, fontSize: 13, color: 'var(--text-3)' }}>{todayLabel()}</p>
+                  {isProvider && (
+                    <span style={{
+                      fontSize: 10, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase',
+                      padding: '2px 7px', borderRadius: 4,
+                      background: 'rgba(52,211,153,0.09)', border: '1px solid rgba(52,211,153,0.20)',
+                      color: 'rgba(52,211,153,0.75)',
+                    }}>Provider</span>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Health Access Score ring */}
+          {healthScore && (
+            <div style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+              padding: '14px 18px', borderRadius: 16,
+              background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)',
+              minWidth: 100,
+            }}>
+              {(() => {
+                const r = 28, circ = 2 * Math.PI * r
+                const off = circ - (healthScore.total / 100) * circ
+                return (
+                  <svg width="72" height="72" viewBox="0 0 72 72" aria-label={`Health access score: ${healthScore.total}`}>
+                    <circle cx="36" cy="36" r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="4" />
+                    <circle
+                      cx="36" cy="36" r={r} fill="none"
+                      stroke={healthScore.color} strokeWidth="4"
+                      strokeDasharray={circ} strokeDashoffset={off}
+                      strokeLinecap="round"
+                      transform="rotate(-90 36 36)"
+                      style={{ transition: 'stroke-dashoffset 1.2s cubic-bezier(0.16,1,0.3,1)' }}
+                    />
+                    <text x="36" y="40" textAnchor="middle" fontSize="16" fontWeight="700"
+                      fill={healthScore.color} fontFamily="var(--font-inter)">
+                      {healthScore.total}
+                    </text>
+                  </svg>
+                )
+              })()}
+              <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: healthScore.color, textAlign: 'center' }}>
+                {healthScore.label}
+              </div>
+              <div style={{ fontSize: 9.5, color: 'var(--text-4)', textAlign: 'center' }}>
+                Access score
+              </div>
+            </div>
           )}
         </header>
 
@@ -872,6 +1112,35 @@ export default function DashboardPage() {
           </div>
         </section>
 
+        {/* ── Quick Actions ───────────────────────────────────────────────── */}
+        <section className="db-fade db-fade-4" style={{ marginBottom: 32 }} aria-label="Quick actions">
+          <SectionLabel label="Quick Actions" />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+            {([
+              { href: '/triage',      label: 'I need care now',        Icon: Danger,      color: 'rgba(248,113,113,0.85)', bg: 'rgba(248,113,113,0.07)', border: 'rgba(248,113,113,0.18)' },
+              { href: '/medications', label: 'Refill a prescription',  Icon: Activity,    color: 'rgba(251,191,36,0.85)',  bg: 'rgba(251,191,36,0.07)',  border: 'rgba(251,191,36,0.18)'  },
+              { href: '/calendar',    label: 'Book a screening',       Icon: Calendar1,   color: 'rgba(79,142,240,0.85)',  bg: 'rgba(79,142,240,0.07)',  border: 'rgba(79,142,240,0.18)'  },
+              { href: '/chw',         label: 'Talk to someone',        Icon: MessageCircle, color: 'rgba(52,211,153,0.85)', bg: 'rgba(52,211,153,0.07)', border: 'rgba(52,211,153,0.18)' },
+            ] as const).map(({ href, label, Icon, color, bg, border }) => (
+              <Link key={href} href={href} style={{ textDecoration: 'none' }}>
+                <div className="qa-btn" style={{
+                  padding: '14px 16px', borderRadius: 12, cursor: 'pointer',
+                  background: bg, border: `1px solid ${border}`,
+                  display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10,
+                  transition: 'transform 0.15s, border-color 0.15s',
+                  minHeight: 80,
+                }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)' }}
+                >
+                  <Icon size={16} color={color} variant="TwoTone" />
+                  <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', lineHeight: 1.3, letterSpacing: '-0.01em' }}>{label}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         {/* ── Your Alerts ─────────────────────────────────────────────────── */}
         {(pendingNotifications.length > 0 || calendarSetUp) && (
           <section className="db-fade db-fade-4" style={{ marginBottom: 32 }} aria-label="Your alerts">
@@ -944,6 +1213,16 @@ export default function DashboardPage() {
             </div>
           </section>
         )}
+
+        {/* ── Personalized Feed ──────────────────────────────────────────── */}
+        <PersonalizedFeed
+          programs={programs}
+          dueScreenings={dueScreeningsCount}
+          hasSavedClinic={pendingNotifications.length > 0}
+          passportPct={pct}
+          hasEligData={hasEligData}
+          loading={loading}
+        />
 
         {/* ── Getting started + Today's tip ────────────────────────────── */}
         <section style={{ marginBottom: 48 }}>

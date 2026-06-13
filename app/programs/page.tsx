@@ -4,7 +4,7 @@ import AppShell from '@/components/AppShell'
 import JsonLd, { PROGRAMS_FAQ_SCHEMA, breadcrumbSchema } from '@/components/JsonLd'
 import { useRouter } from 'next/navigation'
 import { smoothScrollTo } from '@/utils/smoothScroll'
-import { TickCircle, ArrowRight2, ArrowLeft2, DollarCircle, InfoCircle, TrendUp, ShieldTick, Flash, ArrowRight, MagicStar, ReceiptText, RefreshCircle } from 'iconsax-react'
+import { TickCircle, ArrowRight2, ArrowLeft2, DollarCircle, InfoCircle, TrendUp, ShieldTick, Flash, ArrowRight, MagicStar, ReceiptText, RefreshCircle, DocumentText } from 'iconsax-react'
 
 /* ─── reveal hook ─────────────────────────────────── */
 function useReveal(threshold = 0.15) {
@@ -233,6 +233,169 @@ const PROG_FAQ = [
   { q: 'What if I don\'t qualify for Medicaid in my state?', a: 'Some states have not expanded Medicaid. If you fall in the coverage gap, we\'ll find FQHC clinics, free clinics, and 340B pharmacy programs that provide care regardless of Medicaid status.' },
   { q: 'How often should I re-check my eligibility?', a: 'Check whenever your income, household size, or insurance status changes. Open enrollment for ACA plans runs November 1 – January 15. Medicaid eligibility can be re-checked any time.' },
 ]
+
+/* ── Document Checklist (Phase 3.3) ───────────────────────── */
+const DOC_CHECKLIST_KEY = 'nexus_doc_checklist'
+
+const CHECKLIST_GROUPS = [
+  {
+    program: 'For All Programs',
+    color: 'var(--accent)',
+    docs: [
+      { id: 'photo-id',   label: 'Government-issued photo ID', note: 'Driver\'s license, state ID, or passport' },
+      { id: 'ssn',        label: 'Social Security number', note: 'Card not required — number is enough' },
+      { id: 'residency',  label: 'Proof of residency', note: 'Utility bill, lease, or mail dated last 60 days' },
+    ],
+  },
+  {
+    program: 'Income Verification',
+    color: '#34d399',
+    docs: [
+      { id: 'paystub',    label: 'Recent pay stubs (last 2–3)', note: 'Or employer letter on company letterhead' },
+      { id: 'tax-return', label: 'Most recent tax return (1040)', note: 'Required for ACA subsidy calculation' },
+      { id: 'self-attest',label: 'Self-attestation form', note: 'Many states accept this if you lack documents' },
+    ],
+  },
+  {
+    program: 'Medicaid / CHIP',
+    color: '#60a5fa',
+    docs: [
+      { id: 'birth-cert', label: 'Birth certificate (children)', note: 'Required for CHIP enrollment of minors' },
+      { id: 'citizenship', label: 'Citizenship or immigration status', note: 'Passport, naturalization cert, or green card' },
+      { id: 'household',  label: 'Proof of household size', note: 'Marriage cert, adoption papers, or school records' },
+    ],
+  },
+  {
+    program: 'ACA Marketplace',
+    color: '#a78bfa',
+    docs: [
+      { id: 'current-ins', label: 'Current insurance info (if any)', note: 'Policy number and end date for qualifying event' },
+      { id: 'employer-ins', label: 'Employer coverage offer letter', note: 'Only if your employer offers insurance you declined' },
+    ],
+  },
+]
+
+function DocumentChecklist() {
+  const [checked, setChecked] = React.useState<Set<string>>(() => {
+    if (typeof window === 'undefined') return new Set()
+    try { return new Set(JSON.parse(localStorage.getItem(DOC_CHECKLIST_KEY) ?? '[]')) } catch { return new Set() }
+  })
+  const [open, setOpen] = React.useState(true)
+
+  const total = CHECKLIST_GROUPS.reduce((s, g) => s + g.docs.length, 0)
+  const done = checked.size
+
+  const toggle = (id: string) => {
+    setChecked(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      try { localStorage.setItem(DOC_CHECKLIST_KEY, JSON.stringify([...next])) } catch { /* ignore */ }
+      return next
+    })
+  }
+
+  const { ref, visible } = useReveal(0.1)
+
+  return (
+    <section ref={ref} style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)', opacity: visible ? 1 : 0, transform: visible ? 'none' : 'translateY(28px)', transition: 'opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1)' }}>
+      <div style={{ maxWidth: '860px', margin: '0 auto' }}>
+        {/* Header */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16, marginBottom: 32 }}>
+          <div>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)', marginBottom: '16px' }}>
+              <DocumentText size={10} /> Document checklist
+            </span>
+            <h2 style={{ fontSize: 'clamp(22px, 3.5vw, 36px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.15, marginBottom: 10 }}>
+              What to gather before you apply
+            </h2>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', lineHeight: 1.65, margin: 0, maxWidth: 480 }}>
+              Having these documents ready cuts application time from 2 hours to under 20 minutes.
+            </p>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            {/* Progress ring */}
+            <div style={{ position: 'relative', width: 56, height: 56 }}>
+              <svg width="56" height="56" viewBox="0 0 56 56" style={{ transform: 'rotate(-90deg)' }}>
+                <circle cx="28" cy="28" r="22" fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="4" />
+                <circle
+                  cx="28" cy="28" r="22" fill="none"
+                  stroke={done === total ? '#34d399' : 'var(--accent)'}
+                  strokeWidth="4" strokeLinecap="round"
+                  strokeDasharray={`${2 * Math.PI * 22}`}
+                  strokeDashoffset={`${2 * Math.PI * 22 * (1 - done / total)}`}
+                  style={{ transition: 'stroke-dashoffset 0.4s ease' }}
+                />
+              </svg>
+              <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: done === total ? '#34d399' : 'var(--text)' }}>
+                {done}/{total}
+              </div>
+            </div>
+            <button
+              onClick={() => setOpen(v => !v)}
+              style={{ padding: '7px 14px', borderRadius: 100, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', color: 'rgba(255,255,255,0.4)', fontSize: 12, fontFamily: 'inherit', cursor: 'pointer' }}
+            >
+              {open ? 'Hide' : 'Show'} list
+            </button>
+          </div>
+        </div>
+
+        {open && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: 16 }}>
+            {CHECKLIST_GROUPS.map(group => (
+              <div
+                key={group.program}
+                style={{ borderRadius: 18, border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.015)', overflow: 'hidden' }}
+              >
+                <div style={{ padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: group.color, flexShrink: 0 }} />
+                  <span style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.7)', letterSpacing: '0.04em' }}>{group.program}</span>
+                </div>
+                <div style={{ padding: '10px 0' }}>
+                  {group.docs.map(doc => (
+                    <label
+                      key={doc.id}
+                      style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '10px 18px', cursor: 'pointer' }}
+                    >
+                      <div
+                        onClick={() => toggle(doc.id)}
+                        role="checkbox"
+                        aria-checked={checked.has(doc.id)}
+                        tabIndex={0}
+                        onKeyDown={e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(doc.id) } }}
+                        style={{
+                          flexShrink: 0, width: 18, height: 18, borderRadius: 5, marginTop: 1,
+                          border: `1.5px solid ${checked.has(doc.id) ? group.color : 'rgba(255,255,255,0.2)'}`,
+                          background: checked.has(doc.id) ? `${group.color}22` : 'transparent',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          transition: 'all 0.15s', cursor: 'pointer',
+                        }}
+                      >
+                        {checked.has(doc.id) && <TickCircle size={14} color={group.color} variant="Bold" />}
+                      </div>
+                      <div style={{ flex: 1 }} onClick={() => toggle(doc.id)}>
+                        <div style={{ fontSize: 13, fontWeight: checked.has(doc.id) ? 400 : 500, color: checked.has(doc.id) ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.75)', textDecoration: checked.has(doc.id) ? 'line-through' : 'none', transition: 'all 0.15s' }}>
+                          {doc.label}
+                        </div>
+                        <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', marginTop: 2, lineHeight: 1.5 }}>{doc.note}</div>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {done === total && total > 0 && (
+          <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 10, padding: '12px 18px', borderRadius: 12, background: 'rgba(52,211,153,0.06)', border: '1px solid rgba(52,211,153,0.2)' }}>
+            <TickCircle size={16} color="#34d399" variant="Bold" />
+            <span style={{ fontSize: 14, fontWeight: 600, color: '#34d399' }}>You&apos;re ready to apply — all documents gathered!</span>
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
 
 function ProgramsFAQ() {
   const [open, setOpen] = useState<number | null>(null)
@@ -885,6 +1048,9 @@ export default function ProgramsPage() {
           </div>
         </div>
       </section>
+
+      {/* ── DOCUMENT CHECKLIST ───────────────────────── */}
+      <DocumentChecklist />
 
       {/* ── WHAT PEOPLE SAY ──────────────────────────── */}
       <section style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
