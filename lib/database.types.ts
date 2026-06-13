@@ -19,6 +19,16 @@ export type Database = {
           user_type: string | null
           created_at: string
           updated_at: string
+          /* onboarding fields — added in migration 002 */
+          zip_code: string | null
+          state_code: string | null
+          income_bracket: string | null
+          household_size: number | null
+          care_needs: string[] | null
+          barriers: string[] | null
+          preferred_language: string | null
+          situation: string | null
+          onboarding_completed_at: string | null
         }
         Insert: {
           id: string
@@ -28,6 +38,15 @@ export type Database = {
           user_type?: string | null
           created_at?: string
           updated_at?: string
+          zip_code?: string | null
+          state_code?: string | null
+          income_bracket?: string | null
+          household_size?: number | null
+          care_needs?: string[] | null
+          barriers?: string[] | null
+          preferred_language?: string | null
+          situation?: string | null
+          onboarding_completed_at?: string | null
         }
         Update: {
           id?: string
@@ -37,6 +56,15 @@ export type Database = {
           user_type?: string | null
           created_at?: string
           updated_at?: string
+          zip_code?: string | null
+          state_code?: string | null
+          income_bracket?: string | null
+          household_size?: number | null
+          care_needs?: string[] | null
+          barriers?: string[] | null
+          preferred_language?: string | null
+          situation?: string | null
+          onboarding_completed_at?: string | null
         }
         Relationships: []
       }

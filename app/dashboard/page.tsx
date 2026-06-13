@@ -7,10 +7,18 @@ import Link from 'next/link'
 import {
   Location, Health, Heart, DocumentText, Category,
   Setting2, Logout, ArrowRight2, Profile2User,
-  People, Flash,
+  Flash, ShieldTick, ArrowRight, InfoCircle,
 } from 'iconsax-react'
+import {
+  computeEligibility,
+  CONFIDENCE_COLORS,
+  CONFIDENCE_LABELS,
+  type IncomeBracket,
+  type ProgramResult,
+} from '@/lib/eligibility'
 
-/* ─── helpers ─────────────────────────────────────────────────────── */
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
 function timeGreeting() {
   const h = new Date().getHours()
   if (h < 12) return 'Good morning'
@@ -45,7 +53,8 @@ function relativeTime(iso: string) {
   return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
-/* ─── daily tip ───────────────────────────────────────────────────── */
+// ─── Daily tip ─────────────────────────────────────────────────────────────
+
 const TIPS = [
   { text: 'Drinking water before meals supports digestion and portion awareness.', tag: 'Hydration' },
   { text: 'Even a 10-minute walk measurably improves mood and lowers cortisol.', tag: 'Movement' },
@@ -58,15 +67,16 @@ const TIPS = [
 ]
 const todayTip = () => TIPS[new Date().getDate() % TIPS.length]
 
-/* ─── static data ─────────────────────────────────────────────────── */
+// ─── Static data ──────────────────────────────────────────────────────────
+
 const TOOLS = [
   {
-    href: '/triage', title: 'Symptom Triage', sub: 'Check your symptoms',
+    href: '/triage', title: 'Symptom Guide', sub: 'Check your symptoms',
     Icon: Heart,
     bg: 'rgba(248,113,113,0.09)', border: 'rgba(248,113,113,0.18)', color: 'rgba(248,113,113,0.85)',
   },
   {
-    href: '/medications', title: 'Medications', sub: 'Track prescriptions',
+    href: '/medications', title: 'Medications', sub: 'Track & find savings',
     Icon: DocumentText,
     bg: 'rgba(251,191,36,0.09)', border: 'rgba(251,191,36,0.18)', color: 'rgba(251,191,36,0.85)',
   },
@@ -76,25 +86,26 @@ const TOOLS = [
     bg: 'rgba(167,139,250,0.09)', border: 'rgba(167,139,250,0.18)', color: 'rgba(167,139,250,0.85)',
   },
   {
-    href: '/community', title: 'Community', sub: 'Connect with others',
-    Icon: People,
+    href: '/eligibility', title: 'Eligibility', sub: 'Check what you qualify for',
+    Icon: ShieldTick,
     bg: 'rgba(79,142,240,0.09)', border: 'rgba(79,142,240,0.18)', color: 'rgba(79,142,240,0.85)',
   },
 ] as const
 
 const QUICK = [
-  { href: '/community',   label: 'Community'   },
-  { href: '/calendar',    label: 'Calendar'    },
-  { href: '/stories',     label: 'Stories'     },
-  { href: '/advocacy',    label: 'Advocacy'    },
-  { href: '/eligibility', label: 'Eligibility' },
-  { href: '/pathways',    label: 'Pathways'    },
-  { href: '/chw',         label: 'CHW'         },
-  { href: '/equity',      label: 'Equity'      },
-  { href: '/outcomes',    label: 'Outcomes'    },
+  { href: '/passport',   label: 'Health Passport' },
+  { href: '/calendar',   label: 'Calendar'        },
+  { href: '/stories',    label: 'Stories'         },
+  { href: '/advocacy',   label: 'Advocacy'        },
+  { href: '/eligibility',label: 'Eligibility'     },
+  { href: '/pathways',   label: 'Pathways'        },
+  { href: '/chw',        label: 'CHW'             },
+  { href: '/equity',     label: 'Equity'          },
+  { href: '/outcomes',   label: 'Outcomes'        },
 ]
 
-/* ─── micro-components ────────────────────────────────────────────── */
+// ─── Micro-components ─────────────────────────────────────────────────────
+
 function Skel({ w, h, br = 6 }: { w?: string; h?: number; br?: number }) {
   return (
     <div aria-hidden="true" style={{
@@ -105,12 +116,33 @@ function Skel({ w, h, br = 6 }: { w?: string; h?: number; br?: number }) {
   )
 }
 
-function SectionLabel({ label }: { label: string }) {
+function SectionLabel({
+  label,
+  action,
+}: {
+  label: string
+  action?: { href: string; text: string }
+}) {
   return (
-    <p style={{
-      margin: '0 0 12px', fontSize: 10, fontWeight: 600,
-      letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--text-4)',
-    }}>{label}</p>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+      <p style={{
+        margin: 0, fontSize: 10, fontWeight: 600,
+        letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--text-4)',
+      }}>{label}</p>
+      {action && (
+        <Link href={action.href} style={{
+          fontSize: 11, color: 'var(--text-4)', textDecoration: 'none',
+          display: 'flex', alignItems: 'center', gap: 4,
+          transition: 'color 0.15s',
+        }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'var(--text-2)' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--text-4)' }}
+        >
+          {action.text}
+          <ArrowRight2 size={9} color="currentColor" variant="Linear" />
+        </Link>
+      )}
+    </div>
   )
 }
 
@@ -123,7 +155,6 @@ function StepRow({
       padding: '11px 0',
       borderBottom: '1px solid rgba(255,255,255,0.04)',
     }}>
-      {/* circle indicator */}
       <div style={{
         width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
         background: done ? 'rgba(52,211,153,0.12)' : 'transparent',
@@ -140,7 +171,6 @@ function StepRow({
           </svg>
         )}
       </div>
-      {/* text */}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{
           fontSize: 13, fontWeight: done ? 400 : 500, letterSpacing: '-0.01em',
@@ -157,16 +187,153 @@ function StepRow({
   )
 
   if (!done && href) {
-    return (
-      <Link href={href} style={{ textDecoration: 'none', display: 'block' }}>
-        {row}
-      </Link>
-    )
+    return <Link href={href} style={{ textDecoration: 'none', display: 'block' }}>{row}</Link>
   }
   return row
 }
 
-/* ═══════════════════════════════════════════════════════════════════ */
+// ─── Eligibility snapshot ─────────────────────────────────────────────────
+
+function EligibilityCard({ p }: { p: ProgramResult }) {
+  const confColor = CONFIDENCE_COLORS[p.confidence]
+  return (
+    <Link
+      href={p.href}
+      style={{ textDecoration: 'none', display: 'block', flexShrink: 0 }}
+    >
+      <div
+        className="elig-card"
+        style={{
+          width: 200,
+          padding: '16px 18px',
+          background: `${p.accentColor}08`,
+          border: `1px solid ${p.accentColor}1A`,
+          borderRadius: 14,
+          cursor: 'pointer',
+          transition: 'border-color 0.18s, background 0.18s, transform 0.2s',
+        }}
+        onMouseEnter={e => {
+          const el = e.currentTarget as HTMLElement
+          el.style.borderColor = `${p.accentColor}40`
+          el.style.background  = `${p.accentColor}12`
+          el.style.transform   = 'translateY(-2px)'
+        }}
+        onMouseLeave={e => {
+          const el = e.currentTarget as HTMLElement
+          el.style.borderColor = `${p.accentColor}1A`
+          el.style.background  = `${p.accentColor}08`
+          el.style.transform   = 'translateY(0)'
+        }}
+      >
+        {/* Confidence badge */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 10 }}>
+          <div style={{
+            width: 6, height: 6, borderRadius: '50%',
+            background: confColor, flexShrink: 0,
+          }} />
+          <span style={{
+            fontSize: 9.5, fontWeight: 700, letterSpacing: '0.08em',
+            textTransform: 'uppercase', color: confColor,
+          }}>
+            {CONFIDENCE_LABELS[p.confidence]}
+          </span>
+        </div>
+
+        {/* Program name */}
+        <div style={{
+          fontSize: 13.5, fontWeight: 700, color: 'var(--text)',
+          letterSpacing: '-0.01em', marginBottom: 4, lineHeight: 1.25,
+        }}>
+          {p.name}
+        </div>
+
+        {/* Value */}
+        <div style={{ fontSize: 12, fontWeight: 600, color: p.accentColor, marginBottom: 10 }}>
+          {p.valueLabel}
+        </div>
+
+        {/* Description */}
+        <div style={{
+          fontSize: 11.5, color: 'var(--text-4)', lineHeight: 1.55,
+          marginBottom: 12,
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+        }}>
+          {p.description}
+        </div>
+
+        {/* Badge pill */}
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 4,
+          padding: '3px 9px', borderRadius: 100,
+          background: `${p.accentColor}12`, border: `1px solid ${p.accentColor}22`,
+          fontSize: 10, fontWeight: 600, color: p.accentColor,
+          letterSpacing: '0.04em',
+        }}>
+          {p.badgeLabel}
+        </div>
+      </div>
+    </Link>
+  )
+}
+
+function EligibilityNudge() {
+  return (
+    <Link href="/onboarding" style={{ textDecoration: 'none', display: 'block' }}>
+      <div style={{
+        padding: '18px 22px',
+        background: 'rgba(79,142,240,0.04)', border: '1px dashed rgba(79,142,240,0.22)',
+        borderRadius: 14, display: 'flex', alignItems: 'center', gap: 14,
+        cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s',
+      }}
+        onMouseEnter={e => {
+          const el = e.currentTarget as HTMLElement
+          el.style.background   = 'rgba(79,142,240,0.08)'
+          el.style.borderColor  = 'rgba(79,142,240,0.38)'
+        }}
+        onMouseLeave={e => {
+          const el = e.currentTarget as HTMLElement
+          el.style.background   = 'rgba(79,142,240,0.04)'
+          el.style.borderColor  = 'rgba(79,142,240,0.22)'
+        }}
+      >
+        <div style={{
+          width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+          background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.20)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <ShieldTick size={16} color="var(--accent)" variant="TwoTone" />
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>
+            Unlock your program eligibility
+          </div>
+          <div style={{ fontSize: 12, color: 'var(--text-4)', lineHeight: 1.5 }}>
+            Answer 7 quick questions to see which programs you qualify for — Medicaid, ACA, HRSA, and more.
+          </div>
+        </div>
+        <ArrowRight2 size={13} color="rgba(255,255,255,0.25)" variant="Linear" style={{ flexShrink: 0 }} />
+      </div>
+    </Link>
+  )
+}
+
+function EligibilitySourceBadge() {
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', gap: 4,
+      fontSize: 10, color: 'var(--text-4)', letterSpacing: '0.03em',
+    }}>
+      <InfoCircle size={9} color="currentColor" variant="Linear" />
+      Based on 2025 Federal Poverty Guidelines · HHS
+    </div>
+  )
+}
+
+// ─── Main page ────────────────────────────────────────────────────────────
+
 export default function DashboardPage() {
   const supabase = createClientClient()
 
@@ -174,28 +341,63 @@ export default function DashboardPage() {
     id: string; email: string
     full_name: string | null; phone: string | null
     user_type: string | null; created_at: string
+    income_bracket: string | null
+    household_size: number | null
+    care_needs: string[] | null
+    situation: string | null
   } | null>(null)
-  const [loading,  setLoading]  = useState(true)
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [loading,   setLoading]   = useState(true)
+  const [menuOpen,  setMenuOpen]  = useState(false)
+  const [programs,  setPrograms]  = useState<ProgramResult[]>([])
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { window.location.href = '/login'; return }
+
       const { data } = await supabase
         .from('user_profiles')
-        .select('full_name, phone, user_type')
+        .select('full_name, phone, user_type, income_bracket, household_size, care_needs, situation')
         .eq('id', user.id)
         .single()
-      setProfile({
-        id:         user.id,
-        email:      user.email ?? '',
-        full_name:  data?.full_name ?? null,
-        phone:      data?.phone     ?? null,
-        user_type:  data?.user_type ?? null,
-        created_at: user.created_at,
-      })
+
+      const profileData = {
+        id:             user.id,
+        email:          user.email ?? '',
+        full_name:      data?.full_name      ?? null,
+        phone:          data?.phone          ?? null,
+        user_type:      data?.user_type      ?? null,
+        created_at:     user.created_at,
+        income_bracket: data?.income_bracket ?? null,
+        household_size: data?.household_size ?? null,
+        care_needs:     data?.care_needs     ?? null,
+        situation:      data?.situation      ?? null,
+      }
+      setProfile(profileData)
+
+      // Compute eligibility — prefer Supabase data, fall back to localStorage
+      let bracket    = profileData.income_bracket as IncomeBracket | null
+      let hhSize     = profileData.household_size ?? 1
+      let careNeeds  = profileData.care_needs ?? []
+      let situation  = profileData.situation ?? null
+
+      if (!bracket) {
+        try {
+          const raw = localStorage.getItem('nexus_onboarding')
+          if (raw) {
+            const { answers } = JSON.parse(raw) as { answers: Record<string, string | string[]> }
+            bracket   = (answers['income_bracket'] as IncomeBracket | undefined) ?? null
+            const hhR = answers['household_size'] as string | undefined
+            hhSize    = hhR === '4_plus' ? 4 : (parseInt(hhR ?? '') || 1)
+            careNeeds = (answers['needs'] as string[] | undefined) ?? []
+            situation = (answers['situation'] as string | undefined) ?? null
+          }
+        } catch { /* ignore */ }
+      }
+
+      const computed = computeEligibility({ incomeBracket: bracket, householdSize: hhSize, careNeeds, situation })
+      setPrograms(computed)
       setLoading(false)
     }
     load()
@@ -220,6 +422,7 @@ export default function DashboardPage() {
   const pct         = passportPct(profile)
   const isProvider  = profile?.user_type === 'provider'
   const tip         = todayTip()
+  const hasEligData = !!profile?.income_bracket
 
   const passportSteps = [
     { label: 'Email address', done: true },
@@ -239,20 +442,19 @@ export default function DashboardPage() {
       done:  pct === 100, href: '/dashboard/profile',
     },
     {
+      label: 'Answer eligibility questions',
+      sub:   hasEligData ? 'Done — programs found' : 'Unlocks your program eligibility',
+      done:  hasEligData, href: '/onboarding',
+    },
+    {
       label: 'Explore Find Care',
       sub:   'Free clinics & telehealth near you',
       done:  false, href: '/search',
-    },
-    {
-      label: 'Take a triage assessment',
-      sub:   'Understand your symptoms',
-      done:  false, href: '/triage',
     },
   ]
 
   const doneCount = gettingStarted.filter(s => s.done).length
 
-  /* ──────────────────────────────────────────────────────────────── */
   return (
     <div style={{
       minHeight: '100vh',
@@ -274,21 +476,23 @@ export default function DashboardPage() {
         .db-fade-5 { animation-delay:.38s }
 
         .ql-pill:hover {
-          background:    rgba(255,255,255,0.06) !important;
-          border-color:  rgba(255,255,255,0.14) !important;
-          color:         var(--text-2) !important;
+          background:   rgba(255,255,255,0.06) !important;
+          border-color: rgba(255,255,255,0.14) !important;
+          color:        var(--text-2) !important;
         }
         .menu-item:hover    { background: rgba(255,255,255,0.05) !important; color: var(--text) !important; }
         .menu-signout:hover { background: rgba(248,113,113,0.07) !important; color: rgba(248,113,113,0.95) !important; }
-
         .nav-icon-btn { transition: background 0.15s, color 0.15s; }
         .nav-icon-btn:hover { background: rgba(255,255,255,0.06) !important; color: rgba(255,255,255,0.72) !important; }
-
-        /* tool card arrow fade-in on hover */
         .tool-card:hover .tc-arrow { opacity: 1 !important; }
 
-        /* step row hover feedback */
-        a:has(.step-inner):hover .step-inner { opacity: 0.80; }
+        /* Eligibility row — horizontal scroll on mobile */
+        .elig-scroll {
+          display: flex; gap: 10px; overflow-x: auto;
+          padding-bottom: 6px; -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+        }
+        .elig-scroll::-webkit-scrollbar { display: none; }
 
         @media (max-width: 640px) {
           .db-grid-2   { grid-template-columns: 1fr !important; }
@@ -300,7 +504,7 @@ export default function DashboardPage() {
         }
       `}</style>
 
-      {/* ── Nav ───────────────────────────────────────────────────── */}
+      {/* ── Nav ─────────────────────────────────────────────────────────── */}
       <nav style={{
         position: 'sticky', top: 0, zIndex: 50, height: 52,
         background: 'rgba(6,6,8,0.90)',
@@ -310,7 +514,6 @@ export default function DashboardPage() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 24px',
       }}>
-        {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
           <svg width="17" height="17" viewBox="0 0 100 100" fill="none" aria-hidden="true">
             <path d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4F8EF0" opacity="0.95"/>
@@ -325,7 +528,6 @@ export default function DashboardPage() {
           }}>NEXUS</span>
         </Link>
 
-        {/* Right controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
           <Link href="/dashboard/profile" aria-label="Profile" className="nav-icon-btn" style={{
             width: 32, height: 32, borderRadius: 8,
@@ -334,7 +536,6 @@ export default function DashboardPage() {
           }}>
             <Profile2User size={14} color="currentColor" variant="Linear" />
           </Link>
-
           <Link href="/settings/security" aria-label="Settings" className="nav-icon-btn" style={{
             width: 32, height: 32, borderRadius: 8,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -347,8 +548,7 @@ export default function DashboardPage() {
           <div ref={menuRef} style={{ position: 'relative', marginLeft: 4 }}>
             <button
               onClick={() => setMenuOpen(v => !v)}
-              aria-label="User menu"
-              aria-expanded={menuOpen}
+              aria-label="User menu" aria-expanded={menuOpen}
               style={{
                 width: 32, height: 32, borderRadius: '50%',
                 background: 'linear-gradient(135deg,rgba(79,142,240,0.38) 0%,rgba(79,142,240,0.14) 100%)',
@@ -365,18 +565,13 @@ export default function DashboardPage() {
 
             {menuOpen && (
               <div style={{
-                position: 'absolute', top: 'calc(100% + 8px)', right: 0,
-                minWidth: 220,
+                position: 'absolute', top: 'calc(100% + 8px)', right: 0, minWidth: 220,
                 background: 'rgba(9,10,18,0.98)',
-                backdropFilter: 'blur(24px)',
-                WebkitBackdropFilter: 'blur(24px)',
-                border: '1px solid rgba(255,255,255,0.09)',
-                borderRadius: 12,
+                backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
+                border: '1px solid rgba(255,255,255,0.09)', borderRadius: 12,
                 boxShadow: '0 20px 60px rgba(0,0,0,0.60), 0 0 0 1px rgba(255,255,255,0.03)',
-                overflow: 'hidden',
-                animation: 'db-up 0.18s ease both',
+                overflow: 'hidden', animation: 'db-up 0.18s ease both',
               }}>
-                {/* User info header */}
                 <div style={{ padding: '14px 16px 12px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                   <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 2, letterSpacing: '-0.01em' }}>
                     {loading ? '—' : (profile?.full_name || profile?.email?.split('@')[0])}
@@ -389,17 +584,14 @@ export default function DashboardPage() {
                       display: 'inline-block', fontSize: 10, fontWeight: 600,
                       letterSpacing: '0.07em', textTransform: 'uppercase',
                       padding: '2px 7px', borderRadius: 4,
-                      background: 'rgba(79,142,240,0.10)',
-                      border: '1px solid rgba(79,142,240,0.20)',
+                      background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.20)',
                       color: 'rgba(79,142,240,0.85)',
                     }}>{profile.user_type}</span>
                   )}
                 </div>
-
-                {/* Links */}
                 <div style={{ padding: '4px 0' }}>
                   {([
-                    { href: '/dashboard/profile',  label: 'Profile',  Icon: Profile2User },
+                    { href: '/dashboard/profile', label: 'Profile',  Icon: Profile2User },
                     { href: '/settings/security',  label: 'Security', Icon: Setting2     },
                   ] as const).map(({ href, label, Icon }) => (
                     <Link key={href} href={href} className="menu-item"
@@ -415,8 +607,6 @@ export default function DashboardPage() {
                     </Link>
                   ))}
                 </div>
-
-                {/* Sign out */}
                 <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '4px 0' }}>
                   <button onClick={signOut} className="menu-signout" style={{
                     width: '100%', display: 'flex', alignItems: 'center', gap: 10,
@@ -434,11 +624,11 @@ export default function DashboardPage() {
         </div>
       </nav>
 
-      {/* ── Main ──────────────────────────────────────────────────── */}
+      {/* ── Main ────────────────────────────────────────────────────────── */}
       <main style={{ maxWidth: 960, margin: '0 auto', padding: '52px 24px 96px' }}>
 
-        {/* ── Greeting ──────────────────────────────────────────── */}
-        <header className="db-fade" style={{ marginBottom: 52 }}>
+        {/* ── Greeting ──────────────────────────────────────────────────── */}
+        <header className="db-fade" style={{ marginBottom: 44 }}>
           {loading ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <Skel w="240px" h={38} br={8} />
@@ -471,10 +661,35 @@ export default function DashboardPage() {
           )}
         </header>
 
-        {/* ── Actions ──────────────────────────────────────────────────── */}
+        {/* ── Eligibility Snapshot ────────────────────────────────────────── */}
+        <section className="db-fade db-fade-1" style={{ marginBottom: 32 }} aria-label="Your eligibility">
+          <SectionLabel
+            label="Your Eligibility"
+            action={programs.length > 0 ? { href: '/programs', text: 'See all programs' } : undefined}
+          />
+
+          {loading ? (
+            <div style={{ display: 'flex', gap: 10 }}>
+              {[0,1,2].map(i => <Skel key={i} w="200px" h={140} br={14} />)}
+            </div>
+          ) : programs.length > 0 ? (
+            <>
+              <div className="elig-scroll">
+                {programs.map(p => <EligibilityCard key={p.id} p={p} />)}
+              </div>
+              <div style={{ marginTop: 10 }}>
+                <EligibilitySourceBadge />
+              </div>
+            </>
+          ) : (
+            <EligibilityNudge />
+          )}
+        </section>
+
+        {/* ── Actions ─────────────────────────────────────────────────────── */}
         <section style={{ marginBottom: 32 }} aria-label="Actions">
           <SectionLabel label="Actions" />
-          <div className="db-fade db-fade-1 db-grid-2" style={{
+          <div className="db-fade db-fade-2 db-grid-2" style={{
             display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10,
           }}>
 
@@ -487,7 +702,6 @@ export default function DashboardPage() {
                 minHeight: 220,
                 display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
               }}>
-                {/* top row */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div style={{
                     width: 38, height: 38, borderRadius: 10,
@@ -498,29 +712,19 @@ export default function DashboardPage() {
                   </div>
                   <ArrowRight2 size={13} color="rgba(255,255,255,0.20)" variant="Linear" />
                 </div>
-
-                {/* copy */}
                 <div style={{ margin: '20px 0 18px' }}>
-                  <div style={{
-                    fontSize: 16, fontWeight: 600, color: 'var(--text)',
-                    letterSpacing: '-0.02em', marginBottom: 6,
-                  }}>Find Care</div>
+                  <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--text)', letterSpacing: '-0.02em', marginBottom: 6 }}>
+                    Find Care
+                  </div>
                   <div style={{ fontSize: 13, color: 'var(--text-3)', lineHeight: 1.55 }}>
                     Free &amp; low-cost healthcare — clinics, telehealth, and CHW programs near you.
                   </div>
                 </div>
-
-                {/* 3 feature bullets */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
                   {['Free clinics', 'Telehealth', 'CHW programs'].map(item => (
                     <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <div style={{
-                        width: 4, height: 4, borderRadius: '50%',
-                        background: 'rgba(79,142,240,0.50)', flexShrink: 0,
-                      }} />
-                      <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.36)', letterSpacing: '-0.01em' }}>
-                        {item}
-                      </span>
+                      <div style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(79,142,240,0.50)', flexShrink: 0 }} />
+                      <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.36)', letterSpacing: '-0.01em' }}>{item}</span>
                     </div>
                   ))}
                 </div>
@@ -534,7 +738,6 @@ export default function DashboardPage() {
                 minHeight: 220,
                 display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
               }}>
-                {/* top row */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div style={{
                     width: 38, height: 38, borderRadius: 10,
@@ -545,26 +748,19 @@ export default function DashboardPage() {
                   </div>
                   <ArrowRight2 size={13} color="rgba(255,255,255,0.20)" variant="Linear" />
                 </div>
-
-                {/* copy + bar */}
                 <div style={{ margin: '20px 0 14px' }}>
-                  <div style={{
-                    fontSize: 16, fontWeight: 600, color: 'var(--text)',
-                    letterSpacing: '-0.02em', marginBottom: 13,
-                  }}>Health Passport</div>
+                  <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--text)', letterSpacing: '-0.02em', marginBottom: 13 }}>
+                    Health Passport
+                  </div>
                   {loading ? (
                     <Skel w="100%" h={3} br={2} />
                   ) : (
                     <>
-                      <div style={{
-                        height: 3, background: 'rgba(255,255,255,0.07)',
-                        borderRadius: 2, overflow: 'hidden', marginBottom: 6,
-                      }}>
+                      <div style={{ height: 3, background: 'rgba(255,255,255,0.07)', borderRadius: 2, overflow: 'hidden', marginBottom: 6 }}>
                         <div style={{
                           height: '100%', width: `${pct}%`,
                           background: 'linear-gradient(90deg,rgba(52,211,153,0.55),rgba(52,211,153,0.90))',
-                          borderRadius: 2,
-                          transition: 'width 1.2s cubic-bezier(0.16,1,0.3,1)',
+                          borderRadius: 2, transition: 'width 1.2s cubic-bezier(0.16,1,0.3,1)',
                         }} />
                       </div>
                       <div style={{ fontSize: 11.5, color: 'var(--text-4)', marginBottom: 2 }}>
@@ -573,28 +769,21 @@ export default function DashboardPage() {
                     </>
                   )}
                 </div>
-
-                {/* field checklist */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {passportSteps.map(({ label, done }) => (
                     <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                       {done
                         ? <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                            <circle cx="7" cy="7" r="6"
-                              fill="rgba(52,211,153,0.12)" stroke="rgba(52,211,153,0.40)" strokeWidth="1"/>
-                            <path d="M4.5 7L6.25 8.75L9.5 5"
-                              stroke="rgba(52,211,153,0.85)" strokeWidth="1.3"
-                              strokeLinecap="round" strokeLinejoin="round"/>
+                            <circle cx="7" cy="7" r="6" fill="rgba(52,211,153,0.12)" stroke="rgba(52,211,153,0.40)" strokeWidth="1"/>
+                            <path d="M4.5 7L6.25 8.75L9.5 5" stroke="rgba(52,211,153,0.85)" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
                         : <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                            <circle cx="7" cy="7" r="6"
-                              stroke="rgba(255,255,255,0.12)" strokeWidth="1"/>
+                            <circle cx="7" cy="7" r="6" stroke="rgba(255,255,255,0.12)" strokeWidth="1"/>
                           </svg>
                       }
-                      <span style={{
-                        fontSize: 12.5, letterSpacing: '-0.01em',
-                        color: done ? 'var(--text-3)' : 'var(--text-2)',
-                      }}>{label}</span>
+                      <span style={{ fontSize: 12.5, letterSpacing: '-0.01em', color: done ? 'var(--text-3)' : 'var(--text-2)' }}>
+                        {label}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -603,10 +792,10 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {/* ── Tools ────────────────────────────────────────────────────── */}
+        {/* ── Tools ───────────────────────────────────────────────────────── */}
         <section style={{ marginBottom: 32 }} aria-label="Tools">
           <SectionLabel label="Tools" />
-          <div className="db-fade db-fade-2 db-grid-4" style={{
+          <div className="db-fade db-fade-3 db-grid-4" style={{
             display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10,
           }}>
             {TOOLS.map(({ href, title, sub, Icon, bg, border, color }) => (
@@ -622,16 +811,13 @@ export default function DashboardPage() {
                     </div>
                     <ArrowRight2
                       className="tc-arrow"
-                      size={11}
-                      color="rgba(255,255,255,0.28)"
-                      variant="Linear"
+                      size={11} color="rgba(255,255,255,0.28)" variant="Linear"
                       style={{ opacity: 0, transition: 'opacity 0.15s' }}
                     />
                   </div>
-                  <div style={{
-                    fontSize: 13.5, fontWeight: 600, color: 'var(--text)',
-                    letterSpacing: '-0.01em', marginBottom: 4,
-                  }}>{title}</div>
+                  <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)', letterSpacing: '-0.01em', marginBottom: 4 }}>
+                    {title}
+                  </div>
                   <div style={{ fontSize: 12, color: 'var(--text-3)', lineHeight: 1.4 }}>{sub}</div>
                 </div>
               </Link>
@@ -641,50 +827,35 @@ export default function DashboardPage() {
 
         {/* ── Getting started + Today's tip ────────────────────────────── */}
         <section style={{ marginBottom: 48 }}>
-          <div className="db-fade db-fade-3 db-grid-act" style={{
+          <div className="db-fade db-fade-4 db-grid-act" style={{
             display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 10,
           }}>
 
             {/* Getting started */}
             <div className="bento-card" style={{ padding: '24px 26px' }}>
               <div style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                marginBottom: 18,
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18,
               }}>
                 <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', letterSpacing: '-0.01em' }}>
                   Getting started
                 </div>
                 <div style={{
                   fontSize: 11, fontWeight: 600, letterSpacing: '0.03em',
-                  color: doneCount === gettingStarted.length
-                    ? 'rgba(52,211,153,0.75)' : 'rgba(79,142,240,0.75)',
-                  background: doneCount === gettingStarted.length
-                    ? 'rgba(52,211,153,0.09)' : 'rgba(79,142,240,0.09)',
-                  border: `1px solid ${doneCount === gettingStarted.length
-                    ? 'rgba(52,211,153,0.18)' : 'rgba(79,142,240,0.18)'}`,
+                  color: doneCount === gettingStarted.length ? 'rgba(52,211,153,0.75)' : 'rgba(79,142,240,0.75)',
+                  background: doneCount === gettingStarted.length ? 'rgba(52,211,153,0.09)' : 'rgba(79,142,240,0.09)',
+                  border: `1px solid ${doneCount === gettingStarted.length ? 'rgba(52,211,153,0.18)' : 'rgba(79,142,240,0.18)'}`,
                   padding: '2px 9px', borderRadius: 100,
                 }}>
                   {doneCount}/{gettingStarted.length}
                 </div>
               </div>
-
               {gettingStarted.map(step => (
-                <StepRow
-                  key={step.label}
-                  done={step.done}
-                  label={step.label}
-                  sub={step.sub}
-                  href={step.href}
-                />
+                <StepRow key={step.label} done={step.done} label={step.label} sub={step.sub} href={step.href} />
               ))}
             </div>
 
             {/* Today's Tip */}
-            <div className="bento-card" style={{
-              padding: '24px 22px',
-              display: 'flex', flexDirection: 'column',
-            }}>
-              {/* header */}
+            <div className="bento-card" style={{ padding: '24px 22px', display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 16 }}>
                 <div style={{
                   width: 28, height: 28, borderRadius: 8,
@@ -697,17 +868,9 @@ export default function DashboardPage() {
                   Today&apos;s Tip
                 </span>
               </div>
-
-              {/* tip text */}
-              <p style={{
-                flex: 1,
-                fontSize: 13, color: 'var(--text-2)', lineHeight: 1.68,
-                margin: '0 0 18px', letterSpacing: '-0.01em',
-              }}>
+              <p style={{ flex: 1, fontSize: 13, color: 'var(--text-2)', lineHeight: 1.68, margin: '0 0 18px', letterSpacing: '-0.01em' }}>
                 {tip.text}
               </p>
-
-              {/* tag */}
               <span style={{
                 display: 'inline-block', alignSelf: 'flex-start',
                 fontSize: 10, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase',
@@ -721,8 +884,8 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {/* ── Explore ──────────────────────────────────────────────────── */}
-        <section className="db-fade db-fade-4" aria-label="Explore">
+        {/* ── Explore ─────────────────────────────────────────────────────── */}
+        <section className="db-fade db-fade-5" aria-label="Explore">
           <SectionLabel label="Explore" />
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
             {QUICK.map(({ href, label }) => (
