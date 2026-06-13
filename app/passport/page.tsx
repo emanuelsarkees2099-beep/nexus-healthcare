@@ -117,8 +117,19 @@ function AddModal({ onClose, onAdd }: { onClose: () => void; onAdd: (item: strin
   )
 }
 
+const PASSPORT_KEY = 'nexus_passport'
+
+function loadPassport(): Passport {
+  if (typeof window === 'undefined') return DEMO_PASSPORT
+  try {
+    const raw = localStorage.getItem(PASSPORT_KEY)
+    if (raw) return { ...DEMO_PASSPORT, ...JSON.parse(raw) }
+  } catch { /* ignore */ }
+  return DEMO_PASSPORT
+}
+
 export default function PassportPage() {
-  const [passport] = useState<Passport>(DEMO_PASSPORT)
+  const [passport, setPassport] = useState<Passport>(loadPassport)
   const [showQR,        setShowQR]        = useState(false)
   const [showFullscreen, setShowFullscreen] = useState(false)
   const [masked, setMasked] = useState(false)
@@ -126,8 +137,33 @@ export default function PassportPage() {
   const [saved, setSaved] = useState(false)
 
   const handleSave = () => {
+    try {
+      const updated: Passport = {
+        ...passport,
+        lastUpdated: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+      }
+      localStorage.setItem(PASSPORT_KEY, JSON.stringify(updated))
+      setPassport(updated)
+    } catch { /* ignore */ }
     setSaved(true)
     setTimeout(() => setSaved(false), 2500)
+  }
+
+  const handleAdd = (item: string) => {
+    if (!item.trim()) return
+    setPassport(prev => {
+      const next = { ...prev }
+      if (addModal === 'allergy') {
+        next.allergies = [...prev.allergies, { name: item, severity: 'mild' }]
+      } else if (addModal === 'medication') {
+        // Accept "Name dose frequency" or just "Name"
+        const parts = item.trim().split(/\s{2,}|,/)
+        next.medications = [...prev.medications, { name: parts[0] ?? item, dose: parts[1] ?? '', frequency: parts[2] ?? '' }]
+      } else if (addModal === 'condition') {
+        next.conditions = [...prev.conditions, { name: item, since: String(new Date().getFullYear()) }]
+      }
+      return next
+    })
   }
 
   const handlePrint = () => window.print()
@@ -212,7 +248,7 @@ export default function PassportPage() {
       {addModal && (
         <AddModal
           onClose={() => setAddModal(null)}
-          onAdd={(_item) => { /* would update state */ }}
+          onAdd={(item) => { handleAdd(item); setAddModal(null) }}
         />
       )}
 

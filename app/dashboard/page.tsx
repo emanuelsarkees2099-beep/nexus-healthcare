@@ -8,6 +8,7 @@ import {
   Location, Health, Heart, DocumentText, Category,
   Setting2, Logout, ArrowRight2, Profile2User,
   Flash, ShieldTick, ArrowRight, InfoCircle,
+  Notification, Calendar1,
 } from 'iconsax-react'
 import {
   computeEligibility,
@@ -349,6 +350,9 @@ export default function DashboardPage() {
   const [loading,   setLoading]   = useState(true)
   const [menuOpen,  setMenuOpen]  = useState(false)
   const [programs,  setPrograms]  = useState<ProgramResult[]>([])
+  const [pendingNotifications, setPendingNotifications] = useState<Array<{ clinicName: string; clinicId: string; ts: number }>>([])
+  const [dueScreeningsCount, setDueScreeningsCount] = useState(0)
+  const [calendarSetUp, setCalendarSetUp] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -411,6 +415,49 @@ export default function DashboardPage() {
     document.addEventListener('mousedown', h)
     return () => document.removeEventListener('mousedown', h)
   }, [menuOpen])
+
+  useEffect(() => {
+    // Load notification subscriptions
+    const notifs: Array<{ clinicName: string; clinicId: string; ts: number }> = []
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+      if (key?.startsWith('nexus_notify_')) {
+        try {
+          const val = JSON.parse(localStorage.getItem(key) ?? '{}')
+          const clinicId = key.replace('nexus_notify_', '')
+          notifs.push({ clinicName: val.clinicName ?? 'Clinic', clinicId, ts: val.ts ?? 0 })
+        } catch { /* skip */ }
+      }
+    }
+    setPendingNotifications(notifs)
+
+    // Load calendar prefs and count due screenings
+    try {
+      const raw = localStorage.getItem('nexus_calendar_prefs')
+      if (raw) {
+        const prefs = JSON.parse(raw)
+        if (prefs.age && prefs.sex && prefs.sex !== 'Select') {
+          setCalendarSetUp(true)
+          const ageN    = parseInt(prefs.age) || 30
+          const sex     = prefs.sex as string
+          const conds   = (prefs.conditions ?? []) as string[]
+          const lc      = prefs.lastCheckup ?? 'Select'
+          const recent  = lc === 'Within 1 year'
+          const overdue = lc === '3+ years ago' || lc === 'Never'
+          let n = 0
+          if (!recent) n += 2 // annual wellness + blood pressure
+          if (ageN >= 20 && (overdue || conds.includes('Heart disease'))) n++
+          if ((ageN >= 35 || conds.includes('Diabetes')) && (overdue || conds.includes('Diabetes'))) n++
+          if ((sex === 'Female' || sex === 'Prefer not to say') && ageN >= 21 && (overdue || lc === '1–2 years ago')) n++
+          if ((sex === 'Female' || sex === 'Prefer not to say') && ageN >= 40) n++
+          if (ageN >= 45) n++
+          if (!recent) n++ // flu
+          n++ // dental (always due)
+          setDueScreeningsCount(n)
+        }
+      }
+    } catch { /* ignore */ }
+  }, [])
 
   const signOut = useCallback(async () => {
     await supabase.auth.signOut()
@@ -824,6 +871,79 @@ export default function DashboardPage() {
             ))}
           </div>
         </section>
+
+        {/* ── Your Alerts ─────────────────────────────────────────────────── */}
+        {(pendingNotifications.length > 0 || calendarSetUp) && (
+          <section className="db-fade db-fade-4" style={{ marginBottom: 32 }} aria-label="Your alerts">
+            <SectionLabel label="Your Alerts" />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+              {pendingNotifications.length > 0 && (
+                <div style={{
+                  padding: '16px 20px', borderRadius: 14,
+                  background: 'rgba(79,142,240,0.05)', border: '1px solid rgba(79,142,240,0.15)',
+                  display: 'flex', alignItems: 'center', gap: 16,
+                }}>
+                  <div style={{
+                    width: 34, height: 34, borderRadius: 10, flexShrink: 0,
+                    background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.20)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <Notification size={15} color="rgba(79,142,240,0.85)" variant="TwoTone" />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>
+                      {pendingNotifications.length === 1 ? '1 clinic on your watch list' : `${pendingNotifications.length} clinics on your watch list`}
+                    </div>
+                    <div style={{ fontSize: 12, color: 'var(--text-4)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {pendingNotifications.slice(0, 2).map(n => n.clinicName).join(', ')}
+                      {pendingNotifications.length > 2 ? ` + ${pendingNotifications.length - 2} more` : ''}
+                    </div>
+                  </div>
+                  <Link href="/search" style={{
+                    display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0,
+                    fontSize: 12, color: 'rgba(79,142,240,0.75)', textDecoration: 'none',
+                  }}>
+                    View <ArrowRight2 size={10} color="currentColor" variant="Linear" />
+                  </Link>
+                </div>
+              )}
+
+              {calendarSetUp && dueScreeningsCount > 0 && (
+                <Link href="/calendar" style={{ textDecoration: 'none', display: 'block' }}>
+                  <div
+                    style={{
+                      padding: '16px 20px', borderRadius: 14,
+                      background: 'rgba(245,158,11,0.05)', border: '1px solid rgba(245,158,11,0.15)',
+                      display: 'flex', alignItems: 'center', gap: 16,
+                      cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s',
+                    }}
+                    onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(245,158,11,0.08)'; el.style.borderColor = 'rgba(245,158,11,0.25)' }}
+                    onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(245,158,11,0.05)'; el.style.borderColor = 'rgba(245,158,11,0.15)' }}
+                  >
+                    <div style={{
+                      width: 34, height: 34, borderRadius: 10, flexShrink: 0,
+                      background: 'rgba(245,158,11,0.10)', border: '1px solid rgba(245,158,11,0.20)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <Calendar1 size={15} color="rgba(245,158,11,0.85)" variant="TwoTone" />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>
+                        {dueScreeningsCount} screening{dueScreeningsCount !== 1 ? 's' : ''} due
+                      </div>
+                      <div style={{ fontSize: 12, color: 'var(--text-4)' }}>
+                        Based on your age, health history, and conditions
+                      </div>
+                    </div>
+                    <ArrowRight2 size={12} color="rgba(255,255,255,0.22)" variant="Linear" style={{ flexShrink: 0 }} />
+                  </div>
+                </Link>
+              )}
+
+            </div>
+          </section>
+        )}
 
         {/* ── Getting started + Today's tip ────────────────────────────── */}
         <section style={{ marginBottom: 48 }}>

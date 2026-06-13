@@ -149,16 +149,27 @@ const WHY_ITEMS = [
 ]
 
 /* ─── page ────────────────────────────────────────── */
+const CAL_KEY = 'nexus_calendar_prefs'
+
+function loadCalPrefs() {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = localStorage.getItem(CAL_KEY)
+    return raw ? JSON.parse(raw) : null
+  } catch { return null }
+}
+
 export default function CalendarPage() {
-  const [step, setStep]           = useState<'form' | 'timeline'>('form')
-  const [age, setAge]             = useState('')
-  const [sex, setSex]             = useState('Select')
-  const [lastCheckup, setLastCheckup] = useState('Select')
-  const [conditions, setConditions] = useState<string[]>([])
-  const [zip, setZip]             = useState('')
-  const [remEmail, setRemEmail]   = useState('')
-  const [remFreq, setRemFreq]     = useState('Monthly')
-  const [remSet, setRemSet]       = useState(false)
+  const saved0 = typeof window !== 'undefined' ? loadCalPrefs() : null
+  const [step, setStep]           = useState<'form' | 'timeline'>(saved0?.age && saved0?.sex !== 'Select' ? 'timeline' : 'form')
+  const [age, setAge]             = useState(saved0?.age ?? '')
+  const [sex, setSex]             = useState(saved0?.sex ?? 'Select')
+  const [lastCheckup, setLastCheckup] = useState(saved0?.lastCheckup ?? 'Select')
+  const [conditions, setConditions] = useState<string[]>(saved0?.conditions ?? [])
+  const [zip, setZip]             = useState(saved0?.zip ?? '')
+  const [remEmail, setRemEmail]   = useState(saved0?.remEmail ?? '')
+  const [remFreq, setRemFreq]     = useState(saved0?.remFreq ?? 'Monthly')
+  const [remSet, setRemSet]       = useState<boolean>(saved0?.remSet ?? false)
   const timelineRef               = useRef<HTMLDivElement>(null)
   const formRef                   = useRef<HTMLElement>(null)
 
@@ -169,16 +180,31 @@ export default function CalendarPage() {
 
   const CONDITION_OPTIONS = ['Diabetes', 'Hypertension', 'Heart disease', 'Asthma / COPD', 'Cancer history', 'Mental health', 'None of these']
 
+  function persist(patch: Record<string, unknown>) {
+    try {
+      const current = loadCalPrefs() ?? {}
+      localStorage.setItem(CAL_KEY, JSON.stringify({ ...current, ...patch }))
+    } catch { /* ignore */ }
+  }
+
   function toggleCondition(c: string) {
-    if (c === 'None of these') { setConditions(['None of these']); return }
+    if (c === 'None of these') { setConditions(['None of these']); persist({ conditions: ['None of these'] }); return }
     const updated = conditions.includes(c) ? conditions.filter(x => x !== c) : [...conditions.filter(x => x !== 'None of these'), c]
     setConditions(updated)
+    persist({ conditions: updated })
   }
 
   function generate() {
     if (!age || sex === 'Select') return
+    persist({ age, sex, lastCheckup, conditions, zip })
     setStep('timeline')
     setTimeout(() => smoothScrollTo(timelineRef.current), 100)
+  }
+
+  function setReminder() {
+    if (!remEmail) return
+    persist({ remEmail, remFreq, remSet: true })
+    setRemSet(true)
   }
 
   const pill: React.CSSProperties = {
@@ -389,7 +415,7 @@ export default function CalendarPage() {
                       </Field>
                     </div>
                     <button
-                      onClick={() => { if (remEmail) setRemSet(true) }}
+                      onClick={setReminder}
                       disabled={!remEmail}
                       style={{
                         padding: '13px', borderRadius: '12px', border: 'none', fontFamily: 'inherit', fontSize: '14px', fontWeight: 600,
