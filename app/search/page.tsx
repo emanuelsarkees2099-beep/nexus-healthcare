@@ -842,6 +842,7 @@ function SearchResults() {
                 lng={geoCenter.lng}
                 clinics={results}
                 radius={radius}
+                matchScores={matchScores ?? undefined}
                 onSearchArea={(newLat, newLng, r) => {
                   // Re-center on the panned area and re-run search
                   setGeoCenter({ lat: newLat, lng: newLng })

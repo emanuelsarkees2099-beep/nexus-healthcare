@@ -10,22 +10,29 @@ type Clinic = {
   hours?: string; type?: string; lat?: number; lng?: number
 }
 
+type PinMatchScore = { color: string; tier: string; total: number; label: string }
+
 type Props = {
   lat: number
   lng: number
+  matchScores?: Map<string, PinMatchScore>
   clinics: Clinic[]
   radius: string
   onSearchArea?: (lat: number, lng: number, radius: string) => void
   onSelectClinic?: (clinic: Clinic) => void
 }
 
-export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onSelectClinic }: Props) {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const mapRef       = useRef<LeafletMap | null>(null)
-  const markersRef   = useRef<LeafletMarker[]>([])
+export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onSelectClinic, matchScores }: Props) {
+  const containerRef  = useRef<HTMLDivElement>(null)
+  const mapRef        = useRef<LeafletMap | null>(null)
+  const markersRef    = useRef<LeafletMarker[]>([])
+  const matchScoresRef = useRef<Map<string, PinMatchScore> | undefined>(matchScores)
   const [selected, setSelected]   = useState<Clinic | null>(null)
   const [mapMoved,  setMapMoved]  = useState(false)
   const panCenterRef = useRef<{ lat: number; lng: number }>({ lat, lng })
+
+  // Keep ref current on every render without triggering re-runs
+  matchScoresRef.current = matchScores
 
   // Build Google Maps deeplink for directions
   const directionsUrl = (c: Clinic) =>
@@ -77,7 +84,7 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
       .bindPopup('<strong style="color:#4A90D9">Your location</strong>')
 
     // Clinic markers
-    addMarkers(L, map, clinics, setSelected)
+    addMarkers(L, map, clinics, setSelected, matchScoresRef.current)
 
     // Detect when user pans/zooms away from initial view
     map.on('moveend', () => {
@@ -108,7 +115,7 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
       // Remove old markers
       markersRef.current.forEach(m => m.remove())
       markersRef.current = []
-      addMarkers(L, map, clinics, setSelected)
+      addMarkers(L, map, clinics, setSelected, matchScoresRef.current)
     })()
   }, [clinics])
 
@@ -312,7 +319,8 @@ function addMarkers(
   L: typeof import('leaflet'),
   map: LeafletMap,
   clinics: Clinic[],
-  onSelect: (c: Clinic) => void
+  onSelect: (c: Clinic) => void,
+  matchScores?: Map<string, PinMatchScore>
 ) {
   // Group clinics that are too close together (simple grid clustering)
   const CLUSTER_DIST = 0.003 // ~300 m
@@ -336,27 +344,41 @@ function addMarkers(
     const primary = group[0]
     if (!primary.lat || !primary.lng) return
 
-    const isFree    = group.some(c => c.free)
-    const isSliding = group.some(c => c.sliding_scale)
-    const color     = isFree ? '#4A90D9' : isSliding ? '#60a5fa' : '#fbbf24'
-    const count     = group.length
+    const count = group.length
+
+    // Match score color takes precedence; fall back to affordability color
+    const matchScore = matchScores?.get(String(primary.id))
+    let color: string
+    if (matchScore && matchScore.tier !== 'low') {
+      color = matchScore.color
+    } else {
+      const isFree    = group.some(c => c.free)
+      const isSliding = group.some(c => c.sliding_scale)
+      color = isFree ? '#4A90D9' : isSliding ? '#60a5fa' : '#fbbf24'
+    }
+
+    // Show match score percentage on the pin when scores are active
+    const pinLabel = count > 1
+      ? String(count)
+      : (matchScore && matchScore.tier !== 'low' ? `${matchScore.total}` : '')
+    const pinSize = count > 1 ? 32 : matchScore && matchScore.tier !== 'low' ? 28 : 20
 
     const icon = L.divIcon({
       className: '',
       html: `<div style="
         position:relative;
-        width:${count > 1 ? 32 : 20}px;height:${count > 1 ? 32 : 20}px;
+        width:${pinSize}px;height:${pinSize}px;
         border-radius:50%;
         background:${color};
         border:2px solid rgba(255,255,255,0.9);
-        box-shadow:0 2px 8px rgba(0,0,0,0.5);
+        box-shadow:0 2px 8px rgba(0,0,0,0.5),0 0 0 3px ${color}30;
         display:flex;align-items:center;justify-content:center;
-        color:#07070F;font-weight:700;font-size:${count > 1 ? 11 : 0}px;
+        color:#07070F;font-weight:700;font-size:${pinLabel ? 9 : 0}px;
         font-family:sans-serif;
         cursor:pointer;
-      ">${count > 1 ? count : ''}</div>`,
-      iconSize:   [count > 1 ? 32 : 20, count > 1 ? 32 : 20],
-      iconAnchor: [count > 1 ? 16 : 10, count > 1 ? 16 : 10],
+      ">${pinLabel}</div>`,
+      iconSize:   [pinSize, pinSize],
+      iconAnchor: [pinSize / 2, pinSize / 2],
     })
 
     const marker = L.marker([primary.lat, primary.lng], { icon })

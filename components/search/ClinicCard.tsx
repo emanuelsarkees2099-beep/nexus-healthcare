@@ -31,6 +31,7 @@ import AffordabilityBar from '@/components/AffordabilityBar'
 import { isOpenNow, computeEquityScore } from '@/lib/search-utils'
 import { useToast } from '@/components/ui/Toast'
 import type { MatchScore } from '@/lib/match-engine'
+import AvailabilitySignal from '@/components/search/AvailabilitySignal'
 
 /* ── Re-export skeleton so callers can import from one place ── */
 export { SkeletonClinicCard } from '@/components/ui/Skeleton'
@@ -285,12 +286,7 @@ export default function ClinicCard({
     ? `${window.location.origin}/clinics/${clinic.id}`
     : `/clinics/${clinic.id}`
 
-  /* Deterministic "live" wait time seeded from clinic ID + hour */
-  const seed = clinic.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0) + Math.floor(Date.now() / 3600000)
-  const rng = () => ((seed * 16807) % 2147483647 - 1) / 2147483646
-  const waitMins   = Math.round(12 + rng() * 48)
-  const reporters  = Math.round(2 + rng() * 8)
-  const walkIn     = rng() > 0.45
+  /* Availability signal handled by AvailabilitySignal component */
 
   /* #24 — Share clinic (Web Share API → SMS/clipboard fallback) */
   const handleShare = useCallback(async () => {
@@ -556,18 +552,10 @@ export default function ClinicCard({
           )}
         </div>
 
-        {/* Walk-in wait time */}
-        {walkIn && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 100, background: 'rgba(96,165,250,0.07)', border: '1px solid rgba(96,165,250,0.2)', fontSize: 11, color: '#60a5fa', fontWeight: 600 }}>
-              <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#60a5fa', animation: 'open-pulse 1.5s ease-in-out infinite', display: 'inline-block' }} />
-              Walk-in available · ~{waitMins} min wait
-            </div>
-            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>
-              Reported by {reporters} patients today
-            </span>
-          </div>
-        )}
+        {/* Availability signal */}
+        <div style={{ marginBottom: 10 }}>
+          <AvailabilitySignal clinicId={clinic.id} clinicName={clinic.name} variant="compact" />
+        </div>
 
         {/* Affordability bar */}
         <div style={{ marginBottom: 10 }}>
