@@ -9,11 +9,14 @@ import { createClientClient } from '@/lib/auth-client'
 import { useI18n } from '@/components/I18nContext'
 import { detectIntent, isOpenNow } from '@/lib/search-utils'
 import type { SearchIntent } from '@/lib/search-utils'
+import { computeMatchScore } from '@/lib/match-engine'
+import type { MatchInput, MatchScore } from '@/lib/match-engine'
 import {
   SearchNormal1, Location, CloseCircle, Hospital,
   Heart, Health, Eye, Profile,
-  InfoCircle, Map, RowVertical, Printer,
+  InfoCircle, Map as MapIcon, RowVertical, Printer,
   Clock, Flash, ArrowRight, RefreshCircle, ShieldTick, Global,
+  Filter,
 } from 'iconsax-react'
 /* P3 — standardized skeleton */
 import { SkeletonClinicCard, SKELETON_STYLES } from '@/components/ui/Skeleton'
@@ -26,6 +29,9 @@ const ClinicCard = dynamic_import(() => import('@/components/search/ClinicCard')
 
 /* P2 — ClinicMap code-split: Leaflet requires browser APIs */
 const ClinicMap = dynamic_import(() => import('@/components/ClinicMap'), { ssr: false })
+
+/* Phase 2.1 — MatchForm code-split (bottom-sheet, heavy) */
+const MatchForm = dynamic_import(() => import('@/components/search/MatchForm'), { ssr: false })
 
 /* ── Types (P2: imported from extracted ClinicCard component) ─────── */
 export type { Clinic, AffordabilityLabel } from '@/components/search/ClinicCard'
@@ -136,8 +142,19 @@ function SearchResults() {
   const [intent,        setIntent]        = useState<SearchIntent>({})
   const [bridgeClinic,  setBridgeClinic]  = useState<string | null>(null)   // N5: insurance bridge toast
   const [visiblePage,   setVisiblePage]   = useState(1)                      // pagination
+  const [showMatchForm, setShowMatchForm] = useState(false)                  // Phase 2.1: guided match form
 
   const PAGE_SIZE = 25
+
+  /* Phase 2.1 — parse match params from URL */
+  const needsParam    = searchParams.get('needs')    || ''
+  const languageParam = searchParams.get('language') || ''
+  const insuranceParam = searchParams.get('insurance') || ''
+  const matchInput: MatchInput | null = (needsParam || languageParam || insuranceParam) ? {
+    needs:     needsParam ? needsParam.split(',').filter(Boolean) : [],
+    language:  languageParam,
+    insurance: insuranceParam,
+  } : null
 
   /* Detect intent from query */
   useEffect(() => {
@@ -305,7 +322,17 @@ function SearchResults() {
 
   // E8 — language-matched care: boost language-concordant providers to the top
   const targetLanguage = lang !== 'en' ? (LOCALE_LANGUAGE_MAP[lang as keyof typeof LOCALE_LANGUAGE_MAP] ?? null) : null
-  if (targetLanguage) {
+
+  // Phase 2.1 — match score sort: when match params are active, sort by computed match score
+  // otherwise fall back to language boost → affordability order from API
+  let matchScores: Map<string, MatchScore> | null = null
+  if (matchInput) {
+    const scored = results.map(c => ({ clinic: c, score: computeMatchScore(c, matchInput) }))
+    scored.sort((a, b) => b.score.total - a.score.total)
+    results = scored.map(s => s.clinic)
+    const entries: [string, MatchScore][] = scored.map(s => [String(s.clinic.id), s.score])
+    matchScores = new Map(entries)
+  } else if (targetLanguage) {
     results = [...results].sort((a, b) => {
       const aMatch = clinicHasLanguage(a, targetLanguage) ? 1 : 0
       const bMatch = clinicHasLanguage(b, targetLanguage) ? 1 : 0
@@ -454,7 +481,7 @@ function SearchResults() {
         {/* ── Sticky filter bar (#16) ── */}
         <div className="sticky-filter-bar">
 
-        {/* Specialty filter pills (#14) */}
+        {/* Specialty filter pills (#14) + Phase 2.1 Get Matched button */}
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px', alignItems: 'center' }}>
           {SPECIALTY_FILTERS.map(f => (
             <button
@@ -466,7 +493,65 @@ function SearchResults() {
               <f.Icon size={13} color={activeFilter === f.id ? 'var(--accent)' : 'rgba(255,255,255,0.50)'} variant="Linear" /> {f.label}
             </button>
           ))}
+          {/* Phase 2.1 — Get Matched trigger */}
+          <button
+            onClick={() => setShowMatchForm(true)}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '5px',
+              padding: '6px 13px', borderRadius: '100px',
+              fontSize: '11px', fontFamily: 'var(--font-inter),sans-serif', fontWeight: 600,
+              cursor: 'pointer', transition: 'all 0.18s', marginLeft: '4px',
+              background: matchInput ? 'rgba(74,144,217,0.15)' : 'rgba(74,144,217,0.07)',
+              border: `1px solid ${matchInput ? 'rgba(74,144,217,0.40)' : 'rgba(74,144,217,0.22)'}`,
+              color: 'var(--accent)',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.18)')}
+            onMouseLeave={e => (e.currentTarget.style.background = matchInput ? 'rgba(74,144,217,0.15)' : 'rgba(74,144,217,0.07)')}
+          >
+            <Filter size={12} color="var(--accent)" variant={matchInput ? 'Bold' : 'Linear'} />
+            {matchInput ? 'Matched for you' : 'Get matched'}
+          </button>
         </div>
+
+        {/* Phase 2.1 — Active match context bar */}
+        {matchInput && (matchInput.needs.length > 0 || matchInput.language || matchInput.insurance) && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap',
+            padding: '8px 12px', borderRadius: '10px', marginBottom: '10px',
+            background: 'rgba(74,144,217,0.05)', border: '1px solid rgba(74,144,217,0.14)',
+          }}>
+            <span style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 500 }}>
+              Sorted by match:
+            </span>
+            {matchInput.needs.map(n => (
+              <span key={n} style={{ fontSize: '11px', fontFamily: 'var(--font-inter)', fontWeight: 600, padding: '2px 9px', borderRadius: '100px', background: 'rgba(74,144,217,0.10)', border: '1px solid rgba(74,144,217,0.25)', color: 'var(--accent)' }}>
+                {n}
+              </span>
+            ))}
+            {matchInput.language && matchInput.language !== 'english' && (
+              <span style={{ fontSize: '11px', fontFamily: 'var(--font-inter)', fontWeight: 600, padding: '2px 9px', borderRadius: '100px', background: 'rgba(167,139,250,0.10)', border: '1px solid rgba(167,139,250,0.25)', color: '#A78BFA' }}>
+                {matchInput.language}
+              </span>
+            )}
+            {matchInput.insurance && (
+              <span style={{ fontSize: '11px', fontFamily: 'var(--font-inter)', fontWeight: 600, padding: '2px 9px', borderRadius: '100px', background: 'rgba(52,211,153,0.08)', border: '1px solid rgba(52,211,153,0.22)', color: '#34D399' }}>
+                {matchInput.insurance}
+              </span>
+            )}
+            <button
+              onClick={() => {
+                const p = new URLSearchParams(window.location.search)
+                p.delete('needs'); p.delete('language'); p.delete('insurance')
+                router.replace(`/search?${p}`)
+              }}
+              style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-3)', fontSize: '11px', fontFamily: 'var(--font-inter)', display: 'flex', alignItems: 'center', gap: '3px', padding: '2px 6px', borderRadius: '5px', transition: 'color 0.15s' }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--error,#F87171)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
+            >
+              × Clear match
+            </button>
+          </div>
+        )}
 
         {/* Controls row */}
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '12px', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -541,7 +626,7 @@ function SearchResults() {
                       display: 'flex', alignItems: 'center', gap: '4px', transition: 'all 0.18s',
                     }}
                   >
-                    {mode === 'list' ? <><RowVertical size={12} color={viewMode === mode ? 'var(--accent)' : 'rgba(255,255,255,0.50)'} /> List</> : <><Map size={12} color={viewMode === mode ? 'var(--accent)' : 'rgba(255,255,255,0.50)'} /> Map</>}
+                    {mode === 'list' ? <><RowVertical size={12} color={viewMode === mode ? 'var(--accent)' : 'rgba(255,255,255,0.50)'} /> List</> : <><MapIcon size={12} color={viewMode === mode ? 'var(--accent)' : 'rgba(255,255,255,0.50)'} /> Map</>}
                   </button>
                 ))}
               </div>
@@ -628,6 +713,33 @@ function SearchResults() {
 
             {/* CTA cards */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px', maxWidth: '600px', margin: '0 auto 32px' }}>
+              {/* Card 0 — Phase 2.1: Get matched */}
+              <div style={{
+                background: 'rgba(74,144,217,0.07)', border: '1px solid rgba(74,144,217,0.28)',
+                borderRadius: '16px', padding: '20px', cursor: 'pointer',
+                transition: 'border-color 0.2s, background 0.2s',
+                gridColumn: '1 / -1',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(74,144,217,0.12)'; e.currentTarget.style.borderColor = 'rgba(74,144,217,0.40)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(74,144,217,0.07)'; e.currentTarget.style.borderColor = 'rgba(74,144,217,0.28)' }}
+                onClick={() => setShowMatchForm(true)}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(74,144,217,0.15)', border: '1px solid rgba(74,144,217,0.30)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Filter size={18} color="var(--accent)" variant="TwoTone" />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px', fontFamily: 'var(--font-display)' }}>
+                      Get matched to the right clinic
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-2)', lineHeight: 1.65, fontFamily: 'var(--font-inter)' }}>
+                      Answer 3 quick questions about your needs, language, and coverage — we'll rank results for you.
+                    </div>
+                  </div>
+                  <ArrowRight size={16} color="var(--accent)" style={{ flexShrink: 0 }} />
+                </div>
+              </div>
+
               {/* Card 1 — sliding scale */}
               <div style={{
                 background: 'rgba(74,144,217,0.05)', border: '1px solid rgba(74,144,217,0.18)',
@@ -720,6 +832,7 @@ function SearchResults() {
                   isSaved={savedIds.has(String(clinic.id))} saving={savingId === String(clinic.id)}
                   onBookmark={toggleBookmark} openNowFilter={openNowFilter}
                   langMatch={targetLanguage ? clinicHasLanguage(clinic, targetLanguage) : false}
+                  matchScore={matchScores?.get(String(clinic.id))}
                 />
               ))}
             </div>
@@ -754,6 +867,7 @@ function SearchResults() {
                     isSaved={savedIds.has(String(clinic.id))} saving={savingId === String(clinic.id)}
                     onBookmark={toggleBookmark} openNowFilter={openNowFilter}
                     langMatch={targetLanguage ? clinicHasLanguage(clinic, targetLanguage) : false}
+                    matchScore={matchScores?.get(String(clinic.id))}
                   />
                 </div>
               ))}
@@ -850,6 +964,14 @@ function SearchResults() {
           to   { opacity: 1; transform: translateY(0) scale(1); }
         }
       `}</style>
+
+      {/* Phase 2.1 — Guided Match Form (bottom sheet) */}
+      {showMatchForm && (
+        <MatchForm
+          onClose={() => setShowMatchForm(false)}
+          initialZip={locationVal}
+        />
+      )}
 
       {/* N5 — Insurance Bridge Toast */}
       {bridgeClinic && (

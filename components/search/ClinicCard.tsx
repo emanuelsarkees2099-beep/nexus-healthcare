@@ -30,6 +30,7 @@ import { useI18n } from '@/components/I18nContext'
 import AffordabilityBar from '@/components/AffordabilityBar'
 import { isOpenNow, computeEquityScore } from '@/lib/search-utils'
 import { useToast } from '@/components/ui/Toast'
+import type { MatchScore } from '@/lib/match-engine'
 
 /* ── Re-export skeleton so callers can import from one place ── */
 export { SkeletonClinicCard } from '@/components/ui/Skeleton'
@@ -249,13 +250,14 @@ function ReviewModal({
 
 /* ── ClinicCard ──────────────────────────────────────────────── */
 export default function ClinicCard({
-  clinic, index, isSaved, saving, onBookmark, openNowFilter, langMatch,
+  clinic, index, isSaved, saving, onBookmark, openNowFilter, langMatch, matchScore,
 }: {
   clinic: Clinic; index: number
   isSaved: boolean; saving: boolean
   onBookmark: (c: Clinic) => void
   openNowFilter: boolean
   langMatch?: boolean
+  matchScore?: MatchScore
 }) {
   const { t } = useI18n()
   const { toast } = useToast()
@@ -347,6 +349,32 @@ export default function ClinicCard({
       </div>
 
       <div style={{ flex: 1, minWidth: 0 }}>
+        {/* Match score badge (Phase 2.1 — shown when match params are active) */}
+        {matchScore && matchScore.tier !== 'low' && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px', flexWrap: 'wrap' }}>
+            <span
+              title={`Match score: ${matchScore.total}/100 — distance: ${matchScore.breakdown.distance}/40, needs: ${matchScore.breakdown.needs}/25, language: ${matchScore.breakdown.language}/20, access: ${matchScore.breakdown.waitTime}/15`}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '5px',
+                fontSize: '11px', fontWeight: 700,
+                color: matchScore.color,
+                background: `${matchScore.color}14`,
+                border: `1px solid ${matchScore.color}30`,
+                padding: '3px 10px', borderRadius: '100px',
+                fontFamily: 'var(--font-inter)',
+                cursor: 'help',
+              }}
+            >
+              <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: matchScore.color, flexShrink: 0 }} />
+              {matchScore.label} · {matchScore.total}%
+            </span>
+            {/* Mini breakdown dots */}
+            <span style={{ fontSize: '10px', color: 'var(--text-4,rgba(255,255,255,0.2))', fontFamily: 'var(--font-inter)' }}>
+              dist · needs · lang · access
+            </span>
+          </div>
+        )}
+
         {/* Header row */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 10, flexWrap: 'wrap' }}>
           <div style={{ flex: 1, minWidth: 0 }}>
