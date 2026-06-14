@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
 import { Global, TrendUp, Chart2, Danger, ArrowRight, ArrowDown2 } from 'iconsax-react'
@@ -202,7 +202,7 @@ export default function EquityPage() {
 
         <Reveal>
           <div style={{ ...pill, background: 'rgba(248,113,113,0.08)', borderColor: 'rgba(248,113,113,0.25)', color: '#f87171', marginBottom: '24px' }}>
-            <Global size={10} variant="Linear" /> Healthcare Equity Lab
+            <Global size={14} variant="Linear" /> Healthcare Equity Lab
           </div>
         </Reveal>
 
@@ -257,7 +257,7 @@ export default function EquityPage() {
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <Reveal>
             <div style={{ marginBottom: '48px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><Chart2 size={10} variant="Linear" /> State-by-State Data</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Chart2 size={14} variant="Linear" /> State-by-State Data</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '16px' }}>
                 How every state stacks up
               </h2>
@@ -311,7 +311,7 @@ export default function EquityPage() {
           <Reveal>
             <div style={{ marginBottom: '48px' }}>
               <div style={{ ...pill, background: 'rgba(248,113,113,0.08)', borderColor: 'rgba(248,113,113,0.2)', color: '#f87171', marginBottom: '20px' }}>
-                <Danger size={10} variant="Linear" /> Racial Disparities
+                <Danger size={14} variant="Linear" /> Racial Disparities
               </div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '16px' }}>
                 Race and insurance: the numbers
@@ -416,7 +416,7 @@ export default function EquityPage() {
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <Reveal>
             <div style={{ marginBottom: '56px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><TrendUp size={10} variant="Linear" /> Policy Timeline</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><TrendUp size={14} variant="Linear" /> Policy Timeline</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>
                 The laws that shaped the gap
               </h2>

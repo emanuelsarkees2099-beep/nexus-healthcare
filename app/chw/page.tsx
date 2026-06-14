@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
 import { submitForm } from '@/utils/submitForm'
@@ -315,7 +315,7 @@ export default function CHWPage() {
 
         <div style={{ maxWidth: '740px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}>
-            <span style={pill}><Profile2User size={10} variant="Linear" /> CHW Network</span>
+            <span style={pill}><Profile2User size={14} variant="Linear" /> CHW Network</span>
           </div>
           <h1 style={{ fontSize: 'clamp(40px, 7vw, 76px)', fontWeight: 700, lineHeight: 1.08, letterSpacing: '-0.03em', marginBottom: '22px', animation: 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both' }}>
             A person, not a portal.
@@ -341,7 +341,7 @@ export default function CHWPage() {
           <RevealBlock>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '52px', flexWrap: 'wrap', gap: '16px' }}>
               <div>
-                <span style={pill}><TickCircle size={10} variant="Linear" /> Process</span>
+                <span style={pill}><TickCircle size={14} variant="Linear" /> Process</span>
                 <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>From first message<br />to resolved care</h2>
               </div>
               <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)', maxWidth: '260px', lineHeight: 1.65 }}>The average time from first contact to a care appointment is under 3 days.</p>
@@ -401,7 +401,7 @@ export default function CHWPage() {
               {/* Match preferences panel */}
               <div style={{ marginBottom: 14 }}>
                 <button onClick={() => setShowMatchPrefs(v => !v)} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 100, border: `1px solid ${hasPrefs ? 'rgba(79,142,240,0.3)' : 'rgba(255,255,255,0.08)'}`, background: hasPrefs ? 'rgba(79,142,240,0.08)' : 'rgba(255,255,255,0.03)', color: hasPrefs ? 'var(--accent)' : 'rgba(255,255,255,0.5)', fontSize: 12, fontWeight: hasPrefs ? 600 : 400, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}>
-                  <MagicStar size={11} color="currentColor" /> {hasPrefs ? `Personalized match (${prefSpecs.size + (prefLang !== 'All' ? 1 : 0)} prefs)` : 'Personalize your match'} <ArrowRight2 size={10} color="currentColor" style={{ transform: showMatchPrefs ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
+                  <MagicStar size={11} color="currentColor" /> {hasPrefs ? `Personalized match (${prefSpecs.size + (prefLang !== 'All' ? 1 : 0)} prefs)` : 'Personalize your match'} <ArrowRight2 size={14} color="currentColor" style={{ transform: showMatchPrefs ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
                 </button>
                 {showMatchPrefs && (
                   <div style={{ marginTop: 12, padding: '18px', borderRadius: 14, background: 'rgba(79,142,240,0.04)', border: '1px solid rgba(79,142,240,0.14)', display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -472,7 +472,7 @@ export default function CHWPage() {
                           </div>
                         </div>
                         <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
-                          <Location size={10} variant="Linear" />{chw.loc}
+                          <Location size={14} variant="Linear" />{chw.loc}
                         </div>
                       </div>
                     </div>
@@ -487,8 +487,8 @@ export default function CHWPage() {
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
                       <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', display: 'flex', gap: '12px' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Star1 size={10} variant="Linear" color="#fbbf24" />{chw.rating}</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Profile2User size={10} variant="Linear" />{chw.clients} clients</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Star1 size={14} variant="Linear" color="#fbbf24" />{chw.rating}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Profile2User size={14} variant="Linear" />{chw.clients} clients</span>
                       </div>
                       <button
                         onClick={async () => {
@@ -540,7 +540,7 @@ export default function CHWPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '52px' }}>
-              <span style={pill}><MessageCircle size={10} variant="Linear" /> Stories</span>
+              <span style={pill}><MessageCircle size={14} variant="Linear" /> Stories</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px' }}>
                 What a CHW actually does
               </h2>
@@ -580,7 +580,7 @@ export default function CHWPage() {
               <div style={{ borderRadius: '26px', padding: '56px 52px', background: 'rgba(10,9,22,0.97)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.04)' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '48px', alignItems: 'start' }}>
                   <div>
-                    <span style={pill}><MagicStar size={10} variant="Linear" /> Join the network</span>
+                    <span style={pill}><MagicStar size={14} variant="Linear" /> Join the network</span>
                     <h2 style={{ fontSize: 'clamp(22px, 3vw, 34px)', fontWeight: 700, letterSpacing: '-0.02em', margin: '20px 0 12px', lineHeight: 1.2 }}>Become a Community Health Worker</h2>
                     <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65, marginBottom: '24px' }}>
                       If you know your community and want to help your neighbors navigate care, we'll train and connect you.

@@ -117,7 +117,7 @@ export default function LanguageSelector() {
             border: '1px solid rgba(74,144,217,0.14)',
             marginBottom: '16px',
           }}>
-            <Global size={10} color="var(--accent)" variant="Linear" />
+            <Global size={14} color="var(--accent)" variant="Linear" />
             <span style={{ fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.08em', fontFamily: 'var(--font-inter)' }}>NEXUS · 12 languages</span>
           </div>
 

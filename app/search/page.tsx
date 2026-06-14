@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useEffect, useRef, useState, Suspense, useCallback } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -143,6 +143,7 @@ function SearchResults() {
   const [bridgeClinic,  setBridgeClinic]  = useState<string | null>(null)   // N5: insurance bridge toast
   const [visiblePage,   setVisiblePage]   = useState(1)                      // pagination
   const [showMatchForm, setShowMatchForm] = useState(false)                  // Phase 2.1: guided match form
+  const [heroWords, setHeroWords] = useState([false, false, false, false])
 
   const PAGE_SIZE = 25
 
@@ -155,6 +156,13 @@ function SearchResults() {
     language:  languageParam,
     insurance: insuranceParam,
   } : null
+
+  /* Hero word animation */
+  useEffect(() => {
+    const delays = [0, 120, 240, 380]
+    const timers = delays.map((d, i) => setTimeout(() => setHeroWords(w => { const n = [...w]; n[i] = true; return n }), d + 200))
+    return () => timers.forEach(clearTimeout)
+  }, [])
 
   /* Detect intent from query */
   useEffect(() => {
@@ -406,7 +414,109 @@ function SearchResults() {
           .filter-pill { font-size: 11px !important; padding: 6px 12px !important; }
         }
       `}</style>
-      {/* ── Sticky search header ── */}
+      {/* ── Hero (shown before any search) ── */}
+      {!locationVal && !loading && clinics.length === 0 && (
+        <div style={{
+          minHeight: 'calc(100vh - 62px)',
+          display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center',
+          padding: '80px 24px 60px', position: 'relative', overflow: 'hidden',
+        }}>
+          {/* Background blobs */}
+          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', top: '8%', left: '5%', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(79,142,240,0.065) 0%, transparent 65%)' }} />
+            <div style={{ position: 'absolute', bottom: '10%', right: '3%', width: 420, height: 420, borderRadius: '50%', background: 'radial-gradient(circle, rgba(167,139,250,0.055) 0%, transparent 65%)' }} />
+            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 900, height: 900, borderRadius: '50%', background: 'radial-gradient(circle, rgba(79,142,240,0.025) 0%, transparent 55%)' }} />
+            {/* Subtle grid */}
+            <svg width="100%" height="100%" style={{ position: 'absolute', inset: 0, opacity: 0.035 }}>
+              <defs><pattern id="sg" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="0.5"/></pattern></defs>
+              <rect width="100%" height="100%" fill="url(#sg)" />
+            </svg>
+          </div>
+
+          {/* Pill */}
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 14px', borderRadius: '100px', fontSize: '11px', fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', fontFamily: 'var(--font-inter)', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.22)', color: 'var(--accent)', marginBottom: '28px', opacity: heroWords[0] ? 1 : 0, transition: 'opacity 0.5s ease' }}>
+            <Hospital size={14} variant="Linear" style={{ flexShrink: 0 }} /> Clinic Finder
+          </div>
+
+          {/* Animated h1 */}
+          <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, letterSpacing: '-0.04em', textAlign: 'center', margin: '0 0 12px', lineHeight: 1.05 }}>
+            <div style={{ fontSize: 'clamp(46px, 7vw, 88px)', color: 'var(--text)' }}>
+              {['Find', 'free'].map((w, i) => (
+                <span key={w} style={{ display: 'inline-block', marginRight: '0.22em', opacity: heroWords[i] ? 1 : 0, transform: heroWords[i] ? 'translateY(0)' : 'translateY(18px)', transition: 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)', transitionDelay: `${i * 0.1}s` }}>{w}</span>
+              ))}
+              <span style={{ display: 'inline-block', marginRight: '0.22em', color: 'var(--accent)', opacity: heroWords[2] ? 1 : 0, transform: heroWords[2] ? 'translateY(0)' : 'translateY(18px)', transition: 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)', transitionDelay: '0.2s' }}>care</span>
+            </div>
+            <div style={{ fontSize: 'clamp(46px, 7vw, 88px)', color: 'var(--text-2)' }}>
+              <span style={{ display: 'inline-block', opacity: heroWords[3] ? 1 : 0, transform: heroWords[3] ? 'translateY(0)' : 'translateY(18px)', transition: 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)', transitionDelay: '0.3s' }}>near you.</span>
+            </div>
+          </h1>
+
+          {/* Subtitle */}
+          <p style={{ fontSize: '16px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', textAlign: 'center', maxWidth: '420px', lineHeight: 1.7, margin: '0 0 36px', opacity: heroWords[3] ? 1 : 0, transition: 'opacity 0.6s ease 0.45s' }}>
+            13,000+ federally verified clinics. Sliding-scale fees. No insurance required.
+          </p>
+
+          {/* Large search form */}
+          <form onSubmit={handleSearch} style={{ width: '100%', maxWidth: '580px', opacity: heroWords[3] ? 1 : 0, transform: heroWords[3] ? 'translateY(0)' : 'translateY(12px)', transition: 'opacity 0.6s ease 0.5s, transform 0.6s cubic-bezier(0.16,1,0.3,1) 0.5s' }}>
+            <div style={{ display: 'flex', gap: '0', borderRadius: '16px', overflow: 'hidden', border: '1.5px solid rgba(79,142,240,0.28)', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(10px)', boxShadow: '0 20px 60px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.04)' }}>
+              {/* Query input */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, padding: '14px 18px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
+                <SearchNormal1 size={18} color="rgba(255,255,255,0.35)" style={{ flexShrink: 0 }} />
+                <input
+                  value={inputVal} onChange={e => setInputVal(e.target.value)}
+                  placeholder="Condition, specialty, or clinic name"
+                  style={{ flex: 1, background: 'none', border: 'none', outline: 'none', color: 'var(--text)', fontFamily: 'var(--font-inter)', fontSize: '15px', caretColor: 'var(--accent)' }}
+                />
+              </div>
+              {/* Location input */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 18px', minWidth: '160px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
+                <Location size={16} color="var(--accent)" style={{ flexShrink: 0 }} />
+                <input
+                  value={locationVal} onChange={e => handleLocationChange(e.target.value)}
+                  placeholder="ZIP or city"
+                  style={{ width: '120px', background: 'none', border: 'none', outline: 'none', color: 'var(--text)', fontFamily: 'var(--font-inter)', fontSize: '15px', caretColor: 'var(--accent)' }}
+                />
+              </div>
+              {/* Submit */}
+              <button type="submit" style={{ background: 'var(--accent)', color: 'var(--bg)', border: 'none', padding: '0 28px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-inter)', transition: 'opacity 0.18s', flexShrink: 0, letterSpacing: '0.01em' }}
+                onMouseEnter={e => (e.currentTarget.style.opacity = '0.87')}
+                onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+              >
+                Search
+              </button>
+            </div>
+          </form>
+
+          {/* Category shortcuts */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginTop: '20px', opacity: heroWords[3] ? 1 : 0, transition: 'opacity 0.6s ease 0.6s' }}>
+            {SPECIALTY_FILTERS.filter(f => f.id !== 'all').map(f => (
+              <button key={f.id} onClick={() => { setActiveFilter(f.id) }} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '7px 15px', borderRadius: '100px', fontSize: '12px', fontWeight: 500, fontFamily: 'var(--font-inter)', cursor: 'pointer', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', color: 'var(--text-3)', transition: 'all 0.18s' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(79,142,240,0.10)'; e.currentTarget.style.borderColor = 'rgba(79,142,240,0.28)'; e.currentTarget.style.color = 'var(--accent)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = 'var(--text-3)' }}
+              >
+                <f.Icon size={13} color="currentColor" variant="Linear" /> {f.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Trust stats row */}
+          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '28px', opacity: heroWords[3] ? 1 : 0, transition: 'opacity 0.6s ease 0.7s' }}>
+            {[
+              { icon: <ShieldTick size={13} color="var(--accent)" variant="TwoTone" />, text: '13,000+ verified clinics' },
+              { icon: <Flash size={13} color="#4ade80" variant="TwoTone" />, text: 'All free or sliding-scale' },
+              { icon: <Global size={13} color="#a78bfa" variant="TwoTone" />, text: '50+ languages served' },
+            ].map(s => (
+              <div key={s.text} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>
+                {s.icon} {s.text}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Sticky search header (shown after search starts) ── */}
+      {(locationVal || loading || clinics.length > 0) && (
       <div className="search-sticky-header" style={{
         position: 'sticky', top: '62px', zIndex: 100,
         background: 'rgba(2,4,9,0.88)', backdropFilter: 'blur(20px)',
@@ -472,7 +582,9 @@ function SearchResults() {
           </form>
         </div>
       </div>
+      )}
 
+      {(locationVal || loading || clinics.length > 0) && (
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '20px 24px 0' }}>
 
         {/* Intent banner */}
@@ -664,8 +776,10 @@ function SearchResults() {
           )}
         </p>
       </div>
+      )}
 
       {/* ── Results area ── */}
+      {(locationVal || loading || clinics.length > 0) && (
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px 120px' }}>
         {fetchError && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 16px', background: 'var(--coral-dim)', border: '1px solid rgba(248,113,113,0.25)', borderRadius: '12px', marginBottom: '20px', color: 'var(--coral)', fontSize: '13px', fontFamily: 'var(--font-inter)' }}>
@@ -673,8 +787,8 @@ function SearchResults() {
           </div>
         )}
 
-        {/* ── Illustrated empty state (#15) ── */}
-        {!locationVal && !loading && (
+        {/* ── Illustrated empty state (LEGACY — hero handles pre-search; keep for other edge cases) ── */}
+        {!locationVal && !loading && false && (
           <div style={{ padding: '60px 0 40px' }}>
             {/* Hero illustration */}
             <div style={{ textAlign: 'center', marginBottom: '48px' }}>
@@ -760,7 +874,7 @@ function SearchResults() {
                   Pay what you can — fees set by income. Many visits cost $0–$20.
                 </div>
                 <div style={{ marginTop: '12px', fontSize: '11px', color: 'var(--accent)', fontFamily: 'var(--font-inter)', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  Enter ZIP to search <ArrowRight size={10} />
+                  Enter ZIP to search <ArrowRight size={14} />
                 </div>
               </div>
 
@@ -947,6 +1061,7 @@ function SearchResults() {
           </div>
         )}
       </div>
+      )}
 
       <style>{`
         @media (max-width: 700px) {

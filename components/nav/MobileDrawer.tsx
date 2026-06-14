@@ -45,7 +45,6 @@ const LINK_ICONS: Record<string, React.ElementType<any>> = {
   '/provider':    Hospital,
   '/rights':      ShieldTick,
   '/advocacy':    Speaker,
-  '/open':        Global,
   '/about':       Global,
   '/passport':    ShieldTick,
   '/methodology': SearchStatus,
@@ -61,7 +60,7 @@ const CATEGORIES = [
   { title: 'Programs',   color: '#34D399', hrefs: ['/programs', '/pathways', '/eligibility', '/calendar', '/medications'] },
   { title: 'Explore',    color: '#A78BFA', hrefs: ['/impact', '/outcomes', '/stories', '/editorial', '/equity'] },
   { title: 'Community',  color: '#F59E0B', hrefs: ['/chw', '/provider', '/rights', '/advocacy'] },
-  { title: 'More',       color: '#9CA3AF', hrefs: ['/open', '/passport', '/about', '/methodology'] },
+  { title: 'More',       color: '#9CA3AF', hrefs: ['/equity', '/passport', '/about', '/methodology'] },
 ]
 
 export default function MobileDrawer({ open, onClose, links, user, onLogout, onAnchor }: MobileDrawerProps) {

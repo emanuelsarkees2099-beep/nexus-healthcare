@@ -244,7 +244,7 @@ function CalendarEventMini() {
           <span style={{ fontSize: '10px', color: 'var(--text-3)', width: '28px', flexShrink: 0, fontFamily: 'var(--font-mono),monospace' }}>{ev.day}</span>
           <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: colors[ev.type], flexShrink: 0 }} />
           <span style={{ fontSize: '11px', color: 'var(--text-2)', flex: 1 }}>{ev.event}</span>
-          <Clock size={10} color="var(--text-3)" variant="Linear" />
+          <Clock size={14} color="var(--text-3)" variant="Linear" />
         </div>
       ))}
     </div>
@@ -267,10 +267,10 @@ function PathwaysMini() {
             fontFamily: 'var(--font-inter)',
             display: 'flex', alignItems: 'center', gap: '4px',
           }}>
-            {i === 2 && <TickCircle size={10} color="var(--accent)" variant="Linear" />}
+            {i === 2 && <TickCircle size={14} color="var(--accent)" variant="Linear" />}
             {step}
           </div>
-          {i < steps.length - 1 && <ArrowRight size={10} color="var(--text-3)" variant="Linear" />}
+          {i < steps.length - 1 && <ArrowRight size={14} color="var(--text-3)" variant="Linear" />}
         </div>
       ))}
     </div>
@@ -636,7 +636,7 @@ export default function Features() {
               e.currentTarget.style.background = 'rgba(74,144,217,0.05)'
             }}
           >
-            {item.label} <ArrowRight size={10} color="var(--accent)" variant="Linear" />
+            {item.label} <ArrowRight size={14} color="var(--accent)" variant="Linear" />
           </Link>
         ))}
       </div>

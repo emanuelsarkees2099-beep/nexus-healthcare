@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useState } from 'react'
 import AppShell from '@/components/AppShell'
 import { Video, Call, MessageCircle, Clock, Shield, Global, ArrowRight2, ExportSquare, TickCircle, InfoCircle, Hospital, Health, Buildings, CallCalling, HeartCircle, Calendar1, Copy, ArrowDown2, MagicStar, Book1, Profile2User } from 'iconsax-react'
@@ -212,7 +212,7 @@ export default function TelehealthPage() {
         <section style={{ padding: '60px 24px 40px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
           <div style={{ maxWidth: '700px', margin: '0 auto' }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', borderRadius: '100px', fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.06em', marginBottom: '24px' }}>
-              <Video size={10} variant="Linear" /> TELEHEALTH ACCESS
+              <Video size={14} variant="Linear" /> TELEHEALTH ACCESS
             </span>
             <h1 style={{ fontSize: 'clamp(34px, 6vw, 64px)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '20px', color: '#fff' }}>
               See a doctor.<br />
@@ -366,7 +366,7 @@ export default function TelehealthPage() {
           <div style={{ maxWidth: '960px', margin: '0 auto' }}>
             <div style={{ marginBottom: '36px' }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.2)', borderRadius: '100px', fontSize: '11px', color: '#fbbf24', letterSpacing: '0.06em', marginBottom: '20px' }}>
-                <MagicStar size={10} variant="Linear" /> WHAT TO SAY
+                <MagicStar size={14} variant="Linear" /> WHAT TO SAY
               </span>
               <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#fff', marginBottom: '8px' }}>
                 Calling without insurance? Use these scripts.

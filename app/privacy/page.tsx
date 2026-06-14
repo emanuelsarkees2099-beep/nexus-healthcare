@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import React, { useState } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
@@ -127,7 +127,7 @@ export default function PrivacyPage() {
         }} />
 
         <div style={{ ...pill, marginBottom: '24px' }}>
-          <Lock size={10} variant="Linear" /> Privacy Policy
+          <Lock size={14} variant="Linear" /> Privacy Policy
         </div>
 
         <h1 style={{

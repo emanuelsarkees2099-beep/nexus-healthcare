@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import AppShell from '@/components/AppShell'
 import JsonLd, { ELIGIBILITY_FAQ_SCHEMA, breadcrumbSchema } from '@/components/JsonLd'
@@ -826,7 +826,7 @@ export default function EligibilityPage() {
           {/* Results header */}
           <div style={{ marginBottom: '32px' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', borderRadius: '100px', fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.06em', marginBottom: '20px' }}>
-              <MagicStar size={10} variant="Linear" /> YOUR PERSONALIZED RESULTS
+              <MagicStar size={14} variant="Linear" /> YOUR PERSONALIZED RESULTS
             </div>
             <h2 style={{ fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '12px', color: '#fff' }}>
               {results.length > 0
@@ -987,7 +987,7 @@ export default function EligibilityPage() {
         <section style={{ padding: '60px 24px 48px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
           <div style={{ maxWidth: '680px', margin: '0 auto' }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', borderRadius: '100px', fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.06em', marginBottom: '24px' }}>
-              <ShieldTick size={10} variant="Linear" /> ELIGIBILITY WIZARD
+              <ShieldTick size={14} variant="Linear" /> ELIGIBILITY WIZARD
             </span>
             <h1 style={{ fontSize: 'clamp(34px, 6vw, 60px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '20px', color: '#fff' }}>
               Find out what<br />
@@ -1123,6 +1123,68 @@ export default function EligibilityPage() {
             </div>
           </section>
         )}
+
+      {/* ── PROGRAM EXPLAINER ── */}
+      <section style={{ padding: '80px 24px 60px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase' as const, background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)', marginBottom: '20px' }}>
+              Program guide
+            </div>
+            <h2 style={{ fontSize: 'clamp(22px, 4vw, 38px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.15, marginBottom: '12px' }}>What each program covers</h2>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.45)', maxWidth: '460px', margin: '0 auto', lineHeight: 1.7 }}>
+              The federal programs NEXUS checks are each designed for a different situation. Here&apos;s what you need to know.
+            </p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+            {[
+              { name: 'Medicaid', color: '#60a5fa', icon: '🛡️', who: 'Low-income adults, children, pregnant individuals', covers: 'Full coverage — doctor visits, hospital stays, prescriptions, dental and vision in many states', income: 'Up to 138% FPL in expansion states (≈$20,783/yr single)' },
+              { name: 'CHIP', color: '#4ade80', icon: '👦', who: 'Children under 19 in families that earn too much for Medicaid', covers: 'Comprehensive child health coverage with low or no premiums', income: 'Up to 200–300% FPL depending on state (≈$30–45K/yr family)' },
+              { name: 'ACA Marketplace', color: '#a78bfa', icon: '📋', who: 'Individuals and families above Medicaid threshold', covers: 'Subsidized plans — premium tax credits can reduce monthly cost to $0', income: 'Up to 400% FPL; expanded credits available above that' },
+              { name: 'HRSA / Free Clinics', color: '#fb923c', icon: '🏥', who: 'Anyone, regardless of income or insurance status', covers: 'Primary care, behavioral health, dental — on a sliding-scale or free basis', income: 'No income limit — sliding scale means you pay what you can' },
+              { name: 'Ryan White (HIV)', color: '#f472b6', icon: '💊', who: 'People living with HIV who are uninsured or underinsured', covers: 'Medical care, medications, support services — no cost or very low cost', income: 'Varies by state; most serve low-income individuals first' },
+              { name: 'Extra Help / LIS', color: '#fbbf24', icon: '💰', who: 'Medicare enrollees with limited income and resources', covers: 'Helps pay Medicare Part D prescription drug costs — premiums, deductibles, copays', income: 'Up to 150% FPL (≈$22,590/yr single, $30,660/yr couple)' },
+            ].map(prog => (
+              <div key={prog.name} style={{ padding: '22px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '10px', transition: 'border-color 0.2s' }}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = `${prog.color}30`)}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span style={{ fontSize: '20px' }}>{prog.icon}</span>
+                  <span style={{ fontSize: '16px', fontWeight: 700, color: prog.color }}>{prog.name}</span>
+                </div>
+                <div style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.04em', textTransform: 'uppercase' as const }}>Who it&apos;s for</div>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, margin: 0 }}>{prog.who}</p>
+                <div style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.04em', textTransform: 'uppercase' as const }}>What it covers</div>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, margin: 0 }}>{prog.covers}</p>
+                <div style={{ padding: '8px 12px', background: `${prog.color}08`, border: `1px solid ${prog.color}18`, borderRadius: '8px', fontSize: '12px', color: prog.color }}>
+                  📊 {prog.income}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section style={{ padding: '40px 24px 100px' }}>
+        <div style={{ maxWidth: '720px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: 'clamp(20px, 3vw, 30px)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '28px' }}>Common questions</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {[
+              { q: 'Is my information stored anywhere?', a: 'No. Your answers are calculated entirely in your browser. Nothing is sent to any server. NEXUS has no account system and stores no personal data.' },
+              { q: 'What is the Federal Poverty Level (FPL)?', a: 'The FPL is a federal measure used to determine eligibility for many programs. In 2024, 100% FPL is approximately $15,060/year for a single person ($30,720 for a family of four). Programs like Medicaid and ACA subsidies use this threshold.' },
+              { q: 'I got results but don\'t know how to apply — what next?', a: 'Each result includes a direct link to apply or learn more. For free clinics, you can use the Clinic Finder to locate one near you — no referral or insurance needed.' },
+              { q: 'Can immigrants use these programs?', a: 'It depends on the program and immigration status. HRSA-funded free clinics serve everyone regardless of status. Medicaid eligibility varies by state and status. Emergency Medicaid is available in all states. NEXUS shows you what applies.' },
+            ].map((item, i) => (
+              <div key={i} style={{ padding: '18px 22px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px' }}>
+                <div style={{ fontSize: '15px', fontWeight: 600, marginBottom: '8px', color: '#eef4f5' }}>{item.q}</div>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, margin: 0 }}>{item.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       </div>
     </AppShell>

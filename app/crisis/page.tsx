@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import React, { useState, useEffect, useCallback } from 'react'
 import AppShell from '@/components/AppShell'
 import JsonLd, { medicalPageSchema, breadcrumbSchema } from '@/components/JsonLd'
@@ -260,11 +260,11 @@ export default function CrisisPage() {
 
         <h1 style={{
           fontSize: 'clamp(38px, 7vw, 76px)', fontWeight: 900,
-          letterSpacing: '-0.04em', lineHeight: 1.0, marginBottom: '24px',
-          maxWidth: '700px',
+          letterSpacing: '-0.04em', lineHeight: 1.05, marginBottom: '24px',
+          maxWidth: '680px',
         }}>
-          You&apos;re not alone.<br />
-          <span style={{ color: '#f87171' }}>Help is one call away.</span>
+          Real help,<br />
+          <span style={{ color: '#f87171' }}>right now.</span>
         </h1>
 
         <p style={{
@@ -500,8 +500,8 @@ export default function CrisisPage() {
                     }}>
                       <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5' }}>{er.name}</div>
                       <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Routing size={10} color="rgba(255,255,255,0.45)" /> {er.dist}</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={10} color="rgba(255,255,255,0.45)" /> {er.wait} wait</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Routing size={14} color="rgba(255,255,255,0.45)" /> {er.dist}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={14} color="rgba(255,255,255,0.45)" /> {er.wait} wait</span>
                         <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><PulsingDot color="#60a5fa" /> Open now</span>
                       </div>
                     </div>
@@ -571,8 +571,8 @@ export default function CrisisPage() {
                     }}>
                       <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5' }}>{mh.name}</div>
                       <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Routing size={10} color="rgba(255,255,255,0.45)" /> {mh.dist}</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={10} color="rgba(255,255,255,0.45)" /> {mh.hours}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Routing size={14} color="rgba(255,255,255,0.45)" /> {mh.dist}</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={14} color="rgba(255,255,255,0.45)" /> {mh.hours}</span>
                       </div>
                     </div>
                   ))

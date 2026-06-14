@@ -157,7 +157,7 @@ export default function CostCalculator() {
           fontFamily: 'var(--font-inter)', letterSpacing: '0.06em',
           textTransform: 'uppercase', marginBottom: '24px',
         }}>
-          <DollarSquare size={10} color="currentColor" variant="Linear" />
+          <DollarSquare size={14} color="currentColor" variant="Linear" />
           Cost Calculator
         </div>
         <h2 style={{

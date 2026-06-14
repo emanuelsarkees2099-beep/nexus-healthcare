@@ -606,7 +606,7 @@ export default function ClinicCard({
             onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
           >
-            {t('search.viewDetails')} <ArrowRight size={10} color="rgba(255,255,255,0.45)" variant="Linear" />
+            {t('search.viewDetails')} <ArrowRight size={14} color="rgba(255,255,255,0.45)" variant="Linear" />
           </Link>
           <Link
             href="/verify"
@@ -631,11 +631,11 @@ export default function ClinicCard({
               onMouseEnter={e => (e.currentTarget.style.color = '#fbbf24')}
               onMouseLeave={e => (e.currentTarget.style.color = 'rgba(251,191,36,0.65)')}
             >
-              <Star1 size={10} color="rgba(251,191,36,0.8)" variant="Bold" /> Rate this clinic
+              <Star1 size={14} color="rgba(251,191,36,0.8)" variant="Bold" /> Rate this clinic
             </button>
           ) : (
             <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.2)', fontFamily: 'var(--font-inter)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-              <Star1 size={10} variant="Bold" color="#fbbf24" /> Reviewed ✓
+              <Star1 size={14} variant="Bold" color="#fbbf24" /> Reviewed ✓
             </span>
           )}
         </div>

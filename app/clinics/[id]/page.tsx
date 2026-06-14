@@ -414,7 +414,7 @@ export default function ClinicDetailPage() {
                 fontFamily: 'var(--font-inter)', cursor: 'default',
               }}
             >
-              <Star1 size={10} variant="Bold" color={equity.color} />
+              <Star1 size={14} variant="Bold" color={equity.color} />
               Equity: {equity.label}
             </div>
           </div>

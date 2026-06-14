@@ -89,11 +89,11 @@ export default function AboutPage() {
         <h1 style={{
           fontFamily: 'var(--font-display)',
           fontSize: 'clamp(2.2rem, 6vw, 4rem)',
-          fontWeight: 800, lineHeight: 1.05,
+          fontWeight: 800, lineHeight: 1.1,
           letterSpacing: '-0.035em', marginBottom: '24px',
         }}>
-          Healthcare is a right.<br />
-          <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>We built the infrastructure.</em>
+          Care finds<br />
+          <em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>everyone.</em>
         </h1>
 
         <p style={{
@@ -120,7 +120,7 @@ export default function AboutPage() {
             Find free care near you
           </Link>
           <Link
-            href="/open"
+            href="/advocacy"
             className="about-cta-secondary"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
@@ -130,7 +130,7 @@ export default function AboutPage() {
               textDecoration: 'none', transition: 'color 0.2s, border-color 0.2s',
             }}
           >
-            View public roadmap →
+            Join the advocacy →
           </Link>
         </div>
       </section>
@@ -354,6 +354,53 @@ export default function AboutPage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* How it reaches people */}
+      <section style={{ borderTop: '1px solid var(--border2)', padding: '80px 24px' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '52px' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.6rem, 3.5vw, 2.5rem)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.15 }}>
+              How NEXUS works
+            </h2>
+            <p style={{ fontSize: '15px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', fontWeight: 300, lineHeight: 1.75, maxWidth: '500px', margin: '16px auto 0' }}>
+              From search to care in three steps — no insurance needed, no account required.
+            </p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
+            {[
+              { n: '01', title: 'Tell us where you are', body: 'Enter your location. NEXUS instantly maps every free clinic, FQHC, and sliding-scale provider within 50 miles — with real availability signals.' },
+              { n: '02', title: 'Check what you qualify for', body: 'Answer five questions. Our eligibility engine checks 40+ federal and state programs to surface what you\'re owed — Medicaid, ACA subsidies, drug assistance, and more.' },
+              { n: '03', title: 'Get care', body: 'Book directly, get directions, or connect with a Community Health Worker who can navigate the system on your behalf. Everything in one place.' },
+            ].map(s => (
+              <div key={s.n} className="about-card" style={{ position: 'relative' }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.14em', marginBottom: '16px' }}>{s.n}</div>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '18px', fontWeight: 600, letterSpacing: '-0.01em', marginBottom: '10px' }}>{s.title}</h3>
+                <p style={{ fontSize: '13px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', fontWeight: 300, lineHeight: 1.75, margin: 0 }}>{s.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Impact numbers */}
+      <section style={{ borderTop: '1px solid var(--border2)', padding: '60px 24px 80px' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+            {[
+              { stat: '13,000+', label: 'Verified clinics indexed', note: 'FQHCs, free clinics, sliding-scale' },
+              { stat: '40+', label: 'Programs checked', note: 'Medicaid, ACA, CHIP, and more' },
+              { stat: '2 min', label: 'Eligibility check time', note: 'No paperwork. No account.' },
+              { stat: '$0', label: 'Cost to use NEXUS', note: 'Free forever — no ads, no data sales' },
+            ].map(s => (
+              <div key={s.stat} style={{ textAlign: 'center', padding: '28px 20px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border2)', borderRadius: '16px' }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text)', lineHeight: 1, marginBottom: '8px' }}>{s.stat}</div>
+                <div style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: '4px' }}>{s.label}</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>{s.note}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

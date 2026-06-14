@@ -461,7 +461,7 @@ export default function EnrollPage({ params }: { params: Promise<{ id: string }>
 
         {/* Source */}
         <div style={{ marginTop: 32, display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--text-4)' }}>
-          <InfoCircle size={10} color="currentColor" />
+          <InfoCircle size={14} color="currentColor" />
           Source: {guide.source}
         </div>
       </div>

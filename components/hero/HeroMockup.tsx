@@ -99,7 +99,7 @@ export default function HeroMockup({ mockupRef }: HeroMockupProps) {
             margin: '0 12px', fontSize: '11px', color: 'var(--text-3)', fontWeight: 400,
             display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-inter)',
           }}>
-            <Lock1 size={10} color="rgba(255,255,255,0.45)" variant="Linear" aria-hidden="true" />
+            <Lock1 size={14} color="rgba(255,255,255,0.45)" variant="Linear" aria-hidden="true" />
             nexus.health/dashboard
           </div>
           <div style={{ fontSize: '10px', color: 'var(--text-3)', fontWeight: 400, fontFamily: 'var(--font-inter)' }}>v1.0</div>

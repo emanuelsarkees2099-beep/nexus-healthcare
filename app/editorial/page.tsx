@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
 import { Book1, Clock, ArrowRight, TrendUp, SearchNormal1, CloseCircle, Location, Buildings2 } from 'iconsax-react'
@@ -258,7 +258,7 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ fontSize: '10px', fontWeight: 700, padding: '3px 10px', borderRadius: '100px', background: `${article.color}15`, border: `1px solid ${article.color}33`, color: article.color, fontFamily: 'var(--font-inter)', letterSpacing: '0.07em', textTransform: 'uppercase' }}>{article.tag}</span>
           <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Clock size={10} color="rgba(255,255,255,0.45)" variant="Linear" /> {article.readTime}
+            <Clock size={14} color="rgba(255,255,255,0.45)" variant="Linear" /> {article.readTime}
           </span>
         </div>
 
@@ -307,6 +307,7 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
 export default function EditorialPage() {
   const [activeCategory, setActiveCategory] = useState('All')
   const [search, setSearch] = useState('')
+  const [showAll, setShowAll] = useState(false)
 
   const featured = ARTICLES.find(a => a.featured)
   const rest = ARTICLES.filter(a => !a.featured)
@@ -316,6 +317,8 @@ export default function EditorialPage() {
     const matchSearch = !search || a.headline.toLowerCase().includes(search.toLowerCase()) || a.subhead.toLowerCase().includes(search.toLowerCase())
     return matchCat && matchSearch
   })
+
+  const visibleArticles = showAll || search || activeCategory !== 'All' ? filtered : filtered.slice(0, 3)
 
   return (
     <AppShell>
@@ -327,12 +330,12 @@ export default function EditorialPage() {
       }}>
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(74,144,217,0.08) 0%, transparent 65%)', pointerEvents: 'none' }} />
         <Reveal>
-          <div style={{ ...pill, marginBottom: '24px' }}><Book1 size={10} variant="Linear" /> Editorial</div>
+          <div style={{ ...pill, marginBottom: '24px' }}><Book1 size={14} variant="Linear" /> Editorial</div>
         </Reveal>
         <Reveal delay={80}>
-          <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.08, marginBottom: '20px', maxWidth: '700px', margin: '0 auto 20px' }}>
-            Healthcare journalism{' '}
-            <em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>that does something</em>
+          <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '20px', maxWidth: '700px', margin: '0 auto 20px' }}>
+            Stories that<br />
+            <em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>move the needle</em>
           </h1>
         </Reveal>
         <Reveal delay={140}>
@@ -399,13 +402,29 @@ export default function EditorialPage() {
 
           {/* Grid */}
           {filtered.length > 0 ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(310px, 1fr))', gap: '20px' }}>
-              {filtered.map((a, i) => (
-                <Reveal key={a.id} delay={i * 60}>
-                  <ArticleCard article={a} />
+            <>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(310px, 1fr))', gap: '20px' }}>
+                {visibleArticles.map((a, i) => (
+                  <Reveal key={a.id} delay={i * 60}>
+                    <ArticleCard article={a} />
+                  </Reveal>
+                ))}
+              </div>
+              {!showAll && !search && activeCategory === 'All' && filtered.length > 3 && (
+                <Reveal>
+                  <div style={{ textAlign: 'center', marginTop: '40px' }}>
+                    <button
+                      onClick={() => setShowAll(true)}
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 32px', borderRadius: '100px', border: '1px solid rgba(74,144,217,0.3)', background: 'rgba(74,144,217,0.06)', color: 'var(--accent)', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.25s' }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.12)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,144,217,0.5)' }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.06)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,144,217,0.3)' }}
+                    >
+                      Show {filtered.length - 3} more {filtered.length - 3 === 1 ? 'story' : 'stories'} <ArrowRight size={14} variant="Linear" />
+                    </button>
+                  </div>
                 </Reveal>
-              ))}
-            </div>
+              )}
+            </>
           ) : (
             <div style={{ textAlign: 'center', padding: '60px 24px', color: 'rgba(255,255,255,0.4)' }}>
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
@@ -416,52 +435,57 @@ export default function EditorialPage() {
             </div>
           )}
 
-          {/* #46 — City guides framework */}
+          {/* City guides */}
           <Reveal>
             <div style={{ marginTop: '80px', marginBottom: '48px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '24px' }}>
-                <div>
-                  <div style={{ ...pill, marginBottom: '12px' }}><Location size={10} variant="TwoTone" aria-hidden="true" /> City Guides</div>
-                  <h2 style={{ fontSize: 'clamp(20px, 3vw, 30px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>Free care, by city</h2>
-                  <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)', marginTop: '6px', lineHeight: 1.5 }}>
-                    Guides to navigating free and low-cost healthcare in the cities where the need is greatest.
-                  </p>
-                </div>
+              <div style={{ marginBottom: '32px' }}>
+                <div style={{ ...pill, marginBottom: '16px' }}><Location size={14} variant="Linear" aria-hidden="true" /> City Guides</div>
+                <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 700, letterSpacing: '-0.025em', margin: '0 0 10px' }}>Free care, by city</h2>
+                <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', marginTop: '0', lineHeight: 1.6, maxWidth: '480px' }}>
+                  Navigating free and low-cost care in the cities where the need is greatest.
+                </p>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '12px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '10px' }}>
                 {[
-                  { city: 'Houston, TX',        zip: '77001', clinics: 148, pop: '2.3M uninsured', color: '#4A90D9' },
-                  { city: 'Phoenix, AZ',         zip: '85001', clinics: 112, pop: '1.1M uninsured', color: '#A78BFA' },
-                  { city: 'Los Angeles, CA',     zip: '90001', clinics: 203, pop: '2.8M uninsured', color: '#FB923C' },
-                  { city: 'Dallas, TX',          zip: '75201', clinics: 97,  pop: '0.9M uninsured', color: '#60A5FA' },
-                  { city: 'Miami, FL',           zip: '33101', clinics: 88,  pop: '0.7M uninsured', color: '#F472B6' },
-                  { city: 'Chicago, IL',         zip: '60601', clinics: 134, pop: '1.2M uninsured', color: '#FCD34D' },
-                  { city: 'New York, NY',        zip: '10001', clinics: 187, pop: '1.5M uninsured', color: '#4ADE80' },
-                  { city: 'San Antonio, TX',     zip: '78201', clinics: 79,  pop: '0.6M uninsured', color: '#F87171' },
+                  { city: 'Houston',      state: 'TX', zip: '77001', clinics: 148, pop: '2.3M uninsured', color: '#4A90D9' },
+                  { city: 'Phoenix',      state: 'AZ', zip: '85001', clinics: 112, pop: '1.1M uninsured', color: '#a78bfa' },
+                  { city: 'Los Angeles',  state: 'CA', zip: '90001', clinics: 203, pop: '2.8M uninsured', color: '#fb923c' },
+                  { city: 'Dallas',       state: 'TX', zip: '75201', clinics: 97,  pop: '940K uninsured', color: '#60a5fa' },
+                  { city: 'Miami',        state: 'FL', zip: '33101', clinics: 88,  pop: '720K uninsured', color: '#f472b6' },
+                  { city: 'Chicago',      state: 'IL', zip: '60601', clinics: 134, pop: '1.2M uninsured', color: '#fcd34d' },
+                  { city: 'New York',     state: 'NY', zip: '10001', clinics: 187, pop: '1.5M uninsured', color: '#4ade80' },
+                  { city: 'San Antonio',  state: 'TX', zip: '78201', clinics: 79,  pop: '610K uninsured', color: '#f87171' },
+                  { city: 'Las Vegas',    state: 'NV', zip: '89101', clinics: 64,  pop: '480K uninsured', color: '#a78bfa' },
+                  { city: 'Atlanta',      state: 'GA', zip: '30301', clinics: 91,  pop: '830K uninsured', color: '#34d399' },
+                  { city: 'San Diego',    state: 'CA', zip: '92101', clinics: 76,  pop: '510K uninsured', color: '#60a5fa' },
+                  { city: 'Tucson',       state: 'AZ', zip: '85701', clinics: 58,  pop: '290K uninsured', color: '#4A90D9' },
                 ].map(g => (
                   <a
                     key={g.city}
                     href={`/search?loc=${encodeURIComponent(g.zip)}&q=free+clinic`}
-                    style={{ textDecoration: 'none' }}
+                    style={{ textDecoration: 'none', display: 'block' }}
                   >
                     <div
                       style={{
-                        padding: '18px 20px', borderRadius: '16px',
-                        background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)',
+                        padding: '20px 22px', borderRadius: '16px',
+                        background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)',
                         transition: 'border-color 0.2s, background 0.2s, transform 0.2s',
-                        cursor: 'pointer',
+                        cursor: 'pointer', height: '100%', boxSizing: 'border-box',
                       }}
-                      onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = `${g.color}33`; el.style.background = `${g.color}06`; el.style.transform = 'translateY(-2px)' }}
-                      onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(255,255,255,0.07)'; el.style.background = 'rgba(255,255,255,0.02)'; el.style.transform = 'translateY(0)' }}
+                      onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = `${g.color}40`; el.style.background = `${g.color}08`; el.style.transform = 'translateY(-3px)' }}
+                      onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(255,255,255,0.07)'; el.style.background = 'rgba(255,255,255,0.025)'; el.style.transform = 'translateY(0)' }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                        <Buildings2 size={22} color={g.color} variant="TwoTone" aria-hidden="true" />
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                        <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: `${g.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <Buildings2 size={16} color={g.color} variant="Linear" aria-hidden="true" />
+                        </div>
+                        <span style={{ fontSize: '11px', fontWeight: 700, color: g.color, letterSpacing: '0.08em', padding: '3px 8px', borderRadius: '6px', background: `${g.color}10`, border: `1px solid ${g.color}20` }}>{g.state}</span>
                       </div>
-                      <div style={{ fontSize: '14px', fontWeight: 700, marginBottom: '4px', color: 'var(--text)' }}>{g.city}</div>
-                      <div style={{ fontSize: '11px', color: g.color, fontWeight: 600, fontFamily: 'var(--font-mono)' }}>{g.clinics} free clinics</div>
-                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', marginTop: '2px' }}>{g.pop}</div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '10px', fontSize: '11px', color: g.color, fontFamily: 'var(--font-inter)', fontWeight: 600 }}>
-                        Find care <ArrowRight size={10} />
+                      <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '4px', color: 'var(--text)', letterSpacing: '-0.01em' }}>{g.city}</div>
+                      <div style={{ fontSize: '12px', color: g.color, fontWeight: 600, marginBottom: '3px' }}>{g.clinics} free clinics</div>
+                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', lineHeight: 1.4 }}>{g.pop}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '14px', fontSize: '12px', color: g.color, fontWeight: 600 }}>
+                        Explore <ArrowRight size={11} />
                       </div>
                     </div>
                   </a>
@@ -483,7 +507,7 @@ export default function EditorialPage() {
                 flexWrap: 'wrap', gap: '32px',
               }}>
                 <div>
-                  <div style={{ ...pill, marginBottom: '16px' }}><TrendUp size={10} variant="Linear" /> Pitch us</div>
+                  <div style={{ ...pill, marginBottom: '16px' }}><TrendUp size={14} variant="Linear" /> Pitch us</div>
                   <h2 style={{ fontSize: 'clamp(22px, 3vw, 34px)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '12px' }}>Have a story to tell?</h2>
                   <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.45)', maxWidth: '440px', lineHeight: 1.65 }}>
                     We publish first-person healthcare navigation stories, policy analysis, and community guides. If you've navigated the system and learned something, we want to hear from you.

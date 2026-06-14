@@ -289,7 +289,7 @@ export default function BeforeAfterBar() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   marginBottom: i < METRICS.length - 1 ? 'calc(10px + clamp(16px, 2vw, 22px) + 10px + 16px)' : '0',
                 }}>
-                  <ArrowRight size={10} color="rgba(79,142,240,0.65)" variant="Linear" aria-hidden="true" />
+                  <ArrowRight size={14} color="rgba(79,142,240,0.65)" variant="Linear" aria-hidden="true" />
                 </div>
               ))}
             </div>

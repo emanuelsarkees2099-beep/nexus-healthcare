@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import React, { useState, useRef } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
@@ -629,7 +629,7 @@ export default function PassportPage() {
                   fontSize: '12px', fontWeight: 600, color: severityColors[a.severity].color,
                   display: 'flex', alignItems: 'center', gap: '6px',
                 }}>
-                  <Danger size={10} />
+                  <Danger size={14} />
                   {masked ? '••••••' : a.name}
                   <span style={{ opacity: 0.6, fontWeight: 400, textTransform: 'capitalize' }}>({a.severity})</span>
                 </div>

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 export const dynamic = 'force-dynamic'
 import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
@@ -124,12 +124,19 @@ export default function StoriesPage() {
       <section style={{ minHeight: '80dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '100px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(74,144,217,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
-        <div style={{ ...pill, marginBottom: '24px' }}><Book1 size={10} variant="Linear" /> Stories & Community</div>
+        <div style={{ ...pill, marginBottom: '24px' }}><Book1 size={14} variant="Linear" /> Stories & Community</div>
 
-        <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.08, marginBottom: '24px', maxWidth: '820px' }}>
-          {TITLE.map((w, i) => (
-            <span key={i} style={{ display: 'inline-block', marginRight: '0.25em', opacity: words[i] ? 1 : 0, transform: words[i] ? 'translateY(0)' : 'translateY(18px)', transition: 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)', color: w === 'alone' ? 'var(--accent)' : 'inherit' }}>{w}</span>
-          ))}
+        <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.15, marginBottom: '24px', maxWidth: '820px' }}>
+          <div>
+            {TITLE.slice(0, 4).map((w, i) => (
+              <span key={i} style={{ display: 'inline-block', marginRight: '0.25em', opacity: words[i] ? 1 : 0, transform: words[i] ? 'translateY(0)' : 'translateY(18px)', transition: 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)', color: w === 'alone' ? 'var(--accent)' : 'inherit' }}>{w}</span>
+            ))}
+          </div>
+          <div>
+            {TITLE.slice(4).map((w, i) => (
+              <span key={i + 4} style={{ display: 'inline-block', marginRight: '0.25em', opacity: words[i + 4] ? 1 : 0, transform: words[i + 4] ? 'translateY(0)' : 'translateY(18px)', transition: 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)' }}>{w}</span>
+            ))}
+          </div>
         </h1>
 
         <p style={{ fontSize: '17px', color: 'rgba(255,255,255,0.5)', maxWidth: '480px', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -204,7 +211,7 @@ export default function StoriesPage() {
         <div style={{ maxWidth: '860px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '40px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><MessageCircle size={10} variant="Linear" /> Community forum</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><MessageCircle size={14} variant="Linear" /> Community forum</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Questions answered by people who've been there</h2>
             </div>
           </RevealBlock>
@@ -261,7 +268,7 @@ export default function StoriesPage() {
       <section ref={shareRef} style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '620px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ ...pill, marginBottom: '24px' }}><Heart size={10} variant="Linear" /> Share your story</div>
+            <div style={{ ...pill, marginBottom: '24px' }}><Heart size={14} variant="Linear" /> Share your story</div>
             <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '16px' }}>Your story might be someone else's lifeline</h2>
             <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65, marginBottom: '40px' }}>You don't need to write perfectly. Just honestly. Stories are reviewed by our team before publishing.</p>
           </RevealBlock>

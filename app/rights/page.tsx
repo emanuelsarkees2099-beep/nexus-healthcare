@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 export const dynamic = 'force-dynamic'
 import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
@@ -170,7 +170,7 @@ export default function RightsPage() {
       <section style={{ minHeight: '80dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '100px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(74,144,217,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
-        <div style={{ ...pill, marginBottom: '24px' }}><Judge size={10} variant="Linear" /> Rights & Legal Aid</div>
+        <div style={{ ...pill, marginBottom: '24px' }}><Judge size={14} variant="Linear" /> Rights & Legal Aid</div>
 
         <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.08, marginBottom: '24px', maxWidth: '700px' }}>
           {TITLE.map((w, i) => (
@@ -216,7 +216,7 @@ export default function RightsPage() {
         <div style={{ maxWidth: '760px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '48px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><Shield size={10} variant="Linear" /> Your rights</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Shield size={14} variant="Linear" /> Your rights</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Federal protections that apply to you</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', marginTop: '16px', lineHeight: 1.65 }}>These rights exist regardless of your insurance status, income, or immigration status.</p>
             </div>
@@ -256,7 +256,7 @@ export default function RightsPage() {
         <div style={{ maxWidth: '860px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '48px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><SearchNormal1 size={10} variant="Linear" /> Legal aid finder</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><SearchNormal1 size={14} variant="Linear" /> Legal aid finder</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Find free legal help near you</h2>
             </div>
           </RevealBlock>
@@ -373,7 +373,7 @@ export default function RightsPage() {
       <section ref={formRef} style={{ padding: '100px 24px 120px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '580px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ ...pill, marginBottom: '24px' }}><ReceiptText size={10} variant="Linear" /> Get legal help</div>
+            <div style={{ ...pill, marginBottom: '24px' }}><ReceiptText size={14} variant="Linear" /> Get legal help</div>
             <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '16px' }}>We'll connect you with a legal aid partner</h2>
             <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65, marginBottom: '36px' }}>Describe your issue and we'll match you with the right legal aid organization within 24 hours.</p>
           </RevealBlock>

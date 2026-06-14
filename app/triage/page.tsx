@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
@@ -457,7 +457,7 @@ export default function TriagePage() {
 
             {/* Disclaimer */}
             <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', textAlign: 'center', lineHeight: 1.6 }}>
-              <InfoCircle size={10} color="rgba(255,255,255,0.45)" style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
+              <InfoCircle size={14} color="rgba(255,255,255,0.45)" style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
               Not a medical diagnosis. This tool helps you find appropriate care — always consult a healthcare professional. Nothing you enter leaves your device to third parties.
             </p>
           </form>
@@ -565,7 +565,7 @@ export default function TriagePage() {
                     fontFamily: 'var(--font-inter)', fontWeight: 500,
                     display: 'flex', alignItems: 'center', gap: '5px',
                   }}>
-                    <TickCircle size={10} color="var(--success)" variant="Bold" />
+                    <TickCircle size={14} color="var(--success)" variant="Bold" />
                     Analysis complete
                   </div>
                 </div>
@@ -754,7 +754,7 @@ export default function TriagePage() {
                               fontSize: '12px', color: 'rgba(255,255,255,0.4)',
                               display: 'flex', alignItems: 'center', gap: '6px',
                             }}>
-                              <ArrowRight size={10} color="rgba(255,255,255,0.5)" /> {c}
+                              <ArrowRight size={14} color="rgba(255,255,255,0.5)" /> {c}
                             </div>
                           ))}
                         </div>

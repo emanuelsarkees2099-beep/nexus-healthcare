@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useState, useEffect } from 'react'
 import { createClientClient } from '@/lib/auth-client'
 import { useRouter } from 'next/navigation'
@@ -284,11 +284,11 @@ export default function AdminPage() {
                         <>
                           <button onClick={() => updateStatus(sub.id, 'published')} disabled={updating}
                             style={{ padding: '5px 10px', borderRadius: '6px', border: '1px solid #60a5fa60', background: 'rgba(96,165,250,0.1)', color: '#60a5fa', fontSize: '11px', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                            <TickCircle size={10} variant="Bold" aria-hidden="true" /> Approve
+                            <TickCircle size={14} variant="Bold" aria-hidden="true" /> Approve
                           </button>
                           <button onClick={() => updateStatus(sub.id, 'archived')} disabled={updating}
                             style={{ padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(248,113,113,0.4)', background: 'rgba(248,113,113,0.1)', color: '#f87171', fontSize: '11px', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                            <CloseCircle size={10} variant="Bold" aria-hidden="true" /> Reject
+                            <CloseCircle size={14} variant="Bold" aria-hidden="true" /> Reject
                           </button>
                         </>
                       ) : (

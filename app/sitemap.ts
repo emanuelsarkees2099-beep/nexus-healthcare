@@ -41,7 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/outcomes`,      priority: 0.70, changeFrequency: 'weekly'  },
     { url: `${base}/equity`,        priority: 0.70, changeFrequency: 'monthly' },
     { url: `${base}/methodology`,   priority: 0.60, changeFrequency: 'monthly' },
-    { url: `${base}/open`,          priority: 0.65, changeFrequency: 'monthly' },
+    { url: `${base}/advocacy`,      priority: 0.65, changeFrequency: 'monthly' },
 
     /* Provider & rights */
     { url: `${base}/provider`,      priority: 0.65, changeFrequency: 'monthly' },

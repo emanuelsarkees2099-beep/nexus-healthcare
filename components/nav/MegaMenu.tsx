@@ -217,7 +217,7 @@ export default function MegaMenu({ open, onClose }: MegaMenuProps) {
           { label: 'Advocacy',       href: '/advocacy',  icon: Speaker },
           { label: 'Editorial',      href: '/editorial', icon: ClipboardText },
           { label: 'Pathways',       href: '/pathways',  icon: MagicStar },
-          { label: 'Open Source',    href: '/open',      icon: Global },
+          { label: 'Equity Lab',     href: '/equity',    icon: Global },
           { label: 'Health Passport',href: '/passport',  icon: ShieldTick },
           { label: 'Outcomes',       href: '/outcomes',  icon: TrendUp },
         ].map(q => (

@@ -222,7 +222,7 @@ export default function Footer() {
                 { label: 'Impact Dashboard', href: '/impact' },
                 { label: 'Equity Lab',       href: '/equity' },
                 { label: 'Editorial',        href: '/editorial' },
-                { label: 'Open Roadmap',     href: '/open' },
+                { label: 'Advocacy',         href: '/advocacy' },
                 { label: 'For Providers',    href: '/provider' },
               ],
             },
@@ -328,7 +328,7 @@ export default function Footer() {
               letterSpacing: '0.04em', textTransform: 'uppercase',
               fontFamily: 'var(--font-inter)',
             }}>
-              <ShieldTick size={10} color="currentColor" variant="TwoTone" aria-hidden="true" />
+              <ShieldTick size={14} color="currentColor" variant="TwoTone" aria-hidden="true" />
               HRSA Partner
             </div>
             <span aria-hidden="true" style={{ color: 'var(--border)' }}>|</span>

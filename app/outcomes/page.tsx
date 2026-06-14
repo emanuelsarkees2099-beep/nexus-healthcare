@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
 import { smoothScrollTo } from '@/utils/smoothScroll'
@@ -292,7 +292,7 @@ export default function OutcomesPage() {
 
         <div style={{ maxWidth: '740px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}>
-            <span style={pill}><Chart2 size={10} variant="Linear" /> Health outcomes</span>
+            <span style={pill}><Chart2 size={14} variant="Linear" style={{ flexShrink: 0 }} /> Health outcomes</span>
           </div>
           <h1 style={{ fontSize: 'clamp(40px, 7vw, 78px)', fontWeight: 700, lineHeight: 1.08, letterSpacing: '-0.03em', marginBottom: '22px' }}>
             Real results.<br />Real people.
@@ -326,7 +326,7 @@ export default function OutcomesPage() {
           <RevealBlock>
             <div className="outcomes-split" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center' }}>
               <div>
-                <span style={pill}><TrendUp size={10} variant="Linear" /> Growth</span>
+                <span style={pill}><TrendUp size={14} variant="Linear" /> Growth</span>
                 <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', marginBottom: '16px', lineHeight: 1.15 }}>
                   Users accessing care, month by month
                 </h2>
@@ -377,7 +377,7 @@ export default function OutcomesPage() {
               </div>
 
               <div>
-                <span style={pill}><MagicStar size={10} variant="Linear" /> By the numbers</span>
+                <span style={pill}><MagicStar size={14} variant="Linear" /> By the numbers</span>
                 <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', marginBottom: '16px', lineHeight: 1.2 }}>
                   What care are people actually getting?
                 </h2>
@@ -399,7 +399,7 @@ export default function OutcomesPage() {
           <RevealBlock>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '48px', flexWrap: 'wrap', gap: '16px' }}>
               <div>
-                <span style={pill}><Book1 size={10} variant="Linear" /> Research</span>
+                <span style={pill}><Book1 size={14} variant="Linear" /> Research</span>
                 <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>What the data shows</h2>
               </div>
               <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)', maxWidth: '280px', lineHeight: 1.6 }}>Peer-reviewed studies from independent institutions using anonymized NEXUS outcome data.</p>
@@ -431,7 +431,7 @@ export default function OutcomesPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '52px' }}>
-              <span style={pill}><Star1 size={10} variant="Linear" /> Stories</span>
+              <span style={pill}><Star1 size={14} variant="Linear" /> Stories</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px' }}>
                 Behind every stat is a person
               </h2>
@@ -465,7 +465,7 @@ export default function OutcomesPage() {
         <div style={{ maxWidth: '600px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '44px' }}>
-              <span style={pill}><MagicStar size={10} variant="Linear" /> Help others</span>
+              <span style={pill}><MagicStar size={14} variant="Linear" /> Help others</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', marginBottom: '12px' }}>Log your outcome</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65 }}>
                 Your experience improves the AI model for the next person. It takes 60 seconds.

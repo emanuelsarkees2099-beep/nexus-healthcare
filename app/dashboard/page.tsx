@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 export const dynamic = 'force-dynamic'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
@@ -476,7 +476,7 @@ function PersonalizedFeed({
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
                 <span style={{ fontSize: 11, fontWeight: 600, color: item.color }}>{item.cta}</span>
-                <ArrowRight2 size={10} color={item.color} variant="Linear" />
+                <ArrowRight2 size={14} color={item.color} variant="Linear" />
               </div>
             </div>
           </Link>
@@ -1173,7 +1173,7 @@ export default function DashboardPage() {
                     display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0,
                     fontSize: 12, color: 'rgba(79,142,240,0.75)', textDecoration: 'none',
                   }}>
-                    View <ArrowRight2 size={10} color="currentColor" variant="Linear" />
+                    View <ArrowRight2 size={14} color="currentColor" variant="Linear" />
                   </Link>
                 </div>
               )}

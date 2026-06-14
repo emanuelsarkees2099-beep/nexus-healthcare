@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import React, { useState, useEffect, useRef } from 'react'
 import AppShell from '@/components/AppShell'
 import JsonLd, { PROGRAMS_FAQ_SCHEMA, breadcrumbSchema } from '@/components/JsonLd'
@@ -303,7 +303,7 @@ function DocumentChecklist() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16, marginBottom: 32 }}>
           <div>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)', marginBottom: '16px' }}>
-              <DocumentText size={10} /> Document checklist
+              <DocumentText size={14} /> Document checklist
             </span>
             <h2 style={{ fontSize: 'clamp(22px, 3.5vw, 36px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.15, marginBottom: 10 }}>
               What to gather before you apply
@@ -653,10 +653,11 @@ export default function ProgramsPage() {
 
         <div style={{ maxWidth: '720px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}>
-            <span style={pill}><ReceiptText size={10} variant="Linear" /> Financial Clearinghouse</span>
+            <span style={pill}><ReceiptText size={14} variant="Linear" /> Financial Clearinghouse</span>
           </div>
-          <h1 style={{ fontSize: 'clamp(30px, 4.5vw, 56px)', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.03em', marginBottom: '22px' }}>
-            You're leaving money on the table.
+          <h1 style={{ fontSize: 'clamp(30px, 4.5vw, 56px)', fontWeight: 700, lineHeight: 1.15, letterSpacing: '-0.03em', marginBottom: '22px' }}>
+            Stop leaving money<br />
+            <span style={{ color: 'var(--accent)' }}>on the table.</span>
           </h1>
           <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: '500px', margin: '0 auto 40px' }}>
             Most uninsured people qualify for 2–4 programs they've never heard of. Answer 5 questions and find out which ones you're owed.
@@ -866,7 +867,7 @@ export default function ProgramsPage() {
               <div style={{ borderRadius: '23px', padding: '40px 44px', background: 'rgba(10,9,22,0.97)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.04)' }}>
                 <div style={{ marginBottom: '32px' }}>
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(96,165,250,0.08)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.18)', marginBottom: '16px' }}>
-                    <Flash size={10} variant="Linear" /> Step-by-step Enrollment Guide
+                    <Flash size={14} variant="Linear" /> Step-by-step Enrollment Guide
                   </span>
                   <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.2, marginBottom: '10px' }}>
                     Your insurance enrollment roadmap
@@ -968,7 +969,7 @@ export default function ProgramsPage() {
             <div style={{ borderRadius: '28px', padding: '3px', background: 'linear-gradient(135deg, rgba(96,165,250,0.25), rgba(74,144,217,0.1))' }}>
               <div style={{ borderRadius: '26px', padding: '56px 52px', background: 'rgba(10,9,22,0.97)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '28px', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.04)' }}>
                 <div>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(96,165,250,0.08)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.18)', marginBottom: '16px' }}><MagicStar size={10} variant="Linear" /> Free & private</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(96,165,250,0.08)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.18)', marginBottom: '16px' }}><MagicStar size={14} variant="Linear" /> Free & private</span>
                   <h2 style={{ fontSize: 'clamp(22px, 3vw, 36px)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '12px' }}>Your eligibility doesn't expire</h2>
                   <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', maxWidth: '400px', lineHeight: 1.65 }}>Check again whenever your situation changes — income, household size, or coverage status.</p>
                 </div>
@@ -991,7 +992,7 @@ export default function ProgramsPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)', marginBottom: '20px' }}><ReceiptText size={10} variant="Linear" /> Application guide</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)', marginBottom: '20px' }}><ReceiptText size={14} variant="Linear" /> Application guide</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.15, maxWidth: '520px' }}>How to apply for each program</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', marginTop: '16px', maxWidth: '440px', lineHeight: 1.65 }}>Every program has a different process. Here's what to expect — and what to bring.</p>
             </div>
@@ -1057,7 +1058,7 @@ export default function ProgramsPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)', marginBottom: '20px' }}><MagicStar size={10} variant="Linear" /> Results</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)', marginBottom: '20px' }}><MagicStar size={14} variant="Linear" /> Results</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.15, maxWidth: '520px' }}>Programs that actually changed things</h2>
             </div>
           </RevealBlock>

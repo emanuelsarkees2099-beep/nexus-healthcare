@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import AppShell from '@/components/AppShell'
 import { smoothScrollTo } from '@/utils/smoothScroll'
@@ -259,7 +259,7 @@ export default function PathwaysPage() {
 
         <div style={{ maxWidth: '760px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}>
-            <span style={pill}><MagicStar size={10} variant="Linear" /> Care Navigation</span>
+            <span style={pill}><MagicStar size={14} variant="Linear" /> Care Navigation</span>
           </div>
 
           <h1 ref={heroTitleRef} style={{ fontSize: 'clamp(42px, 7vw, 80px)', fontWeight: 700, lineHeight: 1.08, letterSpacing: '-0.03em', marginBottom: '24px', color: 'var(--text)' }}>
@@ -310,7 +310,7 @@ export default function PathwaysPage() {
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '64px' }}>
-              <span style={pill}><TickCircle size={10} variant="Linear" /> How it works</span>
+              <span style={pill}><TickCircle size={14} variant="Linear" /> How it works</span>
               <h2 style={{ fontSize: 'clamp(28px, 4vw, 46px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Three steps to the right care</h2>
             </div>
           </RevealBlock>
@@ -644,7 +644,7 @@ export default function PathwaysPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
-              <span style={pill}><Cpu size={10} variant="Linear" /> Model methodology</span>
+              <span style={pill}><Cpu size={14} variant="Linear" /> Model methodology</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15, maxWidth: '560px' }}>The model doesn't guess.<br />It learns.</h2>
             </div>
           </RevealBlock>
@@ -674,7 +674,7 @@ export default function PathwaysPage() {
             <div style={{ borderRadius: '28px', padding: '4px', background: 'linear-gradient(135deg, rgba(74,144,217,0.2), rgba(167,210,190,0.05))' }}>
               <div style={{ borderRadius: '25px', padding: '60px 52px', background: 'rgba(13,11,30,0.95)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '32px', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05)' }}>
                 <div>
-                  <div style={{ ...pill, marginBottom: '16px' }}><Hospital size={10} variant="Linear" /> Can't travel?</div>
+                  <div style={{ ...pill, marginBottom: '16px' }}><Hospital size={14} variant="Linear" /> Can't travel?</div>
                   <h2 style={{ fontSize: 'clamp(22px, 3vw, 36px)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '12px' }}>Telehealth that's actually free</h2>
                   <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.45)', maxWidth: '400px', lineHeight: 1.65 }}>Three verified telehealth partners, available in 8 languages, zero cost. Same-day availability.</p>
                 </div>
@@ -696,7 +696,7 @@ export default function PathwaysPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
-              <span style={pill}><Star1 size={10} variant="Linear" /> Patient outcomes</span>
+              <span style={pill}><Star1 size={14} variant="Linear" /> Patient outcomes</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15, maxWidth: '560px' }}>Real people.<br />Real care found.</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', marginTop: '16px', maxWidth: '440px', lineHeight: 1.65 }}>47,000 outcomes logged. Here are three of them.</p>
             </div>
@@ -735,7 +735,7 @@ export default function PathwaysPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-              <span style={pill}><TickCircle size={10} variant="Linear" /> Clinic network</span>
+              <span style={pill}><TickCircle size={14} variant="Linear" /> Clinic network</span>
               <h2 style={{ fontSize: 'clamp(22px, 3.5vw, 38px)', fontWeight: 700, letterSpacing: '-0.02em', marginTop: '20px', lineHeight: 1.2 }}>12,000+ verified partners</h2>
               <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.38)', marginTop: '12px', maxWidth: '380px', margin: '12px auto 0', lineHeight: 1.65 }}>Every clinic is manually verified for acceptance of uninsured patients before listing.</p>
             </div>

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
 import { smoothScrollTo } from '@/utils/smoothScroll'
@@ -233,7 +233,7 @@ export default function CalendarPage() {
 
         <div style={{ maxWidth: '720px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}>
-            <span style={pill}><Calendar1 size={10} variant="Linear" /> Preventive care</span>
+            <span style={pill}><Calendar1 size={14} variant="Linear" /> Preventive care</span>
           </div>
           <h1 style={{ fontSize: 'clamp(38px, 5.5vw, 68px)', fontWeight: 700, lineHeight: 1.08, letterSpacing: '-0.03em', marginBottom: '22px', animation: 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both' }}>
             Your health calendar,<br />built around you.
@@ -273,7 +273,7 @@ export default function CalendarPage() {
         <div style={{ maxWidth: '640px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-              <span style={pill}><Profile size={10} variant="Linear" /> Your profile</span>
+              <span style={pill}><Profile size={14} variant="Linear" /> Your profile</span>
               <h2 style={{ fontSize: 'clamp(24px, 4vw, 40px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', marginBottom: '10px' }}>
                 Build your screening plan
               </h2>
@@ -375,8 +375,8 @@ export default function CalendarPage() {
                           <span style={{ fontSize: '11px', padding: '2px 8px', borderRadius: '100px', background: meta.bg, color: meta.color, border: `1px solid ${meta.border}` }}>{meta.label}</span>
                         </div>
                         <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={10} color="rgba(255,255,255,0.45)" variant="Linear" />{s.freq}</span>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Calendar1 size={10} color="rgba(255,255,255,0.45)" variant="Linear" />Due: {s.due}</span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={14} color="rgba(255,255,255,0.45)" variant="Linear" />{s.freq}</span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Calendar1 size={14} color="rgba(255,255,255,0.45)" variant="Linear" />Due: {s.due}</span>
                         </div>
                       </div>
                       {s.status !== 'done' && (
@@ -444,7 +444,7 @@ export default function CalendarPage() {
           <RevealBlock>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px', flexWrap: 'wrap', gap: '16px' }}>
               <div>
-                <span style={pill}><Location size={10} variant="Linear" /> Near you</span>
+                <span style={pill}><Location size={14} variant="Linear" /> Near you</span>
                 <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Free screenings this month</h2>
               </div>
               <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)', maxWidth: '240px', lineHeight: 1.6 }}>No appointment needed for most of these events.</p>
@@ -489,7 +489,7 @@ export default function CalendarPage() {
             <div style={{ borderRadius: '28px', padding: '3px', background: 'linear-gradient(135deg, rgba(74,144,217,0.22), rgba(167,210,190,0.06))' }}>
               <div style={{ borderRadius: '26px', padding: '56px 52px', background: 'rgba(10,9,22,0.97)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '28px', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.04)' }}>
                 <div>
-                  <span style={pill}><MagicStar size={10} variant="Linear" /> Stay ahead</span>
+                  <span style={pill}><MagicStar size={14} variant="Linear" /> Stay ahead</span>
                   <h2 style={{ fontSize: 'clamp(22px, 3vw, 36px)', fontWeight: 700, letterSpacing: '-0.02em', margin: '16px 0 10px', lineHeight: 1.2 }}>Prevention is the cheapest healthcare</h2>
                   <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', maxWidth: '420px', lineHeight: 1.65 }}>Most conditions that land people in the ER were preventable with a $0 screening a year earlier. Your plan is ready when you are.</p>
                 </div>

@@ -43,7 +43,7 @@ const ALL_APP_LINK_DEFS = [
   { labelKey: null,                       href: '/equity',      fallback: 'Equity Lab' },
   { labelKey: 'nav.provider'    as const, href: '/provider',    fallback: 'Provider' },
   { labelKey: 'nav.rights'      as const, href: '/rights',      fallback: 'Rights' },
-  { labelKey: null,                       href: '/open',        fallback: 'Open' },
+  { labelKey: null,                       href: '/advocacy',    fallback: 'Advocacy' },
   { labelKey: 'nav.methodology' as const, href: '/methodology', fallback: 'Methodology' },
   { labelKey: null,                       href: '/triage',      fallback: 'Symptom Guide' },
   { labelKey: null,                       href: '/passport',    fallback: 'Health Passport' },

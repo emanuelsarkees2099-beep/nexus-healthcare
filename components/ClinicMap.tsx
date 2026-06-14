@@ -190,7 +190,7 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
           >
-            <CloseSquare size={10} color="currentColor" variant="Linear" />
+            <CloseSquare size={14} color="currentColor" variant="Linear" />
           </button>
 
           {/* Status badge */}
@@ -249,7 +249,7 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
                   fontFamily: 'var(--font-inter)',
                 }}
               >
-                <Call size={10} color="currentColor" variant="Linear" />
+                <Call size={14} color="currentColor" variant="Linear" />
                 Call
               </a>
             )}
@@ -266,7 +266,7 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
                 fontFamily: 'var(--font-inter)',
               }}
             >
-              <Routing size={10} color="currentColor" variant="Linear" />
+              <Routing size={14} color="currentColor" variant="Linear" />
               Directions
             </a>
             {onSelectClinic && (

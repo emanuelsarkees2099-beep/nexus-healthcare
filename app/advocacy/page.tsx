@@ -1,9 +1,8 @@
-'use client'
+﻿'use client'
 export const dynamic = 'force-dynamic'
 import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
-import { submitForm } from '@/utils/submitForm'
-import { Speaker, ReceiptText, TickCircle, ArrowRight, Location, TrendUp, Global, Sms, ArrowDown2, ExportSquare, Heart, CloseCircle, SearchNormal1, Notification, ArrowRight2, Flash, Book1, Link2 } from 'iconsax-react'
+import { Speaker, ReceiptText, TickCircle, ArrowRight, Location, TrendUp, Global, ArrowDown2, ExportSquare, Heart, CloseCircle, Notification, ArrowRight2, Flash, Book1, Link2 } from 'iconsax-react'
 
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
@@ -45,10 +44,10 @@ function Counter({ target, suffix = '', prefix = '' }: { target: number; suffix?
 
 /* ─── data ────────────────────────────────────────── */
 const PETITIONS = [
-  { id: 'medicaid-expansion', title: 'Expand Medicaid in All 50 States', desc: 'Close the coverage gap that leaves 2.2 million people without coverage in states that haven\'t expanded.', signatures: 84312, goal: 100000, color: '#60a5fa', urgent: true },
-  { id: 'drug-pricing', title: 'Allow Medicare to Negotiate All Drug Prices', desc: 'The Inflation Reduction Act lets Medicare negotiate prices for 10 drugs. Expand this to all drugs.', signatures: 127849, goal: 150000, color: 'var(--accent)', urgent: false },
-  { id: 'uninsured-crisis', title: 'Declare the Uninsured Crisis a National Emergency', desc: '30 million Americans lack health coverage. Federal emergency response should include free clinic surge funding.', signatures: 43201, goal: 75000, color: '#60a5fa', urgent: true },
-  { id: 'chw-funding', title: 'Fund Community Health Workers Through Medicare', desc: 'CHWs have proven 47% better outcomes. Make their services a covered Medicare and Medicaid benefit.', signatures: 29740, goal: 50000, color: '#a78bfa', urgent: false },
+  { id: 'medicaid-expansion', title: 'Expand Medicaid in All 50 States', desc: 'Close the coverage gap that leaves 2.2 million people without coverage in states that haven\'t expanded.', signatures: 84312, goal: 100000, color: '#60a5fa', urgent: true, url: 'https://www.communitycatalyst.org/our-work/coverage-and-access', org: 'Community Catalyst' },
+  { id: 'drug-pricing', title: 'Allow Medicare to Negotiate All Drug Prices', desc: 'The Inflation Reduction Act lets Medicare negotiate prices for 10 drugs. Expand this to all drugs.', signatures: 127849, goal: 150000, color: 'var(--accent)', urgent: false, url: 'https://www.aarp.org/health/medicare-insurance/info-2024/medicare-drug-price-negotiation.html', org: 'AARP' },
+  { id: 'uninsured-crisis', title: 'Declare the Uninsured Crisis a National Emergency', desc: '30 million Americans lack health coverage. Federal emergency response should include free clinic surge funding.', signatures: 43201, goal: 75000, color: '#60a5fa', urgent: true, url: 'https://familiesusa.org/campaigns/', org: 'Families USA' },
+  { id: 'chw-funding', title: 'Fund Community Health Workers Through Medicare', desc: 'CHWs have proven 47% better outcomes. Make their services a covered Medicare and Medicaid benefit.', signatures: 29740, goal: 50000, color: '#a78bfa', urgent: false, url: 'https://www.nachc.org/community-health-workers/advocacy/', org: 'NACHC' },
 ]
 
 const POLICY_WINS = [
@@ -137,39 +136,9 @@ const LEGISLATION = [
   },
 ]
 
-const LETTER_TEMPLATE = `Dear [Representative Name],
-
-I am a constituent writing to urge your support for expanded access to free and affordable healthcare in our state.
-
-Thirty million Americans — including many in our district — lack health coverage. This is not a market failure. It is a policy choice, and it can be reversed.
-
-I urge you to:
-1. Support full Medicaid expansion to close the coverage gap
-2. Fund Community Health Workers as a reimbursable benefit
-3. Increase FQHC funding so that every American can access a free clinic within 30 miles
-4. Protect the No Surprises Act provisions that shield patients from unexpected bills
-
-Healthcare is not a luxury — it is the foundation on which everything else in a person's life is built. When people can't afford to see a doctor, families destabilize, children fall behind, and local economies suffer.
-
-Please stand on the right side of this issue.
-
-Respectfully,
-[Your Name]
-[Your City, State]`
-
 /* ─── page ────────────────────────────────────────── */
 export default function AdvocacyPage() {
-  const [signedPetitions, setSignedPetitions] = useState<Record<string, boolean>>({})
-  const [letterState, setLetterState] = useState<'idle' | 'editing' | 'sent'>('idle')
-  const [letterText, setLetterText] = useState(LETTER_TEMPLATE)
-  const [repName, setRepName] = useState('')
-  const [yourName, setYourName] = useState('')
-  const [yourCity, setYourCity] = useState('')
   const [openFaq, setOpenFaq] = useState<number | null>(null)
-  const [signEmail, setSignEmail] = useState('')
-  const [signingId, setSigningId] = useState<string | null>(null)
-  /* Rep finder */
-  const [repZip, setRepZip] = useState('')
   /* Social share */
   const [copiedId, setCopiedId] = useState<string | null>(null)
   /* Legislation */
@@ -181,28 +150,6 @@ export default function AdvocacyPage() {
     padding: '4px 12px', borderRadius: '100px',
     fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase' as const,
     background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)',
-  }
-
-  const filledLetter = letterText
-    .replace('[Representative Name]', repName || '[Representative Name]')
-    .replace('[Your Name]', yourName || '[Your Name]')
-    .replace('[Your City, State]', yourCity || '[Your City, State]')
-
-  async function handleSign(petitionId: string) {
-    if (signedPetitions[petitionId]) return
-    setSigningId(petitionId)
-    try {
-      await submitForm('advocacy', { petition: petitionId, email: signEmail })
-      setSignedPetitions(prev => ({ ...prev, [petitionId]: true }))
-    } catch (_) { /* silent */ }
-    finally { setSigningId(null) }
-  }
-
-  async function handleSendLetter() {
-    try {
-      await submitForm('advocacy', { type: 'letter', letter: filledLetter, rep: repName, name: yourName, city: yourCity })
-    } catch (_) { /* silent */ }
-    setLetterState('sent')
   }
 
   function handleCopyLink(petitionId: string, title: string) {
@@ -223,11 +170,6 @@ export default function AdvocacyPage() {
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'noopener,noreferrer')
   }
 
-  function handleRepLookup() {
-    if (!repZip.trim()) return
-    window.open(`https://www.congress.gov/members/find-your-member?zip5=${repZip.trim()}`, '_blank', 'noopener,noreferrer')
-  }
-
   function handleBillAlert(billId: string) {
     setBillAlert(billId)
     setTimeout(() => setBillAlert(null), 3000)
@@ -241,7 +183,7 @@ export default function AdvocacyPage() {
         <div style={{ position: 'absolute', top: '50%', right: '10%', width: '300px', height: '300px', background: 'radial-gradient(ellipse, rgba(167,139,250,0.07) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
         <div style={{ maxWidth: '760px', position: 'relative' }}>
-          <div style={{ marginBottom: '28px' }}><span style={pill}><Speaker size={10} variant="Linear" /> Advocacy & Action</span></div>
+          <div style={{ marginBottom: '28px' }}><span style={pill}><Speaker size={14} variant="Linear" /> Advocacy & Action</span></div>
           <h1 style={{ fontSize: 'clamp(40px, 7vw, 84px)', fontWeight: 800, lineHeight: 1.0, letterSpacing: '-0.035em', marginBottom: '24px', animation: 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both' }}>
             Turn frustration<br /><span style={{ color: 'var(--accent)' }}>into legislation.</span>
           </h1>
@@ -264,7 +206,7 @@ export default function AdvocacyPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '48px' }}>
-              <span style={pill}><ReceiptText size={10} variant="Linear" /> Active petitions</span>
+              <span style={pill}><ReceiptText size={14} variant="Linear" /> Active petitions</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Sign what matters</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '400px', lineHeight: 1.6 }}>Each petition is delivered to relevant congressional committees when it hits its goal.</p>
             </div>
@@ -273,10 +215,9 @@ export default function AdvocacyPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {PETITIONS.map((pet, i) => {
               const pct = Math.min((pet.signatures / pet.goal) * 100, 100)
-              const signed = signedPetitions[pet.id]
               return (
                 <RevealBlock key={pet.id} delay={i * 80}>
-                  <div style={{ borderRadius: '20px', padding: '2px', background: signed ? `linear-gradient(135deg, ${pet.color}40, transparent)` : 'linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))' }}>
+                  <div style={{ borderRadius: '20px', padding: '2px', background: 'linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))' }}>
                     <div style={{ borderRadius: '19px', padding: '24px 26px', background: 'rgba(8,10,20,0.97)' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px', flexWrap: 'wrap' }}>
                         <div style={{ flex: 1, minWidth: 0 }}>
@@ -289,7 +230,7 @@ export default function AdvocacyPage() {
                         </div>
                         <div style={{ flexShrink: 0, textAlign: 'right' }}>
                           <div style={{ fontSize: '22px', fontWeight: 800, color: pet.color, letterSpacing: '-0.02em', fontVariantNumeric: 'tabular-nums', fontFamily: 'var(--font-mono, monospace)' }}>
-                            <Counter target={pet.signatures + (signed ? 1 : 0)} />
+                            <Counter target={pet.signatures} />
                           </div>
                           <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>of {pet.goal.toLocaleString()} goal</div>
                         </div>
@@ -326,22 +267,17 @@ export default function AdvocacyPage() {
                             style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid', background: copiedId === pet.id ? 'rgba(74,144,217,0.1)' : 'rgba(255,255,255,0.03)', color: copiedId === pet.id ? 'var(--accent)' : 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', borderColor: copiedId === pet.id ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)', fontFamily: 'inherit' }}>
                             {copiedId === pet.id ? <TickCircle size={13} color="var(--accent)" variant="Linear" /> : <Link2 size={13} color="rgba(255,255,255,0.5)" variant="Linear" />}
                           </button>
-                          {/* Sign button */}
-                          {signed ? (
-                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: pet.color, fontWeight: 600 }}>
-                              <TickCircle size={14} variant="Linear" /> Signed — thank you
-                            </span>
-                          ) : (
-                            <button
-                              onClick={() => handleSign(pet.id)}
-                              disabled={signingId === pet.id}
-                              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '9px 18px', borderRadius: '100px', background: `${pet.color}15`, border: `1px solid ${pet.color}30`, color: pet.color, fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'background 0.2s', opacity: signingId === pet.id ? 0.6 : 1 }}
-                              onMouseEnter={e => (e.currentTarget.style.background = `${pet.color}25`)}
-                              onMouseLeave={e => (e.currentTarget.style.background = `${pet.color}15`)}
-                            >
-                              {signingId === pet.id ? 'Signing…' : <><Heart size={12} variant="Linear" /> Sign this petition</>}
-                            </button>
-                          )}
+                          {/* Sign button — links to real advocacy org */}
+                          <a
+                            href={pet.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '9px 18px', borderRadius: '100px', background: `${pet.color}15`, border: `1px solid ${pet.color}30`, color: pet.color, fontSize: '13px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }}
+                            onMouseEnter={e => (e.currentTarget.style.background = `${pet.color}25`)}
+                            onMouseLeave={e => (e.currentTarget.style.background = `${pet.color}15`)}
+                          >
+                            <Heart size={12} variant="Linear" /> Sign via {pet.org} <ExportSquare size={14} variant="Linear" />
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -353,158 +289,12 @@ export default function AdvocacyPage() {
         </div>
       </section>
 
-      {/* ── WRITE YOUR REP ───────────────────────────── */}
-      <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <RevealBlock>
-            <div style={{ marginBottom: '40px' }}>
-              <span style={pill}><Sms size={10} variant="Linear" /> Contact your representative</span>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>One letter can change a vote</h2>
-              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '460px', lineHeight: 1.6 }}>
-                Congressional staffers track constituent letters. A personalized letter carries more weight than any form email. Edit this template and make it yours.
-              </p>
-            </div>
-          </RevealBlock>
-
-          {letterState === 'sent' ? (
-            <RevealBlock>
-              <div style={{ textAlign: 'center', padding: '56px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.15)', borderRadius: '20px' }}>
-                <TickCircle size={44} variant="Linear" style={{ color: 'var(--accent)', marginBottom: '16px' }} />
-                <h3 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>Letter sent</h3>
-                <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, maxWidth: '360px', margin: '0 auto 24px' }}>
-                  Your letter has been logged. Remember: you can also send it directly to your representatives at <a href="https://www.congress.gov/members/find-your-member" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none' }}>congress.gov/members</a>.
-                </p>
-                <button onClick={() => setLetterState('idle')} style={{ padding: '10px 24px', borderRadius: '100px', border: '1px solid rgba(74,144,217,0.25)', background: 'transparent', color: 'var(--accent)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit' }}>
-                  Write another
-                </button>
-              </div>
-            </RevealBlock>
-          ) : (
-            <RevealBlock delay={80}>
-              <div style={{ borderRadius: '24px', padding: '2px', background: 'linear-gradient(135deg, rgba(74,144,217,0.2), rgba(96,165,250,0.08))' }}>
-                <div style={{ borderRadius: '23px', padding: '32px', background: 'rgba(8,10,20,0.97)' }}>
-                  {/* personalisation fields */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '20px' }}>
-                    {[
-                      { label: 'Representative name', val: repName, set: setRepName, placeholder: 'e.g. Senator Smith' },
-                      { label: 'Your full name', val: yourName, set: setYourName, placeholder: 'Your name' },
-                      { label: 'Your city, state', val: yourCity, set: setYourCity, placeholder: 'Phoenix, AZ' },
-                    ].map(f => (
-                      <div key={f.label}>
-                        <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.4)', marginBottom: '6px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>{f.label}</label>
-                        <input
-                          value={f.val} onChange={e => f.set(e.target.value)} placeholder={f.placeholder}
-                          style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '9px', padding: '10px 12px', color: '#eef4f5', fontSize: '14px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' }}
-                          onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.4)')}
-                          onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}
-                        />
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* letter editor */}
-                  <div style={{ marginBottom: '16px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                      <label style={{ fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>Letter (edit to personalize)</label>
-                      <button onClick={() => setLetterText(LETTER_TEMPLATE)} style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}>Reset to template</button>
-                    </div>
-                    <textarea
-                      value={letterText} onChange={e => setLetterText(e.target.value)} rows={14}
-                      style={{ width: '100%', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', padding: '16px', color: 'rgba(255,255,255,0.65)', fontSize: '13px', lineHeight: 1.75, fontFamily: 'inherit', resize: 'vertical', outline: 'none', boxSizing: 'border-box', caretColor: 'var(--accent)' }}
-                      onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.3)')}
-                      onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}
-                    />
-                  </div>
-
-                  <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                    <button
-                      onClick={handleSendLetter}
-                      style={{ flex: 1, padding: '13px', borderRadius: '12px', border: 'none', background: 'var(--accent)', color: '#020409', fontSize: '14px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', minWidth: '160px', transition: 'opacity 0.2s' }}
-                      onMouseEnter={e => (e.currentTarget.style.opacity = '0.88')}
-                      onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
-                    >
-                      <Sms size={14} variant="Linear" /> Send letter
-                    </button>
-                    <a
-                      href="https://www.congress.gov/members/find-your-member"
-                      target="_blank" rel="noopener noreferrer"
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '13px 20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: 'rgba(255,255,255,0.5)', fontSize: '14px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'none', transition: 'border-color 0.2s, color 0.2s' }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.2)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.8)' }}
-                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.5)' }}
-                    >
-                      <ExportSquare size={13} variant="Linear" /> Find your rep
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </RevealBlock>
-          )}
-        </div>
-      </section>
-
-      {/* ── REP FINDER BY ZIP ────────────────────────── */}
-      <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <RevealBlock>
-            <div style={{ marginBottom: '36px' }}>
-              <span style={pill}><SearchNormal1 size={10} variant="Linear" /> Find your representatives</span>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Know who represents you</h2>
-              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '460px', lineHeight: 1.6 }}>
-                Enter your ZIP code to find your House representative and two senators — the exact people whose votes decide your healthcare coverage.
-              </p>
-            </div>
-          </RevealBlock>
-          <RevealBlock delay={80}>
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
-              <input
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]{5}"
-                maxLength={5}
-                value={repZip}
-                onChange={e => setRepZip(e.target.value.replace(/\D/g, '').slice(0, 5))}
-                onKeyDown={e => { if (e.key === 'Enter') handleRepLookup() }}
-                placeholder="Enter ZIP code (e.g. 90210)"
-                style={{ flex: 1, minWidth: '200px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '14px 18px', color: '#fff', fontSize: '16px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box', letterSpacing: '0.08em' }}
-                onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.4)')}
-                onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)')}
-              />
-              <button
-                onClick={handleRepLookup}
-                disabled={repZip.length < 5}
-                style={{ padding: '14px 24px', borderRadius: '12px', border: 'none', background: repZip.length >= 5 ? 'var(--accent)' : 'rgba(255,255,255,0.06)', color: repZip.length >= 5 ? '#07070F' : 'rgba(255,255,255,0.2)', fontSize: '14px', fontWeight: 700, cursor: repZip.length >= 5 ? 'pointer' : 'not-allowed', fontFamily: 'inherit', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <SearchNormal1 size={14} variant="Linear" /> Find my reps
-              </button>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
-              {[
-                { label: 'Find on Congress.gov', desc: 'Official congressional rep lookup by address', url: 'https://www.congress.gov/members/find-your-member', color: '#60a5fa', icon: <Book1 size={14} variant="Linear" /> },
-                { label: 'Find on OpenStates', desc: 'State legislators — governor, state senate & house', url: 'https://openstates.org/find_your_legislator/', color: '#a78bfa', icon: <Location size={14} variant="Linear" /> },
-                { label: 'USA.gov Rep Finder', desc: 'All elected officials at federal, state, and local level', url: 'https://www.usa.gov/elected-officials', color: 'var(--accent)', icon: <Global size={14} variant="Linear" /> },
-              ].map(link => (
-                <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer"
-                  style={{ padding: '16px 18px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px', textDecoration: 'none', display: 'flex', flexDirection: 'column', gap: '6px', transition: 'all 0.2s' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = `${link.color}30`; (e.currentTarget as HTMLElement).style.background = `${link.color}06` }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.07)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ color: link.color }}>{link.icon}</span>
-                    <span style={{ fontSize: '14px', fontWeight: 700, color: '#eef4f5' }}>{link.label}</span>
-                    <ExportSquare size={11} variant="Linear" style={{ color: 'rgba(255,255,255,0.25)', marginLeft: 'auto' }} />
-                  </div>
-                  <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.38)', lineHeight: 1.5 }}>{link.desc}</span>
-                </a>
-              ))}
-            </div>
-          </RevealBlock>
-        </div>
-      </section>
-
       {/* ── LEGISLATION TRACKER ──────────────────────── */}
       <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '48px' }}>
-              <span style={pill}><Flash size={10} variant="Linear" /> Legislation tracker</span>
+              <span style={pill}><Flash size={14} variant="Linear" /> Legislation tracker</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Bills that affect you right now</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '480px', lineHeight: 1.6 }}>
                 Real legislation moving through Congress — or just passed — that directly affects free clinic funding, Medicaid, drug pricing, and patient protections.
@@ -586,7 +376,7 @@ export default function AdvocacyPage() {
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: 'rgba(255,255,255,0.35)', textDecoration: 'none', transition: 'color 0.15s' }}
                 onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
                 onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.35)')}>
-                Full tracker at Congress.gov <ExportSquare size={10} variant="Linear" />
+                Full tracker at Congress.gov <ExportSquare size={14} variant="Linear" />
               </a>
             </div>
           </RevealBlock>
@@ -598,7 +388,7 @@ export default function AdvocacyPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '48px' }}>
-              <span style={pill}><Location size={10} variant="Linear" /> Policy wins</span>
+              <span style={pill}><Location size={14} variant="Linear" /> Policy wins</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>What advocacy has already moved</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '400px', lineHeight: 1.6 }}>These wins happened because people organized, wrote letters, and showed up. Every state below was a "never" at some point.</p>
             </div>
@@ -615,7 +405,7 @@ export default function AdvocacyPage() {
                   <div>
                     <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '4px' }}>{w.name}</div>
                     <div style={{ fontSize: '13px', color: w.color, fontWeight: 500, marginBottom: '4px' }}>{w.win}</div>
-                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', gap: '4px' }}><TickCircle size={10} variant="Linear" /> Won {w.year}</div>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', gap: '4px' }}><TickCircle size={14} variant="Linear" /> Won {w.year}</div>
                   </div>
                 </div>
               </RevealBlock>
@@ -629,7 +419,7 @@ export default function AdvocacyPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-              <span style={pill}><TrendUp size={10} variant="Linear" /> Movement metrics</span>
+              <span style={pill}><TrendUp size={14} variant="Linear" /> Movement metrics</span>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px' }}>The numbers are moving</h2>
             </div>
           </RevealBlock>
@@ -658,7 +448,7 @@ export default function AdvocacyPage() {
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '40px' }}>
-              <span style={pill}><Global size={10} variant="Linear" /> Partner organizations</span>
+              <span style={pill}><Global size={14} variant="Linear" /> Partner organizations</span>
               <h2 style={{ fontSize: 'clamp(22px, 3vw, 36px)', fontWeight: 700, letterSpacing: '-0.02em', marginTop: '20px' }}>In good company</h2>
             </div>
           </RevealBlock>

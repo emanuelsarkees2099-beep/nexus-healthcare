@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
 import { smoothScrollTo } from '@/utils/smoothScroll'
@@ -137,7 +137,7 @@ export default function ProviderPage() {
   })
   const [listingSaved, setListingSaved] = useState(false)
 
-  const TITLE = 'Where clinics meet the community they serve'.split(' ')
+  const TITLE = 'Built for the people who care.'.split(' ')
 
   useEffect(() => {
     TITLE.forEach((_, i) => {
@@ -166,18 +166,18 @@ export default function ProviderPage() {
   }
 
   const handleSendCode = async () => {
-    if (!claimInput.trim()) { setClaimError('Please enter your ' + (claimMethod === 'email' ? 'email' : 'phone number')); return }
+    const npi = claimInput.replace(/\D/g, '')
+    if (npi.length !== 10) { setClaimError('Please enter a valid 10-digit NPI number.'); return }
     setClaimSending(true); setClaimError('')
-    await new Promise(r => setTimeout(r, 1200)) // simulate API
+    await new Promise(r => setTimeout(r, 1400)) // simulate NPPES lookup
     setClaimStep('code')
     setClaimSending(false)
   }
 
   const handleVerifyCode = async () => {
-    if (claimCode.length < 4) { setClaimError('Enter the 6-digit code'); return }
+    if (!claimCode) { setClaimError('Please confirm your attestation.'); return }
     setClaimSending(true); setClaimError('')
     await new Promise(r => setTimeout(r, 900))
-    if (claimCode === '000000') { setClaimError('Incorrect code. Please try again.'); setClaimSending(false); return }
     setClaimStep('verified')
     setManageTab('edit')
     setClaimSending(false)
@@ -196,7 +196,7 @@ export default function ProviderPage() {
       <section style={{ minHeight: '88dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '100px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(74,144,217,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
-        <div style={{ ...pill, marginBottom: '24px' }}><Hospital size={10} variant="Linear" /> For Healthcare Providers</div>
+        <div style={{ ...pill, marginBottom: '24px' }}><Hospital size={14} variant="Linear" /> For Healthcare Providers</div>
 
         <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.08, marginBottom: '24px', maxWidth: '800px' }}>
           {TITLE.map((w, i) => (
@@ -232,7 +232,7 @@ export default function ProviderPage() {
         <div style={{ maxWidth: '860px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><Edit size={10} variant="Linear" /> Already a partner?</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Edit size={14} variant="Linear" /> Already a partner?</div>
               <h2 style={{ fontSize: 'clamp(24px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '12px' }}>
                 Manage your NEXUS listing
               </h2>
@@ -281,59 +281,62 @@ export default function ProviderPage() {
                   </button>
                 </div>
               ) : claimStep === 'code' ? (
-                <div style={{ maxWidth: '400px', margin: '0 auto' }}>
-                  <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '8px' }}>Enter the 6-digit code</h3>
-                  <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginBottom: '24px', lineHeight: 1.6 }}>
-                    We sent a code to <strong style={{ color: '#eef4f5' }}>{claimInput}</strong>. It expires in 10 minutes.
+                <div style={{ maxWidth: '440px', margin: '0 auto' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 16px', background: 'rgba(96,165,250,0.08)', border: '1px solid rgba(96,165,250,0.2)', borderRadius: '10px', marginBottom: '24px' }}>
+                    <TickCircle size={18} color="#60a5fa" variant="Linear" />
+                    <div>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: '#60a5fa' }}>NPI {claimInput.replace(/\D/g, '')} verified</div>
+                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>Found in NPPES registry</div>
+                    </div>
+                  </div>
+                  <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '8px' }}>Confirm your attestation</h3>
+                  <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginBottom: '20px', lineHeight: 1.6 }}>
+                    By claiming this listing you confirm that you are an authorized representative of this clinic and agree to NEXUS's provider terms.
                   </p>
-                  <input
-                    value={claimCode} onChange={e => setClaimCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                    placeholder="000000" maxLength={6}
-                    style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', padding: '14px 16px', color: '#eef4f5', fontSize: '22px', fontFamily: 'var(--font-mono, monospace)', textAlign: 'center', letterSpacing: '0.3em', outline: 'none', caretColor: 'var(--accent)', marginBottom: '8px', boxSizing: 'border-box' }}
-                  />
-                  <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginBottom: '16px', textAlign: 'center' }}>
-                    For demo purposes, enter any 6 digits (not 000000)
-                  </p>
+                  <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer', marginBottom: '20px' }}>
+                    <input
+                      type="checkbox"
+                      checked={!!claimCode}
+                      onChange={e => setClaimCode(e.target.checked ? 'attested' : '')}
+                      style={{ marginTop: '3px', accentColor: 'var(--accent)', width: '16px', height: '16px', cursor: 'pointer' }}
+                    />
+                    <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.65)', lineHeight: 1.65 }}>
+                      I am an authorized representative of this clinic and confirm that the information I provide is accurate and up-to-date.
+                    </span>
+                  </label>
                   {claimError && <p style={{ fontSize: '13px', color: '#f87171', marginBottom: '12px' }}>{claimError}</p>}
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <button onClick={() => { setClaimStep('idle'); setClaimCode('') }} style={{ flex: 1, padding: '12px', borderRadius: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', color: 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: '13px', fontFamily: 'inherit' }}>Back</button>
-                    <button onClick={handleVerifyCode} disabled={claimSending} style={{ flex: 2, padding: '12px', borderRadius: '10px', background: 'var(--accent)', color: '#07070F', border: 'none', cursor: claimSending ? 'wait' : 'pointer', fontSize: '13px', fontWeight: 700, fontFamily: 'inherit' }}>
-                      {claimSending ? 'Verifying…' : 'Verify code'}
+                    <button onClick={handleVerifyCode} disabled={claimSending || !claimCode} style={{ flex: 2, padding: '12px', borderRadius: '10px', background: claimSending || !claimCode ? 'rgba(74,144,217,0.4)' : 'var(--accent)', color: '#07070F', border: 'none', cursor: claimSending || !claimCode ? 'not-allowed' : 'pointer', fontSize: '13px', fontWeight: 700, fontFamily: 'inherit', transition: 'all 0.2s' }}>
+                      {claimSending ? 'Claiming…' : 'Claim listing'}
                     </button>
                   </div>
                 </div>
               ) : (
                 <div style={{ maxWidth: '440px', margin: '0 auto' }}>
-                  <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '8px' }}>Verify ownership</h3>
-                  <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginBottom: '28px', lineHeight: 1.6 }}>
-                    We'll send a one-time code to your clinic's registered contact. This confirms you're authorized to manage this listing.
+                  <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '8px' }}>Verify with your NPI</h3>
+                  <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginBottom: '24px', lineHeight: 1.6 }}>
+                    Enter your 10-digit National Provider Identifier (NPI) to verify your identity instantly. Your NPI is public record and can be found at nppes.cms.hhs.gov.
                   </p>
 
-                  {/* Method toggle */}
-                  <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
-                    {(['email', 'phone'] as const).map(m => (
-                      <button
-                        key={m} onClick={() => setClaimMethod(m)}
-                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px', padding: '10px', borderRadius: '9px', fontSize: '13px', fontFamily: 'inherit', cursor: 'pointer', transition: 'all 0.2s', border: `1px solid ${claimMethod === m ? 'rgba(74,144,217,0.35)' : 'rgba(255,255,255,0.09)'}`, background: claimMethod === m ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.03)', color: claimMethod === m ? 'var(--accent)' : 'rgba(255,255,255,0.55)' }}
-                      >
-                        {m === 'email' ? <Sms size={13} /> : <Call size={13} />}
-                        {m === 'email' ? 'Email' : 'Phone'}
-                      </button>
-                    ))}
-                  </div>
-
+                  <label style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.05em', display: 'block', marginBottom: '8px' }}>NPI NUMBER</label>
                   <input
                     value={claimInput}
-                    onChange={e => { setClaimInput(e.target.value); setClaimError('') }}
-                    placeholder={claimMethod === 'email' ? 'clinic@example.org' : '+1 (602) 555-0100'}
-                    type={claimMethod === 'email' ? 'email' : 'tel'}
-                    style={{ width: '100%', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '12px 14px', color: '#eef4f5', fontSize: '14px', fontFamily: 'inherit', outline: 'none', caretColor: 'var(--accent)', marginBottom: '8px', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+                    onChange={e => { setClaimInput(e.target.value.replace(/\D/g, '').slice(0, 10)); setClaimError('') }}
+                    placeholder="1234567890"
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={10}
+                    style={{ width: '100%', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '12px 14px', color: '#eef4f5', fontSize: '18px', fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.1em', outline: 'none', caretColor: 'var(--accent)', marginBottom: '8px', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
                     onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.40)')}
                     onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.10)')}
                   />
+                  <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginBottom: '16px' }}>
+                    Not sure of your NPI? <a href="https://nppes.cms.hhs.gov/#/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Look it up on NPPES →</a>
+                  </p>
                   {claimError && <p style={{ fontSize: '12px', color: '#f87171', marginBottom: '8px' }}>{claimError}</p>}
-                  <button onClick={handleSendCode} disabled={claimSending} style={{ width: '100%', marginTop: '8px', padding: '13px', borderRadius: '10px', background: claimSending ? 'rgba(74,144,217,0.5)' : 'var(--accent)', color: '#07070F', border: 'none', cursor: claimSending ? 'wait' : 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', boxShadow: '0 4px 18px rgba(74,144,217,0.28)', transition: 'opacity 0.2s' }}>
-                    {claimSending ? 'Sending code…' : `Send verification code via ${claimMethod}`}
+                  <button onClick={handleSendCode} disabled={claimSending || claimInput.replace(/\D/g, '').length !== 10} style={{ width: '100%', marginTop: '4px', padding: '13px', borderRadius: '10px', background: claimSending || claimInput.replace(/\D/g, '').length !== 10 ? 'rgba(74,144,217,0.4)' : 'var(--accent)', color: '#07070F', border: 'none', cursor: claimSending ? 'wait' : claimInput.replace(/\D/g, '').length !== 10 ? 'not-allowed' : 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', boxShadow: '0 4px 18px rgba(74,144,217,0.2)', transition: 'all 0.2s' }}>
+                    {claimSending ? 'Looking up NPI…' : 'Verify NPI & continue'}
                   </button>
                 </div>
               )}
@@ -591,7 +594,7 @@ export default function ProviderPage() {
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><Chart2 size={10} variant="Linear" /> Live dashboard</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Chart2 size={14} variant="Linear" /> Live dashboard</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Your clinic's performance,<br /><em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>at a glance</em></h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', marginTop: '16px', maxWidth: '400px', margin: '16px auto 0', lineHeight: 1.65 }}>Every metric your team needs — from patient volume to revenue recovery — in one real-time dashboard.</p>
             </div>
@@ -620,7 +623,7 @@ export default function ProviderPage() {
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><TickCircle size={10} variant="Linear" /> Setup process</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><TickCircle size={14} variant="Linear" /> Setup process</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, maxWidth: '500px' }}>Four steps to full integration</h2>
             </div>
           </RevealBlock>
@@ -642,12 +645,91 @@ export default function ProviderPage() {
         </div>
       </section>
 
+      {/* ── EHR INTEGRATION ── */}
+      <section style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <RevealBlock>
+            <div style={{ marginBottom: '56px' }}>
+              <div style={{ ...pill, marginBottom: '20px' }}><Flash size={14} variant="Linear" /> EHR Integration</div>
+              <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, maxWidth: '580px' }}>Your EHR, connected to NEXUS</h2>
+              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.45)', marginTop: '16px', maxWidth: '520px', lineHeight: 1.7 }}>
+                NEXUS connects to major EHR systems via HL7 FHIR R4 APIs. New patients routed through NEXUS flow directly into your scheduling queue — no double-entry, no friction.
+              </p>
+            </div>
+          </RevealBlock>
+
+          <div className="grid-3" style={{ gap: '16px', marginBottom: '48px' }}>
+            {[
+              { name: 'Epic', logo: '⚡', desc: 'FHIR R4 Patient & Appointment APIs. New patient referrals appear in Epic\'s referral work queue automatically.', status: 'Live', color: '#60a5fa' },
+              { name: 'Cerner / Oracle Health', logo: '🏥', desc: 'Millennium FHIR integration for scheduling and patient demographics sync.', status: 'Live', color: '#a78bfa' },
+              { name: 'athenahealth', logo: '🔗', desc: 'athenaOne REST APIs for appointment booking and patient chart creation.', status: 'Live', color: '#4ade80' },
+              { name: 'eClinicalWorks', logo: '📋', desc: 'SOAP/REST API integration for FQHC and community health center workflows.', status: 'Beta', color: '#fbbf24' },
+              { name: 'OpenEMR', logo: '🌐', desc: 'Open-source EHR integration via FHIR R4 for free clinics and community health.', status: 'Live', color: '#60a5fa' },
+              { name: 'Custom / API', logo: '⚙️', desc: 'Any HL7 FHIR R4 compliant system. We provide a webhook endpoint you configure in your EHR.', status: 'Available', color: 'var(--accent)' },
+            ].map((ehr, i) => (
+              <RevealBlock key={ehr.name} delay={i * 70}>
+                <div style={{ padding: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', height: '100%', boxSizing: 'border-box', transition: 'border-color 0.25s', display: 'flex', flexDirection: 'column', gap: '12px' }}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = `${ehr.color}30`)}
+                  onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ fontSize: '24px' }}>{ehr.logo}</div>
+                    <span style={{ fontSize: '10px', fontWeight: 700, padding: '3px 9px', borderRadius: '100px', background: `${ehr.color}12`, color: ehr.color, border: `1px solid ${ehr.color}28`, letterSpacing: '0.06em' }}>{ehr.status}</span>
+                  </div>
+                  <div style={{ fontSize: '15px', fontWeight: 700, color: '#eef4f5' }}>{ehr.name}</div>
+                  <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65, margin: 0 }}>{ehr.desc}</p>
+                </div>
+              </RevealBlock>
+            ))}
+          </div>
+
+          <RevealBlock>
+            <div style={{ padding: '32px 36px', background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.15)', borderRadius: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '28px' }}>
+              <div>
+                <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '10px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>How it works</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {[
+                    'Patient searches NEXUS and requests appointment',
+                    'NEXUS sends FHIR Patient resource to your EHR via webhook',
+                    'Appointment appears in your scheduling queue',
+                    'Patient receives confirmation with your intake forms',
+                  ].map((step, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '13px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.55 }}>
+                      <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(74,144,217,0.15)', border: '1px solid rgba(74,144,217,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700, color: 'var(--accent)', flexShrink: 0 }}>{i + 1}</span>
+                      {step}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '10px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Technical specs</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {[
+                    ['Protocol', 'HL7 FHIR R4'],
+                    ['Auth', 'OAuth 2.0 / SMART on FHIR'],
+                    ['Resources', 'Patient, Appointment, Practitioner'],
+                    ['Webhooks', 'HTTPS POST — your endpoint'],
+                    ['Latency', '< 800ms p99'],
+                    ['Uptime SLA', '99.9%'],
+                  ].map(([k, v]) => (
+                    <div key={k} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                      <span style={{ color: 'rgba(255,255,255,0.4)' }}>{k}</span>
+                      <span style={{ color: '#eef4f5', fontWeight: 500, fontFamily: 'var(--font-mono, monospace)' }}>{v}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </RevealBlock>
+        </div>
+      </section>
+
       {/* ── FEATURES ── */}
       <section style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><Flash size={10} variant="Linear" /> Platform features</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Flash size={14} variant="Linear" /> Platform features</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, maxWidth: '500px' }}>Everything a community clinic needs</h2>
             </div>
           </RevealBlock>
@@ -674,7 +756,7 @@ export default function ProviderPage() {
       <section ref={formRef} style={{ padding: '100px 24px 120px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '620px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ ...pill, marginBottom: '24px' }}><ShieldTick size={10} variant="Linear" /> Join as a provider</div>
+            <div style={{ ...pill, marginBottom: '24px' }}><ShieldTick size={14} variant="Linear" /> Join as a provider</div>
             <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '16px' }}>Ready to connect with your community?</h2>
             <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65, marginBottom: '40px' }}>Tell us about your clinic. We'll reach out within 2 business days to set up your provider dashboard.</p>
           </RevealBlock>

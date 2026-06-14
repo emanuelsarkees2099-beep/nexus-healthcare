@@ -156,13 +156,13 @@ const CMD_ITEMS: CmdItem[] = [
     keywords: ['equity', 'data', 'map', 'disparities', 'race', 'income', 'zip code', 'lab'],
   },
   {
-    id: 'open',
-    label: 'Open Roadmap',
-    description: 'Public changelog, upcoming features, and our mission',
-    href: '/open',
+    id: 'advocacy',
+    label: 'Advocacy & Action',
+    description: 'Sign petitions, track legislation, and make your voice heard',
+    href: '/advocacy',
     icon: <TrendUp size={15} variant="Linear" color="var(--text-2)" />,
     category: 'Info',
-    keywords: ['roadmap', 'changelog', 'open', 'developer', 'updates', 'features', 'api'],
+    keywords: ['advocacy', 'petition', 'legislation', 'congress', 'policy', 'action'],
   },
   {
     id: 'editorial',

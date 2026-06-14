@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
 import { TrendUp, Chart2, Global, Data, DocumentDownload, ArrowDown2, TickCircle } from 'iconsax-react'
@@ -167,7 +167,7 @@ export default function ImpactPage() {
       <section style={{ minHeight: '80dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '100px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(74,144,217,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
-        <div style={{ ...pill, marginBottom: '24px' }}><TrendUp size={10} variant="Linear" /> Impact Dashboard</div>
+        <div style={{ ...pill, marginBottom: '24px' }}><TrendUp size={14} variant="Linear" /> Impact Dashboard</div>
 
         <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.08, marginBottom: '24px', maxWidth: '700px' }}>
           {TITLE.map((w, i) => (
@@ -186,7 +186,7 @@ export default function ImpactPage() {
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><Chart2 size={10} variant="Linear" /> Live data</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Chart2 size={14} variant="Linear" /> Live data</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>The numbers as they stand <em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>today</em></h2>
             </div>
           </RevealBlock>
@@ -263,7 +263,7 @@ export default function ImpactPage() {
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><Global size={10} variant="Linear" /> Regional breakdown</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Global size={14} variant="Linear" /> Regional breakdown</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Coverage across the country</h2>
             </div>
           </RevealBlock>
@@ -323,7 +323,7 @@ export default function ImpactPage() {
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '48px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><Data size={10} variant="Linear" /> Open data</div>
+              <div style={{ ...pill, marginBottom: '20px' }}><Data size={14} variant="Linear" /> Open data</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Download our public dataset</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', marginTop: '16px', maxWidth: '480px', lineHeight: 1.65 }}>Researchers, journalists, and advocates are welcome to use this data. No login required.</p>
             </div>

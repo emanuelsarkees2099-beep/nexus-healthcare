@@ -67,7 +67,7 @@ export default function UserMenu({ user, showUserMenu, setShowUserMenu, onLogout
         </div>
         {user.full_name?.split(' ')[0] || 'Account'}
         <ArrowDown2
-          size={10} color="currentColor" variant="Linear"
+          size={14} color="currentColor" variant="Linear"
           aria-hidden="true"
           style={{ opacity: 0.5, transform: showUserMenu ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}
         />
