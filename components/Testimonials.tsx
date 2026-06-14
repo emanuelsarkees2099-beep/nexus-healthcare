@@ -6,25 +6,25 @@ import { Star1 } from 'iconsax-react'
 registerGSAP()
 
 const ROW_1 = [
-  { quote: "I hadn't seen a doctor in three years because I couldn't afford it. NEXUS found me a free clinic six blocks away. I had no idea it existed.", name: 'Maria R.', location: 'Phoenix, AZ', initials: 'MR', stars: 5 },
-  { quote: "The eligibility navigator showed my whole family qualifies for AHCCCS. I was paying out of pocket for years. This changed everything.", name: 'David T.', location: 'Tucson, AZ', initials: 'DT', stars: 5 },
-  { quote: "Found a free dental clinic in Houston I'd never heard of. Got a cleaning and two fillings at zero cost. NEXUS is incredible.", name: 'James W.', location: 'Houston, TX', initials: 'JW', stars: 5 },
-  { quote: "Prenatal care through NEXUS was a lifesaver. I was terrified about costs but they found a FQHC five minutes from my apartment.", name: 'Priya K.', location: 'Chicago, IL', initials: 'PK', stars: 5 },
-  { quote: "The medication assistance program saved me $400 a month on insulin. I had no idea I qualified. Every diabetic should know about this.", name: 'Robert M.', location: 'Atlanta, GA', initials: 'RM', stars: 5 },
-  { quote: "Encontré atención para mis hijos gratis y en español. No tenemos seguro y NEXUS lo cambió todo para nuestra familia.", name: 'Ana G.', location: 'Miami, FL', initials: 'AG', stars: 5 },
-  { quote: "Mental health services without insurance seemed impossible. NEXUS matched me with a sliding-scale therapist in under three minutes.", name: 'Kevin L.', location: 'Denver, CO', initials: 'KL', stars: 5 },
-  { quote: "As a community health worker I refer clients to NEXUS daily. It cuts my search time in half. The multilingual support is a real lifesaver.", name: 'Sofia L., CHW', location: 'Yuma, AZ', initials: 'SL', stars: 5 },
+  { quote: "I hadn't seen a doctor in three years because I couldn't afford it. NEXUS found me a free clinic six blocks away. I had no idea it existed.", name: 'Maria R.', location: 'Phoenix, AZ', initials: 'MR', stars: 5, outcome: 'Found free clinic' },
+  { quote: "The eligibility navigator showed my whole family qualifies for AHCCCS. I was paying out of pocket for years. This changed everything.", name: 'David T.', location: 'Tucson, AZ', initials: 'DT', stars: 5, outcome: 'Got Medicaid' },
+  { quote: "Found a free dental clinic in Houston I'd never heard of. Got a cleaning and two fillings at zero cost. NEXUS is incredible.", name: 'James W.', location: 'Houston, TX', initials: 'JW', stars: 5, outcome: 'Free dental care' },
+  { quote: "Prenatal care through NEXUS was a lifesaver. I was terrified about costs but they found a FQHC five minutes from my apartment.", name: 'Priya K.', location: 'Chicago, IL', initials: 'PK', stars: 5, outcome: 'Free prenatal care' },
+  { quote: "The medication assistance program saved me $400 a month on insulin. I had no idea I qualified. Every diabetic should know about this.", name: 'Robert M.', location: 'Atlanta, GA', initials: 'RM', stars: 5, outcome: 'Saved $400/mo' },
+  { quote: "Encontré atención para mis hijos gratis y en español. No tenemos seguro y NEXUS lo cambió todo para nuestra familia.", name: 'Ana G.', location: 'Miami, FL', initials: 'AG', stars: 5, outcome: 'Free care en español' },
+  { quote: "Mental health services without insurance seemed impossible. NEXUS matched me with a sliding-scale therapist in under three minutes.", name: 'Kevin L.', location: 'Denver, CO', initials: 'KL', stars: 5, outcome: 'Free therapy matched' },
+  { quote: "As a community health worker I refer clients to NEXUS daily. It cuts my search time in half. The multilingual support is a real lifesaver.", name: 'Sofia L., CHW', location: 'Yuma, AZ', initials: 'SL', stars: 5, outcome: '50% faster referrals' },
 ]
 
 const ROW_2 = [
-  { quote: "Pediatric care for my son within walking distance and completely free. NEXUS found the clinic — I just showed up. No paperwork drama.", name: 'Patricia H.', location: 'Seattle, WA', initials: 'PH', stars: 5 },
-  { quote: "Avoided an $1,800 ER bill thanks to the AI triage. It told me a free clinic could handle my infection. It was absolutely right.", name: 'Marcus T.', location: 'New York, NY', initials: 'MT', stars: 5 },
-  { quote: "I recommend NEXUS to every uninsured patient I see. It's the most practical healthcare tool I've encountered in 12 years of nursing.", name: 'Linda C., RN', location: 'Boston, MA', initials: 'LC', stars: 5 },
-  { quote: "Found Medicaid coverage for my whole family in under ten minutes. We thought we didn't qualify. Turns out we'd been eligible for years.", name: 'Ahmad F.', location: 'Dallas, TX', initials: 'AF', stars: 5 },
-  { quote: "Sliding scale care that works out to $8 a visit. NEXUS found the clinic and even told me exactly what to say when I called.", name: 'Carmen R.', location: 'Los Angeles, CA', initials: 'CR', stars: 5 },
-  { quote: "Free dental day was a game-changer. My kids got cleanings, X-rays, and sealants. NEXUS had it on the calendar before I thought to look.", name: 'Jamal H.', location: 'Detroit, MI', initials: 'JH', stars: 5 },
-  { quote: "The CHW connection was invaluable. She knew exactly which programs we qualified for and helped navigate every step of enrollment.", name: 'Miguel P.', location: 'San Antonio, TX', initials: 'MP', stars: 5 },
-  { quote: "I work two jobs and barely have time to research healthcare. NEXUS gave me everything I needed in one search. Genuinely impressed.", name: 'Sarah B.', location: 'Phoenix, AZ', initials: 'SB', stars: 5 },
+  { quote: "Pediatric care for my son within walking distance and completely free. NEXUS found the clinic — I just showed up. No paperwork drama.", name: 'Patricia H.', location: 'Seattle, WA', initials: 'PH', stars: 5, outcome: 'Free pediatric care' },
+  { quote: "Avoided an $1,800 ER bill thanks to the AI triage. It told me a free clinic could handle my infection. It was absolutely right.", name: 'Marcus T.', location: 'New York, NY', initials: 'MT', stars: 5, outcome: 'Avoided $1,800 ER bill' },
+  { quote: "I recommend NEXUS to every uninsured patient I see. It's the most practical healthcare tool I've encountered in 12 years of nursing.", name: 'Linda C., RN', location: 'Boston, MA', initials: 'LC', stars: 5, outcome: 'Top nursing referral' },
+  { quote: "Found Medicaid coverage for my whole family in under ten minutes. We thought we didn't qualify. Turns out we'd been eligible for years.", name: 'Ahmad F.', location: 'Dallas, TX', initials: 'AF', stars: 5, outcome: 'Got Medicaid' },
+  { quote: "Sliding scale care that works out to $8 a visit. NEXUS found the clinic and even told me exactly what to say when I called.", name: 'Carmen R.', location: 'Los Angeles, CA', initials: 'CR', stars: 5, outcome: '$8/visit sliding scale' },
+  { quote: "Free dental day was a game-changer. My kids got cleanings, X-rays, and sealants. NEXUS had it on the calendar before I thought to look.", name: 'Jamal H.', location: 'Detroit, MI', initials: 'JH', stars: 5, outcome: 'Free dental for kids' },
+  { quote: "The CHW connection was invaluable. She knew exactly which programs we qualified for and helped navigate every step of enrollment.", name: 'Miguel P.', location: 'San Antonio, TX', initials: 'MP', stars: 5, outcome: 'Enrolled in programs' },
+  { quote: "I work two jobs and barely have time to research healthcare. NEXUS gave me everything I needed in one search. Genuinely impressed.", name: 'Sarah B.', location: 'Phoenix, AZ', initials: 'SB', stars: 5, outcome: 'One search, all care' },
 ]
 
 type CardData = typeof ROW_1[0]
@@ -85,6 +85,18 @@ function TestimonialCard({ card }: { card: CardData }) {
       }}
     >
       <StarRow count={card.stars} />
+      {card.outcome && (
+        <div style={{ marginBottom: '0.7rem' }}>
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 3, padding: '2px 9px',
+            borderRadius: 100, fontSize: 10, fontWeight: 700,
+            background: 'rgba(52,211,153,0.08)', color: '#34d399',
+            border: '1px solid rgba(52,211,153,0.22)', fontFamily: 'var(--font-inter)',
+          }}>
+            ★ {card.outcome}
+          </span>
+        </div>
+      )}
       <p style={{
         fontSize: '13px', color: 'var(--text-2)', lineHeight: 1.8, fontWeight: 400,
         marginBottom: '1.25rem', fontFamily: 'var(--font-inter)',

@@ -334,6 +334,104 @@ function RefillTracker({ medications, masked }: { medications: Medication[]; mas
   )
 }
 
+/* ── Vaccine Tracker ───────────────────────────────────────────── */
+const VACCINE_KEY = 'nexus_passport_vaccines'
+type VStatus = 'up-to-date' | 'due' | 'overdue' | 'unknown'
+type VaccineEntry = { id: string; name: string; note: string; status: VStatus }
+
+const DEFAULT_VACCINES: VaccineEntry[] = [
+  { id: 'flu',    name: 'Flu Shot',         note: 'Annual',        status: 'unknown' },
+  { id: 'covid',  name: 'COVID-19 Booster', note: 'Annual',        status: 'unknown' },
+  { id: 'tdap',   name: 'Tdap',             note: 'Every 10 yrs',  status: 'unknown' },
+  { id: 'hepb',   name: 'Hepatitis B',      note: '3-dose series', status: 'unknown' },
+  { id: 'mmr',    name: 'MMR',              note: 'Lifetime',      status: 'unknown' },
+  { id: 'pneumo', name: 'Pneumococcal',     note: 'Age 65+',       status: 'unknown' },
+]
+
+const V_COLOR: Record<VStatus, string> = {
+  'up-to-date': '#34d399',
+  'due':        '#fbbf24',
+  'overdue':    '#f87171',
+  'unknown':    'rgba(255,255,255,0.25)',
+}
+const V_LABEL: Record<VStatus, string> = {
+  'up-to-date': '✓ Up to date',
+  'due':        '! Due',
+  'overdue':    '⚠ Overdue',
+  'unknown':    '? Unknown',
+}
+const V_ORDER: VStatus[] = ['unknown', 'up-to-date', 'due', 'overdue']
+
+function VaccineTracker() {
+  const [vaccines, setVaccines] = useState<VaccineEntry[]>(() => {
+    if (typeof window === 'undefined') return DEFAULT_VACCINES
+    try {
+      const raw = localStorage.getItem(VACCINE_KEY)
+      if (raw) return JSON.parse(raw) as VaccineEntry[]
+    } catch { /* ignore */ }
+    return DEFAULT_VACCINES
+  })
+
+  const toggle = (id: string) =>
+    setVaccines(prev => {
+      const next = prev.map(v =>
+        v.id !== id ? v : { ...v, status: V_ORDER[(V_ORDER.indexOf(v.status) + 1) % V_ORDER.length] }
+      )
+      try { localStorage.setItem(VACCINE_KEY, JSON.stringify(next)) } catch { /* ignore */ }
+      return next
+    })
+
+  const overdueCount = vaccines.filter(v => v.status === 'overdue').length
+
+  return (
+    <div style={{ padding: '20px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Shield size={14} color="#34d399" />
+          <span style={{ fontSize: '13px', fontWeight: 600 }}>Immunization record</span>
+          {overdueCount > 0 && (
+            <span style={{
+              fontSize: '10px', fontWeight: 700, padding: '1px 7px', borderRadius: '100px',
+              background: 'rgba(248,113,113,0.12)', color: '#f87171', border: '1px solid rgba(248,113,113,0.25)',
+            }}>
+              {overdueCount} overdue
+            </span>
+          )}
+        </div>
+        <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)' }}>tap to update</span>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        {vaccines.map(v => (
+          <button
+            key={v.id}
+            onClick={() => toggle(v.id)}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '9px 12px', borderRadius: '10px',
+              background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)',
+              cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left',
+            }}
+          >
+            <div>
+              <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>{v.name}</span>
+              <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginLeft: '8px' }}>{v.note}</span>
+            </div>
+            <span style={{
+              fontSize: '10px', fontWeight: 700, padding: '2px 8px', borderRadius: '100px',
+              color: V_COLOR[v.status],
+              background: `${V_COLOR[v.status]}1a`,
+              border: `1px solid ${V_COLOR[v.status]}40`,
+              whiteSpace: 'nowrap',
+            }}>
+              {V_LABEL[v.status]}
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 const PASSPORT_KEY = 'nexus_passport'
 
 function loadPassport(): Passport {
@@ -730,6 +828,9 @@ export default function PassportPage() {
               </div>
             </div>
           </div>
+
+          {/* Immunization record */}
+          <VaccineTracker />
         </div>
 
         {/* Actions */}
@@ -768,6 +869,43 @@ export default function PassportPage() {
           }}>
             <ExportSquare size={13} /> Share with caregiver
           </button>
+        </div>
+
+        {/* Pre-fill intake form helper */}
+        <div style={{ marginTop: '16px', padding: '18px 20px', borderRadius: '14px', background: 'rgba(79,142,240,0.04)', border: '1px solid rgba(79,142,240,0.12)' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <div style={{ width: 38, height: 38, borderRadius: '10px', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <Copy size={16} color="var(--accent)" />
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>Pre-fill intake forms</div>
+              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginBottom: '12px' }}>
+                Copy a formatted summary to paste into any clinic intake form or patient portal.
+              </div>
+              <button
+                onClick={() => {
+                  const text = [
+                    `Name: ${passport.name}`,
+                    `Date of Birth: ${passport.dob}`,
+                    `Blood Type: ${passport.bloodType}`,
+                    `Allergies: ${passport.allergies.map(a => `${a.name} (${a.severity})`).join(', ') || 'None'}`,
+                    `Current Medications: ${passport.medications.map(m => `${m.name}${m.dose ? ' ' + m.dose : ''}${m.frequency ? ', ' + m.frequency : ''}`).join('; ') || 'None'}`,
+                    `Medical Conditions: ${passport.conditions.map(c => c.name).join(', ') || 'None'}`,
+                    `Emergency Contact: ${passport.emergencyContact.name} (${passport.emergencyContact.relation}) — ${passport.emergencyContact.phone}`,
+                  ].join('\n')
+                  navigator.clipboard.writeText(text).catch(() => {})
+                }}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '6px',
+                  padding: '8px 16px', borderRadius: '100px', fontSize: '12px', fontWeight: 600,
+                  background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.22)',
+                  color: 'var(--accent)', cursor: 'pointer', fontFamily: 'inherit',
+                }}
+              >
+                <Copy size={12} color="var(--accent)" /> Copy intake summary
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* ── Health Timeline (Phase 4.2) ─────────────────────────────── */}

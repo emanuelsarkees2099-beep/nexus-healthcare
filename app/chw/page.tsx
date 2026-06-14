@@ -457,14 +457,14 @@ export default function CHWPage() {
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
                           <span style={{ fontWeight: 600, fontSize: '15px' }}>{chw.name}</span>
                           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                            {hasPrefs && (
-                              <span style={{
+                            <span style={{
                                 fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 100,
                                 background: chw._match.tier === 'excellent' ? 'rgba(52,211,153,0.1)' : chw._match.tier === 'good' ? 'rgba(79,142,240,0.1)' : 'rgba(245,158,11,0.1)',
                                 color: chw._match.tier === 'excellent' ? '#34d399' : chw._match.tier === 'good' ? 'var(--accent)' : '#f59e0b',
                                 border: `1px solid ${chw._match.tier === 'excellent' ? 'rgba(52,211,153,0.2)' : chw._match.tier === 'good' ? 'rgba(79,142,240,0.2)' : 'rgba(245,158,11,0.2)'}`,
-                              }}>{chw._match.total}% match</span>
-                            )}
+                              }}>
+                                {hasPrefs ? `${chw._match.total}% match` : `${chw.rating}★ rated`}
+                              </span>
                             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', padding: '3px 9px', borderRadius: '100px', background: chw.available ? 'rgba(74,144,217,0.1)' : 'rgba(255,255,255,0.05)', color: chw.available ? 'var(--accent)' : 'rgba(255,255,255,0.3)', border: `1px solid ${chw.available ? 'rgba(74,144,217,0.25)' : 'rgba(255,255,255,0.08)'}` }}>
                               {chw.available && <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--accent)', animation: 'open-pulse 2s ease-in-out infinite', display: 'inline-block' }} />}
                               {chw.available ? 'Available' : 'Busy'}
