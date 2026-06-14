@@ -88,6 +88,15 @@ const NEARBY_ER = [
   { name: 'Valleywise Health Medical Center', dist: '2.1 mi', wait: '~24 min', open: true },
 ]
 
+const RESPONSE_TIMES: Record<string, string> = {
+  '988 Suicide & Crisis Lifeline': '< 2 min avg',
+  'Crisis Text Line': '< 5 min avg',
+  '911 Emergency': 'Immediate',
+  'Poison Control': 'Immediate',
+  'Domestic Violence Hotline': '< 3 min avg',
+  'SAMHSA Treatment Locator': 'Same-day referral',
+}
+
 const NEARBY_MH = [
   { name: 'Valle del Sol Behavioral Health', dist: '0.9 mi', hours: 'Open until 8pm', open: true },
   { name: 'Terros Health Crisis Center', dist: '1.8 mi', hours: '24/7 walk-in', open: true },
@@ -374,8 +383,15 @@ export default function CrisisPage() {
                   </span>
                   <Call size={14} color={r.color} style={{ flexShrink: 0, marginTop: '1px' }} />
                 </div>
-                <div style={{ fontSize: '18px', fontWeight: 800, color: '#f5f5f5', letterSpacing: '-0.01em' }}>
-                  {r.number}
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
+                  <div style={{ fontSize: '18px', fontWeight: 800, color: '#f5f5f5', letterSpacing: '-0.01em' }}>
+                    {r.number}
+                  </div>
+                  {RESPONSE_TIMES[r.name] && (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', fontSize: '10px', fontWeight: 700, color: r.color, opacity: 0.85, background: `${r.bg}`, border: `1px solid ${r.border}`, padding: '1px 7px', borderRadius: '100px' }}>
+                      <Clock size={9} color="currentColor" /> {RESPONSE_TIMES[r.name]}
+                    </span>
+                  )}
                 </div>
                 <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>
                   {r.desc}
@@ -710,6 +726,20 @@ export default function CrisisPage() {
                       : <><DocumentDownload size={14} color="currentColor" /> Save my plan</>
                     }
                   </button>
+                  <button
+                    onClick={() => window.print()}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 7,
+                      padding: '11px 20px', borderRadius: 10, border: '1px solid rgba(129,140,248,0.2)', cursor: 'pointer',
+                      background: 'transparent', color: 'rgba(129,140,248,0.7)',
+                      fontSize: 13, fontWeight: 600, fontFamily: 'inherit',
+                      transition: 'all 0.2s',
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(129,140,248,0.08)'; (e.currentTarget as HTMLElement).style.color = 'rgba(129,140,248,0.95)' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = 'rgba(129,140,248,0.7)' }}
+                  >
+                    <DocumentDownload size={14} color="currentColor" /> Print / Save PDF
+                  </button>
                   <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', margin: 'auto 0', lineHeight: 1.5 }}>
                     Stored only on this device. Share with your care team at your next appointment.
                   </p>
@@ -717,6 +747,24 @@ export default function CrisisPage() {
               </div>
             )}
           </div>
+        </div>
+      </section>
+
+      {/* 24-hour check-in */}
+      <section style={{ padding: '0 24px 48px' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto', padding: '24px 28px', borderRadius: 20, background: 'rgba(129,140,248,0.04)', border: '1px solid rgba(129,140,248,0.18)', display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(129,140,248,0.10)', border: '1px solid rgba(129,140,248,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Clock size={20} color="#818cf8" />
+          </div>
+          <div style={{ flex: 1, minWidth: '240px' }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>Plan to check in within 24 hours</div>
+            <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.65 }}>
+              Research shows that one follow-up contact within 24 hours significantly reduces crisis risk. Reach out to a trusted person, your therapist, or one of our CHW navigators — free, no insurance needed.
+            </div>
+          </div>
+          <Link href="/chw" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 18px', borderRadius: 10, background: 'rgba(129,140,248,0.12)', border: '1px solid rgba(129,140,248,0.28)', color: '#818cf8', fontSize: 13, fontWeight: 700, textDecoration: 'none', flexShrink: 0, fontFamily: 'inherit' }}>
+            Connect with a CHW <ArrowRight2 size={13} color="currentColor" />
+          </Link>
         </div>
       </section>
 

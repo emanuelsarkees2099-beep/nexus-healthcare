@@ -313,7 +313,22 @@ export default function MedicationsPage() {
                 </div>
 
                 {/* Brand name */}
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)', marginBottom: 10 }}>{drug.brand}</div>
+                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)', marginBottom: 6 }}>{drug.brand}</div>
+
+                {/* Savings badge */}
+                {drug.manufacturer.toLowerCase().includes('no pap') ? (
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 10px', borderRadius: 100, fontSize: 10, fontWeight: 700, background: 'rgba(52,211,153,0.10)', color: '#34d399', border: '1px solid rgba(52,211,153,0.25)', marginBottom: 8, fontFamily: 'var(--font-inter)' }}>
+                    ✓ Save up to 90% — generic available
+                  </div>
+                ) : drug.incomeLimit !== 'Any' ? (
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 10px', borderRadius: 100, fontSize: 10, fontWeight: 700, background: 'rgba(96,165,250,0.10)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.25)', marginBottom: 8, fontFamily: 'var(--font-inter)' }}>
+                    ★ Free with PAP program
+                  </div>
+                ) : (
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 10px', borderRadius: 100, fontSize: 10, fontWeight: 700, background: 'rgba(251,191,36,0.08)', color: '#fbbf24', border: '1px solid rgba(251,191,36,0.25)', marginBottom: 8, fontFamily: 'var(--font-inter)' }}>
+                    $ Save up to 80% w/ GoodRx
+                  </div>
+                )}
 
                 {/* Manufacturer row */}
                 <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}>
@@ -372,17 +387,22 @@ export default function MedicationsPage() {
         </div>
 
         {/* 340B tip */}
-        <div style={{ padding: '24px 28px', borderRadius: 16, background: 'rgba(74,144,217,0.05)', border: '1px solid rgba(74,144,217,0.15)', marginBottom: 48, display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-          <DollarCircle size={22} color="var(--accent)" style={{ flexShrink: 0, marginTop: 2 }} />
-          <div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)', marginBottom: 6 }}>
-              Free Prescriptions at FQHCs via the 340B Drug Program
+        <div style={{ padding: '24px 28px', borderRadius: 16, background: 'linear-gradient(135deg, rgba(74,144,217,0.07), rgba(96,165,250,0.03))', border: '1px solid rgba(74,144,217,0.22)', marginBottom: 48, display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <DollarCircle size={22} color="var(--accent)" />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+              <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>
+                Get $1–$5 Prescriptions at 340B FQHCs
+              </div>
+              <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 100, background: 'rgba(74,144,217,0.15)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.3)' }}>Up to 50% off</span>
             </div>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)', lineHeight: 1.7, margin: '0 0 14px' }}>
-              Federally Qualified Health Centers participate in the 340B drug pricing program, which allows them to purchase medications at up to 50% discount and pass those savings on to uninsured patients. Many dispense medications free or for $1–$5 per prescription.
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)', lineHeight: 1.7, margin: '0 0 16px' }}>
+              Federally Qualified Health Centers use the 340B drug pricing program to dispense medications at $1–$5 per prescription for uninsured patients — including insulin, blood pressure meds, and mental health medications. No insurance needed.
             </p>
-            <Link href={FQHC_LINK} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 600, color: 'var(--accent)', textDecoration: 'none', fontFamily: 'var(--font-inter)' }}>
-              Find FQHCs near me <ArrowRight2 size={14} color="var(--accent)" />
+            <Link href={FQHC_LINK} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 700, color: '#07070F', background: 'var(--accent)', padding: '9px 18px', borderRadius: 9, textDecoration: 'none', fontFamily: 'var(--font-inter)' }}>
+              Find FQHCs near me <ArrowRight2 size={14} color="#07070F" />
             </Link>
           </div>
         </div>

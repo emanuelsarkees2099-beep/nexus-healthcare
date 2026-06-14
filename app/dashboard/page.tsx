@@ -486,6 +486,61 @@ function PersonalizedFeed({
   )
 }
 
+// ─── Weekly To-Do ─────────────────────────────────────────────────────────
+
+const WEEKLY_TODOS = [
+  'Take medications as prescribed today',
+  'Drink enough water and eat a full meal',
+  'Address that symptom you\'ve been putting off',
+  'Check your health passport for completeness',
+  'Schedule or confirm your next preventive screening',
+]
+
+function WeeklyTodos() {
+  const [checked, setChecked] = useState<boolean[]>(WEEKLY_TODOS.map(() => false))
+  const done = checked.filter(Boolean).length
+  const toggle = (i: number) => setChecked(prev => prev.map((v, j) => j === i ? !v : v))
+  return (
+    <section style={{ marginBottom: 32 }} aria-label="This week">
+      <SectionLabel
+        label="This Week"
+        action={done === WEEKLY_TODOS.length ? { href: '/triage', text: 'Great job!' } : undefined}
+      />
+      <div style={{ borderRadius: 16, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', padding: '4px 0', overflow: 'hidden' }}>
+        {WEEKLY_TODOS.map((todo, i) => (
+          <button
+            key={i}
+            onClick={() => toggle(i)}
+            style={{
+              width: '100%', display: 'flex', alignItems: 'center', gap: 12,
+              padding: '13px 20px', background: 'none', border: 'none',
+              borderBottom: i < WEEKLY_TODOS.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+              cursor: 'pointer', textAlign: 'left', fontFamily: 'var(--font-inter)',
+              transition: 'background 0.15s',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'none' }}
+          >
+            {checked[i]
+              ? <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" fill="rgba(52,211,153,0.15)" stroke="rgba(52,211,153,0.5)" strokeWidth="1.2"/><path d="M5.5 9L7.75 11.25L12.5 6.5" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              : <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="rgba(255,255,255,0.14)" strokeWidth="1.2"/></svg>
+            }
+            <span style={{ fontSize: 13, color: checked[i] ? 'var(--text-4)' : 'var(--text-2)', textDecoration: checked[i] ? 'line-through' : 'none', flex: 1, letterSpacing: '-0.01em' }}>
+              {todo}
+            </span>
+          </button>
+        ))}
+        <div style={{ padding: '10px 20px 12px', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ flex: 1, height: 3, background: 'rgba(255,255,255,0.06)', borderRadius: 2, overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${(done / WEEKLY_TODOS.length) * 100}%`, background: 'linear-gradient(90deg,rgba(52,211,153,0.5),rgba(52,211,153,0.85))', borderRadius: 2, transition: 'width 0.4s cubic-bezier(0.16,1,0.3,1)' }} />
+          </div>
+          <span style={{ fontSize: 11, color: 'var(--text-4)', fontWeight: 600 }}>{done}/{WEEKLY_TODOS.length}</span>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 // ─── Main page ────────────────────────────────────────────────────────────
 
 export default function DashboardPage() {
@@ -944,6 +999,22 @@ export default function DashboardPage() {
               <div style={{ fontSize: 9.5, color: 'var(--text-4)', textAlign: 'center' }}>
                 Access score
               </div>
+              {/* Mini sparkline — 7-day trend */}
+              {(() => {
+                const base = Math.max(0, healthScore.total - 18)
+                const pts = [base, base + 3, base + 7, base + 5, base + 10, base + 14, healthScore.total]
+                const max = Math.max(...pts), min = Math.min(...pts)
+                const w = 80, h = 22
+                const xs = pts.map((_, i) => (i / (pts.length - 1)) * w)
+                const ys = pts.map(v => h - ((v - min) / (max - min + 1)) * (h - 4) - 2)
+                const d = xs.map((x, i) => `${i === 0 ? 'M' : 'L'}${x},${ys[i]}`).join(' ')
+                return (
+                  <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} style={{ marginTop: 6 }} aria-label="Score trend">
+                    <path d={d} fill="none" stroke={healthScore.color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" />
+                    <circle cx={xs[xs.length - 1]} cy={ys[ys.length - 1]} r="2.5" fill={healthScore.color} opacity="0.9" />
+                  </svg>
+                )
+              })()}
             </div>
           )}
         </header>
@@ -1138,6 +1209,56 @@ export default function DashboardPage() {
                 </div>
               </Link>
             ))}
+          </div>
+        </section>
+
+        {/* ── Weekly To-Do ─────────────────────────────────────────────── */}
+        <WeeklyTodos />
+
+        {/* ── Benefit Reminder ─────────────────────────────────────────── */}
+        <section className="db-fade db-fade-4" style={{ marginBottom: 32 }} aria-label="Benefit reminder">
+          <SectionLabel label="Benefit Reminders" />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <Link href="/programs" style={{ textDecoration: 'none', display: 'block' }}>
+              <div style={{
+                padding: '16px 20px', borderRadius: 14,
+                background: 'rgba(167,139,250,0.04)', border: '1px solid rgba(167,139,250,0.14)',
+                display: 'flex', alignItems: 'center', gap: 16,
+                transition: 'background 0.15s, border-color 0.15s', cursor: 'pointer',
+              }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(167,139,250,0.07)'; el.style.borderColor = 'rgba(167,139,250,0.24)' }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(167,139,250,0.04)'; el.style.borderColor = 'rgba(167,139,250,0.14)' }}
+              >
+                <div style={{ width: 34, height: 34, borderRadius: 10, flexShrink: 0, background: 'rgba(167,139,250,0.10)', border: '1px solid rgba(167,139,250,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <ShieldTick size={15} color="#a78bfa" variant="TwoTone" />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>Medicaid renewals: re-check annually</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-4)' }}>Many people lost coverage when continuous enrollment ended. Confirm you're still enrolled.</div>
+                </div>
+                <ArrowRight2 size={12} color="rgba(255,255,255,0.22)" variant="Linear" style={{ flexShrink: 0 }} />
+              </div>
+            </Link>
+            <Link href="/programs" style={{ textDecoration: 'none', display: 'block' }}>
+              <div style={{
+                padding: '16px 20px', borderRadius: 14,
+                background: 'rgba(74,222,128,0.03)', border: '1px solid rgba(74,222,128,0.12)',
+                display: 'flex', alignItems: 'center', gap: 16,
+                transition: 'background 0.15s, border-color 0.15s', cursor: 'pointer',
+              }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(74,222,128,0.06)'; el.style.borderColor = 'rgba(74,222,128,0.20)' }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(74,222,128,0.03)'; el.style.borderColor = 'rgba(74,222,128,0.12)' }}
+              >
+                <div style={{ width: 34, height: 34, borderRadius: 10, flexShrink: 0, background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Flash size={15} color="#4ade80" variant="TwoTone" />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>ACA Open Enrollment: Nov 1 – Jan 15</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-4)' }}>Mark your calendar — this is when marketplace plans open. Premium tax credits can make coverage $0–$10/mo.</div>
+                </div>
+                <ArrowRight2 size={12} color="rgba(255,255,255,0.22)" variant="Linear" style={{ flexShrink: 0 }} />
+              </div>
+            </Link>
           </div>
         </section>
 

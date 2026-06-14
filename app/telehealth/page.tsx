@@ -289,6 +289,22 @@ export default function TelehealthPage() {
               </div>
             </div>
 
+            {/* Cost guide */}
+            <div style={{ marginBottom: '20px', padding: '16px 20px', borderRadius: '14px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+              <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.06em', textTransform: 'uppercase', flexShrink: 0 }}>What you'll pay</span>
+              {([
+                { range: '$0', label: 'With Medicaid / CHIP', color: '#34d399' },
+                { range: '$0–$35', label: 'FQHC sliding scale', color: '#60a5fa' },
+                { range: '$30–$80', label: 'Self-pay telehealth', color: '#fbbf24' },
+              ] as const).map(tier => (
+                <div key={tier.label} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '16px', fontWeight: 800, color: tier.color, fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>{tier.range}</span>
+                  <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.38)' }}>{tier.label}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.1)', fontSize: '12px' }}>·</span>
+                </div>
+              ))}
+            </div>
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {filtered.map((p, i) => (
                 <div key={p.name} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', overflow: 'hidden', transition: 'border-color 0.2s' }}
@@ -300,14 +316,17 @@ export default function TelehealthPage() {
                     onClick={() => setExpanded(expanded === i ? null : i)}>
                     <span style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', flexShrink: 0 }}>{p.logo}</span>
                     <div style={{ flex: 1 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
                         <span style={{ fontSize: '16px', fontWeight: 700, color: '#eef4f5' }}>{p.name}</span>
                         {p.verified && <span style={{ fontSize: '10px', color: '#60a5fa', background: 'rgba(96,165,250,0.1)', padding: '2px 7px', borderRadius: '100px', border: '1px solid rgba(96,165,250,0.2)', display: 'inline-flex', alignItems: 'center', gap: '3px' }}><TickCircle size={9} variant="Bold" aria-hidden="true" /> Verified</span>}
+                        {i === 0 && <span style={{ fontSize: '10px', color: '#34d399', background: 'rgba(52,211,153,0.10)', padding: '2px 7px', borderRadius: '100px', border: '1px solid rgba(52,211,153,0.22)', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>★ Best match</span>}
                       </div>
-                      <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
                         <span style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 600 }}>{p.cost}</span>
-                        <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>Wait: {p.wait}</span>
-                        <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>{p.available}</span>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '2px 8px', borderRadius: '100px', fontSize: '11px', fontWeight: 700, background: p.wait === 'Instant' ? 'rgba(52,211,153,0.12)' : 'rgba(251,191,36,0.08)', color: p.wait === 'Instant' ? '#34d399' : '#fbbf24', border: `1px solid ${p.wait === 'Instant' ? 'rgba(52,211,153,0.30)' : 'rgba(251,191,36,0.20)'}` }}>
+                          <Clock size={9} variant="Linear" /> {p.wait}
+                        </span>
+                        <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.28)' }}>{p.available}</span>
                       </div>
                     </div>
                     <ArrowRight2 size={16} style={{ color: 'rgba(255,255,255,0.3)', transform: expanded === i ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }} />
