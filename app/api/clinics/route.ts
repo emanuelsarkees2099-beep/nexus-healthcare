@@ -451,10 +451,15 @@ async function queryOverpass(lat: number, lng: number, radiusMiles: number): Pro
 // ── HRSA FQHCs via NPI Registry (free, no key, real FQHC data) ───────────────
 // The findahealthcenter.hrsa.gov API is internal-only. We use the NPPES NPI
 // Registry instead — every FQHC must register with NPI (taxonomy 261QF0400X).
-// Returns 100–200 verified FQHCs per city, with zip-centroid distances.
+// Returns 100–200 verified FQHCs per city; also searches "Community Health
+// Center" and "Free Clinic" taxonomy descriptions in parallel for broader coverage.
 async function fetchHRSAClinics(lat: number, lng: number, radiusMiles: number, city: string, state: string): Promise<Clinic[]> {
-  return fetchNPIClinics(lat, lng, city, state, radiusMiles,
-    'Federally Qualified Health Center', 95, 'FQHC', 'HRSA FQHC')
+  const [fqhcResults, chcResults, freeClinicResults] = await Promise.all([
+    fetchNPIClinics(lat, lng, city, state, radiusMiles, 'Federally Qualified Health Center', 95, 'FQHC', 'HRSA FQHC'),
+    fetchNPIClinics(lat, lng, city, state, radiusMiles, 'Community Health Center',           82, 'Community Health Center', 'CHC/NPI'),
+    fetchNPIClinics(lat, lng, city, state, radiusMiles, 'Free Clinic',                       90, 'Free Clinic', 'FreeClin/NPI'),
+  ])
+  return [...fqhcResults, ...chcResults, ...freeClinicResults]
 }
 
 // ── NAFC: secondary source — volunteer free clinics ──────────────────────────
@@ -679,11 +684,28 @@ async function fetchCMSRuralHealthClinics(lat: number, lng: number, city: string
     'Rural Health Clinic', 70, 'Rural Health Clinic', 'CMS RHC')
 }
 
-// ── SAMHSA — no public API available (findtreatment.gov is a React SPA) ──────
-// The backend is AWS-internal. Stubbed out — returns [] until a real API exists.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function fetchSAMHSAClinics(_lat: number, _lng: number, _radiusMiles: number): Promise<Clinic[]> {
-  return []
+// ── Behavioral Health via NPI Registry (replaces dead SAMHSA stub) ───────────
+// findtreatment.gov is a React SPA with no public API. Every licensed behavioral
+// health organization must register with NPPES, so NPI is the reliable source.
+// Searches three taxonomy descriptions in parallel: mental health centers,
+// substance use / rehabilitation, and community mental health centers.
+async function fetchSAMHSAClinics(
+  lat: number, lng: number, radiusMiles: number, city: string, state: string
+): Promise<Clinic[]> {
+  if (!city || !state) return []
+  const taxonomies = [
+    { desc: 'Mental Health Clinic',         score: 80, type: 'Mental Health Center' },
+    { desc: 'Substance Abuse Treatment',     score: 85, type: 'Substance Use Treatment' },
+    { desc: 'Community Mental Health Center',score: 80, type: 'Mental Health Center' },
+  ]
+  const batches = await Promise.all(
+    taxonomies.map(t =>
+      fetchNPIClinics(lat, lng, city, state, radiusMiles, t.desc, t.score, t.type, 'BH/NPI')
+    )
+  )
+  const all = batches.flat()
+  console.log('[NEXUS] BehavioralHealth/NPI → %d providers across 3 taxonomy codes', all.length)
+  return all
 }
 
 // ── Yelp Fusion — free tier (500 req/day, no payment required) ───────────────
@@ -1093,7 +1115,7 @@ export async function GET(req: NextRequest) {
     fetchGooglePlacesClinics(geo.lat, geo.lng, radiusMiles),
     detectedState ? fetchStateHealthClinics(geo.lat, geo.lng, detectedState, radiusMiles) : Promise.resolve([]),
     (detectedCity && detectedState) ? fetchCMSRuralHealthClinics(geo.lat, geo.lng, detectedCity, detectedState, radiusMiles) : Promise.resolve([]),
-    fetchSAMHSAClinics(geo.lat, geo.lng, radiusMiles),
+    (detectedCity && detectedState) ? fetchSAMHSAClinics(geo.lat, geo.lng, radiusMiles, detectedCity, detectedState) : Promise.resolve([]),
     fetchYelpClinics(geo.lat, geo.lng, radiusMiles),
     fetchFindHelpClinics(geo.lat, geo.lng, zip, radiusMiles),
     fetchVAClinics(geo.lat, geo.lng, radiusMiles),
@@ -1114,7 +1136,7 @@ export async function GET(req: NextRequest) {
       Promise.resolve(fetchNAFCClinics(geo.lat, geo.lng, expandedRadius)),
       queryOverpass(geo.lat, geo.lng, expandedRadius),
       (detectedCity && detectedState) ? fetchCMSRuralHealthClinics(geo.lat, geo.lng, detectedCity, detectedState, expandedRadius) : Promise.resolve([]),
-      fetchSAMHSAClinics(geo.lat, geo.lng, expandedRadius),
+      (detectedCity && detectedState) ? fetchSAMHSAClinics(geo.lat, geo.lng, expandedRadius, detectedCity, detectedState) : Promise.resolve([]),
       fetchYelpClinics(geo.lat, geo.lng, expandedRadius),
       fetchFindHelpClinics(geo.lat, geo.lng, zip, expandedRadius),
       fetchVAClinics(geo.lat, geo.lng, expandedRadius),
