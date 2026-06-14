@@ -451,15 +451,10 @@ async function queryOverpass(lat: number, lng: number, radiusMiles: number): Pro
 // ── HRSA FQHCs via NPI Registry (free, no key, real FQHC data) ───────────────
 // The findahealthcenter.hrsa.gov API is internal-only. We use the NPPES NPI
 // Registry instead — every FQHC must register with NPI (taxonomy 261QF0400X).
-// Returns 100–200 verified FQHCs per city; also searches "Community Health
-// Center" and "Free Clinic" taxonomy descriptions in parallel for broader coverage.
+// Single call keeps NPI request count low to avoid rate-limiting.
 async function fetchHRSAClinics(lat: number, lng: number, radiusMiles: number, city: string, state: string): Promise<Clinic[]> {
-  const [fqhcResults, chcResults, freeClinicResults] = await Promise.all([
-    fetchNPIClinics(lat, lng, city, state, radiusMiles, 'Federally Qualified Health Center', 95, 'FQHC', 'HRSA FQHC'),
-    fetchNPIClinics(lat, lng, city, state, radiusMiles, 'Community Health Center',           82, 'Community Health Center', 'CHC/NPI'),
-    fetchNPIClinics(lat, lng, city, state, radiusMiles, 'Free Clinic',                       90, 'Free Clinic', 'FreeClin/NPI'),
-  ])
-  return [...fqhcResults, ...chcResults, ...freeClinicResults]
+  return fetchNPIClinics(lat, lng, city, state, radiusMiles,
+    'Federally Qualified Health Center', 95, 'FQHC', 'HRSA FQHC')
 }
 
 // ── NAFC: secondary source — volunteer free clinics ──────────────────────────
@@ -687,25 +682,13 @@ async function fetchCMSRuralHealthClinics(lat: number, lng: number, city: string
 // ── Behavioral Health via NPI Registry (replaces dead SAMHSA stub) ───────────
 // findtreatment.gov is a React SPA with no public API. Every licensed behavioral
 // health organization must register with NPPES, so NPI is the reliable source.
-// Searches three taxonomy descriptions in parallel: mental health centers,
-// substance use / rehabilitation, and community mental health centers.
+// Single taxonomy search keeps total NPI calls ≤ 3 to avoid rate-limiting.
 async function fetchSAMHSAClinics(
   lat: number, lng: number, radiusMiles: number, city: string, state: string
 ): Promise<Clinic[]> {
   if (!city || !state) return []
-  const taxonomies = [
-    { desc: 'Mental Health Clinic',         score: 80, type: 'Mental Health Center' },
-    { desc: 'Substance Abuse Treatment',     score: 85, type: 'Substance Use Treatment' },
-    { desc: 'Community Mental Health Center',score: 80, type: 'Mental Health Center' },
-  ]
-  const batches = await Promise.all(
-    taxonomies.map(t =>
-      fetchNPIClinics(lat, lng, city, state, radiusMiles, t.desc, t.score, t.type, 'BH/NPI')
-    )
-  )
-  const all = batches.flat()
-  console.log('[NEXUS] BehavioralHealth/NPI → %d providers across 3 taxonomy codes', all.length)
-  return all
+  return fetchNPIClinics(lat, lng, city, state, radiusMiles,
+    'Mental Health Clinic', 80, 'Mental Health Center', 'BH/NPI')
 }
 
 // ── Yelp Fusion — free tier (500 req/day, no payment required) ───────────────
