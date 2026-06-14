@@ -442,7 +442,7 @@ export default function ClinicCard({
                 onMouseDown={e => (e.currentTarget.style.transform = 'scale(0.96)')}
                 onMouseUp={e => (e.currentTarget.style.transform = 'scale(1)')}
               >
-                <Call size={12} color="var(--accent)" variant="Linear" /> {t('search.call')}
+                <Call size={12} color="var(--accent)" variant="Linear" /> Call to book
               </a>
             )}
 
@@ -468,12 +468,21 @@ export default function ClinicCard({
               </button>
             )}
 
+            {clinic.url && (
+              <a
+                href={clinic.url.startsWith('http') ? clinic.url : `https://${clinic.url}`}
+                target="_blank" rel="noopener noreferrer"
+                style={{ background: 'rgba(79,142,240,0.08)', color: 'var(--accent)', border: '1px solid rgba(79,142,240,0.22)', borderRadius: 9, padding: '8px 14px', fontSize: 12, fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}
+              >
+                <Global size={12} variant="Linear" /> {t('search.visit')}
+              </a>
+            )}
             <a
-              href={clinic.url ? (clinic.url.startsWith('http') ? clinic.url : `https://${clinic.url}`) : googleMapsUrl}
+              href={googleMapsUrl}
               target="_blank" rel="noopener noreferrer"
               style={{ background: 'var(--accent)', color: 'var(--bg)', borderRadius: 9, padding: '8px 14px', fontSize: 12, fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}
             >
-              {clinic.url ? <><Global size={12} variant="Linear" /> {t('search.visit')}</> : <><Routing size={12} variant="Linear" /> {t('search.directions')}</>}
+              <Routing size={12} variant="Linear" /> {t('search.directions')}
             </a>
           </div>
         </div>
@@ -489,6 +498,11 @@ export default function ClinicCard({
           {openStatus === false && (
             <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>
               <Clock size={11} color="rgba(255,255,255,0.45)" variant="Linear" /> {t('search.closed')}
+            </span>
+          )}
+          {clinic.hours && (
+            <span style={{ fontSize: 11, color: 'var(--text-3)', fontFamily: 'var(--font-inter)', opacity: 0.75 }}>
+              {clinic.hours}
             </span>
           )}
           {clinic.accepting && (

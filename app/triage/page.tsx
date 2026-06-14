@@ -90,6 +90,9 @@ export default function TriagePage() {
   const [showWork, setShowWork] = useState(false)
   const [isRealAI, setIsRealAI] = useState(false)
   const [totalSteps, setTotalSteps] = useState(5)
+  const [duration, setDuration] = useState('')
+  const [shareCopied, setShareCopied] = useState(false)
+  const [savedToPassport, setSavedToPassport] = useState(false)
   const inputRef    = useRef<HTMLTextAreaElement>(null)
   const timerIds    = useRef<ReturnType<typeof setTimeout>[]>([])
   const runTriageRef = useRef<((input: string) => void) | null>(null)
@@ -252,6 +255,40 @@ export default function TriagePage() {
     setResult(null)
     setShowWork(false)
     setIsRealAI(false)
+    setDuration('')
+    setSavedToPassport(false)
+    setShareCopied(false)
+  }
+
+  function getSpecialtyFromQuery(q: string): string {
+    const lower = q.toLowerCase()
+    if (lower.includes('mental') || lower.includes('anxiety') || lower.includes('depression') || lower.includes('stress')) return 'mental'
+    if (lower.includes('dental') || lower.includes('tooth') || lower.includes('teeth') || lower.includes('gum')) return 'dental'
+    if (lower.includes('eye') || lower.includes('vision') || lower.includes('sight')) return 'vision'
+    if (lower.includes('child') || lower.includes('pediatric') || lower.includes('baby') || lower.includes('kid')) return 'pediatrics'
+    return 'primary'
+  }
+
+  function handleSavePassport(res: TriageResult) {
+    try {
+      const existing = JSON.parse(localStorage.getItem('nexus_passport_triage') || '[]')
+      const entry = { symptom: query, urgency: res.urgency, reasoning: res.reasoning, ts: Date.now(), duration }
+      const updated = [entry, ...existing].slice(0, 20)
+      localStorage.setItem('nexus_passport_triage', JSON.stringify(updated))
+      setSavedToPassport(true)
+    } catch { /* ignore */ }
+  }
+
+  function handleShare(res: TriageResult) {
+    const text = `Nexus Health Triage\nSymptom: ${query}\nUrgency: ${urgencyConfig[res.urgency].label}\nNext step: ${res.steps[0] ?? ''}\n\nnexushealthcare.app/triage`
+    if (navigator.share) {
+      navigator.share({ title: 'Nexus Triage Result', text }).catch(() => {})
+    } else {
+      navigator.clipboard.writeText(text).then(() => {
+        setShareCopied(true)
+        setTimeout(() => setShareCopied(false), 2500)
+      }).catch(() => {})
+    }
   }
 
   return (
@@ -378,6 +415,27 @@ export default function TriagePage() {
               <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
               <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-inter)' }}>or describe in your own words</span>
               <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+            </div>
+
+            {/* Duration chips */}
+            <div>
+              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', marginBottom: 8 }}>How long have you had these symptoms?</p>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {['Just started', '1–2 days', '3–5 days', '1–2 weeks', '1+ month'].map(d => (
+                  <button
+                    key={d} type="button"
+                    onClick={() => setDuration(dur => dur === d ? '' : d)}
+                    style={{
+                      padding: '6px 13px', borderRadius: '100px', fontSize: 12, cursor: 'pointer',
+                      fontFamily: 'var(--font-inter)', transition: 'all 0.15s',
+                      background: duration === d ? 'rgba(74,144,217,0.14)' : 'rgba(255,255,255,0.03)',
+                      border: `1px solid ${duration === d ? 'rgba(74,144,217,0.40)' : 'rgba(255,255,255,0.08)'}`,
+                      color: duration === d ? 'var(--accent)' : 'rgba(255,255,255,0.45)',
+                      fontWeight: duration === d ? 600 : 400,
+                    }}
+                  >{d}</button>
+                ))}
+              </div>
             </div>
 
             <div style={{ position: 'relative' }}>
@@ -661,15 +719,32 @@ export default function TriagePage() {
                     </p>
                   )}
 
+                  {/* Urgency timer banner for time-sensitive cases */}
+                  {(result.urgency === 'urgent' || result.urgency === 'emergency') && (
+                    <div style={{
+                      padding: '10px 14px', borderRadius: '10px', marginBottom: '14px',
+                      background: result.urgency === 'emergency' ? 'rgba(248,113,113,0.07)' : 'rgba(251,146,60,0.07)',
+                      border: `1px solid ${result.urgency === 'emergency' ? 'rgba(248,113,113,0.28)' : 'rgba(251,146,60,0.28)'}`,
+                      display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px',
+                      color: result.urgency === 'emergency' ? '#fca5a5' : '#fdba74',
+                      fontFamily: 'var(--font-inter)', fontWeight: 500,
+                    }}>
+                      <Clock size={14} color="currentColor" />
+                      {result.urgency === 'emergency'
+                        ? 'Call 911 or go to the ER now — do not delay'
+                        : 'Act within the next few hours to be seen today'}
+                    </div>
+                  )}
+
                   <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                    <Link href="/search" style={{
+                    <Link href={`/search?specialty=${getSpecialtyFromQuery(query)}`} style={{
                       padding: '9px 18px', borderRadius: '100px',
                       background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.3)',
                       color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
                       textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px',
                     }}>
                       <Location size={12} />
-                      {result.clinic ? 'Get directions' : 'Search free clinics near me'}
+                      Find a clinic for this →
                     </Link>
                     <Link href="/gps" style={{
                       padding: '9px 18px', borderRadius: '100px',
@@ -766,21 +841,55 @@ export default function TriagePage() {
                   </div>
                 )}
 
-                {/* Try again */}
-                <button
-                  onClick={reset}
-                  style={{
-                    padding: '11px 20px', borderRadius: '100px',
-                    background: 'transparent', border: '1px solid rgba(255,255,255,0.1)',
-                    color: 'rgba(255,255,255,0.45)', fontSize: '13px', cursor: 'pointer',
-                    fontFamily: 'inherit', alignSelf: 'flex-start',
-                    transition: 'all 0.2s',
-                  }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.25)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.7)' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.45)' }}
-                >
-                  ← Try different symptoms
-                </button>
+                {/* Action row — save, share, try again */}
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+                  <button
+                    onClick={() => handleSavePassport(result)}
+                    disabled={savedToPassport}
+                    style={{
+                      padding: '9px 16px', borderRadius: '100px',
+                      background: savedToPassport ? 'rgba(74,222,128,0.10)' : 'rgba(74,144,217,0.08)',
+                      border: `1px solid ${savedToPassport ? 'rgba(74,222,128,0.28)' : 'rgba(74,144,217,0.22)'}`,
+                      color: savedToPassport ? 'var(--green-pulse,#4ade80)' : 'var(--accent)',
+                      fontSize: '12px', fontWeight: 600, cursor: savedToPassport ? 'default' : 'pointer',
+                      fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '6px',
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    <TickCircle size={13} color="currentColor" variant={savedToPassport ? 'Bold' : 'Linear'} />
+                    {savedToPassport ? 'Saved to passport' : 'Save to health passport'}
+                  </button>
+
+                  <button
+                    onClick={() => handleShare(result)}
+                    style={{
+                      padding: '9px 16px', borderRadius: '100px',
+                      background: shareCopied ? 'rgba(74,222,128,0.10)' : 'rgba(255,255,255,0.04)',
+                      border: `1px solid ${shareCopied ? 'rgba(74,222,128,0.28)' : 'rgba(255,255,255,0.10)'}`,
+                      color: shareCopied ? 'var(--green-pulse,#4ade80)' : 'rgba(255,255,255,0.5)',
+                      fontSize: '12px', cursor: 'pointer', fontFamily: 'inherit',
+                      display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s',
+                    }}
+                  >
+                    <InfoCircle size={13} color="currentColor" variant="Linear" />
+                    {shareCopied ? 'Copied!' : 'Share result'}
+                  </button>
+
+                  <button
+                    onClick={reset}
+                    style={{
+                      padding: '9px 16px', borderRadius: '100px',
+                      background: 'transparent', border: '1px solid rgba(255,255,255,0.1)',
+                      color: 'rgba(255,255,255,0.4)', fontSize: '12px', cursor: 'pointer',
+                      fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '5px',
+                      transition: 'all 0.2s',
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.22)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.65)' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.4)' }}
+                  >
+                    ← Try different symptoms
+                  </button>
+                </div>
               </div>
             )}
           </div>

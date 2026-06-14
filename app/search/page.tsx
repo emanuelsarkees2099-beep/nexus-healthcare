@@ -16,7 +16,7 @@ import {
   Heart, Health, Eye, Profile,
   InfoCircle, Map as MapIcon, RowVertical, Printer,
   Clock, Flash, ArrowRight, RefreshCircle, ShieldTick, Global,
-  Filter,
+  Filter, Message,
 } from 'iconsax-react'
 /* P3 — standardized skeleton */
 import { SkeletonClinicCard, SKELETON_STYLES } from '@/components/ui/Skeleton'
@@ -144,6 +144,7 @@ function SearchResults() {
   const [visiblePage,   setVisiblePage]   = useState(1)                      // pagination
   const [showMatchForm, setShowMatchForm] = useState(false)                  // Phase 2.1: guided match form
   const [heroWords, setHeroWords] = useState([false, false, false, false])
+  const [langFilter, setLangFilter] = useState('')
 
   const PAGE_SIZE = 25
 
@@ -327,6 +328,9 @@ function SearchResults() {
     : clinics
 
   if (intent.freeOnly) results = results.filter(c => c.free || c.sliding_scale || c.affordability_label === 'likely-free')
+
+  // Language filter chip — hard-filter when user explicitly selects a language
+  if (langFilter) results = results.filter(c => clinicHasLanguage(c, langFilter))
 
   // E8 — language-matched care: boost language-concordant providers to the top
   const targetLanguage = lang !== 'en' ? (LOCALE_LANGUAGE_MAP[lang as keyof typeof LOCALE_LANGUAGE_MAP] ?? null) : null
@@ -605,6 +609,20 @@ function SearchResults() {
               <f.Icon size={13} color={activeFilter === f.id ? 'var(--accent)' : 'rgba(255,255,255,0.50)'} variant="Linear" /> {f.label}
             </button>
           ))}
+          {/* Language filter chip */}
+          {(['Spanish', 'French', 'Chinese', 'Arabic', 'Vietnamese'] as const).map(lang => (
+            <button
+              key={lang}
+              onClick={() => setLangFilter(f => f === lang ? '' : lang)}
+              className={`filter-pill${langFilter === lang ? ' active' : ''}`}
+              style={{ display: langFilter && langFilter !== lang ? 'none' : 'inline-flex', alignItems: 'center', gap: '5px' }}
+            >
+              <Message size={13} color={langFilter === lang ? 'var(--accent)' : 'rgba(255,255,255,0.50)'} variant="Linear" />
+              {lang}
+              {langFilter === lang && <CloseCircle size={11} color="var(--accent)" variant="Linear" style={{ marginLeft: 2 }} />}
+            </button>
+          ))}
+
           {/* Phase 2.1 — Get Matched trigger */}
           <button
             onClick={() => setShowMatchForm(true)}
@@ -1039,6 +1057,31 @@ function SearchResults() {
               </button>
             </div>
             <EmergencyEscalation />
+
+            {/* Telehealth fallback */}
+            <div style={{
+              marginTop: '28px', padding: '18px 20px', borderRadius: '14px',
+              background: 'rgba(167,139,250,0.05)', border: '1px solid rgba(167,139,250,0.18)',
+              display: 'flex', alignItems: 'center', gap: '14px', textAlign: 'left',
+            }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(167,139,250,0.10)', border: '1px solid rgba(167,139,250,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Global size={16} color="#a78bfa" variant="Linear" />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '4px', fontFamily: 'var(--font-display)' }}>
+                  Can&apos;t find a clinic nearby? Try telehealth.
+                </div>
+                <div style={{ fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', lineHeight: 1.6 }}>
+                  See a doctor online today — many providers offer $0–$30 visits for uninsured patients.
+                </div>
+              </div>
+              <a
+                href="/telehealth"
+                style={{ padding: '8px 16px', borderRadius: '9px', background: 'rgba(167,139,250,0.12)', border: '1px solid rgba(167,139,250,0.28)', color: '#a78bfa', fontSize: '12px', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}
+              >
+                View options <ArrowRight size={12} />
+              </a>
+            </div>
           </div>
         )}
 

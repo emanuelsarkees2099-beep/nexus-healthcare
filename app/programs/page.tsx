@@ -763,15 +763,37 @@ export default function ProgramsPage() {
         <section ref={resultsRef} style={{ padding: '0 24px 60px' }}>
           <div style={{ maxWidth: '760px', margin: '0 auto' }}>
             <RevealBlock>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '32px' }}>
-                <div>
-                  <h2 style={{ fontSize: 'clamp(20px, 3vw, 30px)', fontWeight: 700, letterSpacing: '-0.02em' }}>{matchedPrograms.length} program{matchedPrograms.length !== 1 ? 's' : ''} matched for you</h2>
-                  <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)', marginTop: '4px' }}>Ranked by match confidence · Updated daily</p>
-                </div>
-                <button onClick={restart} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 16px', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: 'rgba(255,255,255,0.5)', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit' }}>
-                  <RefreshCircle size={12} color="rgba(255,255,255,0.5)" variant="Linear" /> Re-check
-                </button>
+              {/* ── Enrollment urgency banner ── */}
+              <div style={{ padding: '12px 16px', borderRadius: '12px', marginBottom: '20px', background: 'rgba(248,113,113,0.06)', border: '1px solid rgba(248,113,113,0.22)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Flash size={14} color="#f87171" variant="Bold" style={{ flexShrink: 0 }} />
+                <span style={{ fontSize: '13px', color: '#fca5a5', fontWeight: 600, flex: 1 }}>
+                  ACA Marketplace closes Dec 15 — apply now to avoid a coverage gap.
+                </span>
+                <a href="https://www.healthcare.gov/apply-and-enroll/start-enrollment/" target="_blank" rel="noopener noreferrer" style={{ fontSize: '12px', fontWeight: 700, color: '#f87171', textDecoration: 'none', whiteSpace: 'nowrap', padding: '5px 12px', borderRadius: '8px', border: '1px solid rgba(248,113,113,0.3)', background: 'rgba(248,113,113,0.06)' }}>
+                  Apply now →
+                </a>
               </div>
+
+              {/* ── Savings headline ── */}
+              {(() => {
+                const totalSavings = matchedPrograms.reduce((sum, p) => sum + Math.round((p.annualValue * p.match) / 100), 0)
+                return (
+                  <div style={{ padding: '20px 24px', borderRadius: '16px', marginBottom: '28px', background: 'linear-gradient(135deg, rgba(74,144,217,0.08), rgba(96,165,250,0.04))', border: '1px solid rgba(74,144,217,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+                    <div>
+                      <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginBottom: '6px', fontFamily: 'var(--font-inter)' }}>You could be saving</div>
+                      <div style={{ fontSize: 'clamp(28px,5vw,40px)', fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.03em', fontFamily: 'var(--font-mono,monospace)', lineHeight: 1 }}>
+                        ${totalSavings.toLocaleString()}<span style={{ fontSize: '16px', fontWeight: 400, color: 'rgba(255,255,255,0.35)', marginLeft: 4 }}>/yr</span>
+                      </div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: '22px', fontWeight: 700, color: 'var(--text)' }}>{matchedPrograms.length} program{matchedPrograms.length !== 1 ? 's' : ''} matched</div>
+                      <button onClick={restart} style={{ marginTop: '6px', display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '6px 12px', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: 'rgba(255,255,255,0.4)', fontSize: '12px', cursor: 'pointer', fontFamily: 'inherit' }}>
+                        <RefreshCircle size={11} color="rgba(255,255,255,0.4)" variant="Linear" /> Re-check
+                      </button>
+                    </div>
+                  </div>
+                )
+              })()}
             </RevealBlock>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '56px' }}>
@@ -799,11 +821,11 @@ export default function ProgramsPage() {
                         <span style={{ fontSize: '13px', color: p.color, fontWeight: 500, display: 'flex', alignItems: 'center', gap: '6px' }}><DollarCircle size={12} variant="Linear" />{p.savings}</span>
                         <button
                           onClick={() => p.url.startsWith('http') ? window.open(p.url, '_blank', 'noopener noreferrer') : router.push(p.url)}
-                          style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', borderRadius: '100px', background: `${p.color}15`, border: `1px solid ${p.color}25`, color: p.color, fontSize: '13px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', transition: 'background 0.2s' }}
-                          onMouseEnter={e => (e.currentTarget.style.background = `${p.color}28`)}
-                          onMouseLeave={e => (e.currentTarget.style.background = `${p.color}15`)}
+                          style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 20px', borderRadius: '100px', background: p.color, border: 'none', color: '#0a0a14', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', transition: 'opacity 0.2s', boxShadow: `0 4px 18px ${p.color}40` }}
+                          onMouseEnter={e => (e.currentTarget.style.opacity = '0.88')}
+                          onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
                         >
-                          Apply now <ArrowRight size={11} variant="Linear" />
+                          Apply now <ArrowRight size={12} variant="Linear" />
                         </button>
                       </div>
                     </div>
