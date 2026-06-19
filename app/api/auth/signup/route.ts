@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+import { sendEmail, buildWelcomeEmail } from '@/lib/email'
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,13 +10,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    const getSupabaseClient = () => createClient(url, anonKey)
+    // One client per request (not a new instance per call)
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+    )
 
-    // 1. Sign up user
-    const { data, error: authError } = await getSupabaseClient().auth.signUp({
-      email,
-      password,
-    })
+    const { data, error: authError } = await supabase.auth.signUp({ email, password })
 
     if (authError || !data.user) {
       return NextResponse.json({ error: authError?.message || 'Signup failed' }, { status: 400 })
@@ -26,33 +24,29 @@ export async function POST(request: NextRequest) {
 
     const userId = data.user.id
 
-    // 2. Create profile (upsert to avoid duplicates)
-    await getSupabaseClient().from('user_profiles').upsert({
-      id: userId,
+    await supabase.from('user_profiles').upsert({
+      id:        userId,
       email,
       full_name: fullName,
-      phone: phone || null,
+      phone:     phone || null,
       user_type: userType || 'patient',
     })
 
-    // 3. Set cookies if session exists
+    // Welcome email — await so it runs before the function exits, but errors never block signup
+    await sendEmail({ to: email, ...buildWelcomeEmail(fullName) }).catch(() => {})
+
     const response = NextResponse.json({ success: true })
 
     if (data.session) {
-      response.cookies.set('sb-access-token', data.session.access_token, {
+      const cookieOpts = {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 60 * 60 * 24 * 365,
-        path: '/',
-      })
-      response.cookies.set('sb-refresh-token', data.session.refresh_token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 60 * 60 * 24 * 365,
-        path: '/',
-      })
+        sameSite: 'strict' as const,
+        maxAge:   60 * 60 * 24 * 365,
+        path:     '/',
+      }
+      response.cookies.set('sb-access-token',  data.session.access_token,  cookieOpts)
+      response.cookies.set('sb-refresh-token', data.session.refresh_token, cookieOpts)
     }
 
     return response

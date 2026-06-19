@@ -1,17 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { sendEmail, buildProgramAlertEmail } from '@/lib/email'
 
 // ── Outcome Logging API ────────────────────────────────────────────────────────
 // POST /api/outcomes — log a health outcome event
 // GET  /api/outcomes — aggregate stats (public summary only)
+
+const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://nexus.health').replace(/\/$/, '')
 
 const getSupabaseClient = () => createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || '',
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 )
 
+const VALID_TYPES = [
+  'clinic_visited',
+  'appointment_made',
+  'program_enrolled',
+  'prescription_obtained',
+  'care_received',
+  'crisis_visited',
+] as const
+
+type EventType = typeof VALID_TYPES[number]
+
 interface OutcomePayload {
-  event_type: 'clinic_visited' | 'appointment_made' | 'program_enrolled' | 'prescription_obtained' | 'care_received'
+  event_type: EventType
   clinic_id?: string
   clinic_name?: string
   program_name?: string
@@ -24,40 +38,60 @@ export async function POST(req: NextRequest) {
   try {
     const body: OutcomePayload = await req.json()
 
-    // Validate event type
-    const validTypes = ['clinic_visited', 'appointment_made', 'program_enrolled', 'prescription_obtained', 'care_received']
-    if (!validTypes.includes(body.event_type)) {
+    if (!VALID_TYPES.includes(body.event_type as EventType)) {
       return NextResponse.json({ error: 'Invalid event_type' }, { status: 400 })
     }
 
     // Get user if authenticated (optional — outcomes can be anonymous)
-    let userId: string | null = null
+    let userId:    string | null = null
+    let userEmail: string | null = null
+
     const authHeader = req.headers.get('Authorization')
     if (authHeader?.startsWith('Bearer ')) {
       const token = authHeader.slice(7)
       const { data } = await getSupabaseClient().auth.getUser(token)
-      userId = data.user?.id ?? null
+      userId    = data.user?.id ?? null
+      userEmail = data.user?.email ?? null
     }
 
     const payload = {
-      user_id: userId,
-      event_type: body.event_type,
-      clinic_id: body.clinic_id ?? null,
-      clinic_name: body.clinic_name ?? null,
+      user_id:      userId,
+      event_type:   body.event_type,
+      clinic_id:    body.clinic_id    ?? null,
+      clinic_name:  body.clinic_name  ?? null,
       program_name: body.program_name ?? null,
-      zip_code: body.zip_code ?? null,
-      notes: body.notes ?? null,
-      anonymous: body.anonymous ?? !userId,
-      created_at: new Date().toISOString(),
+      zip_code:     body.zip_code     ?? null,
+      notes:        body.notes        ?? null,
+      anonymous:    body.anonymous ?? !userId,
+      created_at:   new Date().toISOString(),
     }
 
-    // Try to insert — gracefully fail if table doesn't exist yet
     const { error } = await getSupabaseClient().from('outcomes').insert(payload)
 
     if (error) {
-      // Table may not exist yet — log to console but don't fail the request
       console.warn('[Outcomes] Insert error (table may not exist):', error.message)
       return NextResponse.json({ success: true, queued: true })
+    }
+
+    // Side-effects: trigger emails for specific event types
+    if (body.event_type === 'program_enrolled' && userEmail && body.program_name) {
+      const profileRes = await getSupabaseClient()
+        .from('user_profiles')
+        .select('full_name')
+        .eq('id', userId)
+        .single()
+
+      const name = profileRes.data?.full_name ?? userEmail
+
+      sendEmail({
+        to: userEmail,
+        ...buildProgramAlertEmail(
+          name,
+          body.program_name,
+          body.notes ?? 'You have been enrolled in a healthcare assistance program.',
+          `${APP_URL}/programs`,
+        ),
+      }).catch(() => {})
     }
 
     return NextResponse.json({ success: true })
@@ -70,12 +104,10 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
-    const zip = searchParams.get('zip')
+    const zip  = searchParams.get('zip')
     const days = Math.min(parseInt(searchParams.get('days') || '30'), 365)
-
     const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString()
 
-    // Aggregate counts (no PII)
     let query = getSupabaseClient()
       .from('outcomes')
       .select('event_type, zip_code, clinic_name, program_name, created_at')

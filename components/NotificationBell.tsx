@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Notification as NotificationIcon, NotificationBing, CloseCircle, TickSquare, Clock, Flash, Star1, Calendar } from 'iconsax-react'
+import { createClientClient } from '@/lib/auth-client'
 
 export type NexusNotification = {
   id: string
@@ -10,44 +11,41 @@ export type NexusNotification = {
   url?: string
   read: boolean
   created_at: string
+  _synced?: boolean // true = came from DB, PATCH on mark-read
 }
 
 const STORAGE_KEY = 'nexus_notifications'
 const PUSH_KEY    = 'nexus_push_subscribed'
+const UUID_RE     = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+const POLL_MS     = 60_000
 
 function seed(): NexusNotification[] {
   return [
     {
-      id: 'welcome-1',
-      type: 'system',
+      id: 'welcome-1', type: 'system',
       title: 'Welcome to NEXUS',
       body: 'Your free healthcare navigator is ready. Search clinics near you to get started.',
-      url: '/search',
-      read: false,
+      url: '/search', read: false,
       created_at: new Date(Date.now() - 2 * 3600 * 1000).toISOString(),
     },
     {
-      id: 'program-aca',
-      type: 'new_program',
+      id: 'program-aca', type: 'new_program',
       title: 'ACA Open Enrollment is open',
       body: 'You may qualify for $0/month plans through the marketplace. Deadline approaching.',
-      url: '/programs',
-      read: false,
+      url: '/programs', read: false,
       created_at: new Date(Date.now() - 86400 * 1000).toISOString(),
     },
     {
-      id: 'rights-emtala',
-      type: 'system',
+      id: 'rights-emtala', type: 'system',
       title: 'Know your rights',
       body: 'Under EMTALA, no ER can turn you away — even without insurance.',
-      url: '/rights',
-      read: true,
+      url: '/rights', read: true,
       created_at: new Date(Date.now() - 3 * 86400 * 1000).toISOString(),
     },
   ]
 }
 
-function loadNotifications(): NexusNotification[] {
+function loadLocal(): NexusNotification[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) {
@@ -61,8 +59,15 @@ function loadNotifications(): NexusNotification[] {
   }
 }
 
-function saveNotifications(list: NexusNotification[]) {
+function saveLocal(list: NexusNotification[]) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)) } catch { /* ignore */ }
+}
+
+// Merge server + local: server notifications take precedence by id
+function merge(server: NexusNotification[], local: NexusNotification[]): NexusNotification[] {
+  const serverIds = new Set(server.map(n => n.id))
+  const localOnly = local.filter(n => !serverIds.has(n.id))
+  return [...server, ...localOnly]
 }
 
 function timeAgo(iso: string): string {
@@ -94,28 +99,73 @@ const TYPE_COLOR: Record<NexusNotification['type'], string> = {
 export default function NotificationBell() {
   const [open,          setOpen]          = useState(false)
   const [notifications, setNotifications] = useState<NexusNotification[]>([])
+  const [authToken,     setAuthToken]     = useState<string | null>(null)
   const [pushOn,        setPushOn]        = useState(false)
   const [pushOk,        setPushOk]        = useState(false)
   const [subscribing,   setSubscribing]   = useState(false)
-  const panelRef = useRef<HTMLDivElement>(null)
+  const panelRef   = useRef<HTMLDivElement>(null)
+  const pollRef    = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  /* ── Init ── */
+  /* ── Init: load local + get auth token ── */
   useEffect(() => {
-    setNotifications(loadNotifications())
+    setNotifications(loadLocal())
     setPushOn(localStorage.getItem(PUSH_KEY) === 'true')
     setPushOk('PushManager' in window && 'serviceWorker' in navigator && 'Notification' in window)
+
+    // Get Supabase session token for API calls
+    const supabase = createClientClient()
+    supabase.auth.getSession().then(({ data }) => {
+      setAuthToken(data.session?.access_token ?? null)
+    })
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAuthToken(session?.access_token ?? null)
+    })
 
     const handler = (e: Event) => {
       const notif = (e as CustomEvent<NexusNotification>).detail
       setNotifications(prev => {
         const next = [notif, ...prev]
-        saveNotifications(next)
+        saveLocal(next)
         return next
       })
     }
     window.addEventListener('nexus:notification', handler as EventListener)
-    return () => window.removeEventListener('nexus:notification', handler as EventListener)
+    return () => {
+      window.removeEventListener('nexus:notification', handler as EventListener)
+      subscription.unsubscribe()
+    }
   }, [])
+
+  /* ── Poll API when authenticated ── */
+  const fetchFromApi = useCallback(async (token: string) => {
+    try {
+      const res = await fetch('/api/notifications', {
+        headers: { Authorization: `Bearer ${token}` },
+        cache: 'no-store',
+      })
+      if (!res.ok) return
+      const json = await res.json() as { notifications: NexusNotification[] }
+      const serverNotifs: NexusNotification[] = (json.notifications ?? []).map(n => ({ ...n, _synced: true }))
+      setNotifications(prev => {
+        const merged = merge(serverNotifs, prev)
+        saveLocal(merged)
+        return merged
+      })
+    } catch { /* network error — keep local state */ }
+  }, [])
+
+  useEffect(() => {
+    if (pollRef.current) clearInterval(pollRef.current)
+    if (!authToken) return
+
+    // Immediate fetch, then poll
+    fetchFromApi(authToken)
+    pollRef.current = setInterval(() => fetchFromApi(authToken), POLL_MS)
+
+    return () => { if (pollRef.current) clearInterval(pollRef.current) }
+  }, [authToken, fetchFromApi])
 
   /* ── Close on outside click ── */
   useEffect(() => {
@@ -129,26 +179,39 @@ export default function NotificationBell() {
 
   const unread = notifications.filter(n => !n.read).length
 
+  // Call PATCH for DB notifications (fire-and-forget)
+  const patchRead = useCallback((ids: string[] | 'all') => {
+    if (!authToken) return
+    const body = ids === 'all' ? { all: true } : { ids }
+    fetch('/api/notifications', {
+      method: 'PATCH',
+      headers: { Authorization: `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }).catch(() => {})
+  }, [authToken])
+
   const markAllRead = useCallback(() => {
     setNotifications(prev => {
       const next = prev.map(n => ({ ...n, read: true }))
-      saveNotifications(next)
+      saveLocal(next)
       return next
     })
-  }, [])
+    patchRead('all')
+  }, [patchRead])
 
-  const markRead = useCallback((id: string) => {
+  const markRead = useCallback((id: string, synced?: boolean) => {
     setNotifications(prev => {
       const next = prev.map(n => n.id === id ? { ...n, read: true } : n)
-      saveNotifications(next)
+      saveLocal(next)
       return next
     })
-  }, [])
+    if (synced || UUID_RE.test(id)) patchRead([id])
+  }, [patchRead])
 
   const dismiss = useCallback((id: string) => {
     setNotifications(prev => {
       const next = prev.filter(n => n.id !== id)
-      saveNotifications(next)
+      saveLocal(next)
       return next
     })
   }, [])
@@ -312,7 +375,7 @@ export default function NotificationBell() {
 /* ── Individual notification row ── */
 function NotifRow({ notif, onRead, onDismiss, onClose }: {
   notif: NexusNotification
-  onRead: (id: string) => void
+  onRead: (id: string, synced?: boolean) => void
   onDismiss: (id: string) => void
   onClose: () => void
 }) {
@@ -324,7 +387,7 @@ function NotifRow({ notif, onRead, onDismiss, onClose }: {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={() => {
-        onRead(notif.id)
+        onRead(notif.id, notif._synced)
         if (notif.url) { window.location.href = notif.url; onClose() }
       }}
       style={{
