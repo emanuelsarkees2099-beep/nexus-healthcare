@@ -153,6 +153,20 @@ function ShareableSummary({ passport, masked }: { passport: Passport; masked: bo
     }
   }
 
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'My NEXUS Care Summary',
+          text: summary,
+          url: 'https://nexus.health/passport',
+        })
+      } catch { /* user cancelled share sheet */ }
+    } else {
+      handleCopy()
+    }
+  }
+
   return (
     <div style={{ marginTop: 28 }}>
       <button
@@ -202,6 +216,17 @@ function ShareableSummary({ passport, masked }: { passport: Passport; masked: bo
             >
               {copied ? <TickCircle size={13} color="currentColor" variant="Bold" /> : <Copy size={13} color="currentColor" />}
               {copied ? 'Copied!' : 'Copy to clipboard'}
+            </button>
+            <button
+              onClick={handleShare}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                padding: '8px 16px', borderRadius: 9, border: '1px solid rgba(79,142,240,0.18)',
+                cursor: 'pointer', background: 'rgba(79,142,240,0.06)',
+                color: 'var(--accent)', fontSize: 12, fontFamily: 'inherit', fontWeight: 600,
+              }}
+            >
+              <ExportSquare size={13} color="currentColor" /> Share
             </button>
             <button
               onClick={() => window.print()}
@@ -495,7 +520,7 @@ export default function PassportPage() {
     `Updated: ${passport.lastUpdated}`,
     'nexus.health/passport',
   ].join('\n')
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&format=png&margin=10&data=${encodeURIComponent(qrLines)}`
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&format=png&margin=10&data=${encodeURIComponent(qrLines)}`
 
   return (
     <AppShell>
@@ -531,10 +556,10 @@ export default function PassportPage() {
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={`https://api.qrserver.com/v1/create-qr-code/?size=280x280&format=png&margin=12&data=${encodeURIComponent(qrLines)}`}
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=320x320&format=png&margin=12&data=${encodeURIComponent(qrLines)}`}
               alt="Health Passport QR Code for clinic check-in"
-              width={280} height={280}
-              style={{ borderRadius: '16px', display: 'block', margin: '0 auto 24px', background: 'white', padding: '8px' }}
+              width={320} height={320}
+              style={{ borderRadius: '16px', display: 'block', margin: '0 auto 24px', background: 'white', padding: '8px', maxWidth: 'min(320px, calc(100vw - 80px))' }}
             />
             <div style={{ fontSize: '22px', fontWeight: 800, marginBottom: '8px' }}>
               {masked ? '••••• •.' : passport.name}
@@ -665,8 +690,8 @@ export default function PassportPage() {
             <img
               src={qrUrl}
               alt="Health Passport QR Code — scan at clinic check-in"
-              width={160} height={160}
-              style={{ borderRadius: '10px', display: 'block', background: 'white', padding: '4px' }}
+              width={240} height={240}
+              style={{ borderRadius: '12px', display: 'block', background: 'white', padding: '6px', maxWidth: '100%' }}
             />
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '14px', fontWeight: 600, marginBottom: '4px' }}>

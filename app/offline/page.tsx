@@ -145,7 +145,40 @@ export default function OfflinePage() {
         </p>
       )}
 
-      <div style={{ marginTop: '3rem', position: 'relative', zIndex: 1 }}>
+      {/* Emergency contacts — always available offline (hardcoded) */}
+      <div style={{
+        marginTop: '2rem', width: '100%', maxWidth: '500px',
+        position: 'relative', zIndex: 1,
+        borderTop: '1px solid rgba(255,255,255,0.06)',
+        paddingTop: '1.5rem',
+      }}>
+        <p style={{ fontSize: '11px', color: 'rgba(240,253,248,0.3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>
+          Emergency contacts (always available)
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {[
+            { label: '911 — Emergency services',     tel: '911',          color: '#f87171' },
+            { label: '988 — Mental health crisis',   tel: '988',          color: '#a78bfa' },
+            { label: '211 — Community resources',    tel: '211',          color: '#34d399' },
+            { label: 'Poison Control',               tel: '18002221222',  color: '#fbbf24' },
+            { label: 'RAINN (sexual assault)',        tel: '18006564673',  color: '#60a5fa' },
+          ].map(e => (
+            <a key={e.tel} href={`tel:${e.tel}`} style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '12px 16px', borderRadius: '12px',
+              background: 'rgba(255,255,255,0.02)',
+              border: '1px solid rgba(255,255,255,0.06)',
+              textDecoration: 'none', color: e.color, fontWeight: 600,
+              fontSize: '14px',
+            }}>
+              <span style={{ color: 'rgba(240,253,248,0.7)', fontSize: '13px' }}>{e.label}</span>
+              <span>{e.tel.replace(/^1/, '1-').replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ marginTop: '2rem', position: 'relative', zIndex: 1 }}>
         <Link href="/" style={{ fontSize: '13px', color: 'rgba(240,253,248,0.3)', textDecoration: 'none' }}>
           ← Back to NEXUS
         </Link>

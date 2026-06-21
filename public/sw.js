@@ -3,7 +3,7 @@
    Version: v2
    ========================================================= */
 
-const CACHE_NAME = 'nexus-v3'
+const CACHE_NAME = 'nexus-v4'
 
 /* Pages to precache on install — these work fully offline */
 const PRECACHE_URLS = [
@@ -16,6 +16,8 @@ const PRECACHE_URLS = [
   '/triage',
   '/gps',
   '/passport',
+  '/dashboard',
+  '/medications',
   '/community',
   '/equity',
   '/editorial',

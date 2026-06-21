@@ -31,13 +31,23 @@ const ORBS: Orb[] = [
   { x: 0.10, y: 0.75, vx: 0, vy: 0, r: 0.35, phaseX: 1.50, phaseY: 5.40, speedX: 0.00019, speedY: 0.00027, r1: '90,40,130', r2: '110,60,170',  r3: '140,90,210' },
 ]
 
+function isMobileOrLowEnd(): boolean {
+  if (typeof window === 'undefined') return false
+  // Coarse pointer = touch device (phones/tablets)
+  const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches
+  // Low CPU count — Qualcomm 4xx series, older Snapdragons
+  const lowCPU = typeof navigator !== 'undefined' && (navigator.hardwareConcurrency ?? 8) <= 2
+  return isTouch || lowCPU
+}
+
 export default function BackgroundCanvas() {
   const reducedMotion = useReducedMotion()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const rafRef    = useRef<number>(0)
   const orbsRef   = useRef<Orb[]>(ORBS.map(o => ({ ...o })))
 
-  if (reducedMotion) return null
+  // Skip WebGL on touch devices and low-end hardware — saves battery + GPU
+  if (reducedMotion || isMobileOrLowEnd()) return null
 
   useEffect(() => {
     const canvas = canvasRef.current

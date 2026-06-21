@@ -179,6 +179,17 @@ export default function NotificationBell() {
 
   const unread = notifications.filter(n => !n.read).length
 
+  // Badge API — updates PWA home screen badge on Android Chrome 81+
+  useEffect(() => {
+    if ('setAppBadge' in navigator) {
+      if (unread > 0) {
+        (navigator as Navigator & { setAppBadge: (n: number) => Promise<void> }).setAppBadge(unread).catch(() => {/* permission denied */})
+      } else {
+        (navigator as Navigator & { clearAppBadge: () => Promise<void> }).clearAppBadge?.().catch(() => {/* ignore */})
+      }
+    }
+  }, [unread])
+
   // Call PATCH for DB notifications (fire-and-forget)
   const patchRead = useCallback((ids: string[] | 'all') => {
     if (!authToken) return
@@ -241,7 +252,7 @@ export default function NotificationBell() {
   }, [pushOk, pushOn])
 
   return (
-    <div style={{ position: 'relative' }} ref={panelRef}>
+    <div className="notification-bell-container" style={{ position: 'relative' }} ref={panelRef}>
       {/* ── Bell button ── */}
       <button
         onClick={() => setOpen(o => !o)}
@@ -277,7 +288,7 @@ export default function NotificationBell() {
       {open && (
         <div style={{
           position: 'absolute', top: 'calc(100% + 10px)', right: 0,
-          width: '320px', maxHeight: '450px',
+          width: 'min(320px, calc(100vw - 24px))', maxHeight: '70dvh',
           background: 'rgba(8,10,22,0.97)',
           border: '1px solid rgba(255,255,255,0.09)',
           borderRadius: '16px',

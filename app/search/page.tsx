@@ -565,7 +565,9 @@ function SearchResults() {
                   value={locationVal}
                   onChange={e => handleLocationChange(e.target.value)}
                   placeholder={t('search.locationPlaceholder')}
-                  style={{ background: 'none', border: 'none', outline: 'none', color: 'var(--text)', fontFamily: 'var(--font-inter),sans-serif', fontSize: '13px', width: '130px', caretColor: 'var(--accent)' }}
+                  inputMode="numeric"
+                  autoComplete="postal-code"
+                  style={{ background: 'none', border: 'none', outline: 'none', color: 'var(--text)', fontFamily: 'var(--font-inter),sans-serif', fontSize: '16px', width: '130px', caretColor: 'var(--accent)' }}
                 />
               </div>
 
@@ -598,7 +600,7 @@ function SearchResults() {
         <div className="sticky-filter-bar">
 
         {/* Specialty filter pills (#14) + Phase 2.1 Get Matched button */}
-        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px', alignItems: 'center' }}>
+        <div className="filter-pill-track" style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px', alignItems: 'center' }}>
           {SPECIALTY_FILTERS.map(f => (
             <button
               key={f.id}

@@ -296,6 +296,8 @@ export default function TriagePage() {
       <QuickExit />
       <style>{`
         .triage-step { animation: fadeSlideUp 0.4s cubic-bezier(0.16,1,0.3,1) both; }
+        /* Prevent iOS pull-to-refresh from interrupting triage flow */
+        body { overscroll-behavior-y: contain; }
         @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .triage-result { animation: fadeSlideUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
         .triage-ta:focus { outline: none !important; border-color: rgba(74,144,217,0.4) !important; }
@@ -450,7 +452,7 @@ export default function TriagePage() {
                   width: '100%', padding: '20px', borderRadius: '20px',
                   background: 'rgba(255,255,255,0.03)',
                   border: '1px solid rgba(255,255,255,0.12)',
-                  color: '#f5f5f5', fontSize: '15px', lineHeight: 1.7,
+                  color: '#f5f5f5', fontSize: '16px', lineHeight: 1.7,
                   fontFamily: 'var(--font-inter)',
                   resize: 'none', transition: 'border-color 0.2s',
                   boxSizing: 'border-box',
