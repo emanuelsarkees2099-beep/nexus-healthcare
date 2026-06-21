@@ -172,36 +172,38 @@ export default function SearchBar({
           }
         }}
       >
-        {/* Search icon */}
-        <SearchNormal1 aria-hidden="true" size={18} color="var(--accent)" variant="Linear" style={{ flexShrink: 0, opacity: 0.5 }} />
-
-        {/* Main input */}
-        <label htmlFor="main-search" className="sr-only">Search for free healthcare near you</label>
-        <input
-          ref={inputRef}
-          id="main-search"
-          type="search"
-          value={searchVal}
-          onChange={e => setSearchVal(e.target.value)}
-          placeholder={placeholder}
-          autoComplete="off"
-          aria-label="Search for free healthcare near you"
-          aria-autocomplete="list"
-          aria-controls={showSuggestions ? 'search-suggestions' : undefined}
-          aria-activedescendant={suggestionIdx >= 0 ? `suggestion-${suggestionIdx}` : undefined}
-          onKeyDown={handleKeyDown}
-          style={{
-            flex: 1, background: 'none', border: 'none', outline: 'none',
-            color: 'var(--text)', fontFamily: 'var(--font-inter)',
-            fontSize: '15px', fontWeight: 400, padding: '9px 0', cursor: 'text',
-          }}
-        />
+        {/* Query row: icon + input together so they stay horizontal when the outer flex stacks */}
+        <div className="search-query-row" style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: 0 }}>
+          <SearchNormal1 aria-hidden="true" size={18} color="var(--accent)" variant="Linear" style={{ flexShrink: 0, opacity: 0.5 }} />
+          <label htmlFor="main-search" className="sr-only">Search for free healthcare near you</label>
+          <input
+            ref={inputRef}
+            id="main-search"
+            type="search"
+            value={searchVal}
+            onChange={e => setSearchVal(e.target.value)}
+            placeholder={placeholder}
+            autoComplete="off"
+            aria-label="Search for free healthcare near you"
+            aria-autocomplete="list"
+            aria-controls={showSuggestions ? 'search-suggestions' : undefined}
+            aria-activedescendant={suggestionIdx >= 0 ? `suggestion-${suggestionIdx}` : undefined}
+            onKeyDown={handleKeyDown}
+            style={{
+              flex: 1, background: 'none', border: 'none', outline: 'none',
+              color: 'var(--text)', fontFamily: 'var(--font-inter)',
+              fontSize: '15px', fontWeight: 400, padding: '9px 0', cursor: 'text',
+              minWidth: 0,
+            }}
+          />
+        </div>
 
         {/* Divider */}
-        <div style={{ width: '1px', height: '26px', background: 'var(--border2)', flexShrink: 0 }} aria-hidden="true" />
+        <div className="search-divider" style={{ width: '1px', height: '26px', background: 'var(--border2)', flexShrink: 0 }} aria-hidden="true" />
 
         {/* Location input */}
         <div
+          className="search-loc-wrap"
           style={{ display: 'flex', alignItems: 'center', gap: '7px', flexShrink: 0, padding: '0 4px' }}
           onClick={() => { setEditingLoc(true); setTimeout(() => locationRef.current?.focus(), 50) }}
         >

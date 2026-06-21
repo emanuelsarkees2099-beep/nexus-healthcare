@@ -420,7 +420,7 @@ function SearchResults() {
       `}</style>
       {/* ── Hero (shown before any search) ── */}
       {!locationVal && !loading && clinics.length === 0 && (
-        <div style={{
+        <div className="search-page-hero" style={{
           minHeight: 'calc(100vh - 62px)',
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
@@ -462,28 +462,29 @@ function SearchResults() {
           </p>
 
           {/* Large search form */}
-          <form onSubmit={handleSearch} style={{ width: '100%', maxWidth: '580px', opacity: heroWords[3] ? 1 : 0, transform: heroWords[3] ? 'translateY(0)' : 'translateY(12px)', transition: 'opacity 0.6s ease 0.5s, transform 0.6s cubic-bezier(0.16,1,0.3,1) 0.5s' }}>
-            <div style={{ display: 'flex', gap: '0', borderRadius: '16px', overflow: 'hidden', border: '1.5px solid rgba(79,142,240,0.28)', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(10px)', boxShadow: '0 20px 60px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.04)' }}>
+          <form onSubmit={handleSearch} className="search-hero-form" style={{ width: '100%', maxWidth: '580px', opacity: heroWords[3] ? 1 : 0, transform: heroWords[3] ? 'translateY(0)' : 'translateY(12px)', transition: 'opacity 0.6s ease 0.5s, transform 0.6s cubic-bezier(0.16,1,0.3,1) 0.5s' }}>
+            <div className="search-hero-row" style={{ display: 'flex', gap: '0', borderRadius: '16px', overflow: 'hidden', border: '1.5px solid rgba(79,142,240,0.28)', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(10px)', boxShadow: '0 20px 60px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.04)' }}>
               {/* Query input */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, padding: '14px 18px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
+              <div className="search-hero-query" style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, padding: '14px 18px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
                 <SearchNormal1 size={18} color="rgba(255,255,255,0.35)" style={{ flexShrink: 0 }} />
                 <input
                   value={inputVal} onChange={e => setInputVal(e.target.value)}
                   placeholder="Condition, specialty, or clinic name"
-                  style={{ flex: 1, background: 'none', border: 'none', outline: 'none', color: 'var(--text)', fontFamily: 'var(--font-inter)', fontSize: '15px', caretColor: 'var(--accent)' }}
+                  style={{ flex: 1, background: 'none', border: 'none', outline: 'none', color: 'var(--text)', fontFamily: 'var(--font-inter)', fontSize: '16px', caretColor: 'var(--accent)' }}
                 />
               </div>
               {/* Location input */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 18px', minWidth: '160px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
+              <div className="search-hero-loc" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 18px', minWidth: '160px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
                 <Location size={16} color="var(--accent)" style={{ flexShrink: 0 }} />
                 <input
                   value={locationVal} onChange={e => handleLocationChange(e.target.value)}
                   placeholder="ZIP or city"
-                  style={{ width: '120px', background: 'none', border: 'none', outline: 'none', color: 'var(--text)', fontFamily: 'var(--font-inter)', fontSize: '15px', caretColor: 'var(--accent)' }}
+                  inputMode="numeric"
+                  style={{ width: '100%', background: 'none', border: 'none', outline: 'none', color: 'var(--text)', fontFamily: 'var(--font-inter)', fontSize: '16px', caretColor: 'var(--accent)' }}
                 />
               </div>
               {/* Submit */}
-              <button type="submit" style={{ background: 'var(--accent)', color: 'var(--bg)', border: 'none', padding: '0 28px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-inter)', transition: 'opacity 0.18s', flexShrink: 0, letterSpacing: '0.01em' }}
+              <button type="submit" className="search-hero-submit" style={{ background: 'var(--accent)', color: 'var(--bg)', border: 'none', padding: '0 28px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-inter)', transition: 'opacity 0.18s', flexShrink: 0, letterSpacing: '0.01em' }}
                 onMouseEnter={e => (e.currentTarget.style.opacity = '0.87')}
                 onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
               >

@@ -124,7 +124,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <ScrollProgress />
       <Nav />
       <CrisisButton />
-      <main style={{ paddingTop: '62px', minHeight: '100dvh' }}>
+      <main className="app-main" style={{ paddingTop: '62px', minHeight: '100dvh' }}>
         <PageTransition>{children}</PageTransition>
       </main>
       <Footer />

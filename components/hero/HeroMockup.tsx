@@ -53,6 +53,7 @@ export default function HeroMockup({ mockupRef }: HeroMockupProps) {
   return (
     <div
       ref={mockupRef}
+      className="hero-mockup-wrap"
       style={{
         position: 'relative', zIndex: 2,
         width: '100%', maxWidth: '860px',

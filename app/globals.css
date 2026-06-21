@@ -5263,3 +5263,358 @@ input[inputmode="decimal"] {
   }
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   NEXUS MOBILE — Apple-quality native feel
+   Baseline: iPhone SE (375px) → iPhone 15 Pro Max (430px)
+             → mid-range Android (360–393px)
+   Philosophy: full-width content, 16-20px side gutters,
+               48px touch targets, no horizontal overflow,
+               dock clearance at bottom.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── 1. DOCK CLEARANCE ──────────────────────────────────────────── */
+/* Content must never scroll behind the bottom dock.
+   .app-main is set in AppShell.tsx */
+@media (max-width: 768px) {
+  .app-main {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* ── 2. NAV: always visible background on mobile ────────────────── */
+/* The floating pill nav starts transparent; force opaque on mobile
+   so it's always legible against any page content. */
+@media (max-width: 768px) {
+  #main-nav {
+    background: rgba(5,5,11,0.96) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border-color: rgba(255,255,255,0.09) !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.40) !important;
+  }
+}
+
+/* ── 3. HERO: hide desktop browser mockup ───────────────────────── */
+/* The HeroMockup is a 860px-wide desktop app screenshot. It clips
+   badly on phones and adds no value — hide it. */
+@media (max-width: 768px) {
+  .hero-mockup-wrap {
+    display: none !important;
+  }
+  /* Tighten hero vertical padding so content fills the screen nicely */
+  #hero {
+    min-height: calc(100svh - 62px) !important;
+    padding-bottom: 32px !important;
+    justify-content: flex-start !important;
+    padding-top: 0 !important;
+  }
+  #hero > div[style] {
+    padding-top: clamp(24px, 8vw, 48px) !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    max-width: 100% !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+  #hero h1 {
+    text-align: left !important;
+    font-size: clamp(2rem, 9vw, 3rem) !important;
+  }
+  #hero p {
+    text-align: left !important;
+    font-size: 15px !important;
+  }
+  /* Social proof row: stack vertically on very narrow screens */
+  #hero [style*="flexWrap: wrap"] {
+    gap: 8px !important;
+  }
+}
+@media (max-width: 480px) {
+  #hero h1 { font-size: clamp(1.85rem, 8.5vw, 2.6rem) !important; }
+}
+
+/* ── 4. HERO SEARCH BAR: single-column on mobile ───────────────── */
+/* The search bar is a 3-part horizontal row on desktop.
+   On mobile we stack: query row → location row → button. */
+@media (max-width: 640px) {
+  .search-bar-root {
+    width: 100% !important;
+  }
+  /* Stack the inner row vertically */
+  .search-inner {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    border-radius: var(--r-card) !important;
+    overflow: hidden !important;
+  }
+  /* Query row: icon + input, full width with padding */
+  .search-query-row {
+    padding: 14px 16px !important;
+    border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  .search-query-row input {
+    font-size: 16px !important;
+  }
+  /* Hide vertical divider */
+  .search-divider {
+    display: none !important;
+  }
+  /* Location section: full row below query */
+  .search-loc-wrap {
+    width: 100% !important;
+    padding: 12px 16px !important;
+    border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+    flex-shrink: unset !important;
+    min-width: unset !important;
+  }
+  .search-loc-wrap input {
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 16px !important;
+  }
+  /* Submit button: full-width pill at bottom */
+  .search-submit {
+    border-radius: 0 0 var(--r-card) var(--r-card) !important;
+    width: 100% !important;
+    padding: 15px !important;
+    font-size: 15px !important;
+    min-height: 52px !important;
+    text-align: center !important;
+  }
+}
+
+/* ── 5. SEARCH PAGE HERO: stack + compact ───────────────────────── */
+@media (max-width: 768px) {
+  .search-page-hero {
+    padding: 48px 20px 40px !important;
+    min-height: 0 !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+  }
+  .search-page-hero h1 {
+    text-align: left !important;
+    font-size: clamp(2rem, 9vw, 3rem) !important;
+  }
+  .search-page-hero p { text-align: left !important; }
+  /* Stack the hero form */
+  .search-hero-row {
+    flex-direction: column !important;
+    border-radius: var(--r-card) !important;
+    overflow: hidden !important;
+  }
+  .search-hero-query {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+    width: 100% !important;
+    padding: 14px 16px !important;
+  }
+  .search-hero-loc {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    padding: 12px 16px !important;
+  }
+  .search-hero-loc input {
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 16px !important;
+  }
+  .search-hero-submit {
+    width: 100% !important;
+    padding: 15px !important;
+    font-size: 15px !important;
+    min-height: 52px !important;
+    border-radius: 0 !important;
+  }
+  /* Category shortcut pills: wrap to two per row */
+  .search-page-hero > div[style*="flexWrap"] {
+    justify-content: flex-start !important;
+  }
+}
+
+/* ── 6. FEATURES BENTO GRID ─────────────────────────────────────── */
+/* Already handled by Features.tsx inline @media rule — confirmed OK */
+
+/* ── 7. STATS / HOW-IT-WORKS / LOGOS ────────────────────────────── */
+@media (max-width: 768px) {
+  /* Stats bar: 2-column on mobile */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+  /* How-it-works steps: single column */
+  .hiw-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  /* Testimonials: single column */
+  .testimonials-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── 8. CARD SYSTEM: full-width on mobile ───────────────────────── */
+@media (max-width: 768px) {
+  .bento-card, .nexus-card {
+    /* Ensure cards never overflow their container */
+    min-width: 0 !important;
+    word-break: break-word !important;
+  }
+  /* Clinic cards: clean tap state */
+  .clinic-card, .bento-card, .nexus-card {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ── 9. PROGRAMS / MEDICATIONS / CHW SECTIONS ───────────────────── */
+/* auto-fill minmax grids already collapse to 1 column at narrow
+   widths — but set a safe floor for the gutter */
+@media (max-width: 768px) {
+  /* Programs, medications, CHW page containers */
+  [style*="maxWidth: '1100px'"],
+  [style*="maxWidth: '900px'"],
+  [style*="maxWidth: '800px'"],
+  [style*="max-width: 1100px"],
+  [style*="max-width: 900px"] {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
+
+/* ── 10. BUTTONS: Apple HIG 44pt touch target ───────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  .btn-primary,
+  .btn-secondary,
+  button[type="submit"],
+  .cta-btn {
+    min-height: 48px !important;
+    font-size: 16px !important;
+  }
+  /* Generic action buttons that are too small */
+  button:not(.dock-item):not(.nav-hamburger):not(.geo-btn):not(.banner-dismiss) {
+    min-height: 36px;
+  }
+}
+
+/* ── 11. SECTION VERTICAL RHYTHM ────────────────────────────────── */
+/* Most page sections have inline padding styles. We reduce the
+   top/bottom breathing room globally on phones. */
+@media (max-width: 768px) {
+  /* Named section classes used across pages */
+  .page-section,
+  .section-wrap,
+  .section-inner {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
+
+/* ── 12. TRIAGE PAGE ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Category grid: 2 columns */
+  .triage-category-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  /* Triage result cards: full-width CTAs */
+  .triage-cta-row {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+  .triage-cta-row > * {
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
+
+/* ── 13. PASSPORT PAGE ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Passport action buttons: stack vertically */
+  .passport-actions {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  .passport-actions button,
+  .passport-actions a {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* ── 14. PROGRAMS QUIZ ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Quiz options: 1 column */
+  .quiz-options-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── 15. FOOTER: compact on mobile ──────────────────────────────── */
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  footer {
+    padding: 40px 20px !important;
+  }
+}
+
+/* ── 16. CRISIS PAGE: already has large tap targets via
+         .crisis-call-btn — confirm btn is full width ──────────────── */
+@media (max-width: 768px) {
+  .crisis-resources-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── 17. OVERFLOW GUARD: no horizontal scroll anywhere ──────────── */
+@media (max-width: 768px) {
+  html, body {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  /* Wide decorative elements: cap to viewport */
+  .hero-mockup-wrap,
+  .map-split > div:last-child,
+  .bg-blob {
+    max-width: 100vw !important;
+    overflow: hidden !important;
+  }
+}
+
+/* ── 18. TYPOGRAPHY: tighten on tiny screens ────────────────────── */
+@media (max-width: 380px) {
+  h1 { font-size: clamp(1.75rem, 8.5vw, 2.2rem) !important; }
+  h2 { font-size: clamp(1.2rem, 6vw, 1.6rem) !important; }
+  h3 { font-size: clamp(1rem, 5vw, 1.2rem) !important; }
+}
+
+/* ── 19. INPUT FOCUS: no zoom on iOS (font-size ≥ 16px) ─────────── */
+input, textarea, select {
+  font-size: max(16px, 1em);
+}
+/* Override only where smaller is explicitly desired and zoom won't trigger */
+.filter-pill input,
+.search-pill-input {
+  font-size: 14px;
+}
+
+/* ── 20. ANIMATIONS: simpler on mobile for performance ──────────── */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove floating animation from HeroMockup (it's hidden but just in case) */
+  .hero-mockup-wrap { animation: none !important; }
+  /* No parallax on mobile */
+  [style*="willChange: 'transform'"] { will-change: auto !important; }
+  /* Snap scroll animations immediately */
+  .reveal-fade, .reveal-clip, .reveal-up {
+    transition-duration: 0.25s !important;
+  }
+}
+
