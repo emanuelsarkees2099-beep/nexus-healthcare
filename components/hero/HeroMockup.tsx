@@ -186,7 +186,7 @@ export default function HeroMockup({ mockupRef }: HeroMockupProps) {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
               <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 400 }}>Clinics Near You</div>
-              <div style={{ fontSize: '10px', color: 'var(--accent)', fontFamily: 'var(--font-inter)' }}>See all â†’</div>
+              <div style={{ fontSize: '10px', color: 'var(--accent)', fontFamily: 'var(--font-inter)' }}>See all {'→'}</div>
             </div>
 
             {RESULTS.map((r, i) => (
@@ -261,7 +261,7 @@ export default function HeroMockup({ mockupRef }: HeroMockupProps) {
           fontSize: '11px', color: 'var(--accent)', fontFamily: 'var(--font-inter)',
           opacity: 0.8, animationDelay: '0.7s',
         }}>
-          + 47 more clinics found â†’
+          + 47 more clinics found {'→'}
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-﻿'use client'
+﻿﻿'use client'
 import { useEffect, useRef, useState } from 'react'
 import { useI18n } from '@/components/I18nContext'
 import { SearchNormal1, Location, Gps } from 'iconsax-react'
@@ -279,7 +279,7 @@ export default function SearchBar({
             transition: 'box-shadow 0.2s',
           }}
         >
-          {t('home.hero.cta')} â†’
+          {t('home.hero.cta')} {'→'}
         </button>
       </div>
 

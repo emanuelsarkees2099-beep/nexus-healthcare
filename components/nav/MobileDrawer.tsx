@@ -222,7 +222,7 @@ export default function MobileDrawer({ open, onClose, links, user, onLogout, onA
           border: '1px solid rgba(255,255,255,0.09)',
           borderRadius: '20px', padding: '16px',
           boxShadow: '0 32px 80px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.04) inset',
-          transform: open ? 'scale(1) translateX(0) translateY(0)' : 'scale(0.92) translateX(20px) translateY(-8px)',
+          transform: open ? 'scale(1) translateX(0) translateY(0)' : 'scale(0.92) translateX(0) translateY(-8px)',
           opacity: open ? 1 : 0,
           pointerEvents: open ? 'auto' : 'none',
           transformOrigin: 'top right',

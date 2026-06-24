@@ -1186,7 +1186,7 @@ export default function DashboardPage() {
         {/* ── Quick Actions ───────────────────────────────────────────────── */}
         <section className="db-fade db-fade-4" style={{ marginBottom: 32 }} aria-label="Quick actions">
           <SectionLabel label="Quick Actions" />
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+          <div className="qa-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
             {([
               { href: '/triage',      label: 'I need care now',        Icon: Danger,      color: 'rgba(248,113,113,0.85)', bg: 'rgba(248,113,113,0.07)', border: 'rgba(248,113,113,0.18)' },
               { href: '/medications', label: 'Refill a prescription',  Icon: Activity,    color: 'rgba(251,191,36,0.85)',  bg: 'rgba(251,191,36,0.07)',  border: 'rgba(251,191,36,0.18)'  },

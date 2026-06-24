@@ -398,7 +398,7 @@ export default function MissionFreeze() {
               fontSize: '11px', color: 'var(--bg)', fontWeight: 500, fontFamily: 'var(--font-inter)',
               boxShadow: '0 4px 16px rgba(74,144,217,0.30)', cursor: 'default',
             }}>
-              Find care near me â†’
+              Find care near me {'→'}
             </div>
           </div>
 

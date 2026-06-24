@@ -243,6 +243,7 @@ export default function Hero() {
       ════════════════════════════════════════ */}
       <div
         ref={contentRef}
+        className="hero-content"
         style={{
           position: 'relative', zIndex: 2,
           paddingTop: 'clamp(80px, 10vh, 120px)',
@@ -267,7 +268,7 @@ export default function Hero() {
             display: 'inline-block', width: '24px', height: '1px',
             background: 'var(--accent)', opacity: 0.6,
           }} />
-          <span style={{
+          <span className="hero-badge" style={{
             fontSize: '12px', fontWeight: 400, letterSpacing: '0.12em',
             textTransform: 'uppercase', color: 'var(--text-3)',
             fontFamily: 'var(--font-inter)',

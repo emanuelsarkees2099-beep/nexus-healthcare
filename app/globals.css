@@ -1186,7 +1186,7 @@ a.animated-link:hover::after { width: 100%; }
   .stat-item:nth-child(odd) { border-right:1px solid var(--border2) !important; }
   #cta-grid { grid-template-columns:1fr !important; gap:2.5rem !important; }
   #how > div { grid-template-columns:1fr !important; }
-  section,[id] { padding-top:clamp(60px,10vw,100px) !important; padding-bottom:clamp(60px,10vw,100px) !important; }
+  section { padding-top:clamp(60px,10vw,100px) !important; padding-bottom:clamp(60px,10vw,100px) !important; }
   .floating-cta { width:calc(100% - 2rem) !important; }
   .floating-cta > div { width:100% !important; }
   #testimonials .t-row-2 { display:none !important; }
@@ -5306,10 +5306,10 @@ input[inputmode="decimal"] {
     min-height: calc(100svh - 62px) !important;
     padding-bottom: 32px !important;
     justify-content: flex-start !important;
-    padding-top: 0 !important;
   }
-  #hero > div[style] {
-    padding-top: clamp(24px, 8vw, 48px) !important;
+  /* Target the hero content div by its class (added to Hero.tsx) */
+  .hero-content {
+    padding-top: clamp(24px, 10vw, 56px) !important;
     padding-left: 20px !important;
     padding-right: 20px !important;
     max-width: 100% !important;
@@ -5324,7 +5324,7 @@ input[inputmode="decimal"] {
     text-align: left !important;
     font-size: 15px !important;
   }
-  /* Social proof row: stack vertically on very narrow screens */
+  /* Social proof row: allow wrapping */
   #hero [style*="flexWrap: wrap"] {
     gap: 8px !important;
   }
@@ -5616,5 +5616,137 @@ input, textarea, select {
   .reveal-fade, .reveal-clip, .reveal-up {
     transition-duration: 0.25s !important;
   }
+}
+
+/* ── 21. DASHBOARD QUICK ACTIONS: 4-col → 2-col on mobile ───────── */
+/* qa-grid class is now on the Quick Actions div in dashboard/page.tsx */
+@media (max-width: 640px) {
+  .qa-grid { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 380px) {
+  .qa-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ── 22. PROFILE PAGE: stack label + input on mobile ────────────── */
+/* The Field component uses gridTemplateColumns:'160px 1fr' which is
+   too cramped on phones — stack vertically instead. */
+@media (max-width: 640px) {
+  .pf-field {
+    grid-template-columns: 1fr !important;
+    gap: 4px !important;
+  }
+}
+
+/* ── 23. HOME PAGE / NON-APPSHELL PAGES: dock clearance ─────────── */
+/* Pages that don't use AppShell (home, dashboard) need bottom
+   clearance for the MobileDock via footer or inline padding. */
+@media (max-width: 768px) {
+  footer {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 16px)) !important;
+  }
+}
+
+/* ── 24. TRIAGE PAGE: reduce hero top padding on small screens ───── */
+@media (max-width: 768px) {
+  /* Triage header section uses clamp(80px, 10vw, 120px) top padding inline.
+     Target it via its unique gradient background. Can't beat inline styles
+     without a class — tighten by adjusting the section's first child spacing. */
+  /* Instead: reduce the disclaimer banner margin so content starts sooner */
+  .triage-disclaimer {
+    margin-top: 0 !important;
+    margin-bottom: 24px !important;
+  }
+}
+
+/* ── 25. CRISIS PAGE: 988 button — full width on small phones ────── */
+@media (max-width: 420px) {
+  .crisis-call-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 20px 24px !important;
+    font-size: 20px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* ── 26. DASHBOARD: bottom dock clearance (no AppShell on /dashboard) */
+/* Dashboard's <main> has inline padding-bottom: 96px which covers the dock.
+   Also ensure the dashboard root div fills properly. */
+@media (max-width: 768px) {
+  /* Reduce nav padding on mobile for tighter layout */
+  .db-nav-pad {
+    padding: 0 16px !important;
+  }
+}
+
+/* ── 27. SEARCH RESULTS: tighter padding on mobile ──────────────── */
+/* The sticky header already has a mobile override in search/page.tsx.
+   Additional global rule ensures the search bar row wraps cleanly. */
+@media (max-width: 640px) {
+  .search-bar-row {
+    gap: 6px !important;
+  }
+  /* Location input: let it shrink to fit alongside submit */
+  .search-bar-row > div:nth-child(2) {
+    min-width: 100px !important;
+  }
+}
+
+/* ── 28. MOBILE FABs: lift crisis + AI buttons above the bottom dock ── */
+/* Both .crisis-btn and .ai-fab use inline bottom:24px. On mobile that
+   puts them inside the dock (64px tall). Override to sit above it.    */
+@media (max-width: 768px) {
+  .crisis-btn {
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  .ai-fab {
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 76px !important;
+  }
+  .ai-chat-panel {
+    bottom: calc(128px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 16px !important;
+    width: calc(100vw - 32px) !important;
+  }
+}
+
+/* ── 29. LOGIN / AUTH PAGES: checkbox square fix ───────────────────── */
+@media (max-width: 768px) {
+  input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    padding: 0 !important;
+    appearance: auto !important;
+    -webkit-appearance: checkbox !important;
+    accent-color: var(--accent) !important;
+  }
+}
+
+/* ── 30. HERO BADGE: prevent "FREE · PRIVATE · NO INSURANCE REQUIRED"
+   from wrapping to two lines on small phones. Shrink font & padding.  */
+@media (max-width: 480px) {
+  .hero-badge {
+    font-size: 9px !important;
+    letter-spacing: 0.08em !important;
+    padding: 5px 10px !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* ── 31. NAV HAMBURGER: remove focus ring on mobile (touch devices, no keyboard nav) */
+@media (max-width: 768px) {
+  .nav-hamburger,
+  .nav-hamburger:focus,
+  .nav-hamburger:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ── 32. HERO HEADING: tighter font on narrow screens to reduce breaks ── */
+@media (max-width: 390px) {
+  #hero h1 { font-size: clamp(1.7rem, 8vw, 2.4rem) !important; }
 }
 
