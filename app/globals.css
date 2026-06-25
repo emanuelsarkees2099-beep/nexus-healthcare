@@ -5750,3 +5750,90 @@ input, textarea, select {
   #hero h1 { font-size: clamp(1.7rem, 8vw, 2.4rem) !important; }
 }
 
+/* ══════════════════════════════════════════════════════════════════════
+   33. COMPREHENSIVE MOBILE LAYOUT — systematic fix for all pages
+   ══════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── STATS: 4-column → 2×2 grid (visible on every page) ── */
+  #stats-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    padding: 0 0.5rem !important;
+  }
+  .stat-item {
+    border-right: none !important;
+    border-bottom: 1px solid var(--border2) !important;
+    padding: 1.25rem 1rem !important;
+  }
+  .stat-item:nth-child(odd)  { border-right: 1px solid var(--border2) !important; }
+  .stat-item:nth-last-child(-n+2) { border-bottom: none !important; }
+
+  /* ── ABOUT: 4-column facts grid → 2×2 ── */
+  .about-facts-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  /* About page side-by-side columns → stacked ── */
+  .about-split-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* ── TRIAGE: 4-column category chips → 2-column ── */
+  .triage-category-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+  }
+
+  /* ── DASHBOARD: 4-column quick-action grid → 2-column ── */
+  .db-grid-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* ── JOURNEY / VERIFICATION DIAGRAMS: horizontally scrollable ── */
+  .cv-auto {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    overflow: hidden !important;
+  }
+  .cv-auto > div:nth-child(2),
+  .cv-auto > div:nth-child(3) {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    border-radius: 12px !important;
+    margin: 0 16px 16px !important;
+  }
+
+  /* ── MEGA MENU: hidden on mobile, don't let it cause overflow ── */
+  .mega-item, .mega-col, nav .mega-menu-panel {
+    display: none !important;
+  }
+
+  /* ── GENERAL SECTIONS: consistent side padding ── */
+  .section-inner,
+  .page-inner {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* ── SEARCH PAGE: result card layout ── */
+  .clinic-card-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── OUTCOMES / IMPACT: 3-col → 1-col ── */
+  .outcomes-hero-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* ── PARTNER GRID: 3-col → 2-col ── */
+  .partner-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* ── CALENDAR: 7-col day grid → scrollable ── */
+  .calendar-week-grid {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
