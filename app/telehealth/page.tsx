@@ -206,7 +206,7 @@ export default function TelehealthPage() {
 
   return (
     <AppShell>
-      <div style={{ minHeight: '100vh', background: '#07070F', paddingTop: '100px' }}>
+      <div style={{ minHeight: '100vh', background: '#07070F' }}>
 
         {/* ── HERO ─────────────────────────────── */}
         <section style={{ padding: '60px 24px 40px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>

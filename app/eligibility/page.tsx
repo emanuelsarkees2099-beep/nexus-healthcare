@@ -981,7 +981,7 @@ export default function EligibilityPage() {
         ])}
         id="schema-breadcrumb-eligibility"
       />
-      <div style={{ minHeight: '100vh', background: '#07070F', paddingTop: '100px' }}>
+      <div style={{ minHeight: '100vh', background: '#07070F' }}>
 
         {/* ── PAGE HERO ───────────────────────────── */}
         <section style={{ padding: '60px 24px 48px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>

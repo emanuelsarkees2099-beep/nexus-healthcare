@@ -350,8 +350,15 @@ export default function EditorialPage() {
         <div style={{ maxWidth: '1100px', margin: '0 auto', paddingTop: '48px' }}>
 
           {/* Filter bar */}
+          <style>{`
+            @media (max-width: 640px) {
+              .editorial-filter-bar { flex-direction: column !important; align-items: stretch !important; }
+              .editorial-search-box { margin-left: 0 !important; }
+              .editorial-search-input { flex: 1 !important; width: auto !important; min-width: 0 !important; }
+            }
+          `}</style>
           <Reveal>
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '48px' }}>
+            <div className="editorial-filter-bar" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '48px' }}>
               {/* Category pills */}
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                 {CATEGORIES.map(cat => (
@@ -375,9 +382,10 @@ export default function EditorialPage() {
               </div>
 
               {/* Search box */}
-              <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '100px', padding: '8px 14px', transition: 'border-color 0.2s' }}>
+              <div className="editorial-search-box" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '100px', padding: '8px 14px', transition: 'border-color 0.2s' }}>
                 <SearchNormal1 size={13} variant="Linear" color="rgba(255,255,255,0.4)" />
                 <input
+                  className="editorial-search-input"
                   type="search"
                   placeholder="Search articles…"
                   value={search}
