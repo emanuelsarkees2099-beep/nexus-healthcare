@@ -5790,17 +5790,10 @@ input, textarea, select {
   }
 
   /* ── JOURNEY / VERIFICATION DIAGRAMS: horizontally scrollable ── */
-  .cv-auto {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    overflow: hidden !important;
-  }
-  .cv-auto > div:nth-child(2),
-  .cv-auto > div:nth-child(3) {
+  #diagrams-section > div:nth-child(2),
+  #diagrams-section > div:nth-child(3) {
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
-    border-radius: 12px !important;
-    margin: 0 16px 16px !important;
   }
 
   /* ── MEGA MENU: hidden on mobile, don't let it cause overflow ── */

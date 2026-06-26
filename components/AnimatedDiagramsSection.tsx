@@ -6,7 +6,7 @@ const VerificationDiagram = dynamic(() => import('@/components/VerificationDiagr
 
 export default function AnimatedDiagramsSection() {
   return (
-    <section className="cv-auto" style={{ padding: '80px 24px', maxWidth: '1000px', margin: '0 auto' }}>
+    <section id="diagrams-section" className="cv-auto" style={{ padding: '80px 24px', maxWidth: '1000px', margin: '0 auto' }}>
       <div style={{ textAlign: 'center', marginBottom: '48px' }}>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '8px',
