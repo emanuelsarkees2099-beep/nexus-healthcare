@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { verifyCronBearer } from '@/lib/cron-auth'
 
 // ── Cron: Weekly Impact Digest ─────────────────────────────────────────────────
 // Runs every Monday at 8 AM UTC via Vercel Cron.
@@ -180,12 +181,10 @@ async function sendDigestEmail(stats: WeeklyStats): Promise<boolean> {
 export async function GET(req: NextRequest) {
   // Require CRON_SECRET — if it's not set the route is disabled entirely.
   // This prevents the digest from being triggered by anyone who knows the URL.
-  const cronSecret = process.env.CRON_SECRET
-  if (!cronSecret) {
+  if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'CRON_SECRET not configured' }, { status: 503 })
   }
-  const authHeader = req.headers.get('Authorization')
-  if (authHeader !== `Bearer ${cronSecret}`) {
+  if (!verifyCronBearer(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

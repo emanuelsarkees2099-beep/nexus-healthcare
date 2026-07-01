@@ -141,8 +141,12 @@ export async function POST(req: NextRequest) {
     return twiml('Sorry, we could not process your message. Visit nexushealth.org for help.')
   }
 
-  // Validate Twilio signature in production
-  if (process.env.NODE_ENV === 'production' && process.env.TWILIO_AUTH_TOKEN) {
+  // Validate Twilio signature in production — reject if token is not configured
+  if (process.env.NODE_ENV === 'production') {
+    if (!process.env.TWILIO_AUTH_TOKEN) {
+      console.error('[NEXUS SMS] TWILIO_AUTH_TOKEN not set — rejecting request in production')
+      return new NextResponse('Service Unavailable', { status: 503 })
+    }
     const valid = await validateTwilioSignature(req, bodyText)
     if (!valid) {
       return new NextResponse('Forbidden', { status: 403 })

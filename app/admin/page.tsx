@@ -59,21 +59,10 @@ export default function AdminPage() {
         .eq('id', session.user.id)
         .single()
 
-      // Primary check: user_type must be 'admin' in the database
+      // Gate: user_type must be 'admin' in the database (enforced by RLS)
       if (profile?.user_type !== 'admin') {
         router.push('/')
         return
-      }
-
-      // Secondary check: email must match NEXT_PUBLIC_ADMIN_EMAILS whitelist (if set)
-      const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS
-      if (adminEmails) {
-        const allowed = adminEmails.split(',').map(e => e.trim().toLowerCase())
-        const userEmail = (profile?.email ?? session.user.email ?? '').toLowerCase()
-        if (!allowed.includes(userEmail)) {
-          router.push('/')
-          return
-        }
       }
 
       setAuthChecked(true)

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { verifyCronBearer } from '@/lib/cron-auth'
 
 // ── Cron: Refresh Clinic Freshness ─────────────────────────────────────────────
 // Runs weekly via Vercel Cron. Checks cached clinic data for staleness,
@@ -38,12 +39,10 @@ async function verifyHRSAEndpoint(zip: string): Promise<{ ok: boolean; count: nu
 
 export async function GET(req: NextRequest) {
   // Require CRON_SECRET — route is disabled if not configured
-  const cronSecret = process.env.CRON_SECRET
-  if (!cronSecret) {
+  if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'CRON_SECRET not configured' }, { status: 503 })
   }
-  const authHeader = req.headers.get('Authorization')
-  if (authHeader !== `Bearer ${cronSecret}`) {
+  if (!verifyCronBearer(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

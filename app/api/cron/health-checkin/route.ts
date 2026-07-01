@@ -11,6 +11,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendEmail, buildHealthCheckinEmail } from '@/lib/email'
+import { verifyCronHeader } from '@/lib/cron-auth'
 
 export const maxDuration = 60
 
@@ -47,7 +48,7 @@ function nextAction(eventCounts: Record<string, number>): string {
 }
 
 export async function POST(req: NextRequest) {
-  if (req.headers.get('x-cron-secret') !== process.env.CRON_SECRET) {
+  if (!verifyCronHeader(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
