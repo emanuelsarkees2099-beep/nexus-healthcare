@@ -51,7 +51,7 @@ export default function VerificationDiagram() {
 
         {/* Center NEXUS node */}
         <circle cx={cx} cy={cy} r="24" fill="rgba(74,144,217,0.1)" stroke="rgba(74,144,217,0.3)" strokeWidth="1.5" />
-        <text x={cx} y={cy - 2} textAnchor="middle" fontSize="8" fontWeight="700" fill="rgba(74,144,217,0.9)" fontFamily="var(--font-orbitron,sans-serif)">NEXUS</text>
+        <text x={cx} y={cy - 2} textAnchor="middle" fontSize="8" fontWeight="700" fill="rgba(74,144,217,0.9)" fontFamily="var(--font-display)">NEXUS</text>
         <text x={cx} y={cy + 9} textAnchor="middle" fontSize="7" fill="rgba(255,255,255,0.4)" fontFamily="var(--font-inter,sans-serif)">Verified</text>
 
         {SOURCES.map((src, i) => {

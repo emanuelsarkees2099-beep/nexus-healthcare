@@ -824,7 +824,7 @@ export default function DashboardPage() {
             <circle cx="50" cy="50" r="5" fill="#4F8EF0" opacity="0.7"/>
           </svg>
           <span style={{
-            fontFamily: 'var(--font-orbitron, monospace)',
+            fontFamily: 'var(--font-display)',
             fontSize: 11, fontWeight: 400, letterSpacing: '0.44em',
             color: 'rgba(255,255,255,0.65)',
           }}>NEXUS</span>

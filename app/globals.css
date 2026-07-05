@@ -3367,9 +3367,11 @@ button[aria-pressed="true"] {
     transparent 70%
   );
   transform: translateX(-100%) skewX(-15deg);
-  animation: btn-shimmer-sweep 3.5s var(--ease-out-expo) infinite;
-  animation-delay: 1.2s;
+  /* Motion rule (Midnight Clinic): no infinite loops — sweep on hover only */
   pointer-events: none;
+}
+.btn-shimmer:hover::before {
+  animation: btn-shimmer-sweep 0.9s var(--ease-out-expo) 1;
 }
 
 .btn-shimmer:hover {

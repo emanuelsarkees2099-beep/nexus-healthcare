@@ -237,7 +237,7 @@ export default function MobileDrawer({ open, onClose, links, user, onLogout, onA
           marginBottom: '14px',
         }}>
           <span style={{
-            fontFamily: 'var(--font-orbitron)', fontSize: '10px',
+            fontFamily: 'var(--font-display)', fontSize: '10px',
             letterSpacing: '0.4em', color: 'rgba(255,255,255,0.55)', paddingRight: '0.4em',
           }}>
             NEXUS

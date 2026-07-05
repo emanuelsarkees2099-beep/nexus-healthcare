@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Bricolage_Grotesque, Inter, Orbitron, JetBrains_Mono } from 'next/font/google'
+import { Bricolage_Grotesque, Inter, Instrument_Serif, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import LanguageSelector from '@/components/LanguageSelector'
@@ -31,15 +31,15 @@ const inter = Inter({
   adjustFontFallback: false,
 })
 
-const orbitron = Orbitron({
+// Instrument Serif italic: the single editorial accent voice — used for
+// exactly one accent word per page (Midnight Clinic design language).
+const instrument = Instrument_Serif({
   subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  variable: '--font-orbitron',
+  weight: '400',
+  style: 'italic',
+  variable: '--font-serif',
   display: 'swap',
   adjustFontFallback: false,
-  // Subset to only the characters used: N E X U S · (saves ~90% of font download)
-  // @ts-expect-error — `text` subsetting is valid in Next.js 13.2+ but not yet reflected in these type defs
-  text: 'NEXUS·',
 })
 
 // JetBrains Mono: 400 + 500 only — used for badges, distances, code labels.
@@ -87,7 +87,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${bricolage.variable} ${inter.variable} ${orbitron.variable} ${mono.variable}`}
+      className={`${bricolage.variable} ${inter.variable} ${instrument.variable} ${mono.variable}`}
     >
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />

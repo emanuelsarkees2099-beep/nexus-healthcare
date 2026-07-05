@@ -238,7 +238,7 @@ export default function Nav({ initialUser }: NavProps = {}) {
             <circle cx="50" cy="50" r="5" fill="var(--accent)" opacity="0.7"/>
           </svg>
           <span style={{
-            fontFamily: 'var(--font-orbitron)', fontSize: '11px', fontWeight: 400,
+            fontFamily: 'var(--font-display)', fontSize: '11px', fontWeight: 400,
             letterSpacing: '0.42em', textTransform: 'uppercase',
             color: 'rgba(255,255,255,0.90)', paddingRight: '0.42em', userSelect: 'none',
           }}>
@@ -373,8 +373,9 @@ export default function Nav({ initialUser }: NavProps = {}) {
             <span style={{ opacity: 0.6 }}>⌘K</span>
           </button>
 
-          {/* Notification bell */}
-          <NotificationBell />
+          {/* Notification bell — signed-in users only. Showing an unread
+              badge to an anonymous first-time visitor is fake urgency. */}
+          {user && <NotificationBell />}
 
           {/* User menu */}
           <UserMenu

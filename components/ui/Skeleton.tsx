@@ -168,7 +168,7 @@ export function PageLoading({ label = 'NEXUS' }: { label?: string }) {
     <div style={{ minHeight: '100vh', background: '#07070F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
         <div style={{ width: 36, height: 36, borderRadius: '50%', border: '2px solid rgba(74,144,217,0.2)', borderTopColor: '#4A8FD4', animation: 'spin 0.8s linear infinite' }} />
-        <span style={{ fontFamily: 'var(--font-orbitron, monospace)', fontSize: 11, fontWeight: 400, letterSpacing: '0.45em', color: 'rgba(255,255,255,0.3)' }}>
+        <span style={{ fontFamily: 'var(--font-display)', fontSize: 11, fontWeight: 400, letterSpacing: '0.45em', color: 'rgba(255,255,255,0.3)' }}>
           {label}
         </span>
       </div>

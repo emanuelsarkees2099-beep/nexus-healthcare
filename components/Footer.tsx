@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import { useState } from 'react'
 import Link from 'next/link'
 import { TickCircle, ExportSquare, ShieldTick } from 'iconsax-react'
@@ -138,7 +138,7 @@ export default function Footer() {
                   background: 'linear-gradient(90deg, rgba(74,144,217,0.55), rgba(138,181,188,0.4), transparent)',
                 }} />
                 <span style={{
-                  fontFamily: 'var(--font-orbitron)',
+                  fontFamily: 'var(--font-display)',
                   fontSize: '11px', fontWeight: 400,
                   letterSpacing: '0.5em', textTransform: 'uppercase',
                   color: '#E8E0FF',

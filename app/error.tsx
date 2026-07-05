@@ -23,7 +23,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
 
       <div style={{ marginBottom: '40px', position: 'relative', zIndex: 1 }}>
         <span style={{
-          fontFamily: 'var(--font-orbitron, monospace)',
+          fontFamily: 'var(--font-display)',
           fontSize: '13px', fontWeight: 400,
           letterSpacing: '0.45em', color: 'rgba(255,255,255,0.6)',
         }}>NEXUS</span>

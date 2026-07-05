@@ -11,7 +11,7 @@ export default function NotFound() {
 
       {/* Logo */}
       <div style={{ marginBottom: '52px' }}>
-        <span style={{ fontFamily: 'var(--font-orbitron, monospace)', fontSize: '13px', fontWeight: 400, letterSpacing: '0.45em', color: 'rgba(255,255,255,0.6)' }}>NEXUS</span>
+        <span style={{ fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 400, letterSpacing: '0.45em', color: 'rgba(255,255,255,0.6)' }}>NEXUS</span>
       </div>
 
       {/* 404 display */}
