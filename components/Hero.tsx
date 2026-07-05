@@ -6,7 +6,6 @@ import { registerGSAP } from '@/lib/gsap-st'
 import { useI18n } from '@/components/I18nContext'
 import SearchBar from '@/components/hero/SearchBar'
 import HeroMockup from '@/components/hero/HeroMockup'
-import { Star1 } from 'iconsax-react'
 
 registerGSAP()
 
@@ -376,81 +375,32 @@ export default function Hero() {
             flexWrap: 'wrap',
           }}
         >
-          {/* Social proof pill */}
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '12px',
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: 'var(--r-lg)',
-            padding: '8px 16px 8px 10px',
-          }}>
-            {/* Avatar stack */}
-            <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-              {(['#4F8EF0', '#4a7c84', '#82B4F8', '#5a9099'] as const).map((bg, i) => (
-                <div key={i} aria-hidden="true" style={{
-                  width: '26px', height: '26px', borderRadius: '50%',
-                  background: `linear-gradient(135deg, ${bg}, ${bg}99)`,
-                  border: '2px solid var(--bg2)',
-                  marginLeft: i === 0 ? 0 : '-8px',
-                  zIndex: 4 - i, position: 'relative',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '9px', fontWeight: 700, color: '#fff',
-                  fontFamily: 'var(--font-inter)',
-                }}>
-                  {['J', 'M', 'A', 'S'][i]}
-                </div>
-              ))}
-            </div>
-
-            {/* Text */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
-              <div style={{
-                fontSize: '12.5px', fontWeight: 600,
-                color: 'var(--text)', fontFamily: 'var(--font-inter)',
-                lineHeight: 1.2,
-              }}>
-                284,000+ patients helped
-              </div>
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: '5px',
-              }}>
-                <span style={{ display: 'flex', gap: '1px' }} aria-label="4.9 out of 5 stars">
-                  {[1,2,3,4,5].map(s => (
-                    <Star1 key={s} size={9} color="var(--warning)" variant="Bold" aria-hidden="true" />
-                  ))}
-                </span>
-                <span style={{
-                  fontSize: '10.5px', color: 'var(--text-3)',
-                  fontFamily: 'var(--font-inter)',
-                }}>
-                  4.9 · 12K reviews
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Separator dot */}
-          <span aria-hidden="true" style={{ width: '3px', height: '3px', borderRadius: '50%', background: 'var(--border)', flexShrink: 0 }} />
-
-          {/* Free pill */}
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '6px',
-            background: 'rgba(52,211,153,0.08)',
-            border: '1px solid rgba(52,211,153,0.20)',
-            borderRadius: 'var(--r-lg)',
-            padding: '6px 12px',
-          }}>
-            <span style={{
-              width: '6px', height: '6px', borderRadius: '50%',
-              background: 'var(--success)', flexShrink: 0,
-            }} aria-hidden="true" />
-            <span style={{
-              fontSize: '11px', color: 'var(--success)',
-              fontFamily: 'var(--font-inter)', fontWeight: 500,
+          {/* Honest proof pills — verifiable facts only, no fabricated counts */}
+          {([
+            { text: '12,400+ free clinics mapped', dot: 'var(--accent)' },
+            { text: '48 languages',                dot: 'var(--life)' },
+            { text: 'Always free',                 dot: 'var(--success)' },
+          ] as const).map(pill => (
+            <div key={pill.text} style={{
+              display: 'inline-flex', alignItems: 'center', gap: '7px',
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid var(--border-subtle)',
+              borderRadius: 'var(--r-lg)',
+              padding: '7px 14px',
             }}>
-              Always free
-            </span>
-          </div>
+              <span style={{
+                width: '6px', height: '6px', borderRadius: '50%',
+                background: pill.dot, flexShrink: 0,
+              }} aria-hidden="true" />
+              <span style={{
+                fontSize: '12px', color: 'var(--text-2)',
+                fontFamily: 'var(--font-inter)', fontWeight: 500,
+                whiteSpace: 'nowrap',
+              }}>
+                {pill.text}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
