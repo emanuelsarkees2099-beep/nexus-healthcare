@@ -809,7 +809,7 @@ export default function DashboardPage() {
       {/* ── Nav ─────────────────────────────────────────────────────────── */}
       <nav style={{
         position: 'sticky', top: 0, zIndex: 50, height: 52,
-        background: 'rgba(5,11,22,0.90)',
+        background: 'rgba(5,6,9,0.90)',
         backdropFilter: 'blur(20px) saturate(160%)',
         WebkitBackdropFilter: 'blur(20px) saturate(160%)',
         borderBottom: '1px solid rgba(255,255,255,0.06)',

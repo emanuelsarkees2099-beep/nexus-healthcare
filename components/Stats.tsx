@@ -169,11 +169,12 @@ export default function Stats() {
       aria-label="Key statistics"
       style={{
         position: 'relative', zIndex: 2,
-        borderTop: '1px solid var(--border2)',
-        borderBottom: '1px solid var(--border2)',
         padding: '3rem 0',
       }}
     >
+      {/* Vital hairlines — gradient rules instead of flat borders */}
+      <div aria-hidden="true" className="rule-vital" style={{ position: 'absolute', top: 0, left: 0, right: 0 }} />
+      <div aria-hidden="true" className="rule-vital" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, opacity: 0.5 }} />
       <div
         ref={rowRef}
         id="stats-row"
@@ -230,7 +231,7 @@ export default function Stats() {
                         ? (displayVal! > 100 ? displayVal!.toLocaleString() : String(displayVal!))
                         : '0'}
                     </span>
-                    <span style={{ color: 'var(--accent)' }}>{s.suffix}</span>
+                    <span className="text-vital">{s.suffix}</span>
                   </>
                 )}
               </div>

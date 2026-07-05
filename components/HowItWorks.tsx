@@ -121,11 +121,11 @@ function Panel2() {
       <button
         onClick={() => router.push('/pathways')}
         style={{
-          width: '100%', background: 'var(--accent)', color: 'var(--bg)',
+          width: '100%', background: 'var(--grad-vital)', color: '#04121D',
           border: 'none', borderRadius: 'var(--r-sm)', padding: '12px',
-          fontSize: '13px', fontWeight: 600, cursor: 'pointer',
+          fontSize: '13px', fontWeight: 700, cursor: 'pointer',
           fontFamily: 'var(--font-inter)', marginBottom: '10px',
-          boxShadow: '0 4px 16px rgba(74,144,217,0.25)',
+          boxShadow: '0 4px 16px rgba(79,142,240,0.22), 0 2px 10px rgba(45,212,191,0.16)',
         }}>
         Book appointment &rarr;
       </button>
@@ -251,7 +251,7 @@ export default function HowItWorks() {
               ))}
               <span className="reveal-word" style={{ marginRight: '0.28em' }}>
                 <span className="reveal-word-inner">
-                  <em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>real</em>
+                  <em className="text-vital" style={{ fontStyle: 'normal' }}>real</em>
                 </span>
               </span>
               <span className="reveal-word">
@@ -336,9 +336,9 @@ export default function HowItWorks() {
           }}>
             <div ref={barRef} style={{
               height: '100%',
-              background: 'linear-gradient(90deg, var(--accent), var(--accent2))',
+              background: 'var(--grad-vital)',
               borderRadius: '2px', width: '0%',
-              boxShadow: '0 0 6px rgba(74,144,217,0.5)',
+              boxShadow: '0 0 6px rgba(79,142,240,0.45), 0 0 10px rgba(45,212,191,0.30)',
             }} />
           </div>
         </div>

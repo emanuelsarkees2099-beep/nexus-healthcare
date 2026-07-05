@@ -392,7 +392,7 @@ export default function ClinicCard({
           </div>
 
           {/* Action buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0 }}>
+          <div className="clinic-actions" style={{ display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0 }}>
             {/* #31 — Save with spring micro-animation */}
             <button
               onClick={handleBookmarkClick}
@@ -480,7 +480,7 @@ export default function ClinicCard({
             <a
               href={googleMapsUrl}
               target="_blank" rel="noopener noreferrer"
-              style={{ background: 'var(--accent)', color: 'var(--bg)', borderRadius: 9, padding: '8px 14px', fontSize: 12, fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}
+              style={{ background: 'var(--grad-vital)', color: '#04121D', borderRadius: 9, padding: '8px 14px', fontSize: 12, fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5, boxShadow: '0 2px 10px rgba(79,142,240,0.20), 0 1px 6px rgba(45,212,191,0.14)' }}
             >
               <Routing size={12} variant="Linear" /> {t('search.directions')}
             </a>
@@ -524,11 +524,6 @@ export default function ClinicCard({
               <Location size={11} color={parseFloat(String(clinic.distance)) < 1 ? 'var(--accent)' : 'rgba(255,255,255,0.45)'} variant="Linear" /> {clinic.distance} mi
             </span>
           )}
-          {clinic.phone && (
-            <span style={{ fontSize: 11, color: 'var(--text-3)', fontFamily: 'var(--font-mono),monospace' }}>
-              {clinic.phone}
-            </span>
-          )}
           {/* N6 — equity score dots */}
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 10, color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)' }}>
             <EquityDots score={equity.score} color={equity.color} />
@@ -544,16 +539,14 @@ export default function ClinicCard({
             </span>
           )}
           {clinic.type && (
-            <span style={{ fontSize: 10, letterSpacing: '0.06em', color: clinic.type === 'FQHC' ? 'var(--accent)' : clinic.type?.includes('Free') ? 'var(--green-pulse)' : 'var(--text-3)', background: clinic.type === 'FQHC' ? 'rgba(74,144,217,0.07)' : 'rgba(255,255,255,0.04)', border: `1px solid ${clinic.type === 'FQHC' ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.08)'}`, padding: '2px 8px', borderRadius: 5, fontFamily: 'var(--font-inter)', fontWeight: 600 }}>
-              {clinic.type}
-            </span>
-          )}
-          {clinic.type === 'FQHC' && (
-            <span title="Federally Qualified Health Center — verified by HRSA. Required by law to accept all patients regardless of ability to pay."
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 600, letterSpacing: '0.04em', color: '#60A5FA', background: 'rgba(96,165,250,0.08)', border: '1px solid rgba(96,165,250,0.2)', padding: '2px 8px', borderRadius: 5, fontFamily: 'var(--font-inter)', cursor: 'help' }}
-            >
-              <ShieldTick size={9} color="currentColor" variant="Linear" />
-              HRSA Verified
+            /* FQHC pill carries the HRSA explanation directly — one pill, not two */
+            <span
+              title={clinic.type === 'FQHC'
+                ? 'Federally Qualified Health Center — verified by HRSA. Required by law to accept all patients regardless of ability to pay.'
+                : undefined}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, letterSpacing: '0.06em', color: clinic.type === 'FQHC' ? 'var(--accent)' : clinic.type?.includes('Free') ? 'var(--green-pulse)' : 'var(--text-3)', background: clinic.type === 'FQHC' ? 'rgba(74,144,217,0.07)' : 'rgba(255,255,255,0.04)', border: `1px solid ${clinic.type === 'FQHC' ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.08)'}`, padding: '2px 8px', borderRadius: 5, fontFamily: 'var(--font-inter)', fontWeight: 600, cursor: clinic.type === 'FQHC' ? 'help' : 'default' }}>
+              {clinic.type === 'FQHC' && <ShieldTick size={9} color="currentColor" variant="Linear" />}
+              {clinic.type === 'FQHC' ? 'FQHC · HRSA Verified' : clinic.type}
             </span>
           )}
           {(clinic.free || clinic.sliding_scale) && (

@@ -4,10 +4,9 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   SearchNormal1, Video, Danger,
-  ReceiptText, ShieldTick, Calendar1, Health,
-  Chart2, TrendUp, Book1, Judge,
-  Profile2User, Hospital,
-  ClipboardText, Speaker, Global, MagicStar,
+  ReceiptText, ShieldTick, Health,
+  TrendUp, Book1, Judge,
+  Profile2User, Global, MagicStar,
 } from 'iconsax-react'
 
 interface MegaMenuProps {
@@ -15,43 +14,37 @@ interface MegaMenuProps {
   onClose: () => void
 }
 
+/* Feature triage (launch): three sections following the patient journey —
+   find care → afford care → manage your health. Institutional pages
+   (Impact, Outcomes, Equity, CHW, Provider, Calendar) live in the Footer. */
 const SECTIONS = [
   {
     title: 'Find Care',
     color: '#4F8EF0',
     items: [
-      { label: 'Find Clinics',    href: '/search',    icon: SearchNormal1, desc: 'Search 12,000+ free clinics' },
-      { label: 'Telehealth',      href: '/telehealth',icon: Video,         desc: 'Virtual & phone care' },
-      { label: 'Crisis Help',     href: '/crisis',    icon: Danger,        desc: '24/7 emergency resources' },
+      { label: 'Find Clinics',   href: '/search',    icon: SearchNormal1, desc: 'Search 12,000+ free clinics' },
+      { label: 'Telehealth',     href: '/telehealth',icon: Video,         desc: 'Virtual & phone care' },
+      { label: 'Symptom Guide',  href: '/triage',    icon: Health,        desc: 'Not sure where to start?' },
+      { label: 'Crisis Help',    href: '/crisis',    icon: Danger,        desc: '24/7 emergency resources' },
     ],
   },
   {
-    title: 'Programs',
-    color: '#34D399',
+    title: 'Afford Care',
+    color: '#2DD4BF',
     items: [
-      { label: 'All Programs',    href: '/programs',    icon: ReceiptText,   desc: 'Medicaid, ACA, HRSA & more' },
-      { label: 'Eligibility',     href: '/eligibility', icon: ShieldTick,    desc: 'Check what you qualify for' },
-      { label: 'Health Calendar', href: '/calendar',    icon: Calendar1,     desc: 'Free screenings & vaccines' },
-      { label: 'Medications',     href: '/medications', icon: Health,        desc: 'Assistance & savings' },
+      { label: 'All Programs', href: '/programs',    icon: ReceiptText, desc: 'Medicaid, ACA, HRSA & more' },
+      { label: 'Eligibility',  href: '/eligibility', icon: ShieldTick,  desc: 'Check what you qualify for' },
+      { label: 'Medications',  href: '/medications', icon: Health,      desc: 'Assistance & savings' },
     ],
   },
   {
-    title: 'Explore',
+    title: 'Your Health',
     color: '#A78BFA',
     items: [
-      { label: 'Impact',         href: '/impact',    icon: Chart2,    desc: 'NEXUS by the numbers' },
-      { label: 'Outcomes',       href: '/outcomes',  icon: TrendUp,   desc: 'Real patient results' },
-      { label: 'Stories',        href: '/stories',   icon: Book1,     desc: 'Community voices' },
-      { label: 'Equity Lab',     href: '/equity',    icon: Judge,     desc: 'Health equity research' },
-    ],
-  },
-  {
-    title: 'Community',
-    color: '#F59E0B',
-    items: [
-      { label: 'CHW Network',    href: '/chw',       icon: Profile2User, desc: 'Community health workers' },
-      { label: 'Provider Hub',   href: '/provider',  icon: Hospital,     desc: 'For healthcare teams' },
-      { label: 'Your Rights',    href: '/rights',    icon: ShieldTick,   desc: 'EMTALA, ADA & more' },
+      { label: 'Health Passport', href: '/passport', icon: ShieldTick, desc: 'Your records, your control' },
+      { label: 'Your Rights',     href: '/rights',   icon: Judge,      desc: 'EMTALA, ADA & more' },
+      { label: 'Stories',         href: '/stories',  icon: Book1,      desc: 'Community voices' },
+      { label: 'Kids Guide',      href: '/kids',     icon: Profile2User, desc: 'Health education for kids' },
     ],
   },
 ]
@@ -214,12 +207,9 @@ export default function MegaMenu({ open, onClose }: MegaMenuProps) {
           Also:
         </span>
         {[
-          { label: 'Advocacy',       href: '/advocacy',  icon: Speaker },
-          { label: 'Editorial',      href: '/editorial', icon: ClipboardText },
-          { label: 'Pathways',       href: '/pathways',  icon: MagicStar },
-          { label: 'Equity Lab',     href: '/equity',    icon: Global },
-          { label: 'Health Passport',href: '/passport',  icon: ShieldTick },
-          { label: 'Outcomes',       href: '/outcomes',  icon: TrendUp },
+          { label: 'Pathways', href: '/pathways', icon: MagicStar },
+          { label: 'Impact',   href: '/impact',   icon: TrendUp },
+          { label: 'About',    href: '/about',    icon: Global },
         ].map(q => (
           <Link
             key={q.href}

@@ -31,24 +31,19 @@ const APP_LINK_DEFS = [
   { labelKey: 'nav.stories' as const,   href: '/stories',   fallback: 'Stories',  icon: Book1         },
 ]
 
+/* Feature triage (launch): nav carries only the core patient journey.
+   Institutional/partner pages (Outcomes, CHW, Impact, Equity, Provider,
+   Advocacy, Methodology, Editorial, Calendar) stay reachable via Footer. */
 const ALL_APP_LINK_DEFS = [
-  { labelKey: 'nav.pathways'    as const, href: '/pathways',    fallback: 'Pathways' },
-  { labelKey: 'nav.programs'    as const, href: '/programs',    fallback: 'Programs' },
-  { labelKey: 'nav.outcomes'    as const, href: '/outcomes',    fallback: 'Outcomes' },
-  { labelKey: 'nav.chw'         as const, href: '/chw',         fallback: 'CHW' },
-  { labelKey: 'nav.calendar'    as const, href: '/calendar',    fallback: 'Calendar' },
-  { labelKey: 'nav.impact'      as const, href: '/impact',      fallback: 'Impact' },
-  { labelKey: 'nav.stories'     as const, href: '/stories',     fallback: 'Stories' },
-  { labelKey: null,                       href: '/editorial',   fallback: 'Editorial' },
-  { labelKey: null,                       href: '/equity',      fallback: 'Equity Lab' },
-  { labelKey: 'nav.provider'    as const, href: '/provider',    fallback: 'Provider' },
-  { labelKey: 'nav.rights'      as const, href: '/rights',      fallback: 'Rights' },
-  { labelKey: null,                       href: '/advocacy',    fallback: 'Advocacy' },
-  { labelKey: 'nav.methodology' as const, href: '/methodology', fallback: 'Methodology' },
-  { labelKey: null,                       href: '/triage',      fallback: 'Symptom Guide' },
-  { labelKey: null,                       href: '/passport',    fallback: 'Health Passport' },
-  { labelKey: null,                       href: '/crisis',      fallback: 'Crisis Help' },
-  { labelKey: null,                       href: '/about',       fallback: 'About NEXUS' },
+  { labelKey: 'nav.pathways' as const, href: '/pathways',    fallback: 'Pathways' },
+  { labelKey: 'nav.programs' as const, href: '/programs',    fallback: 'Programs' },
+  { labelKey: null,                    href: '/triage',      fallback: 'Symptom Guide' },
+  { labelKey: null,                    href: '/medications', fallback: 'Medications' },
+  { labelKey: null,                    href: '/passport',    fallback: 'Health Passport' },
+  { labelKey: 'nav.rights'   as const, href: '/rights',      fallback: 'Rights' },
+  { labelKey: 'nav.stories'  as const, href: '/stories',     fallback: 'Stories' },
+  { labelKey: null,                    href: '/crisis',      fallback: 'Crisis Help' },
+  { labelKey: null,                    href: '/about',       fallback: 'About NEXUS' },
 ]
 
 type UserProfile = { full_name?: string | null; email?: string | null; user_type?: string | null }
@@ -213,7 +208,7 @@ export default function Nav({ initialUser }: NavProps = {}) {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '0 16px',
           borderRadius: '14px',
-          background: scrolled ? 'rgba(8,17,32,0.82)' : 'rgba(8,17,32,0.04)',
+          background: scrolled ? 'rgba(10,12,16,0.82)' : 'rgba(10,12,16,0.04)',
           backdropFilter: scrolled ? 'blur(24px) saturate(160%)' : 'none',
           WebkitBackdropFilter: scrolled ? 'blur(24px) saturate(160%)' : 'none',
           border: scrolled

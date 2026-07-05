@@ -42,11 +42,11 @@ label svg,
 }
 
 :root {
-  /* ── CANVAS — deep clinical navy. Alive, not void-black. ── */
-  --bg:  #050B16;
-  --bg2: #081120;
-  --bg3: #0C1728;
-  --bg4: #111E33;
+  /* ── CANVAS — near-black with a whisper of cool tint. ── */
+  --bg:  #050609;
+  --bg2: #0A0C10;
+  --bg3: #0E1116;
+  --bg4: #141821;
 
   /* ── DUOTONE ACCENT — steel blue + bio-teal (“vital”). ──
      Blue = technology/trust. Teal = life/vitals. Together = future of care. */
@@ -652,6 +652,19 @@ h3              { font-weight: 600; }
   border-color: rgba(79,142,240,0.32) !important;
   background: rgba(255,255,255,0.055) !important;
 }
+/* Vital moment: duotone hairline ignites across the card's top edge */
+.bento-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 8%; right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(79,142,240,0.65) 35%, rgba(45,212,191,0.65) 65%, transparent);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+.bento-card:hover::after { opacity: 1; }
 
 .bento-card:active,
 a:active > .bento-card {
@@ -688,6 +701,25 @@ a:active > .bento-card {
   border: 1px solid var(--border2);
   border-radius: 16px;
   transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.3s var(--ease-spring);
+}
+/* One-thumb mobile actions: Call + Directions become large, centered,
+   44px-min touch targets in a full-width row below the clinic name. */
+@media (max-width: 640px) {
+  .clinic-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .clinic-actions > a {
+    flex: 1 1 40%;
+    justify-content: center;
+    min-height: 44px;
+    font-size: 13px !important;
+  }
+  .clinic-actions > button {
+    min-height: 44px;
+    min-width: 44px;
+    justify-content: center;
+  }
 }
 .clinic-card:hover {
   border-color: var(--border);
@@ -823,7 +855,7 @@ a:active > .bento-card {
 
 .mobile-dock {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 500;
-  background: rgba(8,17,32,0.94);
+  background: rgba(10,12,16,0.94);
   backdrop-filter: blur(24px) saturate(180%);
   border-top: 1px solid var(--border2);
   padding: 6px 0 env(safe-area-inset-bottom, 6px);
@@ -1639,7 +1671,7 @@ a[role="button"]:active {
    ═══════════════════════════════════════════════════════════════════ */
 
 .mobile-dock {
-  background: rgba(8,17,32,0.86) !important;
+  background: rgba(10,12,16,0.86) !important;
   backdrop-filter: blur(32px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(32px) saturate(180%) !important;
   border-top: 1px solid rgba(163,190,241,0.10) !important;
@@ -2163,7 +2195,7 @@ a[role="button"]:active {
 
 /* Upgrade FloatingCTA and ExitIntent to glass */
 .floating-cta > div {
-  background: rgba(8, 17, 32, 0.88) !important;
+  background: rgba(10, 12, 16, 0.88) !important;
   backdrop-filter: blur(28px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
   border: 1px solid rgba(74, 144, 217, 0.15) !important;
@@ -2606,7 +2638,7 @@ a:not(.no-press):active,
   position: fixed;
   bottom: 0; left: 0; right: 0;
   z-index: 9900;
-  background: rgba(5,11,22,0.97);
+  background: rgba(5,6,9,0.97);
   border-top: 1px solid rgba(74,144,217,0.18);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -3917,7 +3949,7 @@ button[aria-pressed="true"] {
 }
 
 #main-nav.scrolled {
-  background: rgba(5,11,22,0.88) !important;
+  background: rgba(5,6,9,0.88) !important;
   backdrop-filter: blur(28px) saturate(200%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
   box-shadow: 0 1px 0 rgba(255,255,255,0.06), 0 4px 24px rgba(0,0,0,0.30) !important;
@@ -5376,7 +5408,7 @@ input[inputmode="decimal"] {
    so it's always legible against any page content. */
 @media (max-width: 768px) {
   #main-nav {
-    background: rgba(8,17,32,0.92) !important;
+    background: rgba(10,12,16,0.92) !important;
     backdrop-filter: blur(24px) saturate(160%) !important;
     -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
     border-color: rgba(163,190,241,0.12) !important;

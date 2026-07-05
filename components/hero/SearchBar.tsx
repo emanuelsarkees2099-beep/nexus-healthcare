@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import { useEffect, useRef, useState } from 'react'
 import { useI18n } from '@/components/I18nContext'
 import { SearchNormal1, Location, Gps } from 'iconsax-react'
@@ -141,7 +141,7 @@ export default function SearchBar({
         style={{
           position: 'relative', zIndex: 1,
           display: 'flex', alignItems: 'center',
-          background: 'rgba(8,17,32,0.92)',
+          background: 'rgba(10,12,16,0.92)',
           border: '1px solid rgba(79,142,240,0.24)',
           borderRadius: 'var(--r-md)',
           padding: '7px 7px 7px 18px', gap: '10px',
@@ -289,7 +289,7 @@ export default function SearchBar({
           aria-label="Search suggestions"
           style={{
             position: 'absolute', top: 'calc(100% + 6px)', left: 0, right: 0, zIndex: 100,
-            background: 'rgba(5,11,22,0.98)',
+            background: 'rgba(5,6,9,0.98)',
             border: '1px solid rgba(74,144,217,0.22)',
             borderRadius: 'var(--r-md)', overflow: 'hidden',
             backdropFilter: 'blur(24px)',

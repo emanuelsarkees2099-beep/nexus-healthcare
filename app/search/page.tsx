@@ -484,7 +484,7 @@ function SearchResults() {
                 />
               </div>
               {/* Submit */}
-              <button type="submit" className="search-hero-submit" style={{ background: 'var(--accent)', color: 'var(--bg)', border: 'none', padding: '0 28px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-inter)', transition: 'opacity 0.18s', flexShrink: 0, letterSpacing: '0.01em' }}
+              <button type="submit" className="search-hero-submit" style={{ background: 'var(--grad-vital)', color: '#04121D', border: 'none', padding: '0 28px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-inter)', transition: 'opacity 0.18s', flexShrink: 0, letterSpacing: '0.01em' }}
                 onMouseEnter={e => (e.currentTarget.style.opacity = '0.87')}
                 onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
               >
@@ -574,7 +574,7 @@ function SearchResults() {
 
               {/* Submit */}
               <button type="submit" style={{
-                background: 'var(--accent)', color: 'var(--bg)',
+                background: 'var(--grad-vital)', color: '#04121D',
                 border: 'none', borderRadius: '11px', padding: '0 22px',
                 fontSize: '13px', fontWeight: 700, cursor: 'pointer',
                 fontFamily: 'var(--font-inter),sans-serif', flexShrink: 0,
@@ -771,7 +771,9 @@ function SearchResults() {
 
         {/* Status — aria-live so screen readers announce when results load */}
         <p role="status" aria-live="polite" aria-atomic="true" style={{ fontSize: '12px', color: 'var(--text-3)', marginBottom: '16px', marginTop: '14px', display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', fontFamily: 'var(--font-inter)' }}>
-          {loading ? t('general.loading') : `${visibleCount} ${visibleCount !== 1 ? t('search.clinics') : t('search.clinic')} ${locationVal ? `${t('search.clinicsNear')} ${locationVal}` : '— ' + t('search.enterZip')}`}
+          {loading ? t('general.loading') : locationVal
+            ? `${visibleCount} ${t('search.clinicsNear')} ${locationVal}`
+            : `${visibleCount} ${visibleCount !== 1 ? t('search.clinics') : t('search.clinic')} — ${t('search.enterZip')}`}
           {!loading && sourceBadge && (
             /* #41 — Rich source attribution badge */
             <span
