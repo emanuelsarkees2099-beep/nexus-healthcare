@@ -1,4 +1,4 @@
-﻿﻿'use client'
+﻿'use client'
 import { useEffect, useRef, useState } from 'react'
 import { useI18n } from '@/components/I18nContext'
 import { SearchNormal1, Location, Gps } from 'iconsax-react'
@@ -126,10 +126,10 @@ export default function SearchBar({
 
   return (
     <div className="search-bar-root">
-      {/* Glow ring */}
+      {/* Glow ring — vital gradient halo on focus */}
       <div className="search-glow-ring" style={{
         position: 'absolute', inset: '-2px', borderRadius: '17px',
-        background: 'linear-gradient(135deg, rgba(74,144,217,0.40), rgba(167,210,190,0.14))',
+        background: 'linear-gradient(135deg, rgba(79,142,240,0.45), rgba(45,212,191,0.35))',
         opacity: 0, transition: 'opacity 0.4s',
         zIndex: 0, pointerEvents: 'none', filter: 'blur(1px)',
       }} />
@@ -141,8 +141,8 @@ export default function SearchBar({
         style={{
           position: 'relative', zIndex: 1,
           display: 'flex', alignItems: 'center',
-          background: 'rgba(7,7,15,0.95)',
-          border: '1px solid rgba(74,144,217,0.22)',
+          background: 'rgba(8,17,32,0.92)',
+          border: '1px solid rgba(79,142,240,0.24)',
           borderRadius: 'var(--r-md)',
           padding: '7px 7px 7px 18px', gap: '10px',
           backdropFilter: 'blur(20px)',
@@ -266,17 +266,14 @@ export default function SearchBar({
         {/* CTA button (ref passed down for magnetic effect) */}
         <button
           ref={ctaBtnRef}
-          className="search-submit btn-shimmer magnetic-btn"
+          className="search-submit btn-shimmer magnetic-btn btn-vital"
           onClick={onSearch}
           aria-label="Search for free care"
           style={{
-            background: 'var(--accent)', color: 'var(--bg)',
-            border: 'none', borderRadius: '11px',
+            borderRadius: '11px',
             padding: '13px 22px',
-            fontFamily: 'var(--font-inter)', fontSize: '14px', fontWeight: 500,
+            fontFamily: 'var(--font-inter)', fontSize: '14px',
             cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0,
-            boxShadow: '0 4px 20px rgba(74,144,217,0.32)',
-            transition: 'box-shadow 0.2s',
           }}
         >
           {t('home.hero.cta')} {'→'}
@@ -292,7 +289,7 @@ export default function SearchBar({
           aria-label="Search suggestions"
           style={{
             position: 'absolute', top: 'calc(100% + 6px)', left: 0, right: 0, zIndex: 100,
-            background: 'rgba(4,4,8,0.98)',
+            background: 'rgba(5,11,22,0.98)',
             border: '1px solid rgba(74,144,217,0.22)',
             borderRadius: 'var(--r-md)', overflow: 'hidden',
             backdropFilter: 'blur(24px)',

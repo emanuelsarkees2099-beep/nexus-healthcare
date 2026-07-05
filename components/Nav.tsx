@@ -213,12 +213,12 @@ export default function Nav({ initialUser }: NavProps = {}) {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '0 16px',
           borderRadius: '14px',
-          background: scrolled ? 'rgba(6,6,12,0.88)' : 'rgba(6,6,12,0.04)',
-          backdropFilter: scrolled ? 'blur(24px) saturate(180%)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(24px) saturate(180%)' : 'none',
+          background: scrolled ? 'rgba(8,17,32,0.82)' : 'rgba(8,17,32,0.04)',
+          backdropFilter: scrolled ? 'blur(24px) saturate(160%)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(24px) saturate(160%)' : 'none',
           border: scrolled
-            ? '1px solid rgba(255,255,255,0.10)'
-            : '1px solid rgba(255,255,255,0.00)',
+            ? '1px solid rgba(163,190,241,0.12)'
+            : '1px solid rgba(163,190,241,0.00)',
           boxShadow: scrolled
             ? '0 8px 32px rgba(0,0,0,0.40), 0 1px 0 rgba(255,255,255,0.05) inset'
             : 'none',

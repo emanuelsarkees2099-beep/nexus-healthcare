@@ -42,17 +42,31 @@ label svg,
 }
 
 :root {
-  /* ── CANVAS ── */
-  --bg:  #060608;
-  --bg2: #0A0B10;
-  --bg3: #0E0F17;
-  --bg4: #13141F;
+  /* ── CANVAS — deep clinical navy. Alive, not void-black. ── */
+  --bg:  #050B16;
+  --bg2: #081120;
+  --bg3: #0C1728;
+  --bg4: #111E33;
 
-  /* ── ONE ACCENT — steel blue. Used only for interactive + key moments ── */
+  /* ── DUOTONE ACCENT — steel blue + bio-teal (“vital”). ──
+     Blue = technology/trust. Teal = life/vitals. Together = future of care. */
   --accent:      #4F8EF0;
   --accent2:     #82B4F8;
   --accent-dim:  rgba(79, 142, 240, 0.09);
   --accent-glow: rgba(79, 142, 240, 0.16);
+  --life:        #2DD4BF;
+  --life2:       #5EEAD4;
+  --life-dim:    rgba(45, 212, 191, 0.09);
+  --life-glow:   rgba(45, 212, 191, 0.16);
+
+  /* ── SIGNATURE GRADIENTS — the visual identity of NEXUS ── */
+  --grad-vital:      linear-gradient(135deg, #4F8EF0 0%, #2DD4BF 100%);
+  --grad-vital-soft: linear-gradient(135deg, rgba(79,142,240,0.14) 0%, rgba(45,212,191,0.10) 100%);
+  --grad-text:       linear-gradient(100deg, #82B4F8 0%, #5EEAD4 100%);
+  --grad-aurora:
+    radial-gradient(ellipse 60% 45% at 22% 8%,  rgba(79,142,240,0.13) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 78% 12%, rgba(45,212,191,0.09) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(79,142,240,0.05) 0%, transparent 65%);
 
   /* ── SEMANTIC ONLY — these signal meaning, never decoration ── */
   --success:  #34D399;   /* positive states, open clinics, confirmed */
@@ -76,10 +90,10 @@ label svg,
   --text-3: rgba(248,249,255,0.42);
   --text-4: rgba(248,249,255,0.22);
 
-  /* ── BORDERS — one system, three strengths ── */
-  --border-subtle: rgba(255,255,255,0.10);
-  --border:        rgba(255,255,255,0.14);
-  --border-strong: rgba(79,142,240,0.32);
+  /* ── BORDERS — one system, three strengths. Cool blue-tinted. ── */
+  --border-subtle: rgba(163,190,241,0.10);
+  --border:        rgba(163,190,241,0.15);
+  --border-strong: rgba(79,142,240,0.36);
   /* Backward compat aliases */
   --border2:   var(--border-subtle);
   --border-hi: var(--border-strong);
@@ -180,6 +194,74 @@ label svg,
   --space-20: 80px;
   --space-24: 96px;
   --space-32: 128px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   v5 “VITAL” DESIGN LANGUAGE — signature utilities
+   Deep clinical navy + blue→teal duotone. The future of care looks
+   alive: light moves, surfaces breathe, glass over aurora.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Gradient text — headline accent moments only */
+.text-vital {
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Glass surface — panels that float over the aurora */
+.glass {
+  background: rgba(13, 24, 43, 0.55);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Aurora backdrop — attach to hero/section wrappers */
+.aurora {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--grad-aurora);
+  animation: aurora-breathe 14s ease-in-out infinite alternate;
+}
+@keyframes aurora-breathe {
+  0%   { opacity: 0.85; transform: translateY(0)    scale(1); }
+  100% { opacity: 1;    transform: translateY(-14px) scale(1.035); }
+}
+
+/* Vital CTA — the one gradient button. Use sparingly. */
+.btn-vital {
+  background: var(--grad-vital);
+  color: #04121D;
+  font-weight: 700;
+  border: none;
+  box-shadow:
+    0 0 0 1px rgba(94,234,212,0.25),
+    0 8px 32px rgba(79,142,240,0.28),
+    0 2px 8px rgba(45,212,191,0.20);
+  transition: transform var(--dur-fast) var(--ease-out-expo),
+              box-shadow var(--dur-base) var(--ease-out-expo);
+}
+.btn-vital:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow:
+    0 0 0 1px rgba(94,234,212,0.40),
+    0 12px 44px rgba(79,142,240,0.40),
+    0 4px 16px rgba(45,212,191,0.30);
+}
+
+/* Gradient hairline — section dividers with life */
+.rule-vital {
+  height: 1px;
+  border: none;
+  background: linear-gradient(90deg, transparent, rgba(79,142,240,0.4) 30%, rgba(45,212,191,0.4) 70%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora { animation: none; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -741,7 +823,7 @@ a:active > .bento-card {
 
 .mobile-dock {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 500;
-  background: rgba(8,13,26,0.94);
+  background: rgba(8,17,32,0.94);
   backdrop-filter: blur(24px) saturate(180%);
   border-top: 1px solid var(--border2);
   padding: 6px 0 env(safe-area-inset-bottom, 6px);
@@ -1060,6 +1142,11 @@ a:active > .bento-card {
   opacity: 1;
   pointer-events: auto;
   transform: translateX(-50%) translateY(0);
+}
+/* Mobile: the bottom dock already carries Search — the floating bar would
+   stack a THIRD bottom layer (dock + crisis FAB + this). Kill the clutter. */
+@media (max-width: 768px) {
+  .floating-cta { display: none !important; }
 }
 
 /* ── Pulse dot ── */
@@ -1552,10 +1639,10 @@ a[role="button"]:active {
    ═══════════════════════════════════════════════════════════════════ */
 
 .mobile-dock {
-  background: rgba(5,8,18,0.82) !important;
-  backdrop-filter: blur(32px) saturate(220%) !important;
-  -webkit-backdrop-filter: blur(32px) saturate(220%) !important;
-  border-top: 1px solid rgba(74,144,217,0.08) !important;
+  background: rgba(8,17,32,0.86) !important;
+  backdrop-filter: blur(32px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(180%) !important;
+  border-top: 1px solid rgba(163,190,241,0.10) !important;
   padding-bottom: max(env(safe-area-inset-bottom, 8px), 8px) !important;
 }
 
@@ -2076,7 +2163,7 @@ a[role="button"]:active {
 
 /* Upgrade FloatingCTA and ExitIntent to glass */
 .floating-cta > div {
-  background: rgba(7, 10, 22, 0.88) !important;
+  background: rgba(8, 17, 32, 0.88) !important;
   backdrop-filter: blur(28px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
   border: 1px solid rgba(74, 144, 217, 0.15) !important;
@@ -2337,7 +2424,7 @@ a:not(.no-press):active,
   position: absolute;
   inset: 0;
   background: radial-gradient(ellipse 70% 60% at 50% 40%,
-    transparent 40%, var(--bg, #040408) 100%);
+    transparent 40%, var(--bg, #050B16) 100%);
   pointer-events: none;
   z-index: 0;
 }
@@ -2519,7 +2606,7 @@ a:not(.no-press):active,
   position: fixed;
   bottom: 0; left: 0; right: 0;
   z-index: 9900;
-  background: rgba(4,4,8,0.97);
+  background: rgba(5,11,22,0.97);
   border-top: 1px solid rgba(74,144,217,0.18);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -2870,23 +2957,24 @@ button[aria-pressed="true"] {
   animation: text-shimmer 4s linear infinite;
 }
 
-/* ── P7.8 — PRIMARY CTA SHIMMER BUTTON ── */
+/* ── P7.8 — PRIMARY CTA SHIMMER BUTTON — carries the vital gradient ── */
 .btn-shimmer {
   position: relative;
   overflow: hidden;
-  background: var(--accent);
+  background: var(--grad-vital);
   border: none;
   border-radius: 12px;
   cursor: pointer;
-  color: var(--bg);
+  color: #04121D;
   font-family: var(--font-display);
   font-weight: 600;
-  transition: box-shadow 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 4px 24px rgba(79,142,240,0.35);
+  transition: box-shadow 0.3s ease, transform 0.2s ease, filter 0.2s ease;
+  box-shadow: 0 4px 24px rgba(79,142,240,0.30), 0 2px 12px rgba(45,212,191,0.18);
 }
 .btn-shimmer:hover {
-  box-shadow: 0 8px 40px rgba(79,142,240,0.55);
+  box-shadow: 0 8px 40px rgba(79,142,240,0.45), 0 4px 20px rgba(45,212,191,0.30);
   transform: translateY(-1px);
+  filter: brightness(1.06);
 }
 .btn-shimmer:active {
   transform: translateY(0) scale(0.97) !important;
@@ -3214,8 +3302,8 @@ button[aria-pressed="true"] {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: var(--accent);
-  color: #fff;
+  background: var(--grad-vital);
+  color: #04121D;
   border: none;
   border-radius: var(--r-lg);
   font-family: var(--font-inter), sans-serif;
@@ -3223,15 +3311,16 @@ button[aria-pressed="true"] {
   letter-spacing: -0.01em;
   cursor: pointer;
   overflow: hidden;
-  /* Physical depth: top highlight + drop shadow */
+  /* Physical depth: top highlight + duotone drop shadow */
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.20),
-    0 4px 12px rgba(79,142,240,0.35),
+    0 4px 12px rgba(79,142,240,0.30),
+    0 2px 8px rgba(45,212,191,0.18),
     0 1px 3px rgba(0,0,0,0.20);
   transition:
     transform 0.22s var(--ease-out-expo),
     box-shadow 0.22s ease,
-    background 0.2s ease;
+    filter 0.2s ease;
   will-change: transform;
 }
 
@@ -3255,9 +3344,10 @@ button[aria-pressed="true"] {
   transform: translateY(-2px);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.24),
-    0 8px 24px rgba(79,142,240,0.45),
+    0 8px 24px rgba(79,142,240,0.40),
+    0 4px 16px rgba(45,212,191,0.28),
     0 2px 6px rgba(0,0,0,0.25);
-  background: color-mix(in srgb, var(--accent) 90%, white 10%);
+  filter: brightness(1.08);
 }
 
 .btn-shimmer:active {
@@ -3827,7 +3917,7 @@ button[aria-pressed="true"] {
 }
 
 #main-nav.scrolled {
-  background: rgba(6,6,8,0.88) !important;
+  background: rgba(5,11,22,0.88) !important;
   backdrop-filter: blur(28px) saturate(200%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
   box-shadow: 0 1px 0 rgba(255,255,255,0.06), 0 4px 24px rgba(0,0,0,0.30) !important;
@@ -5286,10 +5376,10 @@ input[inputmode="decimal"] {
    so it's always legible against any page content. */
 @media (max-width: 768px) {
   #main-nav {
-    background: rgba(5,5,11,0.96) !important;
-    backdrop-filter: blur(24px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-    border-color: rgba(255,255,255,0.09) !important;
+    background: rgba(8,17,32,0.92) !important;
+    backdrop-filter: blur(24px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+    border-color: rgba(163,190,241,0.12) !important;
     box-shadow: 0 4px 24px rgba(0,0,0,0.40) !important;
   }
 }

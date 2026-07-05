@@ -66,7 +66,7 @@ export default function Hero() {
   const [searchVal, setSearchVal]           = useState('')
   const [locationVal, setLocationVal]       = useState('')
   const [cycleIdx, setCycleIdx]             = useState(0)
-  const [wordClass, setWordClass]           = useState('word-cycle-in')
+  const [prevIdx, setPrevIdx]               = useState<number | null>(null)
 
   /* restore saved location */
   useEffect(() => {
@@ -76,15 +76,14 @@ export default function Hero() {
     } catch { /* private browsing */ }
   }, [])
 
-  /* cycling headline word */
+  /* cycling headline word — crossfade: old word exits WHILE new word enters,
+     so the headline never reads "Free healthcare, ___ in seconds." */
   useEffect(() => {
     const id = setInterval(() => {
-      setWordClass('word-cycle-out')
-      const t = setTimeout(() => {
-        setCycleIdx(i => (i + 1) % CYCLE_WORDS.length)
-        setWordClass('word-cycle-in')
-      }, 380)
-      return () => clearTimeout(t)
+      setCycleIdx(i => {
+        setPrevIdx(i)
+        return (i + 1) % CYCLE_WORDS.length
+      })
     }, 2800)
     return () => clearInterval(id)
   }, [])
@@ -229,12 +228,13 @@ export default function Hero() {
       }}>
         {/* Dot grid */}
         <div className="dot-grid-bg" style={{ position: 'absolute', inset: 0, opacity: 0.65 }} />
-        {/* Top radial glow — single centred light source */}
+        {/* Aurora — the living blue→teal light field, signature of the Vital language */}
+        <div className="aurora" />
+        {/* Horizon glow — a thin band of life at the top edge */}
         <div style={{
-          position: 'absolute', top: '-80px', left: '50%', transform: 'translateX(-50%)',
-          width: '900px', height: '500px', borderRadius: '50%',
-          background: 'radial-gradient(ellipse, rgba(79,142,240,0.07) 0%, transparent 65%)',
-          filter: 'blur(70px)',
+          position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
+          width: 'min(720px, 90vw)', height: '1px',
+          background: 'linear-gradient(90deg, transparent, rgba(79,142,240,0.55) 35%, rgba(45,212,191,0.55) 65%, transparent)',
         }} />
       </div>
 
@@ -307,13 +307,25 @@ export default function Hero() {
               <span aria-hidden="true" style={{ visibility: 'hidden' }}>
                 {CYCLE_WORDS.reduce((a, b) => a.length >= b.length ? a : b)}
               </span>
+              {prevIdx !== null && (
+                <span
+                  key={`out-${prevIdx}`}
+                  aria-hidden="true"
+                  className="word-cycle-out text-vital"
+                  style={{
+                    position: 'absolute', left: 0, right: 0, top: 0,
+                    display: 'block', textAlign: 'center', whiteSpace: 'nowrap',
+                  }}
+                >
+                  {CYCLE_WORDS[prevIdx]}
+                </span>
+              )}
               <span
-                key={cycleIdx}
-                className={wordClass}
+                key={`in-${cycleIdx}`}
+                className="word-cycle-in text-vital"
                 style={{
                   position: 'absolute', left: 0, right: 0, top: 0,
-                  color: 'var(--accent)', display: 'block', textAlign: 'center',
-                  whiteSpace: 'nowrap',
+                  display: 'block', textAlign: 'center', whiteSpace: 'nowrap',
                 }}
               >
                 {CYCLE_WORDS[cycleIdx]}

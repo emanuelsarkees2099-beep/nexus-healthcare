@@ -18,7 +18,7 @@ import { NextRequest } from 'next/server'
 export const runtime = 'edge'
 
 /* ── Design tokens (must be inline — edge runtime has no CSS) ── */
-const BG    = '#040408'
+const BG    = '#050B16'
 const BG2   = '#08090F'
 const BG3   = '#0C0D18'
 const ACC   = '#4A8FD4'

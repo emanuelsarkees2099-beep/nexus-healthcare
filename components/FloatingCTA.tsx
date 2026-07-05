@@ -89,13 +89,13 @@ export default function FloatingCTA() {
           aria-label="Find free care — scroll to search"
           style={{
             display: 'flex', alignItems: 'center', gap: '6px',
-            background: 'var(--accent)', color: '#07070F',
+            background: 'var(--grad-vital)', color: '#04121D',
             border: 'none', borderRadius: '100px', padding: '10px 20px',
-            fontFamily: 'var(--font-inter)', fontSize: '12px', fontWeight: 600,
+            fontFamily: 'var(--font-inter)', fontSize: '12px', fontWeight: 700,
             cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0,
             letterSpacing: '0.01em',
             transition: 'transform 0.25s var(--ease-spring), box-shadow 0.25s',
-            boxShadow: '0 4px 16px rgba(29,111,191,0.22)',
+            boxShadow: '0 4px 16px rgba(79,142,240,0.25), 0 2px 10px rgba(45,212,191,0.18)',
           }}
           onMouseEnter={e => {
             e.currentTarget.style.transform = 'scale(1.05)'

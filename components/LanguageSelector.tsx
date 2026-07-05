@@ -20,30 +20,101 @@ const LANGUAGES = [
 ]
 
 export default function LanguageSelector() {
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(false)      // full modal
+  const [banner, setBanner]   = useState<typeof LANGUAGES[number] | null>(null) // compact offer
   const [selected, setSelected] = useState<string | null>(null)
   const [closing, setClosing] = useState(false)
 
+  /* First visit: NEVER interrupt with a modal.
+     If the browser prefers a supported non-English language, offer it in a
+     small dismissible banner. Otherwise silently default to English. */
   useEffect(() => {
     if (typeof localStorage === 'undefined') return
     const saved = localStorage.getItem(STORAGE_KEY)
-    if (!saved) {
-      // Small delay so page content loads first
-      const t = setTimeout(() => setVisible(true), 600)
+    if (saved) return
+    const pref = (navigator.language || 'en').slice(0, 2).toLowerCase()
+    const match = LANGUAGES.find(l => l.code === pref && l.code !== 'en')
+    if (match) {
+      const t = setTimeout(() => setBanner(match), 1200)
       return () => clearTimeout(t)
     }
+    localStorage.setItem(STORAGE_KEY, 'en')
   }, [])
 
   const choose = (code: string) => {
     setSelected(code)
     localStorage.setItem(STORAGE_KEY, code)
     window.dispatchEvent(new CustomEvent('nexus:lang-changed'))
+    setBanner(null)
     close()
+  }
+
+  const dismissBanner = () => {
+    localStorage.setItem(STORAGE_KEY, 'en')
+    setBanner(null)
   }
 
   const close = () => {
     setClosing(true)
     setTimeout(() => setVisible(false), 380)
+  }
+
+  /* ── Compact language offer banner (non-blocking) ── */
+  if (!visible && banner) {
+    return (
+      <div
+        role="region"
+        aria-label="Language suggestion"
+        style={{
+          position: 'fixed', bottom: 'calc(84px + env(safe-area-inset-bottom, 0px))',
+          left: '50%', transform: 'translateX(-50%)', zIndex: 9970,
+          display: 'flex', alignItems: 'center', gap: '10px',
+          background: 'rgba(13,24,43,0.92)',
+          backdropFilter: 'blur(24px) saturate(140%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(140%)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--r-pill)',
+          padding: '8px 10px 8px 16px',
+          boxShadow: 'var(--shadow-elevated)',
+          animation: 'lang-fade-in 0.4s ease forwards',
+          maxWidth: 'calc(100vw - 32px)',
+        }}
+      >
+        <Global size={16} color="var(--accent2)" aria-hidden="true" style={{ flexShrink: 0 }} />
+        <button
+          onClick={() => choose(banner.code)}
+          style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            color: 'var(--text)', fontFamily: 'var(--font-inter)',
+            fontSize: '13.5px', fontWeight: 600, whiteSpace: 'nowrap',
+          }}
+        >
+          {banner.native} →
+        </button>
+        <button
+          onClick={() => { setBanner(null); setVisible(true) }}
+          style={{
+            background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)',
+            borderRadius: 'var(--r-pill)', cursor: 'pointer', padding: '5px 12px',
+            color: 'var(--text-2)', fontFamily: 'var(--font-inter)', fontSize: '12px',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          More
+        </button>
+        <button
+          onClick={dismissBanner}
+          aria-label="Dismiss language suggestion"
+          style={{
+            background: 'none', border: 'none', cursor: 'pointer', padding: '4px',
+            color: 'var(--text-3)', display: 'flex', alignItems: 'center',
+          }}
+        >
+          <CloseSquare size={16} color="currentColor" aria-hidden="true" />
+        </button>
+        <style>{`@keyframes lang-fade-in { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }`}</style>
+      </div>
+    )
   }
 
   if (!visible) return null

@@ -193,7 +193,7 @@ export default function AIAssistant() {
           z-index: 9996;
           border-radius: 20px;
           display: flex; flex-direction: column;
-          background: rgba(4,4,8,0.96);
+          background: rgba(5,11,22,0.96);
           border: 1px solid rgba(74,144,217,0.22);
           box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(74,144,217,0.08);
           backdrop-filter: blur(24px);

@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import React, { useState, useRef } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
@@ -962,7 +962,7 @@ export default function PassportPage() {
                   <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <div style={{
                       position: 'absolute', left: 3, width: 9, height: 9, borderRadius: '50%',
-                      background: entry.color, border: `2px solid rgba(6,6,8,1)`,
+                      background: entry.color, border: `2px solid rgba(5,11,22,1)`,
                       boxShadow: `0 0 0 1px ${entry.color}40`,
                     }} />
                     <div style={{

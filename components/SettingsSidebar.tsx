@@ -247,7 +247,7 @@ export default function SettingsSidebar() {
         aria-hidden="true"
         style={{
           position: 'fixed', inset: 0, zIndex: 9970,
-          background: 'rgba(4,4,8,0.7)',
+          background: 'rgba(5,11,22,0.7)',
           backdropFilter: 'blur(6px)',
           animation: closing ? 'sf-fade-out 0.28s ease forwards' : 'sf-fade-in 0.22s ease forwards',
         }}
