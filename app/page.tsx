@@ -1,23 +1,14 @@
 import dynamic from 'next/dynamic'
-import Footer from '@/components/Footer'
-import HomeClientShell from '@/components/HomeClientShell'
 
-/* ── Nav + Hero — code-split, SSR-safe ── */
-const Nav               = dynamic(() => import('@/components/Nav'))
-const Hero              = dynamic(() => import('@/components/Hero'))
-
-/* ── Content sections — code-split, SSR-safe ──
-   Midnight Clinic landing: 6 beats, each with one job.
-   Hero (search) → Stats (live proof) → HowItWorks (3 steps) →
-   Features (product tiles) → Testimonials (voices) → CTA (ask again).
-   Cut at redesign: LogoMarquee, BeforeAfterBar, MissionFreeze,
-   TrustBadges — three stat-flavored sections was repetition, and the
-   marquee implied partnerships we haven't signed. */
-const Stats             = dynamic(() => import('@/components/Stats'))
-const Features          = dynamic(() => import('@/components/Features'))
-const HowItWorks        = dynamic(() => import('@/components/HowItWorks'))
-const Testimonials      = dynamic(() => import('@/components/Testimonials'))
-const CTA               = dynamic(() => import('@/components/CTA'))
+/* ── Light landing ("Paper Clinic") ─────────────────────────────────
+   The marketing page is light; the inner app stays dark for now
+   (Linear's own architecture: light marketing site, dark product).
+   Structure follows the Attio landing formula with NEXUS content:
+   badge → giant headline → search → live product frame → trust band
+   → steps → features → quote → CTA band → footer.
+   The old dark landing sections (Hero/Stats/HowItWorks/Features/
+   Testimonials/CTA) remain in components/ and are no longer mounted. */
+const LightLanding = dynamic(() => import('@/components/landing/LightLanding'))
 
 export default function Home() {
   return (
@@ -27,23 +18,9 @@ export default function Home() {
         Skip to main content
       </a>
 
-      {/* Browser-only components (canvas, scroll, CTA, crisis) in client boundary */}
-      <HomeClientShell />
-
-      {/* Navigation */}
-      <Nav />
-
-      {/* Page content */}
       <main id="main-content">
-        <Hero />
-        <Stats />
-        <HowItWorks />
-        <Features />
-        <Testimonials />
-        <CTA />
+        <LightLanding />
       </main>
-
-      <Footer />
     </>
   )
 }
