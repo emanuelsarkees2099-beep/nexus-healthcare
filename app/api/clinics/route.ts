@@ -254,14 +254,16 @@ async function fetchNPIClinics(
   lat: number, lng: number, city: string, state: string, radiusMiles: number,
   taxonomyDesc: string, affordabilityScore: number, clinicType: string, sourceTag: string
 ): Promise<Clinic[]> {
-  if (!state || !city) return []
+  if (!state) return []
   try {
     const url = new URL('https://npiregistry.cms.hhs.gov/api/')
     url.searchParams.set('version', '2.1')
     url.searchParams.set('enumeration_type', '2')          // organizations only
     url.searchParams.set('taxonomy_description', taxonomyDesc)
+    // State-wide, NOT city-limited: matching by exact city string made a
+    // Phoenix search blind to clinics registered in Tempe/Mesa/Scottsdale.
+    // The zip-centroid distance filter below handles the radius.
     url.searchParams.set('state', state)
-    url.searchParams.set('city', city)
     url.searchParams.set('limit', '200')
 
     const res = await fetch(url.toString(), {
@@ -282,10 +284,18 @@ async function fetchNPIClinics(
     const zipCoords = await geocodeZips(zips)
 
 
+    // NPI names are ALL-CAPS legal entities ("ADELANTE HEALTHCARE, INC") —
+    // title-case for display, keep small words + acronym-like tokens sane.
+    const titleCase = (s: string) => s.toLowerCase().replace(/\b[a-z]/g, ch => ch.toUpperCase())
+      .replace(/\b(Llc|Inc|Pc|Pa|Ltd)\b\.?/g, m => m.toUpperCase())
+      .replace(/\bOf\b/g, 'of').replace(/\bAnd\b/g, 'and').replace(/\bThe\b/g, 'the')
+      .replace(/^./, ch => ch.toUpperCase())
+
     const clinics: Clinic[] = []
     for (const r of results) {
-      const name = (r.basic.organization_name ?? '').trim()
-      if (!name || !isOrganization(name)) continue
+      const rawOrgName = (r.basic.organization_name ?? '').trim()
+      if (!rawOrgName || !isOrganization(rawOrgName)) continue
+      const name = titleCase(rawOrgName)
       if (r.basic.status && r.basic.status !== 'A') continue  // skip deactivated
 
       const locAddr = r.addresses.find(a => a.address_purpose === 'LOCATION') ?? r.addresses[0]
@@ -444,6 +454,74 @@ async function queryOverpass(lat: number, lng: number, radiusMiles: number): Pro
     console.log('[NEXUS] Overpass → %d clinics', clinics.length)
     return clinics
   } catch {
+    return []
+  }
+}
+
+// ── PRIMARY SOURCE: owned clinics table (seeded from HRSA bulk file) ──────────
+// scripts/seed-clinics.mjs loads ~19k pre-geocoded FQHC sites into
+// public.clinics; clinics_near() is an indexed earthdistance radius query.
+// One DB call replaces the 10-API fan-out whenever the table is populated.
+type DBClinicRow = {
+  id: string; source: string; source_id: string; name: string; type: string | null
+  address: string | null; city: string | null; state: string | null; zip: string | null
+  lat: number | null; lng: number | null
+  phone: string | null; website: string | null; hours: string | null
+  weekly_hours: number | null
+  free: boolean | null; sliding_scale: boolean | null; affordability_score: number | null
+  services: string[] | null; languages: string[] | null
+  verified_at: string | null; distance_m: number
+}
+
+async function fetchDBClinics(lat: number, lng: number, radiusMiles: number): Promise<Clinic[]> {
+  if (!sbUrl) return []
+  try {
+    const { data, error } = await supabase.rpc('clinics_near', {
+      in_lat: lat,
+      in_lng: lng,
+      radius_m: Math.round(radiusMiles * 1609.34),
+      max_rows: 200,
+    })
+    if (error || !Array.isArray(data)) {
+      if (error) console.warn('[NEXUS] clinics_near: %s', error.message?.slice(0, 120))
+      return []
+    }
+    return (data as DBClinicRow[]).map(r => {
+      const score = r.affordability_score ?? 50
+      const label: AffordabilityLabel = score >= 70 ? 'likely-free' : score >= 45 ? 'low-cost' : 'standard'
+      const distMi = r.distance_m / 1609.34
+      const website = (r.website ?? '').trim()
+      return {
+        id: `${r.source}-${r.source_id}`,
+        name: r.name,
+        address: r.address ?? '',
+        city: r.city ?? '',
+        state: r.state ?? '',
+        zip: r.zip ?? '',
+        phone: r.phone ?? '',
+        distance: distMi.toFixed(1),
+        services: r.services?.length ? r.services : guessServices(r.name),
+        accepting: true,
+        free: r.free ?? score >= 70,
+        sliding_scale: r.sliding_scale ?? score >= 45,
+        isFreeOrDiscounted: (r.free || r.sliding_scale) ?? score >= 45,
+        affordability_score: score,
+        affordability_label: label,
+        affordability_reasons: r.type === 'FQHC' || r.type === 'FQHC Look-Alike'
+          ? ['FQHC — sliding scale required by law', 'HRSA verified']
+          : [r.source.toUpperCase()],
+        url: website ? (website.startsWith('http') ? website : `https://${website}`) : '',
+        mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${r.name} ${r.address ?? ''} ${r.city ?? ''} ${r.state ?? ''}`)}`,
+        hours: r.hours ?? '',
+        openNow: null,
+        type: r.type ?? 'Clinic',
+        lat: r.lat ?? undefined,
+        lng: r.lng ?? undefined,
+        languages: r.languages ?? undefined,
+      } satisfies Clinic
+    })
+  } catch (e) {
+    console.warn('[NEXUS] fetchDBClinics error: %s', String(e).slice(0, 100))
     return []
   }
 }
@@ -1088,17 +1166,63 @@ export async function GET(req: NextRequest) {
   const detectedCity = geo.city || geo.formatted.split(',')[0].trim()
   console.log('[NEXUS] Geocoded "%s" → city=%s state=%s zip=%s', rawLoc, detectedCity, detectedState, zip)
 
-  // 2. Run all sources in parallel
+  // 2. FAST PATH — owned clinics table (seeded from HRSA bulk data).
+  //    One indexed radius query. Auto-widens 25→50→75mi for rural areas.
+  //    Live-API fan-out below only runs when the table is empty/unavailable.
+  let dbClinics = await fetchDBClinics(geo.lat, geo.lng, radiusMiles)
+  if (dbClinics.length < 15 && radiusMiles < 50) {
+    const wider = await fetchDBClinics(geo.lat, geo.lng, 50)
+    if (wider.length > dbClinics.length) dbClinics = wider
+  }
+  if (dbClinics.length < 15) {
+    const widest = await fetchDBClinics(geo.lat, geo.lng, 75)
+    if (widest.length > dbClinics.length) dbClinics = widest
+  }
+
+  if (dbClinics.length >= 12) {
+    // Merge local NAFC free clinics (tiny, in-memory) for $0-care coverage
+    const nafc = fetchNAFCClinics(geo.lat, geo.lng, radiusMiles)
+    const seenDb = new Set(dbClinics.map(c => fingerprint(c.name, c.zip)))
+    const merged = [...dbClinics]
+    for (const c of nafc) {
+      const fp = fingerprint(c.name, c.zip)
+      if (!seenDb.has(fp)) { seenDb.add(fp); merged.push(c) }
+    }
+    merged.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
+
+    const filteredDb = specialty && specialty !== 'all'
+      ? merged.filter(c => matchesSpecialty(c, specialty))
+      : merged
+    const finalDb = filteredDb.length > 0 ? filteredDb : merged
+
+    console.log('[NEXUS] DB fast path: %d clinics (+%d NAFC)', dbClinics.length, nafc.length)
+    void cacheClinicsBg(finalDb.slice(0, 150), 'db')
+
+    return NextResponse.json(
+      {
+        clinics: finalDb.slice(0, 150),
+        source: 'db',
+        total: finalDb.length,
+        specialty_matched: !(filteredDb.length === 0 && specialty !== 'all'),
+        location: { lat: geo.lat, lng: geo.lng, zip: geo.zip, formatted: geo.formatted },
+        sources: { db: dbClinics.length, nafc: nafc.length },
+      },
+      { headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400' } }
+    )
+  }
+  console.log('[NEXUS] DB sparse (%d) — falling back to live sources', dbClinics.length)
+
+  // 2b. FALLBACK — live-API fan-out (pre-seed behavior, kept as safety net)
   // HRSA + CMS now use NPI Registry (free, no key, real FQHC/RHC data)
   // Overpass uses GET (POST blocked on some server IPs)
   let [hrsaClinics, nafcClinics, osmClinics, googleClinics, stateClinics, cmsClinics, samhsaClinics, yelpClinics, findHelpClinics, vaClinics] = await Promise.all([
-    (detectedCity && detectedState) ? fetchHRSAClinics(geo.lat, geo.lng, radiusMiles, detectedCity, detectedState) : Promise.resolve([]),
+    detectedState ? fetchHRSAClinics(geo.lat, geo.lng, radiusMiles, detectedCity, detectedState) : Promise.resolve([]),
     Promise.resolve(fetchNAFCClinics(geo.lat, geo.lng, radiusMiles)),
     queryOverpass(geo.lat, geo.lng, radiusMiles),
     fetchGooglePlacesClinics(geo.lat, geo.lng, radiusMiles),
     detectedState ? fetchStateHealthClinics(geo.lat, geo.lng, detectedState, radiusMiles) : Promise.resolve([]),
-    (detectedCity && detectedState) ? fetchCMSRuralHealthClinics(geo.lat, geo.lng, detectedCity, detectedState, radiusMiles) : Promise.resolve([]),
-    (detectedCity && detectedState) ? fetchSAMHSAClinics(geo.lat, geo.lng, radiusMiles, detectedCity, detectedState) : Promise.resolve([]),
+    detectedState ? fetchCMSRuralHealthClinics(geo.lat, geo.lng, detectedCity, detectedState, radiusMiles) : Promise.resolve([]),
+    detectedState ? fetchSAMHSAClinics(geo.lat, geo.lng, radiusMiles, detectedCity, detectedState) : Promise.resolve([]),
     fetchYelpClinics(geo.lat, geo.lng, radiusMiles),
     fetchFindHelpClinics(geo.lat, geo.lng, zip, radiusMiles),
     fetchVAClinics(geo.lat, geo.lng, radiusMiles),
@@ -1115,11 +1239,11 @@ export async function GET(req: NextRequest) {
     const expandedRadius = Math.min(radiusMiles * 2, 75)
     console.log('[NEXUS] Sparse results (%d) — auto-expanding to %d miles', initialCount, expandedRadius)
     const [h2, n2, o2, c2, s2, y2, f2, v2] = await Promise.all([
-      (detectedCity && detectedState) ? fetchHRSAClinics(geo.lat, geo.lng, expandedRadius, detectedCity, detectedState) : Promise.resolve([]),
+      detectedState ? fetchHRSAClinics(geo.lat, geo.lng, expandedRadius, detectedCity, detectedState) : Promise.resolve([]),
       Promise.resolve(fetchNAFCClinics(geo.lat, geo.lng, expandedRadius)),
       queryOverpass(geo.lat, geo.lng, expandedRadius),
-      (detectedCity && detectedState) ? fetchCMSRuralHealthClinics(geo.lat, geo.lng, detectedCity, detectedState, expandedRadius) : Promise.resolve([]),
-      (detectedCity && detectedState) ? fetchSAMHSAClinics(geo.lat, geo.lng, expandedRadius, detectedCity, detectedState) : Promise.resolve([]),
+      detectedState ? fetchCMSRuralHealthClinics(geo.lat, geo.lng, detectedCity, detectedState, expandedRadius) : Promise.resolve([]),
+      detectedState ? fetchSAMHSAClinics(geo.lat, geo.lng, expandedRadius, detectedCity, detectedState) : Promise.resolve([]),
       fetchYelpClinics(geo.lat, geo.lng, expandedRadius),
       fetchFindHelpClinics(geo.lat, geo.lng, zip, expandedRadius),
       fetchVAClinics(geo.lat, geo.lng, expandedRadius),
@@ -1151,6 +1275,7 @@ export async function GET(req: NextRequest) {
   }
 
   const merged: Clinic[] = []
+  addIfNew(dbClinics,      merged) // 0th: owned DB rows (even when < threshold)
   addIfNew(hrsaClinics,    merged) // 1st: HRSA FQHCs (federally verified)
   addIfNew(nafcClinics,    merged) // 2nd: NAFC free clinics
   addIfNew(vaClinics,      merged) // 3rd: VA facilities (free/low-cost for veterans)
