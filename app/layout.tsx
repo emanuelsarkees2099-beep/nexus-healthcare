@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Bricolage_Grotesque, Inter, Instrument_Serif, JetBrains_Mono } from 'next/font/google'
+import { Bricolage_Grotesque, Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import LanguageSelector from '@/components/LanguageSelector'
@@ -31,16 +31,6 @@ const inter = Inter({
   adjustFontFallback: false,
 })
 
-// Instrument Serif italic: the single editorial accent voice — used for
-// exactly one accent word per page (Midnight Clinic design language).
-const instrument = Instrument_Serif({
-  subsets: ['latin'],
-  weight: '400',
-  style: 'italic',
-  variable: '--font-serif',
-  display: 'swap',
-  adjustFontFallback: false,
-})
 
 // JetBrains Mono: 400 + 500 only — used for badges, distances, code labels.
 // 600 weight removed, saving one font file.
@@ -87,7 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${bricolage.variable} ${inter.variable} ${instrument.variable} ${mono.variable}`}
+      className={`${bricolage.variable} ${inter.variable} ${mono.variable}`}
     >
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />

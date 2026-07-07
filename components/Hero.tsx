@@ -221,14 +221,7 @@ export default function Hero() {
         >
           <span style={{ display: 'block' }}>Free healthcare,</span>
           <span style={{ display: 'block' }}>
-            <em className="hero-accent-word" style={{
-              fontFamily: 'var(--font-serif)',
-              fontStyle: 'italic',
-              fontWeight: 400,
-              letterSpacing: '-0.01em',
-            }}>
-              found
-            </em>
+            <span className="hero-accent-word">found</span>
             {' '}in seconds.
           </span>
         </h1>
