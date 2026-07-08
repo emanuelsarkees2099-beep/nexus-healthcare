@@ -141,41 +141,49 @@ function ProgramsCounterMini() {
   )
 }
 
-/* ── Mini live illustration: Outcomes sparkline ─────────────────── */
-function OutcomesSparkline() {
-  const points = [18, 35, 28, 52, 41, 63, 58, 71, 67, 82, 79, 88]
-  const maxV = 100
-  const w = 140, h = 40
-  const pathD = points.map((v, i) => {
-    const x = (i / (points.length - 1)) * w
-    const y = h - (v / maxV) * h
-    return `${i === 0 ? 'M' : 'L'}${x},${y}`
-  }).join(' ')
-
+/* ── Mini live illustration: AI triage chat (real product UI) ────── */
+function TriageChatMini() {
   return (
-    <div style={{ marginTop: '12px' }}>
+    <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      {/* User message */}
       <div style={{
-        fontFamily: 'var(--font-display)',
-        fontSize: 'clamp(2.2rem,5vw,3.5rem)',
-        fontWeight: 700, letterSpacing: '-0.04em', lineHeight: 1,
-        color: 'var(--text)', marginBottom: '4px',
+        alignSelf: 'flex-end', maxWidth: '90%',
+        background: 'rgba(79,142,240,0.16)', border: '1px solid rgba(79,142,240,0.25)',
+        borderRadius: '12px 12px 4px 12px', padding: '8px 12px',
+        fontSize: '11.5px', color: 'var(--text)', lineHeight: 1.5,
+        fontFamily: 'var(--font-inter)',
       }}>
-        47K+
+        My tooth has hurt for a week — no insurance
       </div>
-      <div style={{ fontSize: '12px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', marginBottom: '12px' }}>
-        Care visits tracked &amp; powering research
+      {/* AI reply */}
+      <div style={{
+        alignSelf: 'flex-start', maxWidth: '92%',
+        background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border-subtle)',
+        borderRadius: '12px 12px 12px 4px', padding: '8px 12px',
+        fontSize: '11.5px', color: 'var(--text-2)', lineHeight: 1.55,
+        fontFamily: 'var(--font-inter)',
+      }}>
+        <span style={{
+          display: 'block', fontSize: '9px', fontWeight: 700, letterSpacing: '0.1em',
+          color: 'var(--accent)', marginBottom: '4px',
+        }}>NEXUS</span>
+        That&apos;s treatable at a <strong style={{ color: 'var(--text)' }}>free dental clinic</strong> —
+        not an ER. ERs can&apos;t do dental work and average $1,500.
       </div>
-      <svg width={w} height={h + 4} viewBox={`0 0 ${w} ${h + 4}`} aria-hidden="true">
-        <defs>
-          <linearGradient id="spark-grad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="rgba(74,144,217,0.3)" />
-            <stop offset="100%" stopColor="rgba(74,144,217,0.9)" />
-          </linearGradient>
-        </defs>
-        <path d={pathD} fill="none" stroke="url(#spark-grad)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        {/* End dot */}
-        <circle cx={w} cy={h - (points[points.length - 1] / maxV) * h} r="3" fill="var(--accent)" />
-      </svg>
+      {/* Handoff card */}
+      <div style={{
+        alignSelf: 'flex-start', width: '92%',
+        background: 'rgba(52,211,153,0.07)', border: '1px solid rgba(52,211,153,0.2)',
+        borderRadius: 'var(--r-sm)', padding: '8px 12px',
+        fontFamily: 'var(--font-inter)',
+      }}>
+        <div style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text)' }}>
+          3 free dental clinics near you
+        </div>
+        <div style={{ fontSize: '10px', color: 'var(--text-3)', marginTop: '2px' }}>
+          Closest: 1.2 mi · open until 6 PM
+        </div>
+      </div>
     </div>
   )
 }
@@ -512,21 +520,21 @@ export default function Features() {
           </div>
         </Link>
 
-        {/* BC-4: Outcomes — default */}
+        {/* BC-4: AI Symptom Guide — default */}
         <Link
-          href="/outcomes"
+          href="/triage"
           className="bc-4"
           style={{ gridColumn: 'span 3', minHeight: '178px', textDecoration: 'none', color: 'inherit', display: 'block', cursor: 'pointer' }}
         >
           <div className="bento-card nexus-card" role="listitem" style={{ ...cardBase }}>
             <div className="card-depth-overlay" aria-hidden="true" />
-            <BentoIcon icon={<Chart2 size={18} variant="TwoTone" />} />
+            <BentoIcon icon={<Cpu size={18} variant="TwoTone" />} />
             <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.3rem', fontFamily: 'var(--font-display)' }}>
-              Outcomes Tracker
+              AI Symptom Guide
             </div>
-            <OutcomesSparkline />
+            <TriageChatMini />
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '0.75rem' }}>
-              <Tag>Research</Tag>
+              <Tag>AI Triage</Tag>
               <ExploreLink />
             </div>
           </div>
