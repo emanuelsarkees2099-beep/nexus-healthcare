@@ -62,15 +62,7 @@ export default function CTA() {
   const router      = useRouter()
   const sectionRef  = useRef<HTMLElement>(null)
   const innerRef    = useRef<HTMLDivElement>(null)
-  const [count,   setCount]   = useState(47318)
   const [inView,  setInView]  = useState(false)
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setCount(c => c + Math.floor(Math.random() * 3))
-    }, 2800)
-    return () => clearInterval(id)
-  }, [])
 
   /* Trigger TextScramble when section enters viewport */
   useEffect(() => {
@@ -106,9 +98,20 @@ export default function CTA() {
     <section
       ref={sectionRef}
       aria-labelledby="cta-title"
-      style={{ position: 'relative', zIndex: 2, padding: '0 2rem 140px' }}
+      style={{ position: 'relative', zIndex: 2, padding: '0 2rem 140px', overflow: 'hidden' }}
     >
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      {/* Ignite — the Pulse terminates here; the stage lights up on arrival */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', left: '50%', top: '30%',
+        width: 'min(900px, 120vw)', height: '500px',
+        transform: `translateX(-50%) scale(${inView ? 1 : 0.7})`,
+        background: 'radial-gradient(ellipse, rgba(79,142,240,0.10) 0%, rgba(45,212,191,0.05) 45%, transparent 70%)',
+        filter: 'blur(50px)',
+        opacity: inView ? 1 : 0,
+        transition: 'opacity 1.4s var(--ease-out-expo), transform 1.4s var(--ease-out-expo)',
+        pointerEvents: 'none',
+      }} />
+      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
 
         {/* Separator line */}
         <div aria-hidden="true" style={{
@@ -131,11 +134,11 @@ export default function CTA() {
               borderRadius: '50%', background: 'var(--accent)',
               animation: 'pulse-dot 1.8s ease-in-out infinite',
             }} />
-            <span aria-live="polite">
+            <span>
               <strong style={{ color: 'var(--text-2)', fontWeight: 500 }}>
-                {count.toLocaleString()}
+                18,938
               </strong>
-              {' '}people found care this month
+              {' '}verified free &amp; sliding-scale clinics — live
             </span>
           </div>
         </div>

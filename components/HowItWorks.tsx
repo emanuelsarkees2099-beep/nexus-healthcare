@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { registerGSAP } from '@/lib/gsap-st'
 import { SearchNormal1, ShieldTick } from 'iconsax-react'
 registerGSAP()
@@ -159,7 +160,13 @@ export default function HowItWorks() {
     }
   }
 
+  /* In scroll-drive mode the timer never runs — the visitor's scroll
+     position selects the step. Timer remains the mobile/reduced-motion
+     fallback so the demo still self-advances there. */
+  const scrubMode = useRef(false)
+
   const startCycle = () => {
+    if (scrubMode.current) return
     timerRef.current = setInterval(() => {
       setActive(prev => {
         const next = (prev + 1) % STEPS.length
@@ -170,9 +177,46 @@ export default function HowItWorks() {
   }
 
   useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const desktop = window.innerWidth >= 769
+
+    if (reduced || !desktop) {
+      activateStep(0)
+      startCycle()
+      return () => { if (timerRef.current) clearInterval(timerRef.current) }
+    }
+
+    /* ── Scroll-driven steps (desktop): progress through the section
+         maps to the active step; the bar shows within-step progress. ── */
+    scrubMode.current = true
     activateStep(0)
-    startCycle()
-    return () => { if (timerRef.current) clearInterval(timerRef.current) }
+    if (barRef.current) {
+      barRef.current.style.transition = 'none'
+      barRef.current.style.width = '0%'
+    }
+
+    let lastStep = 0
+    const st = ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: 'top 60%',
+      end: 'bottom 60%',
+      onUpdate: self => {
+        const p = self.progress
+        const step = Math.min(STEPS.length - 1, Math.floor(p * STEPS.length))
+        if (step !== lastStep) {
+          lastStep = step
+          setActive(step)
+          setPanelKey(k => k + 1)
+        }
+        if (barRef.current) {
+          const within = Math.min(1, Math.max(0, p * STEPS.length - step))
+          barRef.current.style.width = `${within * 100}%`
+        }
+      },
+    })
+
+    return () => st.kill()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

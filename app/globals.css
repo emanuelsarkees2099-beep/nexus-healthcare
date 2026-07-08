@@ -264,6 +264,51 @@ label svg,
   .aurora { animation: none; }
 }
 
+/* ── Border beam — rotating conic highlight. ONE element per page. ──
+   The single permitted loop besides live-status pulses: it marks the
+   flagship card the way a rotating showcase light marks a product. */
+@property --beam-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+.border-beam { position: relative; }
+.border-beam::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0%, transparent 72%,
+    rgba(79,142,240,0.7) 86%,
+    rgba(45,212,191,0.7) 93%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: beam-spin 7s linear infinite;
+  pointer-events: none;
+  z-index: 3;
+}
+@keyframes beam-spin { to { --beam-angle: 360deg; } }
+@media (prefers-reduced-motion: reduce) {
+  .border-beam::after { animation: none; opacity: 0.4; }
+}
+
+/* ── Bento icon micro-lift on card hover ── */
+.bento-icon-wrap {
+  transition: transform 0.25s var(--ease-out-expo), border-color 0.2s ease, background 0.2s ease;
+}
+.bento-card:hover .bento-icon-wrap {
+  transform: translateY(-2px);
+  border-color: rgba(79,142,240,0.35) !important;
+  background: rgba(79,142,240,0.08) !important;
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    LIGHT THEME OVERRIDE  (toggled via data-theme="light" on <html>)
    ═══════════════════════════════════════════════════════════════════ */

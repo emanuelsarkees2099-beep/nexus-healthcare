@@ -444,7 +444,7 @@ export default function Features() {
           style={{ gridColumn: 'span 5', gridRow: 'span 2', minHeight: '380px', textDecoration: 'none', color: 'inherit', display: 'block' }}
         >
           <div
-            className="bento-card nexus-card card-mint"
+            className="bento-card nexus-card card-mint border-beam"
             role="listitem"
             style={{ ...cardBase }}
           >
