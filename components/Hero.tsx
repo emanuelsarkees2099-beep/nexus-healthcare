@@ -6,6 +6,7 @@ import { registerGSAP } from '@/lib/gsap-st'
 import { useI18n } from '@/components/I18nContext'
 import SearchBar from '@/components/hero/SearchBar'
 import LivingProof from '@/components/hero/LivingProof'
+import HeroConstellation from '@/components/hero/HeroConstellation'
 
 registerGSAP()
 
@@ -36,11 +37,15 @@ const SYMPTOM_PATTERNS = [
   /\b(blood|bleeding|wound|swelling)\b/i,
 ]
 
-/* Split-flap word: renders chars with staggered flap-in/out animations */
+/* Split-flap word.
+   Incoming: per-character flap with stagger (the split-flap effect).
+   Outgoing: the WHOLE word exits fast as one unit — staggered exits
+   overlapped the incoming word for ~700ms and read as garbled text. */
 function FlapWord({ word, leaving }: { word: string; leaving: boolean }) {
   return (
     <span
       aria-hidden={leaving || undefined}
+      className={leaving ? 'flap-word-out' : undefined}
       style={{
         position: 'absolute', left: 0, right: 0, top: 0,
         display: 'block', textAlign: 'center', whiteSpace: 'nowrap',
@@ -50,8 +55,8 @@ function FlapWord({ word, leaving }: { word: string; leaving: boolean }) {
       {word.split('').map((ch, i) => (
         <span
           key={`${word}-${i}`}
-          className={leaving ? 'flap-out' : 'flap-in'}
-          style={{ animationDelay: `${i * 38}ms` }}
+          className={leaving ? undefined : 'flap-in'}
+          style={leaving ? undefined : { animationDelay: `${i * 34}ms` }}
         >
           {ch}
         </span>
@@ -267,6 +272,8 @@ export default function Hero() {
         willChange: 'transform',
       }}>
         <div className="aurora" />
+        {/* Network of care — sparse drifting nodes (desktop only) */}
+        <HeroConstellation />
         <div style={{
           position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
           width: 'min(720px, 90vw)', height: '1px',
@@ -303,22 +310,22 @@ export default function Hero() {
       >
 
         {/* ── Eyebrow ── */}
-        <div ref={eyebrowRef} style={{
+        <div ref={eyebrowRef} className="hero-eyebrow" style={{
           display: 'inline-flex', alignItems: 'center', gap: '10px',
           marginBottom: '28px',
         }}>
-          <span aria-hidden="true" style={{
+          <span aria-hidden="true" className="hero-eyebrow-rule" style={{
             display: 'inline-block', width: '24px', height: '1px',
             background: 'var(--accent)', opacity: 0.6,
           }} />
-          <span style={{
+          <span className="hero-eyebrow-text" style={{
             fontSize: '11.5px', fontWeight: 500, letterSpacing: '0.16em',
             textTransform: 'uppercase', color: 'var(--text-3)',
-            fontFamily: 'var(--font-mono)',
+            fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap',
           }}>
             Free · Private · No insurance required
           </span>
-          <span aria-hidden="true" style={{
+          <span aria-hidden="true" className="hero-eyebrow-rule" style={{
             display: 'inline-block', width: '24px', height: '1px',
             background: 'var(--accent)', opacity: 0.6,
           }} />
@@ -457,30 +464,29 @@ export default function Hero() {
       {/* ── Styles ── */}
       <style>{`
         /* Split-flap characters */
-        .flap-in, .flap-out {
+        .flap-in {
           display: inline-block;
           backface-visibility: hidden;
           transform-origin: 50% 100%;
-        }
-        .flap-in {
           opacity: 0;
           animation: flap-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        .flap-out {
-          animation: flap-out 0.4s cubic-bezier(0.4, 0, 1, 1) forwards;
+        .flap-word-out {
+          transform-origin: 50% 100%;
+          animation: flap-word-out 0.22s cubic-bezier(0.4, 0, 1, 1) forwards;
         }
         @keyframes flap-in {
           from { opacity: 0; transform: rotateX(-95deg) translateY(6px); }
           60%  { opacity: 1; }
           to   { opacity: 1; transform: rotateX(0deg) translateY(0); }
         }
-        @keyframes flap-out {
+        @keyframes flap-word-out {
           from { opacity: 1; transform: rotateX(0deg); }
-          to   { opacity: 0; transform: rotateX(90deg) translateY(-6px); }
+          to   { opacity: 0; transform: rotateX(70deg) translateY(-8px); }
         }
         @media (prefers-reduced-motion: reduce) {
-          .flap-in  { animation: none; opacity: 1; }
-          .flap-out { animation: none; opacity: 0; }
+          .flap-in       { animation: none; opacity: 1; }
+          .flap-word-out { animation: none; opacity: 0; }
           .hero-spotlight { display: none; }
         }
 
@@ -491,6 +497,10 @@ export default function Hero() {
         @media (max-width: 480px) {
           #hero h1 { font-size: clamp(2rem, 8.8vw, 2.8rem) !important; }
           #hero p  { font-size: 0.92rem !important; }
+          /* Eyebrow: one clean line — smaller type, no side rules */
+          .hero-eyebrow-rule { display: none !important; }
+          .hero-eyebrow-text { font-size: 9.5px !important; letter-spacing: 0.13em !important; }
+          .hero-eyebrow { margin-bottom: 20px !important; }
         }
         .search-submit:hover { box-shadow: var(--shadow-glow) !important; }
         .search-submit:active { transform: scale(0.97) !important; }

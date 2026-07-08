@@ -1,12 +1,17 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Heart, CloseCircle, Call } from 'iconsax-react'
 import { useI18n } from '@/components/I18nContext'
 
 export default function CrisisButton() {
   const { t } = useI18n()
+  const pathname = usePathname()
   const [expanded, setExpanded] = useState(false)
+
+  /* The crisis page IS the destination — a shortcut to it is noise there */
+  if (pathname === '/crisis') return null
 
   return (
     <>

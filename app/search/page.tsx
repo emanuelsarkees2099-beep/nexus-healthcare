@@ -405,10 +405,15 @@ function SearchResults() {
       <style>{SKELETON_STYLES}</style>
       <style>{`
         @media (max-width: 768px) {
-          .search-sticky-header { padding: 10px 16px !important; top: 56px !important; }
-          .search-bar-row { flex-direction: column !important; gap: 6px !important; }
-          .search-bar-row > div { min-width: unset !important; width: 100% !important; }
-          .search-bar-row > button { width: 100% !important; padding: 12px !important; font-size: 14px !important; }
+          .search-sticky-header { padding: 10px 12px !important; top: 56px !important; }
+          /* Two compact rows: query full-width on top, location + Search
+             sharing the second. The old stacked-column layout burned
+             ~180px of a phone screen on chrome. */
+          .search-bar-row { gap: 6px !important; }
+          .search-bar-row > div:first-child { flex: 1 1 100% !important; min-width: 0 !important; }
+          .search-bar-row > div:nth-child(2) { flex: 1 1 0 !important; min-width: 0 !important; width: auto !important; }
+          .search-bar-row > div:nth-child(2) input { width: 100% !important; min-width: 0 !important; }
+          .search-bar-row > button { flex: 0 0 auto !important; width: auto !important; padding: 10px 18px !important; font-size: 14px !important; min-height: 44px; }
           .sticky-filter-bar { margin: 0 -16px !important; padding-left: 16px !important; padding-right: 16px !important; }
           .map-split { grid-template-columns: 1fr !important; }
           .map-split > div:last-child { height: 320px !important; position: relative !important; top: auto !important; }

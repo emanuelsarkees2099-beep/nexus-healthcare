@@ -299,6 +299,62 @@ label svg,
   .border-beam::after { animation: none; opacity: 0.4; }
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE FOUNDATION — app-wide rules that make every page behave
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* No page may ever scroll sideways. Individual wide elements (tables,
+   code, charts) must scroll inside their own container instead. */
+html, body { overflow-x: clip; }
+
+@media (max-width: 768px) {
+  /* iOS zooms the page when a focused input's font-size < 16px.
+     Stylesheet !important beats inline styles, so this one rule fixes
+     every input in the app without touching 30 pages. */
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Settings FAB joins the right-edge column (crisis + AI FAB offsets
+     live in section 28 near the other FAB rules). */
+  body:has(.mobile-dock) button[aria-label="Settings"] {
+    bottom: calc(196px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 16px !important;
+  }
+
+  /* Cookie banner on dock-less pages sits at the bottom edge */
+  body:not(:has(.mobile-dock)) .cookie-banner {
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* (Search sticky-header compaction lives in app/search/page.tsx's own
+     style block — the page-level rules win the cascade there.) */
+
+  /* Cookie banner: full-width sheet above the dock, above FABs while
+     visible (it's dismissible; crisis button returns on dismiss).
+     Stacked layout: text on top, button row beneath — the desktop
+     side-by-side layout squeezed the copy into a 3-word column. */
+  .cookie-banner {
+    left: 10px !important;
+    right: 10px !important;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 10001 !important;
+    border-radius: 14px !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+  .cookie-banner > div {
+    justify-content: flex-end;
+  }
+  .cookie-banner > div > button {
+    min-height: 44px;
+    flex: 1;
+  }
+}
+
 /* ── Bento icon micro-lift on card hover ── */
 .bento-icon-wrap {
   transition: transform 0.25s var(--ease-out-expo), border-color 0.2s ease, background 0.2s ease;
@@ -5861,21 +5917,31 @@ input, textarea, select {
   }
 }
 
-/* ── 28. MOBILE FABs: lift crisis + AI buttons above the bottom dock ── */
+/* ── 28. MOBILE FABs: one vertical column above the dock ── */
 /* Both .crisis-btn and .ai-fab use inline bottom:24px. On mobile that
-   puts them inside the dock (64px tall). Override to sit above it.    */
+   puts them inside the dock. Stack them vertically on the right edge —
+   the old side-by-side layout collided with card action buttons. */
 @media (max-width: 768px) {
-  .crisis-btn {
-    bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+  /* Lift only on pages that HAVE the dock — on dock-less pages (auth,
+     admin) the default bottom:24px is correct and lifting strands the
+     FABs mid-content. */
+  body:has(.mobile-dock) .crisis-btn {
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 16px !important;
   }
-  .ai-fab {
-    bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
-    right: 76px !important;
+  body:has(.mobile-dock) .ai-fab {
+    bottom: calc(140px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 16px !important;
+  }
+  body:not(:has(.mobile-dock)) .ai-fab {
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 16px !important;
   }
   .ai-chat-panel {
-    bottom: calc(128px + env(safe-area-inset-bottom, 0px)) !important;
+    bottom: calc(200px + env(safe-area-inset-bottom, 0px)) !important;
     right: 16px !important;
     width: calc(100vw - 32px) !important;
+    max-height: calc(100dvh - 280px) !important;
   }
 }
 
