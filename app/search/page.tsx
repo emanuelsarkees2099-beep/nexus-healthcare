@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import { useEffect, useRef, useState, Suspense, useCallback } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -20,6 +20,9 @@ import {
 } from 'iconsax-react'
 /* P3 — standardized skeleton */
 import { SkeletonClinicCard, SKELETON_STYLES } from '@/components/ui/Skeleton'
+/* Typeahead: location suggestions from /api/places + canonical care categories */
+import TypeaheadList, { type TypeaheadItem } from '@/components/ui/TypeaheadList'
+import { suggestCare } from '@/lib/care-suggest'
 
 /* P2 — ClinicCard code-split: loads after the search input is interactive */
 const ClinicCard = dynamic_import(() => import('@/components/search/ClinicCard'), {
@@ -184,6 +187,75 @@ function SearchResults() {
   const handleLocationChange = (val: string) => {
     setLocationVal(val)
     if (val.trim()) localStorage.setItem('nexus_zip', val.trim())
+  }
+
+  /* ── Typeahead: places (cities/states/ZIPs from /api/places, backed by
+     the clinics DB so every suggestion has real results) + canonical
+     care categories ("pediatrics near me" → Pediatrics). Two anchors
+     each: the pre-search hero form and the sticky header. ── */
+  const [placeItems, setPlaceItems] = useState<TypeaheadItem[]>([])
+  const [placeOpen,  setPlaceOpen]  = useState(false)
+  const [placeIdx,   setPlaceIdx]   = useState(-1)
+  const placeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const [careItems, setCareItems] = useState<TypeaheadItem[]>([])
+  const [careOpen,  setCareOpen]  = useState(false)
+  const [careIdx,   setCareIdx]   = useState(-1)
+
+  const onLocationInput = (val: string) => {
+    handleLocationChange(val)
+    setPlaceIdx(-1)
+    if (placeTimer.current) clearTimeout(placeTimer.current)
+    const q = val.trim()
+    if (q.length < 2) { setPlaceItems([]); setPlaceOpen(false); return }
+    placeTimer.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/places?q=${encodeURIComponent(q)}`)
+        if (!res.ok) return
+        const data = await res.json() as { suggestions?: Array<{ label: string; value: string; type: 'city' | 'state' | 'zip' }> }
+        const items: TypeaheadItem[] = (data.suggestions ?? [])
+          .filter(s => s.value.toLowerCase() !== q.toLowerCase())
+          .map(s => ({ label: s.label, value: s.value, kind: s.type }))
+        setPlaceItems(items)
+        setPlaceOpen(items.length > 0)
+      } catch { /* offline — no suggestions */ }
+    }, 180)
+  }
+
+  const pickPlace = (item: TypeaheadItem) => {
+    handleLocationChange(item.value)
+    setPlaceOpen(false)
+    setPlaceIdx(-1)
+  }
+
+  const onCareInput = (val: string) => {
+    setInputVal(val)
+    setCareIdx(-1)
+    const items: TypeaheadItem[] = suggestCare(val)
+      .filter(c => c.value.toLowerCase() !== val.trim().toLowerCase())
+      .map(c => ({ label: c.label, value: c.value, kind: 'care' as const }))
+    setCareItems(items)
+    setCareOpen(items.length > 0)
+  }
+
+  const pickCare = (item: TypeaheadItem) => {
+    setInputVal(item.value)
+    setCareOpen(false)
+    setCareIdx(-1)
+  }
+
+  /** Shared arrow/enter/escape handling. Returns true when consumed. */
+  const typeaheadKeys = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    items: TypeaheadItem[], idx: number, setIdx: (n: number) => void,
+    open: boolean, close: () => void, pick: (i: TypeaheadItem) => void,
+  ): boolean => {
+    if (!open || items.length === 0) return false
+    if (e.key === 'ArrowDown') { e.preventDefault(); setIdx(Math.min(idx + 1, items.length - 1)); return true }
+    if (e.key === 'ArrowUp')   { e.preventDefault(); setIdx(Math.max(idx - 1, -1)); return true }
+    if (e.key === 'Escape')    { close(); return true }
+    if (e.key === 'Enter' && idx >= 0) { e.preventDefault(); pick(items[idx]); return true }
+    return false
   }
 
   useEffect(() => {
@@ -470,23 +542,38 @@ function SearchResults() {
           <form onSubmit={handleSearch} className="search-hero-form" style={{ width: '100%', maxWidth: '580px', opacity: heroWords[3] ? 1 : 0, transform: heroWords[3] ? 'translateY(0)' : 'translateY(12px)', transition: 'opacity 0.6s ease 0.5s, transform 0.6s cubic-bezier(0.16,1,0.3,1) 0.5s' }}>
             <div className="search-hero-row" style={{ display: 'flex', gap: '0', borderRadius: '16px', overflow: 'hidden', border: '1.5px solid rgba(79,142,240,0.28)', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(10px)', boxShadow: '0 20px 60px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.04)' }}>
               {/* Query input */}
-              <div className="search-hero-query" style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, padding: '14px 18px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
+              <div className="search-hero-query" style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '10px', flex: 1, padding: '14px 18px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
                 <SearchNormal1 size={18} color="rgba(255,255,255,0.35)" style={{ flexShrink: 0 }} />
                 <input
-                  value={inputVal} onChange={e => setInputVal(e.target.value)}
+                  value={inputVal} onChange={e => onCareInput(e.target.value)}
+                  onKeyDown={e => typeaheadKeys(e, careItems, careIdx, setCareIdx, careOpen, () => setCareOpen(false), pickCare)}
+                  onBlur={() => setTimeout(() => setCareOpen(false), 120)}
                   placeholder="Condition, specialty, or clinic name"
+                  aria-autocomplete="list"
+                  aria-controls={careOpen ? 'care-hero-list' : undefined}
+                  aria-activedescendant={careOpen && careIdx >= 0 ? `care-hero-opt-${careIdx}` : undefined}
                   style={{ flex: 1, background: 'none', border: 'none', outline: 'none', color: 'var(--text)', fontFamily: 'var(--font-inter)', fontSize: '16px', caretColor: 'var(--accent)' }}
                 />
+                {careOpen && (
+                  <TypeaheadList items={careItems} activeIdx={careIdx} onPick={pickCare} onHover={setCareIdx} idPrefix="care-hero" />
+                )}
               </div>
               {/* Location input */}
-              <div className="search-hero-loc" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 18px', minWidth: '160px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
+              <div className="search-hero-loc" style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 18px', minWidth: '160px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
                 <Location size={16} color="var(--accent)" style={{ flexShrink: 0 }} />
                 <input
-                  value={locationVal} onChange={e => handleLocationChange(e.target.value)}
-                  placeholder="ZIP or city"
-                  inputMode="numeric"
+                  value={locationVal} onChange={e => onLocationInput(e.target.value)}
+                  onKeyDown={e => typeaheadKeys(e, placeItems, placeIdx, setPlaceIdx, placeOpen, () => setPlaceOpen(false), pickPlace)}
+                  onBlur={() => setTimeout(() => setPlaceOpen(false), 120)}
+                  placeholder="ZIP, city, or state"
+                  aria-autocomplete="list"
+                  aria-controls={placeOpen ? 'place-hero-list' : undefined}
+                  aria-activedescendant={placeOpen && placeIdx >= 0 ? `place-hero-opt-${placeIdx}` : undefined}
                   style={{ width: '100%', background: 'none', border: 'none', outline: 'none', color: 'var(--text)', fontFamily: 'var(--font-inter)', fontSize: '16px', caretColor: 'var(--accent)' }}
                 />
+                {placeOpen && (
+                  <TypeaheadList items={placeItems} activeIdx={placeIdx} onPick={pickPlace} onHover={setPlaceIdx} idPrefix="place-hero" />
+                )}
               </div>
               {/* Submit */}
               <button type="submit" className="search-hero-submit" style={{ background: 'var(--grad-vital)', color: '#04121D', border: 'none', padding: '0 28px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-inter)', transition: 'opacity 0.18s', flexShrink: 0, letterSpacing: '0.01em' }}
@@ -538,6 +625,7 @@ function SearchResults() {
             <div className="search-bar-row" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'stretch' }}>
               {/* Query */}
               <div style={{
+                position: 'relative',
                 display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: '200px',
                 background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)',
                 borderRadius: '12px', padding: '4px 4px 4px 14px',
@@ -549,10 +637,18 @@ function SearchResults() {
                 <SearchNormal1 size={15} color="rgba(255,255,255,0.45)" style={{ flexShrink: 0 }} />
                 <input
                   value={inputVal}
-                  onChange={e => setInputVal(e.target.value)}
+                  onChange={e => onCareInput(e.target.value)}
+                  onKeyDown={e => typeaheadKeys(e, careItems, careIdx, setCareIdx, careOpen, () => setCareOpen(false), pickCare)}
+                  onBlur={() => setTimeout(() => setCareOpen(false), 120)}
                   placeholder={t('search.placeholder')}
+                  aria-autocomplete="list"
+                  aria-controls={careOpen ? 'care-header-list' : undefined}
+                  aria-activedescendant={careOpen && careIdx >= 0 ? `care-header-opt-${careIdx}` : undefined}
                   style={{ flex: 1, background: 'none', border: 'none', outline: 'none', color: 'var(--text)', fontFamily: 'var(--font-inter),sans-serif', fontSize: '14px', caretColor: 'var(--accent)' }}
                 />
+                {careOpen && (
+                  <TypeaheadList items={careItems} activeIdx={careIdx} onPick={pickCare} onHover={setCareIdx} idPrefix="care-header" />
+                )}
                 {inputVal && (
                   <button type="button" onClick={() => { setInputVal(''); setIntent({}) }} style={{ background: 'rgba(255,255,255,0.06)', border: 'none', borderRadius: '5px', padding: '4px 6px', cursor: 'pointer', color: 'var(--text-3)', display: 'flex' }}>
                     <CloseCircle size={12} color="rgba(255,255,255,0.5)" />
@@ -562,6 +658,7 @@ function SearchResults() {
 
               {/* Location */}
               <div style={{
+                position: 'relative',
                 display: 'flex', alignItems: 'center', gap: '8px',
                 background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)',
                 borderRadius: '12px', padding: '4px 14px', minWidth: '150px',
@@ -569,12 +666,18 @@ function SearchResults() {
                 <Location size={13} color="var(--accent)" style={{ flexShrink: 0 }} />
                 <input
                   value={locationVal}
-                  onChange={e => handleLocationChange(e.target.value)}
+                  onChange={e => onLocationInput(e.target.value)}
+                  onKeyDown={e => typeaheadKeys(e, placeItems, placeIdx, setPlaceIdx, placeOpen, () => setPlaceOpen(false), pickPlace)}
+                  onBlur={() => setTimeout(() => setPlaceOpen(false), 120)}
                   placeholder={t('search.locationPlaceholder')}
-                  inputMode="numeric"
-                  autoComplete="postal-code"
+                  aria-autocomplete="list"
+                  aria-controls={placeOpen ? 'place-header-list' : undefined}
+                  aria-activedescendant={placeOpen && placeIdx >= 0 ? `place-header-opt-${placeIdx}` : undefined}
                   style={{ background: 'none', border: 'none', outline: 'none', color: 'var(--text)', fontFamily: 'var(--font-inter),sans-serif', fontSize: '16px', width: '130px', caretColor: 'var(--accent)' }}
                 />
+                {placeOpen && (
+                  <TypeaheadList items={placeItems} activeIdx={placeIdx} onPick={pickPlace} onHover={setPlaceIdx} idPrefix="place-header" />
+                )}
               </div>
 
               {/* Submit */}

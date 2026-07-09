@@ -2,6 +2,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useI18n } from '@/components/I18nContext'
 import { SearchNormal1, Location, Gps } from 'iconsax-react'
+import TypeaheadList, { type TypeaheadItem } from '@/components/ui/TypeaheadList'
+import { suggestCare } from '@/lib/care-suggest'
 
 // U2 — Typeahead suggestion pool
 const TYPEAHEAD_POOL = [
@@ -40,15 +42,52 @@ export default function SearchBar({
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [suggestionIdx, setSuggestionIdx]   = useState(-1)
 
+  /* Location typeahead — cities/states/ZIPs from /api/places */
+  const [locItems, setLocItems] = useState<TypeaheadItem[]>([])
+  const [locOpen,  setLocOpen]  = useState(false)
+  const [locIdx,   setLocIdx]   = useState(-1)
+  const locTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const onLocChange = (val: string) => {
+    setLocationVal(val)
+    setLocIdx(-1)
+    if (locTimer.current) clearTimeout(locTimer.current)
+    const q = val.trim()
+    if (q.length < 2) { setLocItems([]); setLocOpen(false); return }
+    locTimer.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/places?q=${encodeURIComponent(q)}`)
+        if (!res.ok) return
+        const data = await res.json() as { suggestions?: Array<{ label: string; value: string; type: 'city' | 'state' | 'zip' }> }
+        const items: TypeaheadItem[] = (data.suggestions ?? [])
+          .filter(s => s.value.toLowerCase() !== q.toLowerCase())
+          .map(s => ({ label: s.label, value: s.value, kind: s.type }))
+        setLocItems(items)
+        if (items.length > 0) { setLocOpen(true); setShowSuggestions(false) }
+        else setLocOpen(false)
+      } catch { /* offline */ }
+    }, 180)
+  }
+
+  const pickLoc = (item: TypeaheadItem) => {
+    setLocationVal(item.value)
+    try { localStorage.setItem('nexus_location', item.value) } catch { /* private */ }
+    setLocOpen(false)
+    setLocIdx(-1)
+  }
+
   /* â”€â”€ Typeahead: instant static filter + 300ms debounced API suggestions â”€â”€ */
   useEffect(() => {
     const q = searchVal.trim().toLowerCase()
     if (!q) { setSuggestions([]); setShowSuggestions(false); return }
 
-    // Instant static matches shown immediately
+    // Canonical care categories first — handles messy queries like
+    // "pediatrics near me" → "Pediatrics" that substring matching misses
+    const canon = suggestCare(searchVal).map(c => c.label).filter(l => l.toLowerCase() !== q)
+    // Then instant static matches
     const starts   = TYPEAHEAD_POOL.filter(s => s.toLowerCase().startsWith(q) && s.toLowerCase() !== q)
     const contains = TYPEAHEAD_POOL.filter(s => !s.toLowerCase().startsWith(q) && s.toLowerCase().includes(q) && s.toLowerCase() !== q)
-    const staticMatches = [...starts, ...contains].slice(0, 4)
+    const staticMatches = [...new Set([...canon, ...starts, ...contains])].slice(0, 5)
 
     setSuggestions(staticMatches)
     setShowSuggestions(staticMatches.length > 0)
@@ -211,12 +250,23 @@ export default function SearchBar({
           <input
             ref={locationRef}
             value={locationVal}
-            onChange={e => setLocationVal(e.target.value)}
+            onChange={e => onLocChange(e.target.value)}
             onFocus={() => setEditingLoc(true)}
-            onBlur={() => setEditingLoc(false)}
-            onKeyDown={e => { if (e.key === 'Enter') onSearch() }}
+            onBlur={() => { setEditingLoc(false); setTimeout(() => setLocOpen(false), 120) }}
+            onKeyDown={e => {
+              if (locOpen && locItems.length > 0) {
+                if (e.key === 'ArrowDown') { e.preventDefault(); setLocIdx(i => Math.min(i + 1, locItems.length - 1)); return }
+                if (e.key === 'ArrowUp')   { e.preventDefault(); setLocIdx(i => Math.max(i - 1, -1)); return }
+                if (e.key === 'Escape')    { setLocOpen(false); return }
+                if (e.key === 'Enter' && locIdx >= 0) { e.preventDefault(); pickLoc(locItems[locIdx]); return }
+              }
+              if (e.key === 'Enter') onSearch()
+            }}
             placeholder={t('home.hero.zipPlaceholder')}
             aria-label="Location"
+            aria-autocomplete="list"
+            aria-controls={locOpen ? 'place-home-list' : undefined}
+            aria-activedescendant={locOpen && locIdx >= 0 ? `place-home-opt-${locIdx}` : undefined}
             style={{
               background: 'none', border: 'none', outline: 'none',
               color: editingLoc ? 'var(--text)' : 'var(--text-2)',
@@ -338,6 +388,19 @@ export default function SearchBar({
               {s}
             </button>
           ))}
+        </div>
+      )}
+
+      {/* Location typeahead — full-width dropdown under the bar */}
+      {locOpen && locItems.length > 0 && (
+        <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 100 }}>
+          <TypeaheadList
+            items={locItems}
+            activeIdx={locIdx}
+            onPick={pickLoc}
+            onHover={setLocIdx}
+            idPrefix="place-home"
+          />
         </div>
       )}
     </div>
