@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { getNAFCClinicsNear, type NAFCClinic } from '@/lib/nafc-clinics'
 import { rateLimit } from '@/lib/rate-limit'
+import { geocodePlace } from '@/lib/us-places'
 
 // ── Supabase (server-side, anon key) ──────────────────────────────────────────
 const sbUrl    = process.env.NEXT_PUBLIC_SUPABASE_URL    ?? ''
@@ -1154,8 +1155,18 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ clinics: [], source: 'no-location', total: 0 })
   }
 
-  // 1. Geocode
-  const geo = await geocode(rawLoc)
+  // 1. Geocode — instant local lookup first (every US ZIP + city via the
+  //    GeoNames index, ~0ms), Nominatim only for street addresses etc.
+  let geo: { lat: number; lng: number; zip: string; city: string; formatted: string } | null = null
+  const local = geocodePlace(rawLoc)
+  if (local) {
+    geo = {
+      lat: local.lat, lng: local.lng, zip: local.zip,
+      city: local.city, formatted: `${local.city}, ${local.state}`,
+    }
+  } else {
+    geo = await geocode(rawLoc)
+  }
   if (!geo) {
     return NextResponse.json({ clinics: [], source: 'no-location', total: 0 })
   }
