@@ -535,7 +535,7 @@ function SearchResults() {
 
           {/* Subtitle */}
           <p style={{ fontSize: '16px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', textAlign: 'center', maxWidth: '420px', lineHeight: 1.7, margin: '0 0 36px', opacity: heroWords[3] ? 1 : 0, transition: 'opacity 0.6s ease 0.45s' }}>
-            13,000+ federally verified clinics. Sliding-scale fees. No insurance required.
+            18,900+ federally verified clinics. Sliding-scale fees. No insurance required.
           </p>
 
           {/* Large search form */}
@@ -600,7 +600,7 @@ function SearchResults() {
           {/* Trust stats row */}
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '28px', opacity: heroWords[3] ? 1 : 0, transition: 'opacity 0.6s ease 0.7s' }}>
             {[
-              { icon: <ShieldTick size={13} color="var(--accent)" variant="TwoTone" />, text: '13,000+ verified clinics' },
+              { icon: <ShieldTick size={13} color="var(--accent)" variant="TwoTone" />, text: '18,900+ verified clinics' },
               { icon: <Flash size={13} color="#4ade80" variant="TwoTone" />, text: 'All free or sliding-scale' },
               { icon: <Global size={13} color="#a78bfa" variant="TwoTone" />, text: '50+ languages served' },
             ].map(s => (

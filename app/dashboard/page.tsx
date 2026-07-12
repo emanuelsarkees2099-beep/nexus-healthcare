@@ -415,7 +415,7 @@ function buildFeedItems(
       type: 'clinic',
       priority: 55,
       title: 'Find a free or low-cost clinic near you',
-      body: 'NEXUS connects you to 13,000+ FQHCs, free clinics, and sliding-scale providers.',
+      body: 'NEXUS connects you to 18,900+ FQHCs, free clinics, and sliding-scale providers.',
       cta: 'Search clinics',
       href: '/search',
       color: 'var(--accent)',

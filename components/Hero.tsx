@@ -434,7 +434,7 @@ export default function Hero() {
               fontSize: '12.5px', fontWeight: 600,
               color: 'var(--text)', fontFamily: 'var(--font-inter)',
             }}>
-              12,400+ free clinics mapped
+              18,900+ free clinics mapped
             </span>
           </div>
 

@@ -35,7 +35,7 @@ const PAGE_CONFIG: Record<string, { title: string; sub: string; accent: string }
   search:      { title: 'Find Free Care',         sub: 'Search 18,000+ free clinics, FQHCs, and programs.',       accent: ACC  },
   eligibility: { title: 'Check Eligibility',      sub: 'Find programs you qualify for in under 60 seconds.',      accent: ACC2 },
   medications: { title: 'Medication Finder',      sub: 'GoodRx, NeedyMeds, PAPs, and 340B savings programs.',    accent: ACC  },
-  impact:      { title: 'Our Impact',             sub: '284,000+ patients connected to free care this year.',     accent: ACC  },
+  impact:      { title: 'Our Impact',             sub: '18,900+ free and sliding-scale clinics, mapped and searchable.', accent: ACC  },
   equity:      { title: 'Health Equity Lab',      sub: 'Data-driven analysis of healthcare access disparities.',  accent: '#a78bfa' },
   pathways:    { title: 'Care Pathways',          sub: 'Step-by-step guides to finding the right care.',          accent: ACC  },
   rights:      { title: 'Know Your Rights',       sub: 'EMTALA, HIPAA, and your healthcare protections.',        accent: ACC  },

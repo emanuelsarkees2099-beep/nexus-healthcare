@@ -15,8 +15,11 @@ const PulseSpine        = dynamic(() => import('@/components/PulseSpine'))
 const Stats             = dynamic(() => import('@/components/Stats'))
 const Features          = dynamic(() => import('@/components/Features'))
 const HowItWorks        = dynamic(() => import('@/components/HowItWorks'))
-const Testimonials      = dynamic(() => import('@/components/Testimonials'))
 const CTA               = dynamic(() => import('@/components/CTA'))
+/* Testimonials unmounted: the component contains 16 fabricated patient
+   quotes with invented names, dollar amounts, and medical situations —
+   an FTC/false-advertising liability for a healthcare product. It stays
+   in components/ (unmounted) until real, consented stories exist. */
 
 export default function Home() {
   return (
@@ -40,7 +43,6 @@ export default function Home() {
         <Stats />
         <HowItWorks />
         <Features />
-        <Testimonials />
         <CTA />
       </main>
 

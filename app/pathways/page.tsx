@@ -50,10 +50,10 @@ type ClinicResult = {
 }
 
 const TRUST_STATS = [
-  { val: '47K+', label: 'Outcomes trained on' },
-  { val: '94%',  label: 'Successful care access' },
-  { val: '8',    label: 'Match variables' },
-  { val: '<2min',label: 'Avg time to your match' },
+  { val: '18,900+', label: 'Clinics matched from' },
+  { val: '48',      label: 'Languages supported' },
+  { val: '8',       label: 'Match variables' },
+  { val: '<2min',   label: 'Avg time to your match' },
 ]
 
 const SYMPTOMS = ['Chest pain', 'Dental pain', 'Anxiety / depression', 'Fever or infection', 'Back pain', "Women's health", 'Diabetes care', 'Vision problems']

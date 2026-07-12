@@ -389,7 +389,7 @@ export default function AboutPage() {
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
             {[
-              { stat: '13,000+', label: 'Verified clinics indexed', note: 'FQHCs, free clinics, sliding-scale' },
+              { stat: '18,900+', label: 'Verified clinics indexed', note: 'FQHCs, free clinics, sliding-scale' },
               { stat: '40+', label: 'Programs checked', note: 'Medicaid, ACA, CHIP, and more' },
               { stat: '2 min', label: 'Eligibility check time', note: 'No paperwork. No account.' },
               { stat: '$0', label: 'Cost to use NEXUS', note: 'Free forever — no ads, no data sales' },

@@ -140,11 +140,11 @@ export default function StoriesPage() {
         </h1>
 
         <p style={{ fontSize: '17px', color: 'rgba(255,255,255,0.5)', maxWidth: '480px', lineHeight: 1.7, marginBottom: '40px' }}>
-          47,000+ people have shared their journey navigating healthcare without insurance. Their stories are a map for everyone who comes after them.
+          Navigating healthcare without insurance is hard — and lonely. Share how you found care, and help map the way for everyone who comes after you.
         </p>
 
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '40px' }}>
-          {[['47K+', 'stories shared'], ['12K', 'active members'], ['89%', 'felt less alone']].map(([v, l]) => (
+          {[['48', 'languages'], ['$0', 'to share'], ['100%', 'anonymous']].map(([v, l]) => (
             <div key={l} style={{ padding: '10px 20px', background: 'rgba(74,144,217,0.07)', border: '1px solid rgba(74,144,217,0.18)', borderRadius: '100px', textAlign: 'center' }}>
               <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.02em' }}>{v}</div>
               <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '2px' }}>{l}</div>

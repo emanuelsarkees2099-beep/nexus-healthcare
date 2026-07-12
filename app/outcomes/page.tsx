@@ -112,34 +112,40 @@ const CHART_DATA = [
   { month: 'Jun', value: 11800, max: 12000 },
 ]
 
+/* Evidence base — real, publicly documented facts about the US care
+   landscape, attributed to their source category. NOT NEXUS-specific
+   study results (we have none yet); presenting invented studies
+   attributed to real universities would be fabrication. */
 const RESEARCH = [
   {
-    institution: 'Stanford Health Policy',
-    date: 'March 2025',
-    headline: 'Free clinic routing prevents $15M in preventable ER costs annually',
-    method: 'Retrospective analysis of 12,400 NEXUS user outcomes over 18 months, matched against regional ER admission data.',
+    institution: 'HRSA — Health Center Program',
+    date: 'Federal program data',
+    headline: 'Community health centers serve over 30 million patients a year',
+    method: 'Federally Qualified Health Centers are required to provide care on a sliding scale regardless of insurance status or ability to pay.',
     color: 'var(--accent)',
   },
   {
-    institution: 'Harvard School of Public Health',
-    date: 'February 2025',
-    headline: 'NEXUS users show 3.2× higher medication adherence than uninsured baseline',
-    method: 'Longitudinal cohort study, n=2,847 uninsured adults, 12-month follow-up with pharmacy records linkage.',
+    institution: 'KFF — Uninsured population',
+    date: 'Ongoing tracking',
+    headline: 'About 26 million Americans are uninsured',
+    method: 'Many who qualify for Medicaid or subsidized coverage remain unenrolled — often unaware they are eligible.',
     color: '#8ab5bc',
   },
   {
-    institution: 'Johns Hopkins Bloomberg SPH',
-    date: 'January 2025',
-    headline: 'CHW integration improves care access rates by 47% in underserved zip codes',
-    method: 'Randomized controlled study across 8 metro areas, comparing NEXUS+CHW vs. standard navigation.',
+    institution: 'CFPB — Medical debt',
+    date: 'Consumer research',
+    headline: 'Roughly 100 million Americans carry some form of medical debt',
+    method: 'Connecting people to free and sliding-scale care upstream helps prevent avoidable medical debt before it starts.',
     color: '#5a8a90',
   },
 ]
 
+/* Illustrative care pathways — how NEXUS routes common needs. Written
+   as scenarios, not attributed to real individuals. */
 const TESTIMONIALS = [
-  { name: 'Fatima A.', loc: 'Phoenix, AZ', quote: 'I\'d been putting off my daughter\'s checkup for two years because I thought we couldn\'t afford it. NEXUS found a clinic three blocks away. Zero cost.', care: 'Pediatrics' },
-  { name: 'Marcus T.', loc: 'Houston, TX', quote: 'The AI matched me to a mental health clinic that spoke Haitian Creole. I\'d never found anything like that before. I actually went.', care: 'Mental health' },
-  { name: 'Linh N.',   loc: 'San Jose, CA', quote: 'Saved $340 on my first visit alone. The program match found me a medication assistance plan I had no idea existed.', care: 'Prescriptions' },
+  { name: 'Pediatric visit', loc: '$0 at an FQHC', quote: 'A parent unsure they could afford a child\'s checkup is routed to a nearby FQHC that must see them regardless of ability to pay — often at no cost.', care: 'Pediatrics' },
+  { name: 'Mental health', loc: 'Language-matched', quote: 'Someone searching for therapy can filter to clinics offering care in their language, with sliding-scale fees for the uninsured.', care: 'Mental health' },
+  { name: 'Prescriptions', loc: 'Assistance programs', quote: 'The program match surfaces patient-assistance plans and discounts that can cut prescription costs by up to 90%.', care: 'Prescriptions' },
 ]
 
 const CARE_BREAKDOWN = [
