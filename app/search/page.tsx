@@ -23,6 +23,7 @@ import { SkeletonClinicCard, SKELETON_STYLES } from '@/components/ui/Skeleton'
 /* Typeahead: location suggestions from /api/places + canonical care categories */
 import TypeaheadList, { type TypeaheadItem } from '@/components/ui/TypeaheadList'
 import { suggestCare } from '@/lib/care-suggest'
+import MedicalDisclaimer from '@/components/MedicalDisclaimer'
 
 /* P2 — ClinicCard code-split: loads after the search input is interactive */
 const ClinicCard = dynamic_import(() => import('@/components/search/ClinicCard'), {
@@ -1102,6 +1103,9 @@ function SearchResults() {
         {/* List view — staggered entrance (#13) */}
         {!loading && results.length > 0 && viewMode === 'list' && (
           <>
+            <div style={{ marginBottom: '14px' }}>
+              <MedicalDisclaimer variant="inline" />
+            </div>
             <div className="search-results-bottom-pad" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {pagedResults.map((clinic, i) => (
                 <div

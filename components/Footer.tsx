@@ -237,6 +237,7 @@ export default function Footer() {
                 { label: 'Medication Finder',           href: '/medications',                      external: false },
                 { label: 'About NEXUS',                 href: '/about',                            external: false },
                 { label: 'Privacy',                     href: '/privacy',                          external: false },
+                { label: 'Accessibility',               href: '/accessibility',                    external: false },
               ],
             },
           ].map(col => (

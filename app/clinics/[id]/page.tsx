@@ -17,6 +17,7 @@ import {
 import { createClientClient } from '@/lib/auth-client'
 import { computeEquityScore } from '@/lib/search-utils'
 import AvailabilitySignal from '@/components/search/AvailabilitySignal'
+import MedicalDisclaimer from '@/components/MedicalDisclaimer'
 
 type AffordabilityLabel = 'likely-free' | 'low-cost' | 'standard'
 
@@ -858,6 +859,10 @@ export default function ClinicDetailPage() {
             <InfoCircle size={12} variant="Linear" />
             Report outdated or incorrect information
           </a>
+        </div>
+
+        <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 20px 40px' }}>
+          <MedicalDisclaimer variant="inline" />
         </div>
 
       </div>

@@ -15,6 +15,7 @@ const PulseSpine        = dynamic(() => import('@/components/PulseSpine'))
 const Stats             = dynamic(() => import('@/components/Stats'))
 const Features          = dynamic(() => import('@/components/Features'))
 const HowItWorks        = dynamic(() => import('@/components/HowItWorks'))
+const DataSources       = dynamic(() => import('@/components/DataSources'))
 const CTA               = dynamic(() => import('@/components/CTA'))
 /* Testimonials unmounted: the component contains 16 fabricated patient
    quotes with invented names, dollar amounts, and medical situations —
@@ -43,6 +44,7 @@ export default function Home() {
         <Stats />
         <HowItWorks />
         <Features />
+        <DataSources />
         <CTA />
       </main>
 
