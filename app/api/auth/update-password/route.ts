@@ -10,10 +10,17 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { rateLimit } from '@/lib/rate-limit'
 
 const MIN_PW_LENGTH = 8
 
 export async function POST(req: NextRequest) {
+  // Protect the recovery-token endpoint from token-guessing abuse
+  const rl = rateLimit(req, { limit: 10, windowMs: 60_000, namespace: 'auth-pwupdate' })
+  if (!rl.ok) {
+    return NextResponse.json({ error: 'Too many attempts. Please wait a minute.' }, { status: 429, headers: rl.headers })
+  }
+
   const authHeader = req.headers.get('authorization')
   if (!authHeader?.startsWith('Bearer ')) {
     return NextResponse.json({ error: 'Missing authorization token' }, { status: 401 })
@@ -26,8 +33,8 @@ export async function POST(req: NextRequest) {
   }
 
   const password = typeof body.password === 'string' ? body.password : ''
-  if (password.length < MIN_PW_LENGTH) {
-    return NextResponse.json({ error: `Password must be at least ${MIN_PW_LENGTH} characters` }, { status: 422 })
+  if (password.length < MIN_PW_LENGTH || password.length > 200) {
+    return NextResponse.json({ error: `Password must be ${MIN_PW_LENGTH}–200 characters` }, { status: 422 })
   }
 
   // Use service role to validate the recovery token and update the password

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { rateLimit } from '@/lib/rate-limit'
+import { BookmarkSchema, badRequest } from '@/lib/validation'
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
 const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
@@ -29,15 +31,15 @@ export async function GET(req: NextRequest) {
 
 // POST /api/bookmarks — add bookmark
 export async function POST(req: NextRequest) {
+  const rl = rateLimit(req, { limit: 40, windowMs: 60_000, namespace: 'bookmarks' })
+  if (!rl.ok) return NextResponse.json({ error: 'Too many requests.' }, { status: 429, headers: rl.headers })
+
   const user = await getUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const body = await req.json()
-  const { resource_type, resource_id, resource_name, resource_data } = body
-
-  if (!resource_type || !resource_id) {
-    return NextResponse.json({ error: 'resource_type and resource_id required' }, { status: 400 })
-  }
+  const parsed = BookmarkSchema.safeParse(await req.json().catch(() => null))
+  if (!parsed.success) return badRequest(parsed)
+  const { resource_type, resource_id, resource_name, resource_data } = parsed.data
 
   const getSupabaseClient = () => createClient(url, anonKey)
   const { data, error } = await getSupabaseClient()

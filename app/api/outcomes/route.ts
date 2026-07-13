@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendEmail, buildProgramAlertEmail } from '@/lib/email'
+import { rateLimit } from '@/lib/rate-limit'
+import { OutcomeSchema, badRequest } from '@/lib/validation'
 
 // ── Outcome Logging API ────────────────────────────────────────────────────────
 // POST /api/outcomes — log a health outcome event
@@ -36,11 +38,14 @@ interface OutcomePayload {
 
 export async function POST(req: NextRequest) {
   try {
-    const body: OutcomePayload = await req.json()
-
-    if (!VALID_TYPES.includes(body.event_type as EventType)) {
-      return NextResponse.json({ error: 'Invalid event_type' }, { status: 400 })
+    const rl = rateLimit(req, { limit: 30, windowMs: 60_000, namespace: 'outcomes' })
+    if (!rl.ok) {
+      return NextResponse.json({ error: 'Too many requests.' }, { status: 429, headers: rl.headers })
     }
+
+    const parsed = OutcomeSchema.safeParse(await req.json().catch(() => null))
+    if (!parsed.success) return badRequest(parsed)
+    const body: OutcomePayload = parsed.data
 
     // Get user if authenticated (optional — outcomes can be anonymous)
     let userId:    string | null = null

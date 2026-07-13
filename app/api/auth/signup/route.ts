@@ -1,14 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendEmail, buildWelcomeEmail } from '@/lib/email'
+import { rateLimit } from '@/lib/rate-limit'
+import { SignupSchema, badRequest } from '@/lib/validation'
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, fullName, phone, userType } = await request.json()
-
-    if (!email || !password || !fullName) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+    // Abuse protection: 5 account creations per hour per IP
+    const rl = rateLimit(request, { limit: 5, windowMs: 3_600_000, namespace: 'auth-signup' })
+    if (!rl.ok) {
+      return NextResponse.json({ error: 'Too many signups. Please try again later.' }, { status: 429, headers: rl.headers })
     }
+
+    const parsed = SignupSchema.safeParse(await request.json().catch(() => null))
+    if (!parsed.success) return badRequest(parsed)
+    const { email, password, fullName, phone, userType } = parsed.data
+
+    // Self-service signup may never mint a privileged account
+    const safeUserType = userType === 'admin' || userType === 'provider' ? 'patient' : (userType ?? 'patient')
 
     // One client per request (not a new instance per call)
     const supabase = createClient(
@@ -29,7 +38,7 @@ export async function POST(request: NextRequest) {
       email,
       full_name: fullName,
       phone:     phone || null,
-      user_type: userType || 'patient',
+      user_type: safeUserType,
     })
 
     // Welcome email — await so it runs before the function exits, but errors never block signup

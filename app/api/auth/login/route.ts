@@ -1,16 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { rateLimit } from '@/lib/rate-limit'
+import { LoginSchema, badRequest } from '@/lib/validation'
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
 const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json()
-
-    if (!email || !password) {
-      return NextResponse.json({ error: 'Email and password required' }, { status: 400 })
+    // Brute-force / credential-stuffing protection: 8 attempts per minute per IP
+    const rl = rateLimit(request, { limit: 8, windowMs: 60_000, namespace: 'auth-login' })
+    if (!rl.ok) {
+      return NextResponse.json({ error: 'Too many attempts. Please wait a minute.' }, { status: 429, headers: rl.headers })
     }
+
+    const parsed = LoginSchema.safeParse(await request.json().catch(() => null))
+    if (!parsed.success) return badRequest(parsed)
+    const { email, password } = parsed.data
 
     const getSupabaseClient = () => createClient(url, anonKey)
 
