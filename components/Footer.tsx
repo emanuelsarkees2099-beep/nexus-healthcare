@@ -223,7 +223,6 @@ export default function Footer() {
                 { label: 'Impact Dashboard', href: '/impact' },
                 { label: 'Equity Lab',       href: '/equity' },
                 { label: 'Editorial',        href: '/editorial' },
-                { label: 'Advocacy',         href: '/advocacy' },
                 { label: 'For Providers',    href: '/provider' },
               ],
             },

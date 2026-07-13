@@ -637,92 +637,6 @@ async function fetchGooglePlacesClinics(lat: number, lng: number, radiusMiles: n
   return allResults.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
 }
 
-// ── State Health Department APIs (CA, TX, NY, FL, IL) ────────────────────────
-// These states expose public clinic directories via data.gov or state portals.
-async function fetchStateHealthClinics(lat: number, lng: number, state: string, radiusMiles: number): Promise<Clinic[]> {
-  const stateEndpoints: Record<string, string> = {
-    // California OSHPD Licensed Clinic data (data.ca.gov)
-    'CA': `https://data.ca.gov/api/3/action/datastore_search?resource_id=7c38b3e0-9659-4e35-9e8c-3680b36af90e&limit=50&q=clinic`,
-    // Texas DSHS Provider Directory (via THCIC open data)
-    'TX': `https://data.texas.gov/resource/nadb-8m72.json?$limit=50&$where=within_circle(location,${lat},${lng},${radiusMiles * 1609})`,
-    // New York Health Facility data (NY Open Data)
-    'NY': `https://health.data.ny.gov/resource/vn5v-hh5r.json?$limit=30&$where=within_circle(location,${lat},${lng},${radiusMiles * 1609})`,
-    // Florida AHCA facility data
-    'FL': `https://data.florida.gov/api/views/d346-3h4b/rows.json?accessType=DOWNLOAD`,
-    // Illinois IDPH Federally Qualified Health Centers
-    'IL': `https://data.illinois.gov/api/views/6u9f-p59g/rows.json?accessType=DOWNLOAD`,
-  }
-
-  const endpoint = stateEndpoints[state.toUpperCase()]
-  if (!endpoint) return []
-
-  try {
-    const res = await fetch(endpoint, {
-      headers: { 'User-Agent': 'NEXUS-Healthcare/1.0' },
-      next: { revalidate: 86400 },
-      signal: AbortSignal.timeout(6000),
-    })
-    if (!res.ok) return []
-
-    const raw = await res.json() as Record<string, unknown>
-    let records: Record<string, unknown>[] = []
-
-    if (Array.isArray(raw)) {
-      records = raw as Record<string, unknown>[]
-    } else if (raw.result && typeof raw.result === 'object') {
-      const result = raw.result as Record<string, unknown>
-      records = (result.records as Record<string, unknown>[]) ?? []
-    } else if (raw.data && Array.isArray(raw.data)) {
-      records = raw.data as Record<string, unknown>[]
-    }
-
-    const clinics: Clinic[] = []
-    for (const r of records.slice(0, 20)) {
-      const name = String(r.facility_name ?? r.name ?? r.Name ?? r.FACILITY_NAME ?? '').trim()
-      if (!name || !isOrganization(name)) continue
-
-      const { score, label, reasons } = scoreAffordability(name, {})
-      if (score < 40) continue
-
-      const rLat = parseFloat(String(r.latitude ?? r.lat ?? r.Latitude ?? '0')) || lat
-      const rLng = parseFloat(String(r.longitude ?? r.lng ?? r.Longitude ?? '0')) || lng
-      const dist = distanceMiles(lat, lng, rLat, rLng)
-      if (dist > radiusMiles) continue
-
-      clinics.push({
-        id: `state-${state.toLowerCase()}-${String(r.id ?? r.ID ?? Math.random()).replace(/\./g, '')}`,
-        name,
-        address: String(r.address ?? r.Address ?? r.street_address ?? ''),
-        city: String(r.city ?? r.City ?? ''),
-        state: state,
-        zip: String(r.zip ?? r.Zip ?? r.postal_code ?? ''),
-        phone: String(r.phone ?? r.Phone ?? r.telephone ?? ''),
-        distance: dist.toFixed(1),
-        services: guessServices(name),
-        accepting: true,
-        free: score >= 70,
-        sliding_scale: score >= 45,
-        isFreeOrDiscounted: score >= 45,
-        affordability_score: score,
-        affordability_label: label,
-        affordability_reasons: [...reasons, `${state} State Health Dept`],
-        url: String(r.website ?? r.Website ?? r.url ?? ''),
-        mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + ' ' + state)}`,
-        hours: '',
-        openNow: null,
-        type: 'Community Clinic',
-        lat: rLat,
-        lng: rLng,
-      })
-    }
-
-    console.log('[NEXUS] State(%s) → %d clinics', state, clinics.length)
-    return clinics
-  } catch {
-    return []
-  }
-}
-
 // ── Detect state from geocode result ─────────────────────────────────────────
 const STATE_MAP: Record<string, string> = {
   'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR',
@@ -1226,12 +1140,11 @@ export async function GET(req: NextRequest) {
   // 2b. FALLBACK — live-API fan-out (pre-seed behavior, kept as safety net)
   // HRSA + CMS now use NPI Registry (free, no key, real FQHC/RHC data)
   // Overpass uses GET (POST blocked on some server IPs)
-  let [hrsaClinics, nafcClinics, osmClinics, googleClinics, stateClinics, cmsClinics, samhsaClinics, yelpClinics, findHelpClinics, vaClinics] = await Promise.all([
+  let [hrsaClinics, nafcClinics, osmClinics, googleClinics, cmsClinics, samhsaClinics, yelpClinics, findHelpClinics, vaClinics] = await Promise.all([
     detectedState ? fetchHRSAClinics(geo.lat, geo.lng, radiusMiles, detectedCity, detectedState) : Promise.resolve([]),
     Promise.resolve(fetchNAFCClinics(geo.lat, geo.lng, radiusMiles)),
     queryOverpass(geo.lat, geo.lng, radiusMiles),
     fetchGooglePlacesClinics(geo.lat, geo.lng, radiusMiles),
-    detectedState ? fetchStateHealthClinics(geo.lat, geo.lng, detectedState, radiusMiles) : Promise.resolve([]),
     detectedState ? fetchCMSRuralHealthClinics(geo.lat, geo.lng, detectedCity, detectedState, radiusMiles) : Promise.resolve([]),
     detectedState ? fetchSAMHSAClinics(geo.lat, geo.lng, radiusMiles, detectedCity, detectedState) : Promise.resolve([]),
     fetchYelpClinics(geo.lat, geo.lng, radiusMiles),
@@ -1239,13 +1152,13 @@ export async function GET(req: NextRequest) {
     fetchVAClinics(geo.lat, geo.lng, radiusMiles),
   ])
 
-  console.log('[NEXUS] Sources: HRSA=%d NAFC=%d OSM=%d Google=%d State=%d CMS=%d SAMHSA=%d Yelp=%d FindHelp=%d VA=%d',
+  console.log('[NEXUS] Sources: HRSA=%d NAFC=%d OSM=%d Google=%d CMS=%d SAMHSA=%d Yelp=%d FindHelp=%d VA=%d',
     hrsaClinics.length, nafcClinics.length, osmClinics.length, googleClinics.length,
-    stateClinics.length, cmsClinics.length, samhsaClinics.length, yelpClinics.length,
+    cmsClinics.length, samhsaClinics.length, yelpClinics.length,
     findHelpClinics.length, vaClinics.length)
 
   // 2b. Auto-expand radius if results are sparse (rural / underserved areas)
-  const initialCount = hrsaClinics.length + nafcClinics.length + osmClinics.length + stateClinics.length + cmsClinics.length + samhsaClinics.length + findHelpClinics.length + vaClinics.length
+  const initialCount = hrsaClinics.length + nafcClinics.length + osmClinics.length + cmsClinics.length + samhsaClinics.length + findHelpClinics.length + vaClinics.length
   if (initialCount < 8 && radiusMiles <= 40) {
     const expandedRadius = Math.min(radiusMiles * 2, 75)
     console.log('[NEXUS] Sparse results (%d) — auto-expanding to %d miles', initialCount, expandedRadius)
@@ -1291,8 +1204,7 @@ export async function GET(req: NextRequest) {
   addIfNew(nafcClinics,    merged) // 2nd: NAFC free clinics
   addIfNew(vaClinics,      merged) // 3rd: VA facilities (free/low-cost for veterans)
   addIfNew(findHelpClinics,merged) // 4th: 211 / FindHelp (largest social-services DB)
-  addIfNew(stateClinics,   merged) // 5th: State health dept
-  addIfNew(cmsClinics,     merged) // 6th: CMS Rural Health Clinics
+  addIfNew(cmsClinics,     merged) // 5th: CMS Rural Health Clinics
   addIfNew(samhsaClinics,  merged) // 7th: SAMHSA treatment centers (free federal API)
   addIfNew(yelpClinics,    merged) // 8th: Yelp (free tier, optional — requires YELP_API_KEY)
   addIfNew(googleClinics,  merged) // 9th: Google Places (keyed, optional)
@@ -1330,7 +1242,6 @@ export async function GET(req: NextRequest) {
         nafc:     nafcClinics.length,
         va:       vaClinics.length,
         findhelp: findHelpClinics.length,
-        state:    stateClinics.length,
         cms:      cmsClinics.length,
         samhsa:   samhsaClinics.length,
         yelp:     yelpClinics.length,
