@@ -3,25 +3,21 @@
    Version: v2
    ========================================================= */
 
-const CACHE_NAME = 'nexus-v4'
+const CACHE_NAME = 'nexus-v5'
 
-/* Pages to precache on install — these work fully offline */
+/* Pages to precache on install — these work fully offline.
+   Crisis is the priority: it must load with zero signal (life-safety).
+   Only real, high-value routes are listed; removed dead paths that
+   silently failed precache (/gps, /community, /open). */
 const PRECACHE_URLS = [
   '/',
+  '/crisis',
   '/search',
+  '/triage',
   '/programs',
   '/rights',
-  '/chw',
-  '/crisis',
-  '/triage',
-  '/gps',
-  '/passport',
-  '/dashboard',
   '/medications',
-  '/community',
-  '/equity',
-  '/editorial',
-  '/open',
+  '/passport',
   '/manifest.json',
   '/offline',
 ]

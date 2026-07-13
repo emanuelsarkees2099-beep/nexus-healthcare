@@ -24,6 +24,7 @@ import { SkeletonClinicCard, SKELETON_STYLES } from '@/components/ui/Skeleton'
 import TypeaheadList, { type TypeaheadItem } from '@/components/ui/TypeaheadList'
 import { suggestCare } from '@/lib/care-suggest'
 import MedicalDisclaimer from '@/components/MedicalDisclaimer'
+import ErrorBoundary from '@/components/ErrorBoundary'
 
 /* P2 — ClinicCard code-split: loads after the search input is interactive */
 const ClinicCard = dynamic_import(() => import('@/components/search/ClinicCard'), {
@@ -1083,19 +1084,21 @@ function SearchResults() {
               ))}
             </div>
             <div style={{ height: '600px', position: 'sticky', top: '130px' }}>
-              <ClinicMap
-                lat={geoCenter.lat}
-                lng={geoCenter.lng}
-                clinics={results}
-                radius={radius}
-                matchScores={matchScores ?? undefined}
-                onSearchArea={(newLat, newLng, r) => {
-                  // Re-center on the panned area and re-run search
-                  setGeoCenter({ lat: newLat, lng: newLng })
-                  setLocationVal(`${newLat.toFixed(4)}, ${newLng.toFixed(4)}`)
-                  handleSearch()
-                }}
-              />
+              <ErrorBoundary label="Clinic map">
+                <ClinicMap
+                  lat={geoCenter.lat}
+                  lng={geoCenter.lng}
+                  clinics={results}
+                  radius={radius}
+                  matchScores={matchScores ?? undefined}
+                  onSearchArea={(newLat, newLng, r) => {
+                    // Re-center on the panned area and re-run search
+                    setGeoCenter({ lat: newLat, lng: newLng })
+                    setLocationVal(`${newLat.toFixed(4)}, ${newLng.toFixed(4)}`)
+                    handleSearch()
+                  }}
+                />
+              </ErrorBoundary>
             </div>
           </div>
         )}
