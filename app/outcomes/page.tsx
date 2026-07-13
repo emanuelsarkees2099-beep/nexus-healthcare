@@ -88,13 +88,14 @@ function BarChart({ data }: { data: { month: string; value: number; max: number 
 }
 
 /* ─── data ────────────────────────────────────────── */
-// Arizona FQHC baseline estimates (185+ clinics, ~750k patients/year in AZ alone)
-// These represent real community health center activity NEXUS helps navigate
+// Pre-launch: NEXUS has no real usage metrics yet. These are 0 fallbacks
+// so the page never shows invented platform numbers. When live outcome
+// tracking exists, /api/outcomes populates real values over these.
 const BASELINES: Record<string, number> = {
-  total:        287400,
-  users:        124800,
-  resolved:     198600,
-  recent30Days:   8400,
+  total:        0,
+  users:        0,
+  resolved:     0,
+  recent30Days: 0,
 }
 
 const HERO_STATS_STATIC = [
@@ -103,13 +104,15 @@ const HERO_STATS_STATIC = [
   { key: 'resolved', prefix: '',  suffix: '',  decimals: 0, label: 'Cases resolved',         icon: <TrendUp size={15} variant="Linear" />, fallback: 0 },
 ]
 
+// Pre-launch: no real monthly volume yet. Flat until live data exists —
+// never a fabricated growth curve.
 const CHART_DATA = [
-  { month: 'Jan', value: 3200,  max: 12000 },
-  { month: 'Feb', value: 4100,  max: 12000 },
-  { month: 'Mar', value: 5800,  max: 12000 },
-  { month: 'Apr', value: 7200,  max: 12000 },
-  { month: 'May', value: 9400,  max: 12000 },
-  { month: 'Jun', value: 11800, max: 12000 },
+  { month: 'Jan', value: 0, max: 12000 },
+  { month: 'Feb', value: 0, max: 12000 },
+  { month: 'Mar', value: 0, max: 12000 },
+  { month: 'Apr', value: 0, max: 12000 },
+  { month: 'May', value: 0, max: 12000 },
+  { month: 'Jun', value: 0, max: 12000 },
 ]
 
 /* Evidence base — real, publicly documented facts about the US care
