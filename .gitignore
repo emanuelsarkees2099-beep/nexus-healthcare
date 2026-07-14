@@ -45,4 +45,7 @@ seed-progress.log
 scripts/seed-progress.log
 
 .vercel
-data/
+# Root-only: the 26MB regenerable clinic seed. Anchored with a leading
+# slash so it does NOT match lib/data/ (which holds us-places.json, a
+# 2.4MB runtime asset the app imports and MUST be committed).
+/data/
