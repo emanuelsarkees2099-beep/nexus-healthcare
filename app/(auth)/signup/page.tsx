@@ -112,6 +112,10 @@ export default function SignupPage() {
         password,
         options: {
           data: { user_type: userType, consent_at: new Date().toISOString() },
+          // Without this, Supabase falls back to the dashboard's generic
+          // Site URL for the confirmation link — which can 404 or land on
+          // the wrong domain in production.
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
         },
       })
       if (authError) throw authError
