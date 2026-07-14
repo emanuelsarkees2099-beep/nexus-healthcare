@@ -38,45 +38,62 @@ where n.nspname = 'public'
 order by c.relname;
 
 -- ─────────────────────────────────────────────────────────────────────
--- PART B — HARDENING. Idempotent. Safe to re-run.
--- Only tables that are ALWAYS accessed with a user JWT are locked to the
--- owner. Aggregate-read tables get a count-safe treatment.
+-- PART B — HARDENING. Idempotent AND safe against missing tables.
+-- Every block is guarded by to_regclass() so a table that doesn't exist
+-- is silently skipped (CREATE POLICY has no IF EXISTS, so it would
+-- otherwise crash the whole script — which is what happened with
+-- saved_resources). Only tables ALWAYS accessed with a user JWT are
+-- locked to the owner.
 -- ─────────────────────────────────────────────────────────────────────
 
 -- user_profiles: the row id IS the auth user id (signup upserts id=userId).
-alter table if exists public.user_profiles enable row level security;
-drop policy if exists up_select_own on public.user_profiles;
-drop policy if exists up_update_own on public.user_profiles;
-drop policy if exists up_insert_own on public.user_profiles;
-create policy up_select_own on public.user_profiles
-  for select to authenticated using (auth.uid() = id);
-create policy up_update_own on public.user_profiles
-  for update to authenticated using (auth.uid() = id) with check (auth.uid() = id);
-create policy up_insert_own on public.user_profiles
-  for insert to authenticated with check (auth.uid() = id);
+do $$
+begin
+  if to_regclass('public.user_profiles') is not null then
+    execute 'alter table public.user_profiles enable row level security';
+    execute 'drop policy if exists up_select_own on public.user_profiles';
+    execute 'drop policy if exists up_update_own on public.user_profiles';
+    execute 'drop policy if exists up_insert_own on public.user_profiles';
+    execute 'create policy up_select_own on public.user_profiles for select to authenticated using (auth.uid() = id)';
+    execute 'create policy up_update_own on public.user_profiles for update to authenticated using (auth.uid() = id) with check (auth.uid() = id)';
+    execute 'create policy up_insert_own on public.user_profiles for insert to authenticated with check (auth.uid() = id)';
+  end if;
+end $$;
 
--- saved_resources (bookmarks): always accessed with the user's JWT.
-alter table if exists public.saved_resources enable row level security;
-drop policy if exists sr_all_own on public.saved_resources;
-create policy sr_all_own on public.saved_resources
-  for all to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+-- saved_resources (bookmarks) — may not exist yet.
+do $$
+begin
+  if to_regclass('public.saved_resources') is not null then
+    execute 'alter table public.saved_resources enable row level security';
+    execute 'drop policy if exists sr_all_own on public.saved_resources';
+    execute 'create policy sr_all_own on public.saved_resources for all to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id)';
+  end if;
+end $$;
 
--- push_subscriptions: owner-managed (nullable user_id for anonymous).
-alter table if exists public.push_subscriptions enable row level security;
-drop policy if exists ps_all_own on public.push_subscriptions;
-create policy ps_all_own on public.push_subscriptions
-  for all to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+-- push_subscriptions — may not exist yet.
+do $$
+begin
+  if to_regclass('public.push_subscriptions') is not null then
+    execute 'alter table public.push_subscriptions enable row level security';
+    execute 'drop policy if exists ps_all_own on public.push_subscriptions';
+    execute 'create policy ps_all_own on public.push_subscriptions for all to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id)';
+  end if;
+end $$;
 
--- clinics / clinic_cache: public read (already the intended posture).
-alter table if exists public.clinics enable row level security;
-drop policy if exists clinics_public_read on public.clinics;
-create policy clinics_public_read on public.clinics
-  for select to anon, authenticated using (true);
-
-alter table if exists public.clinic_cache enable row level security;
-drop policy if exists cc_public_read on public.clinic_cache;
-create policy cc_public_read on public.clinic_cache
-  for select to anon, authenticated using (true);
+-- clinics / clinic_cache: public read (intended posture).
+do $$
+begin
+  if to_regclass('public.clinics') is not null then
+    execute 'alter table public.clinics enable row level security';
+    execute 'drop policy if exists clinics_public_read on public.clinics';
+    execute 'create policy clinics_public_read on public.clinics for select to anon, authenticated using (true)';
+  end if;
+  if to_regclass('public.clinic_cache') is not null then
+    execute 'alter table public.clinic_cache enable row level security';
+    execute 'drop policy if exists cc_public_read on public.clinic_cache';
+    execute 'create policy cc_public_read on public.clinic_cache for select to anon, authenticated using (true)';
+  end if;
+end $$;
 
 -- ─────────────────────────────────────────────────────────────────────
 -- NOT auto-hardened here (need a decision — see notes):
