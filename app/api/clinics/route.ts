@@ -5,9 +5,13 @@ import { rateLimit } from '@/lib/rate-limit'
 import { geocodePlace } from '@/lib/us-places'
 
 // ── Supabase (server-side, anon key) ──────────────────────────────────────────
+// Lazy factory, NOT an eager module-scope client: @supabase/supabase-js
+// throws synchronously if the URL is empty. An eager const here ran at
+// import time during Next's "Collecting page data" build step, which has
+// no env vars available in CI (no .env.local) — crashing every build.
 const sbUrl    = process.env.NEXT_PUBLIC_SUPABASE_URL    ?? ''
 const sbAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
-const supabase  = createClient(sbUrl, sbAnonKey)
+const getSupabaseClient = () => createClient(sbUrl, sbAnonKey)
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 export type AffordabilityLabel = 'likely-free' | 'low-cost' | 'standard'
@@ -477,7 +481,7 @@ type DBClinicRow = {
 async function fetchDBClinics(lat: number, lng: number, radiusMiles: number): Promise<Clinic[]> {
   if (!sbUrl) return []
   try {
-    const { data, error } = await supabase.rpc('clinics_near', {
+    const { data, error } = await getSupabaseClient().rpc('clinics_near', {
       in_lat: lat,
       in_lng: lng,
       radius_m: Math.round(radiusMiles * 1609.34),
@@ -996,7 +1000,7 @@ async function cacheClinicsBg(clinics: Clinic[], source: string): Promise<void> 
       clinic_data: c as unknown as Record<string, unknown>,
       source,
     }))
-    await supabase
+    await getSupabaseClient()
       .from('clinic_cache')
       .upsert(rows, { onConflict: 'clinic_id', ignoreDuplicates: false })
   } catch {
@@ -1009,7 +1013,7 @@ async function lookupClinicById(id: string): Promise<Clinic | null> {
   if (!sbUrl) return null
   try {
     // 1. Get base clinic from cache
-    const { data: cacheRow } = await supabase
+    const { data: cacheRow } = await getSupabaseClient()
       .from('clinic_cache')
       .select('clinic_data, source')
       .eq('clinic_id', id)
@@ -1019,7 +1023,7 @@ async function lookupClinicById(id: string): Promise<Clinic | null> {
     const clinic = cacheRow.clinic_data as Clinic
 
     // 2. Merge any admin-approved overrides (cal_link, corrected hours, etc.)
-    const { data: override } = await supabase
+    const { data: override } = await getSupabaseClient()
       .from('clinic_overrides')
       .select('cal_link, phone, hours')
       .eq('clinic_id', id)
