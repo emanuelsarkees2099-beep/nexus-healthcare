@@ -1,0 +1,44 @@
+name: CI
+
+# Gate every push and PR to main. A health tool people rely on must not
+# ship a broken build — this is the safety net the repo lacked.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Cancel superseded runs on the same ref (save minutes, faster feedback).
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: typecheck · unit tests · build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Unit tests
+        run: npm run test:unit
+
+      - name: Production build
+        run: npm run build
+        env:
+          # Build must succeed without real secrets. App code already
+          # guards missing env (Supabase/Sentry/analytics no-op without keys).
+          NEXT_PUBLIC_APP_URL: https://nexus.health

@@ -257,7 +257,7 @@ export const PAGE_META = {
 
   resetPassword: meta(
     'Set a New Password',
-    'Create a new password for your NEXUS account.',
+    'Create a new, secure password to regain access to your NEXUS account.',
     [],
     { title: 'Set New Password', sub: 'Choose a strong password for your account.' },
   ),
