@@ -20,36 +20,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     /* Navigation pages */
     { url: `${base}/pathways`,      priority: 0.85, changeFrequency: 'weekly'  },
-    { url: `${base}/gps`,           priority: 0.85, changeFrequency: 'weekly'  },
     { url: `${base}/telehealth`,    priority: 0.85, changeFrequency: 'weekly'  },
+    { url: `${base}/medications`,   priority: 0.85, changeFrequency: 'weekly'  },
 
     /* Community & content */
     { url: `${base}/stories`,       priority: 0.80, changeFrequency: 'daily'   },
-    { url: `${base}/community`,     priority: 0.80, changeFrequency: 'daily'   },
-    { url: `${base}/editorial`,     priority: 0.80, changeFrequency: 'weekly'  },
-    { url: `${base}/advocacy`,      priority: 0.75, changeFrequency: 'monthly' },
-    { url: `${base}/chw`,           priority: 0.75, changeFrequency: 'monthly' },
+    { url: `${base}/kids`,          priority: 0.75, changeFrequency: 'monthly' },
+    { url: `${base}/editorial`,     priority: 0.75, changeFrequency: 'weekly'  },
+    { url: `${base}/advocacy`,      priority: 0.70, changeFrequency: 'monthly' },
+    { url: `${base}/chw`,           priority: 0.70, changeFrequency: 'monthly' },
 
     /* Tools & features */
     { url: `${base}/passport`,      priority: 0.70, changeFrequency: 'monthly' },
     { url: `${base}/calendar`,      priority: 0.70, changeFrequency: 'monthly' },
-    { url: `${base}/wrapped`,       priority: 0.65, changeFrequency: 'yearly'  },
-    { url: `${base}/dashboard`,     priority: 0.70, changeFrequency: 'monthly' },
+    { url: `${base}/rights`,        priority: 0.70, changeFrequency: 'monthly' },
 
     /* Impact & data */
-    { url: `${base}/impact`,        priority: 0.70, changeFrequency: 'weekly'  },
-    { url: `${base}/outcomes`,      priority: 0.70, changeFrequency: 'weekly'  },
-    { url: `${base}/equity`,        priority: 0.70, changeFrequency: 'monthly' },
-    { url: `${base}/methodology`,   priority: 0.60, changeFrequency: 'monthly' },
-    { url: `${base}/advocacy`,      priority: 0.65, changeFrequency: 'monthly' },
+    { url: `${base}/impact`,        priority: 0.65, changeFrequency: 'weekly'  },
+    { url: `${base}/outcomes`,      priority: 0.60, changeFrequency: 'weekly'  },
+    { url: `${base}/equity`,        priority: 0.60, changeFrequency: 'monthly' },
+    { url: `${base}/methodology`,   priority: 0.55, changeFrequency: 'monthly' },
 
     /* Provider & rights */
-    { url: `${base}/provider`,      priority: 0.65, changeFrequency: 'monthly' },
-    { url: `${base}/rights`,        priority: 0.70, changeFrequency: 'monthly' },
-    { url: `${base}/verify`,        priority: 0.65, changeFrequency: 'monthly' },
-
-    /* Tools */
-    { url: `${base}/medications`,   priority: 0.80, changeFrequency: 'weekly'  },
+    { url: `${base}/provider`,      priority: 0.60, changeFrequency: 'monthly' },
+    { url: `${base}/verify`,        priority: 0.60, changeFrequency: 'monthly' },
 
     /* Auth (low crawl priority) */
     { url: `${base}/login`,         priority: 0.30, changeFrequency: 'yearly'  },
@@ -59,6 +53,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/about`,         priority: 0.60, changeFrequency: 'monthly' },
     { url: `${base}/accessibility`, priority: 0.50, changeFrequency: 'monthly' },
     { url: `${base}/privacy`,       priority: 0.40, changeFrequency: 'yearly'  },
+    { url: `${base}/terms`,         priority: 0.40, changeFrequency: 'yearly'  },
   ]
 
   return routes.map(r => ({
