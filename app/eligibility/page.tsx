@@ -11,7 +11,7 @@ import {
 } from 'iconsax-react'
 
 /* ════════════════════════════════════════════════════════════
-   STATE-SPECIFIC DATA  (2024)
+   STATE-SPECIFIC DATA  (2025)
    ════════════════════════════════════════════════════════════ */
 
 /** States that have adopted ACA Medicaid expansion (138% FPL adult threshold) */
@@ -27,15 +27,18 @@ const HIGH_CHIP_STATES = new Set([
   'CA','CT','DC','HI','IL','MA','MD','MN','NJ','NY','RI','VT','WA','WI',
 ])
 
-/** 2024 FPL (Federal Poverty Level) thresholds by household size */
-const FPL_2024: Record<number, number> = {
-  1: 15060, 2: 20440, 3: 25820, 4: 31200, 5: 36580, 6: 41960, 7: 47340, 8: 52720,
+/** 2025 HHS Federal Poverty Guidelines (48 contiguous states + DC),
+ *  by household size. +$5,500 for each person beyond 8.
+ *  Source: HHS Poverty Guidelines, effective Jan 2025. */
+const FPL_2025: Record<number, number> = {
+  1: 15650, 2: 21150, 3: 26650, 4: 32150, 5: 37650, 6: 43150, 7: 48650, 8: 54150,
 }
 
-const FPL_FOR = (hh: number) => FPL_2024[Math.min(Math.max(hh, 1), 8)] ?? 52720
+const FPL_FOR = (hh: number) =>
+  hh <= 8 ? (FPL_2025[Math.max(hh, 1)] ?? 15650) : 54150 + (hh - 8) * 5500
 
 /**
- * State-specific Medicaid enrollment portals (2024).
+ * State-specific Medicaid enrollment portals (2025).
  * Falls back to healthcare.gov when a state URL is missing.
  */
 const STATE_MEDICAID_URLS: Record<string, string> = {
@@ -275,11 +278,11 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
     if (fplPct <= 100) chipMatch = 60   // may overlap with Medicaid
     else if (fplPct <= chipPct) chipMatch = 92
     else if (fplPct <= chipPct + 50) chipMatch = 60
-    else chipMatch = 15
+    else chipMatch = 6   // clearly over the state CHIP ceiling — filtered out
 
     programs.push({
       id: 'chip', name: 'CHIP', tag: 'Federal / State',
-      color: '#a78bfa', icon: <Profile size={16} variant="Linear" />,
+      color: '#60a5fa', icon: <Profile size={16} variant="Linear" />,
       match: Math.round(chipMatch),
       desc: `Children's Health Insurance Program covers kids up to ${highChip ? '300%' : '200%'} FPL in ${STATES.find(s => s.abbr === a.state)?.name ?? a.state}. Includes well-child visits, immunizations, dental, and vision.`,
       savings: 'Low or $0 premiums · $0–$5 copays',
@@ -299,8 +302,8 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
     else if (fplPct <= 200) acaMatch = 93
     else if (fplPct <= 300) acaMatch = 82
     else if (fplPct <= 400) acaMatch = 72
-    else if (fplPct <= 600) acaMatch = 52          // enhanced subsidy (ARP)
-    else acaMatch = 18
+    else if (fplPct <= 500) acaMatch = 46          // subsidy tapers; 8.5%-of-income cap
+    else acaMatch = 9    // high income — little/no subsidy, filtered out
 
     if (a.currentCoverage === 'employer-unaffordable') acaMatch = Math.min(96, acaMatch + 12)
     if (a.currentCoverage === 'cobra') acaMatch = Math.min(94, acaMatch + 8)
@@ -331,7 +334,14 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
 
   /* ── 4. HRSA Free Clinic / FQHC ─────────────────── */
   {
-    const fqhcMatch = uninsured ? 96 : fplPct <= 200 ? 88 : fplPct <= 400 ? 74 : 60
+    // FQHCs must serve everyone, but sliding-scale discounts shrink as income
+    // rises — so relevance (not eligibility) tapers for higher earners.
+    const fqhcMatch = uninsured ? 96
+      : fplPct <= 200 ? 88
+      : fplPct <= 300 ? 68
+      : fplPct <= 400 ? 52
+      : fplPct <= 600 ? 34
+      : 20
     programs.push({
       id: 'fqhc', name: 'HRSA Federally Qualified Health Center', tag: 'Federal',
       color: 'var(--accent)', icon: <Hospital size={16} variant="Linear" />,
@@ -350,7 +360,7 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
     if (uninsured) rxMatch = Math.min(96, rxMatch + 10)
     programs.push({
       id: 'needy', name: 'Patient Assistance Programs (PAP)', tag: 'Rx',
-      color: '#f472b6', icon: <Flash size={16} variant="Linear" />,
+      color: '#4F8EF0', icon: <Flash size={16} variant="Linear" />,
       match: Math.round(rxMatch),
       desc: 'Pharmaceutical manufacturers provide brand-name medications at no or low cost for uninsured and low-income patients. Over 3,000 drugs covered across 1,800+ programs.',
       savings: 'Avg $200–$450/month in Rx',
@@ -365,7 +375,7 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
     const b340Match = fplPct <= 200 ? 80 : fplPct <= 300 ? 62 : 38
     programs.push({
       id: '340b', name: '340B Drug Pricing Program', tag: 'Federal',
-      color: '#fbbf24', icon: <RefreshCircle size={16} variant="Linear" />,
+      color: '#60a5fa', icon: <RefreshCircle size={16} variant="Linear" />,
       match: Math.round(b340Match),
       desc: 'Get prescriptions at 25–50% below retail price at HRSA-participating clinics. Available at most FQHCs and covered entity pharmacies.',
       savings: '25–50% off all medications',
@@ -380,7 +390,7 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
     const medMatch = a.employment === 'retired' ? 85 : 40
     programs.push({
       id: 'medicare', name: 'Medicare', tag: 'Federal',
-      color: '#38bdf8', icon: <Heart size={16} variant="Linear" />,
+      color: '#60a5fa', icon: <Heart size={16} variant="Linear" />,
       match: Math.round(medMatch),
       desc: 'Federal health insurance for adults 65+ or those with qualifying disabilities. Part A (hospital) is usually free; Part B covers outpatient care.',
       savings: '$0 Part A · ~$174/month Part B',
@@ -394,7 +404,7 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
   if (fplPct <= 130) {
     programs.push({
       id: 'snap', name: 'SNAP (Food Assistance)', tag: 'Federal',
-      color: '#86efac', icon: <TrendUp size={16} variant="Linear" />,
+      color: '#4F8EF0', icon: <TrendUp size={16} variant="Linear" />,
       match: Math.round(fplPct <= 100 ? 90 : 75),
       desc: 'Supplemental Nutrition Assistance Program helps low-income individuals and families buy food. Qualifying for SNAP often fast-tracks Medicaid eligibility.',
       savings: `Avg $~${Math.round(200 / a.householdSize * 10) / 10}/month/person`,
@@ -483,14 +493,16 @@ function MatchRing({ pct, color }: { pct: number; color: string }) {
    INCOME SLIDER
    ════════════════════════════════════════════════════════════ */
 const INCOME_BRACKETS = [
-  { label: 'Under $10k', value: 8000 },
-  { label: '$10k–$20k',  value: 15000 },
-  { label: '$20k–$30k',  value: 25000 },
-  { label: '$30k–$40k',  value: 35000 },
-  { label: '$40k–$55k',  value: 47500 },
-  { label: '$55k–$75k',  value: 65000 },
-  { label: '$75k–$100k', value: 87500 },
-  { label: 'Over $100k', value: 120000 },
+  { label: 'Under $10k',  value: 8000 },
+  { label: '$10k–$20k',   value: 15000 },
+  { label: '$20k–$30k',   value: 25000 },
+  { label: '$30k–$40k',   value: 35000 },
+  { label: '$40k–$55k',   value: 47500 },
+  { label: '$55k–$75k',   value: 65000 },
+  { label: '$75k–$100k',  value: 87500 },
+  { label: '$100k–$150k', value: 125000 },
+  { label: '$150k–$250k', value: 200000 },
+  { label: 'Over $250k',  value: 300000 },
 ]
 
 /* ════════════════════════════════════════════════════════════
@@ -691,7 +703,7 @@ export default function EligibilityPage() {
           {/* FPL preview */}
           <div style={{ padding: '14px 18px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', fontSize: '13px', color: 'rgba(255,255,255,0.4)', display: 'flex', gap: '8px', alignItems: 'center' }}>
             <InfoCircle size={13} variant="Linear" />
-            <span>2024 Federal Poverty Level for household of <strong style={{ color: 'rgba(255,255,255,0.7)' }}>{answers.householdSize}</strong>: <strong style={{ color: 'var(--accent)' }}>${fpl.toLocaleString()}/year</strong></span>
+            <span>2025 Federal Poverty Level for household of <strong style={{ color: 'rgba(255,255,255,0.7)' }}>{answers.householdSize}</strong>: <strong style={{ color: 'var(--accent)' }}>${fpl.toLocaleString()}/year</strong></span>
           </div>
         </div>
       )
@@ -1088,13 +1100,13 @@ export default function EligibilityPage() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
                 {[
                   { name: 'Medicaid',               color: '#60a5fa', desc: 'Full coverage for low-income adults and families. Federal + state.',   icon: <ShieldTick size={16} variant="Linear" /> },
-                  { name: 'CHIP',                   color: '#a78bfa', desc: "Children's coverage up to 200–300% FPL depending on your state.",       icon: <Profile size={16} variant="Linear" /> },
+                  { name: 'CHIP',                   color: '#60a5fa', desc: "Children's coverage up to 200–300% FPL depending on your state.",       icon: <Profile size={16} variant="Linear" /> },
                   { name: 'ACA Marketplace',        color: '#60a5fa', desc: 'Tax credits that reduce or eliminate monthly premiums for marketplace plans.', icon: <DollarCircle size={16} variant="Linear" /> },
                   { name: 'FQHC / Free Clinics',    color: 'var(--accent)', desc: 'Federally-funded health centers that serve everyone regardless of income.', icon: <Hospital size={16} variant="Linear" /> },
-                  { name: 'Patient Assist. (PAP)',   color: '#f472b6', desc: 'Free or discounted brand-name medications from pharmaceutical manufacturers.', icon: <Flash size={16} variant="Linear" /> },
-                  { name: '340B Drug Pricing',       color: '#fbbf24', desc: '25–50% off prescriptions at HRSA-participating clinics.', icon: <RefreshCircle size={16} variant="Linear" /> },
-                  { name: 'Medicare',                color: '#38bdf8', desc: 'Coverage for adults 65+ and qualifying disability recipients.', icon: <Heart size={16} variant="Linear" /> },
-                  { name: 'SNAP Food Assistance',    color: '#86efac', desc: 'Food benefits that often open a fast track to Medicaid enrollment.',  icon: <TrendUp size={16} variant="Linear" /> },
+                  { name: 'Patient Assist. (PAP)',   color: '#4F8EF0', desc: 'Free or discounted brand-name medications from pharmaceutical manufacturers.', icon: <Flash size={16} variant="Linear" /> },
+                  { name: '340B Drug Pricing',       color: '#60a5fa', desc: '25–50% off prescriptions at HRSA-participating clinics.', icon: <RefreshCircle size={16} variant="Linear" /> },
+                  { name: 'Medicare',                color: '#60a5fa', desc: 'Coverage for adults 65+ and qualifying disability recipients.', icon: <Heart size={16} variant="Linear" /> },
+                  { name: 'SNAP Food Assistance',    color: '#4F8EF0', desc: 'Food benefits that often open a fast track to Medicaid enrollment.',  icon: <TrendUp size={16} variant="Linear" /> },
                 ].map((prog, i) => (
                   <Reveal key={prog.name} delay={i * 50}>
                     <div style={{ padding: '20px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px' }}>
@@ -1115,7 +1127,7 @@ export default function EligibilityPage() {
                   <div>
                     <div style={{ fontSize: '14px', fontWeight: 700, color: '#eef4f5', marginBottom: '4px' }}>100% private — calculated in your browser</div>
                     <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.6 }}>
-                      Your answers never leave your device. No account required. No data stored. NEXUS uses your state and income range to apply the correct eligibility thresholds, all calculated locally using 2024 federal guidelines.
+                      Your answers never leave your device. No account required. No data stored. NEXUS uses your state and income range to apply the correct eligibility thresholds, all calculated locally using 2025 federal guidelines.
                     </div>
                   </div>
                 </div>
@@ -1138,27 +1150,28 @@ export default function EligibilityPage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
             {[
-              { name: 'Medicaid', color: '#60a5fa', icon: '🛡️', who: 'Low-income adults, children, pregnant individuals', covers: 'Full coverage — doctor visits, hospital stays, prescriptions, dental and vision in many states', income: 'Up to 138% FPL in expansion states (≈$20,783/yr single)' },
-              { name: 'CHIP', color: '#4ade80', icon: '👦', who: 'Children under 19 in families that earn too much for Medicaid', covers: 'Comprehensive child health coverage with low or no premiums', income: 'Up to 200–300% FPL depending on state (≈$30–45K/yr family)' },
-              { name: 'ACA Marketplace', color: '#a78bfa', icon: '📋', who: 'Individuals and families above Medicaid threshold', covers: 'Subsidized plans — premium tax credits can reduce monthly cost to $0', income: 'Up to 400% FPL; expanded credits available above that' },
-              { name: 'HRSA / Free Clinics', color: '#fb923c', icon: '🏥', who: 'Anyone, regardless of income or insurance status', covers: 'Primary care, behavioral health, dental — on a sliding-scale or free basis', income: 'No income limit — sliding scale means you pay what you can' },
-              { name: 'Ryan White (HIV)', color: '#f472b6', icon: '💊', who: 'People living with HIV who are uninsured or underinsured', covers: 'Medical care, medications, support services — no cost or very low cost', income: 'Varies by state; most serve low-income individuals first' },
-              { name: 'Extra Help / LIS', color: '#fbbf24', icon: '💰', who: 'Medicare enrollees with limited income and resources', covers: 'Helps pay Medicare Part D prescription drug costs — premiums, deductibles, copays', income: 'Up to 150% FPL (≈$22,590/yr single, $30,660/yr couple)' },
+              { name: 'Medicaid', icon: <ShieldTick size={20} variant="Bulk" color="var(--accent)" />, who: 'Low-income adults, children, pregnant individuals', covers: 'Full coverage — doctor visits, hospital stays, prescriptions, dental and vision in many states', income: 'Up to 138% FPL in expansion states (≈$21,600/yr single)' },
+              { name: 'CHIP', icon: <Profile2User size={20} variant="Bulk" color="var(--accent)" />, who: 'Children under 19 in families that earn too much for Medicaid', covers: 'Comprehensive child health coverage with low or no premiums', income: 'Up to 200–300% FPL depending on state (≈$32–48K/yr family)' },
+              { name: 'ACA Marketplace', icon: <DollarCircle size={20} variant="Bulk" color="var(--accent)" />, who: 'Individuals and families above the Medicaid threshold', covers: 'Subsidized plans — premium tax credits can reduce monthly cost to $0', income: 'Any income; largest tax credits below 400% FPL' },
+              { name: 'HRSA / Free Clinics', icon: <Hospital size={20} variant="Bulk" color="var(--accent)" />, who: 'Anyone, regardless of income or insurance status', covers: 'Primary care, behavioral health, dental — on a sliding-scale or free basis', income: 'No income limit — sliding scale means you pay what you can' },
+              { name: 'Ryan White (HIV)', icon: <Heart size={20} variant="Bulk" color="var(--accent)" />, who: 'People living with HIV who are uninsured or underinsured', covers: 'Medical care, medications, support services — no cost or very low cost', income: 'Up to 500% FPL in most states; low-income served first' },
+              { name: 'Extra Help / LIS', icon: <Flash size={20} variant="Bulk" color="var(--accent)" />, who: 'Medicare enrollees with limited income and resources', covers: 'Helps pay Medicare Part D prescription drug costs — premiums, deductibles, copays', income: 'Up to 150% FPL (≈$23,475/yr single, $31,725/yr couple)' },
             ].map(prog => (
               <div key={prog.name} style={{ padding: '22px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '10px', transition: 'border-color 0.2s' }}
-                onMouseEnter={e => (e.currentTarget.style.borderColor = `${prog.color}30`)}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(79,142,240,0.30)')}
                 onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontSize: '20px' }}>{prog.icon}</span>
-                  <span style={{ fontSize: '16px', fontWeight: 700, color: prog.color }}>{prog.name}</span>
+                  <span style={{ display: 'inline-flex', flexShrink: 0 }}>{prog.icon}</span>
+                  <span style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text)' }}>{prog.name}</span>
                 </div>
                 <div style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.04em', textTransform: 'uppercase' as const }}>Who it&apos;s for</div>
                 <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, margin: 0 }}>{prog.who}</p>
                 <div style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.04em', textTransform: 'uppercase' as const }}>What it covers</div>
                 <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, margin: 0 }}>{prog.covers}</p>
-                <div style={{ padding: '8px 12px', background: `${prog.color}08`, border: `1px solid ${prog.color}18`, borderRadius: '8px', fontSize: '12px', color: prog.color }}>
-                  📊 {prog.income}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '8px 12px', background: 'rgba(79,142,240,0.06)', border: '1px solid rgba(79,142,240,0.16)', borderRadius: '8px', fontSize: '12px', color: 'var(--accent)' }}>
+                  <TrendUp size={13} variant="Linear" color="var(--accent)" style={{ flexShrink: 0 }} />
+                  <span>{prog.income}</span>
                 </div>
               </div>
             ))}
@@ -1173,7 +1186,7 @@ export default function EligibilityPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { q: 'Is my information stored anywhere?', a: 'No. Your answers are calculated entirely in your browser. Nothing is sent to any server. NEXUS has no account system and stores no personal data.' },
-              { q: 'What is the Federal Poverty Level (FPL)?', a: 'The FPL is a federal measure used to determine eligibility for many programs. In 2024, 100% FPL is approximately $15,060/year for a single person ($30,720 for a family of four). Programs like Medicaid and ACA subsidies use this threshold.' },
+              { q: 'What is the Federal Poverty Level (FPL)?', a: 'The FPL is a federal measure used to determine eligibility for many programs. In 2025, 100% FPL is approximately $15,650/year for a single person ($32,150 for a family of four). Programs like Medicaid and ACA subsidies use this threshold.' },
               { q: 'I got results but don\'t know how to apply — what next?', a: 'Each result includes a direct link to apply or learn more. For free clinics, you can use the Clinic Finder to locate one near you — no referral or insurance needed.' },
               { q: 'Can immigrants use these programs?', a: 'It depends on the program and immigration status. HRSA-funded free clinics serve everyone regardless of status. Medicaid eligibility varies by state and status. Emergency Medicaid is available in all states. NEXUS shows you what applies.' },
             ].map((item, i) => (

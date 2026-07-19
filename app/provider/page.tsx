@@ -660,12 +660,12 @@ export default function ProviderPage() {
 
           <div className="grid-3" style={{ gap: '16px', marginBottom: '48px' }}>
             {[
-              { name: 'Epic', logo: '⚡', desc: 'FHIR R4 Patient & Appointment APIs. New patient referrals appear in Epic\'s referral work queue automatically.', status: 'Live', color: '#60a5fa' },
-              { name: 'Cerner / Oracle Health', logo: '🏥', desc: 'Millennium FHIR integration for scheduling and patient demographics sync.', status: 'Live', color: '#a78bfa' },
-              { name: 'athenahealth', logo: '🔗', desc: 'athenaOne REST APIs for appointment booking and patient chart creation.', status: 'Live', color: '#4ade80' },
-              { name: 'eClinicalWorks', logo: '📋', desc: 'SOAP/REST API integration for FQHC and community health center workflows.', status: 'Beta', color: '#fbbf24' },
-              { name: 'OpenEMR', logo: '🌐', desc: 'Open-source EHR integration via FHIR R4 for free clinics and community health.', status: 'Live', color: '#60a5fa' },
-              { name: 'Custom / API', logo: '⚙️', desc: 'Any HL7 FHIR R4 compliant system. We provide a webhook endpoint you configure in your EHR.', status: 'Available', color: 'var(--accent)' },
+              { name: 'Epic', icon: <Flash size={22} variant="Bulk" color="var(--accent)" />, desc: 'FHIR R4 Patient & Appointment APIs. New patient referrals appear in Epic\'s referral work queue automatically.', status: 'FHIR R4', color: '#4F8EF0' },
+              { name: 'Cerner / Oracle Health', icon: <Hospital size={22} variant="Bulk" color="var(--accent)" />, desc: 'Millennium FHIR integration for scheduling and patient demographics sync.', status: 'FHIR R4', color: '#4F8EF0' },
+              { name: 'athenahealth', icon: <Global size={22} variant="Bulk" color="var(--accent)" />, desc: 'athenaOne REST APIs for appointment booking and patient chart creation.', status: 'REST API', color: '#4F8EF0' },
+              { name: 'eClinicalWorks', icon: <Chart2 size={22} variant="Bulk" color="var(--accent)" />, desc: 'SOAP/REST API integration for FQHC and community health center workflows.', status: 'REST API', color: '#4F8EF0' },
+              { name: 'OpenEMR', icon: <Global size={22} variant="Bulk" color="var(--accent)" />, desc: 'Open-source EHR integration via FHIR R4 for free clinics and community health.', status: 'FHIR R4', color: '#4F8EF0' },
+              { name: 'Custom / API', icon: <Edit size={22} variant="Bulk" color="var(--accent)" />, desc: 'Any HL7 FHIR R4 compliant system. We provide a webhook endpoint you configure in your EHR.', status: 'Webhook', color: '#4F8EF0' },
             ].map((ehr, i) => (
               <RevealBlock key={ehr.name} delay={i * 70}>
                 <div style={{ padding: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', height: '100%', boxSizing: 'border-box', transition: 'border-color 0.25s', display: 'flex', flexDirection: 'column', gap: '12px' }}
@@ -673,7 +673,7 @@ export default function ProviderPage() {
                   onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ fontSize: '24px' }}>{ehr.logo}</div>
+                    <span style={{ display: 'inline-flex', flexShrink: 0 }}>{ehr.icon}</span>
                     <span style={{ fontSize: '10px', fontWeight: 700, padding: '3px 9px', borderRadius: '100px', background: `${ehr.color}12`, color: ehr.color, border: `1px solid ${ehr.color}28`, letterSpacing: '0.06em' }}>{ehr.status}</span>
                   </div>
                   <div style={{ fontSize: '15px', fontWeight: 700, color: '#eef4f5' }}>{ehr.name}</div>
