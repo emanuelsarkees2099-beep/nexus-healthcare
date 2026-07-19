@@ -41,6 +41,36 @@ label svg,
   color: var(--icon-color, rgba(248,249,255,0.72));
 }
 
+/* ── ICONSAX × REACT 19 defaultProps SHIM ───────────────────────────
+   iconsax-react sets its paint via `defaultProps` (color:'currentColor').
+   React 19 — bundled with Next.js 16 — IGNORES defaultProps on function
+   components, so any <Icon> rendered without an explicit color prop gets
+   color={undefined} → the source emits stroke={undefined}/fill={undefined}
+   → React drops the attribute entirely → the path has stroke-width but no
+   stroke (and no fill), so it renders completely unpainted: a blank gap
+   where the icon should be. (Confirmed on /passport: 6 icons, 0 paint.)
+
+   Setting `color` alone can't fix it — there's no currentColor reference
+   left on the path to resolve. So we restore the missing paint directly,
+   scoped to iconsax's exact SVG signature (24×24 viewBox, fill="none"):
+     • stroke-based variants (Linear/Broken/TwoTone): have stroke-width but
+       lost their stroke  → give them stroke: currentColor
+     • fill-based variants (Bold/Bulk/Outline): lost their fill, no stroke
+       and no stroke-width → give them fill: currentColor
+   Icons that DO carry an explicit color prop keep their stroke/fill attr,
+   so :not([stroke])/:not([fill]) skips them — this only touches the broken
+   ones. currentColor then resolves through the color rules above. */
+/* `svg:not([stroke])` excludes hand-written inline SVGs that set stroke on
+   the <svg> element and let paths inherit it (e.g. our loading Spinners) —
+   iconsax always paints per-path and never sets stroke on the svg, so this
+   only ever touches genuine iconsax icons. */
+svg[viewBox="0 0 24 24"][fill="none"]:not([stroke]) path[stroke-width]:not([stroke]) {
+  stroke: currentColor;
+}
+svg[viewBox="0 0 24 24"][fill="none"]:not([stroke]) path:not([fill]):not([stroke]):not([stroke-width]) {
+  fill: currentColor;
+}
+
 :root {
   /* ── CANVAS — near-black with a whisper of cool tint. ── */
   --bg:  #050609;

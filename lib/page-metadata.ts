@@ -149,6 +149,20 @@ export const PAGE_META = {
     { title: 'Your Profile', sub: 'Account settings and preferences.' },
   ),
 
+  settingsProfile: meta(
+    'Profile Settings',
+    'Update your NEXUS account details, contact information, and notification preferences.',
+    [],
+    { title: 'Profile Settings', sub: 'Your account details and preferences.' },
+  ),
+
+  settingsSecurity: meta(
+    'Security Settings',
+    'Manage your NEXUS password, two-factor authentication, recovery codes, and active sessions.',
+    [],
+    { title: 'Security Settings', sub: 'Password, two-factor auth, and sessions.' },
+  ),
+
   passport: meta(
     'Health Passport',
     'Store and organize your medical records, prescriptions, vaccination history, and insurance cards securely in one place.',

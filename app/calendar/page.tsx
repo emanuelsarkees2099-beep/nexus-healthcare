@@ -328,7 +328,7 @@ export default function CalendarPage() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                 }}
               >
-                Generate my screening plan <ArrowRight2 size={15} color="inherit" variant="Linear" />
+                Generate my screening plan <ArrowRight2 size={15} color="currentColor" variant="Linear" />
               </button>
             </div>
           </RevealBlock>
