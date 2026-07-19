@@ -11,7 +11,6 @@ const Hero              = dynamic(() => import('@/components/Hero'))
    Features (product tiles) → Testimonials (voices) → CTA (ask again).
    LogoMarquee / BeforeAfterBar / MissionFreeze / TrustBadges deleted:
    implied partnerships and metrics we don't have. */
-const PulseSpine        = dynamic(() => import('@/components/PulseSpine'))
 const Stats             = dynamic(() => import('@/components/Stats'))
 const Features          = dynamic(() => import('@/components/Features'))
 const HowItWorks        = dynamic(() => import('@/components/HowItWorks'))
@@ -36,10 +35,7 @@ export default function Home() {
       {/* Navigation */}
       <Nav />
 
-      {/* Page content — position:relative anchors The Pulse spine SVG */}
       <main id="main-content" style={{ position: 'relative' }}>
-        {/* The Pulse — scroll-drawn EKG line connecting every section */}
-        <PulseSpine />
         <Hero />
         <Stats />
         <HowItWorks />

@@ -30,7 +30,7 @@ const SECTIONS = [
   },
   {
     title: 'Afford Care',
-    color: '#2DD4BF',
+    color: '#5F9EF9',
     items: [
       { label: 'All Programs', href: '/programs',    icon: ReceiptText, desc: 'Medicaid, ACA, HRSA & more' },
       { label: 'Eligibility',  href: '/eligibility', icon: ShieldTick,  desc: 'Check what you qualify for' },

@@ -288,7 +288,8 @@ export default function CrisisPage() {
           href="tel:988"
           className="crisis-call-btn"
           style={{
-            display: 'inline-flex', alignItems: 'center', gap: '14px',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '14px',
+            width: 'auto', maxWidth: '100%',
             padding: '22px 44px', borderRadius: '20px',
             background: 'linear-gradient(135deg, #dc2626, #f87171)',
             color: '#fff', fontSize: '22px', fontWeight: 800,

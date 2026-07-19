@@ -46,7 +46,7 @@ export default function DataSources() {
         researchers use.
       </p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', textAlign: 'left' }}>
+      <div className="sources-grid" style={{ textAlign: 'left' }}>
         {SOURCES.map((s, i) => (
           <div key={s.name} style={{
             background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)',

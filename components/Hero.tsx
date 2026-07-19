@@ -277,7 +277,7 @@ export default function Hero() {
         <div style={{
           position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
           width: 'min(720px, 90vw)', height: '1px',
-          background: 'linear-gradient(90deg, transparent, rgba(79,142,240,0.55) 35%, rgba(45,212,191,0.55) 65%, transparent)',
+          background: 'linear-gradient(90deg, transparent, rgba(79,142,240,0.55) 35%, rgba(106, 166, 255,0.55) 65%, transparent)',
         }} />
       </div>
       {/* Spotlight — trails the cursor */}
@@ -420,7 +420,7 @@ export default function Hero() {
           }}>
             {/* Avatar cluster (decorative) */}
             <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }} aria-hidden="true">
-              {(['#4F8EF0', '#2DD4BF', '#82B4F8', '#5EEAD4'] as const).map((bg, i) => (
+              {(['#4F8EF0', '#5F9EF9', '#82B4F8', '#A8C9FF'] as const).map((bg, i) => (
                 <div key={i} style={{
                   width: '24px', height: '24px', borderRadius: '50%',
                   background: `linear-gradient(135deg, ${bg}, ${bg}88)`,

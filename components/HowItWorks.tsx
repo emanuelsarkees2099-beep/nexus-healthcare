@@ -126,7 +126,7 @@ function Panel2() {
           border: 'none', borderRadius: 'var(--r-sm)', padding: '12px',
           fontSize: '13px', fontWeight: 700, cursor: 'pointer',
           fontFamily: 'var(--font-inter)', marginBottom: '10px',
-          boxShadow: '0 4px 16px rgba(79,142,240,0.22), 0 2px 10px rgba(45,212,191,0.16)',
+          boxShadow: '0 4px 16px rgba(79,142,240,0.22), 0 2px 10px rgba(106, 166, 255,0.16)',
         }}>
         Book appointment &rarr;
       </button>
@@ -382,7 +382,7 @@ export default function HowItWorks() {
               height: '100%',
               background: 'var(--grad-vital)',
               borderRadius: '2px', width: '0%',
-              boxShadow: '0 0 6px rgba(79,142,240,0.45), 0 0 10px rgba(45,212,191,0.30)',
+              boxShadow: '0 0 6px rgba(79,142,240,0.45), 0 0 10px rgba(106, 166, 255,0.30)',
             }} />
           </div>
         </div>

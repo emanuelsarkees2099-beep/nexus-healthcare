@@ -480,7 +480,7 @@ export default function ClinicCard({
             <a
               href={googleMapsUrl}
               target="_blank" rel="noopener noreferrer"
-              style={{ background: 'var(--grad-vital)', color: '#04121D', borderRadius: 9, padding: '8px 14px', fontSize: 12, fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5, boxShadow: '0 2px 10px rgba(79,142,240,0.20), 0 1px 6px rgba(45,212,191,0.14)' }}
+              style={{ background: 'var(--grad-vital)', color: '#04121D', borderRadius: 9, padding: '8px 14px', fontSize: 12, fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5, boxShadow: '0 2px 10px rgba(79,142,240,0.20), 0 1px 6px rgba(106, 166, 255,0.14)' }}
             >
               <Routing size={12} variant="Linear" /> {t('search.directions')}
             </a>

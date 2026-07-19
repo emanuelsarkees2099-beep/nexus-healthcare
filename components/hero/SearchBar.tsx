@@ -168,7 +168,7 @@ export default function SearchBar({
       {/* Glow ring — vital gradient halo on focus */}
       <div className="search-glow-ring" style={{
         position: 'absolute', inset: '-2px', borderRadius: '17px',
-        background: 'linear-gradient(135deg, rgba(79,142,240,0.45), rgba(45,212,191,0.35))',
+        background: 'linear-gradient(135deg, rgba(79,142,240,0.45), rgba(106, 166, 255,0.35))',
         opacity: 0, transition: 'opacity 0.4s',
         zIndex: 0, pointerEvents: 'none', filter: 'blur(1px)',
       }} />

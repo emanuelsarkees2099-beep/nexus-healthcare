@@ -105,7 +105,7 @@ export default function CTA() {
         position: 'absolute', left: '50%', top: '30%',
         width: 'min(900px, 120vw)', height: '500px',
         transform: `translateX(-50%) scale(${inView ? 1 : 0.7})`,
-        background: 'radial-gradient(ellipse, rgba(79,142,240,0.10) 0%, rgba(45,212,191,0.05) 45%, transparent 70%)',
+        background: 'radial-gradient(ellipse, rgba(79,142,240,0.10) 0%, rgba(106, 166, 255,0.05) 45%, transparent 70%)',
         filter: 'blur(50px)',
         opacity: inView ? 1 : 0,
         transition: 'opacity 1.4s var(--ease-out-expo), transform 1.4s var(--ease-out-expo)',
