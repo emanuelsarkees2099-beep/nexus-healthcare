@@ -41,8 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/equity`,        priority: 0.60, changeFrequency: 'monthly' },
     { url: `${base}/methodology`,   priority: 0.55, changeFrequency: 'monthly' },
 
-    /* Provider & rights */
-    { url: `${base}/provider`,      priority: 0.60, changeFrequency: 'monthly' },
+    /* Verify */
     { url: `${base}/verify`,        priority: 0.60, changeFrequency: 'monthly' },
 
     /* Auth (low crawl priority) */

@@ -612,7 +612,6 @@ export default function Features() {
         </span>
         <div style={{ width: '1px', height: '12px', background: 'rgba(255,255,255,0.12)', flexShrink: 0 }} />
         {[
-          { href: '/provider',      label: 'Provider Dashboard' },
           { href: '/impact',        label: 'Impact Dashboard'   },
           { href: '/telehealth',    label: 'Telehealth'         },
           { href: '/stories',       label: 'Stories'            },

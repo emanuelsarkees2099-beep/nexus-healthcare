@@ -7,7 +7,7 @@ import {
   SearchNormal1, Video, Danger,
   ReceiptText, ShieldTick, Calendar1, Health,
   Chart2, TrendUp, Book1, Judge,
-  Profile2User, Hospital, Buildings,
+  Profile2User, Buildings,
   ClipboardText, Speaker, Global,
   Routing2, Home, CloseCircle, SearchStatus,
 } from 'iconsax-react'
@@ -42,7 +42,6 @@ const LINK_ICONS: Record<string, React.ElementType<any>> = {
   '/editorial':   ClipboardText,
   '/equity':      Judge,
   '/chw':         Profile2User,
-  '/provider':    Hospital,
   '/rights':      ShieldTick,
   '/advocacy':    Speaker,
   '/about':       Global,
@@ -59,7 +58,7 @@ const CATEGORIES = [
   { title: 'Find Care',  color: '#4F8EF0', hrefs: ['/search', '/clinics', '/triage', '/telehealth', '/crisis'] },
   { title: 'Programs',   color: '#34D399', hrefs: ['/programs', '/pathways', '/eligibility', '/calendar', '/medications'] },
   { title: 'Explore',    color: '#A78BFA', hrefs: ['/impact', '/outcomes', '/stories', '/editorial', '/equity'] },
-  { title: 'Community',  color: '#F59E0B', hrefs: ['/chw', '/provider', '/rights', '/advocacy'] },
+  { title: 'Community',  color: '#F59E0B', hrefs: ['/chw', '/rights', '/advocacy'] },
   { title: 'More',       color: '#9CA3AF', hrefs: ['/equity', '/passport', '/about', '/methodology'] },
 ]
 
