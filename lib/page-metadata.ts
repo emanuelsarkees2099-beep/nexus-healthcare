@@ -126,14 +126,6 @@ export const PAGE_META = {
     { page: 'impact' },
   ),
 
-  /* ── Provider & community ─────────────────────────────────────── */
-  provider: meta(
-    'For Healthcare Providers',
-    'List your free or sliding-scale clinic on NEXUS to reach the 30 million uninsured Americans who need your services.',
-    ['healthcare provider', 'list clinic', 'FQHC directory', 'free clinic provider'],
-    { title: 'For Healthcare Providers', sub: 'Join 2,400+ partner clinics. Patient matching. Revenue recovery.' },
-  ),
-
   /* ── Account & personal ──────────────────────────────────────── */
   dashboard: meta(
     'Your Dashboard',

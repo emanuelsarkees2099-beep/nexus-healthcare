@@ -16,7 +16,7 @@ interface MegaMenuProps {
 
 /* Feature triage (launch): three sections following the patient journey —
    find care → afford care → manage your health. Institutional pages
-   (Impact, Outcomes, Equity, CHW, Provider, Calendar) live in the Footer. */
+   (Impact, Outcomes, Equity, CHW, Calendar) live in the Footer. */
 const SECTIONS = [
   {
     title: 'Find Care',

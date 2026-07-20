@@ -115,10 +115,6 @@ describe('PAGE_META — specific entry content', () => {
   it('about: description mentions "30 million"', () => {
     expect(PAGE_META.about.description as string).toContain('30 million')
   })
-
-  it('provider: description mentions "30 million"', () => {
-    expect(PAGE_META.provider.description as string).toContain('30 million')
-  })
 })
 
 /* ================================================================== */

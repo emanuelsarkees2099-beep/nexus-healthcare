@@ -32,7 +32,7 @@ const APP_LINK_DEFS = [
 ]
 
 /* Feature triage (launch): nav carries only the core patient journey.
-   Institutional/partner pages (Outcomes, CHW, Impact, Equity, Provider,
+   Institutional/partner pages (Outcomes, CHW, Impact, Equity,
    Advocacy, Methodology, Editorial, Calendar) stay reachable via Footer. */
 const ALL_APP_LINK_DEFS = [
   { labelKey: 'nav.pathways' as const, href: '/pathways',    fallback: 'Pathways' },

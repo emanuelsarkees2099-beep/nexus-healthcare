@@ -22,7 +22,6 @@ export type TranslationKey =
   | 'nav.impact'
   | 'nav.outcomes'
   | 'nav.calendar'
-  | 'nav.provider'
   | 'nav.methodology'
   /* Nav — auth & account actions */
   | 'nav.signIn'
@@ -130,7 +129,6 @@ const EN: Translations = {
   'nav.impact':       'Impact',
   'nav.outcomes':     'Outcomes',
   'nav.calendar':     'Calendar',
-  'nav.provider':     'Provider',
   'nav.methodology':  'Methodology',
   /* Nav — auth & account actions */
   'nav.signIn':       'Sign in',
@@ -238,7 +236,6 @@ const ES: Translations = {
   'nav.impact':       'Impacto',
   'nav.outcomes':     'Resultados',
   'nav.calendar':     'Calendario',
-  'nav.provider':     'Proveedor',
   'nav.methodology':  'Metodología',
   /* Nav — auth & account actions */
   'nav.signIn':       'Iniciar sesión',
@@ -343,7 +340,6 @@ const ZH: Translations = {
   'nav.impact':       '影响',
   'nav.outcomes':     '结果',
   'nav.calendar':     '日历',
-  'nav.provider':     '提供者',
   'nav.methodology':  '方法论',
   /* Nav — auth & account actions */
   'nav.signIn':       '登录',
@@ -448,7 +444,6 @@ const VI: Translations = {
   'nav.impact':       'Tác động',
   'nav.outcomes':     'Kết quả',
   'nav.calendar':     'Lịch',
-  'nav.provider':     'Nhà cung cấp',
   'nav.methodology':  'Phương pháp',
   /* Nav — auth & account actions */
   'nav.signIn':       'Đăng nhập',
