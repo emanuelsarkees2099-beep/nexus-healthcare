@@ -10,6 +10,7 @@ const AIAssistant                 = dynamic(() => import('@/components/AIAssista
 const CookieConsent               = dynamic(() => import('@/components/CookieConsent'),              { ssr: false })
 const SentryInit                  = dynamic(() => import('@/components/SentryInit'),                 { ssr: false })
 const PostHogProvider             = dynamic(() => import('@/components/PostHogProvider'),            { ssr: false })
+const VercelAnalytics            = dynamic(() => import('@/components/VercelAnalytics'),              { ssr: false })
 const MobileDock                  = dynamic(() => import('@/components/MobileDock'),                 { ssr: false })
 const ScrollToTop                 = dynamic(() => import('@/components/ScrollToTop'),                 { ssr: false })
 const InstallBanner               = dynamic(() => import('@/components/InstallBanner'),               { ssr: false })
@@ -72,6 +73,8 @@ export default function GlobalClientComponents() {
       <SentryInit />
       {/* Analytics — PostHog, no-op if NEXT_PUBLIC_POSTHOG_KEY not set */}
       <PostHogProvider />
+      {/* Analytics — Vercel Web Analytics, no-op off the Vercel runtime */}
+      <VercelAnalytics />
       <CommandPalette />
       <ServiceWorkerRegistration />
       <AIAssistant />
