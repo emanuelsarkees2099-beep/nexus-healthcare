@@ -22,7 +22,7 @@ const SECTIONS = [
     title: 'Find Care',
     color: '#4F8EF0',
     items: [
-      { label: 'Find Clinics',   href: '/search',    icon: SearchNormal1, desc: 'Search 12,000+ free clinics' },
+      { label: 'Find Clinics',   href: '/search',    icon: SearchNormal1, desc: 'Search 18,900+ free clinics' },
       { label: 'Telehealth',     href: '/telehealth',icon: Video,         desc: 'Virtual & phone care' },
       { label: 'Symptom Guide',  href: '/triage',    icon: Health,        desc: 'Not sure where to start?' },
       { label: 'Crisis Help',    href: '/crisis',    icon: Danger,        desc: '24/7 emergency resources' },

@@ -32,7 +32,7 @@ const CMD_ITEMS: CmdItem[] = [
   {
     id: 'search',
     label: 'Find a Free Clinic',
-    description: 'Search 12,000+ free and sliding-scale clinics',
+    description: 'Search 18,900+ free and sliding-scale clinics',
     href: '/search',
     icon: <Location size={15} variant="Linear" color="var(--text-2)" />,
     category: 'Core',

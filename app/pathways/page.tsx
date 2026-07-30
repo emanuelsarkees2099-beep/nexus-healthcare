@@ -27,7 +27,7 @@ const STEPS = [
 ]
 
 const INSURANCE_OPTIONS = [
-  { id: 'uninsured', label: 'No insurance',          desc: 'Access 12,000+ free clinics' },
+  { id: 'uninsured', label: 'No insurance',          desc: 'Access 18,900+ free clinics' },
   { id: 'medicaid',  label: 'Medicaid / CHIP',        desc: 'Verify coverage & find providers' },
   { id: 'aca',       label: 'ACA marketplace plan',   desc: 'Find in-network free clinics' },
   { id: 'other',     label: 'Other / Not sure',       desc: "We'll figure it out together" },
@@ -736,7 +736,7 @@ export default function PathwaysPage() {
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '48px' }}>
               <span style={pill}><TickCircle size={14} variant="Linear" /> Clinic network</span>
-              <h2 style={{ fontSize: 'clamp(22px, 3.5vw, 38px)', fontWeight: 700, letterSpacing: '-0.02em', marginTop: '20px', lineHeight: 1.2 }}>12,000+ verified partners</h2>
+              <h2 style={{ fontSize: 'clamp(22px, 3.5vw, 38px)', fontWeight: 700, letterSpacing: '-0.02em', marginTop: '20px', lineHeight: 1.2 }}>18,900+ verified partners</h2>
               <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.38)', marginTop: '12px', maxWidth: '380px', margin: '12px auto 0', lineHeight: 1.65 }}>Every clinic is manually verified for acceptance of uninsured patients before listing.</p>
             </div>
           </RevealBlock>

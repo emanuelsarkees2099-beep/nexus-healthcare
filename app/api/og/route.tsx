@@ -32,7 +32,7 @@ const PAGE_CONFIG: Record<string, { title: string; sub: string; accent: string }
   triage:      { title: 'Symptom Guide',         sub: 'Describe symptoms → get care direction. Always free.',     accent: ACC  },
   crisis:      { title: 'Crisis Resources',       sub: 'Immediate help for mental health & medical emergencies.', accent: '#f87171' },
   programs:    { title: 'Programs & Benefits',    sub: 'Medicaid, CHIP, Ryan White, 340B, and more.',              accent: ACC  },
-  search:      { title: 'Find Free Care',         sub: 'Search 18,000+ free clinics, FQHCs, and programs.',       accent: ACC  },
+  search:      { title: 'Find Free Care',         sub: 'Search 18,900+ free clinics, FQHCs, and programs.',       accent: ACC  },
   eligibility: { title: 'Check Eligibility',      sub: 'Find programs you qualify for in under 60 seconds.',      accent: ACC2 },
   medications: { title: 'Medication Finder',      sub: 'GoodRx, NeedyMeds, PAPs, and 340B savings programs.',    accent: ACC  },
   impact:      { title: 'Our Impact',             sub: '18,900+ free and sliding-scale clinics, mapped and searchable.', accent: ACC  },

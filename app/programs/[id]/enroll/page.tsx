@@ -152,7 +152,7 @@ const GUIDES: Record<string, ProgramGuide> = {
     steps: [
       {
         title: 'Find an FQHC near you',
-        body: 'There are 12,000+ HRSA-funded health center locations across the US. Use the official locator to find one near your ZIP code.',
+        body: 'There are 18,900+ HRSA-funded health center locations across the US. Use the official locator to find one near your ZIP code.',
         link: { label: 'HRSA Health Center Finder', url: 'https://findahealthcenter.hrsa.gov' },
         tip: 'FQHCs serve all patients — no referral, no insurance, no documentation required to be seen.',
       },

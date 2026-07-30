@@ -441,7 +441,7 @@ export default function Features() {
               Clinic Finder
             </div>
             <div style={{ fontSize: '13px', color: 'var(--text-2)', lineHeight: 1.75, fontFamily: 'var(--font-inter)', maxWidth: '280px' }}>
-              12,000+ federally qualified health centers, free clinics, and sliding-scale providers — searchable by specialty, language, and wait time.
+              18,900+ federally qualified health centers, free clinics, and sliding-scale providers — searchable by specialty, language, and wait time.
             </div>
             <Tag color="var(--accent)" bg="rgba(74,144,217,0.07)">Core feature</Tag>
             <ClinicMapMini />
