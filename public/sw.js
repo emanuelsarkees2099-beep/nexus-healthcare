@@ -1,9 +1,14 @@
 /* =========================================================
    NEXUS Service Worker — offline-first for spotty connectivity
-   Version: v2
+   Version: v6
+
+   IMPORTANT: bump CACHE_NAME on every deploy that changes any
+   precached page or client asset. The activate handler purges
+   every cache whose name !== CACHE_NAME, so a new name is what
+   forces returning visitors off stale HTML / _next chunks.
    ========================================================= */
 
-const CACHE_NAME = 'nexus-v5'
+const CACHE_NAME = 'nexus-v6'
 
 /* Pages to precache on install — these work fully offline.
    Crisis is the priority: it must load with zero signal (life-safety).

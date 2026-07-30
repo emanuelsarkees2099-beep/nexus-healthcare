@@ -4,7 +4,6 @@ import gsap from 'gsap'
 import { registerGSAP } from '@/lib/gsap-st'
 import { createClientClient } from '@/lib/auth-client'
 import { killAllIfReduced } from '@/lib/motion'
-import { Clock } from 'iconsax-react'
 registerGSAP()
 
 /**
@@ -34,7 +33,7 @@ interface StatDef {
 }
 
 const STAT_DEFS: StatDef[] = [
-  { key: 'clinics', label: 'Free clinics indexed',  prefix: '',  suffix: '+', value: null, source: 'dynamic', minValid: 10,  fallback: 13847 },
+  { key: 'clinics', label: 'Free clinics indexed',  prefix: '',  suffix: '+', value: null, source: 'dynamic', minValid: 10,  fallback: 18900 },
   { key: 'stories', label: 'Stories & submissions', prefix: '',  suffix: '+', value: null, source: 'dynamic', minValid: 1,   fallback: 2419  },
   { key: 'langs',   label: 'Languages supported',  prefix: '',  suffix: '',  value: 48,   source: 'static',  minValid: 0  },
   { key: 'cost',    label: 'Cost to use NEXUS',    prefix: '$', suffix: '',  value: 0,    source: 'static',  minValid: 0  },
@@ -54,21 +53,12 @@ function countUp(el: HTMLSpanElement, target: number, duration = 1800) {
   requestAnimationFrame(step)
 }
 
-/** Format a Date as "May 4 · 2:31 PM" */
-function formatVerifiedAt(d: Date): string {
-  return d.toLocaleString('en-US', {
-    month: 'short', day: 'numeric',
-    hour: 'numeric', minute: '2-digit', hour12: true,
-  }).replace(',', ' ·')
-}
-
 export default function Stats() {
   const rowRef   = useRef<HTMLDivElement>(null)
   const numRefs  = useRef<(HTMLSpanElement | null)[]>([])
   const fired    = useRef(false)
 
   const [stats,       setStats]       = useState<StatDef[]>(STAT_DEFS)
-  const [verifiedAt,  setVerifiedAt]  = useState<Date | null>(null)
   const [fetchState,  setFetchState]  = useState<'loading' | 'done' | 'error'>('loading')
 
   /* ── Fetch live counts from Supabase ── */
@@ -113,7 +103,6 @@ export default function Stats() {
         return s
       }))
 
-      setVerifiedAt(new Date())
       setFetchState(fetchOk ? 'done' : 'error')
     }
 
@@ -260,22 +249,6 @@ export default function Stats() {
           )
         })}
       </div>
-
-      {/* Last verified timestamp */}
-      {verifiedAt && (
-        <div style={{
-          textAlign: 'center', marginTop: '1.5rem',
-          fontSize: '11px', color: 'var(--text-3)', opacity: 0.55,
-          fontFamily: 'var(--font-inter)', letterSpacing: '0.02em',
-        }}>
-          <span style={{
-            display: 'inline-flex', alignItems: 'center', gap: '5px',
-          }}>
-            <Clock size={14} color="var(--text-2)" variant="Linear" />
-            Last verified: {formatVerifiedAt(verifiedAt)}
-          </span>
-        </div>
-      )}
 
       <style>{`
         @keyframes stat-skeleton {

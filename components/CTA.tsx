@@ -3,68 +3,22 @@ import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import gsap from 'gsap'
 import { registerGSAP } from '@/lib/gsap-st'
-import { TickCircle } from 'iconsax-react'
-import LuxeReveal from '@/components/LuxeReveal'
-import { useCountUp } from '@/hooks/useCountUp'
+import { TickCircle, ArrowRight } from 'iconsax-react'
 registerGSAP()
 
-/* ── Animated stat number ───────────────────────────────────────────── */
-function ProofStat({ value, label, isLast }: { value: string; label: string; isLast: boolean }) {
-  // Parse the value into numeric + prefix/suffix
-  // e.g. "30M" → target=30, suffix="M"
-  //      "12,400+" → target=12400, suffix="+"
-  //      "$0"  → target=0, prefix="$"
-  //      "50"  → target=50
-  const numMatch = value.match(/^([^0-9]*)([0-9,.]+)([^0-9]*)$/)
-  const prefix  = numMatch ? numMatch[1] : ''
-  const rawNum  = numMatch ? parseFloat(numMatch[2].replace(/,/g, '')) : 0
-  const suffix  = numMatch ? numMatch[3] : ''
-
-  const { ref, displayValue } = useCountUp({
-    target: rawNum,
-    duration: 1600,
-    prefix,
-    suffix,
-    decimals: 0,
-    easing: 'expo',
-  })
-
-  return (
-    <div className="cta-proof" style={{
-      textAlign: 'center', padding: '0 2.5rem',
-      borderRight: !isLast ? '1px solid var(--border-subtle)' : 'none',
-    }}>
-      <div
-        ref={ref}
-        style={{
-          fontSize: 'clamp(1.6rem, 2.8vw, 2.4rem)',
-          fontFamily: 'var(--font-display)',
-          fontWeight: 700,
-          letterSpacing: '-0.03em',
-          color: 'var(--text)',
-          lineHeight: 1,
-          marginBottom: '0.35rem',
-          fontVariantNumeric: 'tabular-nums',
-        }}
-      >
-        {displayValue}
-      </div>
-      <div style={{
-        fontSize: '12px', color: 'var(--text-3)',
-        fontFamily: 'var(--font-inter)', fontWeight: 400,
-        letterSpacing: '0.01em',
-      }}>{label}</div>
-    </div>
-  )
-}
-
+/* ═══════════════════════════════════════════════════════════════════
+   CLOSING CTA — calm, confident, consistent.
+   Redesigned away from the char-by-char LuxeReveal + scaling "ignite"
+   glow (too dramatic for the app's tone) to a single gentle fade-up.
+   Numbers unified to the same "18,900+" the rest of the page uses —
+   the old proof strip ("30M we serve", "12,400+") was both inconsistent
+   and an overclaim, so it's gone.
+═══════════════════════════════════════════════════════════════════ */
 export default function CTA() {
-  const router      = useRouter()
-  const sectionRef  = useRef<HTMLElement>(null)
-  const innerRef    = useRef<HTMLDivElement>(null)
-  const [inView,  setInView]  = useState(false)
+  const router     = useRouter()
+  const sectionRef = useRef<HTMLElement>(null)
+  const [inView, setInView] = useState(false)
 
-  /* Trigger TextScramble when section enters viewport */
   useEffect(() => {
     const section = sectionRef.current
     if (!section) return
@@ -77,18 +31,11 @@ export default function CTA() {
   }, [])
 
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const ctx = gsap.context(() => {
-      gsap.from('.cta-line', {
-        y: 60, opacity: 0, duration: 1.1, ease: 'power4.out', stagger: 0.14,
-        scrollTrigger: { trigger: sectionRef.current, start: 'top 75%', once: true },
-      })
-      gsap.from('.cta-proof', {
-        y: 24, opacity: 0, duration: 0.8, ease: 'power3.out', stagger: 0.08,
-        scrollTrigger: { trigger: sectionRef.current, start: 'top 65%', once: true },
-      })
-      gsap.from('.cta-actions', {
-        y: 20, opacity: 0, duration: 0.7, ease: 'power3.out',
-        scrollTrigger: { trigger: sectionRef.current, start: 'top 60%', once: true },
+      gsap.from('.cta-rise', {
+        y: 18, opacity: 0, duration: 0.6, ease: 'power2.out', stagger: 0.09,
+        scrollTrigger: { trigger: sectionRef.current, start: 'top 72%', once: true },
       })
     }, sectionRef)
     return () => ctx.revert()
@@ -100,33 +47,34 @@ export default function CTA() {
       aria-labelledby="cta-title"
       style={{ position: 'relative', zIndex: 2, padding: '0 2rem 140px', overflow: 'hidden' }}
     >
-      {/* Ignite — the Pulse terminates here; the stage lights up on arrival */}
+      {/* Soft ambient glow — static, just a gentle fade-in (no scaling drama) */}
       <div aria-hidden="true" style={{
-        position: 'absolute', left: '50%', top: '30%',
-        width: 'min(900px, 120vw)', height: '500px',
-        transform: `translateX(-50%) scale(${inView ? 1 : 0.7})`,
-        background: 'radial-gradient(ellipse, rgba(79,142,240,0.10) 0%, rgba(106, 166, 255,0.05) 45%, transparent 70%)',
-        filter: 'blur(50px)',
+        position: 'absolute', left: '50%', top: '34%',
+        width: 'min(760px, 110vw)', height: '420px',
+        transform: 'translateX(-50%)',
+        background: 'radial-gradient(ellipse, rgba(79,142,240,0.10) 0%, rgba(79,142,240,0.04) 45%, transparent 70%)',
+        filter: 'blur(60px)',
         opacity: inView ? 1 : 0,
-        transition: 'opacity 1.4s var(--ease-out-expo), transform 1.4s var(--ease-out-expo)',
+        transition: 'opacity 1s ease',
         pointerEvents: 'none',
       }} />
-      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
 
-        {/* Separator line */}
+      <div style={{ maxWidth: '720px', margin: '0 auto', position: 'relative', textAlign: 'center' }}>
+
+        {/* Separator */}
         <div aria-hidden="true" style={{
           height: '1px',
-          background: 'linear-gradient(90deg, transparent, rgba(79,142,240,0.35) 30%, rgba(79,142,240,0.35) 70%, transparent)',
-          marginBottom: '100px',
+          background: 'linear-gradient(90deg, transparent, rgba(79,142,240,0.30) 30%, rgba(79,142,240,0.30) 70%, transparent)',
+          marginBottom: '90px',
         }} />
 
-        {/* Live pill eyebrow */}
-        <div className="cta-line" style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+        {/* Live pill eyebrow — consistent clinic count */}
+        <div className="cta-rise" style={{ marginBottom: '2.25rem' }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: '8px',
             background: 'rgba(79,142,240,0.07)', border: '1px solid rgba(79,142,240,0.16)',
             borderRadius: '100px', padding: '6px 16px',
-            fontSize: '13px', fontWeight: 400, color: 'var(--text-3)',
+            fontSize: '13px', fontWeight: 400, color: 'var(--text-2)',
             fontFamily: 'var(--font-inter)',
           }}>
             <span aria-hidden="true" style={{
@@ -134,107 +82,55 @@ export default function CTA() {
               borderRadius: '50%', background: 'var(--accent)',
               animation: 'pulse-dot 1.8s ease-in-out infinite',
             }} />
-            <span>
-              <strong style={{ color: 'var(--text-2)', fontWeight: 500 }}>
-                18,938
-              </strong>
-              {' '}verified free &amp; sliding-scale clinics — live
-            </span>
+            <span><strong style={{ color: 'var(--text)', fontWeight: 600 }}>18,900+</strong> free &amp; sliding-scale clinics, verified and live</span>
           </div>
         </div>
 
-        {/* Headline — full width, centered, cinematic */}
-        <div ref={innerRef} style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <h2
-            id="cta-title"
-            className="cta-line"
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(3rem, 6.5vw, 6rem)',
-              fontWeight: 800,
-              lineHeight: 1.0,
-              letterSpacing: '-0.04em',
-              marginBottom: 0,
-            }}
-          >
-            <LuxeReveal
-              text="Your health"
-              trigger={inView}
-              delay={200}
-              charDelay={32}
-              style={{ fontFamily: 'inherit', fontWeight: 'inherit', letterSpacing: 'inherit' }}
-            />
-            {' '}
-            <em className="text-shimmer" style={{ fontStyle: 'italic' }}>
-              doesn&apos;t wait.
-            </em>
-          </h2>
-          <h2
-            className="cta-line"
-            aria-hidden="true"
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(3rem, 6.5vw, 6rem)',
-              fontWeight: 800,
-              lineHeight: 1.0,
-              letterSpacing: '-0.04em',
-              color: 'var(--text-2)',
-            }}
-          >
-            <LuxeReveal
-              text="Neither should you."
-              trigger={inView}
-              delay={580}
-              charDelay={28}
-              style={{ fontFamily: 'inherit', fontWeight: 'inherit', letterSpacing: 'inherit' }}
-            />
-          </h2>
-        </div>
+        {/* Headline — calm, no per-character reveal */}
+        <h2
+          id="cta-title"
+          className="cta-rise"
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(2.6rem, 5.5vw, 4.6rem)',
+            fontWeight: 800,
+            lineHeight: 1.05,
+            letterSpacing: '-0.035em',
+            margin: '0 0 1.75rem',
+            color: 'var(--text)',
+            textWrap: 'balance',
+          }}
+        >
+          Your health doesn&apos;t wait.<br />
+          <span style={{ color: 'var(--text-3)' }}>Neither should you.</span>
+        </h2>
 
         {/* Subline */}
-        <p className="cta-line" style={{
-          textAlign: 'center',
-          fontSize: 'clamp(16px, 1.8vw, 19px)',
+        <p className="cta-rise" style={{
+          fontSize: 'clamp(15px, 1.7vw, 18px)',
           color: 'var(--text-2)',
           fontFamily: 'var(--font-inter)',
           fontWeight: 400,
           lineHeight: 1.75,
-          maxWidth: '520px',
-          margin: '0 auto 3.5rem',
+          maxWidth: '480px',
+          margin: '0 auto 2.75rem',
         }}>
           Free clinics, hidden programs, real care — found in seconds.
           No insurance, no signup, no cost.
         </p>
 
-        {/* Primary CTA */}
-        <div className="cta-actions" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+        {/* Actions */}
+        <div className="cta-rise" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
           <button
-            className="btn-shimmer magnetic-btn-full"
-            style={{
-              padding: '18px 52px',
-              fontSize: '17px',
-              fontFamily: 'var(--font-display)',
-              color: '#fff',
-              letterSpacing: '-0.01em',
-            }}
-            onMouseMove={e => {
-              const btn = e.currentTarget
-              const r = btn.getBoundingClientRect()
-              const dx = e.clientX - (r.left + r.width  / 2)
-              const dy = e.clientY - (r.top  + r.height / 2)
-              const dist = Math.sqrt(dx * dx + dy * dy)
-              btn.style.transform = dist < 110
-                ? `translate(${dx * (1 - dist / 110) * 0.35}px, ${dy * (1 - dist / 110) * 0.35}px) translateY(-1px)`
-                : 'translateY(-1px)'
-            }}
-            onMouseLeave={e => { e.currentTarget.style.transform = '' }}
-            onClick={() => router.push('/pathways')}
+            className="btn btn-primary btn-lg"
+            style={{ padding: '15px 40px', fontSize: '16px' }}
+            onClick={() => router.push('/search')}
             aria-label="Find free care near you"
           >
             Find free care near me
+            <ArrowRight size={17} color="currentColor" variant="Linear" />
           </button>
 
-          {/* Ghost secondary */}
           <button
             style={{
               background: 'transparent', color: 'var(--text-3)',
@@ -259,26 +155,10 @@ export default function CTA() {
           </button>
         </div>
 
-        {/* Proof strip — numbers count up when scrolled into view */}
-        <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          gap: '0', marginTop: '4rem',
-          flexWrap: 'wrap',
-        }}>
-          {[
-            { value: '30M',     label: 'uninsured Americans we serve' },
-            { value: '12400+',  label: 'free clinics mapped' },
-            { value: '50',      label: 'states covered' },
-            { value: '$0',      label: 'cost to use NEXUS' },
-          ].map((stat, i, arr) => (
-            <ProofStat key={stat.value} value={stat.value} label={stat.label} isLast={i === arr.length - 1} />
-          ))}
-        </div>
-
         {/* Trust row */}
-        <div className="cta-proof" style={{
-          display: 'flex', gap: '24px', justifyContent: 'center',
-          flexWrap: 'wrap', marginTop: '2.5rem',
+        <div className="cta-rise" style={{
+          display: 'flex', gap: '22px', justifyContent: 'center',
+          flexWrap: 'wrap', marginTop: '2.75rem',
         }}>
           {['No signup required', '100% anonymous', 'Always free'].map(label => (
             <div key={label} style={{
@@ -291,13 +171,6 @@ export default function CTA() {
             </div>
           ))}
         </div>
-
-        <style>{`
-          @media (max-width: 640px) {
-            .cta-proof { padding: 1rem 1.5rem !important; border-right: none !important; border-bottom: 1px solid var(--border-subtle); }
-            .cta-proof:last-child { border-bottom: none; }
-          }
-        `}</style>
       </div>
     </section>
   )

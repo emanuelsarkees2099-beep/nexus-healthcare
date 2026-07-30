@@ -41,15 +41,20 @@ const SYMPTOM_PATTERNS = [
    Incoming: per-character flap with stagger (the split-flap effect).
    Outgoing: the WHOLE word exits fast as one unit — staggered exits
    overlapped the incoming word for ~700ms and read as garbled text. */
-function FlapWord({ word, leaving }: { word: string; leaving: boolean }) {
+/* overlay=true → the OUTGOING word, absolutely stacked over the incoming
+   one so the two crossfade. overlay=false (incoming) stays in normal flow
+   so it sizes the container to the CURRENT word — keeping exactly one space
+   before " in seconds." regardless of word length. */
+function FlapWord({ word, leaving, overlay = false }: { word: string; leaving: boolean; overlay?: boolean }) {
   return (
     <span
       aria-hidden={leaving || undefined}
       className={leaving ? 'flap-word-out' : undefined}
       style={{
-        position: 'absolute', left: 0, right: 0, top: 0,
-        display: 'block', textAlign: 'center', whiteSpace: 'nowrap',
-        color: 'var(--accent)',
+        display: 'inline-block', whiteSpace: 'nowrap', color: 'var(--accent)',
+        ...(overlay
+          ? { position: 'absolute', left: 0, top: 0 }
+          : { position: 'relative' }),
       }}
     >
       {word.split('').map((ch, i) => (
@@ -348,16 +353,14 @@ export default function Hero() {
         >
           <span style={{ display: 'block' }}>Free healthcare,</span>
           <span style={{ display: 'block' }}>
+            {/* Sizes to the CURRENT word (incoming stays in flow); the
+                outgoing word is overlaid so they crossfade without a gap. */}
             <span style={{
               display: 'inline-block', position: 'relative',
-              perspective: '600px',
+              perspective: '600px', verticalAlign: 'bottom',
             }}>
-              {/* Width lock — no layout shift between words */}
-              <span aria-hidden="true" style={{ visibility: 'hidden' }}>
-                {CYCLE_WORDS.reduce((a, b) => (a.length >= b.length ? a : b))}
-              </span>
               {prevIdx !== null && (
-                <FlapWord key={`out-${prevIdx}`} word={CYCLE_WORDS[prevIdx]} leaving />
+                <FlapWord key={`out-${prevIdx}`} word={CYCLE_WORDS[prevIdx]} leaving overlay />
               )}
               <FlapWord key={`in-${cycleIdx}`} word={CYCLE_WORDS[cycleIdx]} leaving={false} />
             </span>

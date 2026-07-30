@@ -310,13 +310,8 @@ export default function Features() {
         scrollTrigger: { trigger: '.section-intro', start: 'top 85%', once: true },
       })
 
-      /* ── Word-by-word masked h2 reveal (mask-reveal technique) ── */
-      gsap.set('.reveal-word-inner', { y: '115%', opacity: 0 })
-      gsap.to('.reveal-word-inner', {
-        y: '0%', opacity: 1,
-        duration: 0.75, ease: 'power3.out', stagger: 0.065,
-        scrollTrigger: { trigger: '.reveal-h2', start: 'top 86%', once: true },
-      })
+      /* Heading now rides the .section-intro fade below — no separate
+         per-word mask reveal (it read as too dramatic and was fragile). */
 
       /* ── Eyebrow pill clip-wipe entrance ── */
       gsap.from('.features-eyebrow', {
@@ -402,28 +397,15 @@ export default function Features() {
         </div>
         <h2
           id="features-title"
-          className="reveal-h2"
           style={{
             fontFamily: 'var(--font-display)',
             fontSize: 'clamp(2.2rem,4vw,3.5rem)',
             fontWeight: 700, lineHeight: 1.05, letterSpacing: '-0.03em',
-            marginBottom: '1.25rem',
+            marginBottom: '1.25rem', textWrap: 'balance',
           }}
         >
-          {['Built', 'for', 'people', 'the'].map(w => (
-            <span key={w} className="reveal-word" style={{ marginRight: '0.28em' }}>
-              <span className="reveal-word-inner">{w}</span>
-            </span>
-          ))}
-          <br />
-          <span className="reveal-word" style={{ marginRight: '0.28em' }}>
-            <span className="reveal-word-inner">system</span>
-          </span>
-          <span className="reveal-word">
-            <span className="reveal-word-inner">
-              <em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>overlooked</em>
-            </span>
-          </span>
+          Built for people the<br />
+          system <em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>overlooked</em>
         </h2>
         <p style={{ fontSize: '15px', color: 'var(--text-2)', maxWidth: '480px', fontWeight: 400, lineHeight: 1.85, fontFamily: 'var(--font-inter)' }}>
           Every feature was designed around one question: what does an uninsured adult actually need to get care today?
@@ -624,23 +606,23 @@ export default function Features() {
             className="also-included-pill"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '5px',
-              fontSize: '12px', color: 'rgba(255,255,255,0.55)',
-              fontFamily: 'var(--font-inter)', fontWeight: 400,
+              fontSize: '12px', color: 'rgba(255,255,255,0.86)',
+              fontFamily: 'var(--font-inter)', fontWeight: 500,
               textDecoration: 'none', padding: '5px 13px',
               borderRadius: '100px',
-              border: '1px solid rgba(74,144,217,0.20)',
-              background: 'rgba(74,144,217,0.05)',
+              border: '1px solid rgba(74,144,217,0.40)',
+              background: 'rgba(74,144,217,0.12)',
               transition: 'color 0.2s, border-color 0.25s, background 0.25s',
             }}
             onMouseEnter={e => {
               e.currentTarget.style.color = 'var(--accent2)'
-              e.currentTarget.style.borderColor = 'rgba(74,144,217,0.40)'
-              e.currentTarget.style.background = 'rgba(74,144,217,0.10)'
+              e.currentTarget.style.borderColor = 'rgba(74,144,217,0.60)'
+              e.currentTarget.style.background = 'rgba(74,144,217,0.20)'
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.color = 'rgba(255,255,255,0.55)'
-              e.currentTarget.style.borderColor = 'rgba(74,144,217,0.20)'
-              e.currentTarget.style.background = 'rgba(74,144,217,0.05)'
+              e.currentTarget.style.color = 'rgba(255,255,255,0.86)'
+              e.currentTarget.style.borderColor = 'rgba(74,144,217,0.40)'
+              e.currentTarget.style.background = 'rgba(74,144,217,0.12)'
             }}
           >
             {item.label} <ArrowRight size={14} color="var(--accent)" variant="Linear" />
