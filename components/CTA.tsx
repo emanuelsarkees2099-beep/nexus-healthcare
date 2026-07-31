@@ -92,17 +92,16 @@ export default function CTA() {
           className="cta-rise"
           style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.6rem, 5.5vw, 4.6rem)',
+            fontSize: 'clamp(3rem, 6vw, 5rem)',
             fontWeight: 800,
-            lineHeight: 1.05,
-            letterSpacing: '-0.035em',
+            lineHeight: 1.02,
+            letterSpacing: '-0.04em',
             margin: '0 0 1.75rem',
             color: 'var(--text)',
             textWrap: 'balance',
           }}
         >
-          Your health doesn&apos;t wait.<br />
-          <span style={{ color: 'var(--text-3)' }}>Neither should you.</span>
+          Your health can&apos;t wait.
         </h2>
 
         {/* Subline */}

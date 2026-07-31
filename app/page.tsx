@@ -16,6 +16,10 @@ const Features          = dynamic(() => import('@/components/Features'))
 const HowItWorks        = dynamic(() => import('@/components/HowItWorks'))
 const DataSources       = dynamic(() => import('@/components/DataSources'))
 const CTA               = dynamic(() => import('@/components/CTA'))
+const MissionBand       = dynamic(() => import('@/components/MissionBand'))
+const ProgramsShowcase  = dynamic(() => import('@/components/ProgramsShowcase'))
+const UseCases          = dynamic(() => import('@/components/UseCases'))
+const LandingFAQ        = dynamic(() => import('@/components/LandingFAQ'))
 /* Testimonials unmounted: the component contains 16 fabricated patient
    quotes with invented names, dollar amounts, and medical situations —
    an FTC/false-advertising liability for a healthcare product. It stays
@@ -38,9 +42,13 @@ export default function Home() {
       <main id="main-content" style={{ position: 'relative' }}>
         <Hero />
         <Stats />
+        <MissionBand />
         <HowItWorks />
         <Features />
+        <ProgramsShowcase />
+        <UseCases />
         <DataSources />
+        <LandingFAQ />
         <CTA />
       </main>
 
