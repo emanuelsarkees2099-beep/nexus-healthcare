@@ -206,7 +206,6 @@ export default function Footer() {
                 { label: 'Stories',       href: '/stories' },
                 { label: 'Rights & Legal',href: '/rights' },
                 { label: 'Advocacy Hub',  href: '/advocacy' },
-                { label: 'Kids Health Guide', href: '/kids' },
               ],
             },
             {

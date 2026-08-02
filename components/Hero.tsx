@@ -385,9 +385,12 @@ export default function Hero() {
         </p>
 
         {/* ── Search ── */}
+        {/* z-index:30 puts the search + its typeahead dropdowns above the
+            LivingProof card below, whose top was overlapping (and stealing
+            clicks from) the first few location suggestions. */}
         <div
           ref={searchRef}
-          style={{ width: '100%', maxWidth: '640px' }}
+          style={{ width: '100%', maxWidth: '640px', position: 'relative', zIndex: 30 }}
         >
           <SearchBar
             searchVal={searchVal}
@@ -402,7 +405,7 @@ export default function Hero() {
         </div>
 
         {/* ── Living Proof — real clinics near the visitor, on load ── */}
-        <div ref={livingRef} style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+        <div ref={livingRef} style={{ width: '100%', display: 'flex', justifyContent: 'center', position: 'relative', zIndex: 1 }}>
           <LivingProof />
         </div>
 

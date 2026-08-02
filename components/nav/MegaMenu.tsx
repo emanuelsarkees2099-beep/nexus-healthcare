@@ -6,7 +6,7 @@ import {
   SearchNormal1, Video, Danger,
   ReceiptText, ShieldTick, Health,
   TrendUp, Book1, Judge,
-  Profile2User, Global, MagicStar,
+  Global, MagicStar,
 } from 'iconsax-react'
 
 interface MegaMenuProps {
@@ -44,7 +44,6 @@ const SECTIONS = [
       { label: 'Health Passport', href: '/passport', icon: ShieldTick, desc: 'Your records, your control' },
       { label: 'Your Rights',     href: '/rights',   icon: Judge,      desc: 'EMTALA, ADA & more' },
       { label: 'Stories',         href: '/stories',  icon: Book1,      desc: 'Community voices' },
-      { label: 'Kids Guide',      href: '/kids',     icon: Profile2User, desc: 'Health education for kids' },
     ],
   },
 ]

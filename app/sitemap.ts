@@ -25,7 +25,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     /* Community & content */
     { url: `${base}/stories`,       priority: 0.80, changeFrequency: 'daily'   },
-    { url: `${base}/kids`,          priority: 0.75, changeFrequency: 'monthly' },
     { url: `${base}/editorial`,     priority: 0.75, changeFrequency: 'weekly'  },
     { url: `${base}/advocacy`,      priority: 0.70, changeFrequency: 'monthly' },
     { url: `${base}/chw`,           priority: 0.70, changeFrequency: 'monthly' },

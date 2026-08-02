@@ -8,12 +8,12 @@ registerGSAP()
 
 /* ── Reusable bento pieces ───────────────────────────────────────── */
 
-function BentoIcon({ icon, color = 'rgba(255,255,255,0.55)', bg = 'rgba(255,255,255,0.04)', border = 'rgba(255,255,255,0.08)' }: {
+/* Vivid gradient icon tile — a rich glass chip with a colored glow, built
+   from the card's own accent so each card gets a distinct pop of color
+   (blue / violet / amber / teal) instead of the old flat grey squares. */
+function BentoIcon({ icon, color = 'var(--accent)' }: {
   icon: React.ReactNode; color?: string; bg?: string; border?: string
 }) {
-  /* Inject explicit color prop — iconsax TwoTone/Linear use stroke="currentColor"
-     which can fail to cascade through React's SVG rendering in some environments.
-     cloneElement bypasses CSS inheritance and passes color as a direct React prop. */
   const iconWithColor = React.isValidElement(icon)
     ? React.cloneElement(icon as React.ReactElement<{ color?: string }>, { color })
     : icon
@@ -23,8 +23,11 @@ function BentoIcon({ icon, color = 'rgba(255,255,255,0.55)', bg = 'rgba(255,255,
       aria-hidden="true"
       className="bento-icon-wrap"
       style={{
-        width: '40px', height: '40px', background: bg, border: `1px solid ${border}`,
-        borderRadius: 'var(--r-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        width: '46px', height: '46px',
+        background: `linear-gradient(145deg, color-mix(in srgb, ${color} 30%, transparent), color-mix(in srgb, ${color} 6%, transparent))`,
+        border: `1px solid color-mix(in srgb, ${color} 36%, transparent)`,
+        boxShadow: `0 8px 22px color-mix(in srgb, ${color} 18%, transparent), inset 0 1px 0 color-mix(in srgb, ${color} 24%, transparent)`,
+        borderRadius: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center',
         marginBottom: '1.25rem', color, flexShrink: 0,
       }}
     >
@@ -405,7 +408,7 @@ export default function Features() {
           }}
         >
           Built for people the<br />
-          system <em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>overlooked</em>
+          system <em style={{ fontStyle: 'normal', background: 'var(--grad-text)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>overlooked</em>
         </h2>
         <p style={{ fontSize: '15px', color: 'var(--text-2)', maxWidth: '480px', fontWeight: 400, lineHeight: 1.85, fontFamily: 'var(--font-inter)' }}>
           Every feature was designed around one question: what does an uninsured adult actually need to get care today?
@@ -587,8 +590,11 @@ export default function Features() {
         </Link>
       </div>
 
-      {/* ── Also included pill row ── */}
-      <div style={{ marginTop: '40px', paddingTop: '28px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+      {/* ── Also included pill row ──
+         position/z-index lifts this row ABOVE the .dot-grid-bg::before
+         vignette (z-index:0), which fades to near-black at the section's
+         bottom edge and was darkening these pills like a shadow. */}
+      <div style={{ position: 'relative', zIndex: 1, marginTop: '40px', paddingTop: '28px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
         <span style={{ fontSize: '11px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', whiteSpace: 'nowrap', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
           Also included
         </span>
