@@ -17,6 +17,7 @@ const HowItWorks        = dynamic(() => import('@/components/HowItWorks'))
 const DataSources       = dynamic(() => import('@/components/DataSources'))
 const CTA               = dynamic(() => import('@/components/CTA'))
 const MissionBand       = dynamic(() => import('@/components/MissionBand'))
+const ProductMockup     = dynamic(() => import('@/components/ProductMockup'))
 const ProgramsShowcase  = dynamic(() => import('@/components/ProgramsShowcase'))
 const UseCases          = dynamic(() => import('@/components/UseCases'))
 const LandingFAQ        = dynamic(() => import('@/components/LandingFAQ'))
@@ -44,6 +45,7 @@ export default function Home() {
         <Stats />
         <MissionBand />
         <HowItWorks />
+        <ProductMockup />
         <Features />
         <ProgramsShowcase />
         <UseCases />

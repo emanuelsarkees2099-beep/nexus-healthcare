@@ -612,26 +612,26 @@ export default function Features() {
             className="also-included-pill"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '5px',
-              fontSize: '12px', color: '#ffffff',
+              fontSize: '12px', color: 'rgba(255,255,255,0.74)',
               fontFamily: 'var(--font-inter)', fontWeight: 500,
               textDecoration: 'none', padding: '5px 13px',
               borderRadius: '100px',
-              border: '1px solid rgba(255,255,255,0.65)',
-              background: 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(255,255,255,0.32)',
+              background: 'rgba(255,255,255,0.035)',
               transition: 'color 0.2s, border-color 0.25s, background 0.25s',
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.color = '#ffffff'
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.95)'
-              e.currentTarget.style.background = 'rgba(255,255,255,0.14)'
+              e.currentTarget.style.color = 'rgba(255,255,255,0.95)'
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.55)'
+              e.currentTarget.style.background = 'rgba(255,255,255,0.09)'
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.color = '#ffffff'
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.65)'
-              e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
+              e.currentTarget.style.color = 'rgba(255,255,255,0.74)'
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.32)'
+              e.currentTarget.style.background = 'rgba(255,255,255,0.035)'
             }}
           >
-            {item.label} <ArrowRight size={14} color="#ffffff" variant="Linear" />
+            {item.label} <ArrowRight size={14} color="rgba(255,255,255,0.74)" variant="Linear" />
           </Link>
         ))}
       </div>
