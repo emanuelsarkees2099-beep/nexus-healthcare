@@ -8,7 +8,7 @@
    forces returning visitors off stale HTML / _next chunks.
    ========================================================= */
 
-const CACHE_NAME = 'nexus-v9'
+const CACHE_NAME = 'nexus-v10'
 
 /* Pages to precache on install — these work fully offline.
    Crisis is the priority: it must load with zero signal (life-safety).

@@ -6140,3 +6140,64 @@ input, textarea, select {
 }
 
 
+
+/* ═══════════════════════════════════════════════════════════════════
+   PROPORTIONAL VIEWPORT SCALING — one layout, every screen size
+   ═══════════════════════════════════════════════════════════════════
+   The design is authored at a ~1280–1440px "reference" width. Because
+   almost all sizing in this app is hard px (1,371 px font-sizes, ~200 px
+   container max-widths), a fluid root font-size would do nothing — px
+   doesn't respond to rem scaling. `zoom` is the one property that scales
+   type, spacing, borders, and max-widths together, so the composition
+   stays visually IDENTICAL and simply gets bigger on a large display
+   instead of stranding the content in a narrow column with tiny text.
+
+   Media queries evaluate against the true viewport (zoom doesn't feed
+   back into them), so these steps are stable.
+   ────────────────────────────────────────────────────────────────── */
+:root { --app-zoom: 1; }
+
+@media (min-width: 1500px) { :root { --app-zoom: 1.05; } }  /* MacBook Pro 14" */
+@media (min-width: 1700px) { :root { --app-zoom: 1.12; } }  /* MacBook Pro 16" */
+@media (min-width: 1920px) { :root { --app-zoom: 1.20; } }  /* 1080p desktop   */
+@media (min-width: 2400px) { :root { --app-zoom: 1.34; } }  /* 27" iMac / QHD  */
+@media (min-width: 3000px) { :root { --app-zoom: 1.55; } }  /* 4K and beyond   */
+
+@media (min-width: 1500px) {
+  :root { zoom: var(--app-zoom); }
+
+  /* Viewport-height compensation: a zoomed `100dvh` would render at
+     100dvh × zoom and overflow the screen, so divide it back out. The
+     attribute selectors catch the inline vh/dvh min-heights used across
+     the page wrappers and hero. */
+  #hero,
+  [style*="100dvh"],
+  [style*="100vh"] {
+    min-height: calc(100dvh / var(--app-zoom)) !important;
+  }
+
+  /* Fixed full-bleed decorative layers (the ambient background canvas) use
+     `inset: 0`, which also resolves against the zoomed viewport and would
+     render ~1.3× wider than the screen. Divide it back out so the ambient
+     field stays exactly screen-sized and correctly centred. */
+  canvas[style*="fixed"] {
+    width:  calc(100vw  / var(--app-zoom)) !important;
+    height: calc(100dvh / var(--app-zoom)) !important;
+  }
+}
+
+/* ── Compact phones: keep multi-column composition instead of one very
+      long vertical run. Cards get narrower rather than the page getting
+      endlessly taller, which is what makes the section still read as the
+      designed layout. ── */
+@media (max-width: 620px) {
+  .sources-grid   { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+  .usecases-panel { grid-template-columns: repeat(2, 1fr) !important; }
+  .programs-grid  { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 380px) {
+  /* Only on the very smallest phones does a single column win. */
+  .sources-grid   { grid-template-columns: 1fr !important; }
+  .usecases-panel { grid-template-columns: 1fr !important; }
+  .programs-grid  { grid-template-columns: 1fr !important; }
+}
