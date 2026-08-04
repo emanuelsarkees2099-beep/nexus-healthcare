@@ -6186,18 +6186,31 @@ input, textarea, select {
   }
 }
 
-/* ── Compact phones: keep multi-column composition instead of one very
-      long vertical run. Cards get narrower rather than the page getting
-      endlessly taller, which is what makes the section still read as the
-      designed layout. ── */
-@media (max-width: 620px) {
-  .sources-grid   { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
-  .usecases-panel { grid-template-columns: repeat(2, 1fr) !important; }
-  .programs-grid  { grid-template-columns: repeat(2, 1fr) !important; }
-}
-@media (max-width: 380px) {
-  /* Only on the very smallest phones does a single column win. */
-  .sources-grid   { grid-template-columns: 1fr !important; }
-  .usecases-panel { grid-template-columns: 1fr !important; }
-  .programs-grid  { grid-template-columns: 1fr !important; }
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE LAYER — phone-only, isolated from the desktop composition
+   ═══════════════════════════════════════════════════════════════════
+   Everything below lives inside a single max-width query, so no rule
+   here can ever affect the desktop layout, and no desktop grid/scale
+   rule reaches the phone. Phones get ONE ordered column — the goal is
+   a shorter, calmer page through tighter vertical rhythm, never by
+   squeezing desktop columns onto a small screen.
+   ────────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Zoom never applies on phones — the layout is authored for this width. */
+  :root { --app-zoom: 1; zoom: 1; }
+
+  /* 1. Vertical rhythm: oversized section padding is the main reason the
+        page felt endless. Trim it on stacked sections — never the hero,
+        which is full-height flex-centred and must keep its own spacing. */
+  main > section:not(#hero) { padding-top: clamp(44px, 7vh, 68px) !important; }
+
+  /* 2. Keep every stacked grid to one clean column, in source order. */
+  .bento-grid,
+  .usecases-panel,
+  .sources-grid,
+  .programs-layout { grid-template-columns: 1fr !important; }
+
+  /* 3. Cards size to their content — no desktop min-heights stretching
+        a short card into a tall empty box. */
+  .bento-card { min-height: unset !important; }
 }

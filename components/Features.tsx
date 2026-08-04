@@ -653,23 +653,14 @@ export default function Features() {
           clip-path: inset(0 0% 0 0);
           overflow: hidden;
         }
-        /* Tablet + phone: keep a TWO-column bento so the section still reads
-           as the designed composition instead of one very long vertical run.
-           Cards get narrower rather than the page getting endlessly taller. */
-        @media (max-width: 900px) {
-          .bento-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+        /* Phones read this as a single, ordered column — cramming the bento
+           into two narrow columns wrecked the card compositions. */
+        @media (max-width: 768px) {
+          .bento-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
           .bc-1,.bc-2,.bc-3,.bc-4,.bc-5,.bc-6 {
             grid-column: span 1 !important; grid-row: span 1 !important;
             min-height: unset !important;
           }
-          /* The lead card keeps a little more presence across both columns */
-          .bc-1 { grid-column: span 2 !important; }
-        }
-        /* Only the very smallest phones (<=360px) drop to a single column —
-           390/414px phones keep the two-column composition. */
-        @media (max-width: 360px) {
-          .bento-grid { grid-template-columns: 1fr !important; }
-          .bc-1 { grid-column: span 1 !important; }
         }
       `}</style>
     </section>

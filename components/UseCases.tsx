@@ -73,10 +73,8 @@ export default function UseCases() {
       </div>
 
       <style>{`
-        /* Hold two columns down to small phones so the panel keeps its
-           designed shape; only the narrowest screens go single-column. */
         @media (max-width: 820px) { .usecases-panel { grid-template-columns: repeat(2, 1fr) !important; } }
-        @media (max-width: 380px) { .usecases-panel { grid-template-columns: 1fr !important; } }
+        @media (max-width: 480px) { .usecases-panel { grid-template-columns: 1fr !important; } }
       `}</style>
     </section>
   )
