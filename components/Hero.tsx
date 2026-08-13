@@ -305,7 +305,9 @@ export default function Hero() {
           paddingTop: 'clamp(88px, 11vh, 128px)',
           paddingLeft: 'clamp(20px, 4vw, 48px)',
           paddingRight: 'clamp(20px, 4vw, 48px)',
-          maxWidth: '860px',
+          /* 1000px (not 860) so the headline's longest line —
+             "deserved in seconds." — has room to stay on ONE line. */
+          maxWidth: '1000px',
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
@@ -342,7 +344,14 @@ export default function Hero() {
           id="hero-h1"
           style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.8rem, 6vw, 5.8rem)',
+            /* Sized so the LONGEST cycling line always fits on one line.
+               Measured: the widest line 2 ("deserved in seconds.") needs
+               ~10.5x the font-size in width, and the available width is
+               1000px minus 2x48px padding = 904px → 904/10.5 ≈ 86px cap.
+               8.1vw keeps the same ratio on narrower screens, so the
+               two-line composition holds at every width without any
+               breakpoint overrides. */
+            fontSize: 'min(8.1vw, 84px)',
             fontWeight: 800,
             lineHeight: 1.05,
             letterSpacing: '-0.04em',
@@ -351,8 +360,8 @@ export default function Hero() {
             color: 'var(--text)',
           }}
         >
-          <span style={{ display: 'block' }}>Free healthcare,</span>
-          <span style={{ display: 'block' }}>
+          <span style={{ display: 'block', whiteSpace: 'nowrap' }}>Free healthcare,</span>
+          <span style={{ display: 'block', whiteSpace: 'nowrap' }}>
             {/* Sizes to the CURRENT word (incoming stays in flow); the
                 outgoing word is overlaid so they crossfade without a gap. */}
             <span style={{
@@ -496,12 +505,14 @@ export default function Hero() {
           .hero-spotlight { display: none; }
         }
 
+        /* NOTE: no per-breakpoint h1 font-size here. The single
+           min(8.1vw, 84px) above is fluid by design and keeps the headline
+           on exactly two lines at every width; breakpoint overrides were
+           what let the longest cycling word spill onto a third line. */
         @media (max-width: 768px) {
           #hero { padding-bottom: 40px !important; }
-          #hero h1 { font-size: clamp(2.4rem, 9.5vw, 3.6rem) !important; }
         }
         @media (max-width: 480px) {
-          #hero h1 { font-size: clamp(2rem, 8.8vw, 2.8rem) !important; }
           #hero p  { font-size: 0.92rem !important; }
           /* Eyebrow: one clean line — smaller type, no side rules */
           .hero-eyebrow-rule { display: none !important; }
