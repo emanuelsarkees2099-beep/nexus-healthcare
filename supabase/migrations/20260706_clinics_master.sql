@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════════
--- NEXUS — Clinics master table
+-- AXVO — Clinics master table
 -- Owned clinic data (HRSA FQHCs + future sources), searched by radius.
 -- Replaces per-request fan-out to 10 live APIs as the primary source.
 -- Run in: Supabase Dashboard → SQL Editor

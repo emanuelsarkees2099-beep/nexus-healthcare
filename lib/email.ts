@@ -1,5 +1,5 @@
 /**
- * NEXUS - Central Email Service
+ * AXVO - Central Email Service
  * All outbound email routes through this module.
  * Provider: Resend (https://resend.com)
  *
@@ -9,8 +9,8 @@
  */
 
 const RESEND_API_KEY   = process.env.RESEND_API_KEY ?? ''
-const FROM_EMAIL       = process.env.FROM_EMAIL ?? 'NEXUS Health <hello@nexus.health>'
-const APP_URL          = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://nexus.health').replace(/\/$/, '')
+const FROM_EMAIL       = process.env.FROM_EMAIL ?? 'AXVO Health <hello@axvo.health>'
+const APP_URL          = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://axvo.health').replace(/\/$/, '')
 const UNSUBSCRIBE_BASE = `${APP_URL}/api/unsubscribe`
 
 // -- Core types ---------------------------------------------------------------
@@ -124,7 +124,7 @@ function layout(preheader: string, content: string, unsubToken?: string): string
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <meta name="x-apple-disable-message-reformatting"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-<title>NEXUS Health</title>
+<title>AXVO Health</title>
 <!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -170,14 +170,14 @@ p{font-size:14px;color:rgba(255,255,255,0.58);line-height:1.75;margin-bottom:14p
         <path transform="rotate(240 50 50)" d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4F8EF0" opacity="0.95"/>
         <circle cx="50" cy="50" r="5" fill="#4F8EF0" opacity="0.7"/>
       </svg>
-      <span class="logo-text">NEXUS</span>
+      <span class="logo-text">AXVO</span>
     </div>
     <div class="hr"></div>
     <div class="body">${content}</div>
     <div class="footer-wrap">
       <p class="footer-text">
-        ${unsub}<a href="${APP_URL}">nexus.health</a> &nbsp;&middot;&nbsp; &copy; ${YEAR} NEXUS Health<br/>
-        Free healthcare navigation for all Americans. NEXUS is not a medical provider.
+        ${unsub}<a href="${APP_URL}">axvo.health</a> &nbsp;&middot;&nbsp; &copy; ${YEAR} AXVO Health<br/>
+        Free healthcare navigation for all Americans. AXVO is not a medical provider.
       </p>
     </div>
   </div>
@@ -191,11 +191,11 @@ p{font-size:14px;color:rgba(255,255,255,0.58);line-height:1.75;margin-bottom:14p
 export function buildWelcomeEmail(name: string): EmailTemplate {
   const first = name.split(' ')[0]
   return {
-    subject: `Welcome to NEXUS, ${first}`,
+    subject: `Welcome to AXVO, ${first}`,
     html: layout(
       `You're in, ${first}. Free healthcare navigation starts now.`,
       `<h1>You're in, ${first}.</h1>
-<p>NEXUS connects you to free and low-cost healthcare -- clinics, programs, medication savings, and mental health support. Always free to use.</p>
+<p>AXVO connects you to free and low-cost healthcare -- clinics, programs, medication savings, and mental health support. Always free to use.</p>
 <div class="info-box"><span class="info-icon">&#127973;</span><div class="info-body"><strong>Find a clinic</strong> -- Search by ZIP code to find FQHCs, free clinics, and sliding-scale providers near you.</div></div>
 <div class="info-box"><span class="info-icon">&#128138;</span><div class="info-body"><strong>Save on medications</strong> -- Discover patient assistance programs that can cut costs up to 90%.</div></div>
 <div class="info-box"><span class="info-icon">&#129504;</span><div class="info-body"><strong>AI triage</strong> -- Describe your symptoms and get safe guidance on the right level of care.</div></div>
@@ -203,9 +203,9 @@ export function buildWelcomeEmail(name: string): EmailTemplate {
 <a href="${APP_URL}/search" class="cta">Find care near you &rarr;</a>
 <p class="fine">If you did not create this account, you can safely ignore this email.</p>`
     ),
-    text: `Welcome to NEXUS, ${first}!
+    text: `Welcome to AXVO, ${first}!
 
-NEXUS connects you to free and low-cost healthcare.
+AXVO connects you to free and low-cost healthcare.
 
 Find clinics: ${APP_URL}/search
 Save on medications: ${APP_URL}/medications
@@ -214,7 +214,7 @@ Health Passport: ${APP_URL}/passport
 
 If you did not create this account, you can safely ignore this email.
 
--- The NEXUS Team
+-- The AXVO Team
 ${APP_URL}`,
   }
 }
@@ -224,22 +224,22 @@ ${APP_URL}`,
 export function buildConfirmEmailEmail(name: string, confirmUrl: string): EmailTemplate {
   const first = name.split(' ')[0]
   return {
-    subject: `Confirm your NEXUS email, ${first}`,
+    subject: `Confirm your AXVO email, ${first}`,
     html: layout(
       `One click and you are all set, ${first}.`,
       `<h1>Confirm your email</h1>
-<p>Hi ${first}, almost there -- click below to confirm your email address and fully activate your NEXUS account.</p>
+<p>Hi ${first}, almost there -- click below to confirm your email address and fully activate your AXVO account.</p>
 <a href="${confirmUrl}" class="cta">Confirm email address &rarr;</a>
-<div class="info-box" style="margin-top:24px;"><span class="info-icon">&#128274;</span><div class="info-body">This link expires in <strong>24 hours</strong>. If you did not create a NEXUS account, you can safely ignore this email.</div></div>
+<div class="info-box" style="margin-top:24px;"><span class="info-icon">&#128274;</span><div class="info-body">This link expires in <strong>24 hours</strong>. If you did not create a AXVO account, you can safely ignore this email.</div></div>
 <p class="fine" style="margin-top:16px;">Button not working? Copy this link:<br/><span style="color:rgba(255,255,255,0.38);word-break:break-all;">${confirmUrl}</span></p>`
     ),
-    text: `Confirm your NEXUS email, ${first}
+    text: `Confirm your AXVO email, ${first}
 
 ${confirmUrl}
 
 This link expires in 24 hours. If you did not create an account, ignore this email.
 
--- NEXUS Health
+-- AXVO Health
 ${APP_URL}`,
   }
 }
@@ -248,22 +248,22 @@ ${APP_URL}`,
 
 export function buildPasswordResetEmail(resetUrl: string): EmailTemplate {
   return {
-    subject: 'Reset your NEXUS password',
+    subject: 'Reset your AXVO password',
     html: layout(
-      'A password reset was requested for your NEXUS account.',
+      'A password reset was requested for your AXVO account.',
       `<h1>Reset your password</h1>
-<p>Someone requested a password reset for your NEXUS account. Click below to set a new password. This link expires in <strong style="color:#fff;">1 hour</strong>.</p>
+<p>Someone requested a password reset for your AXVO account. Click below to set a new password. This link expires in <strong style="color:#fff;">1 hour</strong>.</p>
 <a href="${resetUrl}" class="cta">Reset password &rarr;</a>
 <div class="info-box" style="margin-top:24px;"><span class="info-icon">&#128274;</span><div class="info-body">If you did not request this, your account is safe -- just ignore this email. Your password will not change unless you click the link above.</div></div>
 <p class="fine" style="margin-top:16px;">Button not working?<br/><span style="color:rgba(255,255,255,0.38);word-break:break-all;">${resetUrl}</span></p>`
     ),
-    text: `Reset your NEXUS password
+    text: `Reset your AXVO password
 
 ${resetUrl}
 
 This link expires in 1 hour. If you did not request a reset, your account is safe -- ignore this email.
 
--- NEXUS Health
+-- AXVO Health
 ${APP_URL}`,
   }
 }
@@ -272,24 +272,24 @@ ${APP_URL}`,
 
 export function buildNewsletterWelcomeEmail(unsubToken: string): EmailTemplate {
   return {
-    subject: "You're subscribed to NEXUS Health updates",
+    subject: "You're subscribed to AXVO Health updates",
     html: layout(
       'Health news, program alerts, and new features -- straight to your inbox.',
       `<h1>You're on the list</h1>
-<p>Thank you for subscribing to NEXUS Health updates. Here is what to expect:</p>
+<p>Thank you for subscribing to AXVO Health updates. Here is what to expect:</p>
 <div class="info-box"><span class="info-icon">&#128240;</span><div class="info-body"><strong>Healthcare news</strong> that matters to uninsured and underinsured Americans</div></div>
 <div class="info-box"><span class="info-icon">&#10024;</span><div class="info-body"><strong>New features</strong> as we build more tools to help you navigate care</div></div>
 <div class="info-box"><span class="info-icon">&#128161;</span><div class="info-body"><strong>Program alerts</strong> -- new coverage options and assistance programs you can apply for</div></div>
-<a href="${APP_URL}" class="cta">Explore NEXUS &rarr;</a>`,
+<a href="${APP_URL}" class="cta">Explore AXVO &rarr;</a>`,
       unsubToken
     ),
-    text: `You're subscribed to NEXUS Health updates.
+    text: `You're subscribed to AXVO Health updates.
 
 You'll receive healthcare news, new features, and program alerts.
 
 To unsubscribe: ${UNSUBSCRIBE_BASE}?token=${unsubToken}
 
--- NEXUS Health
+-- AXVO Health
 ${APP_URL}`,
   }
 }
@@ -315,7 +315,7 @@ export function buildProgramAlertEmail(
   <div class="highlight-desc">${description}</div>
 </div>
 <a href="${learnMoreUrl}" class="cta">Learn more &amp; apply &rarr;</a>
-<p class="fine">You're receiving this because you have a NEXUS account. <a href="${APP_URL}/dashboard">Manage preferences</a></p>`,
+<p class="fine">You're receiving this because you have a AXVO account. <a href="${APP_URL}/dashboard">Manage preferences</a></p>`,
       unsubToken
     ),
     text: `New program match: ${programName}
@@ -325,7 +325,7 @@ ${description}
 
 Learn more: ${learnMoreUrl}
 
--- NEXUS Health
+-- AXVO Health
 ${APP_URL}`,
   }
 }
@@ -346,7 +346,7 @@ export function buildHealthCheckinEmail(
     html: layout(
       `Your health score this week: ${healthScore}/100`,
       `<h1>Your weekly check-in</h1>
-<p>Hi ${first}, here is a quick look at your NEXUS health snapshot this week.</p>
+<p>Hi ${first}, here is a quick look at your AXVO health snapshot this week.</p>
 <div style="background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:28px;margin:20px 0;text-align:center;">
   <div style="font-size:52px;font-weight:800;color:${scoreColor};line-height:1;letter-spacing:-0.03em;">${healthScore}</div>
   <div style="font-size:13px;color:rgba(255,255,255,0.38);margin:8px 0 0;letter-spacing:0.01em;">out of 100 &nbsp;&middot;&nbsp; ${scoreLabel}</div>
@@ -355,7 +355,7 @@ export function buildHealthCheckinEmail(
 <a href="${APP_URL}/dashboard" class="cta">View your dashboard &rarr;</a>`,
       unsubToken
     ),
-    text: `Your weekly NEXUS check-in, ${first}
+    text: `Your weekly AXVO check-in, ${first}
 
 Health score: ${healthScore}/100 -- ${scoreLabel}
 
@@ -363,7 +363,7 @@ Next step: ${nextAction}
 
 Dashboard: ${APP_URL}/dashboard
 
--- NEXUS Health
+-- AXVO Health
 ${APP_URL}`,
   }
 }
@@ -372,11 +372,11 @@ ${APP_URL}`,
 
 export function buildCrisisFollowupEmail(unsubToken?: string): EmailTemplate {
   return {
-    subject: 'NEXUS is still here for you',
+    subject: 'AXVO is still here for you',
     html: layout(
       'We want to check in. You are not alone, and support is available right now.',
       `<h1 style="font-size:22px;">We're still here for you</h1>
-<p>Yesterday you visited NEXUS for crisis resources. We just want to check in and remind you that real support is available -- anytime, any day.</p>
+<p>Yesterday you visited AXVO for crisis resources. We just want to check in and remind you that real support is available -- anytime, any day.</p>
 <div class="info-box" style="border-color:rgba(74,144,217,0.28);background:rgba(74,144,217,0.05);">
   <span class="info-icon">&#128222;</span>
   <div class="info-body"><strong>988 Suicide &amp; Crisis Lifeline</strong><br/>Call or text <strong>988</strong> -- available 24/7, free and confidential.</div>
@@ -393,7 +393,7 @@ export function buildCrisisFollowupEmail(unsubToken?: string): EmailTemplate {
 <p style="color:rgba(255,255,255,0.38);font-size:13px;margin-top:12px;text-align:center;">You are not alone. There are people who care and real help available right now.</p>`,
       unsubToken
     ),
-    text: `NEXUS is still here for you.
+    text: `AXVO is still here for you.
 
 We're checking in after your visit yesterday. Support is available right now:
 
@@ -403,7 +403,7 @@ CHW Connect: ${APP_URL}/chw
 
 You are not alone.
 
--- NEXUS Health
+-- AXVO Health
 ${APP_URL}`,
   }
 }
@@ -428,7 +428,7 @@ ${bodyParagraphs.join('\n\n')}
 
 ${ctaText && ctaUrl ? `${ctaText}: ${ctaUrl}` : ''}
 
--- NEXUS Health
+-- AXVO Health
 ${APP_URL}`,
   }
 }

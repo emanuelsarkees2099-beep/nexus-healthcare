@@ -29,7 +29,7 @@ function RevealBlock({ children, delay = 0 }: { children: React.ReactNode; delay
 
 /* ─── Real community-health organizations with CHW / promotora /
    navigator programs. Names, locations, languages, and public contact
-   info are real. NEXUS does not run these programs or rate them — this
+   info are real. AXVO does not run these programs or rate them — this
    is a directory that points people to them directly. ─── */
 type Org = {
   name: string; loc: string; phone: string; orgUrl: string

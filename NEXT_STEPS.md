@@ -1,6 +1,6 @@
-# 🎯 Next Steps: Complete Your NEXUS Deployment
+# 🎯 Next Steps: Complete Your AXVO Deployment
 
-Congratulations! Your NEXUS healthcare platform is **complete**, **tested**, and **deployed to Vercel**. Here's what you need to do to finish the setup.
+Congratulations! Your AXVO healthcare platform is **complete**, **tested**, and **deployed to Vercel**. Here's what you need to do to finish the setup.
 
 ---
 
@@ -15,17 +15,17 @@ The project is ready to push to GitHub. Follow **GITHUB_SETUP.md** for step-by-s
 ```bash
 # Quick version (copy-paste these commands):
 cd "C:\Users\marwa\Desktop\N E X U S"
-git remote add origin https://github.com/YOUR_USERNAME/nexus-healthcare.git
+git remote add origin https://github.com/YOUR_USERNAME/axvo-healthcare.git
 git branch -M main
 git push -u origin main
 ```
 
 **What to do**:
 1. Go to https://github.com/new
-2. Create repository named `nexus-healthcare`
+2. Create repository named `axvo-healthcare`
 3. Copy the commands above (replace YOUR_USERNAME)
 4. Paste into your terminal
-5. Verify: https://github.com/YOUR_USERNAME/nexus-healthcare
+5. Verify: https://github.com/YOUR_USERNAME/axvo-healthcare
 
 **Why**: Enables version control, backup, and automated Vercel deployments.
 
@@ -41,7 +41,7 @@ Once your repo is on GitHub, connect it to Vercel for continuous deployment:
 1. Go to https://vercel.com/dashboard
 2. Click "Add New" → "Project"
 3. Select "Import Git Repository"
-4. Choose `nexus-healthcare`
+4. Choose `axvo-healthcare`
 5. Configure settings (auto-detects Next.js)
 6. **Add Environment Variables**:
    ```
@@ -62,7 +62,7 @@ Once your repo is on GitHub, connect it to Vercel for continuous deployment:
 **Time**: 10 minutes  
 **Status**: ⏳ PENDING
 
-Your NEXUS app needs a PostgreSQL database:
+Your AXVO app needs a PostgreSQL database:
 
 **What to do**:
 1. Go to https://supabase.com (create account if needed)
@@ -265,7 +265,7 @@ A: Database might be empty. Run seed script or check Supabase connection.
 
 ## 🎉 You're Almost Done!
 
-Your NEXUS healthcare platform is:
+Your AXVO healthcare platform is:
 - ✅ Fully implemented with 15+ core features
 - ✅ Deployed to production (Vercel live)
 - ✅ Documented thoroughly
@@ -315,4 +315,4 @@ Just 4 quick steps remain to go live:
 ---
 
 *Last updated: April 18, 2026*  
-*NEXUS v1.0.0 - Production Ready*
+*AXVO v1.0.0 - Production Ready*

@@ -188,7 +188,7 @@ async function geocode(location: string): Promise<{ lat: number; lng: number; zi
       `&q=${encodeURIComponent(location)}&countrycodes=us&addressdetails=1&limit=1`
 
     const res = await fetch(url, {
-      headers: { 'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health' },
+      headers: { 'User-Agent': 'AXVO-Healthcare/1.0 contact@axvo.health' },
       next: { revalidate: 86400 },
     })
     if (!res.ok) return null
@@ -224,7 +224,7 @@ async function geocodeZips(zips: string[]): Promise<Map<string, { lat: number; l
     await Promise.all(batch.map(async zip => {
       try {
         const r = await fetch(`https://api.zippopotam.us/us/${zip}`, {
-          headers: { 'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health' },
+          headers: { 'User-Agent': 'AXVO-Healthcare/1.0 contact@axvo.health' },
           // No next.revalidate here — keep it simple and direct
           signal: AbortSignal.timeout(5000),
         })
@@ -238,7 +238,7 @@ async function geocodeZips(zips: string[]): Promise<Map<string, { lat: number; l
     }))
   }
 
-  console.log('[NEXUS] geocodeZips: %d unique → %d resolved', unique.length, result.size)
+  console.log('[AXVO] geocodeZips: %d unique → %d resolved', unique.length, result.size)
   return result
 }
 
@@ -272,7 +272,7 @@ async function fetchNPIClinics(
     url.searchParams.set('limit', '200')
 
     const res = await fetch(url.toString(), {
-      headers: { 'Accept': 'application/json', 'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health' },
+      headers: { 'Accept': 'application/json', 'User-Agent': 'AXVO-Healthcare/1.0 contact@axvo.health' },
       next: { revalidate: 3600 },
       signal: AbortSignal.timeout(12000),
     })
@@ -342,11 +342,11 @@ async function fetchNPIClinics(
       })
     }
 
-    console.log('[NEXUS] NPI %s(%s,%s) → %d orgs, %d within radius',
+    console.log('[AXVO] NPI %s(%s,%s) → %d orgs, %d within radius',
       taxonomyDesc.split(' ').slice(0, 3).join(' '), city, state, results.length, clinics.length)
     return clinics.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
   } catch (e) {
-    console.warn('[NEXUS] NPI %s error: %s', sourceTag, String(e).slice(0, 80))
+    console.warn('[AXVO] NPI %s error: %s', sourceTag, String(e).slice(0, 80))
     return []
   }
 }
@@ -383,7 +383,7 @@ async function queryOverpass(lat: number, lng: number, radiusMiles: number): Pro
     let remaining = OVERPASS_ENDPOINTS.length
     for (const ep of OVERPASS_ENDPOINTS) {
       fetch(`${ep}?data=${encoded}`, {
-        headers: { 'Accept': '*/*', 'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health' },
+        headers: { 'Accept': '*/*', 'User-Agent': 'AXVO-Healthcare/1.0 contact@axvo.health' },
         cache: 'no-store',
         signal: AbortSignal.timeout(5000),
       })
@@ -456,7 +456,7 @@ async function queryOverpass(lat: number, lng: number, radiusMiles: number): Pro
           : parseFloat(a.distance) - parseFloat(b.distance)
       )
       .slice(0, 100)
-    console.log('[NEXUS] Overpass → %d clinics', clinics.length)
+    console.log('[AXVO] Overpass → %d clinics', clinics.length)
     return clinics
   } catch {
     return []
@@ -488,7 +488,7 @@ async function fetchDBClinics(lat: number, lng: number, radiusMiles: number): Pr
       max_rows: 200,
     })
     if (error || !Array.isArray(data)) {
-      if (error) console.warn('[NEXUS] clinics_near: %s', error.message?.slice(0, 120))
+      if (error) console.warn('[AXVO] clinics_near: %s', error.message?.slice(0, 120))
       return []
     }
     return (data as DBClinicRow[]).map(r => {
@@ -526,7 +526,7 @@ async function fetchDBClinics(lat: number, lng: number, radiusMiles: number): Pr
       } satisfies Clinic
     })
   } catch (e) {
-    console.warn('[NEXUS] fetchDBClinics error: %s', String(e).slice(0, 100))
+    console.warn('[AXVO] fetchDBClinics error: %s', String(e).slice(0, 100))
     return []
   }
 }
@@ -703,7 +703,7 @@ async function fetchYelpClinics(lat: number, lng: number, radiusMiles: number): 
     try {
       const url = `https://api.yelp.com/v3/businesses/search?latitude=${lat}&longitude=${lng}&radius=${radiusMeters}&term=${encodeURIComponent(term)}&categories=health,medcenters&limit=20&sort_by=distance`
       const res = await fetch(url, {
-        headers: { Authorization: `Bearer ${apiKey}`, 'User-Agent': 'NEXUS-Healthcare/1.0' },
+        headers: { Authorization: `Bearer ${apiKey}`, 'User-Agent': 'AXVO-Healthcare/1.0' },
         next: { revalidate: 3600 },
         signal: AbortSignal.timeout(6000),
       })
@@ -748,7 +748,7 @@ async function fetchYelpClinics(lat: number, lng: number, radiusMiles: number): 
     } catch { /* fail silently per term */ }
   }
 
-  console.log('[NEXUS] Yelp → %d clinics', all.length)
+  console.log('[AXVO] Yelp → %d clinics', all.length)
   return all
 }
 
@@ -783,13 +783,13 @@ async function fetchFindHelpClinics(lat: number, lng: number, zip: string, radiu
         headers: {
           'Authorization': `Bearer ${apiKey}`,
           'Accept':        'application/json',
-          'User-Agent':    'NEXUS-Healthcare/1.0 contact@nexus.health',
+          'User-Agent':    'AXVO-Healthcare/1.0 contact@axvo.health',
         },
         next: { revalidate: 3600 },
         signal: AbortSignal.timeout(8000),
       })
       if (!res.ok) {
-        console.warn('[NEXUS] FindHelp %s → HTTP %d', category, res.status)
+        console.warn('[AXVO] FindHelp %s → HTTP %d', category, res.status)
         continue
       }
 
@@ -866,11 +866,11 @@ async function fetchFindHelpClinics(lat: number, lng: number, zip: string, radiu
         })
       }
     } catch (e) {
-      console.warn('[NEXUS] FindHelp %s error: %s', category, String(e).slice(0, 80))
+      console.warn('[AXVO] FindHelp %s error: %s', category, String(e).slice(0, 80))
     }
   }
 
-  console.log('[NEXUS] FindHelp/211 → %d programs', all.length)
+  console.log('[AXVO] FindHelp/211 → %d programs', all.length)
   return all.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
 }
 
@@ -895,13 +895,13 @@ async function fetchVAClinics(lat: number, lng: number, radiusMiles: number): Pr
       headers: {
         'apikey':     apiKey,
         'Accept':     'application/json',
-        'User-Agent': 'NEXUS-Healthcare/1.0 contact@nexus.health',
+        'User-Agent': 'AXVO-Healthcare/1.0 contact@axvo.health',
       },
       next: { revalidate: 86400 },
       signal: AbortSignal.timeout(8000),
     })
     if (!res.ok) {
-      console.warn('[NEXUS] VA Facilities API → HTTP %d', res.status)
+      console.warn('[AXVO] VA Facilities API → HTTP %d', res.status)
       return []
     }
 
@@ -983,10 +983,10 @@ async function fetchVAClinics(lat: number, lng: number, radiusMiles: number): Pr
       .filter((c): c is Clinic => c !== null)
       .sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
 
-    console.log('[NEXUS] VA Facilities → %d clinics', clinics.length)
+    console.log('[AXVO] VA Facilities → %d clinics', clinics.length)
     return clinics
   } catch (e) {
-    console.warn('[NEXUS] VA Facilities error: %s', String(e).slice(0, 80))
+    console.warn('[AXVO] VA Facilities error: %s', String(e).slice(0, 80))
     return []
   }
 }
@@ -1093,7 +1093,7 @@ export async function GET(req: NextRequest) {
   const detectedState = detectState(geo.formatted)
   // Use Nominatim's address.city field (correct even for zip code searches)
   const detectedCity = geo.city || geo.formatted.split(',')[0].trim()
-  console.log('[NEXUS] Geocoded "%s" → city=%s state=%s zip=%s', rawLoc, detectedCity, detectedState, zip)
+  console.log('[AXVO] Geocoded "%s" → city=%s state=%s zip=%s', rawLoc, detectedCity, detectedState, zip)
 
   // 2. FAST PATH — owned clinics table (seeded from HRSA bulk data).
   //    One indexed radius query. Auto-widens 25→50→75mi for rural areas.
@@ -1124,7 +1124,7 @@ export async function GET(req: NextRequest) {
       : merged
     const finalDb = filteredDb.length > 0 ? filteredDb : merged
 
-    console.log('[NEXUS] DB fast path: %d clinics (+%d NAFC)', dbClinics.length, nafc.length)
+    console.log('[AXVO] DB fast path: %d clinics (+%d NAFC)', dbClinics.length, nafc.length)
     void cacheClinicsBg(finalDb.slice(0, 150), 'db')
 
     return NextResponse.json(
@@ -1139,7 +1139,7 @@ export async function GET(req: NextRequest) {
       { headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400' } }
     )
   }
-  console.log('[NEXUS] DB sparse (%d) — falling back to live sources', dbClinics.length)
+  console.log('[AXVO] DB sparse (%d) — falling back to live sources', dbClinics.length)
 
   // 2b. FALLBACK — live-API fan-out (pre-seed behavior, kept as safety net)
   // HRSA + CMS now use NPI Registry (free, no key, real FQHC/RHC data)
@@ -1156,7 +1156,7 @@ export async function GET(req: NextRequest) {
     fetchVAClinics(geo.lat, geo.lng, radiusMiles),
   ])
 
-  console.log('[NEXUS] Sources: HRSA=%d NAFC=%d OSM=%d Google=%d CMS=%d SAMHSA=%d Yelp=%d FindHelp=%d VA=%d',
+  console.log('[AXVO] Sources: HRSA=%d NAFC=%d OSM=%d Google=%d CMS=%d SAMHSA=%d Yelp=%d FindHelp=%d VA=%d',
     hrsaClinics.length, nafcClinics.length, osmClinics.length, googleClinics.length,
     cmsClinics.length, samhsaClinics.length, yelpClinics.length,
     findHelpClinics.length, vaClinics.length)
@@ -1165,7 +1165,7 @@ export async function GET(req: NextRequest) {
   const initialCount = hrsaClinics.length + nafcClinics.length + osmClinics.length + cmsClinics.length + samhsaClinics.length + findHelpClinics.length + vaClinics.length
   if (initialCount < 8 && radiusMiles <= 40) {
     const expandedRadius = Math.min(radiusMiles * 2, 75)
-    console.log('[NEXUS] Sparse results (%d) — auto-expanding to %d miles', initialCount, expandedRadius)
+    console.log('[AXVO] Sparse results (%d) — auto-expanding to %d miles', initialCount, expandedRadius)
     const [h2, n2, o2, c2, s2, y2, f2, v2] = await Promise.all([
       detectedState ? fetchHRSAClinics(geo.lat, geo.lng, expandedRadius, detectedCity, detectedState) : Promise.resolve([]),
       Promise.resolve(fetchNAFCClinics(geo.lat, geo.lng, expandedRadius)),
@@ -1184,7 +1184,7 @@ export async function GET(req: NextRequest) {
     yelpClinics     = [...yelpClinics,     ...y2]
     findHelpClinics = [...findHelpClinics, ...f2]
     vaClinics       = [...vaClinics,       ...v2]
-    console.log('[NEXUS] After expansion: HRSA=%d NAFC=%d OSM=%d CMS=%d SAMHSA=%d Yelp=%d FindHelp=%d VA=%d',
+    console.log('[AXVO] After expansion: HRSA=%d NAFC=%d OSM=%d CMS=%d SAMHSA=%d Yelp=%d FindHelp=%d VA=%d',
       hrsaClinics.length, nafcClinics.length, osmClinics.length, cmsClinics.length,
       samhsaClinics.length, yelpClinics.length, findHelpClinics.length, vaClinics.length)
   }

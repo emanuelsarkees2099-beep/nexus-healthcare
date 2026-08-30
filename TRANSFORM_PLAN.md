@@ -1,4 +1,4 @@
-# NEXUS — "Insane but Appropriate" Transformation Plan
+# AXVO — "Insane but Appropriate" Transformation Plan
 ### For the original dark design (cycling-word hero, dark canvas, blue accent)
 
 The base is the current dark landing. GSAP + ScrollTrigger are already

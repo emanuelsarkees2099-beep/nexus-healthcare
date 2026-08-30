@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
   if (process.env.NODE_ENV !== 'production') {
     try {
       const res = await fetch('https://ipapi.co/json/', {
-        headers: { 'User-Agent': 'NEXUS-Healthcare/1.0' },
+        headers: { 'User-Agent': 'AXVO-Healthcare/1.0' },
         signal: AbortSignal.timeout(4000),
       })
       if (res.ok) {

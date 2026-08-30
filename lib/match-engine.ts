@@ -1,5 +1,5 @@
 /**
- * NEXUS Match Engine — Phase 2.1
+ * AXVO Match Engine — Phase 2.1
  *
  * Pure, deterministic scoring function. No API calls.
  * Weights: distance 40% · needs 25% · language 20% · wait-time proxy 15%

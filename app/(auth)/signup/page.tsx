@@ -217,7 +217,7 @@ export default function SignupPage() {
               <path transform="rotate(240 50 50)" d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4F8EF0" opacity="0.95"/>
               <circle cx="50" cy="50" r="5" fill="#4F8EF0" opacity="0.7"/>
             </svg>
-            <span style={{ fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 400, letterSpacing: '0.42em', color: 'var(--text)', opacity: 0.90 }}>NEXUS</span>
+            <span style={{ fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 400, letterSpacing: '0.42em', color: 'var(--text)', opacity: 0.90 }}>AXVO</span>
           </Link>
           <p style={{ fontSize: '12px', color: 'var(--text-3)', letterSpacing: '0.02em', margin: 0 }}>
             Free healthcare for everyone
@@ -257,7 +257,7 @@ export default function SignupPage() {
             <h2 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px', letterSpacing: '-0.02em', fontFamily: 'var(--font-display)' }}>
               Account created!
             </h2>
-            <p style={{ fontSize: '13px', color: 'var(--text-3)' }}>Welcome to NEXUS. Setting up your profile…</p>
+            <p style={{ fontSize: '13px', color: 'var(--text-3)' }}>Welcome to AXVO. Setting up your profile…</p>
           </div>
 
         ) : (

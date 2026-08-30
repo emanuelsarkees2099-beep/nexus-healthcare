@@ -271,18 +271,18 @@ export default function TriagePage() {
 
   function handleSavePassport(res: TriageResult) {
     try {
-      const existing = JSON.parse(localStorage.getItem('nexus_passport_triage') || '[]')
+      const existing = JSON.parse(localStorage.getItem('axvo_passport_triage') || '[]')
       const entry = { symptom: query, urgency: res.urgency, reasoning: res.reasoning, ts: Date.now(), duration }
       const updated = [entry, ...existing].slice(0, 20)
-      localStorage.setItem('nexus_passport_triage', JSON.stringify(updated))
+      localStorage.setItem('axvo_passport_triage', JSON.stringify(updated))
       setSavedToPassport(true)
     } catch { /* ignore */ }
   }
 
   function handleShare(res: TriageResult) {
-    const text = `Nexus Health Triage\nSymptom: ${query}\nUrgency: ${urgencyConfig[res.urgency].label}\nNext step: ${res.steps[0] ?? ''}\n\nnexushealthcare.app/triage`
+    const text = `Axvo Health Triage\nSymptom: ${query}\nUrgency: ${urgencyConfig[res.urgency].label}\nNext step: ${res.steps[0] ?? ''}\n\axvo.health/triage`
     if (navigator.share) {
-      navigator.share({ title: 'Nexus Triage Result', text }).catch(() => {})
+      navigator.share({ title: 'Axvo Triage Result', text }).catch(() => {})
     } else {
       navigator.clipboard.writeText(text).then(() => {
         setShareCopied(true)

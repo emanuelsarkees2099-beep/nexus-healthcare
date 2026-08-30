@@ -71,7 +71,7 @@ export default function SearchBar({
 
   const pickLoc = (item: TypeaheadItem) => {
     setLocationVal(item.value)
-    try { localStorage.setItem('nexus_location', item.value) } catch { /* private */ }
+    try { localStorage.setItem('axvo_location', item.value) } catch { /* private */ }
     setLocOpen(false)
     setLocIdx(-1)
   }

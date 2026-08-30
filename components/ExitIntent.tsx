@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { CloseSquare, Location } from 'iconsax-react'
 
-const SESSION_KEY = 'nexus_exit_shown'
+const SESSION_KEY = 'axvo_exit_shown'
 
 export default function ExitIntent() {
   const [visible, setVisible] = useState(false)

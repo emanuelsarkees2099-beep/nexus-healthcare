@@ -25,9 +25,6 @@
     "app/api/clinics/route.ts": {
       "maxDuration": 30
     },
-    "app/api/chat/route.ts": {
-      "maxDuration": 30
-    },
     "app/api/cron/refresh-clinics/route.ts": {
       "maxDuration": 60
     },

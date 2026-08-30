@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { Warning2 } from 'iconsax-react'
 
 export const metadata: Metadata = {
-  title: 'Terms of Service — NEXUS',
-  description: 'Terms of Service for NEXUS, the free healthcare navigation platform.',
+  title: 'Terms of Service — AXVO',
+  description: 'Terms of Service for AXVO, the free healthcare navigation platform.',
   robots: { index: false, follow: false },
 }
 
@@ -33,7 +33,7 @@ export default function TermsPage() {
         {/* Header */}
         <div style={{ marginBottom: '56px' }}>
           <Link href="/" className="terms-back-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', marginBottom: '32px', transition: 'color 0.15s' }}>
-            ← Back to NEXUS
+            ← Back to AXVO
           </Link>
           <h1 style={{ fontSize: 'clamp(28px,4vw,40px)', fontWeight: 800, color: '#ffffff', marginBottom: '12px', letterSpacing: '-0.03em' }}>
             Terms of Service
@@ -43,7 +43,7 @@ export default function TermsPage() {
           </p>
           <div style={{ width: '100%', height: '1px', background: 'rgba(255,255,255,0.07)', margin: '32px 0' }} />
           <p style={{ fontSize: '15px', lineHeight: '1.75', color: 'rgba(255,255,255,0.6)', padding: '20px 22px', background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.18)', borderRadius: '12px' }}>
-            Please read these Terms of Service carefully before using NEXUS. By accessing or using NEXUS, you agree to be bound by these terms. If you do not agree, do not use NEXUS.
+            Please read these Terms of Service carefully before using AXVO. By accessing or using AXVO, you agree to be bound by these terms. If you do not agree, do not use AXVO.
           </p>
         </div>
 
@@ -53,22 +53,22 @@ export default function TermsPage() {
             <Warning2 size={14} color="#f87171" variant="Bold" aria-hidden="true" /> NOT MEDICAL ADVICE
           </p>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: 'rgba(255,255,255,0.65)' }}>
-            NEXUS is a <strong style={{ color: 'rgba(255,255,255,0.85)' }}>healthcare navigation tool</strong>, not a medical provider. Nothing on NEXUS — including AI-generated responses, clinic listings, program descriptions, or any other content — constitutes medical advice, diagnosis, or treatment. Always seek the advice of a qualified healthcare provider for any medical concerns. If you believe you are experiencing a medical emergency, call <strong style={{ color: 'rgba(255,255,255,0.85)' }}>911 immediately</strong>.
+            AXVO is a <strong style={{ color: 'rgba(255,255,255,0.85)' }}>healthcare navigation tool</strong>, not a medical provider. Nothing on AXVO — including AI-generated responses, clinic listings, program descriptions, or any other content — constitutes medical advice, diagnosis, or treatment. Always seek the advice of a qualified healthcare provider for any medical concerns. If you believe you are experiencing a medical emergency, call <strong style={{ color: 'rgba(255,255,255,0.85)' }}>911 immediately</strong>.
           </p>
         </div>
 
         <Section id="acceptance" title="1. Acceptance of Terms">
           <p>
-            These Terms of Service (&ldquo;Terms&rdquo;) constitute a legally binding agreement between you and NEXUS (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) governing your access to and use of the NEXUS platform, website, mobile application, and related services (collectively, the &ldquo;Service&rdquo;).
+            These Terms of Service (&ldquo;Terms&rdquo;) constitute a legally binding agreement between you and AXVO (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) governing your access to and use of the AXVO platform, website, mobile application, and related services (collectively, the &ldquo;Service&rdquo;).
           </p>
           <p>
-            You must be at least 13 years old to use NEXUS. If you are under 18, you represent that your parent or legal guardian has reviewed and agreed to these Terms on your behalf. By using NEXUS, you confirm that you are legally capable of entering into these Terms.
+            You must be at least 13 years old to use AXVO. If you are under 18, you represent that your parent or legal guardian has reviewed and agreed to these Terms on your behalf. By using AXVO, you confirm that you are legally capable of entering into these Terms.
           </p>
         </Section>
 
         <Section id="service" title="2. Description of Service">
           <p>
-            NEXUS is a free healthcare navigation platform designed to help uninsured and underinsured individuals in the United States find:
+            AXVO is a free healthcare navigation platform designed to help uninsured and underinsured individuals in the United States find:
           </p>
           <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <li>Federally Qualified Health Centers (FQHCs) and free clinics</li>
@@ -78,15 +78,15 @@ export default function TermsPage() {
             <li>Patient rights information and healthcare navigation guidance</li>
           </ul>
           <p>
-            NEXUS aggregates publicly available information and does not guarantee the accuracy, completeness, availability, or current operating status of any listed clinic or program. Clinic information may change; always call ahead to confirm services, hours, and eligibility.
+            AXVO aggregates publicly available information and does not guarantee the accuracy, completeness, availability, or current operating status of any listed clinic or program. Clinic information may change; always call ahead to confirm services, hours, and eligibility.
           </p>
         </Section>
 
         <Section id="medical-disclaimer" title="3. Medical Disclaimer and Limitations">
           <p>
-            <strong style={{ color: 'rgba(255,255,255,0.85)' }}>NEXUS is not a licensed healthcare provider, medical practice, or medical device.</strong> The Service, including its AI Assistant, provides general healthcare navigation information only.
+            <strong style={{ color: 'rgba(255,255,255,0.85)' }}>AXVO is not a licensed healthcare provider, medical practice, or medical device.</strong> The Service, including its AI Assistant, provides general healthcare navigation information only.
           </p>
-          <p>NEXUS expressly does not:</p>
+          <p>AXVO expressly does not:</p>
           <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <li>Diagnose medical conditions</li>
             <li>Recommend specific medications or dosages</li>
@@ -95,13 +95,13 @@ export default function TermsPage() {
             <li>Create a patient-provider relationship</li>
           </ul>
           <p>
-            Reliance on any information provided by NEXUS is solely at your own risk. For mental health crises, contact the <strong style={{ color: 'rgba(255,255,255,0.85)' }}>988 Suicide & Crisis Lifeline</strong> (call or text 988) or the Crisis Text Line (text HOME to 741741).
+            Reliance on any information provided by AXVO is solely at your own risk. For mental health crises, contact the <strong style={{ color: 'rgba(255,255,255,0.85)' }}>988 Suicide & Crisis Lifeline</strong> (call or text 988) or the Crisis Text Line (text HOME to 741741).
           </p>
         </Section>
 
         <Section id="accounts" title="4. Account Registration">
           <p>
-            You may use parts of NEXUS without an account. Creating an account allows you to save clinics, track eligibility, and access personalized features. You agree to:
+            You may use parts of AXVO without an account. Creating an account allows you to save clinics, track eligibility, and access personalized features. You agree to:
           </p>
           <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <li>Provide accurate and complete registration information</li>
@@ -116,15 +116,15 @@ export default function TermsPage() {
 
         <Section id="privacy" title="5. Privacy and Data">
           <p>
-            Your use of NEXUS is governed by our <Link href="/privacy" style={{ color: '#4a90d9', textDecoration: 'none' }}>Privacy Policy</Link>, which is incorporated into these Terms by reference. We collect account information (name, email), usage data (searches, saved clinics), and optional profile information (location, user type). We do not sell your personal data.
+            Your use of AXVO is governed by our <Link href="/privacy" style={{ color: '#4a90d9', textDecoration: 'none' }}>Privacy Policy</Link>, which is incorporated into these Terms by reference. We collect account information (name, email), usage data (searches, saved clinics), and optional profile information (location, user type). We do not sell your personal data.
           </p>
           <p>
-            NEXUS is not a HIPAA-covered entity. Do not enter protected health information (PHI), medical records, or sensitive health data into NEXUS. The AI Assistant is designed to help you navigate to care — not to store or process your health records.
+            AXVO is not a HIPAA-covered entity. Do not enter protected health information (PHI), medical records, or sensitive health data into AXVO. The AI Assistant is designed to help you navigate to care — not to store or process your health records.
           </p>
         </Section>
 
         <Section id="acceptable-use" title="6. Acceptable Use">
-          <p>You agree not to use NEXUS to:</p>
+          <p>You agree not to use AXVO to:</p>
           <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <li>Violate any applicable law or regulation</li>
             <li>Impersonate any person or misrepresent your affiliation</li>
@@ -138,7 +138,7 @@ export default function TermsPage() {
 
         <Section id="third-party" title="7. Third-Party Services and Links">
           <p>
-            NEXUS links to and aggregates information from third-party sources including clinic databases, government program websites, and external health resources. We are not responsible for the content, accuracy, or availability of third-party sites. Links do not constitute endorsement.
+            AXVO links to and aggregates information from third-party sources including clinic databases, government program websites, and external health resources. We are not responsible for the content, accuracy, or availability of third-party sites. Links do not constitute endorsement.
           </p>
           <p>
             Our AI Assistant is powered by third-party AI infrastructure. AI responses are generated automatically and may contain inaccuracies. Always verify critical information with the relevant clinic or program directly.
@@ -147,16 +147,16 @@ export default function TermsPage() {
 
         <Section id="intellectual-property" title="8. Intellectual Property">
           <p>
-            The NEXUS name, logo, design, and original content are owned by NEXUS and protected by applicable intellectual property laws. You may not reproduce, distribute, or create derivative works without our prior written permission.
+            The AXVO name, logo, design, and original content are owned by AXVO and protected by applicable intellectual property laws. You may not reproduce, distribute, or create derivative works without our prior written permission.
           </p>
           <p>
-            Clinic listings and program information sourced from public databases remain the property of their respective owners. NEXUS claims no ownership over third-party data.
+            Clinic listings and program information sourced from public databases remain the property of their respective owners. AXVO claims no ownership over third-party data.
           </p>
         </Section>
 
         <Section id="disclaimers" title="9. Disclaimer of Warranties">
           <p>
-            THE SERVICE IS PROVIDED &ldquo;AS IS&rdquo; AND &ldquo;AS AVAILABLE&rdquo; WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY LAW, NEXUS DISCLAIMS ALL WARRANTIES INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+            THE SERVICE IS PROVIDED &ldquo;AS IS&rdquo; AND &ldquo;AS AVAILABLE&rdquo; WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY LAW, AXVO DISCLAIMS ALL WARRANTIES INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
           </p>
           <p>
             We do not warrant that the Service will be uninterrupted, error-free, or free of viruses. Clinic availability, hours, and services change frequently; we make no warranty as to their accuracy.
@@ -165,7 +165,7 @@ export default function TermsPage() {
 
         <Section id="liability" title="10. Limitation of Liability">
           <p>
-            TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, NEXUS AND ITS AFFILIATES, OFFICERS, EMPLOYEES, AND AGENTS SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING FROM YOUR USE OF, OR INABILITY TO USE, THE SERVICE — INCLUDING BUT NOT LIMITED TO RELIANCE ON HEALTHCARE INFORMATION PROVIDED BY NEXUS.
+            TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, AXVO AND ITS AFFILIATES, OFFICERS, EMPLOYEES, AND AGENTS SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING FROM YOUR USE OF, OR INABILITY TO USE, THE SERVICE — INCLUDING BUT NOT LIMITED TO RELIANCE ON HEALTHCARE INFORMATION PROVIDED BY AXVO.
           </p>
           <p>
             IN NO EVENT SHALL OUR TOTAL LIABILITY TO YOU EXCEED ONE HUNDRED DOLLARS ($100). Some jurisdictions do not allow limitations on liability; in such cases, the above limitation may not apply to you.
@@ -174,22 +174,22 @@ export default function TermsPage() {
 
         <Section id="hipaa" title="11. HIPAA Notice">
           <p>
-            NEXUS is a healthcare navigation service and is <strong style={{ color: 'rgba(255,255,255,0.85)' }}>not a HIPAA-covered entity or business associate</strong> as defined under the Health Insurance Portability and Accountability Act of 1996. NEXUS does not store, process, or transmit protected health information (PHI) on behalf of covered entities.
+            AXVO is a healthcare navigation service and is <strong style={{ color: 'rgba(255,255,255,0.85)' }}>not a HIPAA-covered entity or business associate</strong> as defined under the Health Insurance Portability and Accountability Act of 1996. AXVO does not store, process, or transmit protected health information (PHI) on behalf of covered entities.
           </p>
           <p>
-            Users should not enter PHI, medical records, insurance information, or other sensitive health data into NEXUS. The platform is designed for navigation assistance only.
+            Users should not enter PHI, medical records, insurance information, or other sensitive health data into AXVO. The platform is designed for navigation assistance only.
           </p>
         </Section>
 
         <Section id="changes" title="12. Changes to These Terms">
           <p>
-            We may update these Terms from time to time. We will notify registered users of material changes by email or in-app notice. Continued use of NEXUS after changes take effect constitutes your acceptance of the updated Terms. The &ldquo;Last updated&rdquo; date at the top of this page reflects the most recent revision.
+            We may update these Terms from time to time. We will notify registered users of material changes by email or in-app notice. Continued use of AXVO after changes take effect constitutes your acceptance of the updated Terms. The &ldquo;Last updated&rdquo; date at the top of this page reflects the most recent revision.
           </p>
         </Section>
 
         <Section id="termination" title="13. Termination">
           <p>
-            You may stop using NEXUS at any time and may delete your account from your Profile settings. We may suspend or terminate your access for violations of these Terms, illegal activity, or at our sole discretion with reasonable notice. Upon termination, provisions that by their nature should survive (including disclaimers, liability limits, and dispute resolution) will continue to apply.
+            You may stop using AXVO at any time and may delete your account from your Profile settings. We may suspend or terminate your access for violations of these Terms, illegal activity, or at our sole discretion with reasonable notice. Upon termination, provisions that by their nature should survive (including disclaimers, liability limits, and dispute resolution) will continue to apply.
           </p>
         </Section>
 
@@ -204,9 +204,9 @@ export default function TermsPage() {
             If you have questions about these Terms, please contact us:
           </p>
           <div style={{ padding: '16px 18px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', fontSize: '14px', color: 'rgba(255,255,255,0.6)' }}>
-            <p><strong style={{ color: 'rgba(255,255,255,0.85)' }}>NEXUS</strong></p>
-            <p>Email: <a href="mailto:legal@nexus-healthcare.vercel.app" style={{ color: '#4a90d9', textDecoration: 'none' }}>legal@nexus-healthcare.vercel.app</a></p>
-            <p>Website: <a href="https://nexus-healthcare.vercel.app" style={{ color: '#4a90d9', textDecoration: 'none' }}>nexus-healthcare.vercel.app</a></p>
+            <p><strong style={{ color: 'rgba(255,255,255,0.85)' }}>AXVO</strong></p>
+            <p>Email: <a href="mailto:legal@axvo-healthcare.vercel.app" style={{ color: '#4a90d9', textDecoration: 'none' }}>legal@axvo-healthcare.vercel.app</a></p>
+            <p>Website: <a href="https://axvo-healthcare.vercel.app" style={{ color: '#4a90d9', textDecoration: 'none' }}>axvo-healthcare.vercel.app</a></p>
           </div>
         </Section>
 

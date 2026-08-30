@@ -33,9 +33,9 @@ test.describe('Search page — load', () => {
     await expect(input).toBeVisible()
   })
 
-  test('page title contains NEXUS', async ({ page }) => {
+  test('page title contains AXVO', async ({ page }) => {
     await goToSearch(page)
-    await expect(page).toHaveTitle(/NEXUS/i)
+    await expect(page).toHaveTitle(/AXVO/i)
   })
 
   test('has no critical accessibility violations on load', async ({ page }) => {

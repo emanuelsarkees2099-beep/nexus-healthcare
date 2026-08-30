@@ -122,7 +122,7 @@ const CMD_ITEMS: CmdItem[] = [
   {
     id: 'impact',
     label: 'Impact Dashboard',
-    description: 'NEXUS by the numbers — searches, matches, coverage',
+    description: 'AXVO by the numbers — searches, matches, coverage',
     href: '/impact',
     icon: <Flash size={15} variant="Linear" color="var(--text-2)" />,
     category: 'Info',

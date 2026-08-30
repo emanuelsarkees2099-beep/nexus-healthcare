@@ -8,7 +8,7 @@ import { OutcomeSchema, badRequest } from '@/lib/validation'
 // POST /api/outcomes — log a health outcome event
 // GET  /api/outcomes — aggregate stats (public summary only)
 
-const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://nexus.health').replace(/\/$/, '')
+const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://axvo.health').replace(/\/$/, '')
 
 const getSupabaseClient = () => createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || '',

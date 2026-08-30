@@ -2,8 +2,8 @@ import AppShell from '@/components/AppShell'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Methodology — NEXUS Healthcare Platform',
-  description: 'How NEXUS sources, scores, and ranks free and affordable healthcare facilities. A transparent account of our data pipeline, affordability model, and quality standards.',
+  title: 'Methodology — AXVO Healthcare Platform',
+  description: 'How AXVO sources, scores, and ranks free and affordable healthcare facilities. A transparent account of our data pipeline, affordability model, and quality standards.',
 }
 
 export default function MethodologyPage() {
@@ -96,10 +96,10 @@ export default function MethodologyPage() {
       <section style={{ padding: '100px 24px 60px', maxWidth: '860px', margin: '0 auto' }}>
         <span style={pill}>Methodology · v2.0 · April 2026</span>
         <h1 style={{ fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '20px' }}>
-          How NEXUS finds, scores, and ranks free healthcare
+          How AXVO finds, scores, and ranks free healthcare
         </h1>
         <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, maxWidth: '640px' }}>
-          A transparent, academic-quality account of the data sources, scoring models, deduplication logic, and quality safeguards that power the NEXUS clinic finder. No black boxes.
+          A transparent, academic-quality account of the data sources, scoring models, deduplication logic, and quality safeguards that power the AXVO clinic finder. No black boxes.
         </p>
       </section>
 
@@ -117,7 +117,7 @@ export default function MethodologyPage() {
               ['6', 'Data Freshness & Quality Assurance'],
               ['7', 'Privacy & Data Ethics'],
               ['8', 'Limitations & Known Gaps'],
-              ['9', 'Citing NEXUS'],
+              ['9', 'Citing AXVO'],
             ].map(([n, title]) => (
               <li key={n} style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)' }}>
                 <a href={`#section-${n}`} style={{ color: 'var(--accent)', textDecoration: 'none' }}>
@@ -134,7 +134,7 @@ export default function MethodologyPage() {
         <span style={{ ...pill, marginBottom: '12px' }}>Section 1</span>
         <h2 style={h2}>Data Sources &amp; Collection Pipeline</h2>
         <p style={p}>
-          NEXUS aggregates healthcare facility data from four independent sources, ordered by authority and verification level. Each source covers a distinct population of clinics that the others miss.
+          AXVO aggregates healthcare facility data from four independent sources, ordered by authority and verification level. Each source covers a distinct population of clinics that the others miss.
         </p>
 
         <h3 style={h3}>1.1 HRSA Health Center Finder (Primary)</h3>
@@ -161,7 +161,7 @@ export default function MethodologyPage() {
           The National Association of Free &amp; Charitable Clinics (NAFC) represents 1,200+ volunteer-run free clinics that are <em>not</em> federally qualified — meaning they do not appear in HRSA's database. These clinics charge $0 to patients and operate on donations and volunteer labor. They fill a critical gap for patients in rural areas and underserved urban neighborhoods.
         </p>
         <p style={p}>
-          NEXUS maintains a curated static database of 130+ verified NAFC member clinics compiled from the NAFC member directory, individual clinic websites, and Google Places verification. Each entry is manually reviewed for accuracy. This database is stored in <span style={code}>lib/nafc-clinics.ts</span> and queried in-memory using a Haversine distance calculation — zero latency, zero API dependency.
+          AXVO maintains a curated static database of 130+ verified NAFC member clinics compiled from the NAFC member directory, individual clinic websites, and Google Places verification. Each entry is manually reviewed for accuracy. This database is stored in <span style={code}>lib/nafc-clinics.ts</span> and queried in-memory using a Haversine distance calculation — zero latency, zero API dependency.
         </p>
         <p style={p}>
           NAFC clinics receive an affordability score of 90/100. They are labeled "FREE CLINIC" in the UI to distinguish them from FQHCs.
@@ -177,12 +177,12 @@ export default function MethodologyPage() {
 
         <h3 style={h3}>1.4 Google Places API (Optional Tertiary)</h3>
         <p style={p}>
-          When a <span style={code}>GOOGLE_PLACES_API_KEY</span> environment variable is configured, NEXUS runs a tertiary search against the Google Places Nearby Search API using keywords "free clinic" and "community health center". Results are filtered to affordability score ≥ 45/100 before inclusion. This source is strictly optional and not required for core functionality.
+          When a <span style={code}>GOOGLE_PLACES_API_KEY</span> environment variable is configured, AXVO runs a tertiary search against the Google Places Nearby Search API using keywords "free clinic" and "community health center". Results are filtered to affordability score ≥ 45/100 before inclusion. This source is strictly optional and not required for core functionality.
         </p>
 
         <h3 style={h3}>1.5 State Health Department Directories</h3>
         <p style={p}>
-          For searches in California, Texas, New York, Florida, and Illinois — the five states with the largest uninsured populations — NEXUS queries public clinic directories exposed via data.gov and state open-data portals. These are scraped at query time with results cached for 24 hours and filtered by proximity and affordability score.
+          For searches in California, Texas, New York, Florida, and Illinois — the five states with the largest uninsured populations — AXVO queries public clinic directories exposed via data.gov and state open-data portals. These are scraped at query time with results cached for 24 hours and filtered by proximity and affordability score.
         </p>
 
         <table style={table}>
@@ -326,7 +326,7 @@ export default function MethodologyPage() {
           The same physical clinic often appears in multiple data sources under slightly different names. Without deduplication, a user would see the same clinic listed 3–4 times with slightly different data, degrading trust and usability.
         </p>
         <p style={p}>
-          NEXUS uses a <strong style={{ color: 'rgba(255,255,255,0.75)' }}>name fingerprinting</strong> approach: each clinic name is normalized to its first 12 lowercase alphanumeric characters, forming a fingerprint. A hash set of seen fingerprints is maintained as sources are merged in priority order. The first occurrence of each fingerprint wins.
+          AXVO uses a <strong style={{ color: 'rgba(255,255,255,0.75)' }}>name fingerprinting</strong> approach: each clinic name is normalized to its first 12 lowercase alphanumeric characters, forming a fingerprint. A hash set of seen fingerprints is maintained as sources are merged in priority order. The first occurrence of each fingerprint wins.
         </p>
         <div style={callout}>
           <strong style={{ color: 'rgba(255,255,255,0.75)' }}>Merge priority order:</strong><br/>
@@ -346,7 +346,7 @@ export default function MethodologyPage() {
         <span style={{ ...pill, marginBottom: '12px' }}>Section 4</span>
         <h2 style={h2}>Specialty Classification</h2>
         <p style={p}>
-          NEXUS classifies clinics into six specialty categories used by the search filter: Primary care, Mental health, Dental, Women's health, Pediatrics, and Vision. Classification uses a name-and-tag pattern matching approach:
+          AXVO classifies clinics into six specialty categories used by the search filter: Primary care, Mental health, Dental, Women's health, Pediatrics, and Vision. Classification uses a name-and-tag pattern matching approach:
         </p>
         <table style={table}>
           <thead>
@@ -371,7 +371,7 @@ export default function MethodologyPage() {
           </tbody>
         </table>
         <p style={p}>
-          When a specialty filter is applied and returns zero results, NEXUS falls back to the full unfiltered list and surfaces a warning: "No exact [specialty] match — showing nearby clinics." This prevents users from seeing an empty results page when only a few clinics in the area don't match the pattern.
+          When a specialty filter is applied and returns zero results, AXVO falls back to the full unfiltered list and surfaces a warning: "No exact [specialty] match — showing nearby clinics." This prevents users from seeing an empty results page when only a few clinics in the area don't match the pattern.
         </p>
         <p style={p}>
           For HRSA clinics, specialty data is also derived from the <span style={code}>SiteServiceDescription</span> field in the API response where available, supplementing name-based inference.
@@ -399,7 +399,7 @@ export default function MethodologyPage() {
           where a = sin²(Δlat/2) + cos(lat₁)·cos(lat₂)·sin²(Δlng/2)
         </div>
         <p style={p}>
-          The user's ZIP code is also persisted to <span style={code}>localStorage</span> under the key <span style={code}>nexus_zip</span>, enabling pre-fill across the Pathways, Calendar, and Search pages without requiring an account.
+          The user's ZIP code is also persisted to <span style={code}>localStorage</span> under the key <span style={code}>axvo_zip</span>, enabling pre-fill across the Pathways, Calendar, and Search pages without requiring an account.
         </p>
       </section>
 
@@ -450,9 +450,9 @@ export default function MethodologyPage() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px', marginBottom: '28px' }}>
           {[
-            { title: 'No PHI stored', desc: 'NEXUS never collects, stores, or transmits Protected Health Information. Search queries are not logged to any database. ZIP codes in localStorage are stored only on the user\'s own device.', color: '#60a5fa' },
+            { title: 'No PHI stored', desc: 'AXVO never collects, stores, or transmits Protected Health Information. Search queries are not logged to any database. ZIP codes in localStorage are stored only on the user\'s own device.', color: '#60a5fa' },
             { title: 'Outcome data is opt-in', desc: 'The outcome logging feature is entirely voluntary. When a user logs an outcome (e.g. "I visited a clinic"), only the event type and optionally ZIP code are stored — no names, dates of birth, diagnosis, or insurance information.', color: '#60a5fa' },
-            { title: 'No tracking pixels', desc: 'NEXUS does not use advertising trackers, cross-site cookies, or third-party analytics. Vercel Speed Insights is used for performance measurement only and does not expose individual user data.', color: '#a78bfa' },
+            { title: 'No tracking pixels', desc: 'AXVO does not use advertising trackers, cross-site cookies, or third-party analytics. Vercel Speed Insights is used for performance measurement only and does not expose individual user data.', color: '#a78bfa' },
             { title: 'IRB-adjacent posture', desc: 'All data collection is designed to comply with the spirit of IRB minimal-risk standards: data is anonymized, consent is explicit, and collection is proportionate to the research question.', color: '#fbbf24' },
           ].map(item => (
             <div key={item.title} style={{ background: `${item.color}08`, border: `1px solid ${item.color}20`, borderRadius: '14px', padding: '20px' }}>
@@ -471,8 +471,8 @@ export default function MethodologyPage() {
           We document known limitations transparently. Users and researchers should be aware of the following:
         </p>
         <ul style={{ ...p, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          <li><strong style={{ color: 'rgba(255,255,255,0.7)' }}>HRSA API reliability:</strong> The HRSA Find a Health Center API has experienced intermittent outages and endpoint changes. NEXUS tries three known endpoint variants but cannot guarantee availability. In HRSA outage conditions, the platform falls back to NAFC and OSM data.</li>
-          <li><strong style={{ color: 'rgba(255,255,255,0.7)' }}>Rural gaps:</strong> In counties with no HRSA grantee, FQHC look-alike, or NAFC member clinic within 25 miles, NEXUS returns OSM results that may include non-free clinics. The affordability score attempts to filter these, but false positives are possible.</li>
+          <li><strong style={{ color: 'rgba(255,255,255,0.7)' }}>HRSA API reliability:</strong> The HRSA Find a Health Center API has experienced intermittent outages and endpoint changes. AXVO tries three known endpoint variants but cannot guarantee availability. In HRSA outage conditions, the platform falls back to NAFC and OSM data.</li>
+          <li><strong style={{ color: 'rgba(255,255,255,0.7)' }}>Rural gaps:</strong> In counties with no HRSA grantee, FQHC look-alike, or NAFC member clinic within 25 miles, AXVO returns OSM results that may include non-free clinics. The affordability score attempts to filter these, but false positives are possible.</li>
           <li><strong style={{ color: 'rgba(255,255,255,0.7)' }}>Hours and availability:</strong> Clinic hours change frequently. While the platform displays hours when available from HRSA or OSM tags, these may be stale. Users should always call ahead to confirm hours and appointment availability.</li>
           <li><strong style={{ color: 'rgba(255,255,255,0.7)' }}>NAFC completeness:</strong> The static NAFC database includes 130+ manually verified entries out of 1,200+ NAFC members. Clinics not in this database may still exist in users' areas. The NAFC member locator at nafc.org is recommended as a supplementary resource.</li>
           <li><strong style={{ color: 'rgba(255,255,255,0.7)' }}>Name-based affordability scoring:</strong> The scoring model is heuristic-based. A clinic named "Eastside Medical Center" with no affordability signals would score 40/100 (STANDARD) even if it is FQHC-affiliated. Scores should be interpreted as affordability probability indicators, not guarantees.</li>
@@ -483,12 +483,12 @@ export default function MethodologyPage() {
       {/* ── Section 9: Citing ── */}
       <section id="section-9" style={section}>
         <span style={{ ...pill, marginBottom: '12px' }}>Section 9</span>
-        <h2 style={h2}>Citing NEXUS</h2>
+        <h2 style={h2}>Citing AXVO</h2>
         <p style={p}>
-          If you use NEXUS data or methodology in academic work, presentations, or grant applications, please cite as follows:
+          If you use AXVO data or methodology in academic work, presentations, or grant applications, please cite as follows:
         </p>
         <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '14px', padding: '20px 24px', fontFamily: 'monospace', fontSize: '13px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.8, userSelect: 'text', marginBottom: '28px' }}>
-          NEXUS Healthcare Platform. (2026). <em>Free and Affordable Clinic Finder: Methodology v2.0</em>. Retrieved from https://nexus.health/methodology
+          AXVO Healthcare Platform. (2026). <em>Free and Affordable Clinic Finder: Methodology v2.0</em>. Retrieved from https://axvo.health/methodology
         </div>
 
         <div style={callout}>
@@ -496,7 +496,7 @@ export default function MethodologyPage() {
         </div>
 
         <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.3)', lineHeight: 1.7 }}>
-          Questions about methodology? Reach out via the feedback form or contact the NEXUS research team. We welcome collaboration with public health researchers, academic institutions, and policy organizations studying healthcare access disparities.
+          Questions about methodology? Reach out via the feedback form or contact the AXVO research team. We welcome collaboration with public health researchers, academic institutions, and policy organizations studying healthcare access disparities.
         </p>
       </section>
     </AppShell>

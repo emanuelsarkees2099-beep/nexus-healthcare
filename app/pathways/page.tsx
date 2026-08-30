@@ -117,7 +117,7 @@ function InputField({ label, placeholder, value, onChange, type = 'text' }: {
 
 /* ─── FAQ section ─────────────────────────────────── */
 const FAQ_ITEMS = [
-  { q: "Is this actually free? What's the catch?", a: "There is no catch. NEXUS is funded by grants and donations. You pay nothing to search, match, or be seen at any clinic in our network. We will never sell your data." },
+  { q: "Is this actually free? What's the catch?", a: "There is no catch. AXVO is funded by grants and donations. You pay nothing to search, match, or be seen at any clinic in our network. We will never sell your data." },
   { q: 'Do I need to create an account?', a: 'No account, no login, no email. Everything is anonymous. We don\'t know who you are and we don\'t need to.' },
   { q: 'What if I have some insurance but can\'t afford the copay?', a: "Tell us your insurance status honestly. We'll find clinics that work with your specific plan and also show sliding-scale options that may be cheaper than your copay." },
   { q: 'How is the "confidence score" calculated?', a: 'It combines 8 variables: symptom-to-specialty match, historical success rate for your symptom at that clinic, language availability, estimated wait time, distance, and your insurance status. 94% of high-confidence matches result in successful care.' },
@@ -269,7 +269,7 @@ export default function PathwaysPage() {
           </h1>
 
           <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: '540px', margin: '0 auto 40px', fontWeight: 400 }}>
-            NEXUS uses 47,000+ anonymized outcomes to match you with the exact clinic most likely to help — not just the closest one.
+            AXVO uses 47,000+ anonymized outcomes to match you with the exact clinic most likely to help — not just the closest one.
           </p>
 
           <button
@@ -704,8 +704,8 @@ export default function PathwaysPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
             {[
-              { name: 'Maria G.', city: 'Phoenix, AZ', quote: 'I had chest pain and no insurance. NEXUS found me a free clinic 1.4 miles away. I was seen the same day. It turned out to be treatable with a free prescription.', care: 'Cardiac triage', time: '22 min to care' },
-              { name: 'James T.', city: 'Detroit, MI', quote: 'I was avoiding the dentist for 2 years because I thought it would cost hundreds. NEXUS matched me to a dental day at a local FQHC. Free cleaning, two fillings, zero dollars.', care: 'Dental care', time: '0 cost' },
+              { name: 'Maria G.', city: 'Phoenix, AZ', quote: 'I had chest pain and no insurance. AXVO found me a free clinic 1.4 miles away. I was seen the same day. It turned out to be treatable with a free prescription.', care: 'Cardiac triage', time: '22 min to care' },
+              { name: 'James T.', city: 'Detroit, MI', quote: 'I was avoiding the dentist for 2 years because I thought it would cost hundreds. AXVO matched me to a dental day at a local FQHC. Free cleaning, two fillings, zero dollars.', care: 'Dental care', time: '0 cost' },
               { name: 'Anh N.', city: 'San Jose, CA', quote: 'My mother only speaks Vietnamese. The CHW we were connected to spoke her dialect. For the first time in years, she understood her own diagnosis.', care: 'Primary care', time: 'Language matched' },
             ].map((s, i) => (
               <RevealBlock key={s.name} delay={i * 100}>

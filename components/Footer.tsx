@@ -126,7 +126,7 @@ export default function Footer() {
         }}>
           {/* Brand column */}
           <div>
-            {/* NEXUS in Orbitron */}
+            {/* AXVO in Orbitron */}
             <div style={{ marginBottom: '1rem' }}>
               <div style={{
                 display: 'inline-flex', flexDirection: 'column',
@@ -145,7 +145,7 @@ export default function Footer() {
                   textShadow: '0 0 10px rgba(74,144,217,0.5), 0 0 24px rgba(74,144,217,0.2)',
                   paddingRight: '0.5em',
                 }}>
-                  NEXUS
+                  AXVO
                 </span>
                 {/* Bottom accent line */}
                 <div aria-hidden="true" style={{
@@ -233,7 +233,7 @@ export default function Footer() {
                 { label: 'GoodRx',                      href: 'https://www.goodrx.com',            external: true },
                 { label: 'RxAssist',                    href: 'https://www.rxassist.org',          external: true },
                 { label: 'Medication Finder',           href: '/medications',                      external: false },
-                { label: 'About NEXUS',                 href: '/about',                            external: false },
+                { label: 'About AXVO',                 href: '/about',                            external: false },
                 { label: 'Privacy',                     href: '/privacy',                          external: false },
                 { label: 'Accessibility',               href: '/accessibility',                    external: false },
               ],
@@ -300,7 +300,7 @@ export default function Footer() {
             <div style={{ fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 400 }}>
               &copy; 2026{' '}
               <Link href="/" style={{ color: 'var(--text-2)', textDecoration: 'none', fontWeight: 500 }}>
-                NEXUS Health
+                AXVO Health
               </Link>
               {' '}&mdash; Free healthcare for every uninsured American.
             </div>

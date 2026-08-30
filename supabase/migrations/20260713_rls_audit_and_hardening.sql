@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════════
--- NEXUS — RLS audit + hardening
+-- AXVO — RLS audit + hardening
 -- Run in: Supabase Dashboard → SQL Editor
 --
 -- HOW TO USE:

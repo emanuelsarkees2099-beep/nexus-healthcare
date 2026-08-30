@@ -1,5 +1,5 @@
 /**
- * NEXUS — AI Triage Endpoint
+ * AXVO — AI Triage Endpoint
  *
  * POST /api/triage
  * Body: { query: string }
@@ -24,7 +24,7 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { rateLimit } from '@/lib/rate-limit'
 
-const TRIAGE_SYSTEM = `You are a clinical triage assistant for NEXUS Health — a free healthcare access platform for uninsured Americans.
+const TRIAGE_SYSTEM = `You are a clinical triage assistant for AXVO Health — a free healthcare access platform for uninsured Americans.
 
 Your role: analyze patient-reported symptoms and provide structured care guidance based on published clinical guidelines.
 

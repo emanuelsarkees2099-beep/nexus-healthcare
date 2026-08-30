@@ -61,7 +61,7 @@ export async function captureError(
   const Sentry = await getSentry()
   if (!Sentry) {
     /* Fallback: log to console in all environments so errors aren't silently swallowed */
-    console.error('[NEXUS Error]', error, context)
+    console.error('[AXVO Error]', error, context)
     return
   }
   Sentry.withScope(scope => {
@@ -85,7 +85,7 @@ export async function addBreadcrumb(crumb: {
   if (!Sentry) return
   Sentry.addBreadcrumb({
     message:  crumb.message,
-    category: crumb.category ?? 'nexus',
+    category: crumb.category ?? 'axvo',
     level:    crumb.level    ?? 'info',
     data:     crumb.data,
   })
@@ -119,7 +119,7 @@ export async function initSentry(): Promise<void> {
   Sentry.init({
     dsn: DSN,
     environment:       process.env.NEXT_PUBLIC_SENTRY_ENV  ?? process.env.NODE_ENV,
-    release:           process.env.NEXT_PUBLIC_APP_VERSION ?? 'nexus@dev',
+    release:           process.env.NEXT_PUBLIC_APP_VERSION ?? 'axvo@dev',
     tracesSampleRate:  process.env.NODE_ENV === 'production' ? 0.15 : 0,
     replaysSessionSampleRate:    0,
     replaysOnErrorSampleRate:    process.env.NODE_ENV === 'production' ? 0.5 : 0,

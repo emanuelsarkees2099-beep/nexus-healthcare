@@ -4,11 +4,11 @@
  * Uses generateMetadata (server-side) to fetch the clinic name from our API
  * and generate a beautiful per-clinic OG image via /api/og.
  * This makes every shared clinic link show a preview:
- *   "Free care at [Clinic Name] — [City, State] — found on NEXUS"
+ *   "Free care at [Clinic Name] — [City, State] — found on AXVO"
  */
 import type { Metadata } from 'next'
 
-const BASE = process.env.NEXT_PUBLIC_APP_URL ?? 'https://nexus.health'
+const BASE = process.env.NEXT_PUBLIC_APP_URL ?? 'https://axvo.health'
 
 interface LayoutProps {
   params: Promise<{ id: string }>
@@ -40,8 +40,8 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
   } catch { /* fall back to generic metadata */ }
 
   const location = [clinicCity, clinicState].filter(Boolean).join(', ')
-  const title    = `${clinicName}${location ? ` — ${location}` : ''} — NEXUS`
-  const desc     = `Free${clinicServices.length ? ` ${clinicServices.slice(0, 2).join(' & ')}` : ''} care at ${clinicName}${location ? ` in ${location}` : ''}. No insurance required. Found on NEXUS — the free healthcare finder.`
+  const title    = `${clinicName}${location ? ` — ${location}` : ''} — AXVO`
+  const desc     = `Free${clinicServices.length ? ` ${clinicServices.slice(0, 2).join(' & ')}` : ''} care at ${clinicName}${location ? ` in ${location}` : ''}. No insurance required. Found on AXVO — the free healthcare finder.`
 
   // Per-clinic OG image via /api/og edge function
   const ogImg = `${BASE}/api/og?clinic=${encodeURIComponent(clinicName)}${location ? `&city=${encodeURIComponent(location)}` : ''}`
@@ -57,11 +57,11 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
       title,
       description: desc,
       type: 'website',
-      images: [{ url: ogImg, width: 1200, height: 630, alt: `${clinicName} — Free care on NEXUS` }],
+      images: [{ url: ogImg, width: 1200, height: 630, alt: `${clinicName} — Free care on AXVO` }],
     },
     twitter: {
       card: 'summary_large_image',
-      site: '@nexushealth',
+      site: '@axvohealth',
       title,
       description: desc,
       images: [ogImg],

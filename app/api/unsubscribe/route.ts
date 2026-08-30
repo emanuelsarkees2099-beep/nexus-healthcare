@@ -1,5 +1,5 @@
 /**
- * NEXUS — One-click unsubscribe (CAN-SPAM compliant)
+ * AXVO — One-click unsubscribe (CAN-SPAM compliant)
  * GET /api/unsubscribe?token=<uuid>
  *
  * Sets subscribed=false for the matching subscriber.
@@ -9,7 +9,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://nexus.health').replace(/\/$/, '')
+const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://axvo.health').replace(/\/$/, '')
 
 export async function GET(req: NextRequest) {
   const token = new URL(req.url).searchParams.get('token')
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
       // Graceful — if token doesn't exist, still show success page
   }
 
-  return new NextResponse(html('Unsubscribed', 'You have been unsubscribed from NEXUS Health emails. You will not receive any more newsletters from us.'), {
+  return new NextResponse(html('Unsubscribed', 'You have been unsubscribed from AXVO Health emails. You will not receive any more newsletters from us.'), {
     headers: { 'Content-Type': 'text/html' },
   })
 }
@@ -43,7 +43,7 @@ function html(title: string, message: string): string {
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>${title} — NEXUS Health</title>
+<title>${title} — AXVO Health</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#07070F;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#F8F9FF;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
@@ -59,7 +59,7 @@ a{display:inline-block;padding:11px 24px;background:#4F8EF0;color:#060810;font-s
   <div class="icon">✓</div>
   <h1>${title}</h1>
   <p>${message}</p>
-  <a href="${APP_URL}">Visit NEXUS Health</a>
+  <a href="${APP_URL}">Visit AXVO Health</a>
 </div>
 </body>
 </html>`

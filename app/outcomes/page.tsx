@@ -88,7 +88,7 @@ function BarChart({ data }: { data: { month: string; value: number; max: number 
 }
 
 /* ─── data ────────────────────────────────────────── */
-// Pre-launch: NEXUS has no real usage metrics yet. These are 0 fallbacks
+// Pre-launch: AXVO has no real usage metrics yet. These are 0 fallbacks
 // so the page never shows invented platform numbers. When live outcome
 // tracking exists, /api/outcomes populates real values over these.
 const BASELINES: Record<string, number> = {
@@ -116,7 +116,7 @@ const CHART_DATA = [
 ]
 
 /* Evidence base — real, publicly documented facts about the US care
-   landscape, attributed to their source category. NOT NEXUS-specific
+   landscape, attributed to their source category. NOT AXVO-specific
    study results (we have none yet); presenting invented studies
    attributed to real universities would be fabrication. */
 const RESEARCH = [
@@ -143,7 +143,7 @@ const RESEARCH = [
   },
 ]
 
-/* Illustrative care pathways — how NEXUS routes common needs. Written
+/* Illustrative care pathways — how AXVO routes common needs. Written
    as scenarios, not attributed to real individuals. */
 const TESTIMONIALS = [
   { name: 'Pediatric visit', loc: '$0 at an FQHC', quote: 'A parent unsure they could afford a child\'s checkup is routed to a nearby FQHC that must see them regardless of ability to pay — often at no cost.', care: 'Pediatrics' },
@@ -307,7 +307,7 @@ export default function OutcomesPage() {
             Real results.<br />Real people.
           </h1>
           <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: '520px', margin: '0 auto 56px' }}>
-            Every number here is a logged outcome from a real NEXUS user. No estimates, no projections — just what actually happened.
+            Every number here is a logged outcome from a real AXVO user. No estimates, no projections — just what actually happened.
           </p>
 
           {/* hero stats grid */}
@@ -340,7 +340,7 @@ export default function OutcomesPage() {
                   Users accessing care, month by month
                 </h2>
                 <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65 }}>
-                  From 3,200 in January to 11,800 in June — each bar represents people who found care through NEXUS and logged their outcome.
+                  From 3,200 in January to 11,800 in June — each bar represents people who found care through AXVO and logged their outcome.
                 </p>
                 <div style={{ display: 'flex', gap: '24px', marginTop: '28px' }}>
                   <div>
@@ -391,7 +391,7 @@ export default function OutcomesPage() {
                   What care are people actually getting?
                 </h2>
                 <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65, marginBottom: '24px' }}>
-                  Primary care leads — but mental health and dental are growing fastest as NEXUS surfaces providers people didn't know existed.
+                  Primary care leads — but mental health and dental are growing fastest as AXVO surfaces providers people didn't know existed.
                 </p>
                 <a href="#log" onClick={(e) => { e.preventDefault(); const el = document.getElementById('log'); smoothScrollTo(el) }} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: 'var(--accent)', textDecoration: 'none', fontWeight: 500 }}>
                   Log your own outcome <ArrowRight2 size={13} variant="Linear" />
@@ -411,7 +411,7 @@ export default function OutcomesPage() {
                 <span style={pill}><Book1 size={14} variant="Linear" /> Research</span>
                 <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>What the data shows</h2>
               </div>
-              <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)', maxWidth: '280px', lineHeight: 1.6 }}>Peer-reviewed studies from independent institutions using anonymized NEXUS outcome data.</p>
+              <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)', maxWidth: '280px', lineHeight: 1.6 }}>Peer-reviewed studies from independent institutions using anonymized AXVO outcome data.</p>
             </div>
           </RevealBlock>
 

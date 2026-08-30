@@ -47,8 +47,12 @@ const securityHeaders = [
       `font-src 'self' data: https://fonts.gstatic.com`,
       // Images: own origin, data URIs (avatars), any HTTPS (clinic images), blobs
       `img-src 'self' data: https: blob:`,
-      // API calls: Supabase REST + realtime WS, Groq AI, Vercel insights
-      `connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.groq.com https://vitals.vercel-insights.com https://cdn.vercel-insights.com`,
+      // API calls: Supabase REST + realtime WS, Groq AI, Vercel insights.
+      // Sentry + PostHog are listed because both self-activate the moment their
+      // env var is present — without these hosts the browser silently blocks
+      // every error report and analytics event, and the failure is invisible
+      // (CSP violations don't surface as app errors).
+      `connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.groq.com https://vitals.vercel-insights.com https://cdn.vercel-insights.com https://*.sentry.io https://*.i.posthog.com https://*.posthog.com`,
       // Service workers + Web Workers from own origin only
       `worker-src 'self' blob:`,
       // No <object>, <embed>, or <applet>

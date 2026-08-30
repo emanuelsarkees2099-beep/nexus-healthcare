@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Home2, SearchNormal1, ReceiptText, ShieldTick, Setting2, Lock1 } from 'iconsax-react'
 
-/* Interactive 3D product mockup — a browser window showing the NEXUS
+/* Interactive 3D product mockup — a browser window showing the AXVO
    dashboard that tilts toward the cursor. Content uses the platform's real
    facts (18,900+ clinics, 40+ programs, $0) and the same illustrative clinic
    names used elsewhere — no invented usage/traction metrics. */
@@ -109,7 +109,7 @@ export default function ProductMockup() {
             </div>
             <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '8px', padding: '5px 14px', fontSize: '12px', color: 'var(--text-2)', fontFamily: 'var(--font-mono)' }}>
-                <Lock1 size={11} color="var(--text-3)" variant="Bold" /> nexus.health/dashboard
+                <Lock1 size={11} color="var(--text-3)" variant="Bold" /> axvo.health/dashboard
               </div>
             </div>
             <span style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-mono)' }}>v1.0</span>
@@ -119,7 +119,7 @@ export default function ProductMockup() {
           <div className="mockup-body" style={{ display: 'grid', gridTemplateColumns: '186px 1fr' }}>
             {/* Sidebar */}
             <aside className="mockup-sidebar" style={{ borderRight: '1px solid rgba(255,255,255,0.06)', padding: '22px 14px', display: 'flex', flexDirection: 'column', gap: '4px', background: 'rgba(255,255,255,0.012)' }}>
-              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, letterSpacing: '0.14em', fontSize: '15px', color: 'var(--text)', padding: '0 8px 14px', borderBottom: '1px solid rgba(255,255,255,0.06)', marginBottom: '10px' }}>NEXUS</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, letterSpacing: '0.14em', fontSize: '15px', color: 'var(--text)', padding: '0 8px 14px', borderBottom: '1px solid rgba(255,255,255,0.06)', marginBottom: '10px' }}>AXVO</div>
               {NAV.map(({ label, icon: Icon, active }) => (
                 <div key={label} className="mock-nav-item" style={{
                   display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 10px', borderRadius: '9px', fontSize: '13px', fontFamily: 'var(--font-inter)',

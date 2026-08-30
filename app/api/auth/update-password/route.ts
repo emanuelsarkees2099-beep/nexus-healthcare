@@ -1,5 +1,5 @@
 /**
- * NEXUS — Password Update (completes reset flow)
+ * AXVO — Password Update (completes reset flow)
  * POST /api/auth/update-password  { password: string }
  * Authorization: Bearer <recovery_access_token>
  *

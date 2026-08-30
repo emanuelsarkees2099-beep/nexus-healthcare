@@ -19,7 +19,7 @@ async function verifyHRSAEndpoint(zip: string): Promise<{ ok: boolean; count: nu
   const url = `https://findahealthcenter.hrsa.gov/api/v1/healthcenter/FindHealthCenters?zipcode=${zip}&radius=25`
   try {
     const res = await fetch(url, {
-      headers: { Accept: 'application/json', 'User-Agent': 'NEXUS-ClinicBot/1.0' },
+      headers: { Accept: 'application/json', 'User-Agent': 'AXVO-ClinicBot/1.0' },
       signal: AbortSignal.timeout(10000),
     })
     if (!res.ok) return { ok: false, count: 0 }

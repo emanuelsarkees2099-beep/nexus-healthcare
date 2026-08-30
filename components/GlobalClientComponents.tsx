@@ -19,7 +19,7 @@ export default function GlobalClientComponents() {
   /* #37 — Low-bandwidth mode: restore persisted preference on mount */
   useEffect(() => {
     try {
-      const reduced = localStorage.getItem('nexus_reduced_data')
+      const reduced = localStorage.getItem('axvo_reduced_data')
       if (reduced === 'true') {
         document.documentElement.setAttribute('data-reduced-data', 'true')
       }

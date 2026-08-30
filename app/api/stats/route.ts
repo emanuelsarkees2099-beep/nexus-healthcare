@@ -69,7 +69,7 @@ export async function GET() {
       },
     })
   } catch (err) {
-    console.error('[NEXUS] Stats error:', err)
+    console.error('[AXVO] Stats error:', err)
     return NextResponse.json({ error: 'Failed to load stats' }, { status: 500 })
   }
 }

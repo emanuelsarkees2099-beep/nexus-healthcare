@@ -46,10 +46,19 @@ export default function BackgroundCanvas() {
   const rafRef    = useRef<number>(0)
   const orbsRef   = useRef<Orb[]>(ORBS.map(o => ({ ...o })))
 
-  // Skip WebGL on touch devices and low-end hardware — saves battery + GPU
-  if (reducedMotion || isMobileOrLowEnd()) return null
+  /* Skip the canvas on touch devices and low-end hardware — saves battery + GPU.
+     Detected in an effect, never during render: isMobileOrLowEnd() reads window,
+     so calling it inline would return false on the server and true on a phone,
+     desyncing hydration. The bail-out itself must also sit BELOW every hook —
+     an early return above one changes the hook count between renders, which
+     throws "Rendered fewer hooks than expected" the moment the media query
+     flips (e.g. the user turns on reduced-motion). */
+  const [lowEnd, setLowEnd] = useState(false)
+  useEffect(() => { if (isMobileOrLowEnd()) setLowEnd(true) }, [])
+  const skip = reducedMotion || lowEnd
 
   useEffect(() => {
+    if (skip || isMobileOrLowEnd()) return
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
@@ -112,7 +121,9 @@ export default function BackgroundCanvas() {
       }
       cleanupFn?.()
     }
-  }, [])
+  }, [skip])
+
+  if (skip) return null
 
   return (
     <canvas

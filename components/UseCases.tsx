@@ -4,7 +4,7 @@ import {
   CloseCircle, Briefcase, Health, Global, Book1, Profile2User,
 } from 'iconsax-react'
 
-/* Honest scenarios that bring people to NEXUS. */
+/* Honest scenarios that bring people to AXVO. */
 const CASES = [
   { icon: CloseCircle,  title: 'No insurance at all',   body: 'Find free and sliding-scale clinics that treat you regardless of coverage.' },
   { icon: Briefcase,    title: 'Between jobs',          body: 'Lost employer coverage? See ACA special-enrollment options and interim care.' },

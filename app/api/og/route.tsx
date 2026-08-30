@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
 
   /* Resolve display content */
   const cfg = PAGE_CONFIG[page] ?? null
-  const displayTitle = clinic ? clinic : (title || cfg?.title || 'NEXUS')
+  const displayTitle = clinic ? clinic : (title || cfg?.title || 'AXVO')
   const displaySub   = city
     ? `Free healthcare in ${city} · No insurance required`
     : (sub || cfg?.sub || 'Free healthcare, found in seconds. No insurance required.')
@@ -99,10 +99,10 @@ export async function GET(req: NextRequest) {
             {/* Hexagon glyph */}
             <svg width="32" height="32" viewBox="0 0 20 20" fill="none">
               <polygon points="10,1 18,5.5 18,14.5 10,19 2,14.5 2,5.5" stroke={accentColor} strokeWidth="1.4" fill={`${accentColor}14`}/>
-              <path d="M6.5 13.5V6.5L10 13l3.5-6.5V13.5" stroke={accentColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              <path d="M6.5 13.5 L10 6.5 L13.5 13.5 M8 10.7 H12" stroke={accentColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
             </svg>
             <span style={{ fontSize: '13px', fontWeight: 400, letterSpacing: '0.42em', color: 'rgba(255,255,255,0.85)', textTransform: 'uppercase' }}>
-              NEXUS
+              AXVO
             </span>
             {/* Free badge */}
             <div style={{
@@ -176,7 +176,7 @@ export async function GET(req: NextRequest) {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth="2">
                 <rect width="11" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
               </svg>
-              nexus.health
+              axvo.health
             </div>
           </div>
         </div>

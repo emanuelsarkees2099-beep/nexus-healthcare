@@ -64,7 +64,7 @@ const FIELDS: VerifyField[] = [
 ]
 
 const SUBMIT_FLOW = [
-  { label: 'Saving to NEXUS database…', delay: 0 },
+  { label: 'Saving to AXVO database…', delay: 0 },
   { label: 'Updating clinic wait time…', delay: 700 },
   { label: 'Notifying 47 people who saved this clinic…', delay: 1400 },
   { label: 'Updating community trust score…', delay: 2100 },
@@ -226,7 +226,7 @@ export default function VerifyPage() {
           fontSize: '15px', color: 'rgba(255,255,255,0.45)',
           maxWidth: '440px', lineHeight: 1.7, margin: '0 auto 16px',
         }}>
-          30 seconds of your time updates wait times, prices, and availability for thousands of uninsured patients. Your report is the most valuable data on NEXUS.
+          30 seconds of your time updates wait times, prices, and availability for thousands of uninsured patients. Your report is the most valuable data on AXVO.
         </p>
       </section>
 

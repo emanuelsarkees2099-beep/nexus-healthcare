@@ -988,8 +988,8 @@ export default function EligibilityPage() {
       <JsonLd schema={ELIGIBILITY_FAQ_SCHEMA} id="schema-faq-eligibility" />
       <JsonLd
         schema={breadcrumbSchema([
-          { name: 'Home',        url: 'https://nexus.health' },
-          { name: 'Eligibility', url: 'https://nexus.health/eligibility' },
+          { name: 'Home',        url: 'https://axvo.health' },
+          { name: 'Eligibility', url: 'https://axvo.health/eligibility' },
         ])}
         id="schema-breadcrumb-eligibility"
       />
@@ -1127,7 +1127,7 @@ export default function EligibilityPage() {
                   <div>
                     <div style={{ fontSize: '14px', fontWeight: 700, color: '#eef4f5', marginBottom: '4px' }}>100% private — calculated in your browser</div>
                     <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.6 }}>
-                      Your answers never leave your device. No account required. No data stored. NEXUS uses your state and income range to apply the correct eligibility thresholds, all calculated locally using 2025 federal guidelines.
+                      Your answers never leave your device. No account required. No data stored. AXVO uses your state and income range to apply the correct eligibility thresholds, all calculated locally using 2025 federal guidelines.
                     </div>
                   </div>
                 </div>
@@ -1145,7 +1145,7 @@ export default function EligibilityPage() {
             </div>
             <h2 style={{ fontSize: 'clamp(22px, 4vw, 38px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.15, marginBottom: '12px' }}>What each program covers</h2>
             <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.45)', maxWidth: '460px', margin: '0 auto', lineHeight: 1.7 }}>
-              The federal programs NEXUS checks are each designed for a different situation. Here&apos;s what you need to know.
+              The federal programs AXVO checks are each designed for a different situation. Here&apos;s what you need to know.
             </p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
@@ -1185,10 +1185,10 @@ export default function EligibilityPage() {
           <h2 style={{ fontSize: 'clamp(20px, 3vw, 30px)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '28px' }}>Common questions</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { q: 'Is my information stored anywhere?', a: 'No. Your answers are calculated entirely in your browser. Nothing is sent to any server. NEXUS has no account system and stores no personal data.' },
+              { q: 'Is my information stored anywhere?', a: 'No. Your answers are calculated entirely in your browser. Nothing is sent to any server. AXVO has no account system and stores no personal data.' },
               { q: 'What is the Federal Poverty Level (FPL)?', a: 'The FPL is a federal measure used to determine eligibility for many programs. In 2025, 100% FPL is approximately $15,650/year for a single person ($32,150 for a family of four). Programs like Medicaid and ACA subsidies use this threshold.' },
               { q: 'I got results but don\'t know how to apply — what next?', a: 'Each result includes a direct link to apply or learn more. For free clinics, you can use the Clinic Finder to locate one near you — no referral or insurance needed.' },
-              { q: 'Can immigrants use these programs?', a: 'It depends on the program and immigration status. HRSA-funded free clinics serve everyone regardless of status. Medicaid eligibility varies by state and status. Emergency Medicaid is available in all states. NEXUS shows you what applies.' },
+              { q: 'Can immigrants use these programs?', a: 'It depends on the program and immigration status. HRSA-funded free clinics serve everyone regardless of status. Medicaid eligibility varies by state and status. Emergency Medicaid is available in all states. AXVO shows you what applies.' },
             ].map((item, i) => (
               <div key={i} style={{ padding: '18px 22px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px' }}>
                 <div style={{ fontSize: '15px', fontWeight: 600, marginBottom: '8px', color: '#eef4f5' }}>{item.q}</div>

@@ -10,7 +10,7 @@
  *
  *   export async function generateMetadata(): Promise<Metadata> {
  *     return {
- *       title: 'Triage — NEXUS',
+ *       title: 'Triage — AXVO',
  *       ...buildOgMeta({ page: 'triage', base: process.env.NEXT_PUBLIC_APP_URL })
  *     }
  *   }
@@ -21,7 +21,7 @@
 
 import type { Metadata } from 'next'
 
-const DEFAULT_BASE = 'https://nexus.health'
+const DEFAULT_BASE = 'https://axvo.health'
 
 interface OgParams {
   /** One of the pre-configured PAGE_CONFIG keys in /api/og */
@@ -34,7 +34,7 @@ interface OgParams {
   clinic?: string
   /** City shown as pre-label on clinic variant */
   city?: string
-  /** Base URL — defaults to NEXT_PUBLIC_APP_URL or nexus.health */
+  /** Base URL — defaults to NEXT_PUBLIC_APP_URL or axvo.health */
   base?: string | null
 }
 
@@ -51,20 +51,20 @@ export function buildOgImageUrl(params: OgParams): string {
 
 export function buildOgMeta(params: OgParams & { metaTitle?: string; metaDescription?: string }): Partial<Metadata> {
   const imageUrl = buildOgImageUrl(params)
-  const title    = params.metaTitle    ?? params.title  ?? 'NEXUS — Free Healthcare, Found in Seconds'
+  const title    = params.metaTitle    ?? params.title  ?? 'AXVO — Free Healthcare, Found in Seconds'
   const desc     = params.metaDescription ?? params.sub ?? 'Find free clinics, sliding-scale care, and eligibility programs near you. No insurance required.'
 
   return {
     openGraph: {
       title,
       description: desc,
-      siteName: 'NEXUS',
+      siteName: 'AXVO',
       type: 'website',
       images: [{ url: imageUrl, width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: 'summary_large_image',
-      site: '@nexushealth',
+      site: '@axvohealth',
       title,
       description: desc,
       images: [imageUrl],

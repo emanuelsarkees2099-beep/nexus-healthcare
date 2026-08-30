@@ -1,5 +1,5 @@
 /* =========================================================
-   NEXUS i18n — lightweight translation system
+   AXVO i18n — lightweight translation system
    No external dependencies. Reads from localStorage.
    Human-reviewed strings for ES, ZH, VI, PT, FR, AR.
    ========================================================= */
@@ -143,7 +143,7 @@ const EN: Translations = {
 
   'home.hero.badge':          '30M uninsured Americans deserve better',
   'home.hero.headline':       'Free healthcare.\nFound in seconds.',
-  'home.hero.subheadline':    'NEXUS finds free clinics, sliding-scale care, and hidden programs near you — no insurance required.',
+  'home.hero.subheadline':    'AXVO finds free clinics, sliding-scale care, and hidden programs near you — no insurance required.',
   'home.hero.cta':            'Find free care near me',
   'home.hero.secondary':      'Learn how it works',
   'home.hero.zipPlaceholder': 'Enter ZIP or city…',
@@ -250,7 +250,7 @@ const ES: Translations = {
 
   'home.hero.badge':          '30 millones de estadounidenses sin seguro merecen mejor',
   'home.hero.headline':       'Atención médica gratuita.\nEncontrada en segundos.',
-  'home.hero.subheadline':    'NEXUS encuentra clínicas gratuitas, atención por escala móvil y programas ocultos cerca de ti — sin seguro necesario.',
+  'home.hero.subheadline':    'AXVO encuentra clínicas gratuitas, atención por escala móvil y programas ocultos cerca de ti — sin seguro necesario.',
   'home.hero.cta':            'Encontrar atención gratuita',
   'home.hero.secondary':      'Cómo funciona',
   'home.hero.zipPlaceholder': 'Código postal o ciudad…',
@@ -354,7 +354,7 @@ const ZH: Translations = {
 
   'home.hero.badge':          '3000万无保险美国人值得更好的医疗',
   'home.hero.headline':       '免费医疗。\n秒速找到。',
-  'home.hero.subheadline':    'NEXUS 为您在附近找到免费诊所、阶梯收费医疗和隐藏项目 — 无需保险。',
+  'home.hero.subheadline':    'AXVO 为您在附近找到免费诊所、阶梯收费医疗和隐藏项目 — 无需保险。',
   'home.hero.cta':            '查找附近免费医疗',
   'home.hero.secondary':      '了解运作方式',
   'home.hero.zipPlaceholder': '输入邮编或城市…',
@@ -458,7 +458,7 @@ const VI: Translations = {
 
   'home.hero.badge':          '30 triệu người Mỹ không có bảo hiểm xứng đáng được chăm sóc tốt hơn',
   'home.hero.headline':       'Chăm sóc sức khỏe miễn phí.\nTìm thấy trong vài giây.',
-  'home.hero.subheadline':    'NEXUS tìm phòng khám miễn phí, chăm sóc theo thu nhập và các chương trình gần bạn — không cần bảo hiểm.',
+  'home.hero.subheadline':    'AXVO tìm phòng khám miễn phí, chăm sóc theo thu nhập và các chương trình gần bạn — không cần bảo hiểm.',
   'home.hero.cta':            'Tìm chăm sóc miễn phí gần tôi',
   'home.hero.secondary':      'Tìm hiểu cách hoạt động',
   'home.hero.zipPlaceholder': 'Nhập mã bưu chính hoặc thành phố…',
@@ -557,7 +557,7 @@ export function getTranslations(lang: LangCode): Translations {
 /** Read saved language from localStorage (browser-safe) */
 export function getSavedLang(): LangCode {
   if (typeof window === 'undefined') return 'en'
-  return (localStorage.getItem('nexus_language') as LangCode) ?? 'en'
+  return (localStorage.getItem('axvo_language') as LangCode) ?? 'en'
 }
 
 /** t() helper — looks up a key, falls back to English */

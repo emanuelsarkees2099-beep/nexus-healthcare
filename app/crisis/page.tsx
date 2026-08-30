@@ -7,7 +7,7 @@ import { Call, Location, Heart, Danger, ArrowRight2, Clock, Routing, TickCircle,
 import QuickExit from '@/components/QuickExit'
 import DotGrid from '@/components/DotGrid'
 
-const SAFETY_KEY = 'nexus_safety_plan'
+const SAFETY_KEY = 'axvo_safety_plan'
 
 type SafetySection = {
   id: string
@@ -210,16 +210,16 @@ export default function CrisisPage() {
       {/* 5.9 — Structured Data */}
       <JsonLd
         schema={medicalPageSchema(
-          'Crisis & Emergency Resources — NEXUS',
+          'Crisis & Emergency Resources — AXVO',
           'Immediate help for mental health crises, domestic violence, substance abuse, and medical emergencies. Free hotlines, chat, and local resources.',
-          'https://nexus.health/crisis',
+          'https://axvo.health/crisis',
         )}
         id="schema-medical-crisis"
       />
       <JsonLd
         schema={breadcrumbSchema([
-          { name: 'Home',   url: 'https://nexus.health' },
-          { name: 'Crisis', url: 'https://nexus.health/crisis' },
+          { name: 'Home',   url: 'https://axvo.health' },
+          { name: 'Crisis', url: 'https://axvo.health/crisis' },
         ])}
         id="schema-breadcrumb-crisis"
       />
@@ -782,7 +782,7 @@ export default function CrisisPage() {
               You deserve care. You always have.
             </h3>
             <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, marginBottom: '24px' }}>
-              The fact that you&apos;re looking for help is an act of courage. NEXUS exists because healthcare should be available to everyone, in their hardest moments, without barriers.
+              The fact that you&apos;re looking for help is an act of courage. AXVO exists because healthcare should be available to everyone, in their hardest moments, without barriers.
             </p>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link href="/search" style={{

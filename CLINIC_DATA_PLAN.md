@@ -1,4 +1,4 @@
-# NEXUS — Clinic Data Plan: from 2 results to 20–100, everywhere
+# AXVO — Clinic Data Plan: from 2 results to 20–100, everywhere
 
 ## Diagnosis (from reading app/api/clinics/route.ts)
 

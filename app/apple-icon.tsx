@@ -1,5 +1,5 @@
 /**
- * NEXUS Apple Touch Icon — 180×180 for iOS home screen saves.
+ * AXVO Apple Touch Icon — 180×180 for iOS home screen saves.
  * Auto-injects:  <link rel="apple-touch-icon" href="/apple-icon" sizes="180x180" />
  */
 import { ImageResponse } from 'next/og'
@@ -30,7 +30,7 @@ export default function AppleIcon() {
             fill="rgba(74,143,212,0.14)"
           />
           <path
-            d="M8.5 17.5V8.5L13 17L17.5 8.5V17.5"
+            d="M8.5 17.5 L13 8.5 L17.5 17.5 M10.5 14 H15.5"
             stroke="#4A8FD4"
             strokeWidth="1.8"
             strokeLinecap="round"

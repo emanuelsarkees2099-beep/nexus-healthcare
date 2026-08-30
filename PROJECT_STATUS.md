@@ -1,4 +1,4 @@
-# NEXUS Project Completion Status
+# AXVO Project Completion Status
 
 **Status**: ✅ **COMPLETE & PRODUCTION-READY**  
 **Deployment**: ✅ **LIVE ON VERCEL**  
@@ -9,7 +9,7 @@
 
 ## 🎯 Project Overview
 
-NEXUS is a comprehensive, production-ready healthcare discovery platform that connects the 30 million uninsured Americans with free clinics, sliding-scale care, and eligibility programs. The platform aggregates clinic data from 4+ sources (HRSA, NAFC, OpenStreetMap, state APIs) with intelligent deduplication and affordability scoring.
+AXVO is a comprehensive, production-ready healthcare discovery platform that connects the 30 million uninsured Americans with free clinics, sliding-scale care, and eligibility programs. The platform aggregates clinic data from 4+ sources (HRSA, NAFC, OpenStreetMap, state APIs) with intelligent deduplication and affordability scoring.
 
 ---
 
@@ -213,7 +213,7 @@ NEXUS is a comprehensive, production-ready healthcare discovery platform that co
 ## 🗂️ Project Structure
 
 ```
-nexus-app/
+axvo-app/
 ├── app/                          # Next.js App Router
 │   ├── (auth)/                   # Authentication pages
 │   │   ├── login/

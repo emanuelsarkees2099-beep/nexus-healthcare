@@ -8,7 +8,7 @@ export default function OfflinePage() {
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem('nexus_last_results')
+      const raw = localStorage.getItem('axvo_last_results')
       if (raw) {
         const parsed = JSON.parse(raw)
         if (Array.isArray(parsed)) setCachedClinics(parsed.slice(0, 5))
@@ -50,7 +50,7 @@ export default function OfflinePage() {
         textTransform: 'uppercase', color: '#E8E0FF',
         marginBottom: '1.5rem', opacity: 0.7, position: 'relative', zIndex: 1,
       }}>
-        NEXUS
+        AXVO
       </div>
 
       <h1 style={{
@@ -141,7 +141,7 @@ export default function OfflinePage() {
 
       {cachedClinics.length === 0 && (
         <p style={{ fontSize: '12px', color: 'rgba(240,253,248,0.2)', maxWidth: '400px', lineHeight: 1.6, position: 'relative', zIndex: 1 }}>
-          Tip: After your first search, NEXUS caches your nearest 5 clinics so they&apos;re always visible — even without signal.
+          Tip: After your first search, AXVO caches your nearest 5 clinics so they&apos;re always visible — even without signal.
         </p>
       )}
 
@@ -180,7 +180,7 @@ export default function OfflinePage() {
 
       <div style={{ marginTop: '2rem', position: 'relative', zIndex: 1 }}>
         <Link href="/" style={{ fontSize: '13px', color: 'rgba(240,253,248,0.3)', textDecoration: 'none' }}>
-          ← Back to NEXUS
+          ← Back to AXVO
         </Link>
       </div>
     </div>

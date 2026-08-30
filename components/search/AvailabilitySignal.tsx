@@ -22,11 +22,11 @@ export default function AvailabilitySignal({ clinicId, clinicName, variant = 'co
   const { toast } = useToast()
   const [notified, setNotified] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false
-    return localStorage.getItem(`nexus_notify_${clinicId}`) !== null
+    return localStorage.getItem(`axvo_notify_${clinicId}`) !== null
   })
 
   const handleNotify = useCallback(() => {
-    localStorage.setItem(`nexus_notify_${clinicId}`, JSON.stringify({ clinicName, ts: Date.now() }))
+    localStorage.setItem(`axvo_notify_${clinicId}`, JSON.stringify({ clinicName, ts: Date.now() }))
     setNotified(true)
     toast({ title: `Notification set`, body: `We'll alert you when ${clinicName} has shorter wait times.`, variant: 'success' })
   }, [clinicId, clinicName, toast])

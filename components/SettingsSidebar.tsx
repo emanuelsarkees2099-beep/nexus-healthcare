@@ -6,9 +6,9 @@ import { Sun1, Global, Profile, Notification, Keyboard, ShieldTick, CloseCircle,
 const PushNotificationToggle = dynamic(() => import('@/components/PushNotificationToggle'), { ssr: false })
 
 /* ── Storage keys ── */
-const LANG_KEY  = 'nexus_language'
-const A11Y_KEY  = 'nexus_a11y'
-const THEME_KEY = 'nexus_theme'
+const LANG_KEY  = 'axvo_language'
+const A11Y_KEY  = 'axvo_a11y'
+const THEME_KEY = 'axvo_theme'
 
 /* ── Theme ── */
 function applyTheme(t: 'dark' | 'light') {
@@ -195,15 +195,15 @@ export default function SettingsSidebar() {
     setA11y(saved); applyA11y(saved)
     const savedTheme = (localStorage.getItem(THEME_KEY) ?? 'dark') as 'dark' | 'light'
     setTheme(savedTheme); applyTheme(savedTheme)
-    const ds = localStorage.getItem('nexus_low_bandwidth') === 'true'
+    const ds = localStorage.getItem('axvo_low_bandwidth') === 'true'
     setDataSaving(ds)
   }, [])
 
   /* ── Open event ── */
   useEffect(() => {
     const handler = () => setOpen(true)
-    document.addEventListener('nexus:settings:open', handler)
-    return () => document.removeEventListener('nexus:settings:open', handler)
+    document.addEventListener('axvo:settings:open', handler)
+    return () => document.removeEventListener('axvo:settings:open', handler)
   }, [])
 
   /* ── Lock scroll ── */
@@ -221,7 +221,7 @@ export default function SettingsSidebar() {
   const setLanguage = (code: string) => {
     setLang(code)
     localStorage.setItem(LANG_KEY, code)
-    window.dispatchEvent(new CustomEvent('nexus:lang-changed'))
+    window.dispatchEvent(new CustomEvent('axvo:lang-changed'))
   }
 
   const updateA11y = (patch: Partial<A11ySettings>) => {
@@ -233,7 +233,7 @@ export default function SettingsSidebar() {
 
   const toggleDataSaving = (v: boolean) => {
     setDataSaving(v)
-    localStorage.setItem('nexus_low_bandwidth', String(v))
+    localStorage.setItem('axvo_low_bandwidth', String(v))
     document.documentElement.setAttribute('data-reduced-data', String(v))
   }
 
@@ -386,7 +386,7 @@ export default function SettingsSidebar() {
                   display: 'flex', flexDirection: 'column', gap: '6px',
                 }}>
                   {[
-                    ['Version', 'NEXUS Beta v0.1.0'],
+                    ['Version', 'AXVO Beta v0.1.0'],
                     ['Build', new Date().toISOString().slice(0, 10)],
                     ['License', 'Open source · MIT'],
                   ].map(([k, v]) => (
@@ -518,7 +518,7 @@ export default function SettingsSidebar() {
                 border: '1px solid rgba(74,144,217,0.10)',
               }}>
                 <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.32)', fontFamily: 'var(--font-inter)', lineHeight: 1.65, margin: 0 }}>
-                  NEXUS is built to WCAG AA standards. All pages support screen readers and keyboard navigation.
+                  AXVO is built to WCAG AA standards. All pages support screen readers and keyboard navigation.
                 </p>
               </div>
             </>
@@ -543,7 +543,7 @@ export default function SettingsSidebar() {
                 border: '1px solid rgba(74,144,217,0.10)',
               }}>
                 <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.32)', fontFamily: 'var(--font-inter)', lineHeight: 1.65, margin: 0 }}>
-                  NEXUS never sends marketing or shares your data with advertisers. Notifications cover free care availability only.
+                  AXVO never sends marketing or shares your data with advertisers. Notifications cover free care availability only.
                 </p>
               </div>
             </>
@@ -598,7 +598,7 @@ export default function SettingsSidebar() {
           {section === 'privacy' && (
             <>
               <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.30)', fontFamily: 'var(--font-inter)', lineHeight: 1.65, margin: 0 }}>
-                NEXUS collects only what&apos;s necessary to help you find care. No personal health data is stored on our servers.
+                AXVO collects only what&apos;s necessary to help you find care. No personal health data is stored on our servers.
               </p>
 
               <div>
@@ -658,7 +658,7 @@ export default function SettingsSidebar() {
               }}>
                 <ShieldTick size={14} color="rgba(74,217,144,0.6)" variant="TwoTone" style={{ flexShrink: 0, marginTop: '2px' }} />
                 <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.32)', fontFamily: 'var(--font-inter)', lineHeight: 1.65, margin: 0 }}>
-                  NEXUS never sells your data. We are an open-source, non-profit platform built for the uninsured.
+                  AXVO never sells your data. We are an open-source, non-profit platform built for the uninsured.
                 </p>
               </div>
             </>

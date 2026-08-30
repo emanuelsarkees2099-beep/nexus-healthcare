@@ -12,7 +12,7 @@ const getSupabaseClient = () => createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 )
 
-// All critical external URLs used in the NEXUS app
+// All critical external URLs used in the AXVO app
 const LINKS_TO_CHECK = [
   // Programs page
   { name: 'Medicaid enrollment', url: 'https://www.healthcare.gov/medicaid-chip/getting-medicaid-chip/', page: '/programs' },
@@ -42,7 +42,7 @@ async function checkURL(name: string, url: string): Promise<{ name: string; url:
 
     const res = await fetch(url, {
       method: 'HEAD', // Lightweight — don't download body
-      headers: { 'User-Agent': 'NEXUS-LinkChecker/1.0 contact@nexus.health' },
+      headers: { 'User-Agent': 'AXVO-LinkChecker/1.0 contact@axvo.health' },
       signal: controller.signal,
       redirect: 'follow',
     })

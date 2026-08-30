@@ -1,6 +1,6 @@
 -- ============================================================
--- NEXUS — Supabase Setup SQL
--- Run this in your Supabase SQL Editor (nexus project)
+-- AXVO — Supabase Setup SQL
+-- Run this in your Supabase SQL Editor (axvo project)
 -- ============================================================
 
 -- 1. DISABLE RLS on submissions (already done, but just in case)

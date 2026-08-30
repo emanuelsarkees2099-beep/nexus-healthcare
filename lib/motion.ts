@@ -1,5 +1,5 @@
 /**
- * NEXUS — Shared Motion Token System
+ * AXVO — Shared Motion Token System
  *
  * Single source of truth for all animation constants.
  * Every component should pull from here instead of hardcoding

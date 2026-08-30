@@ -235,7 +235,7 @@ const PROG_FAQ = [
 ]
 
 /* ── Document Checklist (Phase 3.3) ───────────────────────── */
-const DOC_CHECKLIST_KEY = 'nexus_doc_checklist'
+const DOC_CHECKLIST_KEY = 'axvo_doc_checklist'
 
 const CHECKLIST_GROUPS = [
   {
@@ -432,7 +432,7 @@ function ProgramsFAQ() {
 function getProfilePreFill(): { answers: string[]; firstSelected: string; fromProfile: boolean } | null {
   if (typeof window === 'undefined') return null
   try {
-    const raw = localStorage.getItem('nexus_onboarding')
+    const raw = localStorage.getItem('axvo_onboarding')
     if (!raw) return null
     const saved = JSON.parse(raw)
     const a = saved.answers ?? {}
@@ -642,8 +642,8 @@ export default function ProgramsPage() {
       <JsonLd schema={PROGRAMS_FAQ_SCHEMA} id="schema-faq-programs" />
       <JsonLd
         schema={breadcrumbSchema([
-          { name: 'Home',     url: 'https://nexus.health' },
-          { name: 'Programs', url: 'https://nexus.health/programs' },
+          { name: 'Home',     url: 'https://axvo.health' },
+          { name: 'Programs', url: 'https://axvo.health/programs' },
         ])}
         id="schema-breadcrumb-programs"
       />
@@ -848,7 +848,7 @@ export default function ProgramsPage() {
                   </div>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 80px 80px', gap: '0', fontSize: '12px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '8px', paddingBottom: '10px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                  <span>Service</span><span style={{ textAlign: 'right' }}>Without</span><span style={{ textAlign: 'right' }}>With NEXUS</span>
+                  <span>Service</span><span style={{ textAlign: 'right' }}>Without</span><span style={{ textAlign: 'right' }}>With AXVO</span>
                 </div>
                 {COST_ROWS.map(row => (
                   <div key={row.label} style={{ display: 'grid', gridTemplateColumns: '1fr 80px 80px', gap: '0', padding: '13px 0', borderBottom: '1px solid rgba(255,255,255,0.04)', alignItems: 'center' }}>
@@ -1030,7 +1030,7 @@ export default function ProgramsPage() {
               },
               {
                 name: 'HRSA Free Clinics', badge: 'Immediate access', badgeColor: '#6d9197',
-                steps: ['Find your nearest FQHC using the NEXUS clinic finder', 'Call or walk in — no appointment required at most locations', 'Bring ID (any form) and proof of income if available', 'Sliding scale fee is calculated on-site, often $0 for low income', 'Dental and mental health often available at same location'],
+                steps: ['Find your nearest FQHC using the AXVO clinic finder', 'Call or walk in — no appointment required at most locations', 'Bring ID (any form) and proof of income if available', 'Sliding scale fee is calculated on-site, often $0 for low income', 'Dental and mental health often available at same location'],
                 tip: 'FQHCs are legally required to see you regardless of ability to pay. You cannot be turned away.',
                 timeToApply: '5 min to locate, walk-in',
               },
@@ -1087,9 +1087,9 @@ export default function ProgramsPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
             {[
-              { name: 'Rosa M.', city: 'El Paso, TX', program: 'Medicaid', saved: '$4,200/year', quote: 'I was paying $340 a month for insulin. Now I pay $3. NEXUS found me a Medicaid plan I had no idea I qualified for.' },
+              { name: 'Rosa M.', city: 'El Paso, TX', program: 'Medicaid', saved: '$4,200/year', quote: 'I was paying $340 a month for insulin. Now I pay $3. AXVO found me a Medicaid plan I had no idea I qualified for.' },
               { name: 'David K.', city: 'Atlanta, GA', program: 'HRSA Clinic', saved: '$0 copay', quote: 'My kids needed vaccines and I had lost my job. The FQHC nearest me saw all three kids the same day. No bill.' },
-              { name: 'Lin C.',  city: 'Los Angeles, CA', program: 'ACA Subsidy', saved: '$290/month', quote: 'I thought healthcare.gov was too complicated. The NEXUS guide walked me through every step and now I have coverage for $0 a month.' },
+              { name: 'Lin C.',  city: 'Los Angeles, CA', program: 'ACA Subsidy', saved: '$290/month', quote: 'I thought healthcare.gov was too complicated. The AXVO guide walked me through every step and now I have coverage for $0 a month.' },
             ].map((t, i) => (
               <RevealBlock key={t.name} delay={i * 100}>
                 <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(74,144,217,0.15), rgba(74,144,217,0.04))', borderRadius: '20px', height: '100%' }}>

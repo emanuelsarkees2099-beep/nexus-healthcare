@@ -1,5 +1,5 @@
 /* =========================================================
-   NEXUS Service Worker — offline-first for spotty connectivity
+   AXVO Service Worker — offline-first for spotty connectivity
    Version: v6
 
    IMPORTANT: bump CACHE_NAME on every deploy that changes any
@@ -8,7 +8,7 @@
    forces returning visitors off stale HTML / _next chunks.
    ========================================================= */
 
-const CACHE_NAME = 'nexus-v12'
+const CACHE_NAME = 'axvo-v1'
 
 /* Pages to precache on install — these work fully offline.
    Crisis is the priority: it must load with zero signal (life-safety).
@@ -100,7 +100,7 @@ self.addEventListener('fetch', event => {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>NEXUS — Offline</title>
+  <title>AXVO — Offline</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{min-height:100vh;background:#020409;color:#fff;font-family:system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px}
@@ -112,9 +112,9 @@ self.addEventListener('fetch', event => {
   </style>
 </head>
 <body>
-  <span style="font-size:13px;letter-spacing:0.45em;color:rgba(255,255,255,0.4);margin-bottom:48px">NEXUS</span>
+  <span style="font-size:13px;letter-spacing:0.45em;color:rgba(255,255,255,0.4);margin-bottom:48px">AXVO</span>
   <h1>You're offline</h1>
-  <p>Check your internet connection. Emergency numbers below work even without NEXUS.</p>
+  <p>Check your internet connection. Emergency numbers below work even without AXVO.</p>
   <a href="tel:911">Call 911</a>
   <p style="margin-top:16px;font-size:12px">Crisis line: <a href="tel:988" style="background:none;color:#4A90D9;padding:0;font-size:12px">988</a> · Poison Control: <a href="tel:18002221222" style="background:none;color:#4A90D9;padding:0;font-size:12px">1-800-222-1222</a></p>
 </body>
@@ -146,14 +146,14 @@ self.addEventListener('fetch', event => {
 self.addEventListener('push', event => {
   if (!event.data) return
   let data = {}
-  try { data = event.data.json() } catch { data = { title: 'NEXUS', body: event.data.text() } }
+  try { data = event.data.json() } catch { data = { title: 'AXVO', body: event.data.text() } }
 
-  const title   = data.title || 'NEXUS'
+  const title   = data.title || 'AXVO'
   const options = {
     body:    data.body    || 'You have a new notification.',
     icon:    data.icon    || '/icons/icon-192.png',
     badge:   '/icons/icon-192.png',
-    tag:     data.tag     || 'nexus-notification',
+    tag:     data.tag     || 'axvo-notification',
     data:    { url: data.url || '/' },
     vibrate: [200, 100, 200],
     actions: data.actions || [],
@@ -168,7 +168,7 @@ self.addEventListener('notificationclick', event => {
 
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
-      /* If NEXUS is already open, focus that tab */
+      /* If AXVO is already open, focus that tab */
       for (const client of clientList) {
         if (client.url.includes(self.location.origin) && 'focus' in client) {
           client.postMessage({ type: 'NOTIFICATION_CLICK', url })
@@ -183,9 +183,9 @@ self.addEventListener('notificationclick', event => {
 
 /* ── Background sync: retry failed form submissions ─ */
 self.addEventListener('sync', event => {
-  if (event.tag === 'nexus-retry-submit') {
+  if (event.tag === 'axvo-retry-submit') {
     event.waitUntil(
-      caches.open('nexus-pending-forms').then(async cache => {
+      caches.open('axvo-pending-forms').then(async cache => {
         const keys = await cache.keys()
         return Promise.all(keys.map(async req => {
           try {

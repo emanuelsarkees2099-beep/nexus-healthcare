@@ -1,6 +1,6 @@
 {
-  "name": "NEXUS — Free Healthcare, Found in Seconds",
-  "short_name": "NEXUS",
+  "name": "AXVO — Free Healthcare, Found in Seconds",
+  "short_name": "AXVO",
   "description": "Find free clinics, sliding-scale care, AI triage, and crisis support. No insurance required.",
   "start_url": "/search",
   "display": "standalone",
@@ -111,7 +111,7 @@
   "prefer_related_applications": false,
   "protocol_handlers": [
     {
-      "protocol": "web+nexus",
+      "protocol": "web+axvo",
       "url": "/search?q=%s"
     }
   ]

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 /*
- * NEXUS SMS Chatbot — Twilio Webhook Handler
+ * AXVO SMS Chatbot — Twilio Webhook Handler
  *
  * Setup:
  * 1. Create a Twilio account at twilio.com and buy a phone number
@@ -18,7 +18,7 @@ import { NextRequest, NextResponse } from 'next/server'
  * (fast + cheap), and returns TwiML.
  */
 
-const SYSTEM_PROMPT = `You are NEXUS, a healthcare navigation assistant helping uninsured Americans find free and low-cost care. You communicate via SMS so keep replies under 160 characters whenever possible (split into multiple messages only if truly necessary).
+const SYSTEM_PROMPT = `You are AXVO, a healthcare navigation assistant helping uninsured Americans find free and low-cost care. You communicate via SMS so keep replies under 160 characters whenever possible (split into multiple messages only if truly necessary).
 
 Your job:
 - Help users find free clinics, FQHCs, and sliding-scale providers near them
@@ -29,14 +29,14 @@ Your job:
 
 Rules:
 - NEVER give medical diagnoses or specific medical advice
-- Always remind users that NEXUS is for navigation, not diagnosis
+- Always remind users that AXVO is for navigation, not diagnosis
 - If someone mentions a medical emergency, immediately say "Call 911" first
 - If someone mentions suicidal thoughts or crisis, immediately say "Text 988 or call 988 now"
 - Be warm, clear, and human — not robotic
 - Support all languages — respond in the same language the user writes in
 - Keep responses SHORT and actionable — this is SMS
 
-If the user gives you a zip code, suggest they visit nexushealth.org/search or text SEARCH <zip> for nearby clinics.
+If the user gives you a zip code, suggest they visit axvohealth.org/search or text SEARCH <zip> for nearby clinics.
 
 You are here to help. Healthcare is a right.`
 
@@ -81,7 +81,7 @@ async function validateTwilioSignature(req: NextRequest, body: string): Promise<
 /* ─── Call Claude API directly via fetch ─── */
 async function callClaude(userMessage: string, lang: string): Promise<string> {
   const apiKey = process.env.ANTHROPIC_API_KEY
-  if (!apiKey) return 'NEXUS is temporarily unavailable. Call 1-800-275-4772 (HRSA) for free care referrals.'
+  if (!apiKey) return 'AXVO is temporarily unavailable. Call 1-800-275-4772 (HRSA) for free care referrals.'
 
   const langNote = lang !== 'en' ? ` [User appears to be writing in: ${lang} — respond in that language]` : ''
 
@@ -102,7 +102,7 @@ async function callClaude(userMessage: string, lang: string): Promise<string> {
 
   if (!response.ok) {
     console.error('Claude API error:', response.status, await response.text())
-    return 'Sorry, something went wrong. Visit nexushealth.org or call 1-800-275-4772 for free clinic help.'
+    return 'Sorry, something went wrong. Visit axvohealth.org or call 1-800-275-4772 for free clinic help.'
   }
 
   const data = await response.json()
@@ -138,13 +138,13 @@ export async function POST(req: NextRequest) {
   try {
     bodyText = await req.text()
   } catch {
-    return twiml('Sorry, we could not process your message. Visit nexushealth.org for help.')
+    return twiml('Sorry, we could not process your message. Visit axvohealth.org for help.')
   }
 
   // Validate Twilio signature in production — reject if token is not configured
   if (process.env.NODE_ENV === 'production') {
     if (!process.env.TWILIO_AUTH_TOKEN) {
-      console.error('[NEXUS SMS] TWILIO_AUTH_TOKEN not set — rejecting request in production')
+      console.error('[AXVO SMS] TWILIO_AUTH_TOKEN not set — rejecting request in production')
       return new NextResponse('Service Unavailable', { status: 503 })
     }
     const valid = await validateTwilioSignature(req, bodyText)
@@ -155,27 +155,30 @@ export async function POST(req: NextRequest) {
 
   const params = new URLSearchParams(bodyText)
   const incomingBody = params.get('Body')?.trim() ?? ''
-  const from = params.get('From') ?? 'unknown'
 
-  console.log(`[NEXUS SMS] From: ${from} | Message: "${incomingBody}"`)
+  /* Never log the sender's number or message body. People text this endpoint
+     about suicidal ideation, diagnoses, and immigration status; that content
+     would otherwise sit in plaintext in Vercel logs. Log only the shape of the
+     request, which is all that's needed to debug delivery. */
+  console.log(`[AXVO SMS] inbound msg received (len=${incomingBody.length})`)
 
   if (!incomingBody) {
-    return twiml('Hi! Text me your zip code or question and I\'ll help you find free healthcare near you. — NEXUS')
+    return twiml('Hi! Text me your zip code or question and I\'ll help you find free healthcare near you. — AXVO')
   }
 
   // Handle HELP keyword
   if (/^help$/i.test(incomingBody)) {
-    return twiml('NEXUS Help: Text your zip code to find free clinics. Text RIGHTS to learn your rights. Text STOP to unsubscribe. Web: nexushealth.org')
+    return twiml('AXVO Help: Text your zip code to find free clinics. Text RIGHTS to learn your rights. Text STOP to unsubscribe. Web: axvohealth.org')
   }
 
   // Handle STOP (Twilio handles this automatically but just in case)
   if (/^stop$/i.test(incomingBody)) {
-    return twiml('You have been unsubscribed from NEXUS. Reply START to resubscribe.')
+    return twiml('You have been unsubscribed from AXVO. Reply START to resubscribe.')
   }
 
   // Emergency keywords — highest priority
   if (/\b(emergency|911|dying|can't breathe|chest pain|stroke|overdose)\b/i.test(incomingBody)) {
-    return twiml('EMERGENCY: If this is a medical emergency, CALL 911 NOW. For free ER rights info after: nexushealth.org/rights')
+    return twiml('EMERGENCY: If this is a medical emergency, CALL 911 NOW. For free ER rights info after: axvohealth.org/rights')
   }
 
   // Crisis keywords
@@ -189,8 +192,8 @@ export async function POST(req: NextRequest) {
     const reply = await callClaude(incomingBody, lang)
     return twiml(reply)
   } catch (err) {
-    console.error('[NEXUS SMS] Error calling Claude:', err)
-    return twiml('Sorry, I\'m having trouble right now. Visit nexushealth.org or call 1-800-275-4772 (HRSA) for free care help.')
+    console.error('[AXVO SMS] Error calling Claude:', err)
+    return twiml('Sorry, I\'m having trouble right now. Visit axvohealth.org or call 1-800-275-4772 (HRSA) for free care help.')
   }
 }
 
@@ -198,7 +201,7 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   return NextResponse.json({
     status: 'ok',
-    service: 'NEXUS SMS Chatbot',
+    service: 'AXVO SMS Chatbot',
     instructions: 'This endpoint receives Twilio SMS webhooks. Configure your Twilio number to POST to /api/sms',
   })
 }

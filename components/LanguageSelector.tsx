@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { CloseSquare, Global } from 'iconsax-react'
 
-const STORAGE_KEY = 'nexus_language'
+const STORAGE_KEY = 'axvo_language'
 
 const LANGUAGES = [
   { code: 'en', label: 'English',    native: 'English',    flag: '🇺🇸' },
@@ -44,7 +44,7 @@ export default function LanguageSelector() {
   const choose = (code: string) => {
     setSelected(code)
     localStorage.setItem(STORAGE_KEY, code)
-    window.dispatchEvent(new CustomEvent('nexus:lang-changed'))
+    window.dispatchEvent(new CustomEvent('axvo:lang-changed'))
     setBanner(null)
     close()
   }
@@ -189,7 +189,7 @@ export default function LanguageSelector() {
             marginBottom: '16px',
           }}>
             <Global size={14} color="var(--accent)" variant="Linear" />
-            <span style={{ fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.08em', fontFamily: 'var(--font-inter)' }}>NEXUS · 12 languages</span>
+            <span style={{ fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.08em', fontFamily: 'var(--font-inter)' }}>AXVO · 12 languages</span>
           </div>
 
           <h2 style={{
@@ -209,7 +209,7 @@ export default function LanguageSelector() {
             fontWeight: 300,
             lineHeight: 1.6,
           }}>
-            NEXUS is available in 12 languages. Your choice is saved automatically.
+            AXVO is available in 12 languages. Your choice is saved automatically.
           </p>
         </div>
 

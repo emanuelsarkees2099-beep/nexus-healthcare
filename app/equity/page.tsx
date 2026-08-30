@@ -477,7 +477,7 @@ export default function EquityPage() {
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', flexShrink: 0 }}>
                 <a
                   href="/api/equity-data?format=csv"
-                  download="nexus-equity-data.csv"
+                  download="axvo-equity-data.csv"
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: '6px',
                     padding: '10px 20px', borderRadius: '100px',
@@ -492,7 +492,7 @@ export default function EquityPage() {
                 </a>
                 <a
                   href="/api/equity-data?format=json"
-                  download="nexus-equity-data.json"
+                  download="axvo-equity-data.json"
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: '6px',
                     padding: '10px 20px', borderRadius: '100px',

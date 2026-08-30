@@ -41,14 +41,14 @@ export default function JsonLd({ schema, id }: JsonLdProps) {
    Pre-built schema factories — import these in page/layout files
    ─────────────────────────────────────────────────────────────────────────── */
 
-const BASE_URL  = 'https://nexus.health'
+const BASE_URL  = 'https://axvo.health'
 const LOGO_URL  = `${BASE_URL}/icons/icon-512.png`
 
 /** Root WebApplication schema — used in app/layout.tsx */
 export const WEB_APP_SCHEMA = {
   '@context':        'https://schema.org',
   '@type':           'WebApplication',
-  name:              'NEXUS',
+  name:              'AXVO',
   url:               BASE_URL,
   logo:              LOGO_URL,
   applicationCategory: 'HealthApplication',
@@ -59,7 +59,7 @@ export const WEB_APP_SCHEMA = {
     priceCurrency: 'USD',
   },
   description:
-    'NEXUS finds free clinics, sliding-scale care, and hidden programs for the 30 million uninsured Americans who deserve better.',
+    'AXVO finds free clinics, sliding-scale care, and hidden programs for the 30 million uninsured Americans who deserve better.',
   featureList: [
     'Free clinic search by location',
     'Healthcare eligibility calculator',
@@ -78,14 +78,14 @@ export const WEB_APP_SCHEMA = {
 export const ORG_SCHEMA = {
   '@context': 'https://schema.org',
   '@type':    'Organization',
-  name:       'NEXUS',
+  name:       'AXVO',
   url:        BASE_URL,
   logo:       LOGO_URL,
   description:
-    'NEXUS is a free platform connecting uninsured Americans to free clinics, healthcare programs, and community support.',
+    'AXVO is a free platform connecting uninsured Americans to free clinics, healthcare programs, and community support.',
   foundingDate: '2024',
   sameAs: [
-    'https://twitter.com/nexushealth',
+    'https://twitter.com/axvohealth',
   ],
   contactPoint: {
     '@type':       'ContactPoint',
@@ -149,7 +149,7 @@ export const ELIGIBILITY_FAQ_SCHEMA = faqSchema([
   {
     question: 'How do I know if I qualify for free healthcare?',
     answer:
-      'Your eligibility depends on your income (relative to the Federal Poverty Level), household size, age, state of residence, and immigration status. The NEXUS eligibility wizard checks all of these factors and shows you which programs you likely qualify for in under 2 minutes.',
+      'Your eligibility depends on your income (relative to the Federal Poverty Level), household size, age, state of residence, and immigration status. The AXVO eligibility wizard checks all of these factors and shows you which programs you likely qualify for in under 2 minutes.',
   },
   {
     question: 'What is Medicaid and do I qualify?',
@@ -159,7 +159,7 @@ export const ELIGIBILITY_FAQ_SCHEMA = faqSchema([
   {
     question: 'Can I get free healthcare if I am undocumented?',
     answer:
-      'Yes. Federally Qualified Health Centers (FQHCs) and free clinics serve everyone regardless of immigration status. Emergency Medicaid covers emergency medical conditions in all states. Some states provide full Medicaid to undocumented residents. NEXUS shows you all options available in your state.',
+      'Yes. Federally Qualified Health Centers (FQHCs) and free clinics serve everyone regardless of immigration status. Emergency Medicaid covers emergency medical conditions in all states. Some states provide full Medicaid to undocumented residents. AXVO shows you all options available in your state.',
   },
   {
     question: 'What is the Federal Poverty Level (FPL)?',
@@ -169,12 +169,12 @@ export const ELIGIBILITY_FAQ_SCHEMA = faqSchema([
   {
     question: 'How long does it take to apply for Medicaid?',
     answer:
-      'You can apply for Medicaid online at your state\'s Medicaid agency website, and most applications take 10–20 minutes. States are required to process applications within 45 days (or 90 days for disability-based applications). NEXUS can show you the direct link to apply in your state.',
+      'You can apply for Medicaid online at your state\'s Medicaid agency website, and most applications take 10–20 minutes. States are required to process applications within 45 days (or 90 days for disability-based applications). AXVO can show you the direct link to apply in your state.',
   },
   {
     question: 'What if I don\'t qualify for any programs?',
     answer:
-      'Even if you don\'t qualify for Medicaid or CHIP, you likely have options: Federally Qualified Health Centers (FQHCs) offer care on a sliding-scale fee based on your income. Free clinics serve patients at no cost. Hill-Burton facilities must provide some free care. The NEXUS clinic finder shows all options near you.',
+      'Even if you don\'t qualify for Medicaid or CHIP, you likely have options: Federally Qualified Health Centers (FQHCs) offer care on a sliding-scale fee based on your income. Free clinics serve patients at no cost. Hill-Burton facilities must provide some free care. The AXVO clinic finder shows all options near you.',
   },
 ])
 
@@ -185,7 +185,7 @@ export const PROGRAMS_FAQ_SCHEMA = faqSchema([
   {
     question: 'What free healthcare programs are available to uninsured Americans?',
     answer:
-      'Major programs include: Medicaid (low-income adults and families), CHIP (children under 19), Ryan White Program (HIV/AIDS care), Hill-Burton (free hospital care obligation), 340B Drug Pricing Program (discounted medications), FQHC sliding-scale clinics, and state-specific programs. NEXUS shows you all programs available in your state.',
+      'Major programs include: Medicaid (low-income adults and families), CHIP (children under 19), Ryan White Program (HIV/AIDS care), Hill-Burton (free hospital care obligation), 340B Drug Pricing Program (discounted medications), FQHC sliding-scale clinics, and state-specific programs. AXVO shows you all programs available in your state.',
   },
   {
     question: 'What is CHIP and who qualifies?',

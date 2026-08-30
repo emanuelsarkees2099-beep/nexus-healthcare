@@ -34,9 +34,9 @@ test.describe('Triage page — load', () => {
     await expect(page).toHaveURL(/\/triage/)
   })
 
-  test('page title contains NEXUS', async ({ page }) => {
+  test('page title contains AXVO', async ({ page }) => {
     await goToTriage(page)
-    await expect(page).toHaveTitle(/NEXUS/i)
+    await expect(page).toHaveTitle(/AXVO/i)
   })
 
   test('symptom input area is visible', async ({ page }) => {

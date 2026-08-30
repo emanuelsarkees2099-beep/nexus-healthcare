@@ -1,4 +1,4 @@
-# NEXUS Health — Master Product Audit
+# AXVO Health — Master Product Audit
 ### Reviewed as: Apple HI designer · Linear/Vercel PM · UX researcher · YC founder · principal engineer · staff security engineer · healthcare architect · HIPAA consultant · growth PM · VC · health-system exec
 
 ---
@@ -66,8 +66,8 @@ promising, over-designed, under-validated prototype with a real data moat.**
 
 ## 3. BRANDING
 
-- **Name**: "NEXUS" is fine but generic and heavily used (there's a NEXUS
-  in every vertical). "Nexus Health" is safer. Not worth changing pre-launch;
+- **Name**: "AXVO" is fine but generic and heavily used (there's a AXVO
+  in every vertical). "Axvo Health" is safer. Not worth changing pre-launch;
   flag a trademark search before you spend on it.
 - **Logo**: the three-node glyph is clean and reads at small sizes. Keep.
 - **Typography**: Bricolage (display) + Inter (body) + JetBrains Mono is a
@@ -131,7 +131,7 @@ promising, over-designed, under-validated prototype with a real data moat.**
   Living Proof shortcuts it further. This is the win.
 - Friction points:
   - **Onboarding is nonexistent** — first-time users are dropped into a dark
-    app with a bottom dock they don't understand. A 3-screen "what NEXUS does /
+    app with a bottom dock they don't understand. A 3-screen "what AXVO does /
     it's free & anonymous / find care now" intro would lift activation.
   - **Empty states**: what happens on a search with zero results even at 75mi
     (rural AK/HI)? Must show telehealth + SMS + 211 fallbacks, never a blank.
@@ -365,7 +365,7 @@ Passport, Programs, Stories (as submission, not fake wall), Kids.
 
 ## 20. FUTURE VISION (v10.0)
 
-If NEXUS became a major American healthcare company: **the trusted navigation
+If AXVO became a major American healthcare company: **the trusted navigation
 layer for everyone the system fails.** Not a clinic finder — the place you go
 the moment you're sick and scared and don't know what you can afford. It knows
 your likely eligibility, builds your plan, books or preps the visit, tracks

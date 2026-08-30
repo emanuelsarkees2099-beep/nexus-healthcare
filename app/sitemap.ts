@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = process.env.NEXT_PUBLIC_APP_URL ?? 'https://nexus.health'
+  const base = process.env.NEXT_PUBLIC_APP_URL ?? 'https://axvo.health'
   const now  = new Date()
 
   const routes: Array<{

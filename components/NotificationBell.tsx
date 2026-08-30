@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { Notification as NotificationIcon, NotificationBing, CloseCircle, TickSquare, Clock, Flash, Star1, Calendar } from 'iconsax-react'
 import { createClientClient } from '@/lib/auth-client'
 
-export type NexusNotification = {
+export type AxvoNotification = {
   id: string
   type: 'digest' | 'clinic_update' | 'new_program' | 'reminder' | 'system'
   title: string
@@ -14,16 +14,16 @@ export type NexusNotification = {
   _synced?: boolean // true = came from DB, PATCH on mark-read
 }
 
-const STORAGE_KEY = 'nexus_notifications'
-const PUSH_KEY    = 'nexus_push_subscribed'
+const STORAGE_KEY = 'axvo_notifications'
+const PUSH_KEY    = 'axvo_push_subscribed'
 const UUID_RE     = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 const POLL_MS     = 60_000
 
-function seed(): NexusNotification[] {
+function seed(): AxvoNotification[] {
   return [
     {
       id: 'welcome-1', type: 'system',
-      title: 'Welcome to NEXUS',
+      title: 'Welcome to AXVO',
       body: 'Your free healthcare navigator is ready. Search clinics near you to get started.',
       url: '/search', read: false,
       created_at: new Date(Date.now() - 2 * 3600 * 1000).toISOString(),
@@ -45,7 +45,7 @@ function seed(): NexusNotification[] {
   ]
 }
 
-function loadLocal(): NexusNotification[] {
+function loadLocal(): AxvoNotification[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) {
@@ -53,18 +53,18 @@ function loadLocal(): NexusNotification[] {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(initial))
       return initial
     }
-    return JSON.parse(raw) as NexusNotification[]
+    return JSON.parse(raw) as AxvoNotification[]
   } catch {
     return seed()
   }
 }
 
-function saveLocal(list: NexusNotification[]) {
+function saveLocal(list: AxvoNotification[]) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)) } catch { /* ignore */ }
 }
 
 // Merge server + local: server notifications take precedence by id
-function merge(server: NexusNotification[], local: NexusNotification[]): NexusNotification[] {
+function merge(server: AxvoNotification[], local: AxvoNotification[]): AxvoNotification[] {
   const serverIds = new Set(server.map(n => n.id))
   const localOnly = local.filter(n => !serverIds.has(n.id))
   return [...server, ...localOnly]
@@ -80,7 +80,7 @@ function timeAgo(iso: string): string {
   return `${Math.floor(hrs / 24)}d ago`
 }
 
-const TYPE_ICON: Record<NexusNotification['type'], React.ReactNode> = {
+const TYPE_ICON: Record<AxvoNotification['type'], React.ReactNode> = {
   digest:        <Star1 size={13} variant="Linear" />,
   clinic_update: <Clock size={13} variant="Linear" />,
   new_program:   <Flash size={13} variant="Linear" />,
@@ -88,7 +88,7 @@ const TYPE_ICON: Record<NexusNotification['type'], React.ReactNode> = {
   system:        <NotificationIcon size={13} variant="Linear" />,
 }
 
-const TYPE_COLOR: Record<NexusNotification['type'], string> = {
+const TYPE_COLOR: Record<AxvoNotification['type'], string> = {
   digest:        '#fbbf24',
   clinic_update: 'var(--accent)',
   new_program:   '#60a5fa',
@@ -98,7 +98,7 @@ const TYPE_COLOR: Record<NexusNotification['type'], string> = {
 
 export default function NotificationBell() {
   const [open,          setOpen]          = useState(false)
-  const [notifications, setNotifications] = useState<NexusNotification[]>([])
+  const [notifications, setNotifications] = useState<AxvoNotification[]>([])
   const [authToken,     setAuthToken]     = useState<string | null>(null)
   const [pushOn,        setPushOn]        = useState(false)
   const [pushOk,        setPushOk]        = useState(false)
@@ -124,16 +124,16 @@ export default function NotificationBell() {
     })
 
     const handler = (e: Event) => {
-      const notif = (e as CustomEvent<NexusNotification>).detail
+      const notif = (e as CustomEvent<AxvoNotification>).detail
       setNotifications(prev => {
         const next = [notif, ...prev]
         saveLocal(next)
         return next
       })
     }
-    window.addEventListener('nexus:notification', handler as EventListener)
+    window.addEventListener('axvo:notification', handler as EventListener)
     return () => {
-      window.removeEventListener('nexus:notification', handler as EventListener)
+      window.removeEventListener('axvo:notification', handler as EventListener)
       subscription.unsubscribe()
     }
   }, [])
@@ -146,8 +146,8 @@ export default function NotificationBell() {
         cache: 'no-store',
       })
       if (!res.ok) return
-      const json = await res.json() as { notifications: NexusNotification[] }
-      const serverNotifs: NexusNotification[] = (json.notifications ?? []).map(n => ({ ...n, _synced: true }))
+      const json = await res.json() as { notifications: AxvoNotification[] }
+      const serverNotifs: AxvoNotification[] = (json.notifications ?? []).map(n => ({ ...n, _synced: true }))
       setNotifications(prev => {
         const merged = merge(serverNotifs, prev)
         saveLocal(merged)
@@ -239,10 +239,10 @@ export default function NotificationBell() {
       const perm = await Notification.requestPermission()
       if (perm === 'granted') {
         const reg = await navigator.serviceWorker.ready
-        await reg.showNotification('NEXUS notifications enabled', {
+        await reg.showNotification('AXVO notifications enabled', {
           body: "You'll be notified about clinic updates and new programs.",
           icon: '/icons/icon-192.png',
-          tag:  'nexus-push-enabled',
+          tag:  'axvo-push-enabled',
         })
         setPushOn(true)
         localStorage.setItem(PUSH_KEY, 'true')
@@ -385,7 +385,7 @@ export default function NotificationBell() {
 
 /* ── Individual notification row ── */
 function NotifRow({ notif, onRead, onDismiss, onClose }: {
-  notif: NexusNotification
+  notif: AxvoNotification
   onRead: (id: string, synced?: boolean) => void
   onDismiss: (id: string) => void
   onClose: () => void

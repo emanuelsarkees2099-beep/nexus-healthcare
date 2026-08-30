@@ -1,4 +1,4 @@
-# NEXUS — 3-Day Launch Plan + Everything Worth Knowing
+# AXVO — 3-Day Launch Plan + Everything Worth Knowing
 
 Written after a full-session audit of the codebase, live behavior at desktop
 and 375px, the data layer, and the API surface. Two sections:

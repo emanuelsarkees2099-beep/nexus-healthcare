@@ -23,7 +23,7 @@ export default function GlobalError({
     <html lang="en">
       <body style={{ margin: 0, background: '#050609', color: '#F8F9FF', fontFamily: 'system-ui, -apple-system, sans-serif', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
         <div style={{ textAlign: 'center', maxWidth: '440px' }}>
-          <div style={{ fontSize: '13px', letterSpacing: '0.42em', color: 'rgba(248,249,255,0.6)', marginBottom: '28px' }}>NEXUS</div>
+          <div style={{ fontSize: '13px', letterSpacing: '0.42em', color: 'rgba(248,249,255,0.6)', marginBottom: '28px' }}>AXVO</div>
           <h1 style={{ fontSize: '24px', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '12px' }}>Something went wrong.</h1>
           <p style={{ fontSize: '15px', lineHeight: 1.6, color: 'rgba(248,249,255,0.62)', marginBottom: '28px' }}>
             The page failed to load. You can try again — and if you need care right now,

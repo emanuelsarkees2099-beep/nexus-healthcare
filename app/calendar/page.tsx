@@ -149,7 +149,7 @@ const WHY_ITEMS = [
 ]
 
 /* ─── page ────────────────────────────────────────── */
-const CAL_KEY = 'nexus_calendar_prefs'
+const CAL_KEY = 'axvo_calendar_prefs'
 
 function loadCalPrefs() {
   if (typeof window === 'undefined') return null

@@ -126,7 +126,7 @@ function SearchResults() {
   const [inputVal,      setInputVal]      = useState(query)
   const [locationVal,   setLocationVal]   = useState(() => {
     if (locParam) return locParam
-    if (typeof window !== 'undefined') return localStorage.getItem('nexus_zip') || ''
+    if (typeof window !== 'undefined') return localStorage.getItem('axvo_zip') || ''
     return ''
   })
   const [activeFilter,  setActiveFilter]  = useState('all')
@@ -183,12 +183,12 @@ function SearchResults() {
 
   useEffect(() => { setInputVal(query) }, [query])
   useEffect(() => {
-    if (locParam) { setLocationVal(locParam); localStorage.setItem('nexus_zip', locParam) }
+    if (locParam) { setLocationVal(locParam); localStorage.setItem('axvo_zip', locParam) }
   }, [locParam])
 
   const handleLocationChange = (val: string) => {
     setLocationVal(val)
-    if (val.trim()) localStorage.setItem('nexus_zip', val.trim())
+    if (val.trim()) localStorage.setItem('axvo_zip', val.trim())
   }
 
   /* ── Typeahead: places (cities/states/ZIPs from /api/places, backed by
@@ -261,7 +261,7 @@ function SearchResults() {
   }
 
   useEffect(() => {
-    window.dispatchEvent(new CustomEvent('nexus:saved-count', { detail: savedCount }))
+    window.dispatchEvent(new CustomEvent('axvo:saved-count', { detail: savedCount }))
   }, [savedCount])
 
   useEffect(() => {
@@ -281,7 +281,7 @@ function SearchResults() {
       } else {
         /* ── Guest: load saved clinics from localStorage ── */
         try {
-          const existing = JSON.parse(localStorage.getItem('nexus_saved_clinics') || '{}')
+          const existing = JSON.parse(localStorage.getItem('axvo_saved_clinics') || '{}')
           const ids = new Set<string>(Object.keys(existing))
           setSavedIds(ids); setSavedCount(ids.size)
         } catch { /* ignore */ }
@@ -332,7 +332,7 @@ function SearchResults() {
         }
       } else {
         /* ── Guest: persist to localStorage ── */
-        const LS_KEY = 'nexus_saved_clinics'
+        const LS_KEY = 'axvo_saved_clinics'
         try {
           const existing: Record<string, object> = JSON.parse(localStorage.getItem(LS_KEY) || '{}')
           if (savedIds.has(id)) {
@@ -358,7 +358,7 @@ function SearchResults() {
     if (!savedIds.has(String(clinic.id))) {
       try {
         type ClinicReminder = { clinicId: string; clinicName: string; ts48h: number; ts11m: number; fired48h: boolean; fired11m: boolean }
-        const raw = localStorage.getItem('nexus_reminders')
+        const raw = localStorage.getItem('axvo_reminders')
         const reminders: ClinicReminder[] = raw ? JSON.parse(raw) : []
         const now = Date.now()
         const entry: ClinicReminder = {
@@ -368,7 +368,7 @@ function SearchResults() {
           fired48h: false, fired11m: false,
         }
         const updated = [entry, ...reminders.filter(r => r.clinicId !== String(clinic.id))]
-        localStorage.setItem('nexus_reminders', JSON.stringify(updated))
+        localStorage.setItem('axvo_reminders', JSON.stringify(updated))
       } catch { /* ignore */ }
     }
   }
@@ -377,15 +377,15 @@ function SearchResults() {
     e?.preventDefault()
     const loc = locationVal.trim()
     if (loc) {
-      localStorage.setItem('nexus_zip', loc)
+      localStorage.setItem('axvo_zip', loc)
       // E4 — persist recent searches for dashboard recent-searches panel
       try {
         type RecentSearch = { q: string; loc: string; ts: number }
-        const raw = localStorage.getItem('nexus_recent_searches')
+        const raw = localStorage.getItem('axvo_recent_searches')
         const recent: RecentSearch[] = raw ? JSON.parse(raw) : []
         const entry: RecentSearch = { q: inputVal.trim(), loc, ts: Date.now() }
         const updated = [entry, ...recent.filter(r => !(r.q === entry.q && r.loc === entry.loc))].slice(0, 8)
-        localStorage.setItem('nexus_recent_searches', JSON.stringify(updated))
+        localStorage.setItem('axvo_recent_searches', JSON.stringify(updated))
       } catch { /* Safari private / quota exceeded — ignore */ }
       router.push(`/search?q=${encodeURIComponent(inputVal.trim())}&loc=${encodeURIComponent(loc)}`)
       fetchClinics(loc, activeFilter, radius)

@@ -11,7 +11,7 @@
 
 1. Go to https://github.com/new
 2. Fill in the form:
-   - **Repository name**: `nexus-healthcare`
+   - **Repository name**: `axvo-healthcare`
    - **Description**: "A comprehensive free healthcare discovery platform connecting uninsured Americans with free clinics, sliding-scale care, and eligibility programs"
    - **Visibility**: Choose "Public" (for open-source) or "Private"
    - **Initialize repository**: UNCHECK all boxes (we already have these files)
@@ -27,7 +27,7 @@ Copy and paste these commands into your terminal:
 cd "C:\Users\marwa\Desktop\N E X U S"
 
 # Add GitHub remote
-git remote add origin https://github.com/YOUR_USERNAME/nexus-healthcare.git
+git remote add origin https://github.com/YOUR_USERNAME/axvo-healthcare.git
 
 # Rename branch to main (if using master)
 git branch -M main
@@ -40,7 +40,7 @@ git push -u origin main
 
 ### Step 3: Verify in GitHub
 
-1. Go to https://github.com/YOUR_USERNAME/nexus-healthcare
+1. Go to https://github.com/YOUR_USERNAME/axvo-healthcare
 2. You should see:
    - ✅ All files (111 total)
    - ✅ Commit history (4 commits)
@@ -76,7 +76,7 @@ git remote -v
 If it shows the wrong URL:
 ```bash
 git remote remove origin
-git remote add origin https://github.com/YOUR_USERNAME/nexus-healthcare.git
+git remote add origin https://github.com/YOUR_USERNAME/axvo-healthcare.git
 ```
 
 ### "fatal: Authentication failed"
@@ -90,7 +90,7 @@ GitHub no longer accepts password authentication. Use a personal access token:
 Or use SSH keys (recommended):
 1. Generate SSH key: `ssh-keygen -t ed25519 -C "your-email@example.com"`
 2. Add to GitHub: https://github.com/settings/keys
-3. Use SSH URL: `git@github.com:YOUR_USERNAME/nexus-healthcare.git`
+3. Use SSH URL: `git@github.com:YOUR_USERNAME/axvo-healthcare.git`
 
 ### "Permission denied (publickey)"
 SSH key permissions issue. Fix with:

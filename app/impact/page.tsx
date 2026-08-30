@@ -26,7 +26,7 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
   )
 }
 
-/* The real problem NEXUS is built for — publicly documented facts,
+/* The real problem AXVO is built for — publicly documented facts,
    attributed to their source. No invented platform metrics. */
 const PROBLEM = [
   { stat: '~26M', label: 'Americans are uninsured', src: 'KFF' },
@@ -34,7 +34,7 @@ const PROBLEM = [
   { stat: '30M+', label: 'patients served yearly by community health centers', src: 'HRSA' },
 ]
 
-/* What NEXUS actually provides today — verifiable facts about the product. */
+/* What AXVO actually provides today — verifiable facts about the product. */
 const CAPABILITIES = [
   { icon: <ShieldTick size={18} variant="Bold" color="var(--accent)" />, title: '18,900+ clinics indexed', body: 'Federally Qualified Health Centers, free clinics, and sliding-scale providers — sourced from HRSA and verified public data.' },
   { icon: <Global size={18} variant="Bold" color="var(--accent)" />, title: '48 languages', body: 'The whole platform — search, triage, results — works in the language people actually speak.' },
@@ -55,7 +55,7 @@ export default function ImpactPage() {
               Built to measure what<br />actually matters.
             </h1>
             <p style={{ fontSize: 'clamp(1rem, 1.4vw, 1.1rem)', color: 'var(--text-2)', lineHeight: 1.7, maxWidth: '560px', margin: '0 auto', fontFamily: 'var(--font-inter)' }}>
-              NEXUS is new. Rather than invent numbers, we&apos;ll publish real, transparent outcomes here
+              AXVO is new. Rather than invent numbers, we&apos;ll publish real, transparent outcomes here
               as we grow — and hold ourselves to them. Here is the problem we exist to solve, and what
               the product does today.
             </p>
@@ -82,11 +82,11 @@ export default function ImpactPage() {
           </div>
         </section>
 
-        {/* What NEXUS provides */}
+        {/* What AXVO provides */}
         <section style={{ maxWidth: '820px', margin: '0 auto', padding: 'clamp(56px, 9vh, 96px) clamp(20px, 5vw, 32px) 0' }}>
           <Reveal>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 700, letterSpacing: '-0.03em', textAlign: 'center', marginBottom: '36px', color: 'var(--text)' }}>
-              What NEXUS does today
+              What AXVO does today
             </h2>
           </Reveal>
           <div style={{ display: 'grid', gap: '14px' }}>

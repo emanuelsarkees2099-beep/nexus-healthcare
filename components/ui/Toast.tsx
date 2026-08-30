@@ -1,6 +1,6 @@
 'use client'
 /**
- * NEXUS Centralized Toast System (#35)
+ * AXVO Centralized Toast System (#35)
  *
  * Usage:
  *   import { useToast } from '@/components/ui/Toast'

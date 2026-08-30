@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════════
-   NEXUS — DESIGN SYSTEM v4
+   AXVO — DESIGN SYSTEM v4
    One accent. Three radii. Physical depth. No decoration without purpose.
    Reference: Apple · Linear · Vercel · Stripe
    ═══════════════════════════════════════════════════════════════════ */
@@ -34,7 +34,7 @@ label svg,
 .pill svg,
 .tag svg,
 .btn svg,
-.nexus-card svg,
+.axvo-card svg,
 .bento-card svg,
 .onboarding-option svg,
 [class*="card"] svg {
@@ -109,7 +109,7 @@ p, li, blockquote, figcaption, dd, .lead, .subtitle { text-wrap: pretty; }
   --life-dim:    rgba(106, 166, 255, 0.09);
   --life-glow:   rgba(106, 166, 255, 0.16);
 
-  /* ── SIGNATURE GRADIENTS — the visual identity of NEXUS ── */
+  /* ── SIGNATURE GRADIENTS — the visual identity of AXVO ── */
   --grad-vital:      linear-gradient(135deg, #5F9EF9 0%, #3B7DE8 100%);
   --grad-vital-soft: linear-gradient(135deg, rgba(79,142,240,0.14) 0%, rgba(59,125,232,0.10) 100%);
   --grad-text:       linear-gradient(100deg, #A8C9FF 0%, #5F9EF9 100%);
@@ -1491,11 +1491,11 @@ a.animated-link:hover::after { width: 100%; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   NEXUS-CARD — the universal interactive card
+   AXVO-CARD — the universal interactive card
    Flat. Dark. Physical depth on hover. No gradient borders.
    ═══════════════════════════════════════════════════════════════════ */
 
-.nexus-card {
+.axvo-card {
   position: relative;
   background: var(--bg2);
   border: 1px solid var(--border-subtle);
@@ -1506,7 +1506,7 @@ a.animated-link:hover::after { width: 100%; }
     box-shadow 0.28s ease,
     transform 0.28s var(--ease-out-expo);
 }
-.nexus-card:hover {
+.axvo-card:hover {
   border-color: var(--border);
   box-shadow: var(--shadow-hover);
   transform: translateY(-4px);
@@ -1538,7 +1538,7 @@ a[role="button"]:active {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   NEXUS BUTTON SYSTEM — 3 variants, 2 sizes, full state machine
+   AXVO BUTTON SYSTEM — 3 variants, 2 sizes, full state machine
    Usage:  <button class="btn btn-primary">...</button>
            <button class="btn btn-secondary btn-sm">...</button>
            <button class="btn btn-ghost">...</button>
@@ -1796,7 +1796,7 @@ a[role="button"]:active {
 
 @container (max-width: 320px) {
   .card-container .clinic-card  { padding: 14px 16px !important; }
-  .card-container .nexus-card   { padding: 16px 18px !important; }
+  .card-container .axvo-card   { padding: 16px 18px !important; }
 }
 @container (min-width: 500px) {
   .card-container .clinic-card  { padding: 22px 28px !important; }
@@ -2471,7 +2471,7 @@ a:not(.no-press):active,
 }
 
 /* Map existing card systems to semantic variants */
-/* .nexus-card and .bento-card → interactive-card behavior */
+/* .axvo-card and .bento-card → interactive-card behavior */
 /* .wallet-card → surface-card behavior */
 .wallet-card {
   /* Upgrade to glass-card */
@@ -3054,7 +3054,7 @@ button[aria-pressed="true"] {
 
 /* ═══════════════════════════════════════════════════════════════════
    PHASE 7 — PREMIUM ANIMATION SYSTEM
-   Market-leading animation library for NEXUS landing page.
+   Market-leading animation library for AXVO landing page.
    Patterns from Linear, Vercel, Stripe, and Awwwards winners.
    ═══════════════════════════════════════════════════════════════════ */
 
@@ -3689,7 +3689,7 @@ button[aria-pressed="true"] {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   NEXUS FORM SYSTEM — floating labels, consistent inputs
+   AXVO FORM SYSTEM — floating labels, consistent inputs
    Usage:
      <div class="field">
        <input class="field-input" type="text" placeholder=" " id="email" />
@@ -3800,7 +3800,7 @@ button[aria-pressed="true"] {
 }
 
 /* ── Standard non-floating input for simpler contexts ── */
-.nexus-input {
+.axvo-input {
   width: 100%;
   background: rgba(255,255,255,0.04);
   border: 1px solid var(--border);
@@ -3812,8 +3812,8 @@ button[aria-pressed="true"] {
   outline: none;
   transition: border-color var(--dur-base) ease, box-shadow var(--dur-base) ease;
 }
-.nexus-input::placeholder { color: var(--text-3); }
-.nexus-input:focus {
+.axvo-input::placeholder { color: var(--text-3); }
+.axvo-input:focus {
   border-color: rgba(79,142,240,0.50);
   box-shadow: 0 0 0 3px rgba(79,142,240,0.12);
 }
@@ -3896,13 +3896,13 @@ button[aria-pressed="true"] {
     inset 0 1px 0 rgba(255,255,255,0.10) !important;
 }
 
-/* All nexus-cards get specular too */
-.nexus-card {
+/* All axvo-cards get specular too */
+.axvo-card {
   box-shadow:
     var(--shadow-card),
     inset 0 1px 0 rgba(255,255,255,0.055);
 }
-.nexus-card:hover {
+.axvo-card:hover {
   box-shadow:
     var(--shadow-hover),
     inset 0 1px 0 rgba(255,255,255,0.09);
@@ -4509,7 +4509,7 @@ input:focus, textarea:focus, select:focus {
 ::-webkit-scrollbar-thumb:hover { background: rgba(79,142,240,0.45); }
 
 /* ═══════════════════════════════════════════════════════════════════
-   NEXUS ANIMATION LIBRARY v2 — "Best animations on the market"
+   AXVO ANIMATION LIBRARY v2 — "Best animations on the market"
    Every keyframe here does something that cannot be faked with a
    simple opacity fade. Multi-axis, multi-phase, physically grounded.
    ═══════════════════════════════════════════════════════════════════ */
@@ -5366,7 +5366,7 @@ body {
   }
   /* Disable hover card lifts on touch — they fire on tap and feel broken */
   .bento-card:hover,
-  .nexus-card:hover,
+  .axvo-card:hover,
   .clinic-card:hover {
     transform: none !important;
   }
@@ -5563,7 +5563,7 @@ input[inputmode="decimal"] {
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   NEXUS MOBILE — Apple-quality native feel
+   AXVO MOBILE — Apple-quality native feel
    Baseline: iPhone SE (375px) → iPhone 15 Pro Max (430px)
              → mid-range Android (360–393px)
    Philosophy: full-width content, 16-20px side gutters,
@@ -5759,13 +5759,13 @@ input[inputmode="decimal"] {
 
 /* ── 8. CARD SYSTEM: full-width on mobile ───────────────────────── */
 @media (max-width: 768px) {
-  .bento-card, .nexus-card {
+  .bento-card, .axvo-card {
     /* Ensure cards never overflow their container */
     min-width: 0 !important;
     word-break: break-word !important;
   }
   /* Clinic cards: clean tap state */
-  .clinic-card, .bento-card, .nexus-card {
+  .clinic-card, .bento-card, .axvo-card {
     -webkit-tap-highlight-color: transparent;
   }
 }

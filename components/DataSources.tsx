@@ -3,7 +3,7 @@
  * DataSources — the honest replacement for the removed fake-testimonial wall.
  *
  * Instead of inventing patient quotes, we show the real, verifiable
- * foundation of the product: the authoritative public datasets NEXUS is
+ * foundation of the product: the authoritative public datasets AXVO is
  * built on. This is what actually earns trust in healthcare — provenance,
  * not manufactured social proof.
  */
@@ -41,7 +41,7 @@ export default function DataSources() {
         Every clinic, from a source you can check.
       </h2>
       <p style={{ fontSize: 'clamp(0.95rem, 1.3vw, 1.05rem)', color: 'var(--text-2)', lineHeight: 1.7, maxWidth: '540px', margin: '0 auto 44px', fontFamily: 'var(--font-inter)', opacity: visible ? 1 : 0, transition: 'opacity 0.7s ease 0.1s' }}>
-        We don&apos;t invent numbers or testimonials. NEXUS is built on authoritative,
+        We don&apos;t invent numbers or testimonials. AXVO is built on authoritative,
         publicly verifiable healthcare datasets — the same ones federal agencies and
         researchers use.
       </p>

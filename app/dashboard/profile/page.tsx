@@ -199,7 +199,7 @@ export default function ProfilePage() {
           onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.38)')}
         >
           <ArrowLeft size={14} color="rgba(255,255,255,0.5)" variant="Linear" />
-          NEXUS
+          AXVO
         </Link>
         <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-mono, monospace)' }}>
           Account settings
@@ -329,7 +329,7 @@ export default function ProfilePage() {
                 />
               </Field>
 
-              <Field label="Role" hint="How you use NEXUS">
+              <Field label="Role" hint="How you use AXVO">
                 <div style={{ display: 'flex', gap: '6px' }}>
                   {(Object.entries(USER_TYPE_META) as [UserType, typeof USER_TYPE_META[UserType]][]).map(([type, meta]) => (
                     <button

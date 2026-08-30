@@ -1,5 +1,5 @@
 /**
- * NEXUS — Search utility functions
+ * AXVO — Search utility functions
  *
  * Pure, side-effect-free helpers used by the search page and its unit tests.
  * Extracted from app/search/page.tsx so they can be imported by Vitest without

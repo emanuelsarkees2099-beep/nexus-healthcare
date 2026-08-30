@@ -10,13 +10,13 @@ export default function AccessibilityControls() {
 
   // Persist & apply
   useEffect(() => {
-    const saved = localStorage.getItem('nexus_a11y_mode') as Mode | null
+    const saved = localStorage.getItem('axvo_a11y_mode') as Mode | null
     if (saved) applyMode(saved)
   }, [])
 
   function applyMode(m: Mode) {
     setMode(m)
-    localStorage.setItem('nexus_a11y_mode', m)
+    localStorage.setItem('axvo_a11y_mode', m)
     const root = document.documentElement
     root.classList.remove('a11y-large', 'a11y-contrast')
     if (m === 'large-text')    root.classList.add('a11y-large')

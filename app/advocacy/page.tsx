@@ -161,12 +161,12 @@ export default function AdvocacyPage() {
 
   function shareOnTwitter(title: string, petitionId: string) {
     const text = encodeURIComponent(`I just signed: "${title}" — join me in demanding better healthcare access for all Americans`)
-    const url  = encodeURIComponent(`${typeof window !== 'undefined' ? window.location.origin : 'https://nexus-health.app'}/advocacy#${petitionId}`)
+    const url  = encodeURIComponent(`${typeof window !== 'undefined' ? window.location.origin : 'https://axvo-health.app'}/advocacy#${petitionId}`)
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'noopener,noreferrer')
   }
 
   function shareOnFacebook(petitionId: string) {
-    const url = encodeURIComponent(`${typeof window !== 'undefined' ? window.location.origin : 'https://nexus-health.app'}/advocacy#${petitionId}`)
+    const url = encodeURIComponent(`${typeof window !== 'undefined' ? window.location.origin : 'https://axvo-health.app'}/advocacy#${petitionId}`)
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'noopener,noreferrer')
   }
 

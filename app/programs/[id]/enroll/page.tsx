@@ -256,7 +256,7 @@ const GENERIC_GUIDE: ProgramGuide = {
       tip: 'Follow up 2 weeks after applying if you haven\'t heard back.',
     },
   ],
-  source: 'NEXUS · Verified 2025',
+  source: 'AXVO · Verified 2025',
 }
 
 export default function EnrollPage({ params }: { params: Promise<{ id: string }> }) {

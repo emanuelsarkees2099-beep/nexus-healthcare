@@ -75,7 +75,7 @@ function Panel1() {
           letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '6px',
           fontFamily: 'var(--font-inter)',
         }}>
-          NEXUS recommends
+          AXVO recommends
         </div>
         <div style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 500, marginBottom: '4px', fontFamily: 'var(--font-inter)' }}>
           Free clinic visit &mdash; not an ER

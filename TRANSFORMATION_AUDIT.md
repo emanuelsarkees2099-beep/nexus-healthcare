@@ -1,4 +1,4 @@
-# NEXUS HEALTH — Master Product Transformation Audit
+# AXVO HEALTH — Master Product Transformation Audit
 
 Written after a full inspection of the codebase across many sessions: every
 page, component, API route, the clinics data layer, auth via Supabase +
@@ -15,7 +15,7 @@ P0 = launch-blocking · P1 = first month · P2 = first 6 months · P3 = strategi
 
 # 0. THE ONE-PARAGRAPH TRUTH
 
-NEXUS's durable asset is its **data + routing** (18,938 geocoded clinics, every
+AXVO's durable asset is its **data + routing** (18,938 geocoded clinics, every
 US city/ZIP, sub-second radius search) — not its UI, which has been rebuilt ~15
 times. The product is a strong *finder* with no *retention loop*, no *revenue
 model*, no *tests/CI*, and — until this week — fabricated medical claims. The
@@ -420,10 +420,10 @@ success, keyboard-only completion of core loop.
 # 14. BRANDING
 
 **Current state.** Strong type stack, clean 3-node logo, distinctive dark
-landing. Name "NEXUS" is generic/common.
+landing. Name "AXVO" is generic/common.
 
 **Critical problems.** Dark theme fights the trust conventions of the audience.
-Trademark risk on "NEXUS." Empty social proof (fake wall removed → DataSources
+Trademark risk on "AXVO." Empty social proof (fake wall removed → DataSources
 added).
 
 **Short-term.** Trademark search; light/warm variant test; founder-story block
@@ -515,7 +515,7 @@ for a new dev, review turnaround.
 - **Community trust graph** — verification and reviews from real users +
   CHWs compound into the most trusted safety-net dataset in the country.
 - **SMS/USSD for the unconnected** — full care navigation with no smartphone.
-- **Discharge-planner portal** — hospitals hand patients to NEXUS at discharge,
+- **Discharge-planner portal** — hospitals hand patients to AXVO at discharge,
   closing the loop that causes readmissions.
 
 ---

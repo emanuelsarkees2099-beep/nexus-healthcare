@@ -1,5 +1,5 @@
 /**
- * NEXUS — Centralized page metadata
+ * AXVO — Centralized page metadata
  * Each route's layout.tsx imports from here to keep metadata DRY
  * and easy to update in one place.
  *
@@ -11,8 +11,8 @@
  */
 import type { Metadata } from 'next'
 
-const BASE_URL      = process.env.NEXT_PUBLIC_APP_URL ?? 'https://nexus.health'
-const SITE_NAME     = 'NEXUS'
+const BASE_URL      = process.env.NEXT_PUBLIC_APP_URL ?? 'https://axvo.health'
+const SITE_NAME     = 'AXVO'
 const KEYWORDS_BASE = ['free healthcare', 'free clinic', 'uninsured', 'no insurance', 'healthcare access']
 
 /**
@@ -121,36 +121,36 @@ export const PAGE_META = {
 
   impact: meta(
     'Our Impact',
-    'See how NEXUS is connecting uninsured Americans to free healthcare — by the numbers.',
-    ['healthcare impact', 'NEXUS statistics', 'free clinic impact'],
+    'See how AXVO is connecting uninsured Americans to free healthcare — by the numbers.',
+    ['healthcare impact', 'AXVO statistics', 'free clinic impact'],
     { page: 'impact' },
   ),
 
   /* ── Account & personal ──────────────────────────────────────── */
   dashboard: meta(
     'Your Dashboard',
-    'Your personalized NEXUS dashboard — saved clinics, active programs, and your health passport in one place.',
+    'Your personalized AXVO dashboard — saved clinics, active programs, and your health passport in one place.',
     [],
-    { title: 'Your NEXUS Dashboard', sub: 'Saved clinics, programs, and your health journey.' },
+    { title: 'Your AXVO Dashboard', sub: 'Saved clinics, programs, and your health journey.' },
   ),
 
   profile: meta(
     'Your Profile',
-    'Manage your NEXUS account details, notification preferences, and privacy settings.',
+    'Manage your AXVO account details, notification preferences, and privacy settings.',
     [],
     { title: 'Your Profile', sub: 'Account settings and preferences.' },
   ),
 
   settingsProfile: meta(
     'Profile Settings',
-    'Update your NEXUS account details, contact information, and notification preferences.',
+    'Update your AXVO account details, contact information, and notification preferences.',
     [],
     { title: 'Profile Settings', sub: 'Your account details and preferences.' },
   ),
 
   settingsSecurity: meta(
     'Security Settings',
-    'Manage your NEXUS password, two-factor authentication, recovery codes, and active sessions.',
+    'Manage your AXVO password, two-factor authentication, recovery codes, and active sessions.',
     [],
     { title: 'Security Settings', sub: 'Password, two-factor auth, and sessions.' },
   ),
@@ -171,29 +171,29 @@ export const PAGE_META = {
 
   /* ── Meta / info ─────────────────────────────────────────────── */
   about: meta(
-    'About NEXUS',
-    'NEXUS is a free tool connecting 30 million uninsured Americans to federally-funded health centers, free clinics, and assistance programs.',
-    ['about NEXUS', 'who we are', 'NEXUS mission', 'free healthcare mission'],
-    { title: 'About NEXUS', sub: 'Free healthcare, found in seconds. No insurance required.' },
+    'About AXVO',
+    'AXVO is a free tool connecting 30 million uninsured Americans to federally-funded health centers, free clinics, and assistance programs.',
+    ['about AXVO', 'who we are', 'AXVO mission', 'free healthcare mission'],
+    { title: 'About AXVO', sub: 'Free healthcare, found in seconds. No insurance required.' },
   ),
 
   methodology: meta(
     'Our Data Methodology',
-    'How NEXUS sources, verifies, and updates free clinic and healthcare program data. Transparency in every record.',
+    'How AXVO sources, verifies, and updates free clinic and healthcare program data. Transparency in every record.',
     ['data methodology', 'clinic data sources', 'HRSA data', 'NAFC data', 'data accuracy'],
     { title: 'Data Methodology', sub: 'How we source and verify 18,000+ clinic records.' },
   ),
 
   open: meta(
     'Open Roadmap',
-    "NEXUS is built in the open. See what we're working on, vote on features, and contribute to the mission.",
+    "AXVO is built in the open. See what we're working on, vote on features, and contribute to the mission.",
     ['open roadmap', 'product roadmap', 'feature requests', 'open source healthcare'],
     { title: 'Open Roadmap', sub: 'What we are building next — vote and contribute.' },
   ),
 
   outcomes: meta(
     'Health Outcomes Data',
-    'Explore data on patient outcomes from FQHC and free clinic visits — how NEXUS users improved their health access.',
+    'Explore data on patient outcomes from FQHC and free clinic visits — how AXVO users improved their health access.',
     ['health outcomes', 'FQHC outcomes', 'free clinic data', 'patient results'],
     { title: 'Health Outcomes Data', sub: 'How care access changes lives — by the numbers.' },
   ),
@@ -242,41 +242,41 @@ export const PAGE_META = {
 
   login: meta(
     'Sign In',
-    'Sign in to your NEXUS account to access your saved clinics, submissions, and health passport.',
+    'Sign in to your AXVO account to access your saved clinics, submissions, and health passport.',
     [],
-    { title: 'Sign In to NEXUS', sub: 'Access your saved clinics and health journey.' },
+    { title: 'Sign In to AXVO', sub: 'Access your saved clinics and health journey.' },
   ),
 
   signup: meta(
     'Create Your Free Account',
-    'Join NEXUS to save clinics, track programs, share your story, and get personalized healthcare guidance. Always free.',
+    'Join AXVO to save clinics, track programs, share your story, and get personalized healthcare guidance. Always free.',
     ['create account', 'sign up', 'free account'],
     { title: 'Create Your Free Account', sub: 'Save clinics, track programs, share your story.' },
   ),
 
   forgotPassword: meta(
     'Reset Your Password',
-    "Reset your NEXUS account password. We'll send a reset link to your email address.",
+    "Reset your AXVO account password. We'll send a reset link to your email address.",
     [],
     { title: 'Reset Password', sub: 'We will send a reset link to your email.' },
   ),
 
   resetPassword: meta(
     'Set a New Password',
-    'Create a new, secure password to regain access to your NEXUS account.',
+    'Create a new, secure password to regain access to your AXVO account.',
     [],
     { title: 'Set New Password', sub: 'Choose a strong password for your account.' },
   ),
 
   verifyEmail: meta(
     'Verify Your Email',
-    'Check your inbox to confirm your NEXUS account email address.',
+    'Check your inbox to confirm your AXVO account email address.',
     [],
     { title: 'Verify Email', sub: 'One click and you are all set.' },
   ),
 
   onboarding: meta(
-    'Get Started with NEXUS',
+    'Get Started with AXVO',
     'Tell us a little about yourself so we can find the right free healthcare resources for you.',
     ['get started', 'healthcare onboarding', 'personalized care'],
     { title: 'Get Started', sub: 'Find the right care for your situation.' },
@@ -284,7 +284,7 @@ export const PAGE_META = {
 
   verify: meta(
     'Verify Your Information',
-    'Verify your identity or healthcare information to access additional NEXUS features.',
+    'Verify your identity or healthcare information to access additional AXVO features.',
     [],
     { title: 'Verify', sub: 'Confirm your information to continue.' },
   ),

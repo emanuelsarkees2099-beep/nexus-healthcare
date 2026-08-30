@@ -1,4 +1,4 @@
-# NEXUS — Launch Readiness (what's done, what needs you)
+# AXVO — Launch Readiness (what's done, what needs you)
 
 Status after 7 batches of hardening. The code is in launch-grade shape.
 Everything below marked **YOU** needs a human — mostly ~30 min of account

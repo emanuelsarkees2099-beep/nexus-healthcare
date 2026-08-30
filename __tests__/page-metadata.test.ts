@@ -2,7 +2,7 @@
  * C8 — Unit tests: lib/page-metadata.ts
  *
  * Verifies that every entry in PAGE_META:
- *   1. Has a title in the form "<Page Title> — NEXUS"
+ *   1. Has a title in the form "<Page Title> — AXVO"
  *   2. Has a non-empty description
  *   3. Has an openGraph block with correct title/description/images
  *   4. Has a twitter block with card="summary_large_image"
@@ -18,13 +18,13 @@ import type { Metadata } from 'next'
 
 /* ── helpers ──────────────────────────────────────────────────────── */
 const BASE_KEYWORDS = ['free healthcare', 'free clinic', 'uninsured', 'no insurance', 'healthcare access']
-const SITE_NAME     = 'NEXUS'
+const SITE_NAME     = 'AXVO'
 
 function assertMetaShape(key: string, meta: Metadata) {
   const title = meta.title as string
 
   // Title format
-  expect(title, `${key}: title should end with — NEXUS`).toMatch(/— NEXUS$/)
+  expect(title, `${key}: title should end with — AXVO`).toMatch(/— AXVO$/)
   expect(title.length, `${key}: title should be non-empty`).toBeGreaterThan(7)
 
   // Description

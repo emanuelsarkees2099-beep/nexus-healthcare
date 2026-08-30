@@ -83,7 +83,7 @@ const QUESTIONS: Question[] = [
         label: 'I\'m helping someone else find care',
         sub: 'Caregiver or family member',
         icon: <Heart size={18} color="currentColor" variant="TwoTone" />,
-        insight: 'NEXUS works great for caregivers. We\'ll tailor suggestions for the person you\'re helping.',
+        insight: 'AXVO works great for caregivers. We\'ll tailor suggestions for the person you\'re helping.',
       },
     ],
   },
@@ -631,7 +631,7 @@ export default function OnboardingPage() {
   const finishOnboarding = async () => {
     // Always persist to localStorage
     try {
-      localStorage.setItem('nexus_onboarding', JSON.stringify({
+      localStorage.setItem('axvo_onboarding', JSON.stringify({
         answers,
         completedAt: new Date().toISOString(),
         version: 2,

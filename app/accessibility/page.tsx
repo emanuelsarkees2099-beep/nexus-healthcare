@@ -2,15 +2,15 @@ import type { Metadata } from 'next'
 import AppShell from '@/components/AppShell'
 
 export const metadata: Metadata = {
-  title: 'Accessibility — NEXUS',
-  description: 'How NEXUS works to be usable by everyone, and how to reach us about accessibility barriers.',
+  title: 'Accessibility — AXVO',
+  description: 'How AXVO works to be usable by everyone, and how to reach us about accessibility barriers.',
 }
 
 const SECTIONS: { title: string; body: string[] }[] = [
   {
     title: 'Our commitment',
     body: [
-      'NEXUS exists to remove barriers to healthcare — so removing barriers to using NEXUS itself is core to the mission. We aim to conform to the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA, and we treat accessibility as an ongoing responsibility, not a one-time checkbox.',
+      'AXVO exists to remove barriers to healthcare — so removing barriers to using AXVO itself is core to the mission. We aim to conform to the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA, and we treat accessibility as an ongoing responsibility, not a one-time checkbox.',
       'Many of the people we serve are older, disabled, low-vision, hard of hearing, or navigating care under stress. The product is built for them first.',
     ],
   },
@@ -34,13 +34,13 @@ const SECTIONS: { title: string; body: string[] }[] = [
   {
     title: 'Emergencies',
     body: [
-      'NEXUS is not a substitute for emergency care. If you are experiencing a medical emergency, call 911. If you are in a mental-health crisis, call or text 988 (the Suicide & Crisis Lifeline).',
+      'AXVO is not a substitute for emergency care. If you are experiencing a medical emergency, call 911. If you are in a mental-health crisis, call or text 988 (the Suicide & Crisis Lifeline).',
     ],
   },
   {
     title: 'Contact us about accessibility',
     body: [
-      'If any part of NEXUS is difficult or impossible for you to use, please tell us — we treat accessibility reports as high priority. Email accessibility@nexus.health with the page, your device or assistive technology, and what went wrong, and we will respond and work to fix it.',
+      'If any part of AXVO is difficult or impossible for you to use, please tell us — we treat accessibility reports as high priority. Email accessibility@axvo.health with the page, your device or assistive technology, and what went wrong, and we will respond and work to fix it.',
     ],
   },
 ]

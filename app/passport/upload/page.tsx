@@ -98,7 +98,7 @@ export default function PassportUploadPage() {
 
   const handleSave = (label: string) => {
     setSaved(prev => new Set([...prev, label]))
-    // Production: merges into nexus_passport localStorage key and syncs to passport page
+    // Production: merges into axvo_passport localStorage key and syncs to passport page
   }
 
   const handleSaveAll = () => {
@@ -244,7 +244,7 @@ export default function PassportUploadPage() {
         <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', padding: '12px 14px', borderRadius: 12, background: 'rgba(52,211,153,0.04)', border: '1px solid rgba(52,211,153,0.12)', marginTop: 14 }}>
           <Shield size={13} color="#34d399" style={{ flexShrink: 0, marginTop: 1 }} />
           <p style={{ fontSize: 11.5, color: 'rgba(52,211,153,0.7)', margin: 0, lineHeight: 1.6 }}>
-            <strong>Your data stays on your device.</strong> In production, extraction runs via an encrypted tunnel using Claude claude-sonnet-4-6. NEXUS never stores your raw documents.
+            <strong>Your data stays on your device.</strong> In production, extraction runs via an encrypted tunnel using Claude claude-sonnet-4-6. AXVO never stores your raw documents.
           </p>
         </div>
 

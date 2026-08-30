@@ -1,4 +1,4 @@
-# NEXUS Deployment Guide
+# AXVO Deployment Guide
 
 ## Vercel Deployment Status
 
@@ -27,14 +27,14 @@ To push this project to GitHub and connect it to Vercel:
 
 1. Go to https://github.com/new
 2. Create a new repository:
-   - **Name**: `nexus-healthcare` (or your preferred name)
+   - **Name**: `axvo-healthcare` (or your preferred name)
    - **Description**: "A comprehensive free healthcare discovery platform"
    - **Public** or **Private** (your choice)
    - **Don't** initialize with README, .gitignore, or license (we have these)
 3. Click "Create repository"
 4. From the local repository, add the GitHub remote:
    ```bash
-   git remote add origin https://github.com/YOUR_USERNAME/nexus-healthcare.git
+   git remote add origin https://github.com/YOUR_USERNAME/axvo-healthcare.git
    git branch -M main
    git push -u origin main
    ```
@@ -42,7 +42,7 @@ To push this project to GitHub and connect it to Vercel:
 ### Option 2: Using GitHub CLI (if installed)
 
 ```bash
-gh repo create nexus-healthcare --public --source=. --remote=origin --push
+gh repo create axvo-healthcare --public --source=. --remote=origin --push
 ```
 
 ## Connect to Vercel via GitHub
@@ -52,7 +52,7 @@ Once your repository is on GitHub:
 1. Go to https://vercel.com/dashboard
 2. Click "Add New..." → "Project"
 3. Select "Import Git Repository"
-4. Find and select `nexus-healthcare`
+4. Find and select `axvo-healthcare`
 5. Configure project settings:
    - Framework: Next.js (should auto-detect)
    - Build Command: `npm run build` (default)

@@ -34,7 +34,7 @@ export interface HealthScoreInput {
   passportHasEmergencyContact: boolean
   /** User has visited / saved a clinic */
   hasSavedClinic: boolean
-  /** nexus_calendar_prefs — has generated a screening plan */
+  /** axvo_calendar_prefs — has generated a screening plan */
   calendarSetUp: boolean
   /** Number of due screenings (from calendar) */
   dueScreeningsCount: number

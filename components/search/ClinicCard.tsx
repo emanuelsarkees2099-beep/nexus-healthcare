@@ -107,7 +107,7 @@ function ReviewModal({
   const handleSubmit = () => {
     if (stars === 0) return
     // Persist locally (48-hour block prevents duplicate reviews per clinic)
-    const key = `nexus_review_${clinicId}`
+    const key = `axvo_review_${clinicId}`
     localStorage.setItem(key, JSON.stringify({ stars, tags: [...tags], note, ts: Date.now() }))
     setDone(true)
     setTimeout(onClose, 1800)
@@ -268,13 +268,12 @@ export default function ClinicCard({
   /* Check if user already reviewed this clinic in past 48 h — run once on mount */
   const [alreadyReviewed] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false
-    const stored = localStorage.getItem(`nexus_review_${clinic.id}`)
+    const stored = localStorage.getItem(`axvo_review_${clinic.id}`)
     if (!stored) return false
     try { return (Date.now() - JSON.parse(stored).ts) < 48 * 60 * 60 * 1000 } catch { return false }
   })
 
   const openStatus = isOpenNow(clinic.hours)
-  if (openNowFilter && openStatus === false) return null
 
   const score  = clinic.affordability_score ?? (clinic.free ? 95 : clinic.sliding_scale ? 72 : 40)
   const aLabel: AffordabilityLabel = clinic.affordability_label ?? (clinic.free ? 'likely-free' : clinic.sliding_scale ? 'low-cost' : 'standard')
@@ -292,7 +291,7 @@ export default function ClinicCard({
   const handleShare = useCallback(async () => {
     const shareData = {
       title: clinic.name,
-      text: `Free clinic: ${clinic.name} — ${clinic.address}, ${clinic.city} ${clinic.state}. Found on NEXUS (nexus.health)`,
+      text: `Free clinic: ${clinic.name} — ${clinic.address}, ${clinic.city} ${clinic.state}. Found on AXVO (axvo.health)`,
       url: clinicUrl,
     }
     if (navigator.share) {
@@ -324,6 +323,13 @@ export default function ClinicCard({
       toast({ title: 'Clinic saved!', body: `${clinic.name} added to your list.`, variant: 'success', icon: <Bookmark2 size={14} variant="Bold" /> })
     }
   }, [saving, isSaved, clinic, onBookmark, toast])
+
+  /* "Open now" filter — must stay BELOW every hook. The card keeps a stable
+     key={clinic.id}, so toggling the filter re-renders this same instance
+     rather than remounting it; bailing out above the useCallbacks above would
+     drop three hooks mid-life and crash the list with
+     "Rendered fewer hooks than expected". */
+  if (openNowFilter && openStatus === false) return null
 
   return (
     <>

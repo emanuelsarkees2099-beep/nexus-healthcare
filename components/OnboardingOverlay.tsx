@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Location, ReceiptText, Profile2User, Danger, CloseCircle, Heart, ArrowRight, ArrowLeft2, TickCircle, DollarCircle, Hospital, MedalStar } from 'iconsax-react'
 
-const STORAGE_KEY = 'nexus_onboarded_v3'
+const STORAGE_KEY = 'axvo_onboarded_v3'
 
 type Step = 1 | 2 | 3 | 4 | 5
 
@@ -87,7 +87,7 @@ export default function OnboardingOverlay() {
       className="onboarding-backdrop"
       role="dialog"
       aria-modal="true"
-      aria-label="NEXUS onboarding wizard"
+      aria-label="AXVO onboarding wizard"
       aria-live="polite"
       style={{ animation: animOut ? 'ob-fade-out 0.28s ease forwards' : undefined }}
     >

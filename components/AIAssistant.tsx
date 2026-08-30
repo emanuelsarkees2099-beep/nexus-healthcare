@@ -18,7 +18,7 @@ const SUGGESTIONS = [
   'Find free dental care options',
 ]
 
-const DISCLAIMER = `NEXUS Assistant helps you navigate healthcare access. It is not a medical provider and cannot diagnose conditions or prescribe treatments. For emergencies, call 911.`
+const DISCLAIMER = `AXVO Assistant helps you navigate healthcare access. It is not a medical provider and cannot diagnose conditions or prescribe treatments. For emergencies, call 911.`
 
 export default function AIAssistant() {
   const [open,     setOpen]     = useState(false)
@@ -272,7 +272,7 @@ export default function AIAssistant() {
 
       {/* Chat panel */}
       {open && (
-        <div className="ai-chat-panel" role="dialog" aria-label="NEXUS AI Healthcare Navigator" aria-modal="true">
+        <div className="ai-chat-panel" role="dialog" aria-label="AXVO AI Healthcare Navigator" aria-modal="true">
           {/* Header */}
           <div style={{
             padding: '14px 16px',
@@ -290,7 +290,7 @@ export default function AIAssistant() {
             </div>
             <div>
               <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>
-                NEXUS Navigator
+                AXVO Navigator
               </div>
               <div style={{ fontSize: 10, color: 'var(--accent,#4A8FD4)', fontFamily: 'var(--font-inter)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                 Healthcare Access Guide
@@ -325,7 +325,7 @@ export default function AIAssistant() {
                   {DISCLAIMER}
                 </div>
                 <div className="ai-msg-assistant">
-                  Hi! I&apos;m the NEXUS Healthcare Navigator. I can help you find free clinics, understand program eligibility, navigate the healthcare system, and know your rights as a patient. How can I help you today?
+                  Hi! I&apos;m the AXVO Healthcare Navigator. I can help you find free clinics, understand program eligibility, navigate the healthcare system, and know your rights as a patient. How can I help you today?
                 </div>
                 {/* Quick suggestion chips */}
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', paddingTop: 4 }}>
@@ -367,7 +367,7 @@ export default function AIAssistant() {
               onKeyDown={handleKey}
               placeholder="Ask about free clinics, programs, patient rights…"
               rows={1}
-              aria-label="Message NEXUS Navigator"
+              aria-label="Message AXVO Navigator"
               style={{
                 flex: 1, resize: 'none',
                 background: 'rgba(255,255,255,0.04)',

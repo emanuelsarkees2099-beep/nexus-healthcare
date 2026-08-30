@@ -27,12 +27,12 @@ type ProofState =
   | { status: 'ready'; city: string; loc: string; clinics: ProofClinic[] }
   | { status: 'hidden' }
 
-const CACHE_KEY = 'nexus_living_proof_v1'
+const CACHE_KEY = 'axvo_living_proof_v1'
 
 async function detectLocation(): Promise<{ city: string; loc: string } | null> {
   // 1. Saved location from a previous visit
   try {
-    const saved = localStorage.getItem('nexus_location') || localStorage.getItem('nexus_zip')
+    const saved = localStorage.getItem('axvo_location') || localStorage.getItem('axvo_zip')
     if (saved && saved.trim()) return { city: '', loc: saved.trim() }
   } catch { /* private browsing */ }
 

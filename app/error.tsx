@@ -4,7 +4,7 @@ import { Warning2, Home2 } from 'iconsax-react'
 
 export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
-    console.error('[NEXUS] Global error:', error)
+    console.error('[AXVO] Global error:', error)
   }, [error])
 
   return (
@@ -26,7 +26,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
           fontFamily: 'var(--font-display)',
           fontSize: '13px', fontWeight: 400,
           letterSpacing: '0.45em', color: 'rgba(255,255,255,0.6)',
-        }}>NEXUS</span>
+        }}>AXVO</span>
       </div>
 
       <div style={{

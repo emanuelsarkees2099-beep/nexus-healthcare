@@ -17,7 +17,7 @@ const SECTIONS = [
     id: 'what-we-collect',
     icon: <Data size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'What We Collect',
-    content: `NEXUS is built on a core principle: we collect the minimum possible data to give you the best results.
+    content: `AXVO is built on a core principle: we collect the minimum possible data to give you the best results.
 
 When you search for a clinic, we use your city, ZIP code, or coordinates to return nearby results. This location data is used only during your active session and is never stored on our servers.
 
@@ -47,7 +47,7 @@ Account data (if you create one) is used to pre-fill forms, save searches, and p
     id: 'third-parties',
     icon: <Shield size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'Third-Party Services',
-    content: `NEXUS integrates with the following third-party services:
+    content: `AXVO integrates with the following third-party services:
 
 HRSA (Health Resources & Services Administration) — Federal API used to retrieve Federally Qualified Health Center (FQHC) data. No user data is sent to HRSA.
 
@@ -63,7 +63,7 @@ We do not use: Google Analytics, Facebook Pixel, advertising trackers, behaviora
     id: 'cookies',
     icon: <Lock size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'Cookies & Local Storage',
-    content: `NEXUS uses minimal cookies and local storage.
+    content: `AXVO uses minimal cookies and local storage.
 
 If you are logged in, a session cookie is used to keep you authenticated. This is a functional cookie and cannot be disabled without logging out.
 
@@ -71,7 +71,7 @@ We use local storage to remember your language preference and any bookmarked cli
 
 We do not use third-party tracking cookies. We do not use cookies for advertising or cross-site tracking.
 
-You can clear all NEXUS local data by clearing your browser's storage for this domain. If you log out, your session cookie is deleted immediately.`
+You can clear all AXVO local data by clearing your browser's storage for this domain. If you log out, your session cookie is deleted immediately.`
   },
   {
     id: 'your-rights',
@@ -89,11 +89,11 @@ Portability — Export your data in JSON format from the Profile page.
 
 Opt-out of Story Publishing — Request removal of any published story at any time.
 
-CCPA Rights (California) — California residents may request disclosure of personal information collected, sold, or disclosed. NEXUS does not sell personal data.
+CCPA Rights (California) — California residents may request disclosure of personal information collected, sold, or disclosed. AXVO does not sell personal data.
 
 GDPR Rights (EU residents) — You have rights under GDPR including access, rectification, erasure, restriction, and data portability. Contact us to exercise these rights.
 
-To exercise any right: email privacy@nexushealth.org with "Privacy Request" in the subject line.`
+To exercise any right: email privacy@axvohealth.org with "Privacy Request" in the subject line.`
   },
   {
     id: 'security',
@@ -103,7 +103,7 @@ To exercise any right: email privacy@nexushealth.org with "Privacy Request" in t
 
 All data in transit is encrypted via TLS 1.3. Account data at rest is encrypted using AES-256. Supabase row-level security ensures users can only access their own records. We conduct periodic security reviews.
 
-We do not guarantee absolute security — no system does. If you discover a security vulnerability, please disclose it responsibly to security@nexushealth.org. We will respond within 72 hours.
+We do not guarantee absolute security — no system does. If you discover a security vulnerability, please disclose it responsibly to security@axvohealth.org. We will respond within 72 hours.
 
 In the event of a data breach affecting personal information, we will notify affected users within 72 hours as required by law.`
   },
@@ -143,7 +143,7 @@ export default function PrivacyPage() {
           fontSize: '16px', color: 'rgba(255,255,255,0.5)',
           maxWidth: '480px', lineHeight: 1.7, marginBottom: '32px',
         }}>
-          NEXUS collects nothing it doesn&apos;t need. We have never sold data, we never will, and we&apos;ve built the system to make that structurally impossible.
+          AXVO collects nothing it doesn&apos;t need. We have never sold data, we never will, and we&apos;ve built the system to make that structurally impossible.
         </p>
 
         <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.04em' }}>
@@ -195,7 +195,7 @@ export default function PrivacyPage() {
               Full policy
             </h2>
             <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.65 }}>
-              This policy applies to nexushealth.org and all NEXUS-branded services. Click any section to expand.
+              This policy applies to axvohealth.org and all AXVO-branded services. Click any section to expand.
             </p>
           </div>
 
@@ -275,8 +275,8 @@ export default function PrivacyPage() {
             <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '12px' }}>Questions about this policy?</h3>
             <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, marginBottom: '16px' }}>
               If you have questions, concerns, or want to exercise any of your privacy rights, contact us at{' '}
-              <a href="mailto:privacy@nexushealth.org" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
-                privacy@nexushealth.org
+              <a href="mailto:privacy@axvohealth.org" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
+                privacy@axvohealth.org
               </a>
               . We respond to all privacy requests within 5 business days.
             </p>

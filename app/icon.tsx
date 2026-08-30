@@ -1,7 +1,7 @@
 /**
- * NEXUS App Icon — generated favicon via Next.js App Router convention.
+ * AXVO App Icon — generated favicon via Next.js App Router convention.
  *
- * Renders the Nexus hexagon glyph as a 32×32 PNG.
+ * Renders the Axvo hexagon glyph as a 32×32 PNG.
  * Next.js auto-injects:  <link rel="icon" href="/icon" type="image/png" sizes="32x32" />
  * No manual <link> tag needed — this file IS the favicon.
  */
@@ -33,9 +33,10 @@ export default function Icon() {
             strokeWidth="1.5"
             fill="rgba(74,143,212,0.12)"
           />
-          {/* N-like path (stylized NEXUS mark) */}
+          {/* A-like path (stylized AXVO mark) — apex + crossbar, same
+              bounding box and stroke weight as the previous N mark */}
           <path
-            d="M8.5 17.5V8.5L13 17L17.5 8.5V17.5"
+            d="M8.5 17.5 L13 8.5 L17.5 17.5 M10.5 14 H15.5"
             stroke="#4A8FD4"
             strokeWidth="2"
             strokeLinecap="round"

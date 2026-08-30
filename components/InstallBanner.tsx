@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { CloseCircle } from 'iconsax-react'
 
-const DISMISSED_KEY  = 'nexus_install_dismissed'
+const DISMISSED_KEY  = 'axvo_install_dismissed'
 const DISMISS_TTL_MS = 30 * 24 * 60 * 60 * 1000 // 30 days
 
 interface BeforeInstallPromptEvent extends Event {
@@ -90,12 +90,12 @@ export default function InstallBanner() {
 
         {/* Text */}
         <div className="banner-text">
-          <div className="banner-title">Add NEXUS to home screen</div>
+          <div className="banner-title">Add AXVO to home screen</div>
           <div className="banner-sub">Works offline · No app store needed</div>
         </div>
 
         {/* Install */}
-        <button className="banner-install-btn" onClick={install} aria-label="Install NEXUS app">
+        <button className="banner-install-btn" onClick={install} aria-label="Install AXVO app">
           {isIOSHint ? 'How?' : 'Install'}
         </button>
 
@@ -136,7 +136,7 @@ export default function InstallBanner() {
             {[
               { n: 1, text: 'Tap the Share button at the bottom of Safari (the box with an arrow)' },
               { n: 2, text: 'Scroll down and tap "Add to Home Screen"' },
-              { n: 3, text: 'Tap "Add" — NEXUS will appear on your home screen like a native app' },
+              { n: 3, text: 'Tap "Add" — AXVO will appear on your home screen like a native app' },
             ].map(s => (
               <div key={s.n} style={{ display: 'flex', gap: '12px', marginBottom: '16px', alignItems: 'flex-start' }}>
                 <span style={{

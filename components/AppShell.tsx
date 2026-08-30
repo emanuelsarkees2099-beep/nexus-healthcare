@@ -49,7 +49,7 @@ function PageTransition({ children }: { children: React.ReactNode }) {
 }
 
 /* ── N8: Care Continuity Reminder Checker ───────────────────────
-   Runs once on every page mount. Reads nexus_reminders localStorage,
+   Runs once on every page mount. Reads axvo_reminders localStorage,
    fires Notification API for any past-due reminders, then marks them
    as fired so they never repeat.
    ─────────────────────────────────────────────────────────────── */
@@ -69,7 +69,7 @@ function useReminderChecker() {
     if (Notification.permission !== 'granted') return
 
     try {
-      const raw = localStorage.getItem('nexus_reminders')
+      const raw = localStorage.getItem('axvo_reminders')
       if (!raw) return
       const reminders: ClinicReminder[] = JSON.parse(raw)
       const now = Date.now()
@@ -81,10 +81,10 @@ function useReminderChecker() {
         /* 48-hour follow-up */
         if (!r.fired48h && now >= r.ts48h) {
           try {
-            new Notification('NEXUS — Following up', {
+            new Notification('AXVO — Following up', {
               body:  `Have you scheduled your visit to ${r.clinicName}? It's been 2 days since you saved it.`,
               icon:  '/icons/icon-192.png',
-              tag:   `nexus-48h-${r.clinicId}`,
+              tag:   `axvo-48h-${r.clinicId}`,
               badge: '/icons/icon-96.png',
             })
           } catch { /* ignore if notification blocked */ }
@@ -95,10 +95,10 @@ function useReminderChecker() {
         /* 11-month annual reminder */
         if (!r.fired11m && now >= r.ts11m) {
           try {
-            new Notification('NEXUS — Annual care reminder', {
+            new Notification('AXVO — Annual care reminder', {
               body:  `It's been about a year. Consider scheduling a follow-up visit at ${r.clinicName}.`,
               icon:  '/icons/icon-192.png',
-              tag:   `nexus-11m-${r.clinicId}`,
+              tag:   `axvo-11m-${r.clinicId}`,
               badge: '/icons/icon-96.png',
             })
           } catch { /* ignore if notification blocked */ }
@@ -110,7 +110,7 @@ function useReminderChecker() {
       })
 
       if (changed) {
-        localStorage.setItem('nexus_reminders', JSON.stringify(updated))
+        localStorage.setItem('axvo_reminders', JSON.stringify(updated))
       }
     } catch { /* localStorage unavailable */ }
   }, [])

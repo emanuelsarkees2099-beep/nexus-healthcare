@@ -1,5 +1,5 @@
 /**
- * NEXUS — Newsletter Broadcast Cron
+ * AXVO — Newsletter Broadcast Cron
  * POST /api/cron/newsletter-broadcast
  * Header: x-cron-secret
  *

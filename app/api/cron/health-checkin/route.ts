@@ -1,5 +1,5 @@
 /**
- * NEXUS — Weekly Health Check-In Email Cron
+ * AXVO — Weekly Health Check-In Email Cron
  * POST /api/cron/health-checkin
  * Schedule: every Monday at 10:00 AM UTC (vercel.json)
  *
@@ -11,7 +11,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendEmail, buildHealthCheckinEmail } from '@/lib/email'
-import { verifyCronHeader } from '@/lib/cron-auth'
+import { verifyCronHeader, verifyCronBearer } from '@/lib/cron-auth'
 
 export const maxDuration = 60
 
@@ -40,18 +40,14 @@ function computeScore(eventCounts: Record<string, number>): { score: number; lab
 }
 
 function nextAction(eventCounts: Record<string, number>): string {
-  if (!eventCounts.clinic_visited)         return 'Find a free clinic near you — search by ZIP code on NEXUS.'
+  if (!eventCounts.clinic_visited)         return 'Find a free clinic near you — search by ZIP code on AXVO.'
   if (!eventCounts.program_enrolled)       return 'Check your program eligibility — you may qualify for free coverage.'
   if (!eventCounts.prescription_obtained)  return 'Explore medication assistance programs and save up to 90%.'
   if (!eventCounts.appointment_made)       return 'Schedule a follow-up appointment to stay on top of your health.'
   return 'Update your Health Passport with your latest care visit.'
 }
 
-export async function POST(req: NextRequest) {
-  if (!verifyCronHeader(req)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
+async function run() {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
     process.env.SUPABASE_SERVICE_ROLE_KEY ?? ''
@@ -104,4 +100,22 @@ export async function POST(req: NextRequest) {
 
   console.log(`[health-checkin] sent=${sent} failed=${failed} total=${users.length}`)
   return NextResponse.json({ sent, failed, total: users.length })
+}
+
+/* Vercel Cron invokes scheduled paths with GET + `Authorization: Bearer
+   $CRON_SECRET`. This route previously exported POST only, so every scheduled
+   run returned 405 and no check-in email was ever sent. GET is the scheduled
+   entry point; POST is kept for manual/no-cron invocation. */
+export async function GET(req: NextRequest) {
+  if (!verifyCronBearer(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+  return run()
+}
+
+export async function POST(req: NextRequest) {
+  if (!verifyCronHeader(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+  return run()
 }

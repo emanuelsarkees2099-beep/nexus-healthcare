@@ -2,7 +2,7 @@
 /**
  * P3 — Standardized skeleton loader system
  *
- * Design principle: every loading state in NEXUS uses these primitives.
+ * Design principle: every loading state in AXVO uses these primitives.
  * No more ad-hoc spinners — every page shows an appropriately-shaped
  * skeleton that matches the content it's waiting for.
  *
@@ -14,7 +14,7 @@
  *   SkeletonClinicCard — shaped like a ClinicCard result row
  *   SkeletonHero       — top-of-page hero area skeleton
  *   SkeletonDashboard  — dashboard overview tab skeleton
- *   PageLoading        — full-page centered NEXUS spinner (existing style, standardized)
+ *   PageLoading        — full-page centered AXVO spinner (existing style, standardized)
  */
 import React from 'react'
 
@@ -163,7 +163,7 @@ export function SkeletonDashboard() {
 }
 
 /* ── PageLoading — full-page spinner (standardized from loading.tsx) ── */
-export function PageLoading({ label = 'NEXUS' }: { label?: string }) {
+export function PageLoading({ label = 'AXVO' }: { label?: string }) {
   return (
     <div style={{ minHeight: '100vh', background: '#07070F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>

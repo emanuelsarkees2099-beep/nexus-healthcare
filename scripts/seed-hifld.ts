@@ -1,6 +1,6 @@
 #!/usr/bin/env npx ts-node
 /**
- * ── NEXUS: HIFLD + HRSA Full Seeding Script ──────────────────────────────────
+ * ── AXVO: HIFLD + HRSA Full Seeding Script ──────────────────────────────────
  *
  * This script seeds the Supabase `clinics_cache` table with every FQHC delivery
  * site from HRSA (~14,000 sites) by iterating through all US ZIP codes and
@@ -166,7 +166,7 @@ async function fetchHRSAForZip(zip: string): Promise<HRSAClinic[]> {
   for (const url of endpoints) {
     try {
       const res = await fetch(url, {
-        headers: { Accept: 'application/json', 'User-Agent': 'NEXUS-Seeder/1.0 contact@nexus.health' },
+        headers: { Accept: 'application/json', 'User-Agent': 'AXVO-Seeder/1.0 contact@axvo.health' },
         signal: AbortSignal.timeout(12000),
       })
       if (!res.ok) continue
@@ -249,7 +249,7 @@ async function sleep(ms: number): Promise<void> {
 
 async function main() {
   console.log('═══════════════════════════════════════════════')
-  console.log('  NEXUS HIFLD + HRSA Full Seeding Script')
+  console.log('  AXVO HIFLD + HRSA Full Seeding Script')
   console.log('═══════════════════════════════════════════════')
   console.log('')
 

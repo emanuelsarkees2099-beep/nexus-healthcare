@@ -239,7 +239,7 @@ export default function MobileDrawer({ open, onClose, links, user, onLogout, onA
             fontFamily: 'var(--font-display)', fontSize: '10px',
             letterSpacing: '0.4em', color: 'rgba(255,255,255,0.55)', paddingRight: '0.4em',
           }}>
-            NEXUS
+            AXVO
           </span>
           <button
             onClick={onClose}

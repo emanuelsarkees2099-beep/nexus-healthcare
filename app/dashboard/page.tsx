@@ -415,7 +415,7 @@ function buildFeedItems(
       type: 'clinic',
       priority: 55,
       title: 'Find a free or low-cost clinic near you',
-      body: 'NEXUS connects you to 18,900+ FQHCs, free clinics, and sliding-scale providers.',
+      body: 'AXVO connects you to 18,900+ FQHCs, free clinics, and sliding-scale providers.',
       cta: 'Search clinics',
       href: '/search',
       color: 'var(--accent)',
@@ -597,7 +597,7 @@ export default function DashboardPage() {
 
       if (!bracket) {
         try {
-          const raw = localStorage.getItem('nexus_onboarding')
+          const raw = localStorage.getItem('axvo_onboarding')
           if (raw) {
             const { answers } = JSON.parse(raw) as { answers: Record<string, string | string[]> }
             bracket   = (answers['income_bracket'] as IncomeBracket | undefined) ?? null
@@ -614,13 +614,13 @@ export default function DashboardPage() {
 
       // Recompute health score with Supabase-provided eligibility data merged in
       try {
-        const passportRaw = typeof window !== 'undefined' ? localStorage.getItem('nexus_passport') : null
+        const passportRaw = typeof window !== 'undefined' ? localStorage.getItem('axvo_passport') : null
         let pp = { allergies: [] as unknown[], medications: [] as unknown[], conditions: [] as unknown[], emergencyContact: null as {name?: string} | null }
         try { if (passportRaw) pp = JSON.parse(passportRaw) } catch { /* ignore */ }
         const notifCount = typeof window !== 'undefined'
-          ? Array.from({ length: localStorage.length }, (_, i) => localStorage.key(i)).filter(k => k?.startsWith('nexus_notify_')).length
+          ? Array.from({ length: localStorage.length }, (_, i) => localStorage.key(i)).filter(k => k?.startsWith('axvo_notify_')).length
           : 0
-        const calPrefsRaw = typeof window !== 'undefined' ? localStorage.getItem('nexus_calendar_prefs') : null
+        const calPrefsRaw = typeof window !== 'undefined' ? localStorage.getItem('axvo_calendar_prefs') : null
         const calPrefs = calPrefsRaw ? JSON.parse(calPrefsRaw) : null
         const calUp = !!(calPrefs?.age && calPrefs?.sex && calPrefs.sex !== 'Select')
         setHealthScore(computeHealthScore({
@@ -656,10 +656,10 @@ export default function DashboardPage() {
     const notifs: Array<{ clinicName: string; clinicId: string; ts: number }> = []
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i)
-      if (key?.startsWith('nexus_notify_')) {
+      if (key?.startsWith('axvo_notify_')) {
         try {
           const val = JSON.parse(localStorage.getItem(key) ?? '{}')
-          const clinicId = key.replace('nexus_notify_', '')
+          const clinicId = key.replace('axvo_notify_', '')
           notifs.push({ clinicName: val.clinicName ?? 'Clinic', clinicId, ts: val.ts ?? 0 })
         } catch { /* skip */ }
       }
@@ -668,7 +668,7 @@ export default function DashboardPage() {
 
     // Load calendar prefs and count due screenings
     try {
-      const raw = localStorage.getItem('nexus_calendar_prefs')
+      const raw = localStorage.getItem('axvo_calendar_prefs')
       if (raw) {
         const prefs = JSON.parse(raw)
         if (prefs.age && prefs.sex && prefs.sex !== 'Select') {
@@ -691,7 +691,7 @@ export default function DashboardPage() {
           setDueScreeningsCount(n)
 
           // Compute health score with everything we know from localStorage
-          const passportRaw = localStorage.getItem('nexus_passport')
+          const passportRaw = localStorage.getItem('axvo_passport')
           let passportData = { allergies: [] as unknown[], medications: [] as unknown[], conditions: [] as unknown[], emergencyContact: null as unknown }
           try { if (passportRaw) passportData = JSON.parse(passportRaw) } catch { /* ignore */ }
           const score = computeHealthScore({
@@ -827,7 +827,7 @@ export default function DashboardPage() {
             fontFamily: 'var(--font-display)',
             fontSize: 11, fontWeight: 400, letterSpacing: '0.44em',
             color: 'rgba(255,255,255,0.65)',
-          }}>NEXUS</span>
+          }}>AXVO</span>
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>

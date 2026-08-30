@@ -1,4 +1,4 @@
-# NEXUS — Free Healthcare, Found in Seconds
+# AXVO — Free Healthcare, Found in Seconds
 
 **A comprehensive platform for connecting uninsured Americans with free clinics, sliding-scale care, and eligibility programs.**
 
@@ -6,7 +6,7 @@
 
 ## Overview
 
-NEXUS is an open-source healthcare discovery platform that aggregates clinic data from 4+ sources (HRSA, NAFC, OpenStreetMap, state APIs) and surfaces the most accessible and affordable options to the 30 million uninsured Americans. The platform combines:
+AXVO is an open-source healthcare discovery platform that aggregates clinic data from 4+ sources (HRSA, NAFC, OpenStreetMap, state APIs) and surfaces the most accessible and affordable options to the 30 million uninsured Americans. The platform combines:
 
 - **Multi-source clinic discovery** with intelligent deduplication
 - **Affordability scoring** (0–100 model based on clinic type and pricing structure)
@@ -70,8 +70,8 @@ Node.js 18+, npm/yarn, Supabase account, Vercel account, Anthropic API key
 
 ### 1. Clone & Install
 ```bash
-git clone https://github.com/yourusername/nexus-healthcare.git
-cd nexus-healthcare
+git clone https://github.com/yourusername/axvo-healthcare.git
+cd axvo-healthcare
 npm install
 ```
 
@@ -229,10 +229,10 @@ MIT License. See `LICENSE` file for details.
 ## Citation
 
 ```bibtex
-@software{nexus2024,
-  author = {NEXUS Healthcare Team},
-  title = {NEXUS: Open-source Free Healthcare Discovery Platform},
-  url = {https://github.com/yourusername/nexus-healthcare},
+@software{axvo2024,
+  author = {AXVO Healthcare Team},
+  title = {AXVO: Open-source Free Healthcare Discovery Platform},
+  url = {https://github.com/yourusername/axvo-healthcare},
   year = {2024}
 }
 ```
@@ -250,7 +250,7 @@ MIT License. See `LICENSE` file for details.
 
 - **Issues**: GitHub Issues
 - **Discussions**: GitHub Discussions
-- **Email**: contact@nexus.health
+- **Email**: contact@axvo.health
 
 ---
 

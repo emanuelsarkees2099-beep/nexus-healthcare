@@ -103,7 +103,7 @@ export default function Hero() {
   /* restore saved location */
   useEffect(() => {
     try {
-      const s = localStorage.getItem('nexus_location') || localStorage.getItem('nexus_zip') || ''
+      const s = localStorage.getItem('axvo_location') || localStorage.getItem('axvo_zip') || ''
       if (s) setLocationVal(s)
     } catch { /* private browsing */ }
   }, [])

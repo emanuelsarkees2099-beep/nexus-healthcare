@@ -65,7 +65,7 @@ export async function GET(req: NextRequest) {
     const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1&countrycodes=us`
     const res = await fetch(url, {
       headers: {
-        'User-Agent': 'NEXUS-Health-App/1.0 (https://nexushealth.app; contact@nexushealth.app)',
+        'User-Agent': 'AXVO-Health-App/1.0 (https://axvohealth.app; contact@axvohealth.app)',
         'Accept-Language': 'en',
       },
       // Next.js fetch cache — deduplicate concurrent requests in the same render

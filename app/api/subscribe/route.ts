@@ -1,5 +1,5 @@
 /**
- * NEXUS — Newsletter Subscribe
+ * AXVO — Newsletter Subscribe
  * POST /api/subscribe  { email: string }
  *
  * Stores the subscriber in newsletter_subscribers.

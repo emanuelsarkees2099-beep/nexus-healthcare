@@ -4,15 +4,15 @@ import Link from 'next/link'
 import { Heart, Clock, People, Lock, TickCircle, CloseCircle } from 'iconsax-react'
 
 export const metadata: Metadata = {
-  title: 'About — NEXUS Healthcare Platform',
-  description: 'NEXUS is a free healthcare navigation platform helping uninsured and underinsured Americans find free clinics, sliding-scale providers, and government benefit programs.',
+  title: 'About — AXVO Healthcare Platform',
+  description: 'AXVO is a free healthcare navigation platform helping uninsured and underinsured Americans find free clinics, sliding-scale providers, and government benefit programs.',
 }
 
 const TEAM_VALUES = [
   {
     Icon: Heart,
     title: 'Built for people, not profit',
-    body: 'NEXUS is a mission-driven project with zero venture capital, no advertising, and no data monetization. Our only goal is connecting uninsured Americans to the care they are legally entitled to.',
+    body: 'AXVO is a mission-driven project with zero venture capital, no advertising, and no data monetization. Our only goal is connecting uninsured Americans to the care they are legally entitled to.',
   },
   {
     Icon: Clock,
@@ -35,7 +35,7 @@ const HRSA_FACTS = [
   { stat: '1,400+',    label: 'HRSA-funded health center organizations' },
   { stat: '14,000+',  label: 'service delivery sites across the U.S.' },
   { stat: '30M',      label: 'patients served annually by FQHCs' },
-  { stat: '$0',       label: 'cost to use NEXUS, always' },
+  { stat: '$0',       label: 'cost to use AXVO, always' },
 ]
 
 export default function AboutPage() {
@@ -101,7 +101,7 @@ export default function AboutPage() {
           fontFamily: 'var(--font-inter)', fontWeight: 300,
           lineHeight: 1.8, maxWidth: '580px', margin: '0 auto 40px',
         }}>
-          30 million Americans are uninsured. Tens of millions more are underinsured. NEXUS exists to close the gap between who needs care and who can find it — using technology to surface the federally-funded, sliding-scale, and free resources that were already there.
+          30 million Americans are uninsured. Tens of millions more are underinsured. AXVO exists to close the gap between who needs care and who can find it — using technology to surface the federally-funded, sliding-scale, and free resources that were already there.
         </p>
 
         <div className="about-cta-row" style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -137,7 +137,7 @@ export default function AboutPage() {
 
       {/* HRSA facts strip */}
       <section
-        aria-label="Key facts about NEXUS and HRSA health centers"
+        aria-label="Key facts about AXVO and HRSA health centers"
         style={{
           borderTop: '1px solid var(--border2)', borderBottom: '1px solid var(--border2)',
           padding: '3rem 24px',
@@ -239,7 +239,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* What NEXUS is and isn't */}
+      {/* What AXVO is and isn't */}
       <section style={{
         padding: '0 24px 80px', maxWidth: '800px', margin: '0 auto',
       }}>
@@ -252,7 +252,7 @@ export default function AboutPage() {
             fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700,
             letterSpacing: '-0.02em', marginBottom: '28px', color: 'var(--text)',
           }}>
-            What NEXUS is — and what it isn&apos;t
+            What AXVO is — and what it isn&apos;t
           </h2>
           <div
             className="about-split-grid"
@@ -260,7 +260,7 @@ export default function AboutPage() {
           >
             {[
               {
-                label: 'NEXUS is',
+                label: 'AXVO is',
                 icon: <TickCircle size={13} variant="Bold" />,
                 color: 'var(--accent)',
                 items: [
@@ -273,7 +273,7 @@ export default function AboutPage() {
                 ],
               },
               {
-                label: 'NEXUS is not',
+                label: 'AXVO is not',
                 icon: <CloseCircle size={13} variant="Bold" />,
                 color: '#f87171',
                 items: [
@@ -362,7 +362,7 @@ export default function AboutPage() {
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '52px' }}>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.6rem, 3.5vw, 2.5rem)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.15 }}>
-              How NEXUS works
+              How AXVO works
             </h2>
             <p style={{ fontSize: '15px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', fontWeight: 300, lineHeight: 1.75, maxWidth: '500px', margin: '16px auto 0' }}>
               From search to care in three steps — no insurance needed, no account required.
@@ -370,7 +370,7 @@ export default function AboutPage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
             {[
-              { n: '01', title: 'Tell us where you are', body: 'Enter your location. NEXUS instantly maps every free clinic, FQHC, and sliding-scale provider within 50 miles — with real availability signals.' },
+              { n: '01', title: 'Tell us where you are', body: 'Enter your location. AXVO instantly maps every free clinic, FQHC, and sliding-scale provider within 50 miles — with real availability signals.' },
               { n: '02', title: 'Check what you qualify for', body: 'Answer five questions. Our eligibility engine checks 40+ federal and state programs to surface what you\'re owed — Medicaid, ACA subsidies, drug assistance, and more.' },
               { n: '03', title: 'Get care', body: 'Book directly, get directions, or connect with a Community Health Worker who can navigate the system on your behalf. Everything in one place.' },
             ].map(s => (
@@ -392,7 +392,7 @@ export default function AboutPage() {
               { stat: '18,900+', label: 'Verified clinics indexed', note: 'FQHCs, free clinics, sliding-scale' },
               { stat: '40+', label: 'Programs checked', note: 'Medicaid, ACA, CHIP, and more' },
               { stat: '2 min', label: 'Eligibility check time', note: 'No paperwork. No account.' },
-              { stat: '$0', label: 'Cost to use NEXUS', note: 'Free forever — no ads, no data sales' },
+              { stat: '$0', label: 'Cost to use AXVO', note: 'Free forever — no ads, no data sales' },
             ].map(s => (
               <div key={s.stat} style={{ textAlign: 'center', padding: '28px 20px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border2)', borderRadius: '16px' }}>
                 <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text)', lineHeight: 1, marginBottom: '8px' }}>{s.stat}</div>

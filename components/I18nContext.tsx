@@ -19,8 +19,8 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
     // Listen for language changes from LanguageSelector
     const handler = () => setLang(getSavedLang())
-    window.addEventListener('nexus:lang-changed', handler)
-    return () => window.removeEventListener('nexus:lang-changed', handler)
+    window.addEventListener('axvo:lang-changed', handler)
+    return () => window.removeEventListener('axvo:lang-changed', handler)
   }, [])
 
   const tWrapper = (key: TranslationKey) => tFn(key, lang)

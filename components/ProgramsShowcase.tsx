@@ -48,7 +48,7 @@ export default function ProgramsShowcase() {
             Every program,<br />one search
           </h2>
           <p style={{ fontSize: 'clamp(1rem, 1.35vw, 1.12rem)', color: 'var(--text-2)', lineHeight: 1.72, fontFamily: 'var(--font-inter)', marginBottom: '24px', maxWidth: '30ch' }}>
-            Answer a few questions and NEXUS scans the major federal and state
+            Answer a few questions and AXVO scans the major federal and state
             programs you might qualify for — then shows you exactly where to apply.
           </p>
           {/* honest reassurance line — also lengthens the left column to

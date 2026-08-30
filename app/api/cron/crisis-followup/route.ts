@@ -1,5 +1,5 @@
 /**
- * NEXUS — Crisis Follow-Up Email Cron
+ * AXVO — Crisis Follow-Up Email Cron
  * POST /api/cron/crisis-followup
  * Schedule: daily at 9:00 AM UTC (vercel.json)
  *
@@ -13,15 +13,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendEmail, buildCrisisFollowupEmail } from '@/lib/email'
-import { verifyCronHeader } from '@/lib/cron-auth'
+import { verifyCronHeader, verifyCronBearer } from '@/lib/cron-auth'
 
 export const maxDuration = 30
 
-export async function POST(req: NextRequest) {
-  if (!verifyCronHeader(req)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
+async function run() {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
     process.env.SUPABASE_SERVICE_ROLE_KEY ?? ''
@@ -96,4 +92,22 @@ export async function POST(req: NextRequest) {
 
   console.log(`[crisis-followup] sent=${sent} skipped=${skipped} window=${from20h}–${to20h}`)
   return NextResponse.json({ sent, skipped, total: uniqueUserIds.length })
+}
+
+/* Vercel Cron invokes scheduled paths with GET + `Authorization: Bearer
+   $CRON_SECRET`. This route previously exported POST only, so every scheduled
+   run returned 405 and no follow-up email was ever sent. GET is the scheduled
+   entry point; POST is kept for manual/no-cron invocation. */
+export async function GET(req: NextRequest) {
+  if (!verifyCronBearer(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+  return run()
+}
+
+export async function POST(req: NextRequest) {
+  if (!verifyCronHeader(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+  return run()
 }

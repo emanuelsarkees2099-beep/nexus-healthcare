@@ -5,12 +5,12 @@ import { Add } from 'iconsax-react'
 /* Honest answers — every claim here matches how the product actually
    works (browser-side eligibility, no account, public data sources). */
 const FAQS = [
-  { q: 'Is NEXUS really free?', a: 'Yes — completely, always. There are no fees, no premium tier, and no card required. NEXUS is a navigation tool, not an insurer or provider.' },
-  { q: 'Do I need insurance to use it?', a: 'No. NEXUS is built specifically for people without insurance or who are underinsured. Free and sliding-scale clinics are legally required to serve you regardless of coverage.' },
+  { q: 'Is AXVO really free?', a: 'Yes — completely, always. There are no fees, no premium tier, and no card required. AXVO is a navigation tool, not an insurer or provider.' },
+  { q: 'Do I need insurance to use it?', a: 'No. AXVO is built specifically for people without insurance or who are underinsured. Free and sliding-scale clinics are legally required to serve you regardless of coverage.' },
   { q: 'Do I have to create an account?', a: 'No. You can search clinics, check eligibility, and use every core feature anonymously. An optional account only exists to save clinics and records if you want to.' },
   { q: 'Is my information private?', a: 'Yes. Eligibility is calculated entirely in your browser — your income and household answers are never sent to a server. We don’t sell data, ever.' },
   { q: 'How current is the clinic data?', a: 'Clinics come from authoritative public datasets — HRSA, the National Association of Free & Charitable Clinics, the CMS provider registry, and SAMHSA — refreshed on a regular schedule.' },
-  { q: 'Can immigrants use NEXUS?', a: 'Yes. HRSA-funded health centers serve everyone regardless of immigration status, and NEXUS shows which options apply to your situation.' },
+  { q: 'Can immigrants use AXVO?', a: 'Yes. HRSA-funded health centers serve everyone regardless of immigration status, and AXVO shows which options apply to your situation.' },
   { q: 'What if I’m in an emergency?', a: 'Call 911. For mental-health or crisis support, the Crisis page lists 24/7 lifelines and is precached to load even with no connection.' },
 ]
 

@@ -1,5 +1,5 @@
 /**
- * NEXUS — Password Reset Request
+ * AXVO — Password Reset Request
  * POST /api/auth/reset-password  { email: string }
  *
  * Triggers a Supabase password reset email.
@@ -12,7 +12,7 @@ import { createClient } from '@supabase/supabase-js'
 import { rateLimit } from '@/lib/rate-limit'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
-const APP_URL  = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://nexus.health').replace(/\/$/, '')
+const APP_URL  = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://axvo.health').replace(/\/$/, '')
 
 export async function POST(req: NextRequest) {
   const rl = rateLimit(req as unknown as Request, {

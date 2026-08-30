@@ -43,7 +43,7 @@ const ALL_APP_LINK_DEFS = [
   { labelKey: 'nav.rights'   as const, href: '/rights',      fallback: 'Rights' },
   { labelKey: 'nav.stories'  as const, href: '/stories',     fallback: 'Stories' },
   { labelKey: null,                    href: '/crisis',      fallback: 'Crisis Help' },
-  { labelKey: null,                    href: '/about',       fallback: 'About NEXUS' },
+  { labelKey: null,                    href: '/about',       fallback: 'About AXVO' },
 ]
 
 type UserProfile = { full_name?: string | null; email?: string | null; user_type?: string | null }
@@ -227,7 +227,7 @@ export default function Nav({ initialUser }: NavProps = {}) {
         <a
           href={isHome ? '#' : '/'}
           onClick={e => { if (isHome) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) } }}
-          aria-label="NEXUS — home"
+          aria-label="AXVO — home"
           className="nav-logo"
           style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', flexShrink: 0 }}
         >
@@ -242,7 +242,7 @@ export default function Nav({ initialUser }: NavProps = {}) {
             letterSpacing: '0.42em', textTransform: 'uppercase',
             color: 'rgba(255,255,255,0.90)', paddingRight: '0.42em', userSelect: 'none',
           }}>
-            NEXUS
+            AXVO
           </span>
         </a>
 

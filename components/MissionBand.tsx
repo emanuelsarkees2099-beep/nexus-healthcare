@@ -36,7 +36,7 @@ export default function MissionBand() {
         opacity: visible ? 1 : 0, transition: 'opacity 0.9s ease 0.2s',
       }}>
         Tens of millions of Americans go without care every year — not because
-        help doesn&apos;t exist, but because it&apos;s buried. NEXUS surfaces it.
+        help doesn&apos;t exist, but because it&apos;s buried. AXVO surfaces it.
       </p>
     </section>
   )

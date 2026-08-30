@@ -1,4 +1,4 @@
-# NEXUS — Dark Design Restoration & "Engineered, Not Vibe-Coded" Plan
+# AXVO — Dark Design Restoration & "Engineered, Not Vibe-Coded" Plan
 
 Goal: return to the original dark identity, then raise it to the standard of a
 team that ships for a living. The tell of vibe-coded UI is inconsistency and

@@ -40,7 +40,7 @@ export default function CHWDashboard() {
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem('nexus_chw_name')
+      const stored = localStorage.getItem('axvo_chw_name')
       if (stored) setChwName(stored)
     } catch {}
   }, [])

@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 
 // Admin panel — never indexed, never cached
 export const metadata: Metadata = {
-  title: 'Admin — NEXUS',
-  description: 'NEXUS admin panel.',
+  title: 'Admin — AXVO',
+  description: 'AXVO admin panel.',
   robots: { index: false, follow: false, noarchive: true, nosnippet: true },
 }
 

@@ -1,4 +1,4 @@
-# NEXUS — 5-Day Launch Revolution Plan
+# AXVO — 5-Day Launch Revolution Plan
 
 **Goal:** Ship the best healthcare-access web app online in 5 days.
 **Strategy:** Keep the stack (Next.js 16 + Supabase + Vercel — it's already best-in-class).

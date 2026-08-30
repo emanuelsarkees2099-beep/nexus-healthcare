@@ -28,9 +28,9 @@ test.describe('Crisis page — load', () => {
     await expect(page).toHaveURL(/\/crisis/)
   })
 
-  test('page title contains NEXUS', async ({ page }) => {
+  test('page title contains AXVO', async ({ page }) => {
     await goToCrisis(page)
-    await expect(page).toHaveTitle(/NEXUS/i)
+    await expect(page).toHaveTitle(/AXVO/i)
   })
 
   test('page has a visible main heading', async ({ page }) => {

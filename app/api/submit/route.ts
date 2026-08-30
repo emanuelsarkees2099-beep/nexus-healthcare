@@ -96,13 +96,13 @@ async function notifyAdmin(type: string, data: Record<string, unknown>, userId: 
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'NEXUS <notifications@nexus-health.app>',
+      from: 'AXVO <notifications@axvo-health.app>',
       to: ADMIN_EMAIL,
-      subject: `[NEXUS] New ${type} submission`,
+      subject: `[AXVO] New ${type} submission`,
       html: `
         <div style="font-family:sans-serif;background:#07070F;padding:32px;max-width:600px;margin:0 auto;border-radius:12px">
           <div style="margin-bottom:24px">
-            <span style="font-size:11px;letter-spacing:0.3em;color:#6d9197">NEXUS</span>
+            <span style="font-size:11px;letter-spacing:0.3em;color:#6d9197">AXVO</span>
           </div>
           <h2 style="color:#fff;font-size:20px;margin-bottom:8px">New ${type} submission</h2>
           <p style="color:#64748b;font-size:14px;margin-bottom:24px">User ID: ${userId}</p>
@@ -118,7 +118,7 @@ async function notifyAdmin(type: string, data: Record<string, unknown>, userId: 
         </div>
       `,
     }),
-  }).catch(e => console.warn('[NEXUS] Resend error:', e))
+  }).catch(e => console.warn('[AXVO] Resend error:', e))
 }
 
 // ─── POST /api/submit ──────────────────────────────────────────────────────────
@@ -160,7 +160,7 @@ export async function POST(req: NextRequest) {
       .single()
 
     if (error) {
-      console.error('[NEXUS] Supabase insert error:', error)
+      console.error('[AXVO] Supabase insert error:', error)
       return NextResponse.json({ error: 'Failed to save submission. Please try again.' }, { status: 500 })
     }
 
@@ -169,7 +169,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true, id: row.id })
   } catch (err) {
-    console.error('[NEXUS] Submit route error:', err)
+    console.error('[AXVO] Submit route error:', err)
     return NextResponse.json({ error: 'Server error. Please try again.' }, { status: 500 })
   }
 }

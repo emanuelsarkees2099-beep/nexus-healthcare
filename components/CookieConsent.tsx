@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
-const STORAGE_KEY = 'nexus_cookie_consent'
+const STORAGE_KEY = 'axvo_cookie_consent'
 
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false)
@@ -43,7 +43,7 @@ export default function CookieConsent() {
           fontFamily: 'var(--font-inter)', fontWeight: 300, lineHeight: 1.6,
           margin: 0, flex: 1,
         }}>
-          NEXUS uses essential cookies for authentication and performance analytics.
+          AXVO uses essential cookies for authentication and performance analytics.
           We never sell your data.{' '}
           <Link
             href="/privacy"

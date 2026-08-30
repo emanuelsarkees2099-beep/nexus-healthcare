@@ -169,7 +169,7 @@ function TriageChatMini() {
         <span style={{
           display: 'block', fontSize: '9px', fontWeight: 700, letterSpacing: '0.1em',
           color: 'var(--accent)', marginBottom: '4px',
-        }}>NEXUS</span>
+        }}>AXVO</span>
         That&apos;s treatable at a <strong style={{ color: 'var(--text)' }}>free dental clinic</strong> —
         not an ER. ERs can&apos;t do dental work and average $1,500.
       </div>
@@ -396,7 +396,7 @@ export default function Features() {
           borderRadius: '100px', padding: '5px 14px',
         }}>
           <Activity size={11} color="var(--accent)" variant="TwoTone" />
-          What NEXUS offers
+          What AXVO offers
         </div>
         <h2
           id="features-title"
@@ -429,7 +429,7 @@ export default function Features() {
           style={{ gridColumn: 'span 5', gridRow: 'span 2', minHeight: '380px', textDecoration: 'none', color: 'inherit', display: 'block' }}
         >
           <div
-            className="bento-card nexus-card card-mint border-beam"
+            className="bento-card axvo-card card-mint border-beam"
             role="listitem"
             style={{ ...cardBase }}
           >
@@ -457,7 +457,7 @@ export default function Features() {
           className="bc-2"
           style={{ gridColumn: 'span 7', minHeight: '178px', textDecoration: 'none', color: 'inherit', display: 'block', cursor: 'pointer' }}
         >
-          <div className="bento-card nexus-card card-violet" role="listitem" style={{ ...cardBase }}>
+          <div className="bento-card axvo-card card-violet" role="listitem" style={{ ...cardBase }}>
             <div className="card-depth-overlay" aria-hidden="true" />
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem' }}>
               <BentoIcon
@@ -489,7 +489,7 @@ export default function Features() {
           className="bc-3"
           style={{ gridColumn: 'span 4', minHeight: '178px', textDecoration: 'none', color: 'inherit', display: 'block', cursor: 'pointer' }}
         >
-          <div className="bento-card nexus-card card-amber" role="listitem" style={{ ...cardBase }}>
+          <div className="bento-card axvo-card card-amber" role="listitem" style={{ ...cardBase }}>
             <div className="card-depth-overlay" aria-hidden="true" />
             <BentoIcon
               icon={<ReceiptText size={18} variant="TwoTone" />}
@@ -511,7 +511,7 @@ export default function Features() {
           className="bc-4"
           style={{ gridColumn: 'span 3', minHeight: '178px', textDecoration: 'none', color: 'inherit', display: 'block', cursor: 'pointer' }}
         >
-          <div className="bento-card nexus-card" role="listitem" style={{ ...cardBase }}>
+          <div className="bento-card axvo-card" role="listitem" style={{ ...cardBase }}>
             <div className="card-depth-overlay" aria-hidden="true" />
             <BentoIcon icon={<Cpu size={18} variant="TwoTone" />} />
             <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.3rem', fontFamily: 'var(--font-display)' }}>
@@ -531,7 +531,7 @@ export default function Features() {
           className="bc-5"
           style={{ gridColumn: 'span 5', minHeight: '178px', textDecoration: 'none', color: 'inherit', display: 'block', cursor: 'pointer' }}
         >
-          <div className="bento-card nexus-card card-violet" role="listitem" style={{ ...cardBase }}>
+          <div className="bento-card axvo-card card-violet" role="listitem" style={{ ...cardBase }}>
             <div className="card-depth-overlay" aria-hidden="true" />
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem' }}>
               <BentoIcon
@@ -563,7 +563,7 @@ export default function Features() {
           className="bc-6"
           style={{ gridColumn: 'span 7', minHeight: '178px', textDecoration: 'none', color: 'inherit', display: 'block', cursor: 'pointer' }}
         >
-          <div className="bento-card nexus-card card-mint" role="listitem" style={{ ...cardBase }}>
+          <div className="bento-card axvo-card card-mint" role="listitem" style={{ ...cardBase }}>
             <div className="card-depth-overlay" aria-hidden="true" />
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem' }}>
               <BentoIcon

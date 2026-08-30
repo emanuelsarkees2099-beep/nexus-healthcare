@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 
-const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://nexus.health').replace(/\/$/, '')
+const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://axvo.health').replace(/\/$/, '')
 
 export default function robots(): MetadataRoute.Robots {
   return {

@@ -1,5 +1,5 @@
 /**
- * NEXUS — Clinic database seeder
+ * AXVO — Clinic database seeder
  *
  * Seeds public.clinics from the HRSA Health Center Service Delivery and
  * Look-Alike Sites file (~19k active FQHC sites, pre-geocoded by HRSA).
@@ -133,7 +133,7 @@ async function main() {
   const fileArgIdx = args.indexOf('--file')
   const localFile = fileArgIdx >= 0 ? args[fileArgIdx + 1] : null
 
-  console.log('NEXUS clinic seeder — HRSA Health Center sites')
+  console.log('AXVO clinic seeder — HRSA Health Center sites')
 
   let csvText
   if (localFile) {

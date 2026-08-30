@@ -1,5 +1,5 @@
 /**
- * NEXUS — In-memory sliding-window rate limiter
+ * AXVO — In-memory sliding-window rate limiter
  *
  * Usage:
  *   import { rateLimit } from '@/lib/rate-limit'

@@ -85,7 +85,7 @@ export default function ClinicDetailPage() {
 
     /* Load own review from localStorage */
     try {
-      const raw = localStorage.getItem(`nexus_review_${id}`)
+      const raw = localStorage.getItem(`axvo_review_${id}`)
       if (raw) setOwnReview(JSON.parse(raw))
     } catch { /* ignore */ }
 
@@ -125,7 +125,7 @@ export default function ClinicDetailPage() {
   const handleShare = useCallback(async () => {
     const url = window.location.href
     if (navigator.share) {
-      await navigator.share({ title: clinic?.name, text: `Free clinic: ${clinic?.name} — found via NEXUS`, url })
+      await navigator.share({ title: clinic?.name, text: `Free clinic: ${clinic?.name} — found via AXVO`, url })
     } else {
       await navigator.clipboard.writeText(url)
       setCopied(true)
@@ -135,7 +135,7 @@ export default function ClinicDetailPage() {
 
   const handleSMS = useCallback(() => {
     if (!clinic) return
-    const msg = `Free clinic: ${clinic.name}, ${clinic.address}, ${clinic.city} ${clinic.state}. Phone: ${clinic.phone}. Found via NEXUS (nexus.health)`
+    const msg = `Free clinic: ${clinic.name}, ${clinic.address}, ${clinic.city} ${clinic.state}. Phone: ${clinic.phone}. Found via AXVO (axvo.health)`
     window.location.href = `sms:?body=${encodeURIComponent(msg)}`
   }, [clinic])
 
@@ -154,7 +154,7 @@ export default function ClinicDetailPage() {
   useEffect(() => {
     if (!clinic) return
     try {
-      const STORAGE_KEY = 'nexus_last_viewed'
+      const STORAGE_KEY = 'axvo_last_viewed'
       const raw  = localStorage.getItem(STORAGE_KEY)
       const list: Array<{ id: string; name: string; city: string; state: string; ts: number }> =
         raw ? JSON.parse(raw) : []
@@ -773,7 +773,7 @@ export default function ClinicDetailPage() {
                 />
               </div>
               <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-inter)', marginTop: 10, fontWeight: 300 }}>
-                Scheduling powered by the clinic&apos;s own booking system. NEXUS does not store appointment data.
+                Scheduling powered by the clinic&apos;s own booking system. AXVO does not store appointment data.
               </p>
             </div>
           ) : (
@@ -847,7 +847,7 @@ export default function ClinicDetailPage() {
         {/* ── Report outdated info ── */}
         <div style={{ marginTop: '24px', textAlign: 'center' }}>
           <a
-            href={`mailto:data@nexus.health?subject=Report outdated info: ${encodeURIComponent(clinic.name)}&body=Clinic ID: ${clinic.id}%0AClinic name: ${encodeURIComponent(clinic.name)}%0A%0AWhat's outdated:%0A`}
+            href={`mailto:data@axvo.health?subject=Report outdated info: ${encodeURIComponent(clinic.name)}&body=Clinic ID: ${clinic.id}%0AClinic name: ${encodeURIComponent(clinic.name)}%0A%0AWhat's outdated:%0A`}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '6px',
               fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)',

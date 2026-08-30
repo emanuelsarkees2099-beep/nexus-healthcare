@@ -38,15 +38,15 @@ const pill: React.CSSProperties = {
 
 const STORIES = [
   { name: 'Maria L.', city: 'Phoenix, AZ', category: 'Insurance Navigation', fullStory: false,
-    quote: 'I spent six months thinking I didn\'t qualify for anything. Then I logged into NEXUS at 11pm on a Tuesday and within 8 minutes it told me I qualified for AHCCCS and pointed me to a CHW who spoke Spanish. Three weeks later I had coverage. I cried.',
+    quote: 'I spent six months thinking I didn\'t qualify for anything. Then I logged into AXVO at 11pm on a Tuesday and within 8 minutes it told me I qualified for AHCCCS and pointed me to a CHW who spoke Spanish. Three weeks later I had coverage. I cried.',
     expanded: 'What I want people to know is that the system makes you feel stupid on purpose. It\'s confusing because they want you to give up. I almost did. But the CHW who helped me — Rosa — she had been through the same thing. She knew every form, every deadline, every trick they use to reject you. We got it done together. I\'m sharing this so whoever reads it knows: don\'t give up. There are people who want to help.'
   },
   { name: 'James T.', city: 'Detroit, MI', category: 'Emergency Care Rights', fullStory: false,
-    quote: 'I had a heart scare at 2am. No insurance. I was about to not go because I thought I\'d get a $40,000 bill. My daughter showed me the NEXUS rights page on her phone. I didn\'t know hospitals can\'t turn you away. I went. It was a minor arrhythmia. Treatable.',
-    expanded: 'The hospital tried to send me a bill anyway. $12,000 for three hours. The NEXUS legal aid connection helped me dispute it under the No Surprises Act and Medicaid retroactive enrollment. I paid $0. Please share the rights page with every person you know who is scared to go to the ER. That fear is killing people.'
+    quote: 'I had a heart scare at 2am. No insurance. I was about to not go because I thought I\'d get a $40,000 bill. My daughter showed me the AXVO rights page on her phone. I didn\'t know hospitals can\'t turn you away. I went. It was a minor arrhythmia. Treatable.',
+    expanded: 'The hospital tried to send me a bill anyway. $12,000 for three hours. The AXVO legal aid connection helped me dispute it under the No Surprises Act and Medicaid retroactive enrollment. I paid $0. Please share the rights page with every person you know who is scared to go to the ER. That fear is killing people.'
   },
   { name: 'Anh N.', city: 'San Jose, CA', category: 'Language Access', fullStory: false,
-    quote: 'My mother has been here 22 years and still doesn\'t speak English well enough for a medical conversation. She\'s been misdiagnosed twice because of translation errors. The CHW we found through NEXUS speaks her exact dialect of Vietnamese — not just standard Vietnamese. For the first time she understood her own diagnosis.',
+    quote: 'My mother has been here 22 years and still doesn\'t speak English well enough for a medical conversation. She\'s been misdiagnosed twice because of translation errors. The CHW we found through AXVO speaks her exact dialect of Vietnamese — not just standard Vietnamese. For the first time she understood her own diagnosis.',
     expanded: 'People don\'t understand how much is lost in a bad translation. Medical terms, cultural context, the way you describe pain — all of it matters. My mother had been describing her symptoms wrong for years not because she was inaccurate but because the translator was translating the wrong concept. The CHW caught it immediately. My mother\'s condition has been properly managed for 8 months now.'
   },
 ]
@@ -315,7 +315,7 @@ export default function StoriesPage() {
 
                 <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer' }}>
                   <input type="checkbox" checked={form.consent} onChange={e => setForm(p => ({ ...p, consent: e.target.checked }))} style={{ marginTop: '2px', width: '16px', height: '16px', accentColor: 'var(--accent)', flexShrink: 0 }} />
-                  <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65 }}>I consent to NEXUS publishing this story (with only my first name and city) and understand I can request removal at any time.</span>
+                  <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65 }}>I consent to AXVO publishing this story (with only my first name and city) and understand I can request removal at any time.</span>
                 </label>
 
                 {submitError && (
