@@ -242,7 +242,7 @@ export default function Nav({ initialUser }: NavProps = {}) {
             width={1238}
             height={150}
             priority
-            style={{ height: '20px', width: 'auto', userSelect: 'none' }}
+            style={{ height: '15px', width: 'auto', userSelect: 'none' }}
           />
         </a>
 
