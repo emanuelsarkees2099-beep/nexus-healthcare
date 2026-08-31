@@ -988,8 +988,8 @@ export default function EligibilityPage() {
       <JsonLd schema={ELIGIBILITY_FAQ_SCHEMA} id="schema-faq-eligibility" />
       <JsonLd
         schema={breadcrumbSchema([
-          { name: 'Home',        url: 'https://axvo.health' },
-          { name: 'Eligibility', url: 'https://axvo.health/eligibility' },
+          { name: 'Home',        url: 'https://www.axvohealth.com' },
+          { name: 'Eligibility', url: 'https://www.axvohealth.com/eligibility' },
         ])}
         id="schema-breadcrumb-eligibility"
       />

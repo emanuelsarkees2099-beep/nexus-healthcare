@@ -280,7 +280,7 @@ export default function TriagePage() {
   }
 
   function handleShare(res: TriageResult) {
-    const text = `Axvo Health Triage\nSymptom: ${query}\nUrgency: ${urgencyConfig[res.urgency].label}\nNext step: ${res.steps[0] ?? ''}\n\axvo.health/triage`
+    const text = `Axvo Health Triage\nSymptom: ${query}\nUrgency: ${urgencyConfig[res.urgency].label}\nNext step: ${res.steps[0] ?? ''}\n\axvohealth.com/triage`
     if (navigator.share) {
       navigator.share({ title: 'Axvo Triage Result', text }).catch(() => {})
     } else {

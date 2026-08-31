@@ -135,7 +135,7 @@ export default function ClinicDetailPage() {
 
   const handleSMS = useCallback(() => {
     if (!clinic) return
-    const msg = `Free clinic: ${clinic.name}, ${clinic.address}, ${clinic.city} ${clinic.state}. Phone: ${clinic.phone}. Found via AXVO (axvo.health)`
+    const msg = `Free clinic: ${clinic.name}, ${clinic.address}, ${clinic.city} ${clinic.state}. Phone: ${clinic.phone}. Found via AXVO (axvohealth.com)`
     window.location.href = `sms:?body=${encodeURIComponent(msg)}`
   }, [clinic])
 
@@ -847,7 +847,7 @@ export default function ClinicDetailPage() {
         {/* ── Report outdated info ── */}
         <div style={{ marginTop: '24px', textAlign: 'center' }}>
           <a
-            href={`mailto:data@axvo.health?subject=Report outdated info: ${encodeURIComponent(clinic.name)}&body=Clinic ID: ${clinic.id}%0AClinic name: ${encodeURIComponent(clinic.name)}%0A%0AWhat's outdated:%0A`}
+            href={`mailto:data@axvohealth.com?subject=Report outdated info: ${encodeURIComponent(clinic.name)}&body=Clinic ID: ${clinic.id}%0AClinic name: ${encodeURIComponent(clinic.name)}%0A%0AWhat's outdated:%0A`}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '6px',
               fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)',

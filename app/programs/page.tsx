@@ -642,8 +642,8 @@ export default function ProgramsPage() {
       <JsonLd schema={PROGRAMS_FAQ_SCHEMA} id="schema-faq-programs" />
       <JsonLd
         schema={breadcrumbSchema([
-          { name: 'Home',     url: 'https://axvo.health' },
-          { name: 'Programs', url: 'https://axvo.health/programs' },
+          { name: 'Home',     url: 'https://www.axvohealth.com' },
+          { name: 'Programs', url: 'https://www.axvohealth.com/programs' },
         ])}
         id="schema-breadcrumb-programs"
       />

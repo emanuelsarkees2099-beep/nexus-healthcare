@@ -166,7 +166,7 @@ async function fetchHRSAForZip(zip: string): Promise<HRSAClinic[]> {
   for (const url of endpoints) {
     try {
       const res = await fetch(url, {
-        headers: { Accept: 'application/json', 'User-Agent': 'AXVO-Seeder/1.0 contact@axvo.health' },
+        headers: { Accept: 'application/json', 'User-Agent': 'AXVO-Seeder/1.0 contact@axvohealth.com' },
         signal: AbortSignal.timeout(12000),
       })
       if (!res.ok) continue

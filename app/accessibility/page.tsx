@@ -40,7 +40,7 @@ const SECTIONS: { title: string; body: string[] }[] = [
   {
     title: 'Contact us about accessibility',
     body: [
-      'If any part of AXVO is difficult or impossible for you to use, please tell us — we treat accessibility reports as high priority. Email accessibility@axvo.health with the page, your device or assistive technology, and what went wrong, and we will respond and work to fix it.',
+      'If any part of AXVO is difficult or impossible for you to use, please tell us — we treat accessibility reports as high priority. Email accessibility@axvohealth.com with the page, your device or assistive technology, and what went wrong, and we will respond and work to fix it.',
     ],
   },
 ]

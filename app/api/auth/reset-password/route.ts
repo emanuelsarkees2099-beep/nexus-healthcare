@@ -12,7 +12,7 @@ import { createClient } from '@supabase/supabase-js'
 import { rateLimit } from '@/lib/rate-limit'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
-const APP_URL  = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://axvo.health').replace(/\/$/, '')
+const APP_URL  = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.axvohealth.com').replace(/\/$/, '')
 
 export async function POST(req: NextRequest) {
   const rl = rateLimit(req as unknown as Request, {

@@ -41,4 +41,4 @@ jobs:
         env:
           # Build must succeed without real secrets. App code already
           # guards missing env (Supabase/Sentry/analytics no-op without keys).
-          NEXT_PUBLIC_APP_URL: https://axvo.health
+          NEXT_PUBLIC_APP_URL: https://www.axvohealth.com

@@ -188,7 +188,7 @@ async function geocode(location: string): Promise<{ lat: number; lng: number; zi
       `&q=${encodeURIComponent(location)}&countrycodes=us&addressdetails=1&limit=1`
 
     const res = await fetch(url, {
-      headers: { 'User-Agent': 'AXVO-Healthcare/1.0 contact@axvo.health' },
+      headers: { 'User-Agent': 'AXVO-Healthcare/1.0 contact@axvohealth.com' },
       next: { revalidate: 86400 },
     })
     if (!res.ok) return null
@@ -224,7 +224,7 @@ async function geocodeZips(zips: string[]): Promise<Map<string, { lat: number; l
     await Promise.all(batch.map(async zip => {
       try {
         const r = await fetch(`https://api.zippopotam.us/us/${zip}`, {
-          headers: { 'User-Agent': 'AXVO-Healthcare/1.0 contact@axvo.health' },
+          headers: { 'User-Agent': 'AXVO-Healthcare/1.0 contact@axvohealth.com' },
           // No next.revalidate here — keep it simple and direct
           signal: AbortSignal.timeout(5000),
         })
@@ -272,7 +272,7 @@ async function fetchNPIClinics(
     url.searchParams.set('limit', '200')
 
     const res = await fetch(url.toString(), {
-      headers: { 'Accept': 'application/json', 'User-Agent': 'AXVO-Healthcare/1.0 contact@axvo.health' },
+      headers: { 'Accept': 'application/json', 'User-Agent': 'AXVO-Healthcare/1.0 contact@axvohealth.com' },
       next: { revalidate: 3600 },
       signal: AbortSignal.timeout(12000),
     })
@@ -383,7 +383,7 @@ async function queryOverpass(lat: number, lng: number, radiusMiles: number): Pro
     let remaining = OVERPASS_ENDPOINTS.length
     for (const ep of OVERPASS_ENDPOINTS) {
       fetch(`${ep}?data=${encoded}`, {
-        headers: { 'Accept': '*/*', 'User-Agent': 'AXVO-Healthcare/1.0 contact@axvo.health' },
+        headers: { 'Accept': '*/*', 'User-Agent': 'AXVO-Healthcare/1.0 contact@axvohealth.com' },
         cache: 'no-store',
         signal: AbortSignal.timeout(5000),
       })
@@ -783,7 +783,7 @@ async function fetchFindHelpClinics(lat: number, lng: number, zip: string, radiu
         headers: {
           'Authorization': `Bearer ${apiKey}`,
           'Accept':        'application/json',
-          'User-Agent':    'AXVO-Healthcare/1.0 contact@axvo.health',
+          'User-Agent':    'AXVO-Healthcare/1.0 contact@axvohealth.com',
         },
         next: { revalidate: 3600 },
         signal: AbortSignal.timeout(8000),
@@ -895,7 +895,7 @@ async function fetchVAClinics(lat: number, lng: number, radiusMiles: number): Pr
       headers: {
         'apikey':     apiKey,
         'Accept':     'application/json',
-        'User-Agent': 'AXVO-Healthcare/1.0 contact@axvo.health',
+        'User-Agent': 'AXVO-Healthcare/1.0 contact@axvohealth.com',
       },
       next: { revalidate: 86400 },
       signal: AbortSignal.timeout(8000),

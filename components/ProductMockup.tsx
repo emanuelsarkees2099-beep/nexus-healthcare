@@ -109,7 +109,7 @@ export default function ProductMockup() {
             </div>
             <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '8px', padding: '5px 14px', fontSize: '12px', color: 'var(--text-2)', fontFamily: 'var(--font-mono)' }}>
-                <Lock1 size={11} color="var(--text-3)" variant="Bold" /> axvo.health/dashboard
+                <Lock1 size={11} color="var(--text-3)" variant="Bold" /> axvohealth.com/dashboard
               </div>
             </div>
             <span style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-mono)' }}>v1.0</span>

@@ -291,7 +291,7 @@ export default function ClinicCard({
   const handleShare = useCallback(async () => {
     const shareData = {
       title: clinic.name,
-      text: `Free clinic: ${clinic.name} — ${clinic.address}, ${clinic.city} ${clinic.state}. Found on AXVO (axvo.health)`,
+      text: `Free clinic: ${clinic.name} — ${clinic.address}, ${clinic.city} ${clinic.state}. Found on AXVO (axvohealth.com)`,
       url: clinicUrl,
     }
     if (navigator.share) {

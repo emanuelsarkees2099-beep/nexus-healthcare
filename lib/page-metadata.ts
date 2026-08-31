@@ -11,7 +11,7 @@
  */
 import type { Metadata } from 'next'
 
-const BASE_URL      = process.env.NEXT_PUBLIC_APP_URL ?? 'https://axvo.health'
+const BASE_URL      = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.axvohealth.com'
 const SITE_NAME     = 'AXVO'
 const KEYWORDS_BASE = ['free healthcare', 'free clinic', 'uninsured', 'no insurance', 'healthcare access']
 

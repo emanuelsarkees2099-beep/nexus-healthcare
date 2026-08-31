@@ -21,7 +21,7 @@
 
 import type { Metadata } from 'next'
 
-const DEFAULT_BASE = 'https://axvo.health'
+const DEFAULT_BASE = 'https://www.axvohealth.com'
 
 interface OgParams {
   /** One of the pre-configured PAGE_CONFIG keys in /api/og */
@@ -34,7 +34,7 @@ interface OgParams {
   clinic?: string
   /** City shown as pre-label on clinic variant */
   city?: string
-  /** Base URL — defaults to NEXT_PUBLIC_APP_URL or axvo.health */
+  /** Base URL — defaults to NEXT_PUBLIC_APP_URL or axvohealth.com */
   base?: string | null
 }
 

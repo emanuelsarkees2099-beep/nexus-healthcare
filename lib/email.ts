@@ -9,8 +9,8 @@
  */
 
 const RESEND_API_KEY   = process.env.RESEND_API_KEY ?? ''
-const FROM_EMAIL       = process.env.FROM_EMAIL ?? 'AXVO Health <hello@axvo.health>'
-const APP_URL          = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://axvo.health').replace(/\/$/, '')
+const FROM_EMAIL       = process.env.FROM_EMAIL ?? 'AXVO Health <hello@axvohealth.com>'
+const APP_URL          = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.axvohealth.com').replace(/\/$/, '')
 const UNSUBSCRIBE_BASE = `${APP_URL}/api/unsubscribe`
 
 // -- Core types ---------------------------------------------------------------
@@ -176,7 +176,7 @@ p{font-size:14px;color:rgba(255,255,255,0.58);line-height:1.75;margin-bottom:14p
     <div class="body">${content}</div>
     <div class="footer-wrap">
       <p class="footer-text">
-        ${unsub}<a href="${APP_URL}">axvo.health</a> &nbsp;&middot;&nbsp; &copy; ${YEAR} AXVO Health<br/>
+        ${unsub}<a href="${APP_URL}">axvohealth.com</a> &nbsp;&middot;&nbsp; &copy; ${YEAR} AXVO Health<br/>
         Free healthcare navigation for all Americans. AXVO is not a medical provider.
       </p>
     </div>

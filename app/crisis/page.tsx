@@ -212,14 +212,14 @@ export default function CrisisPage() {
         schema={medicalPageSchema(
           'Crisis & Emergency Resources — AXVO',
           'Immediate help for mental health crises, domestic violence, substance abuse, and medical emergencies. Free hotlines, chat, and local resources.',
-          'https://axvo.health/crisis',
+          'https://www.axvohealth.com/crisis',
         )}
         id="schema-medical-crisis"
       />
       <JsonLd
         schema={breadcrumbSchema([
-          { name: 'Home',   url: 'https://axvo.health' },
-          { name: 'Crisis', url: 'https://axvo.health/crisis' },
+          { name: 'Home',   url: 'https://www.axvohealth.com' },
+          { name: 'Crisis', url: 'https://www.axvohealth.com/crisis' },
         ])}
         id="schema-breadcrumb-crisis"
       />

@@ -250,7 +250,7 @@ MIT License. See `LICENSE` file for details.
 
 - **Issues**: GitHub Issues
 - **Discussions**: GitHub Discussions
-- **Email**: contact@axvo.health
+- **Email**: contact@axvohealth.com
 
 ---
 

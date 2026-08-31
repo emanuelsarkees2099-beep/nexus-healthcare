@@ -488,7 +488,7 @@ export default function MethodologyPage() {
           If you use AXVO data or methodology in academic work, presentations, or grant applications, please cite as follows:
         </p>
         <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '14px', padding: '20px 24px', fontFamily: 'monospace', fontSize: '13px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.8, userSelect: 'text', marginBottom: '28px' }}>
-          AXVO Healthcare Platform. (2026). <em>Free and Affordable Clinic Finder: Methodology v2.0</em>. Retrieved from https://axvo.health/methodology
+          AXVO Healthcare Platform. (2026). <em>Free and Affordable Clinic Finder: Methodology v2.0</em>. Retrieved from https://www.axvohealth.com/methodology
         </div>
 
         <div style={callout}>

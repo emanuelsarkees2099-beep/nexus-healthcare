@@ -41,7 +41,7 @@ export default function JsonLd({ schema, id }: JsonLdProps) {
    Pre-built schema factories — import these in page/layout files
    ─────────────────────────────────────────────────────────────────────────── */
 
-const BASE_URL  = 'https://axvo.health'
+const BASE_URL  = 'https://www.axvohealth.com'
 const LOGO_URL  = `${BASE_URL}/icons/icon-512.png`
 
 /** Root WebApplication schema — used in app/layout.tsx */
