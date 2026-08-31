@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import { createClientClient } from '@/lib/auth-client'
 import { useI18n } from '@/components/I18nContext'
@@ -231,19 +232,18 @@ export default function Nav({ initialUser }: NavProps = {}) {
           className="nav-logo"
           style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', flexShrink: 0 }}
         >
-          <svg className="nav-logo-glyph" width="22" height="22" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-            <path d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="var(--accent)" opacity="0.95"/>
-            <path transform="rotate(120 50 50)" d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="var(--accent)" opacity="0.95"/>
-            <path transform="rotate(240 50 50)" d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="var(--accent)" opacity="0.95"/>
-            <circle cx="50" cy="50" r="5" fill="var(--accent)" opacity="0.7"/>
-          </svg>
-          <span style={{
-            fontFamily: 'var(--font-display)', fontSize: '11px', fontWeight: 400,
-            letterSpacing: '0.42em', textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.90)', paddingRight: '0.42em', userSelect: 'none',
-          }}>
-            AXVO
-          </span>
+          {/* Wordmark PNG — source art has a solid black backing, keyed to
+              transparent via luminance-as-alpha (white glyph -> opaque,
+              black -> transparent) so it composites cleanly over the nav's
+              dark background at any width. Native ratio 1238x150 (~8.25:1). */}
+          <Image
+            src="/axvo-wordmark.png"
+            alt=""
+            width={1238}
+            height={150}
+            priority
+            style={{ height: '20px', width: 'auto', userSelect: 'none' }}
+          />
         </a>
 
         {/* ── Desktop nav links ── */}

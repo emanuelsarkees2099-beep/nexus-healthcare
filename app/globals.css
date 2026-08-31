@@ -2098,32 +2098,9 @@ a[role="button"]:active {
   transition: filter 0.3s ease;
 }
 .nav-logo:hover { filter: drop-shadow(0 0 8px rgba(74,144,217,0.35)); }
-.nav-logo-glyph { flex-shrink: 0; transition: transform 0.4s var(--ease-spring); }
-.nav-logo:hover .nav-logo-glyph { transform: rotate(15deg) scale(1.08); }
-
-/* D8 — Logo draw-in animation on load */
-@keyframes logo-draw {
-  from { stroke-dashoffset: 80; opacity: 0; }
-  to   { stroke-dashoffset: 0;  opacity: 1; }
-}
-.nav-logo-glyph polygon,
-.nav-logo-glyph path {
-  stroke-dasharray: 80;
-  stroke-dashoffset: 0;
-  animation: logo-draw 0.9s cubic-bezier(0.16,1,0.3,1) both;
-}
-.nav-logo-glyph path {
-  animation-delay: 0.15s;
-}
-@media (prefers-reduced-motion: reduce) {
-  .nav-logo-glyph polygon,
-  .nav-logo-glyph path {
-    animation: none;
-    stroke-dasharray: none;
-    stroke-dashoffset: 0;
-    opacity: 1;
-  }
-}
+/* .nav-logo-glyph rules removed with the old tri-lobe SVG mark — the nav
+   now renders the AXVO wordmark PNG, which has no path/polygon children
+   for the old rotate/scale hover or stroke-dash draw-in to target. */
 
 /* ═══════════════════════════════════════════════════════════════════
    IMPACT WALL — win marquee pauses on hover, tab focus
