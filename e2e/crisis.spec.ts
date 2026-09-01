@@ -109,8 +109,15 @@ test.describe('Crisis page — resource categories', () => {
 
   test('domestic violence resources are present', async ({ page }) => {
     await goToCrisis(page)
-    const section = page.locator('text=/domestic violence/i, text=/domestic abuse/i').first()
-    await expect(section).toBeVisible({ timeout: 8_000 })
+    // A comma inside a single 'text=...' locator string does NOT act as OR
+    // in Playwright — it silently matches nothing. Confirmed via isolated
+    // probe: 'text=/domestic violence/i, text=/domestic abuse/i' → 0
+    // matches, while 'text=/domestic violence/i' alone → 1, visible,
+    // correct text, immediately (it's in the raw server-rendered HTML,
+    // no timing issue at all). Use .or() to combine two locators for real.
+    const violence = page.locator('text=/domestic violence/i')
+    const abuse     = page.locator('text=/domestic abuse/i')
+    await expect(violence.or(abuse).first()).toBeVisible({ timeout: 8_000 })
   })
 
   test('substance abuse resources are present', async ({ page }) => {
