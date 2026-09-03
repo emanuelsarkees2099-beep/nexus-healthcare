@@ -17,6 +17,10 @@ import { NextRequest } from 'next/server'
 
 export const runtime = 'edge'
 
+/* ImageResponse runs as a serverless function, not in a browser — it needs
+   a real fetchable URL for <img>, not a relative path. */
+const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.axvohealth.com').replace(/\/$/, '')
+
 /* ── Design tokens (must be inline — edge runtime has no CSS) ── */
 const BG    = '#050B16'
 const BG2   = '#08090F'
@@ -96,11 +100,9 @@ export async function GET(req: NextRequest) {
         }}>
           {/* Logo row */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            {/* Hexagon glyph */}
-            <svg width="32" height="32" viewBox="0 0 20 20" fill="none">
-              <polygon points="10,1 18,5.5 18,14.5 10,19 2,14.5 2,5.5" stroke={accentColor} strokeWidth="1.4" fill={`${accentColor}14`}/>
-              <path d="M6.5 13.5 L10 6.5 L13.5 13.5 M8 10.7 H12" stroke={accentColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-            </svg>
+            {/* AXVO badge */}
+            {/* eslint-disable-next-line @next/next/no-img-element -- ImageResponse needs a real <img>, not next/image */}
+            <img src={`${APP_URL}/axvo-badge.png`} width={32} height={32} alt="" />
             <span style={{ fontSize: '13px', fontWeight: 400, letterSpacing: '0.42em', color: 'rgba(255,255,255,0.85)', textTransform: 'uppercase' }}>
               AXVO
             </span>
