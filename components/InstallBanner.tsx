@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import { CloseCircle } from 'iconsax-react'
 
 const DISMISSED_KEY  = 'axvo_install_dismissed'
@@ -80,12 +81,7 @@ export default function InstallBanner() {
       <div className="pwa-install-banner" role="banner" aria-live="polite">
         {/* App icon */}
         <div className="banner-icon" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 100 100" fill="none">
-            <path d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4F8EF0" opacity="0.95"/>
-            <path transform="rotate(120 50 50)" d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4F8EF0" opacity="0.95"/>
-            <path transform="rotate(240 50 50)" d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4F8EF0" opacity="0.95"/>
-            <circle cx="50" cy="50" r="5" fill="#4F8EF0" opacity="0.7"/>
-          </svg>
+          <Image src="/axvo-badge.png" alt="" width={28} height={28} style={{ borderRadius: '50%' }} />
         </div>
 
         {/* Text */}
