@@ -121,16 +121,29 @@ export default function SignupPage() {
       if (authError) throw authError
       if (!authData.user) throw new Error('Signup failed — no user returned.')
 
-      await supabase.from('user_profiles').upsert({
-        id:        authData.user.id,
-        email,
-        user_type: userType,
-      })
-
       if (authData.session) {
+        // Email confirmation is off (or was already satisfied) — we have a
+        // real authenticated session right now, so this write will pass
+        // RLS. Non-fatal: if it somehow still fails, don't block the
+        // success screen over it — app/auth/callback and the dashboard's
+        // own defaults both tolerate a missing profile row.
+        try {
+          await supabase.from('user_profiles').upsert({
+            id:        authData.user.id,
+            email,
+            user_type: userType,
+          })
+        } catch (profileErr) {
+          console.error('[signup] profile upsert failed:', profileErr)
+        }
         setSuccess(true)
         setTimeout(() => { window.location.href = '/onboarding' }, 1600)
       } else {
+        // Confirmation required — no session yet, so we deliberately don't
+        // attempt the profile write here (it would fail RLS, since we're
+        // still unauthenticated at this point). app/auth/callback creates
+        // it once the user clicks the confirmation link and a real session
+        // exists.
         setNeedsConfirm(true)
       }
     } catch (err) {
