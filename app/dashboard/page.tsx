@@ -2,6 +2,7 @@
 export const dynamic = 'force-dynamic'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import Image from 'next/image'
 import { createClientClient } from '@/lib/auth-client'
 import Link from 'next/link'
 import {
@@ -817,12 +818,7 @@ export default function DashboardPage() {
         padding: '0 24px',
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-          <svg width="17" height="17" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-            <path d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4F8EF0" opacity="0.95"/>
-            <path transform="rotate(120 50 50)" d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4F8EF0" opacity="0.95"/>
-            <path transform="rotate(240 50 50)" d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4F8EF0" opacity="0.95"/>
-            <circle cx="50" cy="50" r="5" fill="#4F8EF0" opacity="0.7"/>
-          </svg>
+          <Image src="/axvo-badge.png" alt="" width={17} height={17} style={{ borderRadius: '50%' }} />
           <span style={{
             fontFamily: 'var(--font-display)',
             fontSize: 11, fontWeight: 400, letterSpacing: '0.44em',

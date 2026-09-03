@@ -164,12 +164,7 @@ p{font-size:14px;color:rgba(255,255,255,0.58);line-height:1.75;margin-bottom:14p
 <div class="wrap">
   <div class="card">
     <div class="logo-bar">
-      <svg width="22" height="22" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4F8EF0" opacity="0.95"/>
-        <path transform="rotate(120 50 50)" d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4F8EF0" opacity="0.95"/>
-        <path transform="rotate(240 50 50)" d="M50,50 C38,44 30,26 50,12 C70,26 62,44 50,50Z" fill="#4F8EF0" opacity="0.95"/>
-        <circle cx="50" cy="50" r="5" fill="#4F8EF0" opacity="0.7"/>
-      </svg>
+      <img src="${APP_URL}/axvo-badge.png" width="22" height="22" alt="AXVO" style="border-radius:50%;display:block;" />
       <span class="logo-text">AXVO</span>
     </div>
     <div class="hr"></div>
