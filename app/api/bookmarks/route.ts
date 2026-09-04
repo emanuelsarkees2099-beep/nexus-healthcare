@@ -5,6 +5,20 @@ import { BookmarkSchema, badRequest } from '@/lib/validation'
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
 const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+// The data-operations client below deliberately uses the service role, not
+// anonKey: getUser() only *verifies* who the caller is (via their bearer
+// token, on its own throwaway anon-key client) -- the actual query client
+// created bare with createClient(url, anonKey) never had that token
+// attached to it, so saved_resources' auth.uid() = user_id RLS policy
+// would see every one of these requests as anonymous and reject all of
+// them. Rather than restructure this to forward the caller's JWT, this
+// matches the same fix already applied today to /api/submit, /api/stats,
+// and /api/admin/submissions: verify identity via getUser(), then trust
+// that check and use the service role for the actual read/write, filtered
+// manually by user_id (already done throughout this file). RLS stays on
+// and self-scoped for saved_resources regardless, as defense in depth
+// against anyone querying the table directly with just the anon key.
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? anonKey
 
 async function getUser(req: NextRequest) {
   const token = req.headers.get('authorization')?.slice(7)
@@ -18,7 +32,7 @@ export async function GET(req: NextRequest) {
   const user = await getUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const getSupabaseClient = () => createClient(url, anonKey)
+  const getSupabaseClient = () => createClient(url, serviceRoleKey)
   const { data, error } = await getSupabaseClient()
     .from('saved_resources')
     .select('*')
@@ -41,7 +55,7 @@ export async function POST(req: NextRequest) {
   if (!parsed.success) return badRequest(parsed)
   const { resource_type, resource_id, resource_name, resource_data } = parsed.data
 
-  const getSupabaseClient = () => createClient(url, anonKey)
+  const getSupabaseClient = () => createClient(url, serviceRoleKey)
   const { data, error } = await getSupabaseClient()
     .from('saved_resources')
     .upsert({
@@ -71,7 +85,7 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: 'resource_id and resource_type required' }, { status: 400 })
   }
 
-  const getSupabaseClient = () => createClient(url, anonKey)
+  const getSupabaseClient = () => createClient(url, serviceRoleKey)
   const { error } = await getSupabaseClient()
     .from('saved_resources')
     .delete()
