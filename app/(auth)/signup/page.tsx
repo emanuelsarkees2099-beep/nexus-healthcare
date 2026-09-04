@@ -470,7 +470,7 @@ export default function SignupPage() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginTop: '16px', flexWrap: 'wrap' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: 'var(--text-3)', opacity: 0.7 }}>
                 <ShieldTick size={12} color="rgba(255,255,255,0.35)" variant="TwoTone" />
-                HIPAA compliant
+                Encrypted &amp; access-controlled
               </div>
               <span style={{ color: 'rgba(255,255,255,0.12)', fontSize: '10px' }}>·</span>
               <span style={{ fontSize: '11px', color: 'var(--text-3)', opacity: 0.7 }}>256-bit encrypted</span>

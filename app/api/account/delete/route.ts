@@ -49,13 +49,12 @@ export async function POST(req: NextRequest) {
   const results = await Promise.allSettled([
     service.from('user_profiles').delete().eq('id', userId),
     service.from('push_subscriptions').delete().eq('user_id', userId),
-    // NOTE: the real table is 'saved_searches', not 'saved_resources' --
-    // app/api/bookmarks/route.ts currently queries 'saved_resources',
-    // which doesn't exist (confirmed via a live 404 with Postgres's own
-    // "did you mean saved_searches" hint). That's a separate, real,
-    // pre-existing bug -- the whole bookmark feature is currently broken
-    // in production -- flagged to the user, not fixed here to stay
-    // scoped to this task. Using the real table name below regardless.
+    // saved_searches is a real, distinct, user-scoped table (confirmed
+    // live: accepts user_id, correctly RLS-protected) -- unrelated to the
+    // bookmarks feature (app/api/bookmarks/route.ts queries a table called
+    // 'saved_resources', which doesn't exist at all -- a separate,
+    // unresolved bug, see conversation). Cleaned up here regardless, since
+    // whatever it's for, it's still this user's data.
     service.from('saved_searches').delete().eq('user_id', userId),
     service.from('submissions').update({ user_id: null }).eq('user_id', userId),
     service.from('outcomes').update({ user_id: null }).eq('user_id', userId),

@@ -13,7 +13,6 @@ const PostHogProvider             = dynamic(() => import('@/components/PostHogPr
 const VercelAnalytics            = dynamic(() => import('@/components/VercelAnalytics'),              { ssr: false })
 const MobileDock                  = dynamic(() => import('@/components/MobileDock'),                 { ssr: false })
 const ScrollToTop                 = dynamic(() => import('@/components/ScrollToTop'),                 { ssr: false })
-const InstallBanner               = dynamic(() => import('@/components/InstallBanner'),               { ssr: false })
 
 export default function GlobalClientComponents() {
   /* #37 — Low-bandwidth mode: restore persisted preference on mount */
@@ -81,8 +80,6 @@ export default function GlobalClientComponents() {
       <CookieConsent />
       {/* Mobile bottom dock — shown via CSS only on ≤768px */}
       <MobileDock />
-      {/* PWA install prompt — A2HS banner, mobile only */}
-      <InstallBanner />
       {/* #35 — Centralized toast notification system */}
       <ToastContainer />
       {/* Scroll-reveal: auto-reveals elements with .reveal-fade/.reveal-clip etc. */}
