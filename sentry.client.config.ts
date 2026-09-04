@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/nextjs'
+import { scrubEvent } from '@/lib/sentry-scrub'
 
 const DSN = process.env.NEXT_PUBLIC_SENTRY_DSN
 
@@ -11,9 +12,19 @@ if (DSN) {
     // Capture 15% of transactions for performance monitoring in production
     tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.15 : 0,
 
-    // No session replays — HIPAA caution
+    // No session replays, ever — replaysOnErrorSampleRate was previously
+    // 0.5 in production, directly contradicting this comment. A replay is
+    // a visual recording of what the user was doing, which for this app
+    // can mean a triage symptom description or a story submission's
+    // content actually being typed on screen — a much bigger leak surface
+    // than an error message. Both must be 0.
     replaysSessionSampleRate: 0,
-    replaysOnErrorSampleRate: process.env.NODE_ENV === 'production' ? 0.5 : 0,
+    replaysOnErrorSampleRate: 0,
+
+    // Defense in depth: strip emails/phones/known-sensitive fields from
+    // whatever an error's own message, breadcrumbs, or request data
+    // happen to carry, before the event ever leaves the browser.
+    beforeSend: scrubEvent,
 
     // Suppress common browser noise
     ignoreErrors: [

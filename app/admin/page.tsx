@@ -71,22 +71,23 @@ export default function AdminPage() {
     checkAdmin()
   }, []) // eslint-disable-line
 
+  // Routed through /api/admin/submissions rather than querying Supabase
+  // directly: audit logging needs the service-role key, which can only
+  // ever run server-side, and reading via the service role also fixes a
+  // previously-broken user_profiles join (RLS made it self-only, so a
+  // client-side query only ever saw the logged-in admin's own profile,
+  // never the actual submitter's).
   const loadSubmissions = async () => {
     setLoading(true)
     try {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) return
 
-      const { data, error: err } = await supabase
-        .from('submissions')
-        .select(`
-          *,
-          user_profiles (full_name, email, user_type)
-        `)
-        .order('created_at', { ascending: false })
-        .limit(200)
-
-      if (err) throw err
+      const res = await fetch('/api/admin/submissions', {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      })
+      if (!res.ok) throw new Error('Failed to load submissions')
+      const { submissions: data } = await res.json()
       setSubmissions(data || [])
     } catch (err) {
       setError('Failed to load submissions')
@@ -98,16 +99,25 @@ export default function AdminPage() {
 
   const updateStatus = async (id: string, status: string) => {
     setUpdating(true)
-    const { error: err } = await supabase
-      .from('submissions')
-      .update({ status })
-      .eq('id', id)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) return
 
-    if (!err) {
-      setSubmissions(prev => prev.map(s => s.id === id ? { ...s, status } : s))
-      if (selected?.id === id) setSelected(prev => prev ? { ...prev, status } : prev)
+      const res = await fetch('/api/admin/submissions', {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, status }),
+      })
+      if (res.ok) {
+        setSubmissions(prev => prev.map(s => s.id === id ? { ...s, status } : s))
+        if (selected?.id === id) setSelected(prev => prev ? { ...prev, status } : prev)
+      }
+    } finally {
+      setUpdating(false)
     }
-    setUpdating(false)
   }
 
   const filtered = submissions.filter(s => {

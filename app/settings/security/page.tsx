@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 
 import { useState, useEffect, useCallback } from 'react'
 import { createClientClient } from '@/lib/auth-client'
-import { ShieldTick, Key, Logout, InfoCircle, TickCircle, Copy } from 'iconsax-react'
+import { ShieldTick, Key, Logout, InfoCircle, TickCircle, Copy, Trash } from 'iconsax-react'
 import type { User } from '@supabase/supabase-js'
 
 const Spinner = () => (
@@ -39,6 +39,10 @@ export default function SecuritySettingsPage() {
   const [success,         setSuccess]         = useState('')
   const [mounted,         setMounted]         = useState(false)
   const [copiedCodes,     setCopiedCodes]     = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deleteConfirmText, setDeleteConfirmText] = useState('')
+  const [deleting,        setDeleting]        = useState(false)
+  const [deleteError,     setDeleteError]     = useState('')
 
   const supabase = createClientClient()
 
@@ -121,6 +125,34 @@ export default function SecuritySettingsPage() {
     setSigningOutAll(true)
     await supabase.auth.signOut({ scope: 'global' })
     window.location.href = '/login'
+  }
+
+  const deleteAccount = async () => {
+    if (deleteConfirmText !== 'DELETE') return
+    setDeleting(true)
+    setDeleteError('')
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) { window.location.href = '/login'; return }
+
+      const res = await fetch('/api/account/delete', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      })
+      if (!res.ok) {
+        const body = await res.json().catch(() => null)
+        throw new Error(body?.error || 'Failed to delete account.')
+      }
+
+      // The account no longer exists server-side — clear the local
+      // session too, then leave. No confirmation screen: there's nothing
+      // left to show a signed-out, deleted user.
+      await supabase.auth.signOut()
+      window.location.href = '/'
+    } catch (err) {
+      setDeleteError(err instanceof Error ? err.message : 'Failed to delete account.')
+      setDeleting(false)
+    }
   }
 
   const copyCodes = () => {
@@ -290,6 +322,73 @@ export default function SecuritySettingsPage() {
                 {signingOutAll ? 'Signing out…' : 'Sign out everywhere'}
               </button>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Danger zone — account deletion */}
+      <section style={{ background: 'rgba(248,113,113,0.04)', border: '1px solid rgba(248,113,113,0.20)', borderRadius: '12px', padding: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+          <div style={{ width: '36px', height: '36px', borderRadius: '9px', background: 'rgba(248,113,113,0.08)', border: '1px solid rgba(248,113,113,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Trash size={18} color="#f87171" variant="TwoTone" />
+          </div>
+          <div style={{ flex: 1 }}>
+            <h2 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text, #e8eaf0)', margin: 0 }}>Delete account</h2>
+            <p style={{ fontSize: '12px', color: 'var(--text-3, #6b7280)', margin: '2px 0 12px' }}>
+              Permanently deletes your account, profile, saved clinics, and push subscriptions.
+              This can&apos;t be undone.
+            </p>
+
+            {!showDeleteConfirm ? (
+              <button onClick={() => setShowDeleteConfirm(true)}
+                style={{ fontSize: '12px', fontWeight: 600, color: '#f87171', background: 'rgba(248,113,113,0.08)', border: '1px solid rgba(248,113,113,0.3)', borderRadius: '8px', padding: '8px 14px', cursor: 'pointer', fontFamily: 'inherit' }}>
+                Delete my account
+              </button>
+            ) : (
+              <div style={{ background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(248,113,113,0.25)', borderRadius: '10px', padding: '16px' }}>
+                <p style={{ fontSize: '13px', color: 'var(--text, #e8eaf0)', marginBottom: '10px' }}>
+                  Type <strong>DELETE</strong> to confirm. This immediately and permanently removes your account.
+                </p>
+                <input
+                  type="text"
+                  value={deleteConfirmText}
+                  onChange={e => setDeleteConfirmText(e.target.value)}
+                  placeholder="DELETE"
+                  disabled={deleting}
+                  style={{
+                    width: '100%', padding: '10px 12px', marginBottom: '10px',
+                    background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.12)',
+                    borderRadius: '8px', color: 'var(--text, #e8eaf0)', fontSize: '13px', fontFamily: 'inherit',
+                    outline: 'none', boxSizing: 'border-box',
+                  }}
+                />
+                {deleteError && (
+                  <p style={{ fontSize: '12px', color: '#f87171', marginBottom: '10px' }}>{deleteError}</p>
+                )}
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button
+                    onClick={deleteAccount}
+                    disabled={deleteConfirmText !== 'DELETE' || deleting}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '6px',
+                      fontSize: '12px', fontWeight: 700, color: '#fff',
+                      background: deleteConfirmText === 'DELETE' ? '#f87171' : 'rgba(248,113,113,0.3)',
+                      border: 'none', borderRadius: '8px', padding: '9px 16px',
+                      cursor: deleteConfirmText === 'DELETE' && !deleting ? 'pointer' : 'not-allowed',
+                      fontFamily: 'inherit',
+                    }}>
+                    {deleting && <Spinner />}
+                    {deleting ? 'Deleting…' : 'Permanently delete'}
+                  </button>
+                  <button
+                    onClick={() => { setShowDeleteConfirm(false); setDeleteConfirmText(''); setDeleteError('') }}
+                    disabled={deleting}
+                    style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-3, #6b7280)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
