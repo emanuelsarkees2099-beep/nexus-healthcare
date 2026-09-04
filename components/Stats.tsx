@@ -84,11 +84,16 @@ export default function Stats() {
         /* network error — leave as null */
       }
 
-      /* Submissions / stories */
+      /* Submissions / stories — via a count-only RPC, not a direct table
+         read. `submissions` holds real names, free-text personal stories,
+         and emails, so its SELECT policy is admin-only; this function is
+         SECURITY DEFINER and returns nothing but a number. */
       try {
-        const { count, error } = await supabase
-          .from('submissions')
-          .select('*', { count: 'exact', head: true })
+        // 'submissions_count' isn't in the generated Supabase types yet
+        // (function created via raw SQL migration, not the type-gen CLI) —
+        // same cast pattern already used above for the 'clinics' table.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data: count, error } = await (supabase as unknown as any).rpc('submissions_count')
         if (!error && typeof count === 'number' && count >= STAT_DEFS.find(s => s.key === 'stories')!.minValid) {
           storiesCount = count
           fetchOk = true

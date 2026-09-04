@@ -3,7 +3,14 @@ import { createClient } from '@supabase/supabase-js'
 import { rateLimit } from '@/lib/rate-limit'
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+// Service role, not the public anon key: this route runs server-side only
+// and is never exposed to the browser, so it should bypass RLS as a trusted
+// caller rather than depend on anon-permissive policies. This also avoids a
+// real correctness trap -- Postgres applies SELECT policies to the
+// RETURNING clause of INSERT too, so once `submissions` SELECT is locked to
+// admins-only, an anon-key insert's `.select('id')` would come back empty
+// and break every public submission form (stories, advocacy, CHW, etc.).
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
 const RESEND_API_KEY = process.env.RESEND_API_KEY ?? ''
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? ''
 
@@ -145,7 +152,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: validationError }, { status: 422 })
     }
 
-    const getSupabaseClient = () => createClient(url, anonKey)
+    const getSupabaseClient = () => createClient(url, serviceRoleKey)
 
     // Stories → pending_review (admin approves before publishing)
     // CHW signups (has name+email+city but no source field) → pending_verification

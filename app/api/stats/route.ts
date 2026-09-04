@@ -2,11 +2,15 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+// Service role: this is a server-side aggregate-stats route, never exposed
+// to the browser, so it should read as a trusted caller rather than depend
+// on submissions/outcomes having anon-permissive SELECT (which they no
+// longer do -- both are now admin-only at the RLS layer).
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
 
 export async function GET() {
   try {
-    const getSupabaseClient = () => createClient(url, anonKey)
+    const getSupabaseClient = () => createClient(url, serviceRoleKey)
 
     // Total submissions
     const { count: total } = await getSupabaseClient()
