@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { createClientClient } from '@/lib/auth-client'
 
 const IDLE_MS    = 25 * 60 * 1000  // 25 min — show warning
-const LOGOUT_MS  = 30 * 60 * 1000  // 30 min — sign out (HIPAA §164.312(a)(2)(iii))
+const LOGOUT_MS  = 30 * 60 * 1000  // 30 min — sign out (standard practice for accounts touching health-adjacent info; AXVO is not a HIPAA-covered entity, see app/terms#hipaa)
 const EVENTS     = ['mousemove', 'keydown', 'mousedown', 'touchstart', 'scroll'] as const
 
 export function IdleTimeout() {
@@ -146,7 +146,7 @@ export function IdleTimeout() {
           </button>
         </div>
         <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '14px', lineHeight: 1.4 }}>
-          HIPAA requires automatic session expiry after 30 minutes of inactivity.
+          Sessions expire automatically after 30 minutes of inactivity to help protect your account.
         </p>
       </div>
     </div>

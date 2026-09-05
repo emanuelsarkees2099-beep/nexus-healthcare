@@ -96,6 +96,18 @@ GDPR Rights (EU residents) — You have rights under GDPR including access, rect
 To exercise any right: email privacy@axvohealth.org with "Privacy Request" in the subject line.`
   },
   {
+    id: 'hipaa',
+    icon: <Shield size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
+    title: 'Health Information & HIPAA',
+    content: `AXVO is a healthcare navigation service, not a healthcare provider, health plan, or clearinghouse. AXVO is not a HIPAA-covered entity or business associate as defined under the Health Insurance Portability and Accountability Act of 1996, and does not issue a formal HIPAA Notice of Privacy Practices.
+
+We built AXVO to need as little of your health information as possible in the first place: as described above, our eligibility screener runs in your browser and is never transmitted to us, and location searches aren't stored. Please don't enter medical records, diagnoses, or other protected health information into AXVO — the AI Assistant is designed to help you find and navigate to care, not to store or process your health records.
+
+Whatever account or profile information you do choose to give us is still handled under every other protection described in this policy: encrypted in transit and at rest, access-controlled with row-level security, never sold, and deletable by you at any time.
+
+See our Terms of Service (Section 11) for the full legal detail on this.`
+  },
+  {
     id: 'security',
     icon: <InfoCircle size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'Security',
@@ -111,6 +123,16 @@ In the event of a data breach affecting personal information, we will notify aff
 
 export default function PrivacyPage() {
   const [openSection, setOpenSection] = useState<string | null>('what-we-collect')
+
+  React.useEffect(() => {
+    const hash = window.location.hash.replace('#', '')
+    if (hash && SECTIONS.some(s => s.id === hash)) {
+      setOpenSection(hash)
+      // Wait for the accordion's own 0.45s expand transition to finish before
+      // scrolling, so the target has its final expanded height/position.
+      setTimeout(() => document.getElementById(hash)?.scrollIntoView({ behavior: 'auto', block: 'start' }), 500)
+    }
+  }, [])
 
   return (
     <AppShell>
@@ -203,6 +225,7 @@ export default function PrivacyPage() {
             {SECTIONS.map((sec) => (
               <div
                 key={sec.id}
+                id={sec.id}
                 style={{
                   borderRadius: '16px', overflow: 'hidden',
                   border: '1px solid',

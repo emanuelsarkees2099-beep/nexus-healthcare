@@ -425,15 +425,14 @@ export default function SignupPage() {
                 </div>
               </div>
 
-              {/* Terms + HIPAA consent */}
+              {/* Terms + Privacy consent */}
               <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer' }}>
                 <input type="checkbox" checked={agreed} onChange={e => { setAgreed(e.target.checked); setError('') }}
                   style={{ marginTop: '2px', accentColor: '#4F8EF0', width: '14px', height: '14px', flexShrink: 0, cursor: 'pointer' }} />
                 <span style={{ fontSize: '12px', color: 'var(--text-3)', lineHeight: 1.5 }}>
                   I agree to the{' '}
-                  <Link href="/terms" target="_blank" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Terms of Service</Link>,{' '}
-                  <Link href="/privacy" target="_blank" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Privacy Policy</Link>, and{' '}
-                  <Link href="/privacy#hipaa" target="_blank" style={{ color: 'var(--accent)', textDecoration: 'none' }}>HIPAA Notice of Privacy Practices</Link>
+                  <Link href="/terms" target="_blank" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Terms of Service</Link> and{' '}
+                  <Link href="/privacy#hipaa" target="_blank" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Privacy Policy</Link>, including how AXVO handles health-related information
                 </span>
               </label>
 

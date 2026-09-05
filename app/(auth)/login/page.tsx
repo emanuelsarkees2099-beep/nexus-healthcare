@@ -173,7 +173,7 @@ function LoginPageInner() {
   }
 
   const sessionReasonMsg =
-    reason === 'timeout'         ? 'Your session expired after 30 minutes of inactivity — a HIPAA security requirement.' :
+    reason === 'timeout'         ? 'Your session expired after 30 minutes of inactivity, to help protect your account.' :
     reason === 'session_expired' ? 'Your session expired. Please sign in again.' :
     null
 
