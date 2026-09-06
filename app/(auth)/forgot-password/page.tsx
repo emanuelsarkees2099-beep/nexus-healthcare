@@ -50,6 +50,11 @@ export default function ForgotPasswordPage() {
     setLoading(true); setError('')
     try {
       // Always show success regardless of whether the email exists — prevents account enumeration
+      //
+      // This becomes {{ .RedirectTo }} in the "Reset Password" email
+      // template, which app/auth/confirm/route.ts reads back as `next`
+      // once it's verified the link — see that file for why this no
+      // longer goes through /auth/callback's PKCE code exchange.
       await supabase.auth.resetPasswordForEmail(email.trim(), {
         redirectTo: `${window.location.origin}/reset-password`,
       })

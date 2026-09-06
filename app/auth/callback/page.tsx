@@ -3,36 +3,7 @@ export const dynamic = 'force-dynamic'
 
 import { useEffect, useState } from 'react'
 import { createClientClient } from '@/lib/auth-client'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
-
-/**
- * Ensure a user_profiles row exists for this user. This is the first (and
- * for email/password signups, only) point a real authenticated session
- * exists — signup/page.tsx's own attempt runs immediately after signUp(),
- * before email confirmation, so RLS correctly rejects it every time
- * (proven: "new row violates row-level security policy for table
- * user_profiles"). Google OAuth never attempts profile creation anywhere
- * else at all. Non-fatal by design: a failure here shouldn't block sign-in.
- */
-async function ensureUserProfile(supabase: SupabaseClient, user: User) {
-  try {
-    const { data: existing } = await supabase
-      .from('user_profiles')
-      .select('id')
-      .eq('id', user.id)
-      .maybeSingle()
-    if (existing) return
-
-    await supabase.from('user_profiles').upsert({
-      id:        user.id,
-      email:     user.email ?? '',
-      full_name: user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || null,
-      user_type: user.user_metadata?.user_type || 'patient',
-    })
-  } catch (err) {
-    console.error('[auth/callback] ensureUserProfile failed:', err)
-  }
-}
+import { ensureUserProfile } from '@/lib/user-profile'
 
 /**
  * OAuth callback — client-side only.
@@ -40,6 +11,15 @@ async function ensureUserProfile(supabase: SupabaseClient, user: User) {
  * Handles both Supabase PKCE flow (?code=) and implicit flow (#access_token=).
  * Running in the browser gives the SDK access to localStorage (code_verifier)
  * and URL hash fragments, which a server route.ts cannot see.
+ *
+ * This is genuinely safe to keep as a PKCE code exchange: Google OAuth never
+ * leaves the user's browser (it's a redirect to Google and back, same tab),
+ * so the code verifier stashed at request time is always still there.
+ * Email links (signup confirmation, magic link, password reset) are the
+ * opposite — routinely opened in a different browser/device than the one
+ * used to request them — which is why those now go through
+ * app/auth/confirm/route.ts's token-hash verification instead. See that
+ * file for the full explanation.
  */
 export default function AuthCallbackPage() {
   const [status, setStatus] = useState<'loading' | 'error'>('loading')
@@ -71,7 +51,7 @@ export default function AuthCallbackPage() {
             return
           }
           const user = data.session?.user ?? data.user
-          if (user) await ensureUserProfile(supabase, user)
+          if (user) await ensureUserProfile(supabase, user).catch(err => console.error('[auth/callback] ensureUserProfile failed:', err))
           window.location.href = safeNext
         })
         .catch(err => {
@@ -86,7 +66,7 @@ export default function AuthCallbackPage() {
     const timer = setTimeout(async () => {
       const { data } = await supabase.auth.getSession()
       if (data.session) {
-        await ensureUserProfile(supabase, data.session.user)
+        await ensureUserProfile(supabase, data.session.user).catch(err => console.error('[auth/callback] ensureUserProfile failed:', err))
         window.location.href = safeNext
       } else {
         // Listen for the SIGNED_IN event the SDK fires after processing the hash
@@ -94,9 +74,9 @@ export default function AuthCallbackPage() {
           (event, session) => {
             if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session) {
               subscription.unsubscribe()
-              ensureUserProfile(supabase, session.user).then(() => {
-                window.location.href = safeNext
-              })
+              ensureUserProfile(supabase, session.user)
+                .catch(err => console.error('[auth/callback] ensureUserProfile failed:', err))
+                .then(() => { window.location.href = safeNext })
             }
           }
         )

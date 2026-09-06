@@ -121,7 +121,13 @@ function LoginPageInner() {
     try {
       const { error: err } = await supabase.auth.signInWithOtp({
         email,
-        options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(safeNext)}` },
+        // This becomes {{ .RedirectTo }} in the "Magic Link" email template,
+        // which app/auth/confirm/route.ts reads back as `next` once it's
+        // verified the link — see that file for why magic-link emails no
+        // longer go through /auth/callback's PKCE code exchange (that
+        // requires browser-stored state from the browser that requested it,
+        // which an emailed link routinely gets opened outside of).
+        options: { emailRedirectTo: `${window.location.origin}${safeNext}` },
       })
       if (err) throw err
       setMagicSent(true)

@@ -113,10 +113,14 @@ export default function SignupPage() {
         password,
         options: {
           data: { user_type: userType, consent_at: new Date().toISOString() },
-          // Without this, Supabase falls back to the dashboard's generic
-          // Site URL for the confirmation link — which can 404 or land on
-          // the wrong domain in production.
-          emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+          // This becomes {{ .RedirectTo }} in the "Confirm signup" email
+          // template, which app/auth/confirm/route.ts reads back as `next`
+          // once it's verified the link — see that file for why the
+          // confirmation link no longer goes through /auth/callback at all.
+          // Without an explicit value here, Supabase would fall back to the
+          // dashboard's generic Site URL, which can 404 or land on the
+          // wrong domain in production.
+          emailRedirectTo: `${window.location.origin}/dashboard`,
         },
       })
       if (authError) throw authError

@@ -57,13 +57,31 @@ export default function ResetPasswordPage() {
 
   useEffect(() => {
     if (!supabase) return
+
+    // The recovery link now goes through app/auth/confirm/route.ts (token-hash
+    // verifyOtp, works from any browser/device), which already establishes a
+    // real session via cookie before redirecting here — so in the normal case
+    // there's already a session by the time this page loads, and we don't
+    // need to wait for anything.
+    let cancelled = false
+    supabase.auth.getSession().then(({ data }) => {
+      if (!cancelled && data.session) {
+        setReady(true)
+        setTimeout(() => passRef.current?.focus(), 350)
+      }
+    })
+
+    // Fallback for any link still using the older implicit/hash flow (e.g.
+    // one sent before the email template was updated, or already sitting in
+    // an inbox) — the SDK auto-detects the hash and fires this event once
+    // it's processed it.
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'PASSWORD_RECOVERY') {
         setReady(true)
         setTimeout(() => passRef.current?.focus(), 350)
       }
     })
-    return () => subscription.unsubscribe()
+    return () => { cancelled = true; subscription.unsubscribe() }
   }, [supabase])
 
   const handleSubmit = async (e: React.FormEvent) => {
