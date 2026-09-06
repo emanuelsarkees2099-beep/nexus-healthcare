@@ -39,8 +39,13 @@ const securityHeaders = [
       // Fetch directives
       `default-src 'self'`,
       // Next.js requires unsafe-inline for its runtime scripts & __NEXT_DATA__
-      // Vercel Speed Insights + Analytics need their CDN
-      `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com https://vercel.live`,
+      // Vercel Speed Insights + Analytics need their CDN. PostHog serves its
+      // own JS bundle (config.js, surveys.js, etc.) from us-assets.i.posthog.com
+      // -- confirmed live in production that without this, the browser blocks
+      // that script outright and PostHog never initializes at all (the
+      // connect-src entries below don't help if the library's own code never
+      // loads in the first place).
+      `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com https://vercel.live https://us-assets.i.posthog.com`,
       // Inline styles used by React. Google Fonts stylesheet.
       `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
       // Google Fonts files + data URIs for icons

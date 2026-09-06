@@ -992,6 +992,17 @@ async function fetchVAClinics(lat: number, lng: number, radiusMiles: number): Pr
 }
 
 // ── Cache search results (fire-and-forget, non-blocking) ─────────────────────
+// NOTE: `clinic_cache` (singular) has never actually been created in the
+// live database -- confirmed against the live Supabase table list, same
+// as saved_resources/bookmarks earlier this session. It's easy to confuse
+// with `clinics_cache` (plural), which DOES exist but is a completely
+// different, unrelated table: a full bulk HRSA seed dump keyed by its own
+// `id` (see scripts/seed-hifld.ts), not a clinic_id → clinic_data JSONB
+// cache. Writing/reading this table has always silently failed (caught
+// below, never surfaced), so every clinic detail page has always shown
+// "Clinic not found" -- 100% of the time, for every clinic, confirmed
+// live. See supabase/migrations/20260906_create_clinic_cache.sql, which
+// actually creates the table this code has always assumed existed.
 async function cacheClinicsBg(clinics: Clinic[], source: string): Promise<void> {
   if (!sbUrl || clinics.length === 0) return
   try {
