@@ -62,11 +62,33 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
       attributionControl: true,
     })
 
-    // Dark-theme tile layer
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd', maxZoom: 19,
-    }).addTo(map)
+    // Dark-theme tile layer — MapTiler (free tier, key required).
+    // CARTO's free dark_all basemap (used previously) started requiring an
+    // account/key and served every tile with a giant "API KEY REQUIRED"
+    // watermark in production -- confirmed live. MapTiler's free tier
+    // (100k loads/month, no card required) is explicitly fine for
+    // production use. If the key isn't set, fall back to plain OSM tiles
+    // (no dark styling, but never shows a broken/watermarked map) rather
+    // than silently building a URL with "undefined" in it.
+    const maptilerKey = process.env.NEXT_PUBLIC_MAPTILER_KEY
+    if (maptilerKey) {
+      // MapTiler serves 512px tiles by default (confirmed: fetched one
+      // directly, came back 512x512), not the 256px Leaflet assumes --
+      // tileSize/zoomOffset below are required, or the map renders zoomed
+      // in 2x from what {z} actually requested.
+      L.tileLayer(`https://api.maptiler.com/maps/dataviz-dark/{z}/{x}/{y}.png?key=${maptilerKey}`, {
+        attribution: '&copy; <a href="https://www.maptiler.com/copyright/" target="_blank">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        tileSize: 512,
+        zoomOffset: -1,
+        maxZoom: 20,
+      }).addTo(map)
+    } else {
+      console.warn('[ClinicMap] NEXT_PUBLIC_MAPTILER_KEY not set — falling back to standard OpenStreetMap tiles (no dark styling).')
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        subdomains: 'abc', maxZoom: 19,
+      }).addTo(map)
+    }
 
     // User location pin
     const homeIcon = L.divIcon({
