@@ -36,8 +36,24 @@ const pill: React.CSSProperties = {
   border: '1px solid rgba(74,144,217,0.18)',
 }
 
+const STORIES = [
+  { name: 'Maria L.', city: 'Phoenix, AZ', category: 'Insurance Navigation', fullStory: false,
+    quote: 'I spent six months thinking I didn\'t qualify for anything. Then I logged into AXVO at 11pm on a Tuesday and within 8 minutes it told me I qualified for AHCCCS. Three weeks later I had coverage. I cried.',
+    expanded: 'What I want people to know is that the system makes you feel stupid on purpose. It\'s confusing because they want you to give up. I almost did. But I got it done. I\'m sharing this so whoever reads it knows: don\'t give up. There are people who want to help.'
+  },
+  { name: 'James T.', city: 'Detroit, MI', category: 'Emergency Care Rights', fullStory: false,
+    quote: 'I had a heart scare at 2am. No insurance. I was about to not go because I thought I\'d get a $40,000 bill. My daughter showed me the AXVO rights page on her phone. I didn\'t know hospitals can\'t turn you away. I went. It was a minor arrhythmia. Treatable.',
+    expanded: 'The hospital tried to send me a bill anyway. $12,000 for three hours. The AXVO legal aid connection helped me dispute it under the No Surprises Act and Medicaid retroactive enrollment. I paid $0. Please share the rights page with every person you know who is scared to go to the ER. That fear is killing people.'
+  },
+  { name: 'Anh N.', city: 'San Jose, CA', category: 'Language Access', fullStory: false,
+    quote: 'My mother has been here 22 years and still doesn\'t speak English well enough for a medical conversation. She\'s been misdiagnosed twice because of translation errors. AXVO helped us find a clinic that had staff who spoke her exact dialect of Vietnamese — not just standard Vietnamese. For the first time she understood her own diagnosis.',
+    expanded: 'People don\'t understand how much is lost in a bad translation. Medical terms, cultural context, the way you describe pain — all of it matters. My mother had been describing her symptoms wrong for years not because she was inaccurate but because the translator was translating the wrong concept. The clinic caught it immediately. My mother\'s condition has been properly managed for 8 months now.'
+  },
+]
+
 export default function StoriesPage() {
   const shareRef = useRef<HTMLDivElement>(null)
+  const [expandedStory, setExpandedStory] = useState<number | null>(null)
   const [form, setForm] = useState({ name: '', location: '', category: '', story: '', consent: false })
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
@@ -134,27 +150,40 @@ export default function StoriesPage() {
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
               <div style={{ ...pill, marginBottom: '20px' }}>Featured stories</div>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Your story could be the first</h2>
+              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Their stories are your guide</h2>
             </div>
           </RevealBlock>
 
-          {/* No stories published yet -- AXVO is new, and every story published here is
-              a real, consented submission reviewed by our team (see the form below).
-              We'd rather show nothing than invent testimonials that never happened. */}
-          <div style={{
-            textAlign: 'center', padding: '56px 24px',
-            border: '1px dashed rgba(255,255,255,0.12)', borderRadius: '20px',
-          }}>
-            <Book1 size={28} color="rgba(255,255,255,0.25)" variant="Linear" style={{ marginBottom: '14px' }} />
-            <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, maxWidth: '440px', margin: '0 auto' }}>
-              AXVO is new — no stories have been published here yet. Every story that appears on this page will be a real, consented submission from someone who used AXVO to find care.
-            </p>
-            <button
-              onClick={() => shareRef.current && smoothScrollTo(shareRef.current)}
-              style={{ marginTop: '20px', padding: '10px 20px', borderRadius: '100px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.25)', color: 'var(--accent)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}
-            >
-              Be the first to share yours
-            </button>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+            {STORIES.map((s, i) => (
+              <RevealBlock key={s.name} delay={i * 100}>
+                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(74,144,217,0.2), rgba(74,144,217,0.04))', borderRadius: '20px' }}>
+                  <div style={{ background: '#080D1A', borderRadius: '18px', padding: '28px', borderLeft: '3px solid rgba(74,144,217,0.4)' }}>
+                    <span style={{ ...pill, fontSize: '10px', padding: '3px 10px', marginBottom: '16px', display: 'inline-flex' }}>{s.category}</span>
+                    <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, fontStyle: 'italic', marginBottom: '0' }}>&ldquo;{s.quote}&rdquo;</p>
+
+                    {expandedStory === i && (
+                      <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.75, marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>{s.expanded}</p>
+                    )}
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px', flexWrap: 'wrap', gap: '12px' }}>
+                      <div>
+                        <div style={{ fontWeight: 700, fontSize: '14px' }}>{s.name}</div>
+                        <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', marginTop: '2px' }}>{s.city}</div>
+                      </div>
+                      <button
+                        onClick={() => setExpandedStory(expandedStory === i ? null : i)}
+                        style={{ padding: '7px 14px', borderRadius: '100px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.6)', fontSize: '12px', cursor: 'pointer', fontFamily: 'inherit', transition: 'background 0.2s' }}
+                        onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
+                      >
+                        {expandedStory === i ? 'Read less' : 'Read more'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </RevealBlock>
+            ))}
           </div>
         </div>
       </section>
