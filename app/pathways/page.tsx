@@ -23,7 +23,7 @@ function useReveal(threshold = 0.15) {
 const STEPS = [
   { n: '01', icon: <SearchStatus size={18} variant="Linear" />, title: "Tell us what's wrong", body: 'Describe your symptoms or what kind of care you need. No medical jargon required.' },
   { n: '02', icon: <Location size={18} variant="Linear" />, title: 'Confirm your location', body: "We use your zip code and language preference to filter what's actually available near you." },
-  { n: '03', icon: <MagicStar size={18} variant="Linear" />, title: 'AI ranks your best match', body: 'Our model weighs 8 variables — success rate, wait time, languages, and more — to surface the right clinic first.' },
+  { n: '03', icon: <MagicStar size={18} variant="Linear" />, title: 'We rank your best match', body: 'We weigh distance, affordability, services offered, and languages spoken to surface the right clinic first — not just the closest one.' },
 ]
 
 const INSURANCE_OPTIONS = [
@@ -120,7 +120,7 @@ const FAQ_ITEMS = [
   { q: "Is this actually free? What's the catch?", a: "There is no catch. AXVO is funded by grants and donations. You pay nothing to search, match, or be seen at any clinic in our network. We will never sell your data." },
   { q: 'Do I need to create an account?', a: 'No account, no login, no email. Everything is anonymous. We don\'t know who you are and we don\'t need to.' },
   { q: 'What if I have some insurance but can\'t afford the copay?', a: "Tell us your insurance status honestly. We'll find clinics that work with your specific plan and also show sliding-scale options that may be cheaper than your copay." },
-  { q: 'How is the "confidence score" calculated?', a: 'It combines 8 variables: symptom-to-specialty match, historical success rate for your symptom at that clinic, language availability, estimated wait time, distance, and your insurance status. 94% of high-confidence matches result in successful care.' },
+  { q: 'How is the "confidence score" calculated?', a: 'It combines real, checkable factors: symptom-to-specialty match, distance, affordability, services offered, language availability, whether the clinic accepts uninsured patients, and your insurance status. It is not based on outcome data we don\'t yet have — see our Methodology page for the full breakdown.' },
   { q: "What if my symptoms are serious — should I go to the ER?", a: "If you are experiencing a life-threatening emergency, call 911. For urgent but non-emergency symptoms, we\'ll always indicate when a situation warrants immediate care and show you the nearest ER alongside free alternatives." },
 ]
 
@@ -269,7 +269,7 @@ export default function PathwaysPage() {
           </h1>
 
           <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: '540px', margin: '0 auto 40px', fontWeight: 400 }}>
-            AXVO uses 47,000+ anonymized outcomes to match you with the exact clinic most likely to help — not just the closest one.
+            AXVO ranks clinics by distance, affordability, services offered, and languages spoken — to help you find the right clinic, not just the closest one.
           </p>
 
           <button
@@ -435,7 +435,7 @@ export default function PathwaysPage() {
             {loading && (
               <div style={{ textAlign: 'center', padding: '60px 0', animation: 'fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both' }}>
                 <div style={{ width: '52px', height: '52px', borderRadius: '50%', border: '2px solid rgba(74,144,217,0.15)', borderTopColor: 'var(--accent)', margin: '0 auto 24px', animation: 'spin 0.9s linear infinite' }} />
-                <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.55)' }}>Matching across 47,000+ outcomes…</p>
+                <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.55)' }}>Finding your best matches…</p>
                 <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.25)', marginTop: '8px' }}>Checking languages · wait times · specialty match</p>
               </div>
             )}
@@ -639,21 +639,21 @@ export default function PathwaysPage() {
         </section>
       )}
 
-      {/* ── AI METHODOLOGY ───────────────────────────── */}
+      {/* ── METHODOLOGY ──────────────────────────────── */}
       <section style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
-              <span style={pill}><Cpu size={14} variant="Linear" /> Model methodology</span>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15, maxWidth: '560px' }}>The model doesn't guess.<br />It learns.</h2>
+              <span style={pill}><Cpu size={14} variant="Linear" /> Matching methodology</span>
+              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15, maxWidth: '560px' }}>Ranked by real, checkable factors.</h2>
             </div>
           </RevealBlock>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2px', borderRadius: '20px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)' }}>
             {[
-              { n: '01', title: 'Trained on 47,000+ outcomes', body: 'Anonymized, logged outcomes from real users — which clinics actually resolved which symptoms in which zip codes.' },
-              { n: '02', title: '8 variables, simultaneously', body: 'Symptom type · location · insurance · wait time · language · specialty · open hours · historical success rate.' },
-              { n: '03', title: 'Improves with every log', body: 'When you log your outcome, you improve the next match. Real feedback loop. Real learning. No synthetic data.' },
+              { n: '01', title: 'Verified public data', body: 'Clinic listings come from HRSA, the National Association of Free & Charitable Clinics, the NPI registry, and OpenStreetMap — not invented data.' },
+              { n: '02', title: '8 real factors', body: 'Distance · affordability score · services offered · sliding-scale/free status · languages spoken · open-now status · accepting-patients status · FQHC/verified-source status.' },
+              { n: '03', title: 'Improves as we grow', body: 'Outcome logging is opt-in and still early. As more people log what worked, we\'ll use that to improve rankings over time — see our Impact page for where that stands.' },
             ].map((item, i) => (
               <RevealBlock key={item.n} delay={i * 100}>
                 <div style={{ padding: '36px 32px', background: i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent', height: '100%' }}>
