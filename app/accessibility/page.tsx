@@ -20,7 +20,7 @@ const SECTIONS: { title: string; body: string[] }[] = [
       'Keyboard navigation: the core flows — search, results, triage, and crisis — can be operated without a mouse.',
       'Screen readers: interactive elements carry descriptive labels, form fields have associated labels, and decorative graphics are hidden from assistive technology.',
       'Reduced motion: if your device requests reduced motion, animations are disabled and content renders immediately.',
-      'Language: the platform supports 48 languages so people can navigate care in the language they speak.',
+      'Language: the platform supports 4 languages (English, Spanish, Chinese, Vietnamese) so people can navigate care in the language they speak.',
       'Touch targets: buttons and links on mobile meet a minimum comfortable tap size.',
       'Text and inputs: form inputs use a 16px minimum on mobile to prevent forced zoom, and layouts avoid horizontal scrolling.',
     ],

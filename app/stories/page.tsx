@@ -5,7 +5,7 @@ import AppShell from '@/components/AppShell'
 import { smoothScrollTo } from '@/utils/smoothScroll'
 import { submitForm } from '@/utils/submitForm'
 import { createClientClient } from '@/lib/auth-client'
-import { Book1, Heart, MessageCircle, ArrowRight, ArrowUp2, TickCircle, Profile2User, Link2 as LinkIcon } from 'iconsax-react'
+import { Book1, Heart, ArrowRight, TickCircle, Profile2User, Link2 as LinkIcon } from 'iconsax-react'
 import Link from 'next/link'
 
 function useReveal(threshold = 0.15) {
@@ -36,40 +36,8 @@ const pill: React.CSSProperties = {
   border: '1px solid rgba(74,144,217,0.18)',
 }
 
-const STORIES = [
-  { name: 'Maria L.', city: 'Phoenix, AZ', category: 'Insurance Navigation', fullStory: false,
-    quote: 'I spent six months thinking I didn\'t qualify for anything. Then I logged into AXVO at 11pm on a Tuesday and within 8 minutes it told me I qualified for AHCCCS and pointed me to a CHW who spoke Spanish. Three weeks later I had coverage. I cried.',
-    expanded: 'What I want people to know is that the system makes you feel stupid on purpose. It\'s confusing because they want you to give up. I almost did. But the CHW who helped me — Rosa — she had been through the same thing. She knew every form, every deadline, every trick they use to reject you. We got it done together. I\'m sharing this so whoever reads it knows: don\'t give up. There are people who want to help.'
-  },
-  { name: 'James T.', city: 'Detroit, MI', category: 'Emergency Care Rights', fullStory: false,
-    quote: 'I had a heart scare at 2am. No insurance. I was about to not go because I thought I\'d get a $40,000 bill. My daughter showed me the AXVO rights page on her phone. I didn\'t know hospitals can\'t turn you away. I went. It was a minor arrhythmia. Treatable.',
-    expanded: 'The hospital tried to send me a bill anyway. $12,000 for three hours. The AXVO legal aid connection helped me dispute it under the No Surprises Act and Medicaid retroactive enrollment. I paid $0. Please share the rights page with every person you know who is scared to go to the ER. That fear is killing people.'
-  },
-  { name: 'Anh N.', city: 'San Jose, CA', category: 'Language Access', fullStory: false,
-    quote: 'My mother has been here 22 years and still doesn\'t speak English well enough for a medical conversation. She\'s been misdiagnosed twice because of translation errors. The CHW we found through AXVO speaks her exact dialect of Vietnamese — not just standard Vietnamese. For the first time she understood her own diagnosis.',
-    expanded: 'People don\'t understand how much is lost in a bad translation. Medical terms, cultural context, the way you describe pain — all of it matters. My mother had been describing her symptoms wrong for years not because she was inaccurate but because the translator was translating the wrong concept. The CHW caught it immediately. My mother\'s condition has been properly managed for 8 months now.'
-  },
-]
-
-const FORUM_POSTS = [
-  { title: 'Finally got Medicaid approved after 3 denials — here\'s what worked', category: 'Insurance', excerpt: 'Sharing the exact documents and appeal letter that got my third application approved after two rejections for "insufficient documentation."', upvotes: 847, replies: 92, time: '2 days ago' },
-  { title: 'ER turned me away — what are my actual rights?', category: 'Finding Care', excerpt: 'I was told they couldn\'t see me without insurance. I know this sounds wrong. Does EMTALA apply here?', upvotes: 612, replies: 74, time: '4 days ago' },
-  { title: 'Free mental health resources that actually helped me', category: 'Mental Health', excerpt: 'After months of searching I found three actually-free options that aren\'t waitlisted forever. Sharing what worked.', upvotes: 1203, replies: 148, time: '1 week ago' },
-  { title: 'Insulin cost me $340/month — now it\'s $8. Here\'s how.', category: 'Medications', excerpt: 'State 340B program + patient assistance program stacked together. Took 45 minutes to set up. Changed my life.', upvotes: 2187, replies: 203, time: '1 week ago' },
-  { title: 'Prenatal care without insurance in 2025 — a full guide', category: 'Pregnancy', excerpt: 'Compiled everything I learned navigating prenatal care uninsured. FQHCs, Medicaid pregnancy coverage, WIC integration.', upvotes: 934, replies: 118, time: '2 weeks ago' },
-]
-
-const CATEGORIES = ['All', 'Insurance', 'Finding Care', 'Mental Health', 'Medications', 'Pregnancy']
-
-const CATEGORY_COLORS: Record<string, string> = {
-  Insurance: 'var(--accent)', 'Finding Care': '#60a5fa', 'Mental Health': '#60a5fa', Medications: '#fbbf24', Pregnancy: '#f472b6',
-}
-
 export default function StoriesPage() {
   const shareRef = useRef<HTMLDivElement>(null)
-  const [activeCategory, setActiveCategory] = useState('All')
-  const [expandedStory, setExpandedStory] = useState<number | null>(null)
-  const [upvotes, setUpvotes] = useState<Record<number, boolean>>({})
   const [form, setForm] = useState({ name: '', location: '', category: '', story: '', consent: false })
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
@@ -94,8 +62,6 @@ export default function StoriesPage() {
       setTimeout(() => setWords(w => { const n = [...w]; n[i] = true; return n }), 120 + i * 85)
     })
   }, [])
-
-  const filteredPosts = activeCategory === 'All' ? FORUM_POSTS : FORUM_POSTS.filter(p => p.category === activeCategory)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -144,7 +110,7 @@ export default function StoriesPage() {
         </p>
 
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '40px' }}>
-          {[['48', 'languages'], ['$0', 'to share'], ['100%', 'anonymous']].map(([v, l]) => (
+          {[['4', 'languages'], ['$0', 'to share'], ['100%', 'anonymous']].map(([v, l]) => (
             <div key={l} style={{ padding: '10px 20px', background: 'rgba(74,144,217,0.07)', border: '1px solid rgba(74,144,217,0.18)', borderRadius: '100px', textAlign: 'center' }}>
               <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.02em' }}>{v}</div>
               <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '2px' }}>{l}</div>
@@ -168,98 +134,27 @@ export default function StoriesPage() {
           <RevealBlock>
             <div style={{ marginBottom: '56px' }}>
               <div style={{ ...pill, marginBottom: '20px' }}>Featured stories</div>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Their stories are your guide</h2>
+              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Your story could be the first</h2>
             </div>
           </RevealBlock>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
-            {STORIES.map((s, i) => (
-              <RevealBlock key={s.name} delay={i * 100}>
-                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(74,144,217,0.2), rgba(74,144,217,0.04))', borderRadius: '20px' }}>
-                  <div style={{ background: '#080D1A', borderRadius: '18px', padding: '28px', borderLeft: '3px solid rgba(74,144,217,0.4)' }}>
-                    <span style={{ ...pill, fontSize: '10px', padding: '3px 10px', marginBottom: '16px', display: 'inline-flex' }}>{s.category}</span>
-                    <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, fontStyle: 'italic', marginBottom: '0' }}>&ldquo;{s.quote}&rdquo;</p>
-
-                    {expandedStory === i && (
-                      <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.75, marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>{s.expanded}</p>
-                    )}
-
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px', flexWrap: 'wrap', gap: '12px' }}>
-                      <div>
-                        <div style={{ fontWeight: 700, fontSize: '14px' }}>{s.name}</div>
-                        <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', marginTop: '2px' }}>{s.city}</div>
-                      </div>
-                      <button
-                        onClick={() => setExpandedStory(expandedStory === i ? null : i)}
-                        style={{ padding: '7px 14px', borderRadius: '100px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.6)', fontSize: '12px', cursor: 'pointer', fontFamily: 'inherit', transition: 'background 0.2s' }}
-                        onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
-                        onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
-                      >
-                        {expandedStory === i ? 'Read less' : 'Read more'}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </RevealBlock>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── COMMUNITY FORUM ── */}
-      <section style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: '860px', margin: '0 auto' }}>
-          <RevealBlock>
-            <div style={{ marginBottom: '40px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}><MessageCircle size={14} variant="Linear" /> Community forum</div>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>Questions answered by people who've been there</h2>
-            </div>
-          </RevealBlock>
-
-          {/* Category filter */}
-          <RevealBlock delay={80}>
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '28px' }}>
-              {CATEGORIES.map(cat => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  style={{ padding: '7px 16px', borderRadius: '100px', border: '1px solid', borderColor: activeCategory === cat ? 'rgba(74,144,217,0.4)' : 'rgba(255,255,255,0.1)', background: activeCategory === cat ? 'rgba(74,144,217,0.12)' : 'transparent', color: activeCategory === cat ? 'var(--accent)' : 'rgba(255,255,255,0.5)', fontSize: '12px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </RevealBlock>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {filteredPosts.map((p, i) => (
-              <RevealBlock key={p.title} delay={i * 60}>
-                <div style={{ padding: '20px 24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', transition: 'border-color 0.25s, background 0.25s' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,144,217,0.2)'; (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.03)' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.06)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)' }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px', flexWrap: 'wrap' }}>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: '10px', padding: '3px 9px', borderRadius: '100px', background: `${CATEGORY_COLORS[p.category] || 'var(--accent)'}15`, color: CATEGORY_COLORS[p.category] || 'var(--accent)', border: `1px solid ${CATEGORY_COLORS[p.category] || 'var(--accent)'}25`, fontWeight: 500 }}>{p.category}</span>
-                        <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>{p.time}</span>
-                      </div>
-                      <h3 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '6px', lineHeight: 1.35 }}>{p.title}</h3>
-                      <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.6, margin: 0 }}>{p.excerpt}</p>
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px', flexShrink: 0 }}>
-                      <button
-                        onClick={() => setUpvotes(prev => ({ ...prev, [i]: !prev[i] }))}
-                        style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '6px 12px', borderRadius: '100px', background: upvotes[i] ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.04)', border: `1px solid ${upvotes[i] ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)'}`, color: upvotes[i] ? 'var(--accent)' : 'rgba(255,255,255,0.4)', fontSize: '12px', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}
-                      >
-                        <ArrowUp2 size={12} color={upvotes[i] ? 'var(--accent)' : 'rgba(255,255,255,0.45)'} variant="Linear" /> {p.upvotes + (upvotes[i] ? 1 : 0)}
-                      </button>
-                      <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', gap: '4px' }}><MessageCircle size={11} color="rgba(255,255,255,0.45)" variant="Linear" /> {p.replies}</span>
-                    </div>
-                  </div>
-                </div>
-              </RevealBlock>
-            ))}
+          {/* No stories published yet -- AXVO is new, and every story published here is
+              a real, consented submission reviewed by our team (see the form below).
+              We'd rather show nothing than invent testimonials that never happened. */}
+          <div style={{
+            textAlign: 'center', padding: '56px 24px',
+            border: '1px dashed rgba(255,255,255,0.12)', borderRadius: '20px',
+          }}>
+            <Book1 size={28} color="rgba(255,255,255,0.25)" variant="Linear" style={{ marginBottom: '14px' }} />
+            <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, maxWidth: '440px', margin: '0 auto' }}>
+              AXVO is new — no stories have been published here yet. Every story that appears on this page will be a real, consented submission from someone who used AXVO to find care.
+            </p>
+            <button
+              onClick={() => shareRef.current && smoothScrollTo(shareRef.current)}
+              style={{ marginTop: '20px', padding: '10px 20px', borderRadius: '100px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.25)', color: 'var(--accent)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}
+            >
+              Be the first to share yours
+            </button>
           </div>
         </div>
       </section>

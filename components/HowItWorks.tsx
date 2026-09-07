@@ -131,7 +131,7 @@ function Panel2() {
         Book appointment &rarr;
       </button>
       <div style={{ textAlign: 'center', fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>
-        Available in 48 languages
+        Available in 4 languages
       </div>
     </div>
   )

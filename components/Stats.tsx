@@ -35,7 +35,7 @@ interface StatDef {
 const STAT_DEFS: StatDef[] = [
   { key: 'clinics', label: 'Free clinics indexed',  prefix: '',  suffix: '+', value: null, source: 'dynamic', minValid: 10,  fallback: 18900 },
   { key: 'stories', label: 'Stories & submissions', prefix: '',  suffix: '+', value: null, source: 'dynamic', minValid: 1,   fallback: 2419  },
-  { key: 'langs',   label: 'Languages supported',  prefix: '',  suffix: '',  value: 48,   source: 'static',  minValid: 0  },
+  { key: 'langs',   label: 'Languages supported',  prefix: '',  suffix: '',  value: 4,    source: 'static',  minValid: 0  },
   { key: 'cost',    label: 'Cost to use AXVO',    prefix: '$', suffix: '',  value: 0,    source: 'static',  minValid: 0  },
 ]
 

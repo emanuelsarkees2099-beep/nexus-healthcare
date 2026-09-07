@@ -4,7 +4,7 @@ import AppShell from '@/components/AppShell'
 import { smoothScrollTo } from '@/utils/smoothScroll'
 import { useRouter } from 'next/navigation'
 import EmptyState from '@/components/ui/EmptyState'
-import { Location, Hospital, Cpu, ArrowRight, TickCircle, ArrowRight2, Wifi, Clock, Star1, LanguageSquare, MagicStar, SearchStatus, Routing2, Call, InfoCircle } from 'iconsax-react'
+import { Location, Hospital, Cpu, ArrowRight, TickCircle, ArrowRight2, Wifi, Clock, LanguageSquare, MagicStar, SearchStatus, Routing2, Call, InfoCircle } from 'iconsax-react'
 
 /* ─── reveal hook ─────────────────────────────────── */
 function useReveal(threshold = 0.15) {
@@ -51,7 +51,7 @@ type ClinicResult = {
 
 const TRUST_STATS = [
   { val: '18,900+', label: 'Clinics matched from' },
-  { val: '48',      label: 'Languages supported' },
+  { val: '4',       label: 'Languages supported' },
   { val: '8',       label: 'Match variables' },
   { val: '<2min',   label: 'Avg time to your match' },
 ]
@@ -691,79 +691,6 @@ export default function PathwaysPage() {
         </div>
       </section>
 
-      {/* ── SUCCESS STORIES ──────────────────────────── */}
-      <section style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-          <RevealBlock>
-            <div style={{ marginBottom: '56px' }}>
-              <span style={pill}><Star1 size={14} variant="Linear" /> Patient outcomes</span>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15, maxWidth: '560px' }}>Real people.<br />Real care found.</h2>
-              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', marginTop: '16px', maxWidth: '440px', lineHeight: 1.65 }}>47,000 outcomes logged. Here are three of them.</p>
-            </div>
-          </RevealBlock>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
-            {[
-              { name: 'Maria G.', city: 'Phoenix, AZ', quote: 'I had chest pain and no insurance. AXVO found me a free clinic 1.4 miles away. I was seen the same day. It turned out to be treatable with a free prescription.', care: 'Cardiac triage', time: '22 min to care' },
-              { name: 'James T.', city: 'Detroit, MI', quote: 'I was avoiding the dentist for 2 years because I thought it would cost hundreds. AXVO matched me to a dental day at a local FQHC. Free cleaning, two fillings, zero dollars.', care: 'Dental care', time: '0 cost' },
-              { name: 'Anh N.', city: 'San Jose, CA', quote: 'My mother only speaks Vietnamese. The CHW we were connected to spoke her dialect. For the first time in years, she understood her own diagnosis.', care: 'Primary care', time: 'Language matched' },
-            ].map((s, i) => (
-              <RevealBlock key={s.name} delay={i * 100}>
-                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(74,144,217,0.15), rgba(74,144,217,0.04))', borderRadius: '20px', height: '100%' }}>
-                  <div style={{ background: '#080D1A', borderRadius: '18px', padding: '28px', height: '100%', boxSizing: 'border-box', borderLeft: '3px solid rgba(74,144,217,0.35)' }}>
-                    <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, marginBottom: '20px', fontStyle: 'italic' }}>&ldquo;{s.quote}&rdquo;</p>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '8px' }}>
-                      <div>
-                        <div style={{ fontWeight: 600, fontSize: '14px' }}>{s.name}</div>
-                        <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', marginTop: '2px' }}>{s.city}</div>
-                      </div>
-                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.18)', color: 'var(--accent)' }}>{s.care}</span>
-                        <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.15)', color: '#60a5fa' }}>{s.time}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </RevealBlock>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── PARTNER NETWORK ──────────────────────────── */}
-      <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-          <RevealBlock>
-            <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-              <span style={pill}><TickCircle size={14} variant="Linear" /> Clinic network</span>
-              <h2 style={{ fontSize: 'clamp(22px, 3.5vw, 38px)', fontWeight: 700, letterSpacing: '-0.02em', marginTop: '20px', lineHeight: 1.2 }}>18,900+ verified partners</h2>
-              <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.38)', marginTop: '12px', maxWidth: '380px', margin: '12px auto 0', lineHeight: 1.65 }}>Every clinic is manually verified for acceptance of uninsured patients before listing.</p>
-            </div>
-          </RevealBlock>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }} className="partner-grid">
-            {[
-              { name: 'HRSA / FQHC Network',   count: '1,400+', desc: 'Federally qualified health centers' },
-              { name: 'Free Clinic Association', count: '1,200+', desc: 'Volunteer-run free clinics' },
-              { name: 'National Health Service', count: '3,000+', desc: 'Corps-designated clinics' },
-              { name: 'Telehealth Partners',     count: '38',     desc: 'Verified virtual care providers' },
-              { name: 'Dental Access Network',   count: '800+',   desc: 'Free and low-cost dental' },
-              { name: 'Mental Health Alliance',  count: '2,400+', desc: 'Sliding-scale behavioral health' },
-            ].map((n, i) => (
-              <RevealBlock key={n.name} delay={i * 60}>
-                <div style={{ padding: '20px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', transition: 'border-color 0.25s' }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.2)')}
-                  onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)')}
-                >
-                  <div style={{ fontSize: '22px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.02em', marginBottom: '4px' }}>{n.count}</div>
-                  <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>{n.name}</div>
-                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', lineHeight: 1.5 }}>{n.desc}</div>
-                </div>
-              </RevealBlock>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ── FAQ ──────────────────────────────────────── */}
       <FAQSection />

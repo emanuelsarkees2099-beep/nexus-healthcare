@@ -37,7 +37,7 @@ const PROBLEM = [
 /* What AXVO actually provides today — verifiable facts about the product. */
 const CAPABILITIES = [
   { icon: <ShieldTick size={18} variant="Bold" color="var(--accent)" />, title: '18,900+ clinics indexed', body: 'Federally Qualified Health Centers, free clinics, and sliding-scale providers — sourced from HRSA and verified public data.' },
-  { icon: <Global size={18} variant="Bold" color="var(--accent)" />, title: '48 languages', body: 'The whole platform — search, triage, results — works in the language people actually speak.' },
+  { icon: <Global size={18} variant="Bold" color="var(--accent)" />, title: '4 languages', body: 'Search, triage, and results are available in English, Spanish, Chinese, and Vietnamese.' },
   { icon: <TickCircle size={18} variant="Bold" color="var(--accent)" />, title: '$0 to use, no account', body: 'Search, triage, and eligibility all work anonymously. We never sell data and never charge patients.' },
 ]
 
