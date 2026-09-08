@@ -1,6 +1,13 @@
 /**
  * AXVO — AI Healthcare Navigator
- * Streaming SSE endpoint backed by Groq (free tier — Llama 3.3 70B).
+ * Streaming SSE endpoint backed by Groq (free tier — openai/gpt-oss-120b).
+ *
+ * Was llama-3.3-70b-versatile -- Groq deprecated it (June 2026) and every
+ * request has been failing with a 404 "model_not_found" since. Groq's own
+ * deprecation notice recommends openai/gpt-oss-120b as the replacement for
+ * this exact model. See https://console.groq.com/docs/deprecations and
+ * https://api.groq.com/openai/v1/models for the current supported list if
+ * this happens again.
  *
  * POST /api/ai
  * Body: { messages: Array<{role:'user'|'assistant', content:string}>, pageContext?: string }
@@ -94,7 +101,7 @@ export async function POST(req: Request) {
 
       try {
         const groqStream = await client.chat.completions.create({
-          model:      'llama-3.3-70b-versatile',
+          model:      'openai/gpt-oss-120b',
           max_tokens: 1024,
           stream:     true,
           messages:   [
