@@ -93,7 +93,7 @@ CCPA Rights (California) — California residents may request disclosure of pers
 
 GDPR Rights (EU residents) — You have rights under GDPR including access, rectification, erasure, restriction, and data portability. Contact us to exercise these rights.
 
-To exercise any right: email privacy@axvohealth.org with "Privacy Request" in the subject line.`
+To exercise any right: email privacy@axvohealth.com with "Privacy Request" in the subject line.`
   },
   {
     id: 'hipaa',
@@ -115,7 +115,7 @@ See our Terms of Service (Section 11) for the full legal detail on this.`
 
 All data in transit is encrypted via TLS 1.3. Account data at rest is encrypted using AES-256. Supabase row-level security ensures users can only access their own records. We conduct periodic security reviews.
 
-We do not guarantee absolute security — no system does. If you discover a security vulnerability, please disclose it responsibly to security@axvohealth.org. We will respond within 72 hours.
+We do not guarantee absolute security — no system does. If you discover a security vulnerability, please disclose it responsibly to security@axvohealth.com. We will respond within 72 hours.
 
 In the event of a data breach affecting personal information, we will notify affected users within 72 hours as required by law.`
   },
@@ -217,7 +217,7 @@ export default function PrivacyPage() {
               Full policy
             </h2>
             <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.65 }}>
-              This policy applies to axvohealth.org and all AXVO-branded services. Click any section to expand.
+              This policy applies to axvohealth.com and all AXVO-branded services. Click any section to expand.
             </p>
           </div>
 
@@ -298,8 +298,8 @@ export default function PrivacyPage() {
             <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '12px' }}>Questions about this policy?</h3>
             <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, marginBottom: '16px' }}>
               If you have questions, concerns, or want to exercise any of your privacy rights, contact us at{' '}
-              <a href="mailto:privacy@axvohealth.org" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
-                privacy@axvohealth.org
+              <a href="mailto:privacy@axvohealth.com" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
+                privacy@axvohealth.com
               </a>
               . We respond to all privacy requests within 5 business days.
             </p>
