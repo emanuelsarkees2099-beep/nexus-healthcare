@@ -71,7 +71,10 @@ export const WEB_APP_SCHEMA = {
     'Health passport (record storage)',
   ],
   screenshot: `${BASE_URL}/og-default.png`,
-  inLanguage: ['en', 'es', 'zh', 'vi', 'ko', 'fr', 'ht', 'ar'],
+  // Only the languages lib/i18n.ts actually has real translations for
+  // (everything else silently falls back to English) -- see the same fix
+  // applied to app/layout.tsx's hreflang tags.
+  inLanguage: ['en', 'es', 'zh', 'vi'],
 }
 
 /** Organization schema — used in app/layout.tsx */

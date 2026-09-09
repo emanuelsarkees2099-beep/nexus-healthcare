@@ -11,6 +11,9 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin', '/api/', '/auth/callback', '/settings/'],
       },
     ],
-    sitemap: `${APP_URL}/sitemap.xml`,
+    // Two sitemaps: the ~30 static routes, and every individual clinic
+    // detail page (18,900+ -- previously undiscoverable, see
+    // app/sitemap-clinics.xml/route.ts for why this is a big deal).
+    sitemap: [`${APP_URL}/sitemap.xml`, `${APP_URL}/sitemap-clinics.xml`],
   }
 }

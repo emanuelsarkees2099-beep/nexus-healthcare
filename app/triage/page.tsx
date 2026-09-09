@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Hospital, Danger, TickCircle, Location, ArrowRight2, RefreshCircle, InfoCircle, ArrowRight, Clock, MagicStar, Activity, Flash, Heart, Health } from 'iconsax-react'
 import QuickExit from '@/components/QuickExit'
 import CrisisDetectionBanner from '@/components/CrisisDetectionBanner'
+import JsonLd, { medicalPageSchema, breadcrumbSchema } from '@/components/JsonLd'
 
 type Step = {
   type: 'thinking' | 'checking' | 'result' | 'warning'
@@ -294,6 +295,23 @@ export default function TriagePage() {
   return (
     <AppShell>
       <QuickExit />
+      {/* 5.9 — Structured Data. Was documented as a target in components/JsonLd.tsx
+          ("MedicalWebPage (crisis, triage)") but never actually wired up here. */}
+      <JsonLd
+        schema={medicalPageSchema(
+          'Symptom Guide — AXVO',
+          'Describe your symptoms and get guidance on what level of care to seek — matched to published clinical guidelines. Not a diagnosis. Free and private.',
+          'https://www.axvohealth.com/triage',
+        )}
+        id="schema-medical-triage"
+      />
+      <JsonLd
+        schema={breadcrumbSchema([
+          { name: 'Home',   url: 'https://www.axvohealth.com' },
+          { name: 'Symptom Guide', url: 'https://www.axvohealth.com/triage' },
+        ])}
+        id="schema-breadcrumb-triage"
+      />
       <style>{`
         .triage-step { animation: fadeSlideUp 0.4s cubic-bezier(0.16,1,0.3,1) both; }
         /* Prevent iOS pull-to-refresh from interrupting triage flow */

@@ -142,6 +142,33 @@ describe('PAGE_META — title uniqueness', () => {
 })
 
 /* ================================================================== */
+// Regression guard for a real bug: every entry's canonical was hardcoded
+// to the bare homepage, telling Google every inner page was a duplicate of
+// `/`. Canonicals must be unique per page and match that page's own path.
+describe('PAGE_META — canonical URLs are correct', () => {
+  const entries = Object.entries(PAGE_META) as [string, Metadata][]
+
+  it('all canonical URLs are unique (no page canonicalizes to another page)', () => {
+    const canonicals = entries.map(([, m]) => m.alternates?.canonical as string)
+    const unique = new Set(canonicals)
+    expect(unique.size).toBe(canonicals.length)
+  })
+
+  it('no canonical is just the bare homepage', () => {
+    for (const [key, meta] of entries) {
+      const canonical = meta.alternates?.canonical as string
+      expect(canonical, `${key}: canonical must not be the bare homepage`).not.toMatch(/^https?:\/\/[^/]+\/?$/)
+    }
+  })
+
+  it('openGraph.url matches the canonical for every entry', () => {
+    for (const [key, meta] of entries) {
+      expect(meta.openGraph?.url, `${key}: og:url should match canonical`).toBe(meta.alternates?.canonical)
+    }
+  })
+})
+
+/* ================================================================== */
 describe('PAGE_META — descriptions are non-trivial', () => {
   it('all descriptions are at least 50 characters', () => {
     for (const [key, meta] of Object.entries(PAGE_META) as [string, Metadata][]) {
