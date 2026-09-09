@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import { TickCircle, ExportSquare, ShieldTick } from 'iconsax-react'
+import { TickCircle, ExportSquare } from 'iconsax-react'
 export default function Footer() {
   const [email, setEmail]       = useState('')
   const [subState, setSubState] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
@@ -316,19 +316,6 @@ export default function Footer() {
                 background: 'var(--success)', boxShadow: '0 0 6px rgba(52,211,153,0.6)',
               }} />
               All systems operational
-            </div>
-            <span aria-hidden="true" style={{ color: 'var(--border)' }}>|</span>
-            {/* HRSA Partner badge */}
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '5px',
-              fontSize: '10px', fontWeight: 600, color: 'var(--accent)',
-              background: 'rgba(79,142,240,0.07)', border: '1px solid rgba(79,142,240,0.18)',
-              borderRadius: 'var(--r-sm)', padding: '3px 10px',
-              letterSpacing: '0.04em', textTransform: 'uppercase',
-              fontFamily: 'var(--font-inter)',
-            }}>
-              <ShieldTick size={14} color="currentColor" variant="TwoTone" aria-hidden="true" />
-              HRSA Partner
             </div>
             <span aria-hidden="true" style={{ color: 'var(--border)' }}>|</span>
             {/* Legal links */}
