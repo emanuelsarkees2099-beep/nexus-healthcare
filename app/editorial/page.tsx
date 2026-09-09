@@ -2,6 +2,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
 import { Book1, Clock, ArrowRight, TrendUp, SearchNormal1, CloseCircle, Location, Buildings2 } from 'iconsax-react'
+import { CITY_HUBS } from '@/lib/city-hubs'
+
+// Rotates across the 10 real city hub cards -- purely decorative, no meaning
+// tied to a specific city (unlike the removed per-city clinic/population
+// numbers, which were invented and have been replaced with live data on
+// each city's own page).
+const CITY_COLORS = ['#4A90D9', '#a78bfa', '#fb923c', '#60a5fa', '#f472b6', '#fcd34d', '#4ade80', '#f87171', '#34d399', '#38bdf8']
 
 function useReveal(threshold = 0.12) {
   const ref = useRef<HTMLDivElement>(null)
@@ -537,23 +544,12 @@ export default function EditorialPage() {
                 </p>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '10px' }}>
-                {[
-                  { city: 'Houston',      state: 'TX', zip: '77001', clinics: 148, pop: '2.3M uninsured', color: '#4A90D9' },
-                  { city: 'Phoenix',      state: 'AZ', zip: '85001', clinics: 112, pop: '1.1M uninsured', color: '#a78bfa' },
-                  { city: 'Los Angeles',  state: 'CA', zip: '90001', clinics: 203, pop: '2.8M uninsured', color: '#fb923c' },
-                  { city: 'Dallas',       state: 'TX', zip: '75201', clinics: 97,  pop: '940K uninsured', color: '#60a5fa' },
-                  { city: 'Miami',        state: 'FL', zip: '33101', clinics: 88,  pop: '720K uninsured', color: '#f472b6' },
-                  { city: 'Chicago',      state: 'IL', zip: '60601', clinics: 134, pop: '1.2M uninsured', color: '#fcd34d' },
-                  { city: 'New York',     state: 'NY', zip: '10001', clinics: 187, pop: '1.5M uninsured', color: '#4ade80' },
-                  { city: 'San Antonio',  state: 'TX', zip: '78201', clinics: 79,  pop: '610K uninsured', color: '#f87171' },
-                  { city: 'Las Vegas',    state: 'NV', zip: '89101', clinics: 64,  pop: '480K uninsured', color: '#a78bfa' },
-                  { city: 'Atlanta',      state: 'GA', zip: '30301', clinics: 91,  pop: '830K uninsured', color: '#34d399' },
-                  { city: 'San Diego',    state: 'CA', zip: '92101', clinics: 76,  pop: '510K uninsured', color: '#60a5fa' },
-                  { city: 'Tucson',       state: 'AZ', zip: '85701', clinics: 58,  pop: '290K uninsured', color: '#4A90D9' },
-                ].map(g => (
+                {CITY_HUBS.map((g, i) => {
+                  const color = CITY_COLORS[i % CITY_COLORS.length]
+                  return (
                   <a
                     key={g.city}
-                    href={`/search?loc=${encodeURIComponent(g.zip)}&q=free+clinic`}
+                    href={`/search/${g.stateSlug}/${g.citySlug}`}
                     style={{ textDecoration: 'none', display: 'block' }}
                   >
                     <div
@@ -563,24 +559,24 @@ export default function EditorialPage() {
                         transition: 'border-color 0.2s, background 0.2s, transform 0.2s',
                         cursor: 'pointer', height: '100%', boxSizing: 'border-box',
                       }}
-                      onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = `${g.color}40`; el.style.background = `${g.color}08`; el.style.transform = 'translateY(-3px)' }}
+                      onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = `${color}40`; el.style.background = `${color}08`; el.style.transform = 'translateY(-3px)' }}
                       onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(255,255,255,0.07)'; el.style.background = 'rgba(255,255,255,0.025)'; el.style.transform = 'translateY(0)' }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                        <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: `${g.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <Buildings2 size={16} color={g.color} variant="Linear" aria-hidden="true" />
+                        <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <Buildings2 size={16} color={color} variant="Linear" aria-hidden="true" />
                         </div>
-                        <span style={{ fontSize: '11px', fontWeight: 700, color: g.color, letterSpacing: '0.08em', padding: '3px 8px', borderRadius: '6px', background: `${g.color}10`, border: `1px solid ${g.color}20` }}>{g.state}</span>
+                        <span style={{ fontSize: '11px', fontWeight: 700, color, letterSpacing: '0.08em', padding: '3px 8px', borderRadius: '6px', background: `${color}10`, border: `1px solid ${color}20` }}>{g.state}</span>
                       </div>
                       <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '4px', color: 'var(--text)', letterSpacing: '-0.01em' }}>{g.city}</div>
-                      <div style={{ fontSize: '12px', color: g.color, fontWeight: 600, marginBottom: '3px' }}>{g.clinics} free clinics</div>
-                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', lineHeight: 1.4 }}>{g.pop}</div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '14px', fontSize: '12px', color: g.color, fontWeight: 600 }}>
+                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', lineHeight: 1.4 }}>Real-time listings, sourced from HRSA &amp; public data</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '14px', fontSize: '12px', color, fontWeight: 600 }}>
                         Explore <ArrowRight size={11} />
                       </div>
                     </div>
                   </a>
-                ))}
+                  )
+                })}
               </div>
             </div>
           </Reveal>

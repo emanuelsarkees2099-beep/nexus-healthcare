@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next'
+import { CITY_HUBS } from '@/lib/city-hubs'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.axvohealth.com'
@@ -22,6 +23,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/pathways`,      priority: 0.85, changeFrequency: 'weekly'  },
     { url: `${base}/telehealth`,    priority: 0.85, changeFrequency: 'weekly'  },
     { url: `${base}/medications`,   priority: 0.85, changeFrequency: 'weekly'  },
+
+    /* City hub pages -- top 10, see lib/city-hubs.ts for selection methodology */
+    ...CITY_HUBS.map(h => ({
+      url: `${base}/search/${h.stateSlug}/${h.citySlug}`,
+      priority: 0.88,
+      changeFrequency: 'weekly' as MetadataRoute.Sitemap[number]['changeFrequency'],
+    })),
 
     /* Community & content */
     { url: `${base}/stories`,       priority: 0.80, changeFrequency: 'daily'   },
