@@ -43,6 +43,13 @@ type Article = {
   featured?: boolean
   body: string[]
   tldr: string
+  /** Set when this piece is adapted from an outside publication -- credits
+   * the original with a link, rather than presenting it as originally
+   * AXVO's own. Rewritten here in AXVO's own words (not reproduced text)
+   * both to credit properly and to avoid duplicate-content problems for
+   * both sites' SEO. */
+  sourceName?: string
+  sourceUrl?: string
 }
 
 const ARTICLES: Article[] = [
@@ -159,6 +166,68 @@ const ARTICLES: Article[] = [
       'A tooth infection that goes untreated can spread to your jaw, your neck, your brain. It is a life-threatening emergency if it gets to that point. Don\'t let it. One of these eight options can get you seen.',
     ],
   },
+  {
+    id: 7,
+    category: 'Investigation',
+    tag: 'Investigation',
+    headline: 'The Uninsured Crisis: Letter from Arizona',
+    subhead: 'More than 800,000 Arizonans have no health coverage. The pattern behind who they are explains why the fix is harder than it looks.',
+    author: 'Emanuel Sarkees',
+    date: 'June 2, 2026',
+    readTime: '7 min read',
+    color: '#34D399',
+    tldr: 'Arizona\'s 10.3% uninsured rate (43rd in the nation) isn\'t random — it clusters in exactly the counties, industries, and communities policy has quietly excluded for decades.',
+    body: [
+      'Arizona has one of the worst rates of health coverage in the country, and it\'s tempting to treat that as one problem with one fix. It isn\'t. Geography, industry, immigration status, and forty years of specific policy choices all point at the same populations, which is why the gap has been so hard to close.',
+      'Start with who is actually uninsured. It\'s not, for the most part, people without jobs — it\'s full-time workers in agriculture, construction, and food service, industries where employer coverage is rare and expensive. Many of them land in a coverage gap that gets almost no attention: they earn too much for AHCCCS (Arizona\'s Medicaid program) but too little to afford a marketplace plan. The burden isn\'t even across the state either — Hispanic and Latino residents are uninsured at higher rates than white Arizonans, Native American residents face the added weight of chronically underfunded tribal healthcare, and rural border counties like Yuma, Santa Cruz, Apache, and Navajo run well above the rates seen in Phoenix or Tucson.',
+      'The consequences are measurable, not abstract. Insurance status is one of the strongest predictors of cancer survival, because routine screening is what catches disease early — and routine screening is exactly what people skip when they\'re paying cash. Chronic conditions like diabetes and hypertension, manageable with regular checkups and medication, deteriorate instead. And the cost doesn\'t disappear when someone goes without insurance — it moves to the emergency room, then gets passed on to everyone else through higher premiums and public spending, which makes the current setup expensive for a state that\'s ostensibly trying to save money by not covering people.',
+      'None of this happened by accident. Arizona was the last state in the country to adopt Medicaid at all, holding out until 1982. Enrollment for childless adults was frozen entirely in 2011. The state did eventually accept the ACA\'s Medicaid expansion in 2014, but AHCCCS still runs a restrictive, complicated enrollment process — enrollment dropped by over 153,000 people in the twelve months ending June 2024 alone, expansion notwithstanding. Federal law separately locks undocumented immigrants out of Medicaid and ACA marketplace coverage entirely, which matters enormously in a state where agriculture and construction — two of the least-insured industries — depend heavily on immigrant labor. Federal Medicaid cuts signed in July 2025 are projected to push Arizona\'s uninsured rate as high as 18-20%.',
+      'The fixes are not mysterious, just politically unpopular: expand AHCCCS eligibility, simplify an enrollment process that currently works like a filter rather than a front door, fund more Federally Qualified Health Centers in the counties that need them most, run outreach in the languages people actually speak, and revisit immigration-based exclusions that leave essential workers with nowhere to go. Right now, Arizona funds uninsured care through the emergency room — the most expensive and least effective place to do it. AXVO can\'t fix Arizona\'s Medicaid policy, but it can at least make sure that in the meantime, nobody in Yuma or Apache County has to guess where their nearest FQHC is.',
+    ],
+    sourceName: 'The Health Care Blog',
+    sourceUrl: 'https://thehealthcareblog.com/blog/2026/06/02/the-uninsured-crisis-letter-from-arizona/',
+  },
+  {
+    id: 8,
+    category: 'Data Story',
+    tag: 'Data Story',
+    headline: 'The Drug Changing Medicine',
+    subhead: 'GLP-1 drugs are one of the biggest breakthroughs in modern medicine. The people who\'d benefit most can\'t afford them.',
+    author: 'Emanuel Sarkees',
+    date: 'July 21, 2026',
+    readTime: '6 min read',
+    color: '#22D3EE',
+    tldr: 'List price for a GLP-1 prescription runs about $1,300/month and rose 442% between 2021 and 2023 — while the same drug can cost anywhere from $50 to that full price depending entirely on which coverage, if any, you happen to have.',
+    body: [
+      'GLP-1 receptor agonists — the drug class behind Ozempic and Wegovy — mimic a gut hormone that signals fullness, slows digestion, and stabilizes blood sugar. The 2023 SELECT trial found semaglutide cut cardiovascular events by 20% in obese patients who didn\'t even have diabetes, and research now underway extends into sleep apnea, chronic kidney disease, alcohol use disorder, and Alzheimer\'s. It\'s rare for one drug class to plausibly matter across that many conditions at once.',
+      'The problem is what it costs, and specifically how differently it costs depending on who you are. List price runs around $1,300 a month, up 442% between 2021 and 2023. From there the spread is enormous: commercial insurance that actually covers obesity treatment might bring a copay down to $25; paying directly runs $99–350 a month through manufacturer programs; Medicare\'s new GLP-1 Bridge program, launched in July 2026, offers a $50 copay. If you\'re uninsured or underinsured, none of those paths exist for you — you\'re looking at the full list price, for a condition that disproportionately affects lower-income people and communities of color, who are also the people most likely to lack coverage in the first place.',
+      'And the ground is still shifting under even the options that exist. The Medicare Bridge program excludes low-income subsidy recipients and is set to expire at the end of 2027 with no guarantee of renewal. Only 13 states currently cover GLP-1s for obesity through Medicaid — down from 16 just a year earlier. Compounded semaglutide, which had offered a roughly $200/month alternative, is now facing FDA restrictions with nothing affordable stepping in to replace it.',
+      'None of this requires a scientific breakthrough to fix — the drug already works. It requires permanent Medicare coverage instead of a program with an expiration date, mandatory Medicaid coverage instead of a shrinking patchwork of 13 states, and federal price negotiation aggressive enough to close a 27-times gap between the lowest and highest price for the identical medication. Until that happens, AXVO\'s job is narrower but concrete: our medication assistance finder tracks patient assistance programs and discount pricing for exactly this kind of gap.',
+    ],
+    sourceName: 'The Health Care Blog',
+    sourceUrl: 'https://thehealthcareblog.com/blog/2026/07/21/the-drug-changing-medicine/',
+  },
+  {
+    id: 9,
+    category: 'Investigation',
+    tag: 'Investigation',
+    headline: 'Prior Authorization',
+    subhead: 'Most people have never heard of prior authorization until it personally stops them from getting care they need.',
+    author: 'Emanuel Sarkees',
+    date: 'August 20, 2026',
+    readTime: '6 min read',
+    color: '#F472B6',
+    tldr: 'Physicians spend roughly 13 hours a week — nearly two full workdays — getting insurers to approve care they\'ve already decided their patients need. 95% say it gets in the way of necessary treatment.',
+    body: [
+      'Prior authorization requires a doctor to get insurance company sign-off before a patient can receive certain treatment, tests, or medication. Almost nobody knows it exists until a denial personally affects them or someone they love — and once it does, the frustration tends to compound, because the process wears down patients, physicians, and even the insurers administering it.',
+      'The scale of the burden is not anecdotal. The AMA\'s 2025 survey found physicians spend about 13 hours a week processing roughly 40 authorization requests — nearly two full workdays lost to paperwork instead of patients. 95% of physicians surveyed said the process gets in the way of care their patients actually need. A Johns Hopkins review connected prior authorization delays to disease progression, longer hospital stays, and lower cancer survival rates, and a RAND analysis documented specific harm — including a diabetic child left waiting for insulin approval.',
+      'The damage isn\'t distributed evenly. Lower-income and Medicaid patients are hit hardest, since they have the fewest resources to appeal a denial or pay out of pocket while they wait. A 2025 KFF poll found 58% of insured adults had experienced a delay or denial, with the rate climbing higher among lower-income respondents — the same pattern of "the people with the least get the least" that shows up across nearly every part of the healthcare system.',
+      'There have been promises. In June 2025, sixty insurers pledged to streamline the process. In April 2026, CMS proposed extending electronic prior authorization to prescription drugs, with faster timelines and mandatory transparency reporting. Physicians aren\'t convinced — only about a third believe the reforms will meaningfully change anything, largely because a nearly identical pledge in 2018 produced almost no real change. Even now, 89% of the administrative burden remains despite an 11% drop in the number of authorizations required.',
+      'The reforms that would actually move the number: making "gold carding" — exempting high-performing physicians from authorization requirements for treatments they reliably get right — a federal standard rather than a handful of state programs; extending CMS\'s new rules to the commercial insurance plans currently shielded under ERISA; and attaching real penalties to insurers with outlier denial rates instead of just reporting requirements. Prior authorization was designed to catch unnecessary procedures. Right now it\'s doing the opposite — restricting care that was never unnecessary in the first place.',
+    ],
+    sourceName: 'The Health Care Blog',
+    sourceUrl: 'https://thehealthcareblog.com/blog/2026/08/20/prior-authorization/',
+  },
 ]
 
 const CATEGORIES = ['All', 'Investigation', 'Guide', 'Data Story', 'Community']
@@ -234,6 +303,13 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
           </button>
           <div style={{ marginTop: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)' }}>
             By {article.author}
+            {article.sourceUrl && (
+              <> — originally published on{' '}
+                <a href={article.sourceUrl} target="_blank" rel="noopener noreferrer" style={{ color: article.color, textDecoration: 'none' }}>
+                  {article.sourceName} ↗
+                </a>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -296,9 +372,16 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
         </button>
       </div>
 
-      <div style={{ padding: '12px 24px', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)' }}>{article.author}</span>
-        <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-inter)' }}>{article.date}</span>
+      <div style={{ padding: '12px 24px', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)' }}>{article.author}</span>
+          <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-inter)' }}>{article.date}</span>
+        </div>
+        {article.sourceUrl && (
+          <a href={article.sourceUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: '10.5px', color: article.color, textDecoration: 'none', fontFamily: 'var(--font-inter)' }}>
+            Originally published on {article.sourceName} ↗
+          </a>
+        )}
       </div>
     </div>
   )

@@ -714,7 +714,7 @@ export default function PathwaysPage() {
                 <div>
                   <div style={{ ...pill, marginBottom: '16px' }}><Hospital size={14} variant="Linear" /> Can't travel?</div>
                   <h2 style={{ fontSize: 'clamp(22px, 3vw, 36px)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '12px' }}>Telehealth that's actually free</h2>
-                  <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.45)', maxWidth: '400px', lineHeight: 1.65 }}>Three verified telehealth partners, available in 8 languages, zero cost. Same-day availability.</p>
+                  <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.45)', maxWidth: '400px', lineHeight: 1.65 }}>Three verified telehealth partners, available in 5 languages, zero cost. Same-day availability.</p>
                 </div>
                 <button onClick={() => router.push('/telehealth')} style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '14px 24px', borderRadius: '100px', background: 'rgba(255,255,255,0.94)', color: '#07070F', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: 600, fontFamily: 'inherit', whiteSpace: 'nowrap', transition: 'all 0.35s cubic-bezier(0.16,1,0.3,1)' }}
                   onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.03)')}
