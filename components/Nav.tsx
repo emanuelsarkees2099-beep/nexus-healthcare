@@ -21,8 +21,8 @@ const NotificationBell = dynamic(() => import('@/components/NotificationBell'), 
 const HOME_LINK_DEFS = [
   { labelKey: 'nav.features'    as const, href: '#features',     fallback: 'Features',   icon: Grid5 },
   { labelKey: 'nav.howItWorks'  as const, href: '#how',          fallback: 'How it works',icon: SearchStatus },
-  { labelKey: 'nav.eligibility' as const, href: '#eligibility',  fallback: 'Eligibility', icon: ReceiptText },
-  { labelKey: 'nav.stories'     as const, href: '#testimonials', fallback: 'Stories',     icon: Book1 },
+  { labelKey: 'nav.eligibility' as const, href: '/eligibility',  fallback: 'Eligibility', icon: ReceiptText },
+  { labelKey: 'nav.stories'     as const, href: '/stories',      fallback: 'Stories',     icon: Book1 },
 ]
 
 const APP_LINK_DEFS = [
