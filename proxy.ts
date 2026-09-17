@@ -1,16 +1,21 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextRequest, NextResponse } from 'next/server'
 
+// /passport, /calendar, /medications, /triage, /chw were gated here even
+// though every one of them is a static, no-login-required informational
+// page (demo content or hardcoded reference data -- confirmed none of them
+// read `user`/`supabase` at all) that's also deliberately listed in
+// app/sitemap.ts with real SEO metadata and keywords. The gate meant
+// Googlebot got a 307 -> /login on every visit and could never see the
+// content -- confirmed live via Search Console's "Page with redirect"
+// report. /medications in particular carries the "cheap medications" /
+// "cheap prescriptions" keywords added specifically to rank for that
+// exact search, which was therefore never indexable at all.
 const PROTECTED_PATHS = [
   '/dashboard',
   '/patient',
   '/admin',
   '/settings',
-  '/passport',
-  '/calendar',
-  '/medications',
-  '/triage',
-  '/chw',
   '/bookmarks',
 ]
 

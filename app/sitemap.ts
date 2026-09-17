@@ -48,12 +48,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/equity`,        priority: 0.60, changeFrequency: 'monthly' },
     { url: `${base}/methodology`,   priority: 0.55, changeFrequency: 'monthly' },
 
-    /* Verify */
-    { url: `${base}/verify`,        priority: 0.60, changeFrequency: 'monthly' },
-
-    /* Auth (low crawl priority) */
-    { url: `${base}/login`,         priority: 0.30, changeFrequency: 'yearly'  },
-    { url: `${base}/signup`,        priority: 0.35, changeFrequency: 'yearly'  },
+    /* /verify, /login, /signup deliberately omitted: all three carry
+       robots: { index: false } (verify -- generic form, no per-city
+       content to rank on; login/signup -- functional pages, not content),
+       so listing them here told Google to index the exact pages we were
+       simultaneously telling it not to -- Search Console flagged this as
+       "Excluded by noindex tag". A sitemap should only list indexable URLs. */
 
     /* Informational */
     { url: `${base}/about`,         priority: 0.60, changeFrequency: 'monthly' },

@@ -5,7 +5,10 @@ import { Warning2 } from 'iconsax-react'
 export const metadata: Metadata = {
   title: 'Terms of Service — AXVO',
   description: 'Terms of Service for AXVO, the free healthcare navigation platform.',
-  robots: { index: false, follow: false },
+  // Was noindex'd for no documented reason while /privacy (its sibling
+  // legal page) correctly isn't -- and it's listed in app/sitemap.ts,
+  // so the two signals contradicted each other. ToS pages are standard,
+  // non-sensitive, and fine to index.
 }
 
 const LAST_UPDATED = 'May 18, 2025'
