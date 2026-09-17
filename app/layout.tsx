@@ -42,17 +42,27 @@ const mono = JetBrains_Mono({
   adjustFontFallback: false,
 })
 
+const ROOT_BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.axvohealth.com'
+
 export const metadata: Metadata = {
   title: 'AXVO — Free Healthcare, Found in Seconds',
   description:
     'AXVO finds free clinics, sliding-scale care, and hidden programs for the 30 million uninsured Americans who deserve better.',
   keywords: ['free healthcare', 'free clinic', 'uninsured', 'healthcare access', 'AXVO'],
   manifest: '/manifest.json',
+  // The homepage (app/page.tsx) has no metadata/generateMetadata of its own,
+  // so this root object is what actually renders for '/' -- the earlier
+  // canonical-URL fix (lib/page-metadata.ts) only covers routes with their
+  // own nested layout.tsx, which never included the homepage itself. Without
+  // this, the single most important page on the site was shipping with no
+  // <link rel="canonical"> at all.
+  alternates: { canonical: ROOT_BASE_URL },
   openGraph: {
     title: 'AXVO — Free Healthcare, Found in Seconds',
     description: 'Find free clinics, sliding-scale care, and eligibility programs near you. No insurance required.',
     siteName: 'AXVO',
     type: 'website',
+    url: ROOT_BASE_URL,
     // D9: dynamic OG image via @vercel/og edge function
     images: [{ url: `${process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.axvohealth.com'}/api/og`, width: 1200, height: 630, alt: 'AXVO — Free Healthcare, Found in Seconds' }],
   },
