@@ -14,11 +14,16 @@
 export function trackEvent(name: string, properties?: Record<string, unknown>): void {
   if (typeof window === 'undefined') return
   if (!process.env.NEXT_PUBLIC_POSTHOG_KEY) return
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ph = (window as any).posthog
-    if (ph?.capture) ph.capture(name, properties)
-  } catch { /* silently ignore */ }
+  // Same fix as components/PostHogProvider.tsx: posthog.init() via the
+  // ESM `import('posthog-js')` path never assigns itself to window.posthog
+  // (that only happens with PostHog's classic <script> snippet loader) --
+  // reading (window as any).posthog here was always undefined, so every
+  // call to track.* below has been silently no-op'ing. posthog-js caches
+  // a singleton internally, so re-importing it returns the already-
+  // initialized instance instead.
+  import('posthog-js').then(({ default: ph }) => {
+    try { ph.capture(name, properties) } catch { /* silently ignore */ }
+  }).catch(() => { /* ignore */ })
 }
 
 /** Pre-typed wrappers for the 7 key product events */
