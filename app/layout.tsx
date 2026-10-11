@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import Script from 'next/script'
 import { Bricolage_Grotesque, Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -90,6 +91,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${bricolage.variable} ${inter.variable} ${mono.variable}`}
     >
       <head>
+        {/* Google Analytics (GA4) */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-D5ME9L70ZN" strategy="afterInteractive" />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-D5ME9L70ZN');`}
+        </Script>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         {/* PWA: iOS standalone mode — no Safari chrome when launched from home screen */}
         <meta name="apple-mobile-web-app-capable" content="yes" />

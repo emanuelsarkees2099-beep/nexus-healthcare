@@ -45,7 +45,8 @@ const securityHeaders = [
       // that script outright and PostHog never initializes at all (the
       // connect-src entries below don't help if the library's own code never
       // loads in the first place).
-      `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com https://vercel.live https://us-assets.i.posthog.com`,
+      // Google Analytics (gtag.js) loads from googletagmanager.com.
+      `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com https://vercel.live https://us-assets.i.posthog.com https://www.googletagmanager.com`,
       // Inline styles used by React. Google Fonts stylesheet.
       `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
       // Google Fonts files + data URIs for icons
@@ -57,7 +58,7 @@ const securityHeaders = [
       // env var is present — without these hosts the browser silently blocks
       // every error report and analytics event, and the failure is invisible
       // (CSP violations don't surface as app errors).
-      `connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.groq.com https://vitals.vercel-insights.com https://cdn.vercel-insights.com https://*.sentry.io https://*.i.posthog.com https://*.posthog.com`,
+      `connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.groq.com https://vitals.vercel-insights.com https://cdn.vercel-insights.com https://*.sentry.io https://*.i.posthog.com https://*.posthog.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com`,
       // Service workers + Web Workers from own origin only
       `worker-src 'self' blob:`,
       // No <object>, <embed>, or <applet>
