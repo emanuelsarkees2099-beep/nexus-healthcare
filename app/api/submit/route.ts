@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse, after } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit } from '@/lib/rate-limit'
 
@@ -125,7 +125,9 @@ async function notifyAdmin(type: string, data: Record<string, unknown>, userId: 
         </div>
       `,
     }),
-  }).catch(e => console.warn('[AXVO] Resend error:', e))
+  }).then(async r => {
+    if (!r.ok) console.error('[AXVO] Resend rejected admin alert:', r.status, await r.text())
+  }).catch(e => console.error('[AXVO] Resend error:', e))
 }
 
 // ─── POST /api/submit ──────────────────────────────────────────────────────────
@@ -171,8 +173,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to save submission. Please try again.' }, { status: 500 })
     }
 
-    // Fire-and-forget admin notification
-    notifyAdmin(type, data, userId || 'anonymous')
+    // after(), not fire-and-forget: on Vercel the function freezes as soon as
+    // the response is sent, so an un-awaited fetch never actually left --
+    // Resend showed no request at all for a test submission.
+    after(() => notifyAdmin(type, data, userId || 'anonymous'))
 
     return NextResponse.json({ ok: true, id: row.id })
   } catch (err) {

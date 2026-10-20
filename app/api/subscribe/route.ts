@@ -12,7 +12,7 @@
  *     ADD COLUMN IF NOT EXISTS subscribed BOOLEAN NOT NULL DEFAULT true;
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse, after } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { rateLimit } from '@/lib/rate-limit'
 import { sendEmail, buildNewsletterWelcomeEmail } from '@/lib/email'
@@ -74,9 +74,9 @@ export async function POST(req: NextRequest) {
       subscribed:        true,
     })
 
-    // Welcome email — fire-and-forget
-    sendEmail({ to: email, ...buildNewsletterWelcomeEmail(unsubscribeToken) })
-      .catch(() => {})
+    // Welcome email — via after() so Vercel doesn't freeze the function before it sends
+    after(() => sendEmail({ to: email, ...buildNewsletterWelcomeEmail(unsubscribeToken) })
+      .catch(e => console.error('[AXVO] welcome email failed:', e)))
 
     return NextResponse.json({ ok: true })
   } catch {

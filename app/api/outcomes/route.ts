@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse, after } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendEmail, buildProgramAlertEmail } from '@/lib/email'
 import { rateLimit } from '@/lib/rate-limit'
@@ -87,16 +87,18 @@ export async function POST(req: NextRequest) {
         .single()
 
       const name = profileRes.data?.full_name ?? userEmail
+      const to = userEmail
+      const programName = body.program_name
 
-      sendEmail({
-        to: userEmail,
+      after(() => sendEmail({
+        to,
         ...buildProgramAlertEmail(
           name,
-          body.program_name,
+          programName,
           body.notes ?? 'You have been enrolled in a healthcare assistance program.',
           `${APP_URL}/programs`,
         ),
-      }).catch(() => {})
+      }).catch(e => console.error('[AXVO] program alert email failed:', e)))
     }
 
     return NextResponse.json({ success: true })
