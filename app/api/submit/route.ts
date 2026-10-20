@@ -12,7 +12,7 @@ const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
 // and break every public submission form (stories, advocacy, CHW, etc.).
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
 const RESEND_API_KEY = process.env.RESEND_API_KEY ?? ''
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? ''
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'emanuel@axvohealth.com'
 
 // ─── Allowed submission types ──────────────────────────────────────────────────
 const ALLOWED_TYPES = ['story', 'chw', 'legal', 'provider', 'accessibility', 'advocacy', 'outcome'] as const
