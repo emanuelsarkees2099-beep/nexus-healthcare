@@ -16,12 +16,12 @@ const STEPS = [
   {
     num: '02',
     title: 'Get matched to the right care',
-    body: 'Our AI surfaces the best options — free clinics, telehealth, eligibility programs — ranked by distance and fit.',
+    body: 'AXVO ranks free clinics, telehealth, and eligibility programs by distance and how affordable they are likely to be.',
   },
   {
     num: '03',
     title: 'Book, call, or walk in',
-    body: 'See live hours, wait times, and directions. Book directly or get turn-by-turn directions in your language.',
+    body: 'See hours, phone numbers, and directions — then call ahead to confirm before you go.',
   },
 ]
 

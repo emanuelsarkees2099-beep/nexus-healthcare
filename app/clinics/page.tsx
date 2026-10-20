@@ -156,16 +156,6 @@ function ClinicRow({ clinic }: { clinic: Clinic }) {
             {affordabilityText(clinic.affordability_label)}
           </span>
         )}
-        {clinic.accepting && (
-          <span style={{
-            fontSize: '11px', fontWeight: 600, padding: '3px 9px', borderRadius: '20px',
-            fontFamily: 'var(--font-inter)',
-            background: 'rgba(74,222,128,0.08)', color: 'var(--green-pulse)',
-            border: '1px solid rgba(74,222,128,0.18)',
-          }}>
-            Accepting
-          </span>
-        )}
         {clinic.phone && (
           <a
             href={`tel:${clinic.phone.replace(/\D/g, '')}`}
@@ -626,7 +616,6 @@ export default function ClinicsPage() {
 
                 {/* Boolean toggle chips */}
                 {([
-                  { key: 'accepting'   as const, label: 'Accepting patients' },
                   { key: 'free'        as const, label: 'Free care'          },
                   { key: 'slidingScale'as const, label: 'Sliding scale'      },
                 ] as const).map(({ key, label }) => (

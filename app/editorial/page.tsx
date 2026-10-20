@@ -569,7 +569,7 @@ export default function EditorialPage() {
                         <span style={{ fontSize: '11px', fontWeight: 700, color, letterSpacing: '0.08em', padding: '3px 8px', borderRadius: '6px', background: `${color}10`, border: `1px solid ${color}20` }}>{g.state}</span>
                       </div>
                       <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '4px', color: 'var(--text)', letterSpacing: '-0.01em' }}>{g.city}</div>
-                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', lineHeight: 1.4 }}>Real-time listings, sourced from HRSA &amp; public data</div>
+                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', lineHeight: 1.4 }}>Listings sourced from HRSA &amp; public data</div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '14px', fontSize: '12px', color, fontWeight: 600 }}>
                         Explore <ArrowRight size={11} />
                       </div>

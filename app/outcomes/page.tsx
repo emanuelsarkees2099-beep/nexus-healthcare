@@ -411,7 +411,7 @@ export default function OutcomesPage() {
                 <span style={pill}><Book1 size={14} variant="Linear" /> Research</span>
                 <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>What the data shows</h2>
               </div>
-              <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)', maxWidth: '280px', lineHeight: 1.6 }}>Peer-reviewed studies from independent institutions using anonymized AXVO outcome data.</p>
+              <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)', maxWidth: '280px', lineHeight: 1.6 }}>Public research on the uninsured and the safety-net clinics that serve them. AXVO doesn&apos;t have outcome studies of its own yet.</p>
             </div>
           </RevealBlock>
 

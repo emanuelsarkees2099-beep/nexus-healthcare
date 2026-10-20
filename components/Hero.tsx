@@ -244,8 +244,13 @@ export default function Hero() {
   /* ── Search handler ── */
   const handleSearch = useCallback(() => {
     const q = searchVal.trim()
-    if (!q) return
     const loc = locationVal.trim()
+    // Used to `return` early when the "what" box was empty -- so the most
+    // common search (just a ZIP or city, nothing else) silently did nothing.
+    if (!q) {
+      setTimeout(() => router.push(loc ? `/search?loc=${encodeURIComponent(loc)}` : '/search'), 280)
+      return
+    }
     const isSymptom = SYMPTOM_PATTERNS.some(rx => rx.test(q))
     setTimeout(() => router.push(
       isSymptom
@@ -449,7 +454,7 @@ export default function Hero() {
               fontSize: '12.5px', fontWeight: 600,
               color: 'var(--text)', fontFamily: 'var(--font-inter)',
             }}>
-              18,900+ free clinics mapped
+              18,900+ free &amp; low-cost clinics mapped
             </span>
           </div>
 

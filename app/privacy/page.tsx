@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
+import { CONTACT_EMAIL } from '@/lib/contact'
 import { Shield, Eye, Lock, Data, InfoCircle, TickCircle, ArrowDown2 } from 'iconsax-react'
 
 const pill: React.CSSProperties = {
@@ -93,7 +94,7 @@ CCPA Rights (California) — California residents may request disclosure of pers
 
 GDPR Rights (EU residents) — You have rights under GDPR including access, rectification, erasure, restriction, and data portability. Contact us to exercise these rights.
 
-To exercise any right: email privacy@axvohealth.com with "Privacy Request" in the subject line.`
+To exercise any right: email ${CONTACT_EMAIL} with "Privacy Request" in the subject line.`
   },
   {
     id: 'hipaa',
@@ -115,7 +116,7 @@ See our Terms of Service (Section 11) for the full legal detail on this.`
 
 All data in transit is encrypted via TLS 1.3. Account data at rest is encrypted using AES-256. Supabase row-level security ensures users can only access their own records. We conduct periodic security reviews.
 
-We do not guarantee absolute security — no system does. If you discover a security vulnerability, please disclose it responsibly to security@axvohealth.com. We will respond within 72 hours.
+We do not guarantee absolute security — no system does. If you discover a security vulnerability, please disclose it responsibly to ${CONTACT_EMAIL}. We will respond within 72 hours.
 
 In the event of a data breach affecting personal information, we will notify affected users within 72 hours as required by law.`
   },
@@ -169,7 +170,7 @@ export default function PrivacyPage() {
         </p>
 
         <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.04em' }}>
-          Last updated: April 2026 · Version 1.2
+          Last updated: October 19, 2026 · Version 1.3
         </p>
       </section>
 
@@ -298,8 +299,8 @@ export default function PrivacyPage() {
             <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '12px' }}>Questions about this policy?</h3>
             <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, marginBottom: '16px' }}>
               If you have questions, concerns, or want to exercise any of your privacy rights, contact us at{' '}
-              <a href="mailto:privacy@axvohealth.com" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
-                privacy@axvohealth.com
+              <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: 'var(--accent)', textDecoration: 'none' }}>
+                {CONTACT_EMAIL}
               </a>
               . We respond to all privacy requests within 5 business days.
             </p>

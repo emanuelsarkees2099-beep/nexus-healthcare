@@ -22,7 +22,7 @@ import Link from 'next/link'
 import { useState, useCallback } from 'react'
 import {
   Location, Call, Global, Bookmark2,
-  RefreshCircle, Routing, Clock, Flash, ArrowRight,
+  RefreshCircle, Routing, Clock, ArrowRight,
   Calendar1, ExportSquare, TickCircle, Star1, CloseCircle,
   Message, ShieldTick,
 } from 'iconsax-react'
@@ -32,6 +32,7 @@ import { isOpenNow, computeEquityScore } from '@/lib/search-utils'
 import { useToast } from '@/components/ui/Toast'
 import type { MatchScore } from '@/lib/match-engine'
 import AvailabilitySignal from '@/components/search/AvailabilitySignal'
+import { CONTACT_EMAIL } from '@/lib/contact'
 
 /* ── Re-export skeleton so callers can import from one place ── */
 export { SkeletonClinicCard } from '@/components/ui/Skeleton'
@@ -511,11 +512,6 @@ export default function ClinicCard({
               {clinic.hours}
             </span>
           )}
-          {clinic.accepting && (
-            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--accent)', fontFamily: 'var(--font-inter)', fontWeight: 500 }}>
-              <Flash size={11} variant="Linear" /> {t('search.accepting')}
-            </span>
-          )}
           {clinic.distance && (
             /* #31 — pulse glow when very close (< 1 mile) */
             <span
@@ -621,36 +617,12 @@ export default function ClinicCard({
           >
             {t('search.viewDetails')} <ArrowRight size={14} color="rgba(255,255,255,0.45)" variant="Linear" />
           </Link>
-          <Link
-            href="/verify"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'rgba(96,165,250,0.6)', textDecoration: 'none', fontFamily: 'var(--font-inter)', transition: 'color 0.2s' }}
-            onMouseEnter={e => (e.currentTarget.style.color = '#60a5fa')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(96,165,250,0.6)')}
+          <a
+            href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Wrong info: ${clinic.name}`)}&body=${encodeURIComponent(`Clinic ID: ${clinic.id}\nWhat is wrong:\n`)}`}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'rgba(255,255,255,0.4)', textDecoration: 'none', fontFamily: 'var(--font-inter)' }}
           >
-            ✓ Verify this clinic
-          </Link>
-
-          {/* #23 — Rate this clinic */}
-          {!alreadyReviewed ? (
-            <button
-              onClick={() => setShowReview(true)}
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 4,
-                fontSize: 11, color: 'rgba(251,191,36,0.65)',
-                background: 'none', border: 'none', cursor: 'pointer',
-                fontFamily: 'var(--font-inter)', padding: 0,
-                transition: 'color 0.2s',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#fbbf24')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(251,191,36,0.65)')}
-            >
-              <Star1 size={14} color="rgba(251,191,36,0.8)" variant="Bold" /> Rate this clinic
-            </button>
-          ) : (
-            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.2)', fontFamily: 'var(--font-inter)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-              <Star1 size={14} variant="Bold" color="#fbbf24" /> Reviewed ✓
-            </span>
-          )}
+            Report wrong info
+          </a>
         </div>
       </div>
     </div>

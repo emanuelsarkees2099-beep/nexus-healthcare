@@ -461,6 +461,11 @@ function Counter({ target, prefix = '$', suffix = '' }: { target: number; prefix
       if (p < 1) requestAnimationFrame(step)
     }
     requestAnimationFrame(step)
+    // rAF is paused in background tabs and some low-power modes, which left
+    // the results headline stuck at "$0 per year". Always land on the real
+    // number even if no animation frame ever fires.
+    const done = setTimeout(() => setVal(target), dur + 100)
+    return () => clearTimeout(done)
   }, [visible, target])
   return <span ref={ref}>{prefix}{val.toLocaleString()}{suffix}</span>
 }

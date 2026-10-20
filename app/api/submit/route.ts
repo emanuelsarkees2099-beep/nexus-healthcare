@@ -103,7 +103,7 @@ async function notifyAdmin(type: string, data: Record<string, unknown>, userId: 
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'AXVO <notifications@axvo-health.app>',
+      from: 'AXVO <hello@axvohealth.com>',
       to: ADMIN_EMAIL,
       subject: `[AXVO] New ${type} submission`,
       html: `

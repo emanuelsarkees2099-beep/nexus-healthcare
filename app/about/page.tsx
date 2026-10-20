@@ -370,7 +370,7 @@ export default function AboutPage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
             {[
-              { n: '01', title: 'Tell us where you are', body: 'Enter your location. AXVO instantly maps every free clinic, FQHC, and sliding-scale provider within 50 miles — with real availability signals.' },
+              { n: '01', title: 'Tell us where you are', body: 'Enter your location. AXVO maps free clinics, FQHCs, and sliding-scale providers near you, sourced from HRSA and other public data.' },
               { n: '02', title: 'Check what you qualify for', body: 'Answer five questions. Our eligibility engine checks 40+ federal and state programs to surface what you\'re owed — Medicaid, ACA subsidies, drug assistance, and more.' },
               { n: '03', title: 'Get care', body: 'Book directly, get directions, or connect with a Community Health Worker who can navigate the system on your behalf. Everything in one place.' },
             ].map(s => (

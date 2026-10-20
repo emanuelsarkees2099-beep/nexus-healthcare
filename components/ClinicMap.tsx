@@ -227,11 +227,6 @@ export default function ClinicMap({ lat, lng, clinics, radius, onSearchArea, onS
                 Sliding scale
               </span>
             )}
-            {selected.accepting && (
-              <span style={{ fontSize: '10px', fontWeight: 600, color: '#60a5fa', background: 'rgba(96,165,250,0.1)', border: '1px solid rgba(96,165,250,0.2)', borderRadius: '4px', padding: '2px 7px' }}>
-                Accepting patients
-              </span>
-            )}
           </div>
 
           {/* Name */}

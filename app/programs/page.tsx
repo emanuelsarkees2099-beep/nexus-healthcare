@@ -128,7 +128,7 @@ const ALERTS = [
 
 const HOW_STEPS = [
   { n: '01', title: 'Answer 5 short questions', body: 'No personal info required. Just income, household size, and what you need.' },
-  { n: '02', title: 'Get your matched programs', body: 'We cross-check 40+ federal and state programs in real time and rank by match confidence.' },
+  { n: '02', title: 'Get your matched programs', body: 'We check you against Medicaid, CHIP, ACA subsidies, and other major programs and rank them by match confidence.' },
   { n: '03', title: 'Apply with guided help', body: 'Each match comes with a direct link and pre-filled form instructions to reduce friction.' },
 ]
 
@@ -508,7 +508,7 @@ function EligibilityChecklist() {
             Checking eligibility…
           </div>
           <div style={{ fontSize: '12px', color: 'var(--text-3)', marginTop: '2px' }}>
-            Scanning 40+ federal and state programs
+            Checking federal and state programs
           </div>
         </div>
       </div>
@@ -663,7 +663,7 @@ export default function ProgramsPage() {
             Most uninsured people qualify for 2–4 programs they've never heard of. Answer 5 questions and find out which ones you're owed.
           </p>
           <div style={{ display: 'flex', gap: '24px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            {[{ v: '40+', l: 'Programs checked' }, { v: '$0', l: 'Cost to check' }, { v: '2 min', l: 'Time required' }].map(s => (
+            {[{ v: String(PROGRAMS_BASE.length), l: 'Programs checked' }, { v: '$0', l: 'Cost to check' }, { v: '2 min', l: 'Time required' }].map(s => (
               <div key={s.l} style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '28px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em' }}>{s.v}</div>
                 <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '4px' }}>{s.l}</div>

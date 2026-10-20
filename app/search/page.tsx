@@ -902,11 +902,6 @@ function SearchResults() {
               <InfoCircle size={9} color="currentColor" variant="TwoTone" style={{ opacity: 0.5 }} aria-hidden="true" />
             </span>
           )}
-          {!loading && Object.keys(sourceCounts).length > 0 && (
-            <span style={{ color: 'var(--text-3)', fontSize: '10px', fontFamily: 'var(--font-mono),monospace' }}>
-              ({Object.entries(sourceCounts).filter(([, n]) => n > 0).map(([s, n]) => `${s}:${n}`).join(' · ')})
-            </span>
-          )}
         </p>
       </div>
       )}
@@ -1218,8 +1213,9 @@ function SearchResults() {
               <span style={{ color: 'var(--accent)' }}>Likely Free</span> = FQHCs and NAFC clinics with sliding-scale or no-cost care.{' '}
               Sources:{' '}
               <a href="https://findahealthcenter.hrsa.gov" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none' }}>HRSA</a>,{' '}
-              <a href="https://nafc.org" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none' }}>NAFC</a>,{' '}
-              OpenStreetMap.
+              <a href="https://nafcclinics.org" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none' }}>NAFC</a>,{' '}
+              OpenStreetMap.{' '}
+              <strong style={{ color: 'var(--text)', fontWeight: 600 }}>Hours and availability aren&apos;t live — always call ahead before you go.</strong>
             </div>
           </div>
         )}

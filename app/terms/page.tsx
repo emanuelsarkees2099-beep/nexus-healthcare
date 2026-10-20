@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Warning2 } from 'iconsax-react'
+import { CONTACT_EMAIL } from '@/lib/contact'
 
 export const metadata: Metadata = {
   title: 'Terms of Service — AXVO',
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
   // non-sensitive, and fine to index.
 }
 
-const LAST_UPDATED = 'May 18, 2025'
+const LAST_UPDATED = 'October 19, 2026'
 
 const Section = ({ id, title, children }: { id: string; title: string; children: React.ReactNode }) => (
   <section id={id} style={{ marginBottom: '48px' }}>
@@ -208,8 +209,8 @@ export default function TermsPage() {
           </p>
           <div style={{ padding: '16px 18px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', fontSize: '14px', color: 'rgba(255,255,255,0.6)' }}>
             <p><strong style={{ color: 'rgba(255,255,255,0.85)' }}>AXVO</strong></p>
-            <p>Email: <a href="mailto:legal@axvo-healthcare.vercel.app" style={{ color: '#4a90d9', textDecoration: 'none' }}>legal@axvo-healthcare.vercel.app</a></p>
-            <p>Website: <a href="https://axvo-healthcare.vercel.app" style={{ color: '#4a90d9', textDecoration: 'none' }}>axvo-healthcare.vercel.app</a></p>
+            <p>Email: <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: '#4a90d9', textDecoration: 'none' }}>{CONTACT_EMAIL}</a></p>
+            <p>Website: <a href="https://www.axvohealth.com" style={{ color: '#4a90d9', textDecoration: 'none' }}>axvohealth.com</a></p>
           </div>
         </Section>
 

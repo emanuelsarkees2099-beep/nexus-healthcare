@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import AppShell from '@/components/AppShell'
+import { CONTACT_EMAIL } from '@/lib/contact'
 
 export const metadata: Metadata = {
   title: 'Accessibility — AXVO',
@@ -40,7 +41,7 @@ const SECTIONS: { title: string; body: string[] }[] = [
   {
     title: 'Contact us about accessibility',
     body: [
-      'If any part of AXVO is difficult or impossible for you to use, please tell us — we treat accessibility reports as high priority. Email accessibility@axvohealth.com with the page, your device or assistive technology, and what went wrong, and we will respond and work to fix it.',
+      `If any part of AXVO is difficult or impossible for you to use, please tell us — we treat accessibility reports as high priority. Email ${CONTACT_EMAIL} with the page, your device or assistive technology, and what went wrong, and we will respond and work to fix it.`,
     ],
   },
 ]
@@ -57,7 +58,7 @@ export default function AccessibilityPage() {
             Built to be used by everyone.
           </h1>
           <p style={{ fontSize: '15px', color: 'var(--text-2)', lineHeight: 1.75, marginBottom: '48px', fontFamily: 'var(--font-inter)' }}>
-            Last updated {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}.
+            Last updated October 19, 2026.
           </p>
 
           {SECTIONS.map(s => (

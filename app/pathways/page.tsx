@@ -4,7 +4,7 @@ import AppShell from '@/components/AppShell'
 import { smoothScrollTo } from '@/utils/smoothScroll'
 import { useRouter } from 'next/navigation'
 import EmptyState from '@/components/ui/EmptyState'
-import { Location, Hospital, Cpu, ArrowRight, TickCircle, ArrowRight2, Wifi, Clock, Star1, LanguageSquare, MagicStar, SearchStatus, Routing2, Call, InfoCircle } from 'iconsax-react'
+import { Location, Hospital, Cpu, ArrowRight, TickCircle, ArrowRight2, Wifi, Clock, LanguageSquare, MagicStar, SearchStatus, Routing2, Call, InfoCircle } from 'iconsax-react'
 
 /* ─── reveal hook ─────────────────────────────────── */
 function useReveal(threshold = 0.15) {
@@ -27,7 +27,7 @@ const STEPS = [
 ]
 
 const INSURANCE_OPTIONS = [
-  { id: 'uninsured', label: 'No insurance',          desc: 'Access 18,900+ free clinics' },
+  { id: 'uninsured', label: 'No insurance',          desc: 'Access 18,900+ free & low-cost clinics' },
   { id: 'medicaid',  label: 'Medicaid / CHIP',        desc: 'Verify coverage & find providers' },
   { id: 'aca',       label: 'ACA marketplace plan',   desc: 'Find in-network free clinics' },
   { id: 'other',     label: 'Other / Not sure',       desc: "We'll figure it out together" },
@@ -436,7 +436,7 @@ export default function PathwaysPage() {
               <div style={{ textAlign: 'center', padding: '60px 0', animation: 'fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both' }}>
                 <div style={{ width: '52px', height: '52px', borderRadius: '50%', border: '2px solid rgba(74,144,217,0.15)', borderTopColor: 'var(--accent)', margin: '0 auto 24px', animation: 'spin 0.9s linear infinite' }} />
                 <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.55)' }}>Finding your best matches…</p>
-                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.25)', marginTop: '8px' }}>Checking languages · wait times · specialty match</p>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.25)', marginTop: '8px' }}>Checking languages · services · distance</p>
               </div>
             )}
           </div>
@@ -660,44 +660,6 @@ export default function PathwaysPage() {
                   <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.12em', marginBottom: '16px' }}>{item.n}</div>
                   <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '12px', lineHeight: 1.3 }}>{item.title}</h3>
                   <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.7 }}>{item.body}</p>
-                </div>
-              </RevealBlock>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── SUCCESS STORIES ──────────────────────────── */}
-      <section style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-          <RevealBlock>
-            <div style={{ marginBottom: '56px' }}>
-              <span style={pill}><Star1 size={14} variant="Linear" /> Patient outcomes</span>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15, maxWidth: '560px' }}>Real people.<br />Real care found.</h2>
-            </div>
-          </RevealBlock>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
-            {[
-              { name: 'Maria G.', city: 'Phoenix, AZ', quote: 'I had chest pain and no insurance. AXVO found me a free clinic 1.4 miles away. I was seen the same day. It turned out to be treatable with a free prescription.', care: 'Cardiac triage', time: '22 min to care' },
-              { name: 'James T.', city: 'Detroit, MI', quote: 'I was avoiding the dentist for 2 years because I thought it would cost hundreds. AXVO matched me to a dental day at a local FQHC. Free cleaning, two fillings, zero dollars.', care: 'Dental care', time: '0 cost' },
-              { name: 'Anh N.', city: 'San Jose, CA', quote: 'My mother only speaks Vietnamese. AXVO found her a clinic with staff who spoke her dialect. For the first time in years, she understood her own diagnosis.', care: 'Primary care', time: 'Language matched' },
-            ].map((s, i) => (
-              <RevealBlock key={s.name} delay={i * 100}>
-                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(74,144,217,0.15), rgba(74,144,217,0.04))', borderRadius: '20px', height: '100%' }}>
-                  <div style={{ background: '#080D1A', borderRadius: '18px', padding: '28px', height: '100%', boxSizing: 'border-box', borderLeft: '3px solid rgba(74,144,217,0.35)' }}>
-                    <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, marginBottom: '20px', fontStyle: 'italic' }}>&ldquo;{s.quote}&rdquo;</p>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '8px' }}>
-                      <div>
-                        <div style={{ fontWeight: 600, fontSize: '14px' }}>{s.name}</div>
-                        <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', marginTop: '2px' }}>{s.city}</div>
-                      </div>
-                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.18)', color: 'var(--accent)' }}>{s.care}</span>
-                        <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.15)', color: '#60a5fa' }}>{s.time}</span>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </RevealBlock>
             ))}

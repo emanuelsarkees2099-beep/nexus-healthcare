@@ -17,6 +17,7 @@ import { createClientClient } from '@/lib/auth-client'
 import { computeEquityScore } from '@/lib/search-utils'
 import AvailabilitySignal from '@/components/search/AvailabilitySignal'
 import MedicalDisclaimer from '@/components/MedicalDisclaimer'
+import { CONTACT_EMAIL } from '@/lib/contact'
 import type { Clinic as ApiClinic } from '@/app/api/clinics/route'
 
 type AffordabilityLabel = 'likely-free' | 'low-cost' | 'standard'
@@ -50,17 +51,10 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
   const [user,            setUser]           = useState<{ id: string } | null>(null)
   const [copied,          setCopied]         = useState(false)
   const [bridgeVisible,   setBridgeVisible]  = useState(false)  // N5: insurance bridge
-  const [ownReview,       setOwnReview]      = useState<{ stars: number; tags: string[]; note: string; ts: number } | null>(null)
 
   useEffect(() => {
     if (!id) return
     const supabase = createClientClient()
-
-    /* Load own review from localStorage */
-    try {
-      const raw = localStorage.getItem(`axvo_review_${id}`)
-      if (raw) setOwnReview(JSON.parse(raw))
-    } catch { /* ignore */ }
 
     /* Check auth + bookmark status */
     supabase.auth.getSession().then(async ({ data: { session } }) => {
@@ -187,7 +181,6 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
     } : {}),
     medicalSpecialty: clinic.services,
     availableService: clinic.services?.map(s => ({ '@type': 'MedicalTherapy', name: s })) ?? [],
-    isAcceptingNewPatients: clinic.accepting,
     priceRange: clinic.free ? '$0' : clinic.sliding_scale ? 'Sliding scale' : undefined,
     knowsLanguage: clinic.languages ?? ['English'],
   }
@@ -294,17 +287,6 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
                 fontSize: '11px', fontWeight: 600, color: 'var(--amber)', fontFamily: 'var(--font-inter)',
               }}>
                 Sliding scale
-              </div>
-            )}
-            {clinic.accepting && (
-              <div style={{
-                display: 'inline-flex', alignItems: 'center', gap: '5px',
-                background: 'rgba(96,165,250,0.10)', border: '1px solid rgba(96,165,250,0.22)',
-                borderRadius: '100px', padding: '4px 10px',
-                fontSize: '11px', fontWeight: 600, color: 'var(--green-pulse)', fontFamily: 'var(--font-inter)',
-              }}>
-                <div className="open-pulse" style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--green-pulse)' }} />
-                Accepting patients
               </div>
             )}
             {clinic.type && (
@@ -539,7 +521,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
           )}
         </div>
 
-        {/* ── Phase 2.2: Live Availability Signal ── */}
+        {/* ── Call-ahead notice (no live availability data) ── */}
         <div style={{ marginBottom: '16px' }}>
           <AvailabilitySignal clinicId={clinic.id} clinicName={clinic.name} variant="full" />
         </div>
@@ -568,81 +550,6 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
             </div>
           </div>
         )}
-
-        {/* ── Phase 2.3: Patient Experience Ratings ── */}
-        <div style={{ background: 'var(--bg2)', border: '1px solid var(--border2)', borderRadius: '16px', padding: '22px 24px', marginBottom: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: '16px', flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Star1 size={14} color="#fbbf24" variant="Bold" />
-              <h2 style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', margin: 0 }}>
-                Patient Experience
-              </h2>
-            </div>
-            <Link href={`/search?q=${encodeURIComponent(clinic.name)}`}
-              style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', textDecoration: 'none' }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.35)')}
-            >
-              Leave a review →
-            </Link>
-          </div>
-
-          {ownReview ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {/* User's own review */}
-              <div style={{ padding: '14px 16px', borderRadius: 12, background: 'rgba(74,144,217,0.05)', border: '1px solid rgba(74,144,217,0.12)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                  <div style={{ display: 'flex', gap: 2 }}>
-                    {[1,2,3,4,5].map(s => (
-                      <Star1 key={s} size={12} variant={s <= ownReview.stars ? 'Bold' : 'Linear'}
-                        color={s <= ownReview.stars ? '#fbbf24' : 'rgba(255,255,255,0.15)'} />
-                    ))}
-                  </div>
-                  <span style={{ fontSize: 11, color: 'var(--accent)', fontFamily: 'var(--font-inter)', fontWeight: 600 }}>Your review</span>
-                  <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)', marginLeft: 'auto' }}>
-                    {new Date(ownReview.ts).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-                  </span>
-                </div>
-                {ownReview.tags.length > 0 && (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginBottom: ownReview.note ? 8 : 0 }}>
-                    {ownReview.tags.map(tag => (
-                      <span key={tag} style={{ fontSize: 10, padding: '2px 8px', borderRadius: 100, background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.18)', color: 'var(--accent)', fontFamily: 'var(--font-inter)' }}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                {ownReview.note && (
-                  <p style={{ fontSize: 12, color: 'var(--text-2)', fontFamily: 'var(--font-inter)', lineHeight: 1.6, margin: 0 }}>
-                    &ldquo;{ownReview.note}&rdquo;
-                  </p>
-                )}
-              </div>
-              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-inter)', margin: 0 }}>
-                Reviews are anonymous. Community ratings from patients who visited this clinic.
-              </p>
-            </div>
-          ) : (
-            <div style={{ textAlign: 'center', padding: '20px 0' }}>
-              <Star1 size={28} color="rgba(251,191,36,0.2)" variant="Linear" style={{ marginBottom: 10 }} />
-              <p style={{ fontSize: 13, color: 'var(--text-3)', fontFamily: 'var(--font-inter)', marginBottom: 12 }}>
-                No reviews yet for this clinic.
-              </p>
-              <Link href={`/search?q=${encodeURIComponent(clinic.name)}`}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  fontSize: 12, fontWeight: 600, color: 'var(--accent)',
-                  padding: '7px 14px', borderRadius: 8,
-                  background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.18)',
-                  textDecoration: 'none',
-                }}
-              >
-                <Star1 size={11} color="currentColor" variant="Linear" />
-                Be the first to review
-              </Link>
-            </div>
-          )}
-        </div>
 
         {/* ── What to bring ── */}
         <div style={{ background: 'var(--bg2)', border: '1px solid var(--border2)', borderRadius: '16px', padding: '22px 24px', marginBottom: '16px' }}>
@@ -775,7 +682,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
         {/* ── Report outdated info ── */}
         <div style={{ marginTop: '24px', textAlign: 'center' }}>
           <a
-            href={`mailto:data@axvohealth.com?subject=Report outdated info: ${encodeURIComponent(clinic.name)}&body=Clinic ID: ${clinic.id}%0AClinic name: ${encodeURIComponent(clinic.name)}%0A%0AWhat's outdated:%0A`}
+            href={`mailto:${CONTACT_EMAIL}?subject=Report outdated info: ${encodeURIComponent(clinic.name)}&body=Clinic ID: ${clinic.id}%0AClinic name: ${encodeURIComponent(clinic.name)}%0A%0AWhat's outdated:%0A`}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '6px',
               fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)',
