@@ -84,7 +84,7 @@ async function compileWeeklyStats(): Promise<WeeklyStats> {
 
 async function sendDigestEmail(stats: WeeklyStats): Promise<boolean> {
   const resendKey = process.env.RESEND_API_KEY
-  const digestEmail = process.env.DIGEST_EMAIL || 'team@axvohealth.com'
+  const digestEmail = process.env.DIGEST_EMAIL || 'emanuel@axvohealth.com'
 
   if (!resendKey) {
     console.log('[WeeklyDigest] No RESEND_API_KEY — skipping email')
@@ -166,7 +166,7 @@ async function sendDigestEmail(stats: WeeklyStats): Promise<boolean> {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'AXVO Impact <digest@axvohealth.com>',
+        from: 'AXVO Impact <digest@mail.axvohealth.com>',
         to: [digestEmail],
         subject: `AXVO Weekly Impact — ${weekLabel}`,
         html,

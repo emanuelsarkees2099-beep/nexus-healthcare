@@ -9,7 +9,10 @@
  */
 
 const RESEND_API_KEY   = process.env.RESEND_API_KEY ?? ''
-const FROM_EMAIL       = process.env.FROM_EMAIL ?? 'AXVO Health <hello@axvohealth.com>'
+// Resend only has mail.axvohealth.com verified (not the root domain), so
+// sending as @axvohealth.com is rejected. Replies go to the real inbox.
+const FROM_EMAIL       = process.env.FROM_EMAIL ?? 'AXVO Health <hello@mail.axvohealth.com>'
+const REPLY_TO         = 'emanuel@axvohealth.com'
 const APP_URL          = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.axvohealth.com').replace(/\/$/, '')
 const UNSUBSCRIBE_BASE = `${APP_URL}/api/unsubscribe`
 
@@ -55,7 +58,7 @@ export async function sendEmail(
           subject:  payload.subject,
           html:     payload.html,
           text:     payload.text,
-          reply_to: payload.replyTo,
+          reply_to: payload.replyTo ?? REPLY_TO,
         }),
       })
 
