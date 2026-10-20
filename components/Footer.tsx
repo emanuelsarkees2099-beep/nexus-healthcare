@@ -234,6 +234,7 @@ export default function Footer() {
                 { label: 'RxAssist',                    href: 'https://www.rxassist.org',          external: true },
                 { label: 'Medication Finder',           href: '/medications',                      external: false },
                 { label: 'About AXVO',                 href: '/about',                            external: false },
+                { label: 'Founder',                     href: '/founder',                          external: false },
                 { label: 'Privacy',                     href: '/privacy',                          external: false },
                 { label: 'Accessibility',               href: '/accessibility',                    external: false },
               ],

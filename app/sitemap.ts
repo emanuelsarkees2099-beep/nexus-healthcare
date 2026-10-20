@@ -57,6 +57,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     /* Informational */
     { url: `${base}/about`,         priority: 0.60, changeFrequency: 'monthly' },
+    { url: `${base}/founder`,       priority: 0.55, changeFrequency: 'monthly' },
     { url: `${base}/accessibility`, priority: 0.50, changeFrequency: 'monthly' },
     { url: `${base}/privacy`,       priority: 0.40, changeFrequency: 'yearly'  },
     { url: `${base}/terms`,         priority: 0.40, changeFrequency: 'yearly'  },

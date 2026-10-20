@@ -86,13 +86,22 @@ export const ORG_SCHEMA = {
   logo:       LOGO_URL,
   description:
     'AXVO is a free platform connecting uninsured Americans to free clinics, healthcare programs, and community support.',
-  foundingDate: '2024',
+  // Was '2024' -- the project's first commit is April 2026.
+  foundingDate: '2026',
+  founder: {
+    '@type': 'Person',
+    name:    'Emanuel Sarkees',
+    jobTitle: 'Founder & Developer',
+    url:     `${BASE_URL}/founder`,
+    image:   `${BASE_URL}/founder-emanuel-sarkees.jpg`,
+  },
   sameAs: [
     'https://twitter.com/axvohealth',
   ],
   contactPoint: {
     '@type':       'ContactPoint',
     contactType:   'customer support',
+    email:         'emanuel@axvohealth.com',
     availableLanguage: 'English',
   },
 }

@@ -42,7 +42,7 @@ async function checkURL(name: string, url: string): Promise<{ name: string; url:
 
     const res = await fetch(url, {
       method: 'HEAD', // Lightweight — don't download body
-      headers: { 'User-Agent': 'AXVO-LinkChecker/1.0 hello@axvohealth.com' },
+      headers: { 'User-Agent': 'AXVO-LinkChecker/1.0 emanuel@axvohealth.com' },
       signal: controller.signal,
       redirect: 'follow',
     })

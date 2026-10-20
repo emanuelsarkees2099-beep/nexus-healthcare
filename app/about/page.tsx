@@ -104,6 +104,11 @@ export default function AboutPage() {
           30 million Americans are uninsured. Tens of millions more are underinsured. AXVO exists to close the gap between who needs care and who can find it — using technology to surface the federally-funded, sliding-scale, and free resources that were already there.
         </p>
 
+        <p style={{ fontSize: '14px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', margin: '-16px auto 32px' }}>
+          Built by Emanuel Sarkees ·{' '}
+          <Link href="/founder" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Meet the founder →</Link>
+        </p>
+
         <div className="about-cta-row" style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link
             href="/search"
