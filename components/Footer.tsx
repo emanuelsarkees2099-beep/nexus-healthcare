@@ -222,6 +222,8 @@ export default function Footer() {
                 { label: 'Impact Dashboard', href: '/impact' },
                 { label: 'Equity Lab',       href: '/equity' },
                 { label: 'Editorial',        href: '/editorial' },
+                { label: 'Partners',         href: '/partners' },
+                { label: 'Inciteful Med',    href: '/partners/inciteful-med' },
               ],
             },
             {

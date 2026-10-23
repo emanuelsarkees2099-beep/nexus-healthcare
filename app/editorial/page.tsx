@@ -1,5 +1,6 @@
 ﻿'use client'
 import React, { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
 import AppShell from '@/components/AppShell'
 import { Book1, Clock, ArrowRight, TrendUp, SearchNormal1, CloseCircle, Location, Buildings2 } from 'iconsax-react'
 import { CITY_HUBS } from '@/lib/city-hubs'
@@ -57,9 +58,26 @@ type Article = {
    * both sites' SEO. */
   sourceName?: string
   sourceUrl?: string
+  /** Full-page pieces (e.g. interviews) link out instead of expanding inline */
+  href?: string
 }
 
 const ARTICLES: Article[] = [
+  {
+    id: 10,
+    category: 'Community',
+    tag: 'Partner Interview',
+    headline: 'Q&A: Erika Warren on Putting Patients at the Center of Medical Research',
+    subhead: 'The co-founder and CEO of Inciteful Med on a family health scare, a 2:30 a.m. breakthrough in an ICU, and why patients deserve the same research their doctors use.',
+    author: 'Emanuel Sarkees',
+    date: 'October 22, 2026',
+    readTime: '8 min read',
+    color: '#C08BF7',
+    featured: true,
+    href: '/editorial/inciteful-med-interview',
+    tldr: 'Inciteful Med searches 42M+ peer-reviewed papers and explains them in plain language, cited line by line. Erika Warren explains why the problem was never patients doing research — it was the lack of trustworthy tools.',
+    body: [],
+  },
   {
     id: 1,
     category: 'Investigation',
@@ -70,7 +88,6 @@ const ARTICLES: Article[] = [
     date: 'April 14, 2025',
     readTime: '8 min read',
     color: '#4A90D9',
-    featured: true,
     tldr: 'ZIP codes 4 miles apart in Houston have a 20-year life expectancy gap. The healthcare desert is not geography — it\'s policy.',
     body: [
       'In Houston, Texas, there are two ZIP codes roughly four miles apart. In 77002 — downtown, proximate to the Texas Medical Center — residents live on average to 82. In 77021 — the Third Ward — that number is 62. Twenty years. For a distance you could bike in thirty minutes.',
@@ -284,6 +301,16 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
             <span style={{ fontSize: '10px', fontWeight: 700, color: article.color, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: 'var(--font-inter)', marginRight: '8px' }}>TL;DR</span>
             <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)', fontFamily: 'var(--font-inter)', lineHeight: 1.5 }}>{article.tldr}</span>
           </div>
+          {article.href ? (
+            <Link href={article.href} style={{
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              padding: '11px 22px', borderRadius: '100px',
+              background: `${article.color}15`, border: `1px solid ${article.color}33`,
+              color: article.color, fontSize: '13px', fontWeight: 600, textDecoration: 'none',
+            }}>
+              Read the interview <ArrowRight size={13} variant="Linear" />
+            </Link>
+          ) : (<>
           {/* Body */}
           <div style={{ maxHeight: expanded ? '2000px' : '0', overflow: 'hidden', transition: 'max-height 0.5s cubic-bezier(0.16,1,0.3,1)' }}>
             {article.body.map((para, i) => (
@@ -308,6 +335,7 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
             {expanded ? 'Collapse' : 'Read full story'}
             <ArrowRight size={13} variant="Linear" style={{ transform: expanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.3s' }} />
           </button>
+          </>)}
           <div style={{ marginTop: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)' }}>
             By {article.author}
             {article.sourceUrl && (
@@ -353,6 +381,11 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
           <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-inter)', lineHeight: 1.5 }}>{article.tldr}</span>
         </div>
 
+        {article.href ? (
+          <Link href={article.href} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 600, color: article.color, textDecoration: 'none', alignSelf: 'flex-start' }}>
+            Read the interview <ArrowRight size={12} variant="Linear" />
+          </Link>
+        ) : (<>
         {/* Expandable body */}
         <div style={{ maxHeight: expanded ? '1200px' : '0', overflow: 'hidden', transition: 'max-height 0.5s cubic-bezier(0.16,1,0.3,1)' }}>
           {article.body.map((para, i) => (
@@ -377,6 +410,7 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
           {expanded ? 'Collapse' : 'Read more'}
           <ArrowRight size={12} variant="Linear" style={{ transform: expanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.3s' }} />
         </button>
+        </>)}
       </div>
 
       <div style={{ padding: '12px 24px', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', gap: '4px' }}>

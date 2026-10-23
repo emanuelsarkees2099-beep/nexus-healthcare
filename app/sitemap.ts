@@ -34,6 +34,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     /* Community & content */
     { url: `${base}/stories`,       priority: 0.80, changeFrequency: 'daily'   },
     { url: `${base}/editorial`,     priority: 0.75, changeFrequency: 'weekly'  },
+    { url: `${base}/editorial/inciteful-med-interview`, priority: 0.65, changeFrequency: 'monthly' },
+    { url: `${base}/partners`,      priority: 0.60, changeFrequency: 'monthly' },
+    { url: `${base}/partners/inciteful-med`, priority: 0.60, changeFrequency: 'monthly' },
     { url: `${base}/advocacy`,      priority: 0.70, changeFrequency: 'monthly' },
     { url: `${base}/chw`,           priority: 0.70, changeFrequency: 'monthly' },
 
