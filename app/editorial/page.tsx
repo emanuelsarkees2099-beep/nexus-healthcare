@@ -456,7 +456,7 @@ export default function EditorialPage() {
   const [showAll, setShowAll] = useState(false)
 
   const featured = ARTICLES.find(a => a.featured)
-  const rest = ARTICLES.filter(a => !a.featured)
+  const rest = ARTICLES.filter(a => !a.featured).sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
 
   const filtered = rest.filter(a => {
     const matchCat = activeCategory === 'All' || a.category === activeCategory
