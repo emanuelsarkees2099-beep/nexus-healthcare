@@ -132,28 +132,28 @@ const DISPARITIES = [
 
 const STORIES = [
   {
-    headline: 'The ZIP Code Lottery',
-    subhead: 'How your address determines your health',
-    readTime: '6 min read',
-    tag: 'Data Story',
+    headline: 'The Uninsured Crisis: Letter from Arizona',
+    subhead: 'Who goes without coverage, and why',
+    readTime: '7 min read',
+    tag: 'Investigation',
     color: '#4A90D9',
-    body: 'Born in 77002 (Houston) vs 77021 (4 miles south): 20-year difference in life expectancy. Same city. Different worlds. We mapped 2,800+ ZIP codes to show exactly where the system breaks.',
+    body: "Arizona's 10.3% uninsured rate isn't random. It clusters in the counties, industries, and communities that policy has excluded for decades.",
   },
   {
-    headline: 'The $4,000 Diagnosis',
-    subhead: 'Why uninsured patients avoid ERs until it\'s too late',
-    readTime: '8 min read',
+    headline: 'America Is Running Out of Doctors',
+    subhead: 'A shortage built by policy',
+    readTime: '7 min read',
     tag: 'Investigation',
     color: '#F87171',
-    body: 'Delayed care costs the healthcare system $3.2B a year in avoidable complications — but it costs families their lives. We traced 14 deaths that could have been prevented with a $0 clinic visit.',
+    body: "More than 83 million Americans live where there aren't enough clinicians, and rural areas feel it first. A residency cap frozen since 1997 is a big reason why.",
   },
   {
-    headline: 'Language as a Medical Crisis',
-    subhead: 'Being misdiagnosed because of a bad translation',
-    readTime: '5 min read',
-    tag: 'Patient Story',
+    headline: 'The Drug Changing Medicine',
+    subhead: 'GLP-1s and who can afford them',
+    readTime: '6 min read',
+    tag: 'Data Story',
     color: '#60A5FA',
-    body: '40 million Americans speak limited English at home. Fewer than 3% of all clinics provide certified medical interpreters. The gap between those two numbers is measured in lives.',
+    body: "The same GLP-1 prescription can cost $50 or $1,300 a month depending on what coverage, if any, you have. The people who'd benefit most often can't get it.",
   },
 ]
 
@@ -360,7 +360,7 @@ export default function EquityPage() {
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <Reveal>
             <div style={{ marginBottom: '48px' }}>
-              <div style={{ ...pill, marginBottom: '20px' }}>Data stories</div>
+              <div style={{ ...pill, marginBottom: '20px' }}>From the editorial</div>
               <h2 style={{ fontSize: 'clamp(26px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>
                 The numbers have names
               </h2>
