@@ -252,6 +252,28 @@ const ARTICLES: Article[] = [
     sourceName: 'The Health Care Blog',
     sourceUrl: 'https://thehealthcareblog.com/blog/2026/08/20/prior-authorization/',
   },
+  {
+    id: 11,
+    category: 'Investigation',
+    tag: 'Investigation',
+    headline: 'America Is Running Out of Doctors',
+    subhead: 'The physician shortage isn\'t bad luck. It\'s the predictable result of policy choices, and policy can fix it.',
+    author: 'Emanuel Sarkees',
+    date: 'September 14, 2026',
+    readTime: '7 min read',
+    color: '#60A5FA',
+    tldr: 'More than 83 million Americans live where there aren\'t enough clinicians, and federal projections put the physician shortfall above 187,000 by 2037. The causes are a residency cap frozen since 1997, crushing debt, burnout, and falling pay, and each one has a policy fix.',
+    body: [
+      'More than 83 million Americans live in federally designated Health Professional Shortage Areas, places without enough clinicians to meet basic need. The AAMC projects a shortage of up to 86,000 physicians by 2036, and the National Center for Health Workforce Analysis puts the gap at 124,180 by 2027, growing to 187,130 by 2037.',
+      'The biggest bottleneck is training. In 1997 Congress froze the number of Medicare-funded residency slots, and because a physician can\'t practice without finishing residency, that cap limits how many new doctors the country can produce no matter how many students apply to medical school.',
+      'The path is also expensive and exhausting. Average medical school debt now tops $216,000. Physicians are 82.3% more likely to burn out than other workers, and after inflation, Medicare physician payment has fallen more than 33% since 2001. Nearly one in five doctors say they plan to cut their hours or leave medicine.',
+      'Rural communities feel it first. Rural areas average roughly 30 physicians per 100,000 people, compared with 263 in cities, and the number of rural family physicians dropped 11% between 2017 and 2023. Specialists are scarcer still: the American College of Surgeons expects a shortage of 10,000 to 20,000 surgeons by 2036, and more than 80% of U.S. counties have no infectious-disease specialist at all.',
+      'Congress has bills on the table. The Resident Physician Shortage Reduction Act would add 14,000 residency slots over seven years, and the Specialty Physicians Advancing Rural Care Act targets rural specialty care. Both help, but they are a down payment, not a fix. Meanwhile the One Big Beautiful Bill Act caps medical school borrowing at $200,000 and ends Grad PLUS loans, which could push the profession further out of reach for students without family money.',
+      'What would actually change the trend: lift the residency cap for real; restructure medical debt through service-based forgiveness and interest-free deferment during residency; cut the prior authorization and electronic-records burden that drives burnout; and reverse the slide in Medicare reimbursement. The shortage is a policy failure, which means it can be corrected.',
+    ],
+    sourceName: 'The Health Care Blog',
+    sourceUrl: 'https://thehealthcareblog.com/blog/2026/09/14/america-is-running-out-of-doctors/',
+  },
 ]
 
 const CATEGORIES = ['All', 'Investigation', 'Guide', 'Data Story', 'Community']
