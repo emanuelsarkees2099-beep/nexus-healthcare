@@ -227,13 +227,8 @@ export default function Footer() {
               ],
             },
             {
-              title: 'Resources',
+              title: 'Company',
               links: [
-                { label: 'Find a Health Center (HRSA)', href: 'https://findahealthcenter.hrsa.gov', external: true },
-                { label: '211 — Local Help',            href: 'https://www.211.org',               external: true },
-                { label: 'NeedyMeds',                   href: 'https://www.needymeds.org',         external: true },
-                { label: 'GoodRx',                      href: 'https://www.goodrx.com',            external: true },
-                { label: 'RxAssist',                    href: 'https://www.rxassist.org',          external: true },
                 { label: 'Medication Finder',           href: '/medications',                      external: false },
                 { label: 'About AXVO',                 href: '/about',                            external: false },
                 { label: 'Founder',                     href: '/founder',                          external: false },
