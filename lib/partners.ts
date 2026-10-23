@@ -23,7 +23,7 @@ export const PARTNERS: Partner[] = [
     url: 'https://incitefulmed.com',
     logo: '/partners/inciteful-med-logo.svg',
     tagline: 'A health advocacy tool that helps you understand and act on your medical evidence.',
-    summary: 'Ask a health question in plain language and Inciteful Med searches more than 42 million peer-reviewed papers, then explains what the research says — with every statement cited to the exact passage it came from.',
+    summary: 'You ask a health question in plain language, and Inciteful Med searches more than 42 million peer-reviewed papers and explains what the research says, citing the exact passage behind every statement.',
     color: '#9B25EA',
     colorAlt: '#C70FE9',
     interviewHref: '/editorial/inciteful-med-interview',

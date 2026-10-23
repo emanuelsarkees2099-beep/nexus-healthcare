@@ -7,35 +7,23 @@ import { findPartner } from '@/lib/partners'
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.axvohealth.com'
 const partner = findPartner('inciteful-med')!
-const P = partner.color
-const P2 = partner.colorAlt
-// Lighter tint of the brand purple for text on the dark background (contrast)
-const PT = '#C08BF7'
 
 export const metadata: Metadata = {
   title: 'Inciteful Med — AXVO Partner',
-  description: 'AXVO has partnered with Inciteful Med, a health advocacy tool that searches 42M+ peer-reviewed papers and explains what the research says about your health, with every statement cited.',
+  description: 'AXVO is partnering with Inciteful Med, a tool that searches peer-reviewed medical research and explains what it says about your health, with every statement cited.',
   alternates: { canonical: `${BASE_URL}/partners/inciteful-med` },
   openGraph: {
-    title: 'AXVO × Inciteful Med',
-    description: 'Find affordable care with AXVO. Understand the evidence behind it with Inciteful Med.',
+    title: 'AXVO is partnering with Inciteful Med',
+    description: 'A tool that helps patients understand the medical research behind their care.',
     url: `${BASE_URL}/partners/inciteful-med`,
     type: 'website',
   },
 }
 
-const FEATURES = [
-  { n: '01', title: 'Plain-language answers', body: 'Ask a question the way you would ask a person. Inciteful Med searches more than 42 million peer-reviewed papers and explains what the research says at a high-school reading level.' },
-  { n: '02', title: 'Every claim is cited', body: 'Each statement links to the exact passage in the study it came from — so you and your doctor can see precisely where the information comes from.' },
-  { n: '03', title: 'Research centered on you', body: 'Add your health history or sync your medical records, and the search focuses on you rather than a single disease — including how your conditions interact.' },
-  { n: '04', title: 'Better conversations with your doctor', body: 'Turn what you learn into specific questions for your next appointment, and keep asking follow-ups any time, in any language.' },
-]
-
-const STATS = [
-  { v: '42M+', l: 'peer-reviewed papers searched' },
-  { v: '145+', l: 'published papers cite its research engine' },
-  { v: '$0', l: 'to start — free plan, no credit card' },
-]
+const SERIF = 'Georgia, "Iowan Old Style", "Times New Roman", serif'
+const body: React.CSSProperties = { fontFamily: SERIF, fontSize: 19, lineHeight: 1.75, color: 'rgba(255,255,255,0.82)', margin: '0 0 22px' }
+const h2: React.CSSProperties = { fontFamily: 'var(--font-inter)', fontSize: 19, fontWeight: 700, color: '#fff', margin: '44px 0 14px' }
+const link: React.CSSProperties = { color: 'inherit', textDecoration: 'underline', textUnderlineOffset: 3, textDecorationColor: 'rgba(255,255,255,0.35)' }
 
 export default function IncitefulMedPartnerPage() {
   return (
@@ -49,215 +37,75 @@ export default function IncitefulMedPartnerPage() {
         id="schema-breadcrumb-partner"
       />
 
-      {/* ── Hero ── */}
-      <section style={{ position: 'relative', overflow: 'hidden', padding: '72px 24px 64px' }}>
-        <div aria-hidden="true" style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
-          background: `radial-gradient(ellipse 70% 55% at 50% 0%, ${P}26 0%, transparent 70%)`,
-        }} />
-        <div style={{ position: 'relative', maxWidth: 880, margin: '0 auto', textAlign: 'center' }}>
-          <nav aria-label="Breadcrumb" style={{ fontSize: 12, color: 'var(--text-3)', marginBottom: 28 }}>
-            <Link href="/partners" style={{ color: 'var(--text-3)', textDecoration: 'none' }}>Partners</Link>
-            <span style={{ margin: '0 8px' }}>/</span>
-            <span style={{ color: 'var(--text-2)' }}>Inciteful Med</span>
-          </nav>
+      <div style={{ maxWidth: 680, margin: '0 auto', padding: '72px 24px 96px' }}>
+        <Link href="/partners" style={{ fontSize: 14, color: 'var(--text-3)', textDecoration: 'none' }}>
+          ← Partners
+        </Link>
 
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 28,
-            padding: '5px 14px', borderRadius: 100, fontSize: 11, fontWeight: 700,
-            letterSpacing: '0.1em', textTransform: 'uppercase', color: PT,
-            background: `${P}18`, border: `1px solid ${P}44`,
-          }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: `linear-gradient(135deg, ${P}, ${P2})` }} />
-            Official partner
-          </div>
-
-          {/* Co-branded lockup */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, flexWrap: 'wrap', marginBottom: 32 }}>
-            <span style={{ fontFamily: 'var(--font-display)', fontSize: 30, fontWeight: 800, letterSpacing: '0.18em', color: 'var(--text)' }}>AXVO</span>
-            <span aria-hidden="true" style={{ fontSize: 22, color: 'var(--text-3)' }}>×</span>
-            <span style={{
-              display: 'inline-flex', padding: '14px 22px', borderRadius: 14,
-              background: '#ffffff', boxShadow: `0 10px 40px ${P}33`,
-            }}>
-              <Image src={partner.logo} alt="Inciteful Med" width={220} height={40} unoptimized priority style={{ height: 40, width: 'auto' }} />
-            </span>
-          </div>
-
-          <h1 style={{
-            fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 6vw, 56px)', fontWeight: 800,
-            lineHeight: 1.08, letterSpacing: '-0.03em', color: 'var(--text)', marginBottom: 20,
-          }}>
-            Find the care.{' '}
-            <span style={{ background: `linear-gradient(90deg, ${PT}, ${P2})`, WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>
-              Understand the evidence.
-            </span>
-          </h1>
-          <p style={{ fontSize: 17, lineHeight: 1.7, color: 'var(--text-2)', maxWidth: 620, margin: '0 auto 36px' }}>
-            AXVO helps you find free and low-cost care. Inciteful Med helps you understand the medical research behind your
-            diagnosis and treatment — so you can walk into every appointment informed.
-          </p>
-
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href={partner.url} target="_blank" rel="noopener noreferrer" style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 26px', borderRadius: 100,
-              background: `linear-gradient(135deg, ${P}, ${P2})`, color: '#fff', fontWeight: 700, fontSize: 15,
-              textDecoration: 'none', boxShadow: `0 8px 28px ${P}55`,
-            }}>
-              Try Inciteful Med free ↗
-            </a>
-            {partner.interviewHref && (
-              <Link href={partner.interviewHref} style={{
-                display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 26px', borderRadius: 100,
-                border: '1px solid var(--border)', background: 'rgba(255,255,255,0.03)', color: 'var(--text)',
-                fontWeight: 600, fontSize: 15, textDecoration: 'none',
-              }}>
-                Read our interview →
-              </Link>
-            )}
-          </div>
+        <div style={{ margin: '40px 0 28px' }}>
+          <span style={{ display: 'inline-flex', padding: '10px 14px', borderRadius: 8, background: '#fff' }}>
+            <Image src={partner.logo} alt="Inciteful Med" width={180} height={32} unoptimized priority style={{ height: 32, width: 'auto' }} />
+          </span>
         </div>
-      </section>
 
-      <div style={{ maxWidth: 1040, margin: '0 auto', padding: '0 24px 96px' }}>
-        {/* ── Stats ── */}
-        <section aria-label="Inciteful Med at a glance" style={{
-          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 1,
-          borderRadius: 20, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--border)',
-          marginBottom: 12,
-        }}>
-          {STATS.map(s => (
-            <div key={s.l} style={{ background: 'var(--bg2)', padding: '28px 24px', textAlign: 'center' }}>
-              <div style={{
-                fontFamily: 'var(--font-display)', fontSize: 38, fontWeight: 800, letterSpacing: '-0.02em',
-                background: `linear-gradient(135deg, ${PT}, ${P2})`, WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
-              }}>{s.v}</div>
-              <div style={{ fontSize: 13, color: 'var(--text-3)', marginTop: 6 }}>{s.l}</div>
-            </div>
-          ))}
-        </section>
-        <p style={{ fontSize: 11, color: 'var(--text-3)', textAlign: 'center', marginBottom: 88 }}>Figures as reported by Inciteful Med.</p>
+        <h1 style={{ fontFamily: SERIF, fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 700, lineHeight: 1.15, color: '#fff', margin: '0 0 24px' }}>
+          AXVO is partnering with Inciteful Med
+        </h1>
 
-        {/* ── Why we partnered ── */}
-        <section style={{ marginBottom: 88 }}>
-          <div style={{ textAlign: 'center', marginBottom: 40 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: PT, marginBottom: 12 }}>Why we partnered</div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(26px, 4vw, 38px)', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text)' }}>
-              Two halves of the same problem
-            </h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 18 }}>
-            {[
-              { who: 'AXVO', color: 'var(--accent)', q: '“Where can I get care I can afford?”', body: 'AXVO finds free clinics, sliding-scale health centers, cheaper medications, and the coverage programs you may qualify for — no insurance required.' },
-              { who: 'Inciteful Med', color: PT, q: '“What does the research say about my situation?”', body: 'Inciteful Med searches the same peer-reviewed literature your doctor relies on and explains it in plain language, cited line by line.' },
-            ].map(c => (
-              <div key={c.who} style={{ padding: '30px 28px', borderRadius: 20, background: 'var(--bg2)', border: '1px solid var(--border)' }}>
-                <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: c.color, marginBottom: 14 }}>{c.who}</div>
-                <p style={{ fontFamily: 'var(--font-display)', fontSize: 21, fontWeight: 600, lineHeight: 1.35, color: 'var(--text)', marginBottom: 12 }}>{c.q}</p>
-                <p style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--text-2)' }}>{c.body}</p>
-              </div>
-            ))}
-          </div>
-          <p style={{ fontSize: 16, lineHeight: 1.75, color: 'var(--text-2)', maxWidth: 720, margin: '32px auto 0', textAlign: 'center' }}>
-            Getting through the door is only the first step. Patients who understand the evidence behind their care ask
-            sharper questions and advocate for themselves — and that matters most for people the system already underserves.
-          </p>
-        </section>
+        <p style={body}>
+          A lot of what AXVO does is help people find a clinic they can afford. But a cheap appointment doesn&apos;t help
+          much if you walk out confused about your diagnosis or unsure what to ask. Inciteful Med works on that second
+          part, which is why I&apos;m glad to be partnering with them.
+        </p>
 
-        {/* ── Features ── */}
-        <section style={{ marginBottom: 88 }}>
-          <div style={{ textAlign: 'center', marginBottom: 40 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: PT, marginBottom: 12 }}>What Inciteful Med does</div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(26px, 4vw, 38px)', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text)' }}>
-              The research your doctor reads, made readable
-            </h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 16 }}>
-            {FEATURES.map(f => (
-              <div key={f.n} style={{
-                position: 'relative', padding: '28px 24px', borderRadius: 18, overflow: 'hidden',
-                background: `linear-gradient(180deg, ${P}0F, transparent 60%), var(--bg2)`, border: '1px solid var(--border)',
-              }}>
-                <div style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 12, color: PT, marginBottom: 18 }}>{f.n}</div>
-                <h3 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{f.title}</h3>
-                <p style={{ fontSize: 14, lineHeight: 1.65, color: 'var(--text-2)' }}>{f.body}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        <h2 style={h2}>What Inciteful Med does</h2>
+        <p style={body}>
+          You ask a health question in plain language. Inciteful Med searches more than 42 million peer-reviewed papers,
+          the same research your doctor relies on, and explains what it says. Every statement links to the exact passage
+          it came from, so you and your doctor can check it.
+        </p>
+        <p style={body}>
+          You can also add your health history or connect your medical records, and it will look at the research around
+          your situation specifically instead of a single condition. It&apos;s free to start, and the company is
+          independent: no hospital, insurer, or drug maker has a say in what it shows you.
+        </p>
 
-        {/* ── Founders + interview ── */}
-        <section style={{
-          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 18, marginBottom: 72,
-        }}>
-          <div style={{ padding: '32px 28px', borderRadius: 20, background: 'var(--bg2)', border: '1px solid var(--border)' }}>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: PT, marginBottom: 20 }}>The team</div>
-            {[
-              { name: 'Erika Warren', role: 'Co-Founder & CEO' },
-              { name: 'Mike Weishuhn', role: 'Co-Founder · creator of Inciteful Academic' },
-            ].map(p => (
-              <div key={p.name} style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 18 }}>
-                <div aria-hidden="true" style={{
-                  width: 46, height: 46, borderRadius: '50%', flexShrink: 0,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: `linear-gradient(135deg, ${P}, ${P2})`, color: '#fff', fontWeight: 700, fontSize: 15,
-                }}>
-                  {p.name.split(' ').map(w => w[0]).join('')}
-                </div>
-                <div>
-                  <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 16 }}>{p.name}</div>
-                  <div style={{ fontSize: 13, color: 'var(--text-3)' }}>{p.role}</div>
-                </div>
-              </div>
-            ))}
-            <p style={{ fontSize: 14, lineHeight: 1.7, color: 'var(--text-2)', marginTop: 4 }}>
-              Inciteful Med grew out of a family health scare — and is fully independent. No hospital, insurer, or drug maker
-              has a say in what it shows you.
-            </p>
-          </div>
+        <h2 style={h2}>How they fit together</h2>
+        <p style={body}>
+          Use <Link href="/search" style={link}>AXVO</Link>{' '}to find a free or low-cost clinic near you. Before your visit,
+          use Inciteful Med to read up on what you&apos;re dealing with and write down the questions you want to ask.
+        </p>
 
-          {partner.interviewHref && (
-            <Link href={partner.interviewHref} style={{
-              display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 24,
-              padding: '32px 28px', borderRadius: 20, textDecoration: 'none',
-              background: `linear-gradient(135deg, ${P}2E, ${P2}14)`, border: `1px solid ${P}55`,
-            }}>
-              <div>
-                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: PT, marginBottom: 18 }}>Q&amp;A · Editorial</div>
-                <blockquote style={{ fontFamily: 'var(--font-display)', fontSize: 22, lineHeight: 1.4, fontWeight: 600, color: 'var(--text)', margin: 0 }}>
-                  “The problem was never patients doing research. It was the lack of reliable, trustworthy tools.”
-                </blockquote>
-                <div style={{ fontSize: 14, color: 'var(--text-2)', marginTop: 14 }}>— Erika Warren, Co-Founder &amp; CEO</div>
-              </div>
-              <span style={{ fontWeight: 700, color: PT, fontSize: 15 }}>Read the full interview →</span>
-            </Link>
-          )}
-        </section>
+        <h2 style={h2}>Who&apos;s behind it</h2>
+        <p style={body}>
+          Inciteful Med was started by Erika Warren (co-founder and CEO) and Mike Weishuhn, who built the research search
+          engine it runs on after a family member got sick. I interviewed Erika about how it started and what she&apos;s
+          seen since.
+        </p>
+        <p style={body}>
+          <Link href="/editorial/inciteful-med-interview" style={link}>Read the interview with Erika Warren</Link>
+        </p>
 
-        {/* ── Closing CTA ── */}
-        <section style={{
-          textAlign: 'center', padding: '48px 28px', borderRadius: 24,
-          background: 'var(--bg2)', border: '1px solid var(--border)',
-        }}>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 3.5vw, 32px)', fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>
-            Use them together
-          </h2>
-          <p style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--text-2)', maxWidth: 560, margin: '0 auto 28px' }}>
-            Find an affordable clinic with AXVO, then use Inciteful Med to prepare questions before your visit.
-          </p>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/search" style={{ padding: '13px 24px', borderRadius: 100, background: 'var(--accent)', color: '#07070F', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
-              Find free care near you
-            </Link>
-            <a href={partner.url} target="_blank" rel="noopener noreferrer" style={{ padding: '13px 24px', borderRadius: 100, border: `1px solid ${P}66`, color: PT, fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
-              Visit incitefulmed.com ↗
-            </a>
-          </div>
-        </section>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 36 }}>
+          <a href={partner.url} target="_blank" rel="noopener noreferrer" style={{
+            padding: '12px 22px', borderRadius: 8, background: '#fff', color: '#111',
+            fontWeight: 600, fontSize: 15, textDecoration: 'none',
+          }}>
+            Visit incitefulmed.com
+          </a>
+          <Link href="/search" style={{
+            padding: '12px 22px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.2)', color: '#fff',
+            fontWeight: 600, fontSize: 15, textDecoration: 'none',
+          }}>
+            Find a clinic on AXVO
+          </Link>
+        </div>
 
-        <p style={{ fontSize: 12, lineHeight: 1.6, color: 'var(--text-3)', textAlign: 'center', marginTop: 32, maxWidth: 640, marginLeft: 'auto', marginRight: 'auto' }}>
-          Inciteful Med is an independent company. Its content is for educational purposes and is not medical advice —
-          always talk with a clinician about decisions about your care.
+        <p style={{ fontSize: 14, color: 'var(--text-3)', marginTop: 48 }}>
+          Emanuel Sarkees, founder of AXVO · October 22, 2026
+        </p>
+        <p style={{ fontSize: 13, lineHeight: 1.6, color: 'var(--text-3)', marginTop: 8 }}>
+          Inciteful Med is an independent company. Its content is educational and isn&apos;t medical advice.
         </p>
       </div>
     </AppShell>
