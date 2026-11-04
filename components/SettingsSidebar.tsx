@@ -605,7 +605,7 @@ export default function SettingsSidebar() {
                 <SectionLabel>Data collection</SectionLabel>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                   {[
-                    { label: 'Anonymous usage analytics', desc: 'Helps us improve search results', value: true,  locked: false },
+                    { label: 'Usage analytics', desc: 'Only runs if you accept analytics on the cookie banner', value: true,  locked: false },
                     { label: 'Search history',            desc: 'Stored locally in your browser only', value: false, locked: false },
                     { label: 'Crash reports',             desc: 'Automatically sent when errors occur', value: true,  locked: false },
                   ].map(item => (

@@ -322,14 +322,14 @@ export default function MethodologyPage() {
         </p>
         <div style={callout}>
           <strong style={{ color: 'rgba(255,255,255,0.75)' }}>Merge priority order:</strong><br/>
-          1. HRSA (highest authority — federally verified)<br/>
+          1. HRSA (highest authority — federal data)<br/>
           2. NAFC (manually curated — volunteer free clinics)<br/>
           3. State health department directories<br/>
           4. Google Places (optional, commercially sourced)<br/>
           5. OpenStreetMap (community-sourced, score ≥ 55 only)
         </div>
         <p style={p}>
-          When HRSA returns a clinic, any NAFC or OSM entry with a matching fingerprint is suppressed — HRSA's data (phone, address, hours) is treated as authoritative. This ensures that federally-verified data is never overwritten by crowd-sourced approximations.
+          When HRSA returns a clinic, any NAFC or OSM entry with a matching fingerprint is suppressed — HRSA's data (phone, address, hours) is treated as authoritative. This ensures that federal data is never overwritten by crowd-sourced approximations.
         </p>
       </section>
 

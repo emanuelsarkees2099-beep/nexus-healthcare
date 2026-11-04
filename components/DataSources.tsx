@@ -13,8 +13,8 @@ import { ShieldTick } from 'iconsax-react'
 const SOURCES: { name: string; full: string; what: string }[] = [
   { name: 'HRSA', full: 'Health Resources & Services Administration', what: '18,900+ Federally Qualified Health Center sites' },
   { name: 'NAFC', full: 'National Association of Free & Charitable Clinics', what: 'Volunteer-run free clinics' },
-  { name: 'NPI Registry', full: 'National Provider Identifier (CMS)', what: 'Verified provider organizations' },
-  { name: 'SAMHSA', full: 'Substance Abuse & Mental Health Services Admin', what: 'Behavioral health & treatment services' },
+  { name: 'NPI Registry', full: 'National Provider Identifier (CMS)', what: 'Registered health centers & clinics' },
+  { name: 'OpenStreetMap', full: 'Open, community-mapped geographic data', what: 'Additional clinic locations' },
   { name: 'GeoNames', full: 'Open geographic database', what: 'Every US city & ZIP for instant search' },
 ]
 
@@ -35,7 +35,7 @@ export default function DataSources() {
       style={{ position: 'relative', zIndex: 2, maxWidth: '1000px', margin: '0 auto', padding: 'clamp(72px, 11vh, 120px) clamp(20px, 5vw, 32px) 0', textAlign: 'center' }}
     >
       <p style={{ fontSize: '12px', fontWeight: 650, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '14px', fontFamily: 'var(--font-mono)', opacity: visible ? 1 : 0, transition: 'opacity 0.6s ease' }}>
-        Built on verified public data
+        Built on public data
       </p>
       <h2 id="sources-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.7rem, 3.4vw, 2.5rem)', fontWeight: 700, letterSpacing: '-0.035em', lineHeight: 1.12, marginBottom: '14px', color: 'var(--text)', opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(20px)', transition: 'opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)' }}>
         Every clinic, from a source you can check.

@@ -177,7 +177,7 @@ export default function ExitIntent() {
           marginTop: '1rem', fontSize: '11px', color: 'var(--text-3)',
           fontFamily: 'var(--font-inter)', fontWeight: 300,
         }}>
-          No email required · 100% anonymous · Always free
+          No email required · No account needed · Always free
         </p>
       </div>
 

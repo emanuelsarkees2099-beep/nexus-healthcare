@@ -11,7 +11,7 @@ const STEPS = [
   {
     num: '01',
     title: 'Search your location or symptom',
-    body: "Enter your zip code, city, or describe what you're experiencing. Completely anonymous — no account required, ever.",
+    body: "Enter your zip code, city, or describe what you're experiencing. No account required.",
   },
   {
     num: '02',
@@ -49,7 +49,7 @@ function Panel0() {
         fontSize: '12px', color: 'var(--accent)', fontFamily: 'var(--font-inter)',
       }}>
         <ShieldTick size={12} color="currentColor" variant="Linear" aria-hidden="true" />
-        Anonymous &mdash; no account needed
+        No account needed
       </div>
     </div>
   )
