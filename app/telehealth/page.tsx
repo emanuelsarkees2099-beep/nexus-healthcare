@@ -3,87 +3,86 @@ import { useState } from 'react'
 import AppShell from '@/components/AppShell'
 import { Video, Call, MessageCircle, Clock, Shield, Global, ArrowRight2, ExportSquare, TickCircle, InfoCircle, Hospital, Health, Buildings, CallCalling, HeartCircle, Calendar1, Copy, ArrowDown2, MagicStar, Book1, Profile2User } from 'iconsax-react'
 
+/* Telehealth options that accept uninsured or low-income patients.
+   AXVO is not affiliated with any of them and does not verify prices or
+   availability — costs and hours below are what each service publishes
+   in general terms, so users are told to confirm before booking. */
 const PROVIDERS = [
-  {
-    name: 'Teladoc Health',
-    logo: <Hospital size={22} variant="Linear" />,
-    cost: 'Free – $75',
-    wait: '< 10 min',
-    available: '24/7',
-    accepts: ['Uninsured', 'Medicaid', 'Medicare', 'Most insurance'],
-    specialties: ['Primary care', 'Mental health', 'Dermatology', 'Nutrition'],
-    specialtyTags: ['primary', 'mental', 'dermatology'],
-    languages: ['English', 'Español', 'French'],
-    url: 'https://www.teladoc.com',
-    bookingUrl: 'https://member.teladoc.com/registrations/get_started',
-    note: 'Sliding scale available for uninsured patients',
-    verified: true,
-  },
-  {
-    name: 'MDLIVE',
-    logo: <Health size={22} variant="Linear" />,
-    cost: 'Free – $82',
-    wait: '< 15 min',
-    available: '24/7',
-    accepts: ['Uninsured', 'Medicaid', 'Most insurance'],
-    specialties: ['Urgent care', 'Mental health', 'Dermatology'],
-    specialtyTags: ['urgent', 'mental', 'dermatology'],
-    languages: ['English', 'Español'],
-    url: 'https://www.mdlive.com',
-    bookingUrl: 'https://patient.mdlive.com/create_account',
-    note: 'MDLIVE Cares program offers reduced fees for uninsured patients',
-    verified: true,
-  },
   {
     name: 'Federally Qualified Health Centers (FQHC)',
     logo: <Buildings size={22} variant="Linear" />,
-    cost: '$0 – sliding scale',
-    wait: '1–3 days',
+    cost: 'Sliding scale by income',
+    wait: '',
     available: 'By appointment',
     accepts: ['Uninsured', 'Medicaid', 'Medicare', 'CHIP'],
     specialties: ['Primary care', 'Behavioral health', 'OB/GYN', 'Dental', 'Pediatrics'],
     specialtyTags: ['primary', 'mental', 'dental', 'ob-gyn', 'pediatric'],
-    languages: ['English', 'Español', '+ 40 languages'],
+    languages: ['English', 'Español', 'Varies by center'],
     url: 'https://findahealthcenter.hrsa.gov',
     bookingUrl: 'https://findahealthcenter.hrsa.gov',
-    note: 'Required by law to serve everyone regardless of ability to pay. Call your nearest FQHC to book.',
-    verified: true,
-  },
-  {
-    name: 'Open Path Collective',
-    logo: <Health size={22} variant="Linear" />,
-    cost: '$30 – $80 per session',
-    wait: '2–5 days',
-    available: 'By appointment',
-    accepts: ['Uninsured', 'Self-pay'],
-    specialties: ['Mental health', 'Therapy', 'Couples counseling', 'Teen support'],
-    specialtyTags: ['mental', 'therapy'],
-    languages: ['English', 'Español', 'Mandarin', 'Arabic'],
-    url: 'https://openpathcollective.org',
-    bookingUrl: 'https://openpathcollective.org/get-started/',
-    note: 'Licensed therapists at below-market rates. One-time $65 membership, then $30–$80/session.',
-    verified: true,
+    note: 'HRSA-funded health centers must offer a sliding fee scale and serve patients regardless of ability to pay. Many offer phone or video visits — ask when you call.',
   },
   {
     name: 'Planned Parenthood Telehealth',
     logo: <Profile2User size={22} variant="Linear" />,
-    cost: 'Free – sliding scale',
-    wait: 'Same day – 1 day',
-    available: 'Mon–Sat',
+    cost: 'Insurance, Medicaid, or sliding scale',
+    wait: '',
+    available: 'Varies by state',
     accepts: ['Uninsured', 'Medicaid', 'Most insurance', 'Self-pay'],
-    specialties: ['OB/GYN', 'Reproductive health', 'STI testing', 'Birth control', 'Prenatal referrals'],
+    specialties: ['Birth control', 'STI testing & treatment', 'UTI care', 'Reproductive health'],
     specialtyTags: ['ob-gyn', 'women', 'reproductive'],
     languages: ['English', 'Español'],
     url: 'https://www.plannedparenthood.org/get-care/telehealth',
     bookingUrl: 'https://www.plannedparenthood.org/get-care/telehealth',
-    note: 'Accepts most Medicaid plans. Sliding scale fees for uninsured patients. Visit online for your state.',
-    verified: true,
+    note: 'Services and fees vary by state and health center. Many centers offer reduced fees for uninsured patients.',
+  },
+  {
+    name: 'Open Path Collective',
+    logo: <Health size={22} variant="Linear" />,
+    cost: 'Reduced-fee therapy',
+    wait: '',
+    available: 'By appointment',
+    accepts: ['Uninsured', 'Self-pay'],
+    specialties: ['Therapy', 'Mental health', 'Couples counseling'],
+    specialtyTags: ['mental', 'therapy'],
+    languages: ['English', 'Español', 'Varies by therapist'],
+    url: 'https://openpathcollective.org',
+    bookingUrl: 'https://openpathcollective.org',
+    note: 'A nonprofit network of therapists offering reduced session rates after a one-time membership fee. Check the site for current rates.',
+  },
+  {
+    name: 'Teladoc Health',
+    logo: <Hospital size={22} variant="Linear" />,
+    cost: 'Price depends on your plan',
+    wait: '',
+    available: '24/7',
+    accepts: ['Many insurance plans', 'Self-pay'],
+    specialties: ['Primary care', 'Urgent care', 'Mental health', 'Dermatology'],
+    specialtyTags: ['primary', 'urgent', 'mental', 'dermatology'],
+    languages: ['English', 'Español'],
+    url: 'https://www.teladoc.com',
+    bookingUrl: 'https://www.teladoc.com',
+    note: 'A commercial service. If you are uninsured, check the self-pay price before booking — a community health center may cost less.',
+  },
+  {
+    name: 'MDLIVE',
+    logo: <Health size={22} variant="Linear" />,
+    cost: 'Price depends on your plan',
+    wait: '',
+    available: '24/7',
+    accepts: ['Many insurance plans', 'Self-pay'],
+    specialties: ['Urgent care', 'Mental health', 'Dermatology'],
+    specialtyTags: ['urgent', 'mental', 'dermatology'],
+    languages: ['English', 'Español'],
+    url: 'https://www.mdlive.com',
+    bookingUrl: 'https://www.mdlive.com',
+    note: 'A commercial service. If you are uninsured, check the self-pay price before booking — a community health center may cost less.',
   },
   {
     name: 'Crisis Text Line',
     logo: <HeartCircle size={22} variant="Linear" />,
     cost: 'Free',
-    wait: 'Instant',
+    wait: 'Text anytime',
     available: '24/7',
     accepts: ['Everyone'],
     specialties: ['Mental health crisis', 'Suicide prevention', 'Anxiety', 'Depression'],
@@ -92,29 +91,27 @@ const PROVIDERS = [
     url: 'https://www.crisistextline.org',
     bookingUrl: null,
     note: 'Text HOME to 741741 — free, confidential, 24/7. No account needed.',
-    verified: true,
   },
   {
-    name: 'SAMHSA Helpline',
+    name: 'SAMHSA National Helpline',
     logo: <CallCalling size={22} variant="Linear" />,
     cost: 'Free',
-    wait: 'Instant',
-    available: '24/7 365 days',
+    wait: 'Call anytime',
+    available: '24/7',
     accepts: ['Everyone'],
     specialties: ['Substance use', 'Mental health', 'Treatment referrals'],
     specialtyTags: ['substance', 'mental', 'crisis'],
     languages: ['English', 'Español'],
-    url: 'https://www.samhsa.gov/find-help/national-helpline',
+    url: 'https://www.samhsa.gov/find-help/helplines/national-helpline',
     bookingUrl: null,
-    note: 'Call 1-800-662-4357 — confidential, free, no insurance or ID required.',
-    verified: true,
+    note: 'Call 1-800-662-4357 — free, confidential treatment referral and information.',
   },
 ]
 
 /* ── Specialty filter definitions ───────────────── */
 const SPECIALTY_FILTERS = [
   { value: 'all',        label: 'All providers'    },
-  { value: 'free',       label: 'Free / $0'        },
+  { value: 'free',       label: 'Free'             },
   { value: 'mental',     label: 'Mental health'    },
   { value: 'crisis',     label: '24/7 Crisis'      },
   { value: 'primary',    label: 'Primary care'     },
@@ -134,7 +131,7 @@ const SCRIPTS = [
     steps: [
       { prompt: 'When asked about insurance, say:', script: '"I don\'t currently have insurance. Do you have a sliding-scale fee program or can you tell me the self-pay rate?"' },
       { prompt: 'If they say self-pay rates are high, ask:', script: '"Are you a Federally Qualified Health Center? I understand you\'re required to offer sliding-scale fees based on income."' },
-      { prompt: 'To unlock Medicaid fast-track, ask:', script: '"I may qualify for Medicaid. Can you help me apply or connect me with a navigator while I wait for my appointment?"' },
+      { prompt: 'To get help applying for Medicaid, ask:', script: '"I may qualify for Medicaid. Can you help me apply or connect me with a navigator while I wait for my appointment?"' },
     ],
   },
   {
@@ -161,10 +158,10 @@ const SCRIPTS = [
 ]
 
 const HOW_IT_WORKS = [
-  { step: '01', icon: <Global size={18} variant="Linear" />, title: 'Choose a provider', body: 'Browse real telehealth services that accept uninsured and low-income patients. Every provider listed is verified.' },
-  { step: '02', icon: <Shield size={18} variant="Linear" />, title: 'Confirm eligibility', body: 'Most services accept patients regardless of insurance. FQHC clinics are federally required to serve everyone.' },
+  { step: '01', icon: <Global size={18} variant="Linear" />, title: 'Choose a provider', body: 'Browse telehealth services that accept uninsured and low-income patients. AXVO isn\'t affiliated with them, so confirm costs before you book.' },
+  { step: '02', icon: <Shield size={18} variant="Linear" />, title: 'Confirm eligibility', body: 'Ask about cost and payment before your visit. HRSA-funded health centers must serve patients regardless of ability to pay.' },
   { step: '03', icon: <Video size={18} variant="Linear" />, title: 'Connect from anywhere', body: 'Visit by phone, video, or secure message. No commute, no waiting room — just care from where you are.' },
-  { step: '04', icon: <TickCircle size={18} variant="Linear" />, title: 'Follow-up support', body: 'After your visit, your CHW can help you understand prescriptions, referrals, and next steps.' },
+  { step: '04', icon: <TickCircle size={18} variant="Linear" />, title: 'Follow-up support', body: 'Ask the provider about prescriptions and referrals. If you need help navigating next steps, a community health worker program can help.' },
 ]
 
 const EMERGENCY = {
@@ -174,7 +171,7 @@ const EMERGENCY = {
 }
 
 /* #29 — Language filter options */
-const LANG_FILTERS = ['All languages', 'Español', 'French', '40+ languages']
+const LANG_FILTERS = ['All languages', 'Español']
 
 export default function TelehealthPage() {
   const [filter,       setFilter]       = useState('all')
@@ -188,13 +185,13 @@ export default function TelehealthPage() {
     const matchSpec = filter === 'all'
       ? true
       : filter === 'free'
-      ? p.cost.startsWith('Free') || p.cost.startsWith('$0')
+      ? p.cost === 'Free'
       : filter === 'crisis'
-      ? p.available === '24/7' || p.available.includes('24/7')
+      ? p.specialtyTags.includes('crisis')
       : p.specialtyTags.includes(filter)
     const matchLang = langFilter === 'All languages'
       ? true
-      : p.languages.some(l => l.toLowerCase().includes(langFilter.toLowerCase()) || l.includes('+'))
+      : p.languages.some(l => l.toLowerCase().includes(langFilter.toLowerCase()))
     return matchSpec && matchLang
   })
 
@@ -257,7 +254,7 @@ export default function TelehealthPage() {
           <div style={{ maxWidth: '960px', margin: '0 auto' }}>
             <div style={{ marginBottom: '28px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '12px' }}>
-                <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#fff' }}>Verified providers</h2>
+                <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#fff' }}>Telehealth options</h2>
                 <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                   {SPECIALTY_FILTERS.map(f => (
                     <button key={f.value} onClick={() => setFilter(f.value)} style={{ padding: '7px 13px', borderRadius: '100px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', border: '1px solid', transition: 'all 0.18s', background: filter === f.value ? 'var(--accent)' : 'transparent', color: filter === f.value ? '#07070F' : 'rgba(255,255,255,0.5)', borderColor: filter === f.value ? 'var(--accent)' : 'rgba(255,255,255,0.1)' }}>
@@ -293,9 +290,9 @@ export default function TelehealthPage() {
             <div style={{ marginBottom: '20px', padding: '16px 20px', borderRadius: '14px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
               <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.06em', textTransform: 'uppercase', flexShrink: 0 }}>What you'll pay</span>
               {([
-                { range: '$0', label: 'With Medicaid / CHIP', color: '#34d399' },
-                { range: '$0–$35', label: 'FQHC sliding scale', color: '#60a5fa' },
-                { range: '$30–$80', label: 'Self-pay telehealth', color: '#fbbf24' },
+                { range: '$0 or low', label: 'With Medicaid / CHIP', color: '#34d399' },
+                { range: 'Sliding scale', label: 'Community health centers', color: '#60a5fa' },
+                { range: 'Varies', label: 'Self-pay services — check first', color: '#fbbf24' },
               ] as const).map(tier => (
                 <div key={tier.label} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ fontSize: '16px', fontWeight: 800, color: tier.color, fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>{tier.range}</span>
@@ -318,14 +315,14 @@ export default function TelehealthPage() {
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
                         <span style={{ fontSize: '16px', fontWeight: 700, color: '#eef4f5' }}>{p.name}</span>
-                        {p.verified && <span style={{ fontSize: '10px', color: '#60a5fa', background: 'rgba(96,165,250,0.1)', padding: '2px 7px', borderRadius: '100px', border: '1px solid rgba(96,165,250,0.2)', display: 'inline-flex', alignItems: 'center', gap: '3px' }}><TickCircle size={9} variant="Bold" aria-hidden="true" /> Verified</span>}
-                        {i === 0 && <span style={{ fontSize: '10px', color: '#34d399', background: 'rgba(52,211,153,0.10)', padding: '2px 7px', borderRadius: '100px', border: '1px solid rgba(52,211,153,0.22)', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>★ Best match</span>}
                       </div>
                       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
                         <span style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 600 }}>{p.cost}</span>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '2px 8px', borderRadius: '100px', fontSize: '11px', fontWeight: 700, background: p.wait === 'Instant' ? 'rgba(52,211,153,0.12)' : 'rgba(251,191,36,0.08)', color: p.wait === 'Instant' ? '#34d399' : '#fbbf24', border: `1px solid ${p.wait === 'Instant' ? 'rgba(52,211,153,0.30)' : 'rgba(251,191,36,0.20)'}` }}>
-                          <Clock size={9} variant="Linear" /> {p.wait}
-                        </span>
+                        {p.wait && (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '2px 8px', borderRadius: '100px', fontSize: '11px', fontWeight: 700, background: 'rgba(52,211,153,0.12)', color: '#34d399', border: '1px solid rgba(52,211,153,0.30)' }}>
+                            <Clock size={9} variant="Linear" /> {p.wait}
+                          </span>
+                        )}
                         <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.28)' }}>{p.available}</span>
                       </div>
                     </div>
@@ -391,7 +388,7 @@ export default function TelehealthPage() {
                 Calling without insurance? Use these scripts.
               </h2>
               <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.38)', lineHeight: 1.65, maxWidth: '520px' }}>
-                The right words unlock sliding-scale fees, charity care, and Medicaid fast-tracks that aren't advertised. Copy these scripts and read them word-for-word.
+                Knowing what to ask makes it easier to get sliding-scale fees, charity care, and help applying for coverage. Use these as a starting point.
               </p>
             </div>
 
@@ -457,7 +454,7 @@ export default function TelehealthPage() {
                 { label: 'SAMHSA Substance Use', number: '1-800-662-4357', href: 'tel:18006624357', color: '#facc15' },
                 { label: 'National Domestic Violence', number: '1-800-799-7233', href: 'tel:18007997233', color: '#a78bfa' },
                 { label: 'FQHC Health Center Finder', number: 'findahealthcenter.hrsa.gov', href: 'https://findahealthcenter.hrsa.gov', color: 'var(--accent)' },
-                { label: 'Medicaid Enrollment Help', number: '1-800-318-2596', href: 'tel:18003182596', color: '#60a5fa' },
+                { label: 'HealthCare.gov Marketplace call center', number: '1-800-318-2596', href: 'tel:18003182596', color: '#60a5fa' },
               ].map(c => (
                 <a key={c.label} href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer"
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', textDecoration: 'none', transition: 'all 0.2s' }}

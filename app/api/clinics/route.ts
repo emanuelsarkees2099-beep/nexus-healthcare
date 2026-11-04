@@ -156,6 +156,18 @@ function isOrganization(name: string): boolean {
   return orgKeywords.some(kw => name.toLowerCase().includes(kw))
 }
 
+// ── Patient-care filter ───────────────────────────────────────────────────────
+// Public datasets include sites patients can't use: administrative offices,
+// transport vehicles, and school campuses listed without a clinic. Drop them.
+function isPatientCareSite(name: string): boolean {
+  const n = name.trim()
+  if (/\badministrative\b|\badmin(istration)?\s+(office|building|bldg)\b|\bcorporate\s+office\b|\bbilling\s+office\b|\bheadquarters\b/i.test(n)) return false
+  if (/\btransport(ation)?\b/i.test(n) && /\bvehicle\b/i.test(n)) return false
+  if (/\b(academy|elementary|middle school|high school|school)\b/i.test(n) &&
+      !/\b(health|clinic|medical|wellness|dental|care|nurse)\b/i.test(n)) return false
+  return true
+}
+
 // ── Specialty filter ──────────────────────────────────────────────────────────
 function matchesSpecialty(clinic: Clinic, specialty: string): boolean {
   if (!specialty || specialty === 'all') return true
@@ -513,7 +525,7 @@ async function fetchDBClinics(lat: number, lng: number, radiusMiles: number): Pr
         affordability_score: score,
         affordability_label: label,
         affordability_reasons: r.type === 'FQHC' || r.type === 'FQHC Look-Alike'
-          ? ['FQHC — sliding scale required by law', 'HRSA verified']
+          ? ['FQHC — sliding scale required by law', 'Listed in HRSA health center data']
           : [r.source.toUpperCase()],
         url: website ? (website.startsWith('http') ? website : `https://${website}`) : '',
         mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${r.name} ${r.address ?? ''} ${r.city ?? ''} ${r.state ?? ''}`)}`,
@@ -1123,7 +1135,7 @@ export async function GET(req: NextRequest) {
     // Merge local NAFC free clinics (tiny, in-memory) for $0-care coverage
     const nafc = fetchNAFCClinics(geo.lat, geo.lng, radiusMiles)
     const seenDb = new Set(dbClinics.map(c => fingerprint(c.name, c.zip)))
-    const merged = [...dbClinics]
+    const merged = dbClinics.filter(c => isPatientCareSite(c.name))
     for (const c of nafc) {
       const fp = fingerprint(c.name, c.zip)
       if (!seenDb.has(fp)) { seenDb.add(fp); merged.push(c) }
@@ -1205,6 +1217,7 @@ export async function GET(req: NextRequest) {
   const seen = new Set<string>()
   const addIfNew = (clinics: Clinic[], out: Clinic[]) => {
     for (const c of clinics) {
+      if (!isPatientCareSite(c.name)) continue
       const fp = fingerprint(c.name, c.zip)
       if (!seen.has(fp)) {
         seen.add(fp)

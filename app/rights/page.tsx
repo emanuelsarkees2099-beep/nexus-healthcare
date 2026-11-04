@@ -39,7 +39,7 @@ const RIGHTS = [
   {
     title: 'EMTALA: Emergency Care for Everyone',
     badge: 'Federal Law',
-    body: 'The Emergency Medical Treatment and Labor Act (EMTALA) requires any hospital receiving Medicare funding — that\'s almost every hospital in the US — to provide a medical screening exam and stabilizing treatment to any patient who arrives with an emergency medical condition, regardless of their ability to pay, insurance status, citizenship, or immigration status. Hospitals that violate EMTALA face fines up to $50,000 per violation.',
+    body: 'The Emergency Medical Treatment and Labor Act (EMTALA) requires any hospital receiving Medicare funding — that\'s almost every hospital in the US — to provide a medical screening exam and stabilizing treatment to any patient who arrives with an emergency medical condition, regardless of their ability to pay, insurance status, citizenship, or immigration status. Hospitals that violate EMTALA can face federal civil fines and lose their Medicare funding.',
     action: 'If a hospital emergency room turns you away or fails to screen you, you have the right to file a complaint with the Centers for Medicare & Medicaid Services (CMS) at 1-800-MEDICARE.',
   },
   {
@@ -92,9 +92,9 @@ const LEGAL_AID_BY_STATE: Record<string, { name: string; specialty: string; phon
 }
 
 const TIPS = [
-  { title: 'Ask for an itemized bill', desc: 'You have the right to a detailed list of every charge. Billing errors are common — average error rate is 80% in studies.' },
+  { title: 'Ask for an itemized bill', desc: 'You have the right to a detailed list of every charge. Billing errors happen, so check each line and ask about anything you don\'t recognize.' },
   { title: 'Request a financial assistance application', desc: 'Every non-profit hospital must have a financial assistance policy. Ask for it before you agree to a payment plan.' },
-  { title: 'Know your appeal rights', desc: 'Insurance denials can be appealed — twice (internal then external). External appeals succeed over 40% of the time.' },
+  { title: 'Know your appeal rights', desc: 'You can ask your insurer to reconsider a denial (internal appeal), and if it still says no, request an independent external review.' },
   { title: 'Get everything in writing', desc: 'Verbal agreements with hospitals or insurers are difficult to enforce. Always confirm payment arrangements in writing.' },
   { title: 'Bring a patient advocate', desc: 'You have the right to bring any person you trust to medical appointments. Advocates catch errors and help communication.' },
   { title: 'Document everything', desc: 'Keep records of every call, every form, every person\'s name and date. This documentation can be decisive in disputes.' },
@@ -183,7 +183,7 @@ export default function RightsPage() {
         </p>
 
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '40px' }}>
-          {[['Federal law', 'protects you'], ['2,800+', 'legal aid partners'], ['Free', 'consultations']].map(([v, l]) => (
+          {[['EMTALA', 'emergency care'], ['No Surprises Act', 'billing protection'], ['HIPAA', 'medical privacy']].map(([v, l]) => (
             <div key={l} style={{ padding: '10px 20px', background: 'rgba(74,144,217,0.07)', border: '1px solid rgba(74,144,217,0.18)', borderRadius: '100px', textAlign: 'center' }}>
               <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.01em' }}>{v}</div>
               <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '2px' }}>{l}</div>
@@ -374,8 +374,8 @@ export default function RightsPage() {
         <div style={{ maxWidth: '580px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ ...pill, marginBottom: '24px' }}><ReceiptText size={14} variant="Linear" /> Get legal help</div>
-            <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '16px' }}>We'll connect you with a legal aid partner</h2>
-            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65, marginBottom: '36px' }}>Describe your issue and we'll match you with the right legal aid organization within 24 hours.</p>
+            <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '16px' }}>Get help finding legal aid</h2>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65, marginBottom: '36px' }}>Describe your issue and we'll email you free legal aid organizations in your state that handle problems like yours. AXVO is not a law firm and can't give legal advice.</p>
           </RevealBlock>
 
           {submitted ? (
@@ -383,7 +383,7 @@ export default function RightsPage() {
               <div style={{ textAlign: 'center', padding: '48px', background: 'rgba(96,165,250,0.04)', border: '1px solid rgba(96,165,250,0.15)', borderRadius: '20px' }}>
                 <TickCircle size={40} variant="Linear" style={{ color: '#60a5fa', marginBottom: '16px' }} />
                 <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Request received</h3>
-                <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65 }}>We'll connect you with a legal aid partner within 24 hours at <strong style={{ color: '#eef4f5' }}>{form.email}</strong>.</p>
+                <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65 }}>We'll email legal aid options for your state to <strong style={{ color: '#eef4f5' }}>{form.email}</strong>.</p>
               </div>
             </RevealBlock>
           ) : (

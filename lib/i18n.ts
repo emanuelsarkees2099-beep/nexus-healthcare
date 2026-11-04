@@ -141,7 +141,7 @@ const EN: Translations = {
   /* Mobile dock */
   'dock.search':      'Search',
 
-  'home.hero.badge':          '30M uninsured Americans deserve better',
+  'home.hero.badge':          '27M uninsured Americans deserve better',
   'home.hero.headline':       'Free healthcare.\nFound in seconds.',
   'home.hero.subheadline':    'AXVO finds free clinics, sliding-scale care, and hidden programs near you — no insurance required.',
   'home.hero.cta':            'Find free care near me',
@@ -248,7 +248,7 @@ const ES: Translations = {
   /* Mobile dock */
   'dock.search':      'Buscar',
 
-  'home.hero.badge':          '30 millones de estadounidenses sin seguro merecen mejor',
+  'home.hero.badge':          '27 millones de personas sin seguro merecen algo mejor',
   'home.hero.headline':       'Atención médica gratuita.\nEncontrada en segundos.',
   'home.hero.subheadline':    'AXVO encuentra clínicas gratuitas, atención por escala móvil y programas ocultos cerca de ti — sin seguro necesario.',
   'home.hero.cta':            'Encontrar atención gratuita',
@@ -352,7 +352,7 @@ const ZH: Translations = {
   /* Mobile dock */
   'dock.search':      '搜索',
 
-  'home.hero.badge':          '3000万无保险美国人值得更好的医疗',
+  'home.hero.badge':          '2700万无保险美国人值得更好的医疗',
   'home.hero.headline':       '免费医疗。\n秒速找到。',
   'home.hero.subheadline':    'AXVO 为您在附近找到免费诊所、阶梯收费医疗和隐藏项目 — 无需保险。',
   'home.hero.cta':            '查找附近免费医疗',
@@ -456,7 +456,7 @@ const VI: Translations = {
   /* Mobile dock */
   'dock.search':      'Tìm kiếm',
 
-  'home.hero.badge':          '30 triệu người Mỹ không có bảo hiểm xứng đáng được chăm sóc tốt hơn',
+  'home.hero.badge':          '27 triệu người Mỹ không có bảo hiểm xứng đáng được chăm sóc tốt hơn',
   'home.hero.headline':       'Chăm sóc sức khỏe miễn phí.\nTìm thấy trong vài giây.',
   'home.hero.subheadline':    'AXVO tìm phòng khám miễn phí, chăm sóc theo thu nhập và các chương trình gần bạn — không cần bảo hiểm.',
   'home.hero.cta':            'Tìm chăm sóc miễn phí gần tôi',

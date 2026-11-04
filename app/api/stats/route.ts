@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
@@ -8,7 +8,20 @@ const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
 // longer do -- both are now admin-only at the RLS layer).
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
 
-export async function GET() {
+/** Internal submission counts are admin-only — same check as
+ *  /api/admin/submissions (Supabase session token + admin user_type). */
+async function isAdmin(req: NextRequest): Promise<boolean> {
+  const authHeader = req.headers.get('Authorization')
+  if (!authHeader?.startsWith('Bearer ')) return false
+  const anonClient = createClient(url, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '')
+  const { data, error } = await anonClient.auth.getUser(authHeader.slice(7))
+  if (error || !data.user) return false
+  const userType = (data.user.app_metadata as Record<string, unknown> | undefined)?.user_type
+  return userType === 'admin' || userType === 'super_admin'
+}
+
+export async function GET(req: NextRequest) {
+  if (!(await isAdmin(req))) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   try {
     const getSupabaseClient = () => createClient(url, serviceRoleKey)
 

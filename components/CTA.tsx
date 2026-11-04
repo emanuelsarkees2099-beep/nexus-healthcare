@@ -82,7 +82,7 @@ export default function CTA() {
               borderRadius: '50%', background: 'var(--accent)',
               animation: 'pulse-dot 1.8s ease-in-out infinite',
             }} />
-            <span><strong style={{ color: 'var(--text)', fontWeight: 600 }}>18,900+</strong> free &amp; sliding-scale clinics, verified and live</span>
+            <span><strong style={{ color: 'var(--text)', fontWeight: 600 }}>18,900+</strong> free &amp; sliding-scale clinic sites from public health datasets</span>
           </div>
         </div>
 
@@ -159,7 +159,7 @@ export default function CTA() {
           display: 'flex', gap: '22px', justifyContent: 'center',
           flexWrap: 'wrap', marginTop: '2.75rem',
         }}>
-          {['No signup required', '100% anonymous', 'Always free'].map(label => (
+          {['No signup required', 'No insurance needed', 'Always free'].map(label => (
             <div key={label} style={{
               display: 'flex', alignItems: 'center', gap: '6px',
               fontSize: '12px', color: 'var(--text-3)',

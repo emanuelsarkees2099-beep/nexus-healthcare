@@ -21,6 +21,10 @@ export default function CookieConsent() {
   const accept = () => {
     localStorage.setItem(STORAGE_KEY, 'accepted')
     setVisible(false)
+    // Analytics stay off until this moment (see app/layout.tsx and PostHogProvider)
+    const w = window as unknown as { axvoLoadAnalytics?: () => void }
+    w.axvoLoadAnalytics?.()
+    window.dispatchEvent(new Event('axvo-consent-accepted'))
   }
 
   const decline = () => {
@@ -43,8 +47,8 @@ export default function CookieConsent() {
           fontFamily: 'var(--font-inter)', fontWeight: 300, lineHeight: 1.6,
           margin: 0, flex: 1,
         }}>
-          AXVO uses essential cookies for authentication and performance analytics.
-          We never sell your data.{' '}
+          AXVO uses essential cookies to keep you signed in. If you accept, we also use
+          analytics to see which pages help people. We never sell your data.{' '}
           <Link
             href="/privacy"
             style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 500 }}

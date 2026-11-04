@@ -475,6 +475,12 @@ export default function PassportPage() {
   const [masked, setMasked] = useState(false)
   const [addModal, setAddModal] = useState<null | string>(null)
   const [saved, setSaved] = useState(false)
+  // True until the visitor saves their own passport — the sample data is
+  // labeled so nobody mistakes it for a real person's record.
+  const [isExample, setIsExample] = useState(() => {
+    if (typeof window === 'undefined') return true
+    try { return !localStorage.getItem(PASSPORT_KEY) } catch { return true }
+  })
 
   const handleSave = () => {
     try {
@@ -484,6 +490,7 @@ export default function PassportPage() {
       }
       localStorage.setItem(PASSPORT_KEY, JSON.stringify(updated))
       setPassport(updated)
+      setIsExample(false)
     } catch { /* ignore */ }
     setSaved(true)
     setTimeout(() => setSaved(false), 2500)
@@ -623,18 +630,27 @@ export default function PassportPage() {
           fontSize: '15px', color: 'rgba(255,255,255,0.45)',
           maxWidth: '440px', lineHeight: 1.7, margin: '0 auto 16px',
         }}>
-          Store your allergies, medications, and conditions. Generate a one-page summary for any clinic visit. End-to-end encrypted — AXVO cannot read your data.
+          Store your allergies, medications, and conditions. Generate a one-page summary for any clinic visit. Saved only in this browser — it is never sent to AXVO.
         </p>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '6px',
           fontSize: '12px', color: 'rgba(255,255,255,0.3)',
         }}>
-          <Lock size={11} color="rgba(255,255,255,0.45)" /> End-to-end encrypted · Stored on your device only
+          <Lock size={11} color="rgba(255,255,255,0.45)" /> Stored on your device only · Not sent to AXVO
         </div>
       </section>
 
       {/* Passport Card */}
       <section style={{ padding: '0 24px 80px', maxWidth: '780px', margin: '0 auto' }}>
+        {isExample && (
+          <div role="note" style={{
+            marginBottom: '14px', padding: '12px 16px', borderRadius: '12px',
+            background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.22)',
+            fontSize: '13px', color: 'rgba(255,255,255,0.65)', lineHeight: 1.55,
+          }}>
+            <strong style={{ color: '#fbbf24' }}>Example passport.</strong> This is sample information, not a real person. Replace it with your own details and click Save.
+          </div>
+        )}
         {/* Card header */}
         <div style={{
           padding: '20px 24px', borderRadius: '20px 20px 0 0',
@@ -1000,7 +1016,7 @@ export default function PassportPage() {
           <div>
             <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>How your data is protected</div>
             <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.7, margin: 0 }}>
-              Your Health Passport is encrypted on your device before it ever reaches our servers. We use AES-256 encryption with a key only you hold. AXVO employees cannot read your health data — even if we wanted to. You can delete your passport at any time, permanently.
+              Your Health Passport is saved only in this browser’s local storage on your device. It is never uploaded to AXVO, so we can’t see it. It is not encrypted, so anyone who uses this browser can see it — avoid saving it on a shared or public computer. Clearing this site’s data in your browser deletes it permanently.
             </p>
             <Link href="/privacy" style={{
               fontSize: '12px', color: 'var(--accent)', textDecoration: 'none',

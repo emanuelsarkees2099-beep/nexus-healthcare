@@ -59,7 +59,7 @@ export const WEB_APP_SCHEMA = {
     priceCurrency: 'USD',
   },
   description:
-    'AXVO finds free clinics, sliding-scale care, and hidden programs for the 30 million uninsured Americans who deserve better.',
+    'AXVO finds free clinics, sliding-scale care, and hidden programs for the 27 million uninsured Americans who deserve better.',
   featureList: [
     'Free clinic search by location',
     'Healthcare eligibility calculator',

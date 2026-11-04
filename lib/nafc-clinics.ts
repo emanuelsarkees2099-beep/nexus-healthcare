@@ -2141,7 +2141,7 @@ export const NAFC_CLINICS: NAFCClinic[] = [
     url: 'https://ecchc.com', nafc_member: true,
   },
 
-  // ── WISCONSIN (expanded) ──────────────────────────────────────────────────────
+  // ── WISCONSIN (not expanded) ──────────────────────────────────────────────────────
   {
     id: 'nafc-wi-003',
     name: 'Milwaukee Health Services',
@@ -2177,7 +2177,7 @@ export const NAFC_CLINICS: NAFCClinic[] = [
     url: 'https://siouxlandchc.org', nafc_member: true,
   },
 
-  // ── KANSAS (expanded) ─────────────────────────────────────────────────────────
+  // ── KANSAS (not expanded) ─────────────────────────────────────────────────────────
   {
     id: 'nafc-ks-003',
     name: 'COMCARE Health Services — Wichita',

@@ -41,7 +41,7 @@ const CMD_ITEMS: CmdItem[] = [
   {
     id: 'programs',
     label: 'Programs & Eligibility',
-    description: 'Check Medicaid, ACA, HRSA and 40+ programs',
+    description: 'Check Medicaid, CHIP, ACA subsidies, and 5 more programs',
     href: '/programs',
     icon: <ReceiptText size={15} variant="Linear" color="var(--text-2)" />,
     category: 'Core',

@@ -48,7 +48,7 @@ const ROOT_BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.axvohealth
 export const metadata: Metadata = {
   title: 'AXVO — Free Healthcare, Found in Seconds',
   description:
-    'AXVO finds free clinics, sliding-scale care, and hidden programs for the 30 million uninsured Americans who deserve better.',
+    'AXVO finds free clinics, sliding-scale care, and hidden programs for the 27 million uninsured Americans who deserve better.',
   keywords: ['free healthcare', 'free clinic', 'uninsured', 'healthcare access', 'AXVO'],
   manifest: '/manifest.json',
   // The homepage (app/page.tsx) has no metadata/generateMetadata of its own,
@@ -91,13 +91,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${bricolage.variable} ${inter.variable} ${mono.variable}`}
     >
       <head>
-        {/* Google Analytics (GA4) */}
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-D5ME9L70ZN" strategy="afterInteractive" />
+        {/* Google Analytics (GA4) — only loaded after the visitor clicks
+            Accept on the cookie banner (components/CookieConsent.tsx). */}
         <Script id="ga4-init" strategy="afterInteractive">
           {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-D5ME9L70ZN');`}
+window.axvoLoadAnalytics = function () {
+  if (window.__axvoGA) return;
+  window.__axvoGA = true;
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=G-D5ME9L70ZN';
+  document.head.appendChild(s);
+  gtag('js', new Date());
+  gtag('config', 'G-D5ME9L70ZN');
+};
+try { if (localStorage.getItem('axvo_cookie_consent') === 'accepted') window.axvoLoadAnalytics(); } catch (e) {}`}
         </Script>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         {/* PWA: iOS standalone mode — no Safari chrome when launched from home screen */}

@@ -6,10 +6,10 @@ import { Add } from 'iconsax-react'
    works (browser-side eligibility, no account, public data sources). */
 const FAQS = [
   { q: 'Is AXVO really free?', a: 'Yes — completely, always. There are no fees, no premium tier, and no card required. AXVO is a navigation tool, not an insurer or provider.' },
-  { q: 'Do I need insurance to use it?', a: 'No. AXVO is built specifically for people without insurance or who are underinsured. Free and sliding-scale clinics are legally required to serve you regardless of coverage.' },
-  { q: 'Do I have to create an account?', a: 'No. You can search clinics, check eligibility, and use every core feature anonymously. An optional account only exists to save clinics and records if you want to.' },
-  { q: 'Is my information private?', a: 'Yes. Eligibility is calculated entirely in your browser — your income and household answers are never sent to a server. We don’t sell data, ever.' },
-  { q: 'How current is the clinic data?', a: 'Clinics come from authoritative public datasets — HRSA, the National Association of Free & Charitable Clinics, the CMS provider registry, and SAMHSA — refreshed on a regular schedule.' },
+  { q: 'Do I need insurance to use it?', a: 'No. AXVO is built specifically for people without insurance or who are underinsured. HRSA-funded community health centers must serve you regardless of insurance or ability to pay, and free clinics are built for people without coverage.' },
+  { q: 'Do I have to create an account?', a: 'No. You can search clinics, check eligibility, and use every core feature without signing in. An optional account only exists to save clinics and records if you want to.' },
+  { q: 'Is my information private?', a: 'Yes. Eligibility is calculated entirely in your browser — your income and household answers are never sent to a server. We don’t sell data, ever. The Privacy Policy lists the few services that do receive data, like the AI symptom guide.' },
+  { q: 'How current is the clinic data?', a: 'Clinic sites come from public datasets — mainly HRSA’s health center file, plus the National Association of Free & Charitable Clinics, the CMS provider registry, and OpenStreetMap. Hours and services change, so always call ahead before you go.' },
   { q: 'Can immigrants use AXVO?', a: 'Yes. HRSA-funded health centers serve everyone regardless of immigration status, and AXVO shows which options apply to your situation.' },
   { q: 'What if I’m in an emergency?', a: 'Call 911. For mental-health or crisis support, the Crisis page lists 24/7 lifelines and is precached to load even with no connection.' },
 ]

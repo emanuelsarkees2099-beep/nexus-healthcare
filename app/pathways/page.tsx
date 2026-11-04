@@ -23,23 +23,23 @@ function useReveal(threshold = 0.15) {
 const STEPS = [
   { n: '01', icon: <SearchStatus size={18} variant="Linear" />, title: "Tell us what's wrong", body: 'Describe your symptoms or what kind of care you need. No medical jargon required.' },
   { n: '02', icon: <Location size={18} variant="Linear" />, title: 'Confirm your location', body: "We use your zip code and language preference to filter what's actually available near you." },
-  { n: '03', icon: <MagicStar size={18} variant="Linear" />, title: 'We rank your best match', body: 'We weigh distance, affordability, services offered, and languages spoken to surface the right clinic first — not just the closest one.' },
+  { n: '03', icon: <MagicStar size={18} variant="Linear" />, title: 'See your options', body: 'You see clinics that offer the care you need, sorted by distance, with each one labeled as a health center, free clinic, or other provider.' },
 ]
 
 const INSURANCE_OPTIONS = [
   { id: 'uninsured', label: 'No insurance',          desc: 'Access 18,900+ free & low-cost clinics' },
-  { id: 'medicaid',  label: 'Medicaid / CHIP',        desc: 'Verify coverage & find providers' },
-  { id: 'aca',       label: 'ACA marketplace plan',   desc: 'Find in-network free clinics' },
+  { id: 'medicaid',  label: 'Medicaid / CHIP',        desc: 'Find clinics near you' },
+  { id: 'aca',       label: 'ACA marketplace plan',   desc: 'Find low-cost clinics near you' },
   { id: 'other',     label: 'Other / Not sure',       desc: "We'll figure it out together" },
 ]
 
-// Real telehealth providers (nationwide, verified)
+// Real telehealth options (nationwide). AXVO isn't affiliated with any of
+// them; costs are described in general terms because they vary.
 const TELEHEALTH = [
-  { name: 'Teladoc Health',    cost: 'Free–$75',  wait: '< 10 min', langs: 'English · Español · French',          tag: 'General care',   url: 'https://www.teladoc.com',              note: 'Sliding scale for uninsured' },
-  { name: 'MDLIVE',            cost: 'Free–$82',  wait: '< 15 min', langs: 'English · Español',                   tag: 'Urgent care',    url: 'https://www.mdlive.com',               note: 'MDLIVE Cares program for low-income' },
-  { name: 'Open Path Collective', cost: '$30–$80/session', wait: '2–5 days', langs: 'English · Español · Mandarin · Arabic', tag: 'Mental health', url: 'https://openpathcollective.org', note: 'Licensed therapists, below-market rates' },
-  { name: 'Crisis Text Line',  cost: 'Free',      wait: 'Instant',  langs: 'English · Español',                   tag: '24/7 Crisis',    url: 'https://www.crisistextline.org',       note: 'Text HOME to 741741' },
-  { name: 'FQHC Health Center Finder', cost: '$0 sliding scale', wait: '1–3 days', langs: '40+ languages',        tag: 'FQHC near you',  url: 'https://findahealthcenter.hrsa.gov',   note: 'Federally required to serve everyone' },
+  { name: 'Community health centers', cost: 'Sliding scale', wait: 'By appointment', langs: 'Varies by center',  tag: 'Primary care',  url: 'https://findahealthcenter.hrsa.gov', note: 'Many offer phone or video visits; fees based on income' },
+  { name: 'Open Path Collective',     cost: 'Reduced fee',   wait: 'By appointment', langs: 'Varies by therapist', tag: 'Mental health', url: 'https://openpathcollective.org',     note: 'Nonprofit network of reduced-fee therapists' },
+  { name: 'Teladoc Health',           cost: 'Varies',        wait: '24/7',           langs: 'English · Español', tag: 'General care',  url: 'https://www.teladoc.com',           note: 'Commercial service — check the self-pay price first' },
+  { name: 'Crisis Text Line',         cost: 'Free',          wait: '24/7',           langs: 'English · Español', tag: '24/7 Crisis',   url: 'https://www.crisistextline.org',    note: 'Text HOME to 741741' },
 ]
 
 type ClinicResult = {
@@ -50,10 +50,10 @@ type ClinicResult = {
 }
 
 const TRUST_STATS = [
-  { val: '18,900+', label: 'Clinics matched from' },
+  { val: '18,900+', label: 'Clinic sites searched' },
   { val: '4',       label: 'Languages supported' },
-  { val: '8',       label: 'Match variables' },
-  { val: '<2min',   label: 'Avg time to your match' },
+  { val: '50 + DC', label: 'States covered' },
+  { val: '$0',      label: 'Cost to use AXVO' },
 ]
 
 const SYMPTOMS = ['Chest pain', 'Dental pain', 'Anxiety / depression', 'Fever or infection', 'Back pain', "Women's health", 'Diabetes care', 'Vision problems']
@@ -117,10 +117,10 @@ function InputField({ label, placeholder, value, onChange, type = 'text' }: {
 
 /* ─── FAQ section ─────────────────────────────────── */
 const FAQ_ITEMS = [
-  { q: "Is this actually free? What's the catch?", a: "There is no catch. You pay nothing to search, match, or be seen at any clinic in our network. We will never sell your data." },
-  { q: 'Do I need to create an account?', a: 'No account, no login, no email. Everything is anonymous. We don\'t know who you are and we don\'t need to.' },
-  { q: 'What if I have some insurance but can\'t afford the copay?', a: "Tell us your insurance status honestly. We'll find clinics that work with your specific plan and also show sliding-scale options that may be cheaper than your copay." },
-  { q: 'How is the "confidence score" calculated?', a: 'It combines real, checkable factors: symptom-to-specialty match, distance, affordability, services offered, language availability, whether the clinic accepts uninsured patients, and your insurance status. It is not based on outcome data we don\'t yet have — see our Methodology page for the full breakdown.' },
+  { q: "Is this actually free? What's the catch?", a: "AXVO is free to use, with no catch. Clinics set their own prices: community health centers charge on a sliding scale based on income, and free clinics charge nothing. We will never sell your data." },
+  { q: 'Do I need to create an account?', a: 'No. You can use everything without signing in, and we never ask for your name to search.' },
+  { q: 'What if I have some insurance but can\'t afford the copay?', a: "AXVO can't check which plans a clinic accepts, so call the clinic and ask. Community health centers also offer sliding-scale fees, which may cost less than your copay." },
+  { q: 'How are clinics ordered?', a: 'Results are limited to clinics that list the type of care you picked, then sorted by distance. Each listing shows whether it is a community health center (sliding fee), a free clinic, or another provider. See our Methodology page for the details.' },
   { q: "What if my symptoms are serious — should I go to the ER?", a: "If you are experiencing a life-threatening emergency, call 911. For urgent but non-emergency symptoms, we\'ll always indicate when a situation warrants immediate care and show you the nearest ER alongside free alternatives." },
 ]
 
@@ -269,7 +269,7 @@ export default function PathwaysPage() {
           </h1>
 
           <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: '540px', margin: '0 auto 40px', fontWeight: 400 }}>
-            AXVO ranks clinics by distance, affordability, services offered, and languages spoken — to help you find the right clinic, not just the closest one.
+            Tell AXVO what kind of care you need and where you are. It shows free and sliding-scale clinics that offer that care, closest first.
           </p>
 
           <button
@@ -452,7 +452,7 @@ export default function PathwaysPage() {
               <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.38)' }}>
                 {clinicResults.length > 0 ? `${clinicResults.length} clinics near ${location}` : `Searching near ${location}…`}
                 {resultsSource === 'google' && <span style={{ marginLeft: '8px', color: '#60a5fa', fontSize: '11px' }}>● Live results</span>}
-                {resultsSource === 'hrsa' && <span style={{ marginLeft: '8px', color: '#60a5fa', fontSize: '11px' }}>● HRSA verified</span>}
+                {resultsSource === 'hrsa' && <span style={{ marginLeft: '8px', color: '#60a5fa', fontSize: '11px' }}>● HRSA data</span>}
               </p>
             </div>
 
@@ -570,7 +570,7 @@ export default function PathwaysPage() {
                         onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.16)'; (e.currentTarget as HTMLElement).style.transform = 'scale(1.02)' }}
                         onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.08)'; (e.currentTarget as HTMLElement).style.transform = 'scale(1)' }}
                       >
-                        See all {clinicResults.length} verified clinics
+                        See all {clinicResults.length} clinics
                         <ArrowRight size={13} variant="Linear" />
                       </button>
                     </div>
@@ -630,7 +630,7 @@ export default function PathwaysPage() {
                     onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.18)' }}
                     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.1)' }}
                   >
-                    See all verified telehealth providers <ArrowRight size={13} variant="Linear" />
+                    See all telehealth options <ArrowRight size={13} variant="Linear" />
                   </button>
                 </div>
               </div>
@@ -651,9 +651,9 @@ export default function PathwaysPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2px', borderRadius: '20px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)' }}>
             {[
-              { n: '01', title: 'Verified public data', body: 'Clinic listings come from HRSA, the National Association of Free & Charitable Clinics, the NPI registry, and OpenStreetMap — not invented data.' },
-              { n: '02', title: '8 real factors', body: 'Distance · affordability score · services offered · sliding-scale/free status · languages spoken · open-now status · accepting-patients status · FQHC/verified-source status.' },
-              { n: '03', title: 'Improves as we grow', body: 'Outcome logging is opt-in and still early. As more people log what worked, we\'ll use that to improve rankings over time — see our Impact page for where that stands.' },
+              { n: '01', title: 'Public data sources', body: 'Clinic listings come from HRSA, the National Association of Free & Charitable Clinics, the CMS NPI Registry, and OpenStreetMap. Hours and availability can change, so call ahead.' },
+              { n: '02', title: 'Simple, checkable ordering', body: 'Clinics are filtered by the type of care you need and sorted by distance. Each one is labeled by type: community health center, free clinic, or other provider.' },
+              { n: '03', title: 'Improves as we grow', body: 'Outcome logging is opt-in and still early. As people report what worked, we use those reports to fix and improve listings — see the Outcomes page for where that stands.' },
             ].map((item, i) => (
               <RevealBlock key={item.n} delay={i * 100}>
                 <div style={{ padding: '36px 32px', background: i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent', height: '100%' }}>
@@ -675,8 +675,8 @@ export default function PathwaysPage() {
               <div style={{ borderRadius: '25px', padding: '60px 52px', background: 'rgba(13,11,30,0.95)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '32px', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05)' }}>
                 <div>
                   <div style={{ ...pill, marginBottom: '16px' }}><Hospital size={14} variant="Linear" /> Can't travel?</div>
-                  <h2 style={{ fontSize: 'clamp(22px, 3vw, 36px)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '12px' }}>Telehealth that's actually free</h2>
-                  <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.45)', maxWidth: '400px', lineHeight: 1.65 }}>Three verified telehealth partners, available in 5 languages, zero cost. Same-day availability.</p>
+                  <h2 style={{ fontSize: 'clamp(22px, 3vw, 36px)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '12px' }}>Can't travel? Try telehealth</h2>
+                  <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.45)', maxWidth: '400px', lineHeight: 1.65 }}>Many community health centers offer phone or video visits on a sliding scale, and some services are free. Compare options and costs.</p>
                 </div>
                 <button onClick={() => router.push('/telehealth')} style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '14px 24px', borderRadius: '100px', background: 'rgba(255,255,255,0.94)', color: '#07070F', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: 600, fontFamily: 'inherit', whiteSpace: 'nowrap', transition: 'all 0.35s cubic-bezier(0.16,1,0.3,1)' }}
                   onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.03)')}

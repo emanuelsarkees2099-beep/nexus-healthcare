@@ -98,36 +98,29 @@ function HeatGrid({ title, data }: { title: string; data: { label: string; value
 }
 
 /* ── State data ── */
+/* Uninsured rate, total population, 2024 — KFF analysis of the U.S. Census
+   Bureau's American Community Survey (KFF State Health Facts). */
 const STATE_DATA_UNINSURED = [
-  { label: 'TX', value: 19.1 }, { label: 'OK', value: 15.2 }, { label: 'GA', value: 14.2 },
-  { label: 'FL', value: 13.1 }, { label: 'NV', value: 12.8 }, { label: 'AZ', value: 12.7 },
-  { label: 'NM', value: 12.3 }, { label: 'MS', value: 11.6 }, { label: 'NC', value: 11.1 },
-  { label: 'SC', value: 10.7 }, { label: 'AL', value: 10.5 }, { label: 'TN', value: 10.1 },
-  { label: 'WY', value: 9.8  }, { label: 'LA', value: 9.7  }, { label: 'AR', value: 9.5  },
-  { label: 'VA', value: 8.6  }, { label: 'MO', value: 8.5  }, { label: 'IN', value: 8.2  },
-  { label: 'OH', value: 7.1  }, { label: 'KS', value: 7.0  }, { label: 'CA', value: 6.8  },
-  { label: 'IL', value: 6.5  }, { label: 'NY', value: 6.2  }, { label: 'WA', value: 5.9  },
-  { label: 'MN', value: 5.1  }, { label: 'MA', value: 3.8  }, { label: 'RI', value: 3.4  },
-  { label: 'VT', value: 3.2  }, { label: 'DC', value: 3.1  }, { label: 'HI', value: 2.9  },
+  { label: 'TX', value: 16.8 }, { label: 'GA', value: 12 }, { label: 'OK', value: 11.7 }, { label: 'NV', value: 11.4 },
+  { label: 'AK', value: 11.1 }, { label: 'FL', value: 10.9 }, { label: 'AZ', value: 10.2 }, { label: 'NM', value: 10.2 },
+  { label: 'MS', value: 9.7 }, { label: 'TN', value: 9.7 }, { label: 'WY', value: 9.7 }, { label: 'AR', value: 9.3 },
+  { label: 'SC', value: 9.1 }, { label: 'ID', value: 9 }, { label: 'KS', value: 8.6 }, { label: 'MT', value: 8.6 },
+  { label: 'NC', value: 8.6 }, { label: 'UT', value: 8.3 }, { label: 'AL', value: 8.2 }, { label: 'SD', value: 7.9 },
+  { label: 'CO', value: 7.8 }, { label: 'NJ', value: 7.7 }, { label: 'LA', value: 7.6 }, { label: 'MO', value: 7.6 },
+  { label: 'NE', value: 7.6 }, { label: 'IN', value: 7.4 }, { label: 'DE', value: 6.9 }, { label: 'KY', value: 6.9 },
+  { label: 'IL', value: 6.8 }, { label: 'VA', value: 6.8 }, { label: 'OH', value: 6.7 }, { label: 'WA', value: 6.5 },
+  { label: 'MD', value: 6.2 }, { label: 'ND', value: 6 }, { label: 'PA', value: 6 }, { label: 'CA', value: 5.9 },
+  { label: 'WV', value: 5.9 }, { label: 'CT', value: 5.7 }, { label: 'IA', value: 5.7 }, { label: 'ME', value: 5.6 },
+  { label: 'WI', value: 5.4 }, { label: 'MN', value: 5.3 }, { label: 'OR', value: 5.2 }, { label: 'MI', value: 5 },
+  { label: 'NY', value: 4.9 }, { label: 'RI', value: 4.8 }, { label: 'DC', value: 4.7 }, { label: 'NH', value: 4.7 },
+  { label: 'VT', value: 4.3 }, { label: 'HI', value: 3.3 }, { label: 'MA', value: 2.8 },
 ].map(d => ({ ...d, color: '#f87171' }))
 
-const STATE_DATA_ACCESS = [
-  { label: 'VT', value: 98  }, { label: 'MA', value: 97  }, { label: 'HI', value: 96  },
-  { label: 'CT', value: 95  }, { label: 'MN', value: 94  }, { label: 'RI', value: 93  },
-  { label: 'DC', value: 92  }, { label: 'WA', value: 91  }, { label: 'OR', value: 89  },
-  { label: 'CA', value: 87  }, { label: 'NY', value: 86  }, { label: 'IL', value: 84  },
-  { label: 'CO', value: 83  }, { label: 'MD', value: 82  }, { label: 'NJ', value: 81  },
-  { label: 'PA', value: 79  }, { label: 'WI', value: 78  }, { label: 'MI', value: 76  },
-  { label: 'OH', value: 74  }, { label: 'FL', value: 72  }, { label: 'AZ', value: 70  },
-  { label: 'TX', value: 68  }, { label: 'GA', value: 67  }, { label: 'AL', value: 63  },
-  { label: 'MS', value: 61  }, { label: 'OK', value: 60  }, { label: 'LA', value: 59  },
-  { label: 'WY', value: 58  }, { label: 'ID', value: 57  }, { label: 'SD', value: 55  },
-].map(d => ({ ...d, color: '#4A90D9' }))
-
+/* Uninsured rates for people ages 0–64, 2024 — KFF analysis of the ACS. */
 const DISPARITIES = [
-  { label: 'Black Americans uninsured vs white', white: 7.4, poc: 14.2, color: '#A78BFA' },
-  { label: 'Hispanic Americans uninsured vs white', white: 7.4, poc: 19.7, color: '#FB923C' },
-  { label: 'Native Americans uninsured vs white', white: 7.4, poc: 21.4, color: '#F472B6' },
+  { label: 'Black people vs. white people', white: 6.8, poc: 10.1, color: '#A78BFA' },
+  { label: 'Hispanic people vs. white people', white: 6.8, poc: 18.4, color: '#FB923C' },
+  { label: 'American Indian & Alaska Native people vs. white people', white: 6.8, poc: 18.9, color: '#F472B6' },
 ]
 
 const STORIES = [
@@ -158,20 +151,20 @@ const STORIES = [
 ]
 
 const FACT_CARDS = [
-  { stat: '30M', label: 'Uninsured Americans', context: 'That\'s 9.1% of the population — roughly the size of Texas', color: '#F87171' },
-  { stat: '20yrs', label: 'Life expectancy gap', context: 'Between the richest and poorest US counties. Preventable.', color: '#FCD34D' },
-  { stat: '41%', label: 'Avoid care due to cost', context: 'Of uninsured adults skipped needed care because of price', color: '#A78BFA' },
-  { stat: '$3.2B', label: 'Annual avoidable costs', context: 'Spent on complications from delayed care that a free clinic could have prevented', color: '#4A90D9' },
+  { stat: '26.7M', label: 'Uninsured all year', context: 'People in the U.S. with no health insurance for all of 2025 (7.9%). Source: U.S. Census Bureau', color: '#F87171' },
+  { stat: '20+ yrs', label: 'Life expectancy gap', context: 'Between U.S. counties with the highest and lowest life expectancy. Source: JAMA Internal Medicine, 2017', color: '#FCD34D' },
+  { stat: '41%', label: 'Have health care debt', context: 'Share of U.S. adults with debt from medical or dental bills — about 100 million people. Source: KFF, 2022', color: '#A78BFA' },
+  { stat: '16.8%', label: 'Uninsured in Texas', context: 'The highest rate of any state in 2024, compared with 2.8% in Massachusetts. Source: KFF analysis of Census data', color: '#4A90D9' },
 ]
 
 const POLICY_TIMELINE = [
   { year: '1965', event: 'Medicare & Medicaid established', impact: 'First federal healthcare safety net', color: '#4A90D9' },
-  { year: '1996', event: 'EMTALA enforcement strengthened', impact: 'ERs must stabilize regardless of ability to pay', color: '#A78BFA' },
+  { year: '1986', event: 'EMTALA enacted', impact: 'Hospital ERs must screen and stabilize anyone, regardless of ability to pay', color: '#A78BFA' },
   { year: '2010', event: 'Affordable Care Act signed', impact: 'Medicaid expansion, pre-existing conditions banned', color: '#60A5FA' },
-  { year: '2014', event: 'ACA marketplace opens', impact: '7M enrolled in year one; 14M would remain uninsured', color: '#FCD34D' },
-  { year: '2021', event: 'American Rescue Plan', impact: 'ARP subsidies reduced premiums by avg $150/month', color: '#FB923C' },
+  { year: '2014', event: 'ACA marketplaces open and Medicaid expansion begins', impact: 'About 8 million people signed up during the first open enrollment', color: '#FCD34D' },
+  { year: '2021', event: 'American Rescue Plan', impact: 'Enlarged premium tax credits and removed the 400% FPL cutoff', color: '#FB923C' },
   { year: '2022', event: 'Inflation Reduction Act', impact: 'Extended enhanced subsidies through 2025', color: '#F472B6' },
-  { year: '2025', event: 'Coverage cliff looms', impact: 'Enhanced subsidies expire Dec 2025 — 3M could lose coverage', color: '#F87171' },
+  { year: '2025', event: 'Enhanced subsidies expire', impact: 'The larger tax credits ended Dec 31, 2025, raising premiums for many enrollees in 2026', color: '#F87171' },
 ]
 
 const pill: React.CSSProperties = {
@@ -183,7 +176,6 @@ const pill: React.CSSProperties = {
 }
 
 export default function EquityPage() {
-  const [activeMap, setActiveMap] = useState<'uninsured' | 'access'>('uninsured')
   const [openFaq, setOpenFaq] = useState<number | null>(null)
 
   return (
@@ -262,44 +254,29 @@ export default function EquityPage() {
                 How every state stacks up
               </h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', maxWidth: '480px', lineHeight: 1.65 }}>
-                Hover a state to see its number. Darker = worse. Data from CENSUS, CDC, and KFF.
+                Hover a state to see its rate. Darker means a higher share of people without health insurance.
               </p>
             </div>
           </Reveal>
 
-          {/* Toggle */}
-          <div style={{ display: 'flex', background: 'rgba(255,255,255,0.04)', borderRadius: '12px', padding: '4px', width: 'fit-content', gap: '2px', marginBottom: '40px' }}>
-            {([['uninsured', '% Uninsured'], ['access', '% With Clinic Access']] as const).map(([key, label]) => (
-              <button key={key} onClick={() => setActiveMap(key)}
-                style={{
-                  padding: '9px 22px', borderRadius: '9px', border: 'none', cursor: 'pointer',
-                  fontSize: '13px', fontWeight: 500, fontFamily: 'inherit',
-                  background: activeMap === key ? (key === 'uninsured' ? 'rgba(248,113,113,0.15)' : 'rgba(74,144,217,0.15)') : 'transparent',
-                  color: activeMap === key ? (key === 'uninsured' ? '#f87171' : 'var(--accent)') : 'rgba(255,255,255,0.4)',
-                  transition: 'all 0.25s',
-                }}
-              >{label}</button>
-            ))}
-          </div>
-
           <Reveal>
             <HeatGrid
-              title={activeMap === 'uninsured' ? 'Uninsured rate by state (%)' : 'Clinic access score by state (%)'}
-              data={activeMap === 'uninsured' ? STATE_DATA_UNINSURED : STATE_DATA_ACCESS}
+              title="Uninsured rate by state, 2024 (%)"
+              data={STATE_DATA_UNINSURED}
             />
           </Reveal>
 
           <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: activeMap === 'uninsured' ? 'rgba(248,113,113,0.3)' : 'rgba(74,144,217,0.3)' }} />
+              <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: 'rgba(248,113,113,0.3)' }} />
               <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)' }}>Low</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: activeMap === 'uninsured' ? '#f87171' : '#4A90D9' }} />
+              <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: '#f87171' }} />
               <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)' }}>High</span>
             </div>
             <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.2)', fontFamily: 'var(--font-inter)', marginLeft: '8px' }}>
-              Source: U.S. Census Bureau ACS 2023 · KFF State Health Facts
+              Source: KFF analysis of the U.S. Census Bureau American Community Survey, 2024
             </span>
           </div>
         </div>
@@ -346,7 +323,7 @@ export default function EquityPage() {
                         : `${Math.round(d.poc / d.white * 10) / 10}× the rate`}
                     </strong>
                     {' '}to be uninsured compared to white Americans.
-                    {' '}Source: KFF State Health Facts, 2023 ACS.
+                    {' '}Ages 0–64. Source: KFF analysis of the 2024 American Community Survey.
                   </div>
                 </div>
               </Reveal>
@@ -456,61 +433,6 @@ export default function EquityPage() {
         </div>
       </section>
 
-      {/* ── #30 — DOWNLOAD DATA ── */}
-      <section style={{ padding: '40px 24px 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <Reveal>
-            <div style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              gap: '24px', flexWrap: 'wrap',
-              padding: '28px 32px', borderRadius: '20px',
-              background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.15)',
-            }}>
-              <div>
-                <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '4px' }}>
-                  Download this dataset
-                </div>
-                <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-inter)', lineHeight: 1.55, maxWidth: '420px' }}>
-                  State-by-state disparity data, clinic density scores, and Medicaid expansion outcomes. CC-BY 4.0 license. For researchers, journalists, and health departments.
-                </div>
-              </div>
-              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', flexShrink: 0 }}>
-                <a
-                  href="/api/equity-data?format=csv"
-                  download="axvo-equity-data.csv"
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: '6px',
-                    padding: '10px 20px', borderRadius: '100px',
-                    background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.3)',
-                    color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
-                    textDecoration: 'none', transition: 'background 0.18s',
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.2)')}
-                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.12)')}
-                >
-                  <Chart2 size={13} /> CSV Dataset
-                </a>
-                <a
-                  href="/api/equity-data?format=json"
-                  download="axvo-equity-data.json"
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: '6px',
-                    padding: '10px 20px', borderRadius: '100px',
-                    background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
-                    color: 'rgba(255,255,255,0.6)', fontSize: '13px', fontWeight: 600,
-                    textDecoration: 'none', transition: 'background 0.18s',
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}
-                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.04)')}
-                >
-                  <Global size={13} /> JSON API
-                </a>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
       {/* ── ACTION CTA ── */}
       <section style={{ padding: '80px 24px 120px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '760px', margin: '0 auto' }}>
@@ -528,7 +450,7 @@ export default function EquityPage() {
                   Data is only useful if it drives action
                 </h2>
                 <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, maxWidth: '440px', margin: '0 auto 32px' }}>
-                  Every person in this data is someone who can be helped today — for free — using the clinics already in your city.
+                  Every person in this data could be helped today, at low or no cost, by clinics that already exist in their community.
                 </p>
                 <a href="/search" style={{
                   display: 'inline-flex', alignItems: 'center', gap: '10px',

@@ -14,12 +14,15 @@ import {
    STATE-SPECIFIC DATA  (2025)
    ════════════════════════════════════════════════════════════ */
 
-/** States that have adopted ACA Medicaid expansion (138% FPL adult threshold) */
+/** States (plus DC) that have adopted ACA Medicaid expansion (138% FPL adult
+ *  threshold) — 40 states + DC as of 2026. Not expanded: AL, FL, GA, KS, MS,
+ *  SC, TN, TX, WI, WY. (Wisconsin covers adults to 100% FPL without expanding.)
+ *  Source: KFF, Status of State Medicaid Expansion Decisions. */
 const EXPANSION_STATES = new Set([
   'AK','AZ','AR','CA','CO','CT','DC','DE','HI','ID','IL','IN',
-  'IA','KS','KY','LA','ME','MD','MA','MI','MN','MO','MT','NE',
+  'IA','KY','LA','ME','MD','MA','MI','MN','MO','MT','NE',
   'NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI',
-  'SD','UT','VA','VT','WA','WI','WV',
+  'SD','UT','VA','VT','WA','WV',
 ])
 
 /** States with enhanced/higher CHIP income thresholds (≥300% FPL for children) */
@@ -27,15 +30,39 @@ const HIGH_CHIP_STATES = new Set([
   'CA','CT','DC','HI','IL','MA','MD','MN','NJ','NY','RI','VT','WA','WI',
 ])
 
-/** 2025 HHS Federal Poverty Guidelines (48 contiguous states + DC),
- *  by household size. +$5,500 for each person beyond 8.
- *  Source: HHS Poverty Guidelines, effective Jan 2025. */
-const FPL_2025: Record<number, number> = {
-  1: 15650, 2: 21150, 3: 26650, 4: 32150, 5: 37650, 6: 43150, 7: 48650, 8: 54150,
+/** 2026 HHS Poverty Guidelines: base amount for one person plus a fixed
+ *  amount for each additional person. Alaska and Hawaii have their own.
+ *  Source: HHS / ASPE Poverty Guidelines, January 2026. */
+const FPL_YEAR = 2026
+const FPL_2026 = {
+  default: { base: 15960, perPerson: 5680 },
+  AK:      { base: 19950, perPerson: 7100 },
+  HI:      { base: 18360, perPerson: 6530 },
+} as const
+
+const FPL_FOR = (hh: number, state = '') => {
+  const t = state === 'AK' ? FPL_2026.AK : state === 'HI' ? FPL_2026.HI : FPL_2026.default
+  return t.base + (Math.max(hh, 1) - 1) * t.perPerson
 }
 
-const FPL_FOR = (hh: number) =>
-  hh <= 8 ? (FPL_2025[Math.max(hh, 1)] ?? 15650) : 54150 + (hh - 8) * 5500
+/** Expected yearly contribution toward a benchmark silver Marketplace plan
+ *  under the 2026 rules (enhanced subsidies expired after 2025), as a share
+ *  of income. No premium tax credit below 100% or above 400% FPL. */
+function acaContributionPct(fplPct: number): number | null {
+  if (fplPct < 100 || fplPct > 400) return null
+  const bands: Array<[number, number, number, number]> = [
+    [100, 133, 2.10, 2.10],
+    [133, 150, 3.14, 4.19],
+    [150, 200, 4.19, 6.60],
+    [200, 250, 6.60, 8.44],
+    [250, 300, 8.44, 9.96],
+    [300, 400, 9.96, 9.96],
+  ]
+  for (const [lo, hi, from, to] of bands) {
+    if (fplPct <= hi) return from + ((fplPct - lo) / (hi - lo)) * (to - from)
+  }
+  return 9.96
+}
 
 /**
  * State-specific Medicaid enrollment portals (2025).
@@ -217,7 +244,7 @@ interface EligibleProgram {
 }
 
 function calcEligibility(a: WizardAnswers): EligibleProgram[] {
-  const fpl       = FPL_FOR(a.householdSize)
+  const fpl       = FPL_FOR(a.householdSize, a.state)
   const fplPct    = a.annualIncome > 0 ? (a.annualIncome / fpl) * 100 : 0
   const expanded  = EXPANSION_STATES.has(a.state)
   const highChip  = HIGH_CHIP_STATES.has(a.state)
@@ -295,28 +322,28 @@ function calcEligibility(a: WizardAnswers): EligibleProgram[] {
   /* ── 3. ACA Marketplace Subsidy ─────────────────── */
   if (!onMedicaid) {
     let acaMatch = 0
-    // Enhanced subsidies (American Rescue Plan extended through 2025)
-    if (fplPct < 100 && !expanded) acaMatch = 42  // coverage gap
+    // 2026 rules: enhanced subsidies expired, so tax credits stop at 400% FPL
+    if (fplPct < 100 && !expanded) acaMatch = 20  // coverage gap: no tax credit below 100% FPL
     else if (fplPct < 100) acaMatch = 8           // Medicaid is better
-    else if (fplPct <= 150) acaMatch = 97          // $0 premium plans available
-    else if (fplPct <= 200) acaMatch = 93
-    else if (fplPct <= 300) acaMatch = 82
-    else if (fplPct <= 400) acaMatch = 72
-    else if (fplPct <= 500) acaMatch = 46          // subsidy tapers; 8.5%-of-income cap
-    else acaMatch = 9    // high income — little/no subsidy, filtered out
+    else if (fplPct <= 150) acaMatch = 94
+    else if (fplPct <= 200) acaMatch = 90
+    else if (fplPct <= 300) acaMatch = 80
+    else if (fplPct <= 400) acaMatch = 70
+    else acaMatch = 9    // above 400% FPL — no premium tax credit, filtered out
 
     if (a.currentCoverage === 'employer-unaffordable') acaMatch = Math.min(96, acaMatch + 12)
     if (a.currentCoverage === 'cobra') acaMatch = Math.min(94, acaMatch + 8)
 
-    const monthlyEst = fplPct <= 150 ? '$0' : fplPct <= 250 ? '$0–$50' : fplPct <= 400 ? '$50–$150' : '$150+'
+    const contribPct = acaContributionPct(fplPct)
+    const monthlyEst = contribPct === null ? null : Math.round((a.annualIncome * contribPct) / 100 / 12)
 
     const hasStateExchange = a.state in STATE_ACA_URLS
     programs.push({
       id: 'aca', name: 'ACA Marketplace Subsidy', tag: 'Federal',
       color: '#60a5fa', icon: <DollarCircle size={16} variant="Linear" />,
       match: Math.round(acaMatch),
-      desc: 'Premium tax credits reduce your monthly health insurance cost — potentially to $0. Plans cover doctor visits, prescriptions, hospitalizations, and preventive care.',
-      savings: `~${monthlyEst}/month premium`,
+      desc: 'Premium tax credits lower your monthly premium for a Marketplace plan, and some bronze plans can cost $0. Plans cover doctor visits, prescriptions, hospital care, and preventive care.',
+      savings: monthlyEst === null ? 'No premium tax credit at this income' : `About $${monthlyEst}/month for a benchmark silver plan (2026 rules)`,
       annualValue: fplPct <= 200 ? 5400 : fplPct <= 400 ? 3200 : 1400,
       url: getAcaUrl(a.state),
       highlights: [
@@ -545,7 +572,7 @@ export default function EligibilityPage() {
 
   useEffect(() => { setMounted(true) }, [])
 
-  const fpl = FPL_FOR(answers.householdSize)
+  const fpl = FPL_FOR(answers.householdSize, answers.state)
   const fplPct = answers.annualIncome > 0 ? Math.round((answers.annualIncome / fpl) * 100) : 0
   const incomeIdx = INCOME_BRACKETS.findIndex(b => b.value === answers.annualIncome)
 
@@ -708,7 +735,7 @@ export default function EligibilityPage() {
           {/* FPL preview */}
           <div style={{ padding: '14px 18px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', fontSize: '13px', color: 'rgba(255,255,255,0.4)', display: 'flex', gap: '8px', alignItems: 'center' }}>
             <InfoCircle size={13} variant="Linear" />
-            <span>2025 Federal Poverty Level for household of <strong style={{ color: 'rgba(255,255,255,0.7)' }}>{answers.householdSize}</strong>: <strong style={{ color: 'var(--accent)' }}>${fpl.toLocaleString()}/year</strong></span>
+            <span>{FPL_YEAR} Federal Poverty Level for household of <strong style={{ color: 'rgba(255,255,255,0.7)' }}>{answers.householdSize}</strong>: <strong style={{ color: 'var(--accent)' }}>${fpl.toLocaleString()}/year</strong></span>
           </div>
         </div>
       )
@@ -852,8 +879,8 @@ export default function EligibilityPage() {
             </h2>
             {results.length > 0 && (
               <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>
-                Based on your answers, these programs could save you up to&nbsp;
-                <strong style={{ color: 'var(--accent)' }}><Counter target={totalAnnual} /></strong> per year in healthcare costs.
+                Rough estimate of what these programs could be worth to you:&nbsp;
+                <strong style={{ color: 'var(--accent)' }}><Counter target={totalAnnual} /></strong> a year. Your actual savings depend on your situation.
               </p>
             )}
           </div>
@@ -1132,7 +1159,7 @@ export default function EligibilityPage() {
                   <div>
                     <div style={{ fontSize: '14px', fontWeight: 700, color: '#eef4f5', marginBottom: '4px' }}>100% private — calculated in your browser</div>
                     <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.6 }}>
-                      Your answers never leave your device. No account required. No data stored. AXVO uses your state and income range to apply the correct eligibility thresholds, all calculated locally using 2025 federal guidelines.
+                      Your answers never leave your device. No account required. No data stored. AXVO uses your state and income range to apply the correct eligibility thresholds, all calculated locally using 2026 federal guidelines.
                     </div>
                   </div>
                 </div>
@@ -1155,9 +1182,9 @@ export default function EligibilityPage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
             {[
-              { name: 'Medicaid', icon: <ShieldTick size={20} variant="Bulk" color="var(--accent)" />, who: 'Low-income adults, children, pregnant individuals', covers: 'Full coverage — doctor visits, hospital stays, prescriptions, dental and vision in many states', income: 'Up to 138% FPL in expansion states (≈$21,600/yr single)' },
-              { name: 'CHIP', icon: <Profile2User size={20} variant="Bulk" color="var(--accent)" />, who: 'Children under 19 in families that earn too much for Medicaid', covers: 'Comprehensive child health coverage with low or no premiums', income: 'Up to 200–300% FPL depending on state (≈$32–48K/yr family)' },
-              { name: 'ACA Marketplace', icon: <DollarCircle size={20} variant="Bulk" color="var(--accent)" />, who: 'Individuals and families above the Medicaid threshold', covers: 'Subsidized plans — premium tax credits can reduce monthly cost to $0', income: 'Any income; largest tax credits below 400% FPL' },
+              { name: 'Medicaid', icon: <ShieldTick size={20} variant="Bulk" color="var(--accent)" />, who: 'Low-income adults, children, pregnant individuals', covers: 'Full coverage — doctor visits, hospital stays, prescriptions, dental and vision in many states', income: 'Up to 138% FPL in expansion states (about $22,025/yr for one person in 2026)' },
+              { name: 'CHIP', icon: <Profile2User size={20} variant="Bulk" color="var(--accent)" />, who: 'Children under 19 in families that earn too much for Medicaid', covers: 'Comprehensive child health coverage with low or no premiums', income: 'Up to 200–300% FPL or more depending on state (about $54,600–$82,000/yr for a family of three in 2026)' },
+              { name: 'ACA Marketplace', icon: <DollarCircle size={20} variant="Bulk" color="var(--accent)" />, who: 'Individuals and families above the Medicaid threshold', covers: 'Subsidized plans — premium tax credits lower the monthly cost, and some bronze plans are $0', income: 'Tax credits for most people at 100–400% FPL; none above 400% FPL under 2026 rules' },
               { name: 'HRSA / Free Clinics', icon: <Hospital size={20} variant="Bulk" color="var(--accent)" />, who: 'Anyone, regardless of income or insurance status', covers: 'Primary care, behavioral health, dental — on a sliding-scale or free basis', income: 'No income limit — sliding scale means you pay what you can' },
               { name: 'Ryan White (HIV)', icon: <Heart size={20} variant="Bulk" color="var(--accent)" />, who: 'People living with HIV who are uninsured or underinsured', covers: 'Medical care, medications, support services — no cost or very low cost', income: 'Up to 500% FPL in most states; low-income served first' },
               { name: 'Extra Help / LIS', icon: <Flash size={20} variant="Bulk" color="var(--accent)" />, who: 'Medicare enrollees with limited income and resources', covers: 'Helps pay Medicare Part D prescription drug costs — premiums, deductibles, copays', income: 'Up to 150% FPL (≈$23,475/yr single, $31,725/yr couple)' },
@@ -1191,7 +1218,7 @@ export default function EligibilityPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { q: 'Is my information stored anywhere?', a: 'No. Your answers are calculated entirely in your browser. Nothing is sent to any server. AXVO has no account system and stores no personal data.' },
-              { q: 'What is the Federal Poverty Level (FPL)?', a: 'The FPL is a federal measure used to determine eligibility for many programs. In 2025, 100% FPL is approximately $15,650/year for a single person ($32,150 for a family of four). Programs like Medicaid and ACA subsidies use this threshold.' },
+              { q: 'What is the Federal Poverty Level (FPL)?', a: 'The FPL is a federal measure used to determine eligibility for many programs. In 2026, 100% FPL is $15,960 a year for one person and $33,000 for a family of four in the 48 contiguous states and DC (higher in Alaska and Hawaii). Programs like Medicaid and ACA subsidies use this threshold.' },
               { q: 'I got results but don\'t know how to apply — what next?', a: 'Each result includes a direct link to apply or learn more. For free clinics, you can use the Clinic Finder to locate one near you — no referral or insurance needed.' },
               { q: 'Can immigrants use these programs?', a: 'It depends on the program and immigration status. HRSA-funded free clinics serve everyone regardless of status. Medicaid eligibility varies by state and status. Emergency Medicaid is available in all states. AXVO shows you what applies.' },
             ].map((item, i) => (

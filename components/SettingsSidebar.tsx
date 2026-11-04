@@ -658,7 +658,7 @@ export default function SettingsSidebar() {
               }}>
                 <ShieldTick size={14} color="rgba(74,217,144,0.6)" variant="TwoTone" style={{ flexShrink: 0, marginTop: '2px' }} />
                 <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.32)', fontFamily: 'var(--font-inter)', lineHeight: 1.65, margin: 0 }}>
-                  AXVO never sells your data. We are an open-source, non-profit platform built for the uninsured.
+                  AXVO never sells your data. It is a free, open-source project built for the uninsured.
                 </p>
               </div>
             </>

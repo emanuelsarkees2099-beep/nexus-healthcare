@@ -94,12 +94,12 @@ export default function MethodologyPage() {
     <AppShell>
       {/* ── Hero ── */}
       <section style={{ padding: '100px 24px 60px', maxWidth: '860px', margin: '0 auto' }}>
-        <span style={pill}>Methodology · v2.0 · April 2026</span>
+        <span style={pill}>Methodology · v2.1 · November 2026</span>
         <h1 style={{ fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '20px' }}>
           How AXVO finds, scores, and ranks free healthcare
         </h1>
         <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, maxWidth: '640px' }}>
-          A transparent, academic-quality account of the data sources, scoring models, deduplication logic, and quality safeguards that power the AXVO clinic finder. No black boxes.
+          A plain-language account of where AXVO’s clinic data comes from, how results are scored and ordered, and the known limits of the approach.
         </p>
       </section>
 
@@ -134,34 +134,26 @@ export default function MethodologyPage() {
         <span style={{ ...pill, marginBottom: '12px' }}>Section 1</span>
         <h2 style={h2}>Data Sources &amp; Collection Pipeline</h2>
         <p style={p}>
-          AXVO aggregates healthcare facility data from four independent sources, ordered by authority and verification level. Each source covers a distinct population of clinics that the others miss.
+          AXVO combines public healthcare facility data from several sources. A large imported dataset covers most searches; live sources fill gaps in areas where that dataset has few results.
         </p>
 
-        <h3 style={h3}>1.1 HRSA Health Center Finder (Primary)</h3>
+        <h3 style={h3}>1.1 HRSA Health Center Sites (Primary)</h3>
         <p style={p}>
-          The Health Resources and Services Administration (HRSA) maintains a database of all federally qualified health centers (FQHCs) — the approximately 1,400 HRSA-designated grantees operating 14,000+ delivery sites across the United States. FQHCs are legally required under Section 330 of the Public Health Service Act to provide care on a sliding-fee scale regardless of a patient's ability to pay, and cannot turn away any patient for inability to pay.
+          The Health Resources and Services Administration (HRSA) publishes a public data file listing every HRSA-funded health center and look-alike service delivery site in the U.S., with addresses and coordinates. AXVO imports that file into its own database (about 18,900 active sites) and searches it by distance. Roughly 1,400 health center organizations operate these sites.
         </p>
         <div style={callout}>
-          <strong style={{ color: 'rgba(255,255,255,0.75)' }}>Legal foundation:</strong> Under 42 U.S.C. § 254b and 42 CFR Part 51c, all HRSA-funded health centers must offer a sliding-fee discount program. Patient fees are capped at a percentage of the Federal Poverty Level (FPL). Patients below 100% FPL typically pay $0.
+          <strong style={{ color: 'rgba(255,255,255,0.75)' }}>Legal foundation:</strong> Under Section 330 of the Public Health Service Act (42 U.S.C. § 254b) and HRSA program requirements, HRSA-funded health centers must serve patients regardless of ability to pay and offer a sliding fee discount based on income. Patients at or below 100% of the Federal Poverty Level receive a full discount or pay only a nominal fee.
         </div>
         <p style={p}>
-          We query the HRSA API sequentially against three known endpoint variants (the HRSA API has changed endpoints across versions) and parse all known response shapes:
-        </p>
-        <ul style={{ ...p, paddingLeft: '20px' }}>
-          <li style={{ marginBottom: '8px' }}><span style={code}>findahealthcenter.hrsa.gov/api/v1/healthcenter/FindHealthCenters</span></li>
-          <li style={{ marginBottom: '8px' }}><span style={code}>findahealthcenter.hrsa.gov/api/v1.0/FindHealthCenters</span></li>
-          <li style={{ marginBottom: '8px' }}><span style={code}>findahealthcenter.hrsa.gov/api/HealthCenterFinder/FindHealthCenters</span></li>
-        </ul>
-        <p style={p}>
-          HRSA results are assigned an affordability score of 95/100 and are always ranked before supplementary sources. Response caching is set to 1 hour (3,600 seconds) via Next.js ISR.
+          HRSA sites receive an affordability score of 95/100. Search results are cached for up to 1 hour.
         </p>
 
         <h3 style={h3}>1.2 NAFC Member Clinics (Secondary)</h3>
         <p style={p}>
-          The National Association of Free &amp; Charitable Clinics (NAFC) represents 1,200+ volunteer-run free clinics that are <em>not</em> federally qualified — meaning they do not appear in HRSA's database. These clinics charge $0 to patients and operate on donations and volunteer labor. They fill a critical gap for patients in rural areas and underserved urban neighborhoods.
+          The National Association of Free &amp; Charitable Clinics (NAFC) represents roughly 1,400 free and charitable clinics that are <em>not</em> federally funded health centers, so they do not appear in HRSA's data. They rely largely on volunteers and donations and charge little or nothing.
         </p>
         <p style={p}>
-          AXVO maintains a curated static database of 130+ verified NAFC member clinics compiled from the NAFC member directory, individual clinic websites, and Google Places verification. Each entry is manually reviewed for accuracy. This database is stored in <span style={code}>lib/nafc-clinics.ts</span> and queried in-memory using a Haversine distance calculation — zero latency, zero API dependency.
+          AXVO includes a hand-compiled list of nearly 300 free and charitable clinics drawn from the NAFC directory and individual clinic websites. It is stored in <span style={code}>lib/nafc-clinics.ts</span> and searched in memory by distance. Because it is compiled by hand, some entries may be out of date.
         </p>
         <p style={p}>
           NAFC clinics receive an affordability score of 90/100. They are labeled "FREE CLINIC" in the UI to distinguish them from FQHCs.
@@ -172,7 +164,7 @@ export default function MethodologyPage() {
           OpenStreetMap (OSM) provides crowd-sourced location data for healthcare facilities. We query the Overpass API for nodes and ways tagged with <span style={code}>amenity=clinic</span>, <span style={code}>amenity=hospital</span>, <span style={code}>healthcare=*</span>, and <span style={code}>social_facility=outreach</span> within a bounding box around the user's location.
         </p>
         <p style={p}>
-          OSM data quality varies significantly. We apply the affordability scoring model (Section 2) to each result and only include OSM clinics with a score ≥ 55/100 in the merged output, ensuring low-confidence results are excluded. OSM results are always ranked after HRSA and NAFC. Response caching is 2 hours (7,200 seconds).
+          OpenStreetMap is only queried when AXVO’s own database has few results for an area. Its data quality varies, so each result is scored with the affordability model (Section 2) and only clinics scoring 55/100 or higher are included.
         </p>
 
         <h3 style={h3}>1.4 Google Places API (Optional Tertiary)</h3>
@@ -180,9 +172,9 @@ export default function MethodologyPage() {
           When a <span style={code}>GOOGLE_PLACES_API_KEY</span> environment variable is configured, AXVO runs a tertiary search against the Google Places Nearby Search API using keywords "free clinic" and "community health center". Results are filtered to affordability score ≥ 45/100 before inclusion. This source is strictly optional and not required for core functionality.
         </p>
 
-        <h3 style={h3}>1.5 State Health Department Directories</h3>
+        <h3 style={h3}>1.5 CMS NPI Registry (Fallback)</h3>
         <p style={p}>
-          For searches in California, Texas, New York, Florida, and Illinois — the five states with the largest uninsured populations — AXVO queries public clinic directories exposed via data.gov and state open-data portals. These are scraped at query time with results cached for 24 hours and filtered by proximity and affordability score.
+          In areas where AXVO’s database is sparse, AXVO also searches the CMS National Plan and Provider Enumeration System (NPI Registry) for organizations registered as Federally Qualified Health Centers, Rural Health Clinics, or mental health clinics.
         </p>
 
         <table style={table}>
@@ -197,11 +189,11 @@ export default function MethodologyPage() {
           </thead>
           <tbody>
             {[
-              ['HRSA FQHC', '14,000+ sites nationwide', '95 / 100', '1 hour', 'Federal (legal guarantee)'],
-              ['NAFC Members', '130+ curated clinics', '90 / 100', 'Static', 'Manually verified'],
-              ['State Depts (5 states)', 'CA, TX, NY, FL, IL', 'Computed', '24 hours', 'State govt open data'],
+              ['HRSA health center sites', '~18,900 sites nationwide', '95 / 100', 'Imported file', 'Federal (HRSA)'],
+              ['NAFC free clinics', 'Nearly 300, hand-compiled', '90 / 100', 'Static', 'NAFC directory & clinic sites'],
+              ['CMS NPI Registry', 'Fallback in sparse areas', 'By facility type', 'Per request', 'Federal (CMS)'],
               ['Google Places', 'Variable (optional)', 'Computed (≥45)', '1 hour', 'Commercial (optional key)'],
-              ['OpenStreetMap', 'Global crowd-sourced', 'Computed (≥55)', '2 hours', 'Community volunteers'],
+              ['OpenStreetMap', 'Fallback in sparse areas', 'Computed (≥55)', '2 hours', 'Community volunteers'],
             ].map(row => (
               <tr key={row[0]}>
                 {row.map((cell, i) => <td key={i} style={td}>{cell}</td>)}
@@ -219,7 +211,7 @@ export default function MethodologyPage() {
           Every non-HRSA clinic is scored on a 0–100 affordability scale. This score determines whether a clinic appears in results, its sort order relative to other clinics, and the label shown in the UI (LIKELY FREE / LOW COST / STANDARD).
         </p>
         <p style={p}>
-          The model begins with a base score of 40 and applies additive and subtractive adjustments based on signals extracted from the clinic name and OpenStreetMap tags. Each signal is derived from published research on how clinic naming conventions correlate with care affordability.
+          The model begins with a base score of 40 and applies additive and subtractive adjustments based on signals extracted from the clinic name and OpenStreetMap tags. The weights are AXVO’s own rules of thumb based on common naming conventions, not a validated research model.
         </p>
 
         <h3 style={h3}>2.1 Name-Based Signals (additive)</h3>
@@ -386,7 +378,7 @@ export default function MethodologyPage() {
           User location input (ZIP code, city name, or address) is geocoded using the Nominatim API (OpenStreetMap's free geocoder, US-constrained). Nominatim returns a latitude/longitude centroid, which is used for:
         </p>
         <ul style={{ ...p, paddingLeft: '20px' }}>
-          <li style={{ marginBottom: '8px' }}>HRSA API queries (ZIP code parameter)</li>
+          <li style={{ marginBottom: '8px' }}>Distance search against AXVO’s imported HRSA data</li>
           <li style={{ marginBottom: '8px' }}>Haversine distance calculation for NAFC and OSM results</li>
           <li style={{ marginBottom: '8px' }}>Overpass API bounding box construction (±1.2× radius in degrees)</li>
           <li style={{ marginBottom: '8px' }}>Map panel centering</li>
@@ -408,7 +400,7 @@ export default function MethodologyPage() {
         <span style={{ ...pill, marginBottom: '12px' }}>Section 6</span>
         <h2 style={h2}>Data Freshness &amp; Quality Assurance</h2>
 
-        <h3 style={h3}>6.1 ISR Caching Tiers</h3>
+        <h3 style={h3}>6.1 How current the data is</h3>
         <table style={table}>
           <thead>
             <tr>
@@ -419,11 +411,11 @@ export default function MethodologyPage() {
           </thead>
           <tbody>
             {[
-              ['HRSA clinic data', '1 hour', 'Balances freshness with HRSA rate limit compliance'],
+              ['HRSA health center sites', 'Imported file', 'Imported from HRSA’s public download; sites that opened or closed since the import may be missing or out of date'],
+              ['Search results', '1 hour', 'Cached briefly to keep searches fast'],
               ['OSM Overpass results', '2 hours', 'OSM changes infrequently; reduces API load'],
               ['Nominatim geocode', '24 hours', 'Addresses rarely change'],
-              ['State health dept APIs', '24 hours', 'State directories update at most weekly'],
-              ['NAFC static database', 'Static (build time)', 'Manually curated; updated with code deploys'],
+              ['NAFC list', 'Static', 'Updated by hand with code changes'],
             ].map(row => (
               <tr key={row[0]}>
                 {row.map((cell, i) => <td key={i} style={td}>{cell}</td>)}
@@ -432,15 +424,17 @@ export default function MethodologyPage() {
           </tbody>
         </table>
 
-        <h3 style={h3}>6.2 Automated Freshness Monitoring</h3>
+        <h3 style={h3}>6.2 Automated checks</h3>
         <p style={p}>
-          Three Vercel Cron jobs run automatically to maintain data quality:
+          Scheduled jobs help catch problems:
         </p>
         <ul style={{ ...p, paddingLeft: '20px' }}>
-          <li style={{ marginBottom: '10px' }}><strong style={{ color: 'rgba(255,255,255,0.7)' }}>Clinic Freshness Bot</strong> (weekly, Sunday 2 AM UTC): Re-validates HRSA availability for the 20 most-searched ZIP codes. Flags any ZIP codes where HRSA returns zero results when historical data suggests there should be clinics nearby.</li>
-          <li style={{ marginBottom: '10px' }}><strong style={{ color: 'rgba(255,255,255,0.7)' }}>Broken Link Checker</strong> (biweekly, Monday 3 AM UTC): Sends HTTP HEAD requests to all external URLs in the platform (program links, NAFC clinic websites, external references). Flags any returning 4xx/5xx or timing out.</li>
-          <li style={{ marginBottom: '10px' }}><strong style={{ color: 'rgba(255,255,255,0.7)' }}>Weekly Impact Digest</strong> (weekly, Monday 8 AM UTC): Compiles aggregate usage metrics (searches, outcomes logged, new users) into an email digest sent via Resend.</li>
+          <li style={{ marginBottom: '10px' }}><strong style={{ color: 'rgba(255,255,255,0.7)' }}>Broken link checker</strong> (weekly): requests the external links used across the site and flags any that return errors or time out.</li>
+          <li style={{ marginBottom: '10px' }}><strong style={{ color: 'rgba(255,255,255,0.7)' }}>Weekly summary</strong> (weekly): emails the AXVO team a summary of new accounts and outcome reports.</li>
         </ul>
+        <p style={p}>
+          Users can also report wrong information from any clinic page, and those reports are reviewed by hand.
+        </p>
       </section>
 
       {/* ── Section 7: Privacy ── */}
@@ -450,10 +444,10 @@ export default function MethodologyPage() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px', marginBottom: '28px' }}>
           {[
-            { title: 'No PHI stored', desc: 'AXVO never collects, stores, or transmits Protected Health Information. Search queries are not logged to any database. ZIP codes in localStorage are stored only on the user\'s own device.', color: '#60a5fa' },
-            { title: 'Outcome data is opt-in', desc: 'The outcome logging feature is entirely voluntary. When a user logs an outcome (e.g. "I visited a clinic"), only the event type and optionally ZIP code are stored — no names, dates of birth, diagnosis, or insurance information.', color: '#60a5fa' },
-            { title: 'No tracking pixels', desc: 'AXVO does not use advertising trackers, cross-site cookies, or third-party analytics. Vercel Speed Insights is used for performance measurement only and does not expose individual user data.', color: '#a78bfa' },
-            { title: 'IRB-adjacent posture', desc: 'All data collection is designed to comply with the spirit of IRB minimal-risk standards: data is anonymized, consent is explicit, and collection is proportionate to the research question.', color: '#fbbf24' },
+            { title: 'Minimal health data', desc: 'Search queries are not saved to AXVO\'s database, and the eligibility checker runs entirely in the browser. Text typed into the symptom guide or AI chat is sent to an AI provider to generate a response and is not stored by AXVO.', color: '#60a5fa' },
+            { title: 'Outcome reports are opt-in', desc: 'Logging an outcome is voluntary. A report stores the type of care, a 1–5 rating, and an optional note — no name, date of birth, or insurance information is required.', color: '#60a5fa' },
+            { title: 'No advertising trackers', desc: 'AXVO uses no ad networks or tracking pixels. Google Analytics and PostHog load only if a visitor accepts analytics on the cookie banner; Vercel Web Analytics is cookieless.', color: '#a78bfa' },
+            { title: 'Clear consent', desc: 'Stories are only published with explicit consent, and anyone can ask for their submissions to be deleted. The Privacy Policy lists every outside service AXVO uses.', color: '#fbbf24' },
           ].map(item => (
             <div key={item.title} style={{ background: `${item.color}08`, border: `1px solid ${item.color}20`, borderRadius: '14px', padding: '20px' }}>
               <div style={{ fontSize: '13px', fontWeight: 600, color: item.color, marginBottom: '8px' }}>{item.title}</div>
@@ -471,10 +465,10 @@ export default function MethodologyPage() {
           We document known limitations transparently. Users and researchers should be aware of the following:
         </p>
         <ul style={{ ...p, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          <li><strong style={{ color: 'rgba(255,255,255,0.7)' }}>HRSA API reliability:</strong> The HRSA Find a Health Center API has experienced intermittent outages and endpoint changes. AXVO tries three known endpoint variants but cannot guarantee availability. In HRSA outage conditions, the platform falls back to NAFC and OSM data.</li>
+          <li><strong style={{ color: 'rgba(255,255,255,0.7)' }}>Imported data can lag:</strong> AXVO’s health center list comes from an imported HRSA file, so sites that opened, moved, or closed since the last import may be missing or out of date.</li>
           <li><strong style={{ color: 'rgba(255,255,255,0.7)' }}>Rural gaps:</strong> In counties with no HRSA grantee, FQHC look-alike, or NAFC member clinic within 25 miles, AXVO returns OSM results that may include non-free clinics. The affordability score attempts to filter these, but false positives are possible.</li>
           <li><strong style={{ color: 'rgba(255,255,255,0.7)' }}>Hours and availability:</strong> Clinic hours change frequently. While the platform displays hours when available from HRSA or OSM tags, these may be stale. Users should always call ahead to confirm hours and appointment availability.</li>
-          <li><strong style={{ color: 'rgba(255,255,255,0.7)' }}>NAFC completeness:</strong> The static NAFC database includes 130+ manually verified entries out of 1,200+ NAFC members. Clinics not in this database may still exist in users' areas. The NAFC member locator at nafc.org is recommended as a supplementary resource.</li>
+          <li><strong style={{ color: 'rgba(255,255,255,0.7)' }}>Free clinic coverage:</strong> AXVO’s hand-compiled list includes nearly 300 of the roughly 1,400 free and charitable clinics in the U.S. The NAFC’s own clinic locator at nafcclinics.org is a good second search.</li>
           <li><strong style={{ color: 'rgba(255,255,255,0.7)' }}>Name-based affordability scoring:</strong> The scoring model is heuristic-based. A clinic named "Eastside Medical Center" with no affordability signals would score 40/100 (STANDARD) even if it is FQHC-affiliated. Scores should be interpreted as affordability probability indicators, not guarantees.</li>
           <li><strong style={{ color: 'rgba(255,255,255,0.7)' }}>Specialty classification accuracy:</strong> Specialty detection is name-pattern-based only. A community health center that offers dental care but does not include "dental" in its name will not surface in dental-filtered searches.</li>
         </ul>

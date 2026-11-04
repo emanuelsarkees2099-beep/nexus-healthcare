@@ -183,7 +183,7 @@ export default function Footer() {
                 fontSize: '11px', color: 'var(--text-3)',
                 fontFamily: 'var(--font-inter)', fontWeight: 400,
               }}>
-                Built for the 30M uninsured in America
+                Built for the 27M uninsured in America
               </span>
             </div>
           </div>

@@ -4,8 +4,8 @@ import { Home2, SearchNormal1, ReceiptText, ShieldTick, Setting2, Lock1 } from '
 
 /* Interactive 3D product mockup — a browser window showing the AXVO
    dashboard that tilts toward the cursor. Content uses the platform's real
-   facts (18,900+ clinics, 40+ programs, $0) and the same illustrative clinic
-   names used elsewhere — no invented usage/traction metrics. */
+   facts (18,900+ clinic sites, 8 programs, $0) and the same illustrative clinic
+   names used elsewhere — no invented usage/traction metrics or live statuses. */
 
 const NAV = [
   { label: 'Home',         icon: Home2,        active: true },
@@ -17,14 +17,14 @@ const NAV = [
 
 const STATS = [
   { value: '18,900+', label: 'Clinics indexed', delta: 'HRSA · NAFC · NPI' },
-  { value: '40+',     label: 'Programs checked', delta: 'Medicaid · ACA · HRSA' },
+  { value: '8',       label: 'Programs checked', delta: 'Medicaid · CHIP · ACA' },
   { value: '$0',      label: 'Always free',      delta: 'No account needed' },
 ]
 
 const CLINICS = [
-  { init: 'CA', name: 'Clinica Adelante',      meta: '1.2 mi · ~20 min', status: 'Open', open: true },
-  { init: 'VS', name: 'Valle del Sol Health',  meta: '2.8 mi · ~45 min', status: 'Busy', open: false },
-  { init: 'MP', name: 'Mountain Park Health',  meta: '4.1 mi · ~15 min', status: 'Open', open: true },
+  { init: 'CA', name: 'Clinica Adelante',      meta: 'FQHC · sliding scale', status: 'Call ahead', open: true },
+  { init: 'VS', name: 'Valle del Sol Health',  meta: 'FQHC · sliding scale', status: 'Call ahead', open: true },
+  { init: 'MP', name: 'Mountain Park Health',  meta: 'FQHC · sliding scale', status: 'Call ahead', open: true },
 ]
 
 export default function ProductMockup() {

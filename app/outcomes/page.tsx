@@ -1,9 +1,7 @@
 ﻿'use client'
 import { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
-import { smoothScrollTo } from '@/utils/smoothScroll'
-import { Chart2, TrendUp, Book1, Star1, ArrowRight, MagicStar, Profile2User, Clock, DollarCircle, ArrowRight2 } from 'iconsax-react'
-import { useLiveStats } from '@/hooks/useLiveStats'
+import { Chart2, Book1, Star1, MagicStar, ArrowRight2 } from 'iconsax-react'
 import { submitForm } from '@/utils/submitForm'
 
 /* ─── reveal hook ─────────────────────────────────── */
@@ -32,132 +30,39 @@ function RevealBlock({ children, delay = 0 }: { children: React.ReactNode; delay
   )
 }
 
-/* ─── animated counter ────────────────────────────── */
-function Counter({ value, prefix = '', suffix = '', decimals = 0 }: {
-  value: number; prefix?: string; suffix?: string; decimals?: number
-}) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const started = useRef(false)
-  const { ref: wrapRef, visible } = useReveal(0.3)
-
-  useEffect(() => {
-    if (!visible || started.current) return
-    started.current = true
-    const el = ref.current; if (!el) return
-    let start: number | null = null
-    const duration = 2000
-    const step = (ts: number) => {
-      if (!start) start = ts
-      const p = Math.min((ts - start) / duration, 1)
-      const eased = 1 - Math.pow(1 - p, 4)
-      const v = eased * value
-      el.textContent = prefix + (decimals > 0 ? v.toFixed(decimals) : Math.floor(v).toLocaleString()) + suffix
-      if (p < 1) requestAnimationFrame(step)
-    }
-    requestAnimationFrame(step)
-  }, [visible, value, prefix, suffix, decimals])
-
-  return (
-    <div ref={wrapRef}>
-      <span ref={ref}>{prefix}0{suffix}</span>
-    </div>
-  )
-}
-
-/* ─── bar chart ───────────────────────────────────── */
-function BarChart({ data }: { data: { month: string; value: number; max: number }[] }) {
-  const { ref, visible } = useReveal(0.2)
-  return (
-    <div ref={ref} style={{ display: 'flex', gap: '12px', alignItems: 'flex-end', height: '140px' }}>
-      {data.map((d, i) => (
-        <div key={d.month} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-          <div style={{ width: '100%', background: 'rgba(255,255,255,0.04)', borderRadius: '6px 6px 0 0', overflow: 'hidden', height: '120px', display: 'flex', alignItems: 'flex-end' }}>
-            <div style={{
-              width: '100%',
-              height: visible ? `${(d.value / d.max) * 100}%` : '0%',
-              background: `linear-gradient(180deg, var(--accent) 0%, rgba(74,144,217,0.4) 100%)`,
-              borderRadius: '4px 4px 0 0',
-              transition: `height 0.9s cubic-bezier(0.16,1,0.3,1) ${i * 80}ms`,
-            }} />
-          </div>
-          <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>{d.month}</span>
-        </div>
-      ))}
-    </div>
-  )
-}
-
 /* ─── data ────────────────────────────────────────── */
-// Pre-launch: AXVO has no real usage metrics yet. These are 0 fallbacks
-// so the page never shows invented platform numbers. When live outcome
-// tracking exists, /api/outcomes populates real values over these.
-const BASELINES: Record<string, number> = {
-  total:        0,
-  users:        0,
-  resolved:     0,
-  recent30Days: 0,
-}
-
-const HERO_STATS_STATIC = [
-  { key: 'total',    prefix: '',  suffix: '',  decimals: 0, label: 'Total cases submitted',  icon: <Chart2 size={15} variant="Linear" />, fallback: 0 },
-  { key: 'users',    prefix: '',  suffix: '',  decimals: 0, label: 'People served',          icon: <Profile2User size={15} variant="Linear" />,    fallback: 0 },
-  { key: 'resolved', prefix: '',  suffix: '',  decimals: 0, label: 'Cases resolved',         icon: <TrendUp size={15} variant="Linear" />, fallback: 0 },
-]
-
-// Pre-launch: no real monthly volume yet. Flat until live data exists —
-// never a fabricated growth curve.
-const CHART_DATA = [
-  { month: 'Jan', value: 0, max: 12000 },
-  { month: 'Feb', value: 0, max: 12000 },
-  { month: 'Mar', value: 0, max: 12000 },
-  { month: 'Apr', value: 0, max: 12000 },
-  { month: 'May', value: 0, max: 12000 },
-  { month: 'Jun', value: 0, max: 12000 },
-]
-
-/* Evidence base — real, publicly documented facts about the US care
-   landscape, attributed to their source category. NOT AXVO-specific
-   study results (we have none yet); presenting invented studies
-   attributed to real universities would be fabrication. */
+/* Public, sourced facts about the problem AXVO works on. These are not
+   AXVO results — AXVO does not have outcome data of its own yet. */
 const RESEARCH = [
   {
-    institution: 'HRSA — Health Center Program',
-    date: 'Federal program data',
-    headline: 'Community health centers serve over 30 million patients a year',
-    method: 'Federally Qualified Health Centers are required to provide care on a sliding scale regardless of insurance status or ability to pay.',
+    institution: 'U.S. Census Bureau',
+    date: '2025 data, published 2026',
+    headline: '26.7 million people in the U.S. (7.9%) had no health insurance for all of 2025',
+    method: 'Many of them qualify for Medicaid, CHIP, or subsidized Marketplace coverage but are not enrolled.',
     color: 'var(--accent)',
   },
   {
-    institution: 'KFF — Uninsured population',
-    date: 'Ongoing tracking',
-    headline: 'About 26 million Americans are uninsured',
-    method: 'Many who qualify for Medicaid or subsidized coverage remain unenrolled — often unaware they are eligible.',
+    institution: 'HRSA — Health Center Program',
+    date: 'Uniform Data System',
+    headline: 'Community health centers serve more than 30 million patients a year',
+    method: 'HRSA-funded health centers must offer a sliding fee scale and cannot turn patients away because they are unable to pay.',
     color: '#8ab5bc',
   },
   {
-    institution: 'CFPB — Medical debt',
-    date: 'Consumer research',
-    headline: 'Roughly 100 million Americans carry some form of medical debt',
-    method: 'Connecting people to free and sliding-scale care upstream helps prevent avoidable medical debt before it starts.',
+    institution: 'KFF — Health Care Debt Survey',
+    date: '2022',
+    headline: 'About 100 million people in the U.S. carry some form of health care debt',
+    method: 'Finding free and sliding-scale care before a bill arrives is one way to avoid that debt.',
     color: '#5a8a90',
   },
 ]
 
-/* Illustrative care pathways — how AXVO routes common needs. Written
-   as scenarios, not attributed to real individuals. */
-const TESTIMONIALS = [
-  { name: 'Pediatric visit', loc: '$0 at an FQHC', quote: 'A parent unsure they could afford a child\'s checkup is routed to a nearby FQHC that must see them regardless of ability to pay — often at no cost.', care: 'Pediatrics' },
-  { name: 'Mental health', loc: 'Language-matched', quote: 'Someone searching for therapy can filter to clinics offering care in their language, with sliding-scale fees for the uninsured.', care: 'Mental health' },
-  { name: 'Prescriptions', loc: 'Assistance programs', quote: 'The program match surfaces patient-assistance plans and discounts that can cut prescription costs by up to 90%.', care: 'Prescriptions' },
-]
-
-const CARE_BREAKDOWN = [
-  { label: 'Primary care',   pct: 38, color: 'var(--accent)' },
-  { label: 'Mental health',  pct: 22, color: '#5a8a90' },
-  { label: 'Dental',         pct: 16, color: '#8ab5bc' },
-  { label: 'Prescriptions',  pct: 13, color: '#3d7a82' },
-  { label: 'Specialist',     pct:  7, color: '#2d6a72' },
-  { label: 'Telehealth',     pct:  4, color: '#1d5a62' },
+/* What a logged outcome records — shown so visitors know exactly what
+   is collected before they submit. */
+const WHAT_WE_TRACK = [
+  { title: 'Type of care', body: 'Primary care, dental, mental health, specialist, prescriptions, or telehealth.' },
+  { title: 'How it went', body: 'A 1–5 rating of the overall experience.' },
+  { title: 'What happened', body: 'An optional note on what was resolved or what got in the way. No name or contact info is required.' },
 ]
 
 /* ─── outcome log form ────────────────────────────── */
@@ -176,7 +81,7 @@ function OutcomeForm() {
         <Star1 size={20} variant="Linear" />
       </div>
       <p style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px' }}>Thank you for logging your outcome</p>
-      <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.38)' }}>Your feedback directly improves matches for the next person.</p>
+      <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.38)' }}>Every report is read and used to correct or improve clinic listings.</p>
     </div>
   )
 
@@ -231,7 +136,7 @@ function OutcomeForm() {
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             rows={3}
-            placeholder="e.g. The clinic resolved my chest pain, was seen within 20 minutes…"
+            placeholder="e.g. The clinic saw me the same week and charged on a sliding scale…"
             style={{
               width: '100%', display: 'block', background: focused ? 'rgba(13,11,30,0.97)' : 'rgba(13,11,30,0.85)',
               border: 'none', outline: 'none', borderRadius: '10.5px', padding: '13px 15px',
@@ -270,8 +175,6 @@ function OutcomeForm() {
 
 /* ─── page ────────────────────────────────────────── */
 export default function OutcomesPage() {
-  const { stats } = useLiveStats()
-
   const pill: React.CSSProperties = {
     display: 'inline-flex', alignItems: 'center', gap: '6px',
     padding: '4px 12px', borderRadius: '100px',
@@ -285,120 +188,45 @@ export default function OutcomesPage() {
 
   return (
     <AppShell>
-      <style>{`
-        @media (max-width: 768px) {
-          .outcomes-hero-grid { grid-template-columns: repeat(2, 1fr) !important; }
-          .outcomes-split { grid-template-columns: 1fr !important; gap: 24px !important; }
-        }
-        @media (max-width: 480px) {
-          .outcomes-hero-grid { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
-
       {/* ── HERO ─────────────────────────────────────── */}
-      <section style={{ minHeight: '85dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '80px 24px 60px', position: 'relative' }}>
-        <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: '700px', height: '400px', background: 'radial-gradient(ellipse, rgba(74,144,217,0.10) 0%, transparent 70%)', pointerEvents: 'none' }} />
+      <section style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '120px 24px 72px', position: 'relative' }}>
+        <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: '700px', maxWidth: '100%', height: '400px', background: 'radial-gradient(ellipse, rgba(74,144,217,0.10) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
-        <div style={{ maxWidth: '740px', position: 'relative' }}>
+        <div style={{ maxWidth: '680px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}>
             <span style={pill}><Chart2 size={14} variant="Linear" style={{ flexShrink: 0 }} /> Health outcomes</span>
           </div>
-          <h1 style={{ fontSize: 'clamp(40px, 7vw, 78px)', fontWeight: 700, lineHeight: 1.08, letterSpacing: '-0.03em', marginBottom: '22px' }}>
-            Real results.<br />Real people.
+          <h1 style={{ fontSize: 'clamp(36px, 6vw, 64px)', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.03em', marginBottom: '22px' }}>
+            Did AXVO help you get care?
           </h1>
-          <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: '520px', margin: '0 auto 56px' }}>
-            Every number here is a logged outcome from a real AXVO user. No estimates, no projections — just what actually happened.
+          <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, margin: '0 auto 32px' }}>
+            AXVO launched in 2026, and outcome tracking is just getting started. We won&apos;t publish results until there
+            are enough real reports to mean something. When there are, they&apos;ll appear here along with how they were counted.
           </p>
-
-          {/* hero stats grid */}
-          <div className="outcomes-hero-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', maxWidth: '680px', margin: '0 auto' }}>
-            {HERO_STATS_STATIC.map((s, i) => {
-              const live = (stats[s.key as keyof typeof stats] as number) ?? s.fallback
-              const liveValue = (BASELINES[s.key] ?? 0) + live
-              return (
-                <div key={s.label} style={{ ...card, textAlign: 'left', padding: '22px', animation: `fadeUp 0.65s cubic-bezier(0.16,1,0.3,1) ${i * 90}ms both` }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent)', marginBottom: '12px', opacity: 0.7 }}>{s.icon}</div>
-                  <div style={{ fontSize: 'clamp(28px, 4vw, 36px)', fontWeight: 700, letterSpacing: '-0.025em', color: 'var(--text)', lineHeight: 1 }}>
-                    <Counter value={liveValue} prefix={s.prefix} suffix={s.suffix} decimals={s.decimals} />
-                  </div>
-                  <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.38)', marginTop: '6px', lineHeight: 1.4 }}>{s.label}</div>
-                </div>
-              )
-            })}
-          </div>
+          <a href="#log" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '15px', color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>
+            Log your outcome <ArrowRight2 size={14} variant="Linear" />
+          </a>
         </div>
       </section>
 
-      {/* ── GROWTH CHART ─────────────────────────────── */}
-      <section style={{ padding: '80px 24px' }}>
-        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-          <RevealBlock>
-            <div className="outcomes-split" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center' }}>
-              <div>
-                <span style={pill}><TrendUp size={14} variant="Linear" /> Growth</span>
-                <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', marginBottom: '16px', lineHeight: 1.15 }}>
-                  Users accessing care, month by month
-                </h2>
-                <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65 }}>
-                  From 3,200 in January to 11,800 in June — each bar represents people who found care through AXVO and logged their outcome.
-                </p>
-                <div style={{ display: 'flex', gap: '24px', marginTop: '28px' }}>
-                  <div>
-                    <div style={{ fontSize: '28px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.02em' }}>3.7×</div>
-                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '4px' }}>growth in 6 months</div>
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '28px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.02em' }}>42K+</div>
-                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '4px' }}>total outcomes logged</div>
-                  </div>
-                </div>
-              </div>
-              <div style={{ ...card }}>
-                <BarChart data={CHART_DATA} />
-                <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)' }}>Users accessing care</span>
-                  <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)' }}>Jan – Jun 2025</span>
-                </div>
-              </div>
-            </div>
-          </RevealBlock>
-        </div>
-      </section>
-
-      {/* ── CARE BREAKDOWN ───────────────────────────── */}
+      {/* ── WHAT WE TRACK ────────────────────────────── */}
       <section style={{ padding: '0 24px 80px' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
-            <div className="outcomes-split" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center' }}>
-              <div style={{ ...card }}>
-                <h3 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '24px', color: 'rgba(255,255,255,0.7)' }}>Care type breakdown</h3>
-                {CARE_BREAKDOWN.map((c, i) => (
-                  <div key={c.label} style={{ marginBottom: '14px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                      <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)' }}>{c.label}</span>
-                      <span style={{ fontSize: '13px', fontWeight: 600, color: c.color }}>{c.pct}%</span>
-                    </div>
-                    <div style={{ height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '100px', overflow: 'hidden' }}>
-                      <BarStat pct={c.pct} color={c.color} delay={i * 80} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div>
-                <span style={pill}><MagicStar size={14} variant="Linear" /> By the numbers</span>
-                <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', marginBottom: '16px', lineHeight: 1.2 }}>
-                  What care are people actually getting?
-                </h2>
-                <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65, marginBottom: '24px' }}>
-                  Primary care leads — but mental health and dental are growing fastest as AXVO surfaces providers people didn't know existed.
-                </p>
-                <a href="#log" onClick={(e) => { e.preventDefault(); const el = document.getElementById('log'); smoothScrollTo(el) }} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: 'var(--accent)', textDecoration: 'none', fontWeight: 500 }}>
-                  Log your own outcome <ArrowRight2 size={13} variant="Linear" />
-                </a>
-              </div>
+            <div style={{ marginBottom: '32px' }}>
+              <span style={pill}><MagicStar size={14} variant="Linear" /> What a report records</span>
             </div>
           </RevealBlock>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
+            {WHAT_WE_TRACK.map((t, i) => (
+              <RevealBlock key={t.title} delay={i * 80}>
+                <div style={{ ...card, height: '100%' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '8px' }}>{t.title}</h3>
+                  <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>{t.body}</p>
+                </div>
+              </RevealBlock>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -409,9 +237,9 @@ export default function OutcomesPage() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '48px', flexWrap: 'wrap', gap: '16px' }}>
               <div>
                 <span style={pill}><Book1 size={14} variant="Linear" /> Research</span>
-                <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>What the data shows</h2>
+                <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Why this matters</h2>
               </div>
-              <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)', maxWidth: '280px', lineHeight: 1.6 }}>Public research on the uninsured and the safety-net clinics that serve them. AXVO doesn&apos;t have outcome studies of its own yet.</p>
+              <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)', maxWidth: '280px', lineHeight: 1.6 }}>Public data on the uninsured and the clinics that serve them. These are not AXVO results.</p>
             </div>
           </RevealBlock>
 
@@ -420,47 +248,9 @@ export default function OutcomesPage() {
               <RevealBlock key={r.institution} delay={i * 80}>
                 <div style={{ borderRadius: '22px', padding: '2px', background: `linear-gradient(135deg, ${r.color}25, transparent)` }}>
                   <div style={{ borderRadius: '21px', padding: '28px 32px', background: 'rgba(10,9,22,0.96)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.04)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px', flexWrap: 'wrap', marginBottom: '14px' }}>
-                      <div>
-                        <div style={{ fontSize: '12px', color: r.color, fontWeight: 600, letterSpacing: '0.04em', marginBottom: '6px' }}>{r.institution} · {r.date}</div>
-                        <h3 style={{ fontSize: 'clamp(15px, 2vw, 18px)', fontWeight: 600, lineHeight: 1.35, color: 'var(--text)', maxWidth: '560px' }}>{r.headline}</h3>
-                      </div>
-                    </div>
+                    <div style={{ fontSize: '12px', color: r.color, fontWeight: 600, letterSpacing: '0.04em', marginBottom: '6px' }}>{r.institution} · {r.date}</div>
+                    <h3 style={{ fontSize: 'clamp(15px, 2vw, 18px)', fontWeight: 600, lineHeight: 1.35, color: 'var(--text)', maxWidth: '620px', marginBottom: '14px' }}>{r.headline}</h3>
                     <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.38)', lineHeight: 1.65, borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '14px' }}>{r.method}</p>
-                  </div>
-                </div>
-              </RevealBlock>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── TESTIMONIALS ─────────────────────────────── */}
-      <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-          <RevealBlock>
-            <div style={{ textAlign: 'center', marginBottom: '52px' }}>
-              <span style={pill}><Star1 size={14} variant="Linear" /> Stories</span>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px' }}>
-                Behind every stat is a person
-              </h2>
-            </div>
-          </RevealBlock>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-            {TESTIMONIALS.map((t, i) => (
-              <RevealBlock key={t.name} delay={i * 90}>
-                <div style={{ ...card, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', gap: '2px', marginBottom: '14px' }}>
-                    {[1,2,3,4,5].map(s => <Star1 key={s} size={13} color="#4A90D9" variant="Bold" aria-hidden="true" />)}
-                  </div>
-                  <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, flexGrow: 1, marginBottom: '20px' }}>"{t.quote}"</p>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div>
-                      <div style={{ fontSize: '14px', fontWeight: 600 }}>{t.name}</div>
-                      <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)' }}>{t.loc}</div>
-                    </div>
-                    <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)' }}>{t.care}</span>
                   </div>
                 </div>
               </RevealBlock>
@@ -474,10 +264,9 @@ export default function OutcomesPage() {
         <div style={{ maxWidth: '600px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ textAlign: 'center', marginBottom: '44px' }}>
-              <span style={pill}><MagicStar size={14} variant="Linear" /> Help others</span>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', marginBottom: '12px' }}>Log your outcome</h2>
+              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginBottom: '12px' }}>Log your outcome</h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65 }}>
-                Your experience improves the AI model for the next person. It takes 60 seconds.
+                Tell us whether the care you found through AXVO worked out. Reports show which listings are useful and which need fixing. It takes about a minute.
               </p>
             </div>
             <div style={{ ...card }}>
@@ -491,13 +280,5 @@ export default function OutcomesPage() {
         @keyframes fadeUp { from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:translateY(0) } }
       `}</style>
     </AppShell>
-  )
-}
-
-/* inline animated bar for care breakdown */
-function BarStat({ pct, color, delay }: { pct: number; color: string; delay: number }) {
-  const { ref, visible } = useReveal(0.2)
-  return (
-    <div ref={ref} style={{ height: '100%', width: visible ? `${pct}%` : '0%', background: color, borderRadius: '100px', transition: `width 1s cubic-bezier(0.16,1,0.3,1) ${delay}ms` }} />
   )
 }

@@ -129,7 +129,7 @@ const ALERTS = [
 const HOW_STEPS = [
   { n: '01', title: 'Answer 5 short questions', body: 'No personal info required. Just income, household size, and what you need.' },
   { n: '02', title: 'Get your matched programs', body: 'We check you against Medicaid, CHIP, ACA subsidies, and other major programs and rank them by match confidence.' },
-  { n: '03', title: 'Apply with guided help', body: 'Each match comes with a direct link and pre-filled form instructions to reduce friction.' },
+  { n: '03', title: 'Apply with guided help', body: 'Each match links to the official application and lists what to bring.' },
 ]
 
 /* ─── savings reveal ──────────────────────────────── */
@@ -309,7 +309,7 @@ function DocumentChecklist() {
               What to gather before you apply
             </h2>
             <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', lineHeight: 1.65, margin: 0, maxWidth: 480 }}>
-              Having these documents ready cuts application time from 2 hours to under 20 minutes.
+              Having these documents ready makes applying faster and helps avoid delays.
             </p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -660,7 +660,7 @@ export default function ProgramsPage() {
             <span style={{ color: 'var(--accent)' }}>on the table.</span>
           </h1>
           <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: '500px', margin: '0 auto 40px' }}>
-            Most uninsured people qualify for 2–4 programs they've never heard of. Answer 5 questions and find out which ones you're owed.
+            Many uninsured people qualify for coverage or assistance they don't know about. Answer 5 questions to see which programs may fit you.
           </p>
           <div style={{ display: 'flex', gap: '24px', justifyContent: 'center', flexWrap: 'wrap' }}>
             {[{ v: String(PROGRAMS_BASE.length), l: 'Programs checked' }, { v: '$0', l: 'Cost to check' }, { v: '2 min', l: 'Time required' }].map(s => (
@@ -910,10 +910,10 @@ export default function ProgramsPage() {
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {[
-                      { step: '01', title: 'Check your state\'s expansion status', body: 'As of 2024, 41 states + DC have expanded Medicaid to adults earning up to 138% FPL (~$20,120/yr single). Find your state:', link: 'https://www.kff.org/medicaid/issue-brief/status-of-state-medicaid-expansion-decisions-interactive-map/', linkLabel: 'KFF State Map →' },
+                      { step: '01', title: 'Check your state\'s expansion status', body: '40 states plus DC have expanded Medicaid to adults earning up to 138% of the federal poverty level (about $22,025 a year for one person in 2026). Find your state:', link: 'https://www.kff.org/medicaid/issue-brief/status-of-state-medicaid-expansion-decisions-interactive-map/', linkLabel: 'KFF State Map →' },
                       { step: '02', title: 'Apply online (15–30 min)', body: 'Most states accept applications year-round at Healthcare.gov or your state Medicaid portal. You\'ll need: ID, proof of income (or self-attest), and proof of residency.', link: 'https://www.healthcare.gov/medicaid-chip/getting-medicaid-chip/', linkLabel: 'Apply on Healthcare.gov →' },
-                      { step: '03', title: 'Presumptive eligibility: get care today', body: 'Many clinics can grant same-day temporary Medicaid coverage (Presumptive Eligibility) while your application processes. Ask your nearest FQHC.', link: '/search', linkLabel: 'Find nearest FQHC →' },
-                      { step: '04', title: 'Coverage is retroactive', body: 'Medicaid coverage typically begins on the first day of the month you applied. Emergency care you received may be retroactively covered up to 3 months prior in some states.' },
+                      { step: '03', title: 'Ask about presumptive eligibility', body: 'Many hospitals, and in some states certain clinics, can grant temporary Medicaid coverage the same day while your full application is processed. Ask the financial counselor.', link: '/search', linkLabel: 'Find a health center →' },
+                      { step: '04', title: 'Apply soon after getting care', body: 'Medicaid can sometimes cover bills from the months before you applied. How far back depends on your state, and federal changes shorten that window starting in 2027, so apply as soon as you can.' },
                     ].map((s) => (
                       <div key={s.step} style={{ display: 'flex', gap: '14px', padding: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px' }}>
                         <span style={{ flexShrink: 0, fontSize: '10px', fontWeight: 700, color: '#60a5fa', letterSpacing: '0.1em', marginTop: '2px', minWidth: '22px' }}>{s.step}</span>
@@ -938,14 +938,14 @@ export default function ProgramsPage() {
                       <DollarCircle size={14} color="#60a5fa" variant="Linear" />
                     </div>
                     <h3 style={{ fontSize: '16px', fontWeight: 600 }}>ACA Marketplace (Healthcare.gov)</h3>
-                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '100px', background: 'rgba(96,165,250,0.08)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.2)' }}>Often $0/month</span>
+                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '100px', background: 'rgba(96,165,250,0.08)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.2)' }}>Subsidies available</span>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {[
-                      { step: '01', title: 'Know your enrollment window', body: 'Open Enrollment: November 1 – January 15 each year. Outside this window, you qualify if you have a Special Enrollment Period (lost job, had a baby, moved, etc.).', link: 'https://www.healthcare.gov/apply-and-enroll/start-enrollment/', linkLabel: 'Check if you qualify for SEP →' },
+                      { step: '01', title: 'Know your enrollment window', body: 'On HealthCare.gov, open enrollment for 2027 coverage runs November 1, 2026 to January 15, 2027. Enroll by December 15 for coverage starting January 1. State-run marketplaces may use different dates. Outside this window you need a Special Enrollment Period (lost coverage, had a baby, moved, etc.).', link: 'https://www.healthcare.gov/apply-and-enroll/start-enrollment/', linkLabel: 'Check if you qualify for SEP →' },
                       { step: '02', title: 'Create your Healthcare.gov account', body: 'Go to healthcare.gov → Create Account. Have your Social Security number, income estimate, and household size ready. The system auto-calculates your subsidy.', link: 'https://www.healthcare.gov', linkLabel: 'Go to Healthcare.gov →' },
                       { step: '03', title: 'Compare plans by total cost, not premium', body: 'A $0/month premium plan with high deductible is often worse than a $30/month plan with a $500 deductible if you need care. Use the "Total Yearly Costs" comparison view.', link: 'https://www.healthcare.gov/choose-a-plan/comparing-plans/', linkLabel: 'Plan comparison guide →' },
-                      { step: '04', title: 'Enhanced subsidies through 2025', body: 'The Inflation Reduction Act extended enhanced ACA subsidies through 2025. If your income is under 150% FPL, you likely qualify for a $0-premium Silver plan with minimal copays.' },
+                      { step: '04', title: 'Know what changed in 2026', body: 'The larger "enhanced" subsidies expired at the end of 2025, so premiums went up for many people. Regular premium tax credits are still available to most people earning 100–400% of the federal poverty level, and HealthCare.gov calculates yours when you apply.' },
                     ].map((s) => (
                       <div key={s.step} style={{ display: 'flex', gap: '14px', padding: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px' }}>
                         <span style={{ flexShrink: 0, fontSize: '10px', fontWeight: 700, color: '#60a5fa', letterSpacing: '0.1em', marginTop: '2px', minWidth: '22px' }}>{s.step}</span>
@@ -967,7 +967,7 @@ export default function ProgramsPage() {
                 <div style={{ padding: '20px', background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.2)', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>Need care right now?</div>
-                    <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.6 }}>FQHCs cannot turn you away regardless of insurance status or ability to pay. Walk in today.</div>
+                    <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.6 }}>Community health centers serve patients regardless of insurance or ability to pay. Call one near you to schedule a visit.</div>
                   </div>
                   <button
                     onClick={() => router.push('/search')}
@@ -1024,20 +1024,20 @@ export default function ProgramsPage() {
             {[
               {
                 name: 'Medicaid', badge: 'Highest impact', badgeColor: '#60a5fa',
-                steps: ['Visit healthcare.gov or your state\'s Medicaid portal', 'Provide proof of income (pay stubs, tax return, or self-attestation)', 'Provide ID and proof of residency', 'Wait 1–45 days for determination', 'Retroactive coverage possible from application date'],
-                tip: 'Many states now have same-day presumptive eligibility — you can be seen at a clinic before approval is final.',
+                steps: ['Visit healthcare.gov or your state\'s Medicaid portal', 'Provide proof of income (pay stubs, tax return, or self-attestation)', 'Provide ID and proof of residency', 'Wait up to 45 days for a decision (longer if disability is involved)', 'Coverage may reach back to bills from before you applied, depending on your state'],
+                tip: 'Ask a hospital financial counselor about presumptive eligibility, which can give you temporary coverage while your application is processed.',
                 timeToApply: '15–30 min online',
               },
               {
-                name: 'HRSA Free Clinics', badge: 'Immediate access', badgeColor: '#6d9197',
-                steps: ['Find your nearest FQHC using the AXVO clinic finder', 'Call or walk in — no appointment required at most locations', 'Bring ID (any form) and proof of income if available', 'Sliding scale fee is calculated on-site, often $0 for low income', 'Dental and mental health often available at same location'],
-                tip: 'FQHCs are legally required to see you regardless of ability to pay. You cannot be turned away.',
-                timeToApply: '5 min to locate, walk-in',
+                name: 'Community Health Centers', badge: 'No insurance needed', badgeColor: '#6d9197',
+                steps: ['Find a nearby health center (FQHC) using the AXVO clinic finder', 'Call to make an appointment; some centers also offer same-day or walk-in visits', 'Bring ID and proof of income if you have them', 'Your fee is set on a sliding scale based on income and household size', 'Many centers also offer dental and behavioral health care'],
+                tip: 'HRSA-funded health centers must serve patients regardless of ability to pay, though some have waitlists for new patients.',
+                timeToApply: 'Call to schedule',
               },
               {
                 name: 'ACA Marketplace Subsidy', badge: 'Open enrollment', badgeColor: '#60a5fa',
-                steps: ['Visit healthcare.gov during open enrollment (Nov 1 – Jan 15)', 'Create an account and enter household info', 'Compare plans — many are $0 premium with subsidies', 'Enroll and receive coverage starting Feb 1', 'Qualifying life events allow enrollment outside open enrollment'],
-                tip: 'If your income is under 150% FPL, you may qualify for zero-premium plans year-round through special enrollment.',
+                steps: ['Visit HealthCare.gov during open enrollment (Nov 1 – Jan 15 for 2027 coverage)', 'Create an account and enter household info', 'Compare plans by total yearly cost, not just the premium', 'Enroll by Dec 15 for coverage starting Jan 1, or by Jan 15 for Feb 1', 'Qualifying life events allow enrollment outside open enrollment'],
+                tip: 'Losing other coverage, moving, or having a baby can open a Special Enrollment Period, so you don\'t have to wait for open enrollment.',
                 timeToApply: '30–60 min online',
               },
             ].map((prog, idx) => (
@@ -1074,42 +1074,6 @@ export default function ProgramsPage() {
 
       {/* ── DOCUMENT CHECKLIST ───────────────────────── */}
       <DocumentChecklist />
-
-      {/* ── WHAT PEOPLE SAY ──────────────────────────── */}
-      <section style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-          <RevealBlock>
-            <div style={{ marginBottom: '56px' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)', marginBottom: '20px' }}><MagicStar size={14} variant="Linear" /> Results</span>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.15, maxWidth: '520px' }}>Programs that actually changed things</h2>
-            </div>
-          </RevealBlock>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
-            {[
-              { name: 'Rosa M.', city: 'El Paso, TX', program: 'Medicaid', saved: '$4,200/year', quote: 'I was paying $340 a month for insulin. Now I pay $3. AXVO found me a Medicaid plan I had no idea I qualified for.' },
-              { name: 'David K.', city: 'Atlanta, GA', program: 'HRSA Clinic', saved: '$0 copay', quote: 'My kids needed vaccines and I had lost my job. The FQHC nearest me saw all three kids the same day. No bill.' },
-              { name: 'Lin C.',  city: 'Los Angeles, CA', program: 'ACA Subsidy', saved: '$290/month', quote: 'I thought healthcare.gov was too complicated. The AXVO guide walked me through every step and now I have coverage for $0 a month.' },
-            ].map((t, i) => (
-              <RevealBlock key={t.name} delay={i * 100}>
-                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(74,144,217,0.15), rgba(74,144,217,0.04))', borderRadius: '20px', height: '100%' }}>
-                  <div style={{ background: '#0d1618', borderRadius: '18px', padding: '28px', height: '100%', boxSizing: 'border-box' }}>
-                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
-                      <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.18)', color: 'var(--accent)' }}>{t.program}</span>
-                      <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.15)', color: '#60a5fa' }}>Saved {t.saved}</span>
-                    </div>
-                    <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, marginBottom: '20px', fontStyle: 'italic' }}>&ldquo;{t.quote}&rdquo;</p>
-                    <div>
-                      <div style={{ fontWeight: 600, fontSize: '14px' }}>{t.name}</div>
-                      <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', marginTop: '2px' }}>{t.city}</div>
-                    </div>
-                  </div>
-                </div>
-              </RevealBlock>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ── PROGRAMS FAQ ─────────────────────────────── */}
       <ProgramsFAQ />

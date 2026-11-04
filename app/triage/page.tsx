@@ -14,7 +14,7 @@ type Step = {
 }
 
 type TriageResult = {
-  urgency: 'routine' | 'soon' | 'urgent' | 'emergency'
+  urgency: 'routine' | 'soon' | 'urgent' | 'emergency' | 'general'
   clinic?: { name: string; dist: string; type: string; cost: string; wait: string } | null
   reasoning: string
   erAlert?: string
@@ -22,65 +22,41 @@ type TriageResult = {
   citations: string[]
 }
 
-/* ── Fallback keyword-matched scenarios (used when AI is unavailable) ── */
-const SCENARIOS: Record<string, { steps: Step[]; result: TriageResult }> = {
-  default: {
-    steps: [
-      { type: 'thinking', text: 'Analyzing symptom description…', delay: 600 },
-      { type: 'checking', text: 'Cross-referencing CDC triage guidelines for respiratory symptoms…', delay: 1400 },
-      { type: 'checking', text: 'Checking your saved location: Phoenix, AZ…', delay: 2200 },
-      { type: 'checking', text: 'Filtering clinics that handle this condition and accept uninsured patients…', delay: 3000 },
-      { type: 'result', text: 'Match found.', delay: 3800 },
-    ],
-    result: {
-      urgency: 'soon',
-      clinic: { name: 'Mountain Park Health Center', dist: '2.1 mi', type: 'FQHC', cost: '$0–$25 sliding scale', wait: 'Walk-in available now' },
-      reasoning: 'Chest discomfort lasting 2 days with a respiratory pattern is most consistent with pleurisy or a musculoskeletal strain. While usually not immediately dangerous, persistent symptoms require evaluation to rule out pneumonia or pleuritis.',
-      erAlert: 'If pain becomes sharp or stabbing, you develop fever above 101°F, or feel short of breath at rest — go to the ER immediately. Banner University Medical Center is 0.6 mi away.',
-      steps: ['Call Mountain Park at (602) 243-7011 to confirm walk-in availability', 'Describe your symptom: "chest discomfort that worsens when I breathe deeply, 2 days"', 'Bring any ID. Tell them you are uninsured — they will work with you on cost.'],
-      citations: ['CDC Clinical Practice Guidelines — Chest Pain Triage (2024)', 'HRSA FQHC Directory — Mountain Park Health Center', 'AAFP: Approach to Chest Wall Pain'],
-    },
-  },
-  headache: {
-    steps: [
-      { type: 'thinking', text: 'Analyzing symptom description…', delay: 600 },
-      { type: 'checking', text: 'Screening for red-flag headache signs (thunder-clap, worst of life, neurological symptoms)…', delay: 1400 },
-      { type: 'checking', text: 'Checking your saved location: Phoenix, AZ…', delay: 2200 },
-      { type: 'checking', text: 'Filtering for primary care & neurology at sliding-scale clinics…', delay: 3000 },
-      { type: 'result', text: 'Match found.', delay: 3800 },
-    ],
-    result: {
-      urgency: 'routine',
-      clinic: { name: 'Terros Health — Central', dist: '1.3 mi', type: 'FQHC', cost: '$0–$40 sliding scale', wait: 'Next-day appointments' },
-      reasoning: 'A persistent headache for 3 days without thunderclap onset, neurological symptoms, or fever suggests a tension-type or migraine headache. These are common and manageable at a primary care clinic.',
-      steps: ['Book a same-day or next-day appointment at Terros Health', 'Note when the headache started, severity (1-10), and what makes it better or worse', 'Mention any over-the-counter medications you have tried'],
-      citations: ['ICHD-3: Headache Classification (IHS, 2023)', 'HRSA FQHC Directory — Terros Health', 'NIH: Tension Headache Overview'],
-    },
-  },
-  emergency: {
-    steps: [
-      { type: 'thinking', text: 'Analyzing symptom description…', delay: 400 },
-      { type: 'warning', text: '! Potential emergency symptom detected — accelerating triage…', delay: 900 },
-      { type: 'checking', text: 'Checking nearest emergency facilities…', delay: 1500 },
-      { type: 'result', text: 'Emergency guidance ready.', delay: 2200 },
-    ],
-    result: {
-      urgency: 'emergency',
-      clinic: { name: 'Banner University Medical Center ER', dist: '0.6 mi', type: 'Emergency Room', cost: 'They must treat you regardless of ability to pay (EMTALA)', wait: 'Go now — do not wait' },
-      reasoning: 'Chest pain with shortness of breath and sweating are classic warning signs of a cardiac event. This combination requires immediate emergency evaluation. Do not drive yourself if possible.',
-      erAlert: 'Call 911 now or have someone drive you to the ER. Do not eat or drink anything until evaluated.',
-      steps: ['Call 911 or have someone drive you to Banner University Medical Center', 'Tell the triage nurse: "I have chest pain with shortness of breath"', 'If you have aspirin available and are not allergic, chew one regular aspirin (325mg)'],
-      citations: ['ACC/AHA 2023 Chest Pain Guideline', 'EMTALA: 42 U.S.C. § 1395dd — Emergency treatment rights', 'AHA: Heart Attack Warning Signs'],
-    },
-  },
+/* ── Fallback when the AI service is unavailable ──
+   Deliberately general: it never pretends to have analyzed the symptoms
+   and never names a specific clinic, since we don't know where the user is. */
+const FALLBACK_EMERGENCY: TriageResult = {
+  urgency: 'emergency',
+  clinic: null,
+  reasoning: 'Some of what you described can be a sign of a medical emergency. Our AI guide is unavailable right now, so please don\'t wait for an online answer.',
+  erAlert: 'Call 911 now or have someone take you to the nearest emergency room. Do not drive yourself if you have chest pain or feel faint.',
+  steps: [
+    'Call 911 or go to the nearest emergency room',
+    'Tell the triage staff exactly what you are feeling and when it started',
+    'Hospitals with emergency departments must screen and stabilize you regardless of insurance or ability to pay',
+  ],
+  citations: ['American Heart Association: Warning Signs of a Heart Attack', 'EMTALA, 42 U.S.C. § 1395dd'],
 }
 
+const FALLBACK_GENERAL: TriageResult = {
+  urgency: 'general',
+  clinic: null,
+  reasoning: 'Our AI symptom guide couldn\'t analyze your description right now, so this is general guidance, not advice about your specific symptoms.',
+  erAlert: 'Call 911 for chest pain, trouble breathing, signs of a stroke, severe bleeding, or a severe allergic reaction. If you are thinking about harming yourself, call or text 988.',
+  steps: [
+    'If your symptoms are severe or getting worse quickly, go to urgent care or an emergency room',
+    'Otherwise, call a community health center near you and describe your symptoms. They can tell you how soon you should be seen',
+    'Use AXVO search to find free and sliding-scale clinics near you',
+  ],
+  citations: [],
+}
 
 const urgencyConfig = {
   routine: { label: 'Routine — within a few days', color: '#60a5fa', bg: 'rgba(96,165,250,0.08)', border: 'rgba(96,165,250,0.25)' },
   soon: { label: 'See care within 24–48 hours', color: '#fbbf24', bg: 'rgba(251,191,36,0.08)', border: 'rgba(251,191,36,0.25)' },
   urgent: { label: 'Urgent — see care today', color: '#fb923c', bg: 'rgba(251,146,60,0.08)', border: 'rgba(251,146,60,0.25)' },
   emergency: { label: 'Emergency — go now', color: '#f87171', bg: 'rgba(248,113,113,0.08)', border: 'rgba(248,113,113,0.35)' },
+  general: { label: 'General guidance — AI guide unavailable', color: 'rgba(255,255,255,0.7)', bg: 'rgba(255,255,255,0.04)', border: 'rgba(255,255,255,0.15)' },
 }
 
 export default function TriagePage() {
@@ -157,24 +133,23 @@ export default function TriagePage() {
       q.includes('emergency') ||
       q.includes('shortness of breath') ||
       (q.includes('chest') && q.includes('sweat'))
-    const isHeadache = !isEmergency && (q.includes('headache') || q.includes('head pain'))
     // Set total steps for the progress counter
     setTotalSteps(isEmergency ? 4 : 5)
 
     // Choose animated step sequence based on symptom urgency
     const STEPS: Step[] = isEmergency
       ? [
-          { type: 'thinking', text: 'Analyzing symptom description…', delay: 400 },
-          { type: 'warning', text: '! Potential emergency symptom detected — accelerating triage…', delay: 900 },
-          { type: 'checking', text: 'Cross-referencing ACC/AHA emergency triage guidelines…', delay: 1500 },
-          { type: 'result', text: 'Emergency guidance ready.', delay: 2200 },
+          { type: 'thinking', text: 'Reading your description…', delay: 400 },
+          { type: 'warning', text: '! Possible emergency symptoms mentioned', delay: 900 },
+          { type: 'checking', text: 'Preparing emergency guidance…', delay: 1500 },
+          { type: 'result', text: 'Guidance ready.', delay: 2200 },
         ]
       : [
-          { type: 'thinking', text: 'Analyzing symptom description…', delay: 500 },
-          { type: 'checking', text: 'Cross-referencing CDC and clinical triage guidelines…', delay: 1300 },
-          { type: 'checking', text: 'Assessing urgency level and appropriate care setting…', delay: 2100 },
-          { type: 'checking', text: 'Identifying free care options for uninsured patients…', delay: 2900 },
-          { type: 'result', text: 'Care pathway identified.', delay: 3600 },
+          { type: 'thinking', text: 'Reading your description…', delay: 500 },
+          { type: 'checking', text: 'Matching symptoms to a level of care…', delay: 1300 },
+          { type: 'checking', text: 'Writing next steps…', delay: 2100 },
+          { type: 'checking', text: 'Adding low-cost care options…', delay: 2900 },
+          { type: 'result', text: 'Done.', delay: 3600 },
         ]
 
     const lastDelay = STEPS[STEPS.length - 1].delay
@@ -222,13 +197,8 @@ export default function TriagePage() {
         } as TriageResult
       })
       .catch(() => {
-        // Keyword-match fallback (API unavailable or key not configured)
-        const scenario = isEmergency
-          ? SCENARIOS.emergency
-          : isHeadache
-          ? SCENARIOS.headache
-          : SCENARIOS.default
-        return scenario.result
+        // AI unavailable — general guidance only, never a fake analysis
+        return isEmergency ? FALLBACK_EMERGENCY : FALLBACK_GENERAL
       })
 
     // Wait for BOTH minimum animation time AND AI response
@@ -362,7 +332,7 @@ export default function TriagePage() {
           fontSize: '15px', color: 'rgba(255,255,255,0.45)',
           maxWidth: '440px', lineHeight: 1.7, margin: '0 auto 48px',
         }}>
-          A structured guide — not a diagnosis. We match your symptoms to general care pathways based on published clinical guidelines, and point you toward a real provider near you.
+          A guide, not a diagnosis. Describe what you're feeling and an AI model suggests what level of care to seek — then AXVO helps you find a low-cost clinic near you.
         </p>
 
         {/* Honest disclaimer banner */}
@@ -375,7 +345,7 @@ export default function TriagePage() {
           <InfoCircle size={14} color="#fbbf24" style={{ flexShrink: 0, marginTop: '1px' }} />
           <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, margin: 0, fontFamily: 'var(--font-inter)' }}>
             <strong style={{ color: 'rgba(251,191,36,0.9)', fontWeight: 600 }}>This is not a medical diagnosis.</strong>{' '}
-            This tool uses AI analysis and published guidelines (CDC, AAFP, AHA) to suggest appropriate care settings. It cannot examine you, review your medical history, or replace a licensed provider. In any emergency, call 911.
+            This tool uses an AI model instructed to follow published clinical guidelines to suggest an appropriate care setting. AI can make mistakes. It cannot examine you, review your medical history, or replace a licensed provider. In any emergency, call 911.
           </p>
         </div>
       </section>
@@ -536,7 +506,7 @@ export default function TriagePage() {
             {/* Disclaimer */}
             <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', textAlign: 'center', lineHeight: 1.6 }}>
               <InfoCircle size={14} color="rgba(255,255,255,0.45)" style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
-              Not a medical diagnosis. This tool helps you find appropriate care — always consult a healthcare professional. Nothing you enter leaves your device to third parties.
+              Not a medical diagnosis. This tool helps you find appropriate care — always consult a healthcare professional. What you type is sent to an AI provider to generate guidance and is not stored by AXVO.
             </p>
           </form>
         )}
@@ -644,7 +614,7 @@ export default function TriagePage() {
                     display: 'flex', alignItems: 'center', gap: '5px',
                   }}>
                     <TickCircle size={14} color="var(--success)" variant="Bold" />
-                    Analysis complete
+                    {isRealAI ? 'Analysis complete' : 'General guidance shown'}
                   </div>
                 </div>
               )}
@@ -733,9 +703,9 @@ export default function TriagePage() {
                     </>
                   ) : (
                     <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.75, marginBottom: '16px' }}>
-                      Based on your symptoms and urgency level, search for free and sliding-scale clinics near you.{' '}
-                      <strong style={{ color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>FQHCs cannot turn you away</strong>{' '}
-                      regardless of insurance status or ability to pay.
+                      Search for free and sliding-scale clinics near you.{' '}
+                      <strong style={{ color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>Community health centers must serve you</strong>{' '}
+                      regardless of insurance or ability to pay.
                     </p>
                   )}
 
@@ -831,7 +801,7 @@ export default function TriagePage() {
                       </div>
                       {isRealAI && (
                         <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '100px', background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.15)', color: 'rgba(74,144,217,0.7)' }}>
-                          Powered by Claude
+                          AI-generated
                         </span>
                       )}
                     </div>

@@ -21,7 +21,8 @@ export default function PostHogProvider() {
     const host = process.env.NEXT_PUBLIC_POSTHOG_HOST ?? 'https://us.i.posthog.com'
     if (!key) return
 
-    import('posthog-js').then(({ default: posthog }) => {
+    // Only runs after the visitor accepts analytics on the cookie banner
+    const init = () => import('posthog-js').then(({ default: posthog }) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if ((posthog as any).__loaded) return
       posthog.init(key, {
@@ -41,6 +42,12 @@ export default function PostHogProvider() {
         },
       })
     })
+
+    let consent: string | null = null
+    try { consent = localStorage.getItem('axvo_cookie_consent') } catch { /* ignore */ }
+    if (consent === 'accepted') { init(); return }
+    window.addEventListener('axvo-consent-accepted', init, { once: true })
+    return () => window.removeEventListener('axvo-consent-accepted', init)
   }, [])
 
   /* ── Page-view on route change ──

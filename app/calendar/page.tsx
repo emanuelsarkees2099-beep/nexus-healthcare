@@ -113,13 +113,13 @@ function buildScreenings(age: string, sex: string, lastCheckup: string, conditio
       screenings.push({ name: 'Pap smear / HPV test', freq: 'Every 3 years (21–65)', lastDone: 'Unknown', due: papStatus === 'due' ? 'Schedule now' : 'Within 1–2 years', status: papStatus, priority: 'high', icon: <Heart size={14} variant="Linear" />, link: '/pathways' })
     }
     if (ageN >= 40) {
-      screenings.push({ name: 'Mammogram', freq: 'Annually (40+)', lastDone: 'Unknown', due: 'Schedule now', status: 'due', priority: 'high', icon: <Heart size={14} variant="Linear" />, link: '/pathways' })
+      screenings.push({ name: 'Mammogram', freq: 'Every 2 years (40–74)', lastDone: 'Unknown', due: 'Schedule now', status: 'due', priority: 'high', icon: <Heart size={14} variant="Linear" />, link: '/pathways' })
     }
   }
 
   // Colorectal — 45+
   if (ageN >= 45) {
-    screenings.push({ name: 'Colorectal cancer screen', freq: 'Every 10 years (colonoscopy)', lastDone: 'Unknown', due: 'Schedule this year', status: 'due', priority: 'high', icon: <Activity size={14} variant="Linear" />, link: '/pathways' })
+    screenings.push({ name: 'Colorectal cancer screen', freq: 'Colonoscopy every 10 years, or a stool test every 1–3 years (45–75)', lastDone: 'Unknown', due: 'Schedule this year', status: 'due', priority: 'high', icon: <Activity size={14} variant="Linear" />, link: '/pathways' })
   }
 
   // Flu vaccine — everyone 6 months+
@@ -135,17 +135,20 @@ function buildScreenings(age: string, sex: string, lastCheckup: string, conditio
   return screenings
 }
 
-const FREE_EVENTS = [
-  { title: 'Community Health Fair', date: 'Sat Apr 19', time: '9am – 2pm', loc: 'Eastlake Community Center', tags: ['Free screenings', 'Flu shots', 'Dental'], badge: 'Free' },
-  { title: 'Women\'s Wellness Day', date: 'Sat Apr 26', time: '10am – 1pm', loc: 'Valle del Sol Health Center', tags: ['Mammograms', 'Pap smears', 'Labs'], badge: 'Free' },
-  { title: 'Diabetes Awareness Clinic', date: 'Thu May 1',  time: '1pm – 5pm',  loc: 'Mountain Park Health', tags: ['A1C test', 'Nutrition consult'], badge: 'Sliding scale' },
-  { title: 'Blood Pressure Sunday', date: 'Sun May 4',  time: '11am – 3pm', loc: 'Phoenix Central Library', tags: ['BP check', 'Cholesterol', 'No appointment'], badge: 'Free' },
+/* Real, nationwide programs that offer free or low-cost screenings.
+   AXVO does not list individual local events because it can't keep
+   their dates and details accurate. */
+const SCREENING_SOURCES = [
+  { title: 'Community health centers', body: 'Checkups, blood pressure and diabetes screening, and cancer screening referrals on a sliding fee scale, whether or not you have insurance.', tags: ['Sliding scale', 'Primary care'], url: '/search', cta: 'Find one near you', external: false },
+  { title: 'CDC breast & cervical cancer screening program', body: 'Free or low-cost mammograms and cervical cancer screening for women with low incomes and little or no insurance, in every state.', tags: ['Mammograms', 'Pap / HPV tests'], url: 'https://www.cdc.gov/breast-cervical-cancer-screening/', cta: 'Find a program (CDC)', external: true },
+  { title: 'Local health departments', body: 'Many offer free or low-cost flu shots, vaccines, and STI testing. Services vary by county.', tags: ['Vaccines', 'STI testing'], url: 'https://www.naccho.org/membership/lhd-directory', cta: 'Health department directory', external: true },
+  { title: 'Vaccines.gov', body: 'The federal locator for flu and COVID-19 vaccines at pharmacies and clinics near you.', tags: ['Flu shot', 'COVID-19'], url: 'https://www.vaccines.gov/', cta: 'Search vaccines.gov', external: true },
 ]
 
 const WHY_ITEMS = [
   { title: 'Tailored to your profile',   body: 'We don\'t give you a generic list. Your age, sex, and history determine exactly what you need and when.' },
-  { title: 'Free clinics only',          body: 'Every appointment we surface is at a free or sliding-scale clinic verified for your zip code.' },
-  { title: 'Reminders that actually work', body: 'Set email or SMS reminders tied to your specific screenings — not generic health tips.' },
+  { title: 'Low-cost places to go',      body: 'Each screening links to free clinics and sliding-scale health centers near you. Call ahead to confirm hours and services.' },
+  { title: 'Reminders in your calendar', body: 'Download your plan as a calendar file and get reminders from the calendar app you already use. Nothing is sent to AXVO.' },
 ]
 
 /* ─── page ────────────────────────────────────────── */
@@ -167,9 +170,8 @@ export default function CalendarPage() {
   const [lastCheckup, setLastCheckup] = useState(saved0?.lastCheckup ?? 'Select')
   const [conditions, setConditions] = useState<string[]>(saved0?.conditions ?? [])
   const [zip, setZip]             = useState(saved0?.zip ?? '')
-  const [remEmail, setRemEmail]   = useState(saved0?.remEmail ?? '')
-  const [remFreq, setRemFreq]     = useState(saved0?.remFreq ?? 'Monthly')
-  const [remSet, setRemSet]       = useState<boolean>(saved0?.remSet ?? false)
+  const [remFreq, setRemFreq]     = useState<string>(saved0?.remFreq === 'Every 3 months' ? 'Every 3 months' : 'Monthly')
+  const [remSet, setRemSet]       = useState(false)
   const timelineRef               = useRef<HTMLDivElement>(null)
   const formRef                   = useRef<HTMLElement>(null)
 
@@ -201,9 +203,45 @@ export default function CalendarPage() {
     setTimeout(() => smoothScrollTo(timelineRef.current), 100)
   }
 
-  function setReminder() {
-    if (!remEmail) return
-    persist({ remEmail, remFreq, remSet: true })
+  /* Builds a standard .ics file with one recurring reminder that lists
+     the screenings currently due or upcoming. Works with Google, Apple,
+     and Outlook calendars, and never leaves the user's device. */
+  function downloadReminder() {
+    const pending = screenings.filter(s => s.status !== 'done')
+    const pad = (n: number) => String(n).padStart(2, '0')
+    const start = new Date()
+    start.setDate(start.getDate() + 1)
+    const day = `${start.getFullYear()}${pad(start.getMonth() + 1)}${pad(start.getDate())}`
+    const end = new Date(start)
+    end.setDate(end.getDate() + 1)
+    const endDay = `${end.getFullYear()}${pad(end.getMonth() + 1)}${pad(end.getDate())}`
+    const now = new Date()
+    const stamp = `${now.getUTCFullYear()}${pad(now.getUTCMonth() + 1)}${pad(now.getUTCDate())}T${pad(now.getUTCHours())}${pad(now.getUTCMinutes())}${pad(now.getUTCSeconds())}Z`
+    const esc = (t: string) => t.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,')
+    const desc = esc(['Screenings to schedule:', ...pending.map(s => `- ${s.name} (${s.freq})`), '', 'Find free and sliding-scale clinics: https://www.axvohealth.com/search'].join('\n')).replace(/\n/g, '\\n')
+    const rrule = remFreq === 'Every 3 months' ? 'FREQ=MONTHLY;INTERVAL=3' : 'FREQ=MONTHLY'
+    const ics = [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//AXVO Health//Screening Plan//EN', 'CALSCALE:GREGORIAN',
+      'BEGIN:VEVENT',
+      `UID:axvo-screening-${stamp}@axvohealth.com`,
+      `DTSTAMP:${stamp}`,
+      `DTSTART;VALUE=DATE:${day}`,
+      `DTEND;VALUE=DATE:${endDay}`,
+      `RRULE:${rrule}`,
+      'SUMMARY:Check your health screenings',
+      `DESCRIPTION:${desc}`,
+      'BEGIN:VALARM', 'TRIGGER:PT9H', 'ACTION:DISPLAY', 'DESCRIPTION:Check your health screenings', 'END:VALARM',
+      'END:VEVENT', 'END:VCALENDAR',
+    ].join('\r\n')
+    const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }))
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'axvo-screening-reminders.ics'
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    URL.revokeObjectURL(url)
+    persist({ remFreq })
     setRemSet(true)
   }
 
@@ -242,7 +280,7 @@ export default function CalendarPage() {
             Most people skip preventive screenings because they don't know what they need or where to go. We fix both.
           </p>
           <div style={{ display: 'flex', gap: '36px', justifyContent: 'center', flexWrap: 'wrap', animation: 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 200ms both' }}>
-            {[{ v: '100%', l: 'Free to use' }, { v: '12K+', l: 'Free clinics indexed' }, { v: '60s', l: 'Setup time' }].map(s => (
+            {[{ v: '100%', l: 'Free to use' }, { v: '18,900+', l: 'Clinic sites indexed' }, { v: '60s', l: 'Setup time' }].map(s => (
               <div key={s.l} style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '28px', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text)' }}>{s.v}</div>
                 <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '4px' }}>{s.l}</div>
@@ -399,39 +437,30 @@ export default function CalendarPage() {
                     <Notification size={15} variant="Linear" />
                   </div>
                   <div>
-                    <h3 style={{ fontSize: '15px', fontWeight: 600 }}>Set up reminders</h3>
-                    <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.38)' }}>We'll remind you when screenings are due.</p>
+                    <h3 style={{ fontSize: '15px', fontWeight: 600 }}>Add reminders to your calendar</h3>
+                    <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.38)' }}>Download a calendar file with a recurring reminder listing your screenings. It opens in Google, Apple, or Outlook Calendar.</p>
                   </div>
                 </div>
 
-                {!remSet ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                    <div className="calendar-week-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                      <Field label="Email">
-                        <InputField value={remEmail} onChange={setRemEmail} placeholder="you@example.com" />
-                      </Field>
-                      <Field label="Frequency">
-                        <SelectField value={remFreq} onChange={setRemFreq} options={['Monthly', 'Quarterly', 'When due only']} />
-                      </Field>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  <Field label="Remind me">
+                    <SelectField value={remFreq} onChange={setRemFreq} options={['Monthly', 'Every 3 months']} />
+                  </Field>
+                  <button
+                    onClick={downloadReminder}
+                    style={{
+                      padding: '13px', borderRadius: '12px', border: 'none', fontFamily: 'inherit', fontSize: '14px', fontWeight: 600,
+                      cursor: 'pointer', background: 'rgba(74,144,217,0.9)', color: '#07070F',
+                      transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
+                    }}
+                  >Download calendar reminder (.ics)</button>
+                  {remSet && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', animation: 'fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both' }}>
+                      <TickCircle size={16} color="#60a5fa" variant="Linear" />
+                      <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)' }}>Downloaded. Open the file to add the reminder to your calendar.</span>
                     </div>
-                    <button
-                      onClick={setReminder}
-                      disabled={!remEmail}
-                      style={{
-                        padding: '13px', borderRadius: '12px', border: 'none', fontFamily: 'inherit', fontSize: '14px', fontWeight: 600,
-                        cursor: remEmail ? 'pointer' : 'not-allowed',
-                        background: remEmail ? 'rgba(74,144,217,0.9)' : 'rgba(255,255,255,0.05)',
-                        color: remEmail ? '#07070F' : 'rgba(255,255,255,0.25)',
-                        transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
-                      }}
-                    >Enable reminders</button>
-                  </div>
-                ) : (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', animation: 'fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both' }}>
-                    <TickCircle size={16} color="#60a5fa" variant="Linear" />
-                    <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)' }}>Reminders set for <strong style={{ color: 'var(--text)' }}>{remEmail}</strong> · {remFreq.toLowerCase()}</span>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </RevealBlock>
           </div>
@@ -444,37 +473,27 @@ export default function CalendarPage() {
           <RevealBlock>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px', flexWrap: 'wrap', gap: '16px' }}>
               <div>
-                <span style={pill}><Location size={14} variant="Linear" /> Near you</span>
-                <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Free screenings this month</h2>
+                <span style={pill}><Location size={14} variant="Linear" /> Where to go</span>
+                <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Free and low-cost screenings</h2>
               </div>
-              <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)', maxWidth: '240px', lineHeight: 1.6 }}>No appointment needed for most of these events.</p>
+              <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)', maxWidth: '260px', lineHeight: 1.6 }}>Nationwide programs that offer screenings regardless of insurance.</p>
             </div>
           </RevealBlock>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '14px' }}>
-            {FREE_EVENTS.map((ev, i) => (
-              <RevealBlock key={ev.title} delay={i * 70}>
-                <div style={{ ...card, display: 'flex', flexDirection: 'column', gap: '14px', height: '100%' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div>
-                      <div style={{ fontWeight: 600, fontSize: '15px', marginBottom: '4px' }}>{ev.title}</div>
-                      <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.38)', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Calendar1 size={11} color="rgba(255,255,255,0.45)" variant="Linear" />{ev.date}</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={11} color="rgba(255,255,255,0.45)" variant="Linear" />{ev.time}</span>
-                      </div>
-                    </div>
-                    <span style={{ fontSize: '11px', padding: '3px 9px', borderRadius: '100px', background: 'rgba(96,165,250,0.1)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.2)', whiteSpace: 'nowrap' }}>{ev.badge}</span>
-                  </div>
-                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    <Location size={11} color="rgba(255,255,255,0.45)" variant="Linear" />{ev.loc}
-                  </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 380px), 1fr))', gap: '14px' }}>
+            {SCREENING_SOURCES.map((src, i) => (
+              <RevealBlock key={src.title} delay={i * 70}>
+                <div style={{ ...card, display: 'flex', flexDirection: 'column', gap: '14px', height: '100%', boxSizing: 'border-box' }}>
+                  <div style={{ fontWeight: 600, fontSize: '15px' }}>{src.title}</div>
+                  <p style={{ fontSize: '13.5px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>{src.body}</p>
                   <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: 'auto' }}>
-                    {ev.tags.map(t => <span key={t} style={{ fontSize: '12px', padding: '3px 9px', borderRadius: '100px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.45)' }}>{t}</span>)}
+                    {src.tags.map(t => <span key={t} style={{ fontSize: '12px', padding: '3px 9px', borderRadius: '100px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.45)' }}>{t}</span>)}
                   </div>
-                  <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '10px', borderRadius: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)', fontSize: '13px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.22s cubic-bezier(0.16,1,0.3,1)' }}
+                  <a href={src.url} {...(src.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '10px', borderRadius: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)', fontSize: '13px', fontWeight: 500, textDecoration: 'none', transition: 'all 0.22s cubic-bezier(0.16,1,0.3,1)' }}
                     onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.09)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
-                  >Get directions <ArrowRight size={12} variant="Linear" /></button>
+                  >{src.cta} <ArrowRight size={12} variant="Linear" /></a>
                 </div>
               </RevealBlock>
             ))}
@@ -491,7 +510,7 @@ export default function CalendarPage() {
                 <div>
                   <span style={pill}><MagicStar size={14} variant="Linear" /> Stay ahead</span>
                   <h2 style={{ fontSize: 'clamp(22px, 3vw, 36px)', fontWeight: 700, letterSpacing: '-0.02em', margin: '16px 0 10px', lineHeight: 1.2 }}>Prevention is the cheapest healthcare</h2>
-                  <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', maxWidth: '420px', lineHeight: 1.65 }}>Most conditions that land people in the ER were preventable with a $0 screening a year earlier. Your plan is ready when you are.</p>
+                  <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.42)', maxWidth: '420px', lineHeight: 1.65 }}>Most insurance plans and Medicaid must cover recommended screenings at no cost to you, and community health centers offer them on a sliding scale if you're uninsured.</p>
                 </div>
                 <button
                   onClick={() => { setStep('form'); setTimeout(() => smoothScrollTo(formRef.current), 50) }}

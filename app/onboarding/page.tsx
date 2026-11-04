@@ -60,14 +60,14 @@ const QUESTIONS: Question[] = [
       {
         value: 'uninsured',
         label: 'I have no health insurance',
-        sub: '30.4 million Americans are in the same situation',
+        sub: 'About 27 million people in the U.S. are in the same situation',
         icon: <Danger size={18} color="currentColor" variant="TwoTone" />,
         insight: 'FQHCs are required by federal law to see you regardless of insurance.',
       },
       {
         value: 'underinsured',
         label: 'My insurance doesn\'t cover enough',
-        sub: '44% of insured adults face the same gap',
+        sub: 'High deductibles and copays leave many insured people struggling too',
         icon: <DocumentText size={18} color="currentColor" variant="TwoTone" />,
         insight: 'Sliding-scale clinics fill coverage gaps — often at $0 for missed services.',
       },

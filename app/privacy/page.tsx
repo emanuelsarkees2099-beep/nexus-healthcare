@@ -18,107 +18,115 @@ const SECTIONS = [
     id: 'what-we-collect',
     icon: <Data size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'What We Collect',
-    content: `AXVO is built on a core principle: we collect the minimum possible data to give you the best results.
+    content: `AXVO is built to collect as little as possible. You can search, check eligibility, and read every page without an account.
 
-When you search for a clinic, we use your city, ZIP code, or coordinates to return nearby results. This location data is used only during your active session and is never stored on our servers.
+Clinic search: we use the city, ZIP code, or coordinates you give us to find nearby clinics. We don't save your searches to our database.
 
-When you use our eligibility screener, your answers (income range, household size, insurance status) are processed in your browser. We do not transmit or store your eligibility quiz responses.
+Eligibility checker: your answers (income range, household size, insurance status) are calculated in your browser and are never sent to AXVO.
 
-If you submit a community story, we collect only the name and city you provide, plus the story text. This is reviewed before publishing and stored securely.
+Symptom guide and AI assistant: the text you type is sent to an outside AI provider to generate a response (see Third-Party Services). AXVO does not store it.
 
-If you create an account (optional), we store your email address, display name, and any profile information you choose to add. Account data is stored in Supabase with row-level security — only you can access your own records.
+Forms you submit (stories, outcome reports, legal aid requests, clinic corrections, newsletter sign-ups): we store what you enter, such as your first name, city, email, and message, so we can review and respond.
 
-We do not collect: Social Security numbers, health records, medical history, biometric data, or any information that identifies you as a patient.`
+Accounts (optional): we store your email address, display name, and any profile information you add.
+
+Analytics (only if you click Accept on the cookie banner): pages visited, approximate location from your IP address, device and browser type.
+
+We do not collect Social Security numbers, insurance member IDs, or medical records.`
   },
   {
     id: 'how-we-use',
     icon: <Eye size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'How We Use Your Data',
-    content: `Your data is used exclusively to deliver the service you asked for.
+    content: `We use data only to run AXVO and make it better.
 
-Location data is used to filter and sort nearby clinics. It is never stored, never sold, and never shared with third parties.
+Location is used to find and sort nearby clinics.
 
-Aggregated, anonymized analytics (e.g., "500 people searched for mental health clinics in Phoenix this month") may be used to improve our clinic database coverage and inform our impact reporting. No individual can be identified from these aggregates.
+Form submissions are read by the AXVO team so we can publish stories (with your consent), fix clinic listings, and reply to requests.
 
-If you submit a story, it may be published on the Stories page with only your first name and city, exactly as you entered them. You can request removal at any time by contacting us.
+If you submit a story, it may be published on the Stories page with only your first name and city, exactly as you entered them. You can ask us to remove it at any time.
 
-Account data (if you create one) is used to pre-fill forms, save searches, and personalize your experience. We do not use it for advertising, profiling, or sharing.`
+Analytics show which pages and features help people, in aggregate. We do not use them for advertising.
+
+We do not sell your data, share it with insurers, or use it for advertising.`
   },
   {
     id: 'third-parties',
     icon: <Shield size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'Third-Party Services',
-    content: `AXVO integrates with the following third-party services:
+    content: `AXVO relies on these outside services. Each receives only what it needs to do its job.
 
-HRSA (Health Resources & Services Administration) — Federal API used to retrieve Federally Qualified Health Center (FQHC) data. No user data is sent to HRSA.
+Vercel — hosting, plus cookieless page-view and performance measurement (Vercel Web Analytics). Vercel logs standard request data such as IP addresses. vercel.com/legal/privacy-policy
 
-OpenStreetMap / Nominatim — Used for geocoding ZIP codes and city names into coordinates. Your location query may be sent to Nominatim's public API. See nominatim.org/privacy for their policy.
+Supabase — database and optional account sign-in. Stores account data and form submissions in the U.S. supabase.com/privacy
 
-Supabase — Used for user account storage and authentication (if you create an account). Supabase is SOC 2 Type II certified. Data is stored in the US. See supabase.com/privacy for their policy.
+Google Analytics — website analytics. Loaded only after you click Accept on the cookie banner; it sets Google cookies and receives your IP address and browsing activity on AXVO. policies.google.com/privacy
 
-Vercel — Used for hosting. Vercel may log request metadata (IP addresses, timestamps) per their standard infrastructure logging. See vercel.com/privacy.
+PostHog — product analytics (which features are used). Loaded only after you click Accept. Session recording and automatic click tracking are turned off. posthog.com/privacy
 
-We do not use: Google Analytics, Facebook Pixel, advertising trackers, behavioral profiling tools, or any third-party marketing technology.`
+Anthropic — powers the symptom guide. The symptoms you type are sent to Anthropic's API to generate a care-level suggestion. anthropic.com/legal/privacy
+
+Groq — powers the AI assistant chat. Your chat messages are sent to Groq's API to generate replies. groq.com/privacy-policy
+
+OpenStreetMap / Nominatim and MapTiler — turn locations into map coordinates and display map tiles. Your location query and IP address may be sent to them. osmfoundation.org/wiki/Privacy_Policy
+
+Resend — sends email (newsletter, form confirmations, and alerts to the AXVO team). Receives the email address and message content. resend.com/legal/privacy-policy
+
+Twilio — handles text messages if you use AXVO by SMS. Receives your phone number and messages. twilio.com/legal/privacy
+
+Clinic data comes from public sources (HRSA, the CMS NPI Registry, OpenStreetMap, and the National Association of Free & Charitable Clinics). No information about you is sent to those organizations.
+
+We do not use Facebook Pixel, advertising networks, or data brokers.`
   },
   {
     id: 'cookies',
     icon: <Lock size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'Cookies & Local Storage',
-    content: `AXVO uses minimal cookies and local storage.
+    content: `Essential: if you sign in, a session cookie keeps you signed in. It is removed when you sign out.
 
-If you are logged in, a session cookie is used to keep you authenticated. This is a functional cookie and cannot be disabled without logging out.
+Analytics: Google Analytics and PostHog only load after you click Accept on the cookie banner. If you click Decline, they never load. To change your choice, clear this site's data in your browser and the banner will appear again.
 
-We use local storage to remember your language preference and any bookmarked clinics. This data never leaves your device.
-
-We do not use third-party tracking cookies. We do not use cookies for advertising or cross-site tracking.
-
-You can clear all AXVO local data by clearing your browser's storage for this domain. If you log out, your session cookie is deleted immediately.`
+Local storage on your device: AXVO saves some things only in your browser, never on our servers — your language, saved clinics, recent searches, cookie choice, screening plan, safety plan, and Health Passport. This data is not encrypted, so anyone with access to your browser can see it. You can delete it at any time by clearing this site's data in your browser.`
   },
   {
     id: 'your-rights',
     icon: <TickCircle size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'Your Rights',
-    content: `You have the right to:
+    content: `You can:
 
-Access — Request a copy of any personal data we hold about you (account holders only, since anonymous users have no stored data).
+Access — ask for a copy of the personal data we hold about you.
 
-Deletion — Delete your account and all associated data at any time from the Profile page, or by contacting us. Deletion is permanent and takes effect within 24 hours.
+Delete — delete your account at any time from Settings → Security, or ask us to delete your account or any form submission.
 
-Correction — Update any incorrect information in your profile at any time.
+Correct — update your profile at any time, or ask us to correct anything else.
 
-Portability — Export your data in JSON format from the Profile page.
+Remove a story — ask us to take down a published story at any time.
 
-Opt-out of Story Publishing — Request removal of any published story at any time.
+California residents (CCPA) — you may ask what personal information we collect and how it is used. AXVO does not sell personal information.
 
-CCPA Rights (California) — California residents may request disclosure of personal information collected, sold, or disclosed. AXVO does not sell personal data.
-
-GDPR Rights (EU residents) — You have rights under GDPR including access, rectification, erasure, restriction, and data portability. Contact us to exercise these rights.
-
-To exercise any right: email ${CONTACT_EMAIL} with "Privacy Request" in the subject line.`
+To make any request, email ${CONTACT_EMAIL} with "Privacy Request" in the subject line.`
   },
   {
     id: 'hipaa',
     icon: <Shield size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'Health Information & HIPAA',
-    content: `AXVO is a healthcare navigation service, not a healthcare provider, health plan, or clearinghouse. AXVO is not a HIPAA-covered entity or business associate as defined under the Health Insurance Portability and Accountability Act of 1996, and does not issue a formal HIPAA Notice of Privacy Practices.
+    content: `AXVO is a healthcare navigation service, not a healthcare provider, health plan, or clearinghouse. AXVO is not a HIPAA-covered entity or business associate under the Health Insurance Portability and Accountability Act of 1996, and does not issue a HIPAA Notice of Privacy Practices.
 
-We built AXVO to need as little of your health information as possible in the first place: as described above, our eligibility screener runs in your browser and is never transmitted to us, and location searches aren't stored. Please don't enter medical records, diagnoses, or other protected health information into AXVO — the AI Assistant is designed to help you find and navigate to care, not to store or process your health records.
+We built AXVO to need as little health information as possible. Please don't enter medical records or detailed medical history into the symptom guide or AI assistant — what you type there is sent to an outside AI provider to generate a response.
 
-Whatever account or profile information you do choose to give us is still handled under every other protection described in this policy: encrypted in transit and at rest, access-controlled with row-level security, never sold, and deletable by you at any time.
+Anything you do give us is handled under the protections in this policy: encrypted in transit, access-controlled, never sold, and deletable on request.
 
-See our Terms of Service (Section 11) for the full legal detail on this.`
+See our Terms of Service (Section 11) for the full legal detail.`
   },
   {
     id: 'security',
     icon: <InfoCircle size={18} color="rgba(255,255,255,0.5)" variant="Linear" />,
     title: 'Security',
-    content: `We take reasonable and industry-standard measures to protect your data.
+    content: `All traffic to AXVO is encrypted with HTTPS (TLS). Our database provider, Supabase, encrypts stored data, and row-level security limits each account to its own records.
 
-All data in transit is encrypted via TLS 1.3. Account data at rest is encrypted using AES-256. Supabase row-level security ensures users can only access their own records. We conduct periodic security reviews.
+No system is perfectly secure. If you find a security vulnerability, please report it to ${CONTACT_EMAIL}.
 
-We do not guarantee absolute security — no system does. If you discover a security vulnerability, please disclose it responsibly to ${CONTACT_EMAIL}. We will respond within 72 hours.
-
-In the event of a data breach affecting personal information, we will notify affected users within 72 hours as required by law.`
+If a data breach affects your personal information, we will notify you as required by applicable law.`
   },
 ]
 
@@ -166,11 +174,11 @@ export default function PrivacyPage() {
           fontSize: '16px', color: 'rgba(255,255,255,0.5)',
           maxWidth: '480px', lineHeight: 1.7, marginBottom: '32px',
         }}>
-          AXVO collects nothing it doesn&apos;t need. We have never sold data, we never will, and we&apos;ve built the system to make that structurally impossible.
+          AXVO collects as little as it can. We have never sold data and we never will. This page lists exactly what we collect and every outside service involved.
         </p>
 
         <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.28)', letterSpacing: '0.04em' }}>
-          Last updated: October 19, 2026 · Version 1.3
+          Last updated: November 3, 2026 · Version 1.4
         </p>
       </section>
 
@@ -183,8 +191,8 @@ export default function PrivacyPage() {
           }}>
             {[
               { icon: <Shield size={16} variant="Linear" />, label: 'Zero data sold', desc: 'We have never sold user data and never will' },
-              { icon: <Eye size={16} variant="Linear" />,    label: 'No ad trackers', desc: 'Zero third-party advertising or behavioral tracking' },
-              { icon: <Lock size={16} variant="Linear" />,   label: 'Anonymous by default', desc: 'Most features work without any account' },
+              { icon: <Eye size={16} variant="Linear" />,    label: 'No ad trackers', desc: 'No advertising networks; analytics only if you accept' },
+              { icon: <Lock size={16} variant="Linear" />,   label: 'No account needed', desc: 'Every core feature works without signing in' },
               { icon: <Data size={16} variant="Linear" />, label: 'Minimum collection', desc: 'We only store what the service requires' },
             ].map(item => (
               <div key={item.label} style={{

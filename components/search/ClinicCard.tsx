@@ -544,7 +544,7 @@ export default function ClinicCard({
             /* FQHC pill carries the HRSA explanation directly — one pill, not two */
             <span
               title={clinic.type === 'FQHC'
-                ? 'Federally Qualified Health Center — verified by HRSA. Required by law to accept all patients regardless of ability to pay.'
+                ? 'Federally Qualified Health Center listed in HRSA data. Must serve all patients regardless of ability to pay.'
                 : undefined}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, letterSpacing: '0.06em', color: clinic.type === 'FQHC' ? 'var(--accent)' : clinic.type?.includes('Free') ? 'var(--green-pulse)' : 'var(--text-3)', background: clinic.type === 'FQHC' ? 'rgba(74,144,217,0.07)' : 'rgba(255,255,255,0.04)', border: `1px solid ${clinic.type === 'FQHC' ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.08)'}`, padding: '2px 8px', borderRadius: 5, fontFamily: 'var(--font-inter)', fontWeight: 600, cursor: clinic.type === 'FQHC' ? 'help' : 'default' }}>
               {clinic.type === 'FQHC' && <ShieldTick size={9} color="currentColor" variant="Linear" />}

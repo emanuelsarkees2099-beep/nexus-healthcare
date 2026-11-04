@@ -85,14 +85,14 @@ function ClinicMapMini() {
       <div style={{ fontSize: '10px', color: 'var(--text-3)', marginBottom: '8px', fontFamily: 'var(--font-inter)', position: 'relative' }}>
         <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--accent)', animation: 'open-pulse 2.5s ease-in-out infinite' }} />
-          3 clinics · Phoenix, AZ
+          Example search · Phoenix, AZ
         </span>
       </div>
 
       {[
-        { name: 'Clinica Adelante',    dist: '1.2 mi', open: true  },
-        { name: 'Valle del Sol Health', dist: '2.8 mi', open: false },
-        { name: 'Mountain Park Health', dist: '4.1 mi', open: true  },
+        { name: 'Clinica Adelante',    type: 'FQHC' },
+        { name: 'Valle del Sol Health', type: 'FQHC' },
+        { name: 'Mountain Park Health', type: 'FQHC' },
       ].map((c, i) => (
         <div key={c.name} style={{
           display: 'flex', alignItems: 'center', gap: '8px',
@@ -101,9 +101,9 @@ function ClinicMapMini() {
           border: `1px solid ${i === 0 ? 'rgba(74,144,217,0.14)' : 'transparent'}`,
           fontFamily: 'var(--font-inter)', position: 'relative',
         }}>
-          <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: c.open ? 'var(--green-pulse)' : 'var(--text-3)', flexShrink: 0 }} />
+          <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--accent)', flexShrink: 0 }} />
           <span style={{ color: i === 0 ? 'var(--text)' : 'var(--text-2)', flex: 1, fontSize: '11px', fontWeight: i === 0 ? 500 : 400 }}>{c.name}</span>
-          <span style={{ color: 'var(--text-3)', fontSize: '10px', fontFamily: 'var(--font-mono),monospace' }}>{c.dist}</span>
+          <span style={{ color: 'var(--text-3)', fontSize: '10px', fontFamily: 'var(--font-mono),monospace' }}>{c.type}</span>
         </div>
       ))}
     </div>
@@ -121,13 +121,13 @@ function ProgramsCounterMini() {
         letterSpacing: '-0.04em', lineHeight: 1, marginBottom: '4px',
         textShadow: '0 0 40px rgba(252,211,77,0.25)',
       }}>
-        40+
+        8
       </div>
       <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text)', marginBottom: '3px', fontFamily: 'var(--font-display)' }}>
         Programs checked
       </div>
       <div style={{ fontSize: '12px', color: 'var(--text-2)', lineHeight: 1.7, fontFamily: 'var(--font-inter)' }}>
-        Medicaid, ACA, HRSA — scanned in under 60 seconds.
+        Medicaid, CHIP, ACA subsidies, Medicare, and more — 5 questions, calculated in your browser.
       </div>
       <div style={{ display: 'flex', gap: '6px', marginTop: '12px', flexWrap: 'wrap' }}>
         {['Medicaid', 'ACA', 'HRSA', 'CHIP', '340B'].map(p => (
@@ -170,8 +170,8 @@ function TriageChatMini() {
           display: 'block', fontSize: '9px', fontWeight: 700, letterSpacing: '0.1em',
           color: 'var(--accent)', marginBottom: '4px',
         }}>AXVO</span>
-        That&apos;s treatable at a <strong style={{ color: 'var(--text)' }}>free dental clinic</strong> —
-        not an ER. ERs can&apos;t do dental work and average $1,500.
+        That&apos;s usually a job for a <strong style={{ color: 'var(--text)' }}>dental clinic</strong>, not an ER.
+        ERs can treat pain and infection but generally can&apos;t fix the tooth.
       </div>
       {/* Handoff card */}
       <div style={{
@@ -181,10 +181,10 @@ function TriageChatMini() {
         fontFamily: 'var(--font-inter)',
       }}>
         <div style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text)' }}>
-          3 free dental clinics near you
+          Find sliding-scale dental care near you
         </div>
         <div style={{ fontSize: '10px', color: 'var(--text-3)', marginTop: '2px' }}>
-          Closest: 1.2 mi · open until 6 PM
+          Example conversation
         </div>
       </div>
     </div>
@@ -193,35 +193,10 @@ function TriageChatMini() {
 
 /* ── Mini live illustration: CHW avatar row ─────────────────────── */
 function CHWAvatarRow() {
-  const initials = ['MA', 'JR', 'SP', 'LC', 'TK']
-  const colors   = ['#4A90D9', '#A78BFA', '#FCD34D', '#F87171', '#60A5FA']
   return (
     <div style={{ marginTop: '14px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '-8px', marginBottom: '10px' }}>
-        {initials.map((init, i) => (
-          <div key={init} style={{
-            width: '30px', height: '30px', borderRadius: '50%',
-            background: `${colors[i]}20`,
-            border: `2px solid ${colors[i]}`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '10px', fontWeight: 700, color: colors[i],
-            fontFamily: 'var(--font-inter)',
-            marginLeft: i > 0 ? '-8px' : '0',
-            position: 'relative',
-            zIndex: initials.length - i,
-          }}>
-            {init}
-          </div>
-        ))}
-        <div style={{
-          marginLeft: '8px', fontSize: '11px', color: 'var(--text-2)',
-          fontFamily: 'var(--font-inter)',
-        }}>
-          340+ verified workers
-        </div>
-      </div>
       <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-        {['Spanish', 'Somali', 'Arabic', 'French'].map(lang => (
+        {['Español', 'Somali', 'Arabic', 'Haitian Creole'].map(lang => (
           <div key={lang} style={{
             padding: '3px 8px', borderRadius: 'var(--r-sm)',
             background: 'rgba(167,139,250,0.07)', border: '1px solid rgba(167,139,250,0.15)',
@@ -238,9 +213,9 @@ function CHWAvatarRow() {
 /* ── Mini live illustration: Calendar events ────────────────────── */
 function CalendarEventMini() {
   const events = [
-    { day: 'Mon', event: 'Free Dental Day', type: 'dental' },
-    { day: 'Wed', event: 'Vaccine Drive',   type: 'vaccine' },
-    { day: 'Fri', event: 'Mental Health',   type: 'mental' },
+    { day: 'Yearly', event: 'Blood pressure check', type: 'dental' },
+    { day: 'Fall',   event: 'Flu vaccine',          type: 'vaccine' },
+    { day: '45+',    event: 'Colorectal screening', type: 'mental' },
   ]
   const colors: Record<string, string> = { dental: 'var(--amber)', vaccine: 'var(--accent)', mental: 'var(--violet)' }
   return (
@@ -252,7 +227,7 @@ function CalendarEventMini() {
           background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)',
           fontFamily: 'var(--font-inter)',
         }}>
-          <span style={{ fontSize: '10px', color: 'var(--text-3)', width: '28px', flexShrink: 0, fontFamily: 'var(--font-mono),monospace' }}>{ev.day}</span>
+          <span style={{ fontSize: '10px', color: 'var(--text-3)', width: '40px', flexShrink: 0, fontFamily: 'var(--font-mono),monospace' }}>{ev.day}</span>
           <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: colors[ev.type], flexShrink: 0 }} />
           <span style={{ fontSize: '11px', color: 'var(--text-2)', flex: 1 }}>{ev.event}</span>
           <Clock size={14} color="var(--text-3)" variant="Linear" />
@@ -444,7 +419,7 @@ export default function Features() {
               Clinic Finder
             </div>
             <div style={{ fontSize: '13px', color: 'var(--text-2)', lineHeight: 1.75, fontFamily: 'var(--font-inter)', maxWidth: '280px' }}>
-              18,900+ federally qualified health centers, free clinics, and sliding-scale providers — searchable by specialty, language, and wait time.
+              18,900+ community health center sites, free clinics, and sliding-scale providers from public datasets — searchable by location and type of care.
             </div>
             <Tag color="var(--accent)" bg="rgba(74,144,217,0.07)">Core feature</Tag>
             <ClinicMapMini />
@@ -471,7 +446,7 @@ export default function Features() {
                   Smart Care Pathways
                 </div>
                 <div style={{ fontSize: '13px', color: 'var(--text-2)', lineHeight: 1.75, fontFamily: 'var(--font-inter)' }}>
-                  Predicts which clinic will actually see you based on your symptoms, location, and situation — then routes you there.
+                  Ranks nearby clinics by distance, cost, services, and language so the best fit for your situation shows first.
                 </div>
                 <PathwaysMini />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '0.75rem' }}>
@@ -542,14 +517,14 @@ export default function Features() {
               />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.35rem', fontFamily: 'var(--font-display)' }}>
-                  CHW Network
+                  Community Health Workers
                 </div>
                 <div style={{ fontSize: '13px', color: 'var(--text-2)', lineHeight: 1.75, fontFamily: 'var(--font-inter)' }}>
-                  340+ verified Community Health Workers. They speak your language and know the system.
+                  A directory of health centers and nonprofits with community health worker programs — people who can help you navigate care, often in your language.
                 </div>
                 <CHWAvatarRow />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '0.75rem' }}>
-                  <Tag color="var(--violet)" bg="rgba(167,139,250,0.07)">Human-powered</Tag>
+                  <Tag color="var(--violet)" bg="rgba(167,139,250,0.07)">Directory</Tag>
                   <ExploreLink />
                 </div>
               </div>
@@ -577,7 +552,7 @@ export default function Features() {
                   Preventive Care Calendar
                 </div>
                 <div style={{ fontSize: '13px', color: 'var(--text-2)', lineHeight: 1.75, fontFamily: 'var(--font-inter)' }}>
-                  Personalized screening schedule + live free clinic events — dental days, mammography vans, vaccine drives.
+                  A personalized screening schedule based on your age and history, plus where to get screenings free or at low cost.
                 </div>
                 <CalendarEventMini />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '0.75rem' }}>

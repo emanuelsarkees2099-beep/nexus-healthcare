@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
-import { Health, SearchNormal1, ExportSquare, ArrowRight2, InfoCircle, DollarCircle, Heart, Flash, TickCircle, Hospital, Profile2User, ShieldTick, Map1 } from 'iconsax-react'
+import { Health, SearchNormal1, ExportSquare, ArrowRight2, InfoCircle, DollarCircle, Heart, Flash, TickCircle, Hospital, ShieldTick, Map1 } from 'iconsax-react'
 import DotGrid from '@/components/DotGrid'
 
 /* ── Medication assistance programs ─────────────────────────── */
@@ -13,7 +13,7 @@ const PROGRAMS: Array<{ name: string; url: string; desc: string; tags: string[];
     name: 'NeedyMeds',
     url: 'https://www.needymeds.org',
     desc: 'Largest database of patient assistance programs. Search by drug name to find free or low-cost options from manufacturers.',
-    tags: ['Free', 'All drugs', 'No income limit required'],
+    tags: ['Free to search', 'All drugs', 'Programs set their own rules'],
     color: '#4A8FD4',
     Icon: Health,
   },
@@ -28,18 +28,10 @@ const PROGRAMS: Array<{ name: string; url: string; desc: string; tags: string[];
   {
     name: 'GoodRx',
     url: 'https://www.goodrx.com',
-    desc: 'Compare prices at nearby pharmacies. Free coupons can reduce costs by up to 80% — no sign-up required.',
+    desc: 'Compare cash prices at nearby pharmacies and use free discount coupons. No sign-up required.',
     tags: ['Discounted', 'Instant coupon', 'No enrollment'],
     color: '#60a5fa',
     Icon: DollarCircle,
-  },
-  {
-    name: 'Partnership for Prescription Assistance',
-    url: 'https://www.pparx.org',
-    desc: 'Connects patients to over 475 public and private programs providing free or low-cost medications.',
-    tags: ['Free', 'Multiple programs', 'Uninsured'],
-    color: '#a78bfa',
-    Icon: Profile2User,
   },
   {
     name: 'Medicare Extra Help (Low Income Subsidy)',
@@ -60,12 +52,12 @@ const PROGRAMS: Array<{ name: string; url: string; desc: string; tags: string[];
 ]
 
 const TIPS = [
-  { icon: '1', text: 'Always ask your doctor for generic alternatives — they\'re chemically identical and can cost 80-90% less.' },
+  { icon: '1', text: 'Ask your doctor about generics. They have the same active ingredient as the brand name and, according to the FDA, usually cost 80–85% less.' },
   { icon: '2', text: 'Search the drug name on NeedyMeds AND RxAssist — programs differ by manufacturer.' },
-  { icon: '3', text: 'Manufacturer assistance programs often provide 90-day supplies free of charge for qualifying patients.' },
+  { icon: '3', text: 'Manufacturer assistance programs set their own income limits and paperwork. Some ship a 90-day supply at a time to people who qualify.' },
   { icon: '4', text: 'FQHCs (federally-qualified health centers) dispense medications at deep discounts through the 340B drug program.' },
   { icon: '5', text: 'GoodRx and similar coupons can\'t be combined with insurance — use whichever is cheaper per fill.' },
-  { icon: '6', text: 'Many pharmacies (Walmart, Costco) offer $4 generics on a standard list — ask your pharmacist.' },
+  { icon: '6', text: 'Some pharmacies, such as Walmart, have low-price lists for common generics — ask your pharmacist.' },
 ]
 
 const FQHC_LINK = '/search?type=fqhc'
@@ -76,31 +68,31 @@ const FQHC_LINK = '/search?type=fqhc'
    ─────────────────────────────────────────────────────────────── */
 const PAP_DRUGS = [
   // Diabetes
-  { name: 'Insulin (all types)', brand: 'Humalog / Novolog / Lantus', category: 'Diabetes', manufacturer: 'Lilly Cares / Novo Nordisk Cares / Sanofi', incomeLimit: '≤400% FPL', papUrl: 'https://www.lillyinsulinvalue.com', pricingUrl: 'https://costplusdrugs.com/medications/search/?q=insulin', color: '#60a5fa' },
+  { name: 'Insulin (all types)', brand: 'Humalog / Novolog / Lantus', category: 'Diabetes', manufacturer: 'Lilly, Novo Nordisk & Sanofi $35/month insulin programs', incomeLimit: 'See program', papUrl: 'https://www.lillyinsulinvalue.com', pricingUrl: 'https://costplusdrugs.com/medications/search/?q=insulin', color: '#60a5fa' },
   { name: 'Metformin', brand: 'Glucophage (generic)', category: 'Diabetes', manufacturer: 'Generic — no PAP needed', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=metformin', pricingUrl: 'https://www.goodrx.com/metformin', color: '#60a5fa' },
-  { name: 'Ozempic / Wegovy', brand: 'Semaglutide', category: 'Diabetes / Weight', manufacturer: 'Novo Nordisk Patient Assistance', incomeLimit: '≤400% FPL', papUrl: 'https://www.novonordiskcares.com', pricingUrl: 'https://www.goodrx.com/ozempic', color: '#60a5fa' },
-  { name: 'Trulicity', brand: 'Dulaglutide', category: 'Diabetes', manufacturer: 'Lilly Cares Foundation', incomeLimit: '≤400% FPL', papUrl: 'https://www.trulicity.com/savings-resources.html', pricingUrl: 'https://www.goodrx.com/trulicity', color: '#60a5fa' },
+  { name: 'Ozempic', brand: 'Semaglutide (Wegovy is not covered by this program)', category: 'Diabetes', manufacturer: 'Novo Nordisk Patient Assistance Program', incomeLimit: 'See program', papUrl: 'https://www.novocare.com/psp/PAP.html', pricingUrl: 'https://www.goodrx.com/ozempic', color: '#60a5fa' },
+  { name: 'Trulicity', brand: 'Dulaglutide', category: 'Diabetes', manufacturer: 'Lilly Cares Foundation', incomeLimit: 'See program', papUrl: 'https://www.trulicity.com/savings-resources.html', pricingUrl: 'https://www.goodrx.com/trulicity', color: '#60a5fa' },
   // Cardiovascular
   { name: 'Atorvastatin', brand: 'Lipitor (generic)', category: 'Cardiovascular', manufacturer: 'Generic — Cost Plus / GoodRx', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=atorvastatin', pricingUrl: 'https://www.goodrx.com/atorvastatin', color: '#f472b6' },
   { name: 'Lisinopril', brand: 'Prinivil / Zestril (generic)', category: 'Cardiovascular', manufacturer: 'Generic — no PAP needed', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=lisinopril', pricingUrl: 'https://www.goodrx.com/lisinopril', color: '#f472b6' },
-  { name: 'Eliquis', brand: 'Apixaban', category: 'Cardiovascular', manufacturer: 'Bristol-Myers Squibb & Pfizer Together Rx', incomeLimit: '≤400% FPL', papUrl: 'https://www.bms.com/patient-and-caregivers/patient-assistance-foundation/patient-assistance-program.html', pricingUrl: 'https://www.goodrx.com/eliquis', color: '#f472b6' },
-  { name: 'Xarelto', brand: 'Rivaroxaban', category: 'Cardiovascular', manufacturer: 'Janssen Patient Assistance Program', incomeLimit: '≤400% FPL', papUrl: 'https://www.janssenprescriptionassistance.com', pricingUrl: 'https://www.goodrx.com/xarelto', color: '#f472b6' },
+  { name: 'Eliquis', brand: 'Apixaban', category: 'Cardiovascular', manufacturer: 'Bristol Myers Squibb Patient Assistance Foundation', incomeLimit: 'See program', papUrl: 'https://www.bmspaf.org', pricingUrl: 'https://www.goodrx.com/eliquis', color: '#f472b6' },
+  { name: 'Xarelto', brand: 'Rivaroxaban', category: 'Cardiovascular', manufacturer: 'Johnson & Johnson Patient Assistance Foundation', incomeLimit: 'See program', papUrl: 'https://www.janssenprescriptionassistance.com', pricingUrl: 'https://www.goodrx.com/xarelto', color: '#f472b6' },
   // Mental health
   { name: 'Sertraline', brand: 'Zoloft (generic)', category: 'Mental Health', manufacturer: 'Generic — Cost Plus', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=sertraline', pricingUrl: 'https://www.goodrx.com/sertraline', color: '#a78bfa' },
   { name: 'Escitalopram', brand: 'Lexapro (generic)', category: 'Mental Health', manufacturer: 'Generic — no PAP needed', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=escitalopram', pricingUrl: 'https://www.goodrx.com/escitalopram', color: '#a78bfa' },
-  { name: 'Vyvanse', brand: 'Lisdexamfetamine', category: 'ADHD', manufacturer: 'Takeda Patient Assistance', incomeLimit: '≤400% FPL', papUrl: 'https://www.takedaoncologyassist.com', pricingUrl: 'https://www.goodrx.com/vyvanse', color: '#a78bfa' },
+  { name: 'Vyvanse', brand: 'Lisdexamfetamine (generic available)', category: 'ADHD', manufacturer: 'Generic now available — no PAP needed', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=lisdexamfetamine', pricingUrl: 'https://www.goodrx.com/vyvanse', color: '#a78bfa' },
   // Respiratory
-  { name: 'Albuterol inhaler', brand: 'ProAir / Ventolin (generic)', category: 'Respiratory', manufacturer: 'GSK Patient Assistance / Cost Plus', incomeLimit: '≤300% FPL', papUrl: 'https://www.gsk.com/en-gb/responsibility/access-to-medicines/', pricingUrl: 'https://costplusdrugs.com/medications/search/?q=albuterol', color: '#34d399' },
-  { name: 'Advair / Symbicort', brand: 'Fluticasone / Budesonide combo', category: 'Respiratory', manufacturer: 'GSK Bridges to Access / AstraZeneca AZ&Me', incomeLimit: '≤400% FPL', papUrl: 'https://www.azandmeassistance.com', pricingUrl: 'https://www.goodrx.com/advair', color: '#34d399' },
+  { name: 'Albuterol inhaler', brand: 'ProAir / Ventolin (generic)', category: 'Respiratory', manufacturer: 'Generic available — no PAP needed', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=albuterol', pricingUrl: 'https://costplusdrugs.com/medications/search/?q=albuterol', color: '#34d399' },
+  { name: 'Advair / Symbicort', brand: 'Fluticasone / Budesonide combo', category: 'Respiratory', manufacturer: 'GSK & AstraZeneca (AZ&Me) assistance programs', incomeLimit: 'See program', papUrl: 'https://www.azandmeassistance.com', pricingUrl: 'https://www.goodrx.com/advair', color: '#34d399' },
   // Specialty / Biologics
-  { name: 'Humira', brand: 'Adalimumab', category: 'Autoimmune', manufacturer: 'myAbbVie Assist', incomeLimit: '≤600% FPL', papUrl: 'https://www.abbvie.com/patients/patient-assistance.html', pricingUrl: 'https://www.goodrx.com/humira', color: '#fbbf24' },
-  { name: 'Dupixent', brand: 'Dupilumab', category: 'Autoimmune / Eczema', manufacturer: 'Sanofi & Regeneron Patient Support', incomeLimit: '≤400% FPL', papUrl: 'https://www.dupixent.com/support-and-savings.html', pricingUrl: 'https://www.goodrx.com/dupixent', color: '#fbbf24' },
-  { name: 'Keytruda', brand: 'Pembrolizumab', category: 'Oncology', manufacturer: 'Merck Access Program', incomeLimit: '≤500% FPL', papUrl: 'https://www.keytruda.com/financial-support.html', pricingUrl: 'https://www.goodrx.com/keytruda', color: '#fbbf24' },
+  { name: 'Humira', brand: 'Adalimumab', category: 'Autoimmune', manufacturer: 'myAbbVie Assist', incomeLimit: 'See program', papUrl: 'https://www.abbvie.com/patients/patient-assistance.html', pricingUrl: 'https://www.goodrx.com/humira', color: '#fbbf24' },
+  { name: 'Dupixent', brand: 'Dupilumab', category: 'Autoimmune / Eczema', manufacturer: 'Sanofi & Regeneron patient support', incomeLimit: 'See program', papUrl: 'https://www.dupixent.com/support-and-savings.html', pricingUrl: 'https://www.goodrx.com/dupixent', color: '#fbbf24' },
+  { name: 'Keytruda', brand: 'Pembrolizumab', category: 'Oncology', manufacturer: 'Merck patient support programs', incomeLimit: 'See program', papUrl: 'https://www.keytruda.com/financial-support.html', pricingUrl: 'https://www.goodrx.com/keytruda', color: '#fbbf24' },
   // Thyroid / Common
   { name: 'Levothyroxine', brand: 'Synthroid (generic)', category: 'Thyroid', manufacturer: 'Generic — Cost Plus', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=levothyroxine', pricingUrl: 'https://www.goodrx.com/levothyroxine', color: '#6ee7b7' },
   { name: 'Omeprazole', brand: 'Prilosec (generic)', category: 'Gastro', manufacturer: 'Generic — $4 at major pharmacies', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=omeprazole', pricingUrl: 'https://www.goodrx.com/omeprazole', color: '#6ee7b7' },
   { name: 'Amlodipine', brand: 'Norvasc (generic)', category: 'Cardiovascular', manufacturer: 'Generic — Cost Plus', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=amlodipine', pricingUrl: 'https://www.goodrx.com/amlodipine', color: '#f472b6' },
-  { name: 'HIV / PrEP (Truvada)', brand: 'Emtricitabine/TDF', category: 'HIV / Infectious', manufacturer: 'Gilead Advancing Access', incomeLimit: '≤500% FPL', papUrl: 'https://www.gileadadvancingaccess.com', pricingUrl: 'https://www.goodrx.com/truvada', color: '#f87171' },
+  { name: 'HIV / PrEP (Truvada)', brand: 'Emtricitabine/TDF', category: 'HIV / Infectious', manufacturer: 'Gilead Advancing Access', incomeLimit: 'See program', papUrl: 'https://www.gileadadvancingaccess.com', pricingUrl: 'https://www.goodrx.com/truvada', color: '#f87171' },
 ]
 
 const PAP_CATEGORIES = ['All', ...Array.from(new Set(PAP_DRUGS.map(d => d.category)))]
@@ -155,7 +147,7 @@ export default function MedicationsPage() {
             <span style={{ color: 'var(--accent)' }}>Free or Deeply Discounted</span>
           </h1>
           <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, fontFamily: 'var(--font-inter)', fontWeight: 300, maxWidth: 560, margin: '0 auto 32px' }}>
-            Pharmaceutical companies are required to provide assistance programs. Most Americans don&apos;t know they exist. Here&apos;s how to access them.
+            Many drug makers run assistance programs that give medications free or at low cost to people who qualify. Most people don&apos;t know they exist. Here&apos;s where to find them.
           </p>
 
           {/* Disclaimer */}
@@ -283,8 +275,7 @@ export default function MedicationsPage() {
             {[
               { val: filteredDrugs.filter(d => d.incomeLimit === 'Any').length.toString(), label: 'No income limit', color: '#34d399' },
               { val: `${filteredDrugs.length}`, label: `drugs in ${papCategory === 'All' ? 'database' : papCategory}`, color: '#60a5fa' },
-              { val: '$0–$35', label: 'insulin w/ PAP programs', color: '#fbbf24' },
-              { val: '50%', label: 'typical 340B savings', color: '#a78bfa' },
+              { val: '$35/mo', label: 'insulin cap programs from manufacturers', color: '#fbbf24' },
             ].map(s => (
               <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ fontSize: '14px', fontWeight: 800, color: s.color, fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>{s.val}</span>
@@ -322,11 +313,11 @@ export default function MedicationsPage() {
                   </div>
                 ) : drug.incomeLimit !== 'Any' ? (
                   <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 10px', borderRadius: 100, fontSize: 10, fontWeight: 700, background: 'rgba(96,165,250,0.10)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.25)', marginBottom: 8, fontFamily: 'var(--font-inter)' }}>
-                    ★ Free with PAP program
+                    ★ Free or low-cost if you qualify
                   </div>
                 ) : (
                   <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 10px', borderRadius: 100, fontSize: 10, fontWeight: 700, background: 'rgba(251,191,36,0.08)', color: '#fbbf24', border: '1px solid rgba(251,191,36,0.25)', marginBottom: 8, fontFamily: 'var(--font-inter)' }}>
-                    $ Save up to 80% w/ GoodRx
+                    $ Low-cost generic — compare prices
                   </div>
                 )}
 
@@ -338,7 +329,7 @@ export default function MedicationsPage() {
 
                 {/* Income limit badge */}
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 100, fontSize: 11, fontWeight: 500, background: drug.incomeLimit === 'Any' ? 'rgba(52,211,153,0.1)' : 'rgba(251,191,36,0.08)', color: drug.incomeLimit === 'Any' ? '#34d399' : '#fbbf24', border: `1px solid ${drug.incomeLimit === 'Any' ? 'rgba(52,211,153,0.25)' : 'rgba(251,191,36,0.2)'}`, marginBottom: 14, fontFamily: 'var(--font-inter)' }}>
-                  {drug.incomeLimit === 'Any' ? '✓ No income limit' : `Income limit: ${drug.incomeLimit}`}
+                  {drug.incomeLimit === 'Any' ? '✓ No income limit' : 'Income limits apply — see program'}
                 </div>
 
                 {/* Action buttons */}
@@ -352,7 +343,7 @@ export default function MedicationsPage() {
                     onMouseLeave={e => (e.currentTarget.style.background = 'rgba(96,165,250,0.1)')}
                   >
                     <Flash size={12} color="#60a5fa" />
-                    PAP / Free
+                    {drug.incomeLimit === 'Any' ? 'Low-cost option' : 'Assistance program'}
                   </a>
                   <a
                     href={drug.pricingUrl}
@@ -394,12 +385,12 @@ export default function MedicationsPage() {
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
               <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>
-                Get $1–$5 Prescriptions at 340B FQHCs
+                Ask about discounted prescriptions at health centers
               </div>
-              <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 100, background: 'rgba(74,144,217,0.15)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.3)' }}>Up to 50% off</span>
+              <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 100, background: 'rgba(74,144,217,0.15)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.3)' }}>340B program</span>
             </div>
             <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)', lineHeight: 1.7, margin: '0 0 16px' }}>
-              Federally Qualified Health Centers use the 340B drug pricing program to dispense medications at $1–$5 per prescription for uninsured patients — including insulin, blood pressure meds, and mental health medications. No insurance needed.
+              Many community health centers take part in the federal 340B program, which lets them buy medications at a discount, and many pass savings on to uninsured patients through their pharmacy or sliding fee. Prices vary by center, so ask what your prescription would cost there.
             </p>
             <Link href={FQHC_LINK} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 700, color: '#07070F', background: 'var(--accent)', padding: '9px 18px', borderRadius: 9, textDecoration: 'none', fontFamily: 'var(--font-inter)' }}>
               Find FQHCs near me <ArrowRight2 size={14} color="#07070F" />

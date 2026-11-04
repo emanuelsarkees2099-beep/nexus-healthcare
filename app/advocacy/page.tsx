@@ -2,7 +2,7 @@
 export const dynamic = 'force-dynamic'
 import React, { useEffect, useRef, useState } from 'react'
 import AppShell from '@/components/AppShell'
-import { Speaker, ReceiptText, TickCircle, ArrowRight, Location, TrendUp, Global, ArrowDown2, ExportSquare, Heart, CloseCircle, Notification, ArrowRight2, Flash, Book1, Link2 } from 'iconsax-react'
+import { Speaker, TickCircle, Location, ArrowDown2, ExportSquare, Book1, Flash, Profile2User } from 'iconsax-react'
 
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
@@ -25,125 +25,81 @@ function RevealBlock({ children, delay = 0 }: { children: React.ReactNode; delay
   )
 }
 
-function Counter({ target, suffix = '', prefix = '' }: { target: number; suffix?: string; prefix?: string }) {
-  const [val, setVal] = useState(0)
-  const { ref, visible } = useReveal(0.3)
-  useEffect(() => {
-    if (!visible) return
-    const dur = 2000; const start = performance.now()
-    const step = (now: number) => {
-      const p = Math.min((now - start) / dur, 1)
-      const ease = 1 - Math.pow(1 - p, 3)
-      setVal(Math.floor(ease * target))
-      if (p < 1) requestAnimationFrame(step)
-    }
-    requestAnimationFrame(step)
-  }, [visible, target])
-  return <span ref={ref}>{prefix}{val.toLocaleString()}{suffix}</span>
-}
-
 /* ─── data ────────────────────────────────────────── */
-const PETITIONS = [
-  { id: 'medicaid-expansion', title: 'Expand Medicaid in All 50 States', desc: 'Close the coverage gap that leaves 2.2 million people without coverage in states that haven\'t expanded.', signatures: 84312, goal: 100000, color: '#60a5fa', urgent: true, url: 'https://www.communitycatalyst.org/our-work/coverage-and-access', org: 'Community Catalyst' },
-  { id: 'drug-pricing', title: 'Allow Medicare to Negotiate All Drug Prices', desc: 'The Inflation Reduction Act lets Medicare negotiate prices for 10 drugs. Expand this to all drugs.', signatures: 127849, goal: 150000, color: 'var(--accent)', urgent: false, url: 'https://www.aarp.org/health/medicare-insurance/info-2024/medicare-drug-price-negotiation.html', org: 'AARP' },
-  { id: 'uninsured-crisis', title: 'Declare the Uninsured Crisis a National Emergency', desc: '30 million Americans lack health coverage. Federal emergency response should include free clinic surge funding.', signatures: 43201, goal: 75000, color: '#60a5fa', urgent: true, url: 'https://familiesusa.org/campaigns/', org: 'Families USA' },
-  { id: 'chw-funding', title: 'Fund Community Health Workers Through Medicare', desc: 'CHWs have proven 47% better outcomes. Make their services a covered Medicare and Medicaid benefit.', signatures: 29740, goal: 50000, color: '#a78bfa', urgent: false, url: 'https://www.nachc.org/community-health-workers/advocacy/', org: 'NACHC' },
+/* Official, non-partisan lookup tools. AXVO does not run petitions,
+   collect signatures, or lobby — this page points people to the real
+   channels for contacting the officials who represent them. */
+const ACTIONS = [
+  { title: 'Contact your U.S. Representative', desc: 'Enter your ZIP code on the official House site to find your representative and their contact page.', url: 'https://www.house.gov/representatives/find-your-representative', cta: 'house.gov' },
+  { title: 'Contact your U.S. Senators', desc: 'The Senate directory lists both of your senators with phone numbers and contact forms.', url: 'https://www.senate.gov/senators/senators-contact.htm', cta: 'senate.gov' },
+  { title: 'Find your state legislators', desc: 'Medicaid expansion and many coverage rules are decided by state legislatures. Look up yours by address.', url: 'https://openstates.org/find_your_legislator/', cta: 'openstates.org' },
+  { title: 'Look up any federal bill', desc: 'Congress.gov is the official record of every bill, its text, its sponsors, and every action taken on it.', url: 'https://www.congress.gov', cta: 'congress.gov' },
 ]
 
-const POLICY_WINS = [
-  { state: 'AZ', name: 'Arizona', win: 'FQHC funding +$14M', year: '2024', color: '#60a5fa' },
-  { state: 'CA', name: 'California', win: 'Medi-Cal expansion to all adults', year: '2024', color: 'var(--accent)' },
-  { state: 'CO', name: 'Colorado', win: 'CHW Medicaid coverage added', year: '2023', color: '#a78bfa' },
-  { state: 'IL', name: 'Illinois', win: 'Language access mandate passed', year: '2024', color: '#60a5fa' },
-  { state: 'NY', name: 'New York', win: 'NYC Care expanded citywide', year: '2023', color: '#fbbf24' },
-  { state: 'WA', name: 'Washington', win: 'Apple Health expanded to immigrants', year: '2024', color: '#f472b6' },
-]
-
-const PARTNERS = [
-  { name: 'National Health Law Program', url: 'https://healthlaw.org', desc: 'Advancing health rights through legal advocacy' },
-  { name: 'Community Catalyst', url: 'https://www.communitycatalyst.org', desc: 'Building power for health justice' },
-  { name: 'Families USA', url: 'https://familiesusa.org', desc: 'Fighting for affordable healthcare for all' },
-  { name: 'NACHC', url: 'https://www.nachc.org', desc: 'National Assoc. of Community Health Centers' },
-  { name: 'CMS Innovation Center', url: 'https://innovation.cms.gov', desc: 'Testing new payment & care delivery models' },
-]
-
-/* ─── legislation tracker data ──────────────────── */
-const LEGISLATION = [
+/* Issues currently affecting uninsured and low-income patients.
+   Status lines are stated as of the date below; check the linked
+   source for anything newer. */
+const ISSUES_CHECKED = 'November 2026'
+const ISSUES = [
   {
-    id: 'medicare-negotiation',
-    title: 'Medicare Drug Negotiation Expansion Act',
-    status: 'In Committee',
-    statusColor: '#fbbf24',
-    chamber: 'Senate',
-    lastAction: 'Referred to Senate Finance Committee',
-    lastDate: 'Mar 2025',
-    summary: "Expands Medicare’s drug negotiation authority beyond the 10 drugs currently covered by the Inflation Reduction Act to all 200+ top-selling medications.",
-    urgency: 'high',
-    url: 'https://www.congress.gov/search?q=%7B%22source%22%3A%22legislation%22%2C%22search%22%3A%22medicare+drug+negotiation%22%7D',
-    tags: ['Rx Pricing', 'Medicare', 'Bipartisan'],
-  },
-  {
-    id: 'medicaid-expansion-act',
-    title: 'Closing the Coverage Gap Act',
-    status: 'Floor Vote Pending',
+    id: 'aca-subsidies',
+    title: 'Enhanced ACA Marketplace subsidies',
+    status: 'Expired',
     statusColor: '#f87171',
-    chamber: 'House',
-    lastAction: 'Passed Energy & Commerce Committee 24-18',
-    lastDate: 'Apr 2025',
-    summary: 'Would provide Medicaid-equivalent coverage to the ~2.2 million adults in the "coverage gap" in states that have not adopted ACA Medicaid expansion.',
-    urgency: 'urgent',
-    url: 'https://www.congress.gov/search?q=%7B%22source%22%3A%22legislation%22%2C%22search%22%3A%22closing+coverage+gap%22%7D',
-    tags: ['Medicaid', 'Non-Expansion States', 'Coverage Gap'],
+    summary: 'The larger premium tax credits created in 2021 and extended through 2025 expired on December 31, 2025, which raised what many Marketplace enrollees pay. In January 2026 the House passed a three-year extension; the Senate has not passed it. The original ACA subsidies still exist for most people earning 100–400% of the federal poverty level.',
+    url: 'https://www.congress.gov/search?q=%7B%22source%22%3A%22legislation%22%2C%22search%22%3A%22premium+tax+credit+extension%22%7D',
+    linkLabel: 'Search Congress.gov',
   },
   {
-    id: 'chw-medicare',
-    title: 'Community Health Workers Medicare Act',
-    status: 'Signed into Law',
+    id: 'medicaid-gap',
+    title: 'The Medicaid coverage gap',
+    status: 'Ongoing',
+    statusColor: '#fbbf24',
+    summary: 'Ten states have not adopted the ACA Medicaid expansion: Alabama, Florida, Georgia, Kansas, Mississippi, South Carolina, Tennessee, Texas, Wisconsin, and Wyoming. In most of them, adults can earn too much for Medicaid but too little to get Marketplace subsidies. Expansion is decided by each state’s legislature or, in some states, by ballot measure.',
+    url: 'https://www.kff.org/medicaid/issue-brief/status-of-state-medicaid-expansion-decisions/',
+    linkLabel: 'KFF expansion tracker',
+  },
+  {
+    id: 'drug-negotiation',
+    title: 'Medicare drug price negotiation',
+    status: 'In effect',
     statusColor: '#60a5fa',
-    chamber: 'Signed',
-    lastAction: 'Signed by President — effective Jan 1, 2025',
-    lastDate: 'Dec 2024',
-    summary: 'Makes Community Health Worker services a covered Medicare and Medicaid benefit, enabling 47% better health outcomes for enrolled patients.',
-    urgency: 'passed',
-    url: 'https://www.congress.gov/search?q=%7B%22source%22%3A%22legislation%22%2C%22search%22%3A%22community+health+worker+medicare%22%7D',
-    tags: ['CHW', 'Medicare', 'Enacted'],
+    summary: 'The Inflation Reduction Act of 2022 let Medicare negotiate prices on some high-cost drugs for the first time. Negotiated prices for the first 10 drugs took effect January 1, 2026, and 15 more drugs were selected for prices starting in 2027.',
+    url: 'https://www.cms.gov/inflation-reduction-act-and-medicare/medicare-drug-price-negotiation',
+    linkLabel: 'CMS program page',
   },
   {
-    id: 'fqhc-funding',
-    title: 'HRSA Community Health Center Expansion Act',
-    status: 'Subcommittee',
-    statusColor: '#60a5fa',
-    chamber: 'House',
-    lastAction: 'Subcommittee hearing scheduled',
-    lastDate: 'May 2025',
-    summary: 'Increases mandatory HRSA Health Center Fund appropriations by $3.6 billion over 5 years to expand clinic capacity in underserved communities.',
-    urgency: 'normal',
-    url: 'https://www.congress.gov/search?q=%7B%22source%22%3A%22legislation%22%2C%22search%22%3A%22community+health+center+expansion%22%7D',
-    tags: ['FQHC', 'HRSA', 'Underserved'],
+    id: 'health-centers',
+    title: 'Community health center funding',
+    status: 'Needs renewal',
+    statusColor: '#a78bfa',
+    summary: 'Most federal funding for community health centers comes from the Community Health Center Fund, which Congress has to extend periodically. These centers must serve patients regardless of ability to pay, so lapses in that funding directly affect uninsured patients.',
+    url: 'https://bphc.hrsa.gov/',
+    linkLabel: 'HRSA Health Center Program',
   },
-  {
-    id: 'no-surprises-protect',
-    title: 'No Surprises Act Protection Reauthorization',
-    status: 'Senate Floor',
-    statusColor: '#f472b6',
-    chamber: 'Senate',
-    lastAction: 'Motion to proceed adopted 56-44',
-    lastDate: 'Apr 2025',
-    summary: 'Reauthorizes and strengthens existing protections against surprise medical billing, closing loopholes that have allowed some providers to circumvent the 2022 original act.',
-    urgency: 'high',
-    url: 'https://www.congress.gov/search?q=%7B%22source%22%3A%22legislation%22%2C%22search%22%3A%22no+surprises+act%22%7D',
-    tags: ['Patient Protection', 'Billing', 'Bipartisan'],
-  },
+]
+
+/* Real, documented state expansions of coverage. */
+const POLICY_WINS = [
+  { state: 'ME', name: 'Maine', win: 'First state to expand Medicaid by ballot measure', year: '2017', color: '#60a5fa' },
+  { state: 'UT', name: 'Utah, Idaho & Nebraska', win: 'Voters approved Medicaid expansion ballot measures', year: '2018', color: 'var(--accent)' },
+  { state: 'MO', name: 'Missouri & Oklahoma', win: 'Voters wrote Medicaid expansion into their state constitutions', year: '2020', color: '#a78bfa' },
+  { state: 'SD', name: 'South Dakota', win: 'Voters approved a constitutional amendment expanding Medicaid', year: '2022', color: '#60a5fa' },
+  { state: 'NC', name: 'North Carolina', win: 'Legislature passed Medicaid expansion; coverage began Dec 1, 2023', year: '2023', color: '#fbbf24' },
+  { state: 'CA', name: 'California', win: 'Full Medi-Cal opened to income-eligible adults regardless of immigration status', year: '2024', color: '#f472b6' },
+]
+
+const FAQ = [
+  { q: 'Do elected officials actually read constituent messages?', a: 'Congressional offices log constituent calls, emails, and letters by issue and report the volume to the member. You may not get a personal reply, but you are counted. Research from the Congressional Management Foundation has found that personal messages explaining how a policy affects you carry more weight with staff than identical form letters.' },
+  { q: 'What should I say?', a: 'Keep it short: say you are a constituent, name the issue or bill, explain in a few sentences how it affects you or your family, and say what you want them to do. Calling the office is often the fastest way to be logged.' },
+  { q: 'Does AXVO run petitions or lobby?', a: 'No. AXVO does not collect signatures, run campaigns, or lobby, and it is not affiliated with any advocacy organization. This page only points you to official tools for contacting the people who represent you.' },
+  { q: 'I’m not a citizen. Can I still be involved?', a: 'Yes. Anyone can contact their elected officials regardless of immigration status, and you can share information and help others navigate the system. Your experience matters.' },
 ]
 
 /* ─── page ────────────────────────────────────────── */
 export default function AdvocacyPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
-  /* Social share */
-  const [copiedId, setCopiedId] = useState<string | null>(null)
-  /* Legislation */
-  const [expandedBill, setExpandedBill] = useState<string | null>(null)
-  const [billAlert, setBillAlert] = useState<string | null>(null)
+  const [expandedIssue, setExpandedIssue] = useState<string | null>(null)
 
   const pill: React.CSSProperties = {
     display: 'inline-flex', alignItems: 'center', gap: '6px',
@@ -152,320 +108,119 @@ export default function AdvocacyPage() {
     background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)',
   }
 
-  function handleCopyLink(petitionId: string, title: string) {
-    const url = typeof window !== 'undefined' ? `${window.location.origin}/advocacy#${petitionId}` : `/advocacy#${petitionId}`
-    navigator.clipboard?.writeText(url).catch(() => {})
-    setCopiedId(petitionId)
-    setTimeout(() => setCopiedId(null), 2000)
-  }
-
-  function shareOnTwitter(title: string, petitionId: string) {
-    const text = encodeURIComponent(`I just signed: "${title}" — join me in demanding better healthcare access for all Americans`)
-    const url  = encodeURIComponent(`${typeof window !== 'undefined' ? window.location.origin : 'https://axvo-health.app'}/advocacy#${petitionId}`)
-    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'noopener,noreferrer')
-  }
-
-  function shareOnFacebook(petitionId: string) {
-    const url = encodeURIComponent(`${typeof window !== 'undefined' ? window.location.origin : 'https://axvo-health.app'}/advocacy#${petitionId}`)
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'noopener,noreferrer')
-  }
-
-  function handleBillAlert(billId: string) {
-    setBillAlert(billId)
-    setTimeout(() => setBillAlert(null), 3000)
-  }
-
   return (
     <AppShell>
       {/* ── HERO ─────────────────────────────────────── */}
-      <section style={{ minHeight: '85dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '100px 24px 60px', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: '800px', height: '500px', background: 'radial-gradient(ellipse, rgba(74,144,217,0.10) 0%, rgba(96,165,250,0.05) 45%, transparent 70%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', top: '50%', right: '10%', width: '300px', height: '300px', background: 'radial-gradient(ellipse, rgba(167,139,250,0.07) 0%, transparent 65%)', pointerEvents: 'none' }} />
+      <section style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '120px 24px 72px', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: '800px', maxWidth: '100%', height: '500px', background: 'radial-gradient(ellipse, rgba(74,144,217,0.10) 0%, rgba(96,165,250,0.05) 45%, transparent 70%)', pointerEvents: 'none' }} />
 
         <div style={{ maxWidth: '760px', position: 'relative' }}>
-          <div style={{ marginBottom: '28px' }}><span style={pill}><Speaker size={14} variant="Linear" /> Advocacy & Action</span></div>
-          <h1 style={{ fontSize: 'clamp(40px, 7vw, 84px)', fontWeight: 800, lineHeight: 1.0, letterSpacing: '-0.035em', marginBottom: '24px', animation: 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both' }}>
-            Turn frustration<br /><span style={{ color: 'var(--accent)' }}>into legislation.</span>
+          <div style={{ marginBottom: '28px' }}><span style={pill}><Speaker size={14} variant="Linear" /> Advocacy</span></div>
+          <h1 style={{ fontSize: 'clamp(40px, 7vw, 76px)', fontWeight: 800, lineHeight: 1.02, letterSpacing: '-0.035em', marginBottom: '24px', animation: 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both' }}>
+            Health policy is<br /><span style={{ color: 'var(--accent)' }}>decided by people.</span>
           </h1>
-          <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: '520px', margin: '0 auto 48px', animation: 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 100ms both' }}>
-            Every policy change that expanded healthcare access started with people who were angry enough to write a letter. Sign petitions. Contact your representative. Track what's moving.
+          <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: '540px', margin: '0 auto', animation: 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 100ms both' }}>
+            Whether you can get Medicaid, what a Marketplace plan costs, and how much funding your local health center gets all come down to decisions by elected officials. Here&apos;s how to reach yours, and what&apos;s worth paying attention to.
           </p>
-          <div style={{ display: 'flex', gap: '36px', justifyContent: 'center', flexWrap: 'wrap', animation: 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 200ms both' }}>
-            {[{ v: '285K+', l: 'petition signatures' }, { v: '6', l: 'policy wins tracked' }, { v: '5', l: 'partner organizations' }].map(s => (
-              <div key={s.l} style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '26px', fontWeight: 700, letterSpacing: '-0.02em' }}>{s.v}</div>
-                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '4px' }}>{s.l}</div>
-              </div>
+        </div>
+      </section>
+
+      {/* ── TAKE ACTION ──────────────────────────────── */}
+      <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+          <RevealBlock>
+            <div style={{ marginBottom: '40px' }}>
+              <span style={pill}><Profile2User size={14} variant="Linear" /> Take action</span>
+              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Reach the people who represent you</h2>
+              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '480px', lineHeight: 1.6 }}>Official, non-partisan lookup tools. Each takes about a minute.</p>
+            </div>
+          </RevealBlock>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px' }}>
+            {ACTIONS.map((a, i) => (
+              <RevealBlock key={a.title} delay={i * 70}>
+                <a href={a.url} target="_blank" rel="noopener noreferrer"
+                  style={{ display: 'flex', flexDirection: 'column', gap: '10px', height: '100%', boxSizing: 'border-box', padding: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '18px', textDecoration: 'none', color: 'inherit', transition: 'border-color 0.2s' }}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.3)')}
+                  onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}>
+                  <h3 style={{ fontSize: '16px', fontWeight: 700, lineHeight: 1.3 }}>{a.title}</h3>
+                  <p style={{ fontSize: '13.5px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.6, flex: 1 }}>{a.desc}</p>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 600, color: 'var(--accent)' }}>
+                    {a.cta} <ExportSquare size={13} variant="Linear" />
+                  </span>
+                </a>
+              </RevealBlock>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── PETITIONS ────────────────────────────────── */}
+      {/* ── ISSUES ───────────────────────────────────── */}
       <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ marginBottom: '48px' }}>
-              <span style={pill}><ReceiptText size={14} variant="Linear" /> Active petitions</span>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Sign what matters</h2>
-              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '400px', lineHeight: 1.6 }}>Each petition is delivered to relevant congressional committees when it hits its goal.</p>
-            </div>
-          </RevealBlock>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {PETITIONS.map((pet, i) => {
-              const pct = Math.min((pet.signatures / pet.goal) * 100, 100)
-              return (
-                <RevealBlock key={pet.id} delay={i * 80}>
-                  <div style={{ borderRadius: '20px', padding: '2px', background: 'linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))' }}>
-                    <div style={{ borderRadius: '19px', padding: '24px 26px', background: 'rgba(8,10,20,0.97)' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px', flexWrap: 'wrap' }}>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
-                            {pet.urgent && <span style={{ fontSize: '10px', padding: '3px 9px', borderRadius: '100px', background: 'rgba(248,113,113,0.1)', color: '#f87171', border: '1px solid rgba(248,113,113,0.25)', fontWeight: 600, letterSpacing: '0.06em' }}>URGENT</span>}
-                            <span style={{ fontSize: '10px', padding: '3px 9px', borderRadius: '100px', background: `${pet.color}10`, color: pet.color, border: `1px solid ${pet.color}25`, fontWeight: 500 }}>Petition</span>
-                          </div>
-                          <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '6px', lineHeight: 1.3 }}>{pet.title}</h3>
-                          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.6, margin: 0 }}>{pet.desc}</p>
-                        </div>
-                        <div style={{ flexShrink: 0, textAlign: 'right' }}>
-                          <div style={{ fontSize: '22px', fontWeight: 800, color: pet.color, letterSpacing: '-0.02em', fontVariantNumeric: 'tabular-nums', fontFamily: 'var(--font-mono, monospace)' }}>
-                            <Counter target={pet.signatures} />
-                          </div>
-                          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>of {pet.goal.toLocaleString()} goal</div>
-                        </div>
-                      </div>
-
-                      {/* progress bar */}
-                      <div style={{ margin: '16px 0 14px', height: '4px', background: 'rgba(255,255,255,0.06)', borderRadius: '4px', overflow: 'hidden' }}>
-                        <div style={{ height: '100%', width: `${pct}%`, background: `linear-gradient(90deg, ${pet.color}99, ${pet.color})`, borderRadius: '4px', transition: 'width 1.2s cubic-bezier(0.16,1,0.3,1)', boxShadow: `0 0 8px ${pet.color}40` }} />
-                      </div>
-
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)' }}>{pct.toFixed(0)}% to goal · {(pet.goal - pet.signatures).toLocaleString()} more needed</span>
-                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-                          {/* Social share buttons */}
-                          <button
-                            onClick={() => shareOnTwitter(pet.title, pet.id)}
-                            title="Share on X (Twitter)"
-                            style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', fontFamily: 'inherit' }}
-                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.18)'; (e.currentTarget as HTMLElement).style.color = '#fff' }}
-                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.4)' }}>
-                            <CloseCircle size={13} color="rgba(255,255,255,0.5)" variant="Linear" />
-                          </button>
-                          <button
-                            onClick={() => shareOnFacebook(pet.id)}
-                            title="Share on Facebook"
-                            style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', fontFamily: 'inherit' }}
-                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(96,165,250,0.3)'; (e.currentTarget as HTMLElement).style.color = '#60a5fa' }}
-                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.4)' }}>
-                            <ExportSquare size={13} color="rgba(255,255,255,0.5)" variant="Linear" />
-                          </button>
-                          <button
-                            onClick={() => handleCopyLink(pet.id, pet.title)}
-                            title="Copy link"
-                            style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid', background: copiedId === pet.id ? 'rgba(74,144,217,0.1)' : 'rgba(255,255,255,0.03)', color: copiedId === pet.id ? 'var(--accent)' : 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', borderColor: copiedId === pet.id ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)', fontFamily: 'inherit' }}>
-                            {copiedId === pet.id ? <TickCircle size={13} color="var(--accent)" variant="Linear" /> : <Link2 size={13} color="rgba(255,255,255,0.5)" variant="Linear" />}
-                          </button>
-                          {/* Sign button — links to real advocacy org */}
-                          <a
-                            href={pet.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '9px 18px', borderRadius: '100px', background: `${pet.color}15`, border: `1px solid ${pet.color}30`, color: pet.color, fontSize: '13px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }}
-                            onMouseEnter={e => (e.currentTarget.style.background = `${pet.color}25`)}
-                            onMouseLeave={e => (e.currentTarget.style.background = `${pet.color}15`)}
-                          >
-                            <Heart size={12} variant="Linear" /> Sign via {pet.org} <ExportSquare size={14} variant="Linear" />
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </RevealBlock>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── LEGISLATION TRACKER ──────────────────────── */}
-      <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-          <RevealBlock>
-            <div style={{ marginBottom: '48px' }}>
-              <span style={pill}><Flash size={14} variant="Linear" /> Legislation tracker</span>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>Bills that affect you right now</h2>
-              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '480px', lineHeight: 1.6 }}>
-                Real legislation moving through Congress — or just passed — that directly affects free clinic funding, Medicaid, drug pricing, and patient protections.
+            <div style={{ marginBottom: '40px' }}>
+              <span style={pill}><Flash size={14} variant="Linear" /> Issues to follow</span>
+              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>What affects uninsured patients right now</h2>
+              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '520px', lineHeight: 1.6 }}>
+                Status as of {ISSUES_CHECKED}. Each item links to an official or non-partisan source with the latest details.
               </p>
             </div>
           </RevealBlock>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {LEGISLATION.map((bill, i) => (
-              <RevealBlock key={bill.id} delay={i * 70}>
-                <div id={bill.id} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '18px', overflow: 'hidden', transition: 'border-color 0.2s' }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = `${bill.statusColor}25`)}
-                  onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)')}>
+            {ISSUES.map((issue, i) => (
+              <RevealBlock key={issue.id} delay={i * 70}>
+                <div id={issue.id} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '18px', overflow: 'hidden' }}>
+                  <button
+                    onClick={() => setExpandedIssue(expandedIssue === issue.id ? null : issue.id)}
+                    aria-expanded={expandedIssue === issue.id}
+                    style={{ width: '100%', padding: '20px 24px', display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer', background: 'none', border: 'none', color: 'inherit', fontFamily: 'inherit', textAlign: 'left' }}>
+                    <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '100px', background: `${issue.statusColor}15`, color: issue.statusColor, border: `1px solid ${issue.statusColor}30`, fontWeight: 700, letterSpacing: '0.04em', flexShrink: 0 }}>
+                      {issue.status}
+                    </span>
+                    <span style={{ flex: 1, fontSize: '15px', fontWeight: 700, color: '#eef4f5', lineHeight: 1.35 }}>{issue.title}</span>
+                    <ArrowDown2 size={15} variant="Linear" style={{ color: 'rgba(255,255,255,0.35)', transform: expandedIssue === issue.id ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', flexShrink: 0 }} />
+                  </button>
 
-                  {/* Bill header */}
-                  <div style={{ padding: '20px 24px', display: 'flex', alignItems: 'flex-start', gap: '16px', cursor: 'pointer' }}
-                    onClick={() => setExpandedBill(expandedBill === bill.id ? null : bill.id)}>
-                    {/* Urgency indicator */}
-                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: bill.statusColor, marginTop: '6px', flexShrink: 0, boxShadow: bill.urgency === 'urgent' || bill.urgency === 'high' ? `0 0 8px ${bill.statusColor}` : 'none', animation: bill.urgency === 'urgent' ? 'pulseDot 1.5s ease-in-out infinite' : 'none' }} />
-                    <div style={{ flex: 1 }}>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '8px', alignItems: 'center' }}>
-                        <span style={{ fontSize: '11px', padding: '3px 9px', borderRadius: '100px', background: `${bill.statusColor}15`, color: bill.statusColor, border: `1px solid ${bill.statusColor}30`, fontWeight: 700, letterSpacing: '0.04em' }}>
-                          {bill.status}
-                        </span>
-                        <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', padding: '3px 8px', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}>
-                          {bill.chamber}
-                        </span>
-                        {bill.tags.map(tag => (
-                          <span key={tag} style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)', padding: '2px 7px', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.06)' }}>{tag}</span>
-                        ))}
-                      </div>
-                      <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#eef4f5', marginBottom: '4px', lineHeight: 1.35 }}>{bill.title}</h3>
-                      <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', margin: 0 }}>Last action: {bill.lastAction} — <span style={{ color: bill.statusColor }}>{bill.lastDate}</span></p>
-                    </div>
-                    <ArrowRight2 size={15} variant="Linear" style={{ color: 'rgba(255,255,255,0.25)', transform: expandedBill === bill.id ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s', flexShrink: 0, marginTop: '2px' }} />
-                  </div>
-
-                  {/* Expanded details */}
-                  {expandedBill === bill.id && (
+                  {expandedIssue === issue.id && (
                     <div style={{ padding: '0 24px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                      <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, margin: '16px 0 18px' }}>{bill.summary}</p>
-                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                        <a href={bill.url} target="_blank" rel="noopener noreferrer"
-                          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '9px 16px', background: `${bill.statusColor}15`, border: `1px solid ${bill.statusColor}30`, borderRadius: '10px', color: bill.statusColor, fontSize: '13px', fontWeight: 600, textDecoration: 'none', transition: 'opacity 0.15s' }}
-                          onMouseEnter={e => (e.currentTarget.style.opacity = '0.8')}
-                          onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
-                          <Book1 size={12} variant="Linear" /> View on Congress.gov <ExportSquare size={11} variant="Linear" />
-                        </a>
-                        <button
-                          onClick={() => handleBillAlert(bill.id)}
-                          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '9px 16px', background: billAlert === bill.id ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.03)', border: `1px solid ${billAlert === bill.id ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)'}`, borderRadius: '10px', color: billAlert === bill.id ? 'var(--accent)' : 'rgba(255,255,255,0.45)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}>
-                          {billAlert === bill.id ? <><TickCircle size={12} variant="Linear" /> Alert set!</> : <><Notification size={12} variant="Linear" /> Get action alerts</>}
-                        </button>
-                      </div>
+                      <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, margin: '16px 0 18px' }}>{issue.summary}</p>
+                      <a href={issue.url} target="_blank" rel="noopener noreferrer"
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '9px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', color: 'var(--accent)', fontSize: '13px', fontWeight: 600, textDecoration: 'none' }}>
+                        <Book1 size={12} variant="Linear" /> {issue.linkLabel} <ExportSquare size={11} variant="Linear" />
+                      </a>
                     </div>
                   )}
                 </div>
               </RevealBlock>
             ))}
           </div>
-
-          <RevealBlock delay={200}>
-            <div style={{ marginTop: '24px', padding: '18px 22px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px', display: 'flex', gap: '14px', alignItems: 'center', flexWrap: 'wrap' }}>
-              <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flex: 1, flexWrap: 'wrap' }}>
-                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', fontSize: '12px' }}>
-                  {[
-                    { color: '#f87171', label: 'Urgent' },
-                    { color: '#fbbf24', label: 'In Committee' },
-                    { color: '#60a5fa', label: 'Floor Vote' },
-                    { color: '#60a5fa', label: 'Enacted' },
-                  ].map(s => (
-                    <span key={s.label} style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'rgba(255,255,255,0.4)' }}>
-                      <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: s.color, display: 'inline-block' }} /> {s.label}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <a href="https://www.congress.gov" target="_blank" rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: 'rgba(255,255,255,0.35)', textDecoration: 'none', transition: 'color 0.15s' }}
-                onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
-                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.35)')}>
-                Full tracker at Congress.gov <ExportSquare size={14} variant="Linear" />
-              </a>
-            </div>
-          </RevealBlock>
         </div>
       </section>
 
-      {/* ── POLICY WINS MAP ──────────────────────────── */}
+      {/* ── POLICY WINS ──────────────────────────────── */}
       <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
             <div style={{ marginBottom: '48px' }}>
-              <span style={pill}><Location size={14} variant="Linear" /> Policy wins</span>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>What advocacy has already moved</h2>
-              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '400px', lineHeight: 1.6 }}>These wins happened because people organized, wrote letters, and showed up. Every state below was a "never" at some point.</p>
+              <span style={pill}><Location size={14} variant="Linear" /> It has worked before</span>
+              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px', lineHeight: 1.15 }}>States that expanded coverage</h2>
+              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.38)', marginTop: '10px', maxWidth: '480px', lineHeight: 1.6 }}>In several states, coverage expanded because voters put it on the ballot or pushed their legislature to act.</p>
             </div>
           </RevealBlock>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '14px' }}>
             {POLICY_WINS.map((w, i) => (
               <RevealBlock key={w.state} delay={i * 70}>
-                <div
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = `${w.color}30`; (e.currentTarget as HTMLElement).style.background = `${w.color}06` }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.06)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)' }}
-                  style={{ padding: '22px 24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', display: 'flex', gap: '16px', alignItems: 'flex-start', transition: 'all 0.22s' }}>
+                <div style={{ padding: '22px 24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', display: 'flex', gap: '16px', alignItems: 'flex-start', height: '100%', boxSizing: 'border-box' }}>
                   <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: `${w.color}15`, border: `1px solid ${w.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '13px', color: w.color, flexShrink: 0, fontFamily: 'var(--font-mono, monospace)' }}>{w.state}</div>
                   <div>
                     <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '4px' }}>{w.name}</div>
-                    <div style={{ fontSize: '13px', color: w.color, fontWeight: 500, marginBottom: '4px' }}>{w.win}</div>
-                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', gap: '4px' }}><TickCircle size={14} variant="Linear" /> Won {w.year}</div>
+                    <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.5, marginBottom: '6px' }}>{w.win}</div>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center', gap: '4px' }}><TickCircle size={14} variant="Linear" /> {w.year}</div>
                   </div>
                 </div>
-              </RevealBlock>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── IMPACT STATS ─────────────────────────────── */}
-      <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-          <RevealBlock>
-            <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-              <span style={pill}><TrendUp size={14} variant="Linear" /> Movement metrics</span>
-              <h2 style={{ fontSize: 'clamp(26px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-0.025em', marginTop: '20px' }}>The numbers are moving</h2>
-            </div>
-          </RevealBlock>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
-            {[
-              { val: 285000, suffix: '+', label: 'Total petition signatures', color: 'var(--accent)' },
-              { val: 6, suffix: '', label: 'State policy wins in 2 years', color: '#60a5fa' },
-              { val: 14200, suffix: '+', label: 'Letters sent to representatives', color: '#60a5fa' },
-              { val: 5, suffix: '', label: 'National partner organizations', color: '#a78bfa' },
-            ].map((s, i) => (
-              <RevealBlock key={s.label} delay={i * 80}>
-                <div style={{ padding: '28px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '18px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '42px', fontWeight: 800, color: s.color, letterSpacing: '-0.04em', lineHeight: 1, marginBottom: '10px', fontVariantNumeric: 'tabular-nums', fontFamily: 'var(--font-mono, monospace)' }}>
-                    <Counter target={s.val} suffix={s.suffix} />
-                  </div>
-                  <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.5 }}>{s.label}</div>
-                </div>
-              </RevealBlock>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── PARTNERS ─────────────────────────────────── */}
-      <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-          <RevealBlock>
-            <div style={{ marginBottom: '40px' }}>
-              <span style={pill}><Global size={14} variant="Linear" /> Partner organizations</span>
-              <h2 style={{ fontSize: 'clamp(22px, 3vw, 36px)', fontWeight: 700, letterSpacing: '-0.02em', marginTop: '20px' }}>In good company</h2>
-            </div>
-          </RevealBlock>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {PARTNERS.map((p, i) => (
-              <RevealBlock key={p.name} delay={i * 60}>
-                <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 22px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px', textDecoration: 'none', gap: '16px', flexWrap: 'wrap', transition: 'all 0.22s' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,144,217,0.2)'; (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.03)' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.06)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)' }}>
-                  <div>
-                    <div style={{ fontWeight: 600, fontSize: '15px', color: '#eef4f5', marginBottom: '3px' }}>{p.name}</div>
-                    <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.38)' }}>{p.desc}</div>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--accent)', fontSize: '12px', fontWeight: 500, flexShrink: 0 }}>
-                    Visit <ArrowRight size={12} variant="Linear" />
-                  </div>
-                </a>
               </RevealBlock>
             ))}
           </div>
@@ -478,18 +233,13 @@ export default function AdvocacyPage() {
           <RevealBlock>
             <div style={{ marginBottom: '40px' }}>
               <span style={pill}>Common questions</span>
-              <h2 style={{ fontSize: 'clamp(22px, 3vw, 36px)', fontWeight: 700, letterSpacing: '-0.02em', marginTop: '20px' }}>Does any of this actually work?</h2>
+              <h2 style={{ fontSize: 'clamp(22px, 3vw, 36px)', fontWeight: 700, letterSpacing: '-0.02em', marginTop: '20px' }}>Does contacting officials actually matter?</h2>
             </div>
           </RevealBlock>
-          {[
-            { q: 'Do politicians actually read constituent letters?', a: 'Congressional staffers log every letter by issue. Most offices produce weekly reports on constituent contact volume. When you write, you are counted — even if you don\'t get a personal reply. Volume signals priority.' },
-            { q: 'What\'s the most effective form of contact?', a: 'In order of impact: in-person town hall > phone call > handwritten letter > email > form submission. A personal, specific email about your own situation outperforms a form letter 10:1.' },
-            { q: 'Can petitions really change legislation?', a: 'Petitions alone rarely pass bills — but they\'re powerful signals of organized constituent opinion. They\'re most effective combined with direct contact campaigns. The petitions here feed into partner organizations\' legislative testimony.' },
-            { q: 'I\'m not a citizen — can I still be involved?', a: 'Yes. You can contact elected officials regardless of immigration status. You can share petitions, share information, and support others in navigating the system. Your voice and your story matter.' },
-          ].map((f, i) => (
-            <RevealBlock key={i} delay={i * 50}>
+          {FAQ.map((f, i) => (
+            <RevealBlock key={f.q} delay={i * 50}>
               <div style={{ borderRadius: '14px', overflow: 'hidden', border: '1px solid', marginBottom: '6px', borderColor: openFaq === i ? 'rgba(74,144,217,0.2)' : 'rgba(255,255,255,0.06)', background: openFaq === i ? 'rgba(74,144,217,0.03)' : 'transparent', transition: 'all 0.25s' }}>
-                <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                <button onClick={() => setOpenFaq(openFaq === i ? null : i)} aria-expanded={openFaq === i}
                   style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 22px', background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontFamily: 'inherit', textAlign: 'left', gap: '16px' }}>
                   <span style={{ fontSize: '15px', fontWeight: 500, lineHeight: 1.4 }}>{f.q}</span>
                   <ArrowDown2 size={15} variant="Linear" style={{ flexShrink: 0, color: 'rgba(255,255,255,0.4)', transform: openFaq === i ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s' }} />
@@ -505,7 +255,6 @@ export default function AdvocacyPage() {
 
       <style>{`
         @keyframes fadeUp { from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:translateY(0) } }
-        @keyframes pulseDot { 0%,100% { opacity:1; transform:scale(1) } 50% { opacity:0.5; transform:scale(0.8) } }
       `}</style>
     </AppShell>
   )

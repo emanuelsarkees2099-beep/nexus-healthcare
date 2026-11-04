@@ -82,26 +82,6 @@ const CRISIS_RESOURCES = [
   },
 ]
 
-const NEARBY_ER = [
-  { name: 'Banner University Medical Center', dist: '0.6 mi', wait: '~18 min', open: true },
-  { name: 'St. Joseph\'s Hospital', dist: '1.4 mi', wait: '~31 min', open: true },
-  { name: 'Valleywise Health Medical Center', dist: '2.1 mi', wait: '~24 min', open: true },
-]
-
-const RESPONSE_TIMES: Record<string, string> = {
-  '988 Suicide & Crisis Lifeline': '< 2 min avg',
-  'Crisis Text Line': '< 5 min avg',
-  '911 Emergency': 'Immediate',
-  'Poison Control': 'Immediate',
-  'Domestic Violence Hotline': '< 3 min avg',
-  'SAMHSA Treatment Locator': 'Same-day referral',
-}
-
-const NEARBY_MH = [
-  { name: 'Valle del Sol Behavioral Health', dist: '0.9 mi', hours: 'Open until 8pm', open: true },
-  { name: 'Terros Health Crisis Center', dist: '1.8 mi', hours: '24/7 walk-in', open: true },
-]
-
 function PulsingDot({ color }: { color: string }) {
   return (
     <span style={{ position: 'relative', display: 'inline-flex', width: '10px', height: '10px' }}>
@@ -388,11 +368,6 @@ export default function CrisisPage() {
                   <div style={{ fontSize: '18px', fontWeight: 800, color: '#f5f5f5', letterSpacing: '-0.01em' }}>
                     {r.number}
                   </div>
-                  {RESPONSE_TIMES[r.name] && (
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', fontSize: '10px', fontWeight: 700, color: r.color, opacity: 0.85, background: `${r.bg}`, border: `1px solid ${r.border}`, padding: '1px 7px', borderRadius: '100px' }}>
-                      <Clock size={9} color="currentColor" /> {RESPONSE_TIMES[r.name]}
-                    </span>
-                  )}
                 </div>
                 <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>
                   {r.desc}
@@ -463,7 +438,7 @@ export default function CrisisPage() {
               <>
                 <Routing size={13} color="rgba(255,255,255,0.25)" style={{ flexShrink: 0 }} />
                 <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>
-                  Allow location access above to find the 3 nearest in-person crisis centers.{' '}
+                  Allow location access to search for crisis care near you.{' '}
                   <a href="https://www.211.org" target="_blank" rel="noopener noreferrer"
                     style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>
                     Or dial 211 →
@@ -509,20 +484,23 @@ export default function CrisisPage() {
                     </div>
                   </a>
                 ) : (
-                  NEARBY_ER.map(er => (
-                    <div key={er.name} style={{
-                      padding: '16px 18px', borderRadius: '12px',
-                      background: 'rgba(248,113,113,0.04)', border: '1px solid rgba(248,113,113,0.15)',
-                      display: 'flex', flexDirection: 'column', gap: '6px',
-                    }}>
-                      <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5' }}>{er.name}</div>
-                      <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Routing size={14} color="rgba(255,255,255,0.45)" /> {er.dist}</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={14} color="rgba(255,255,255,0.45)" /> {er.wait} wait</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><PulsingDot color="#60a5fa" /> Open now</span>
-                      </div>
+                  <a
+                    href="https://www.google.com/maps/search/emergency+room+near+me"
+                    target="_blank" rel="noopener noreferrer"
+                    style={{
+                      padding: '18px 20px', borderRadius: '14px',
+                      background: 'rgba(248,113,113,0.04)', border: '1px solid rgba(248,113,113,0.18)',
+                      textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '14px',
+                    }}
+                  >
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Location size={16} color="#f87171" />
                     </div>
-                  ))
+                    <div>
+                      <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5', marginBottom: '3px' }}>Find an emergency room</div>
+                      <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>Opens Google Maps · If it&apos;s life-threatening, call 911</div>
+                    </div>
+                  </a>
                 )}
                 <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.2)', margin: '4px 0 0', lineHeight: 1.5 }}>
                   All ERs are required by federal law (EMTALA) to stabilize emergencies regardless of insurance.
@@ -580,19 +558,37 @@ export default function CrisisPage() {
                     </a>
                   </>
                 ) : (
-                  NEARBY_MH.map(mh => (
-                    <div key={mh.name} style={{
-                      padding: '16px 18px', borderRadius: '12px',
-                      background: 'rgba(129,140,248,0.04)', border: '1px solid rgba(129,140,248,0.15)',
-                      display: 'flex', flexDirection: 'column', gap: '6px',
-                    }}>
-                      <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5' }}>{mh.name}</div>
-                      <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Routing size={14} color="rgba(255,255,255,0.45)" /> {mh.dist}</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={14} color="rgba(255,255,255,0.45)" /> {mh.hours}</span>
+                  <>
+                    <a
+                      href="https://findtreatment.gov"
+                      target="_blank" rel="noopener noreferrer"
+                      style={{
+                        padding: '18px 20px', borderRadius: '14px',
+                        background: 'rgba(129,140,248,0.04)', border: '1px solid rgba(129,140,248,0.18)',
+                        textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '14px',
+                      }}
+                    >
+                      <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(129,140,248,0.1)', border: '1px solid rgba(129,140,248,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <Heart size={16} color="#818cf8" />
                       </div>
-                    </div>
-                  ))
+                      <div>
+                        <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5', marginBottom: '3px' }}>FindTreatment.gov (SAMHSA)</div>
+                        <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>Search mental health and substance use care by ZIP code</div>
+                      </div>
+                    </a>
+                    <a
+                      href="tel:988"
+                      style={{
+                        padding: '14px 18px', borderRadius: '12px',
+                        background: 'rgba(129,140,248,0.02)', border: '1px solid rgba(129,140,248,0.12)',
+                        textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px',
+                        fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.6)',
+                      }}
+                    >
+                      <Call size={13} color="#818cf8" />
+                      Call or text 988 — they can connect you to local crisis services
+                    </a>
+                  </>
                 )}
                 <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.2)', margin: '4px 0 0', lineHeight: 1.5 }}>
                   Text <strong>HOME to 741741</strong> (Crisis Text Line) for 24/7 support while you locate in-person care.
@@ -760,12 +756,12 @@ export default function CrisisPage() {
           <div style={{ flex: 1, minWidth: '240px' }}>
             <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>Plan to check in within 24 hours</div>
             <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.65 }}>
-              Research shows that one follow-up contact within 24 hours significantly reduces crisis risk. Reach out to a trusted person, your therapist, or one of our CHW navigators — free, no insurance needed.
+              Staying in contact after a crisis is linked to lower risk. Reach out to a trusted person or your therapist, or call or text 988 again. It&apos;s free and no insurance is needed.
             </div>
           </div>
-          <Link href="/chw" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 18px', borderRadius: 10, background: 'rgba(129,140,248,0.12)', border: '1px solid rgba(129,140,248,0.28)', color: '#818cf8', fontSize: 13, fontWeight: 700, textDecoration: 'none', flexShrink: 0, fontFamily: 'inherit' }}>
-            Connect with a CHW <ArrowRight2 size={13} color="currentColor" />
-          </Link>
+          <a href="tel:988" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 18px', borderRadius: 10, background: 'rgba(129,140,248,0.12)', border: '1px solid rgba(129,140,248,0.28)', color: '#818cf8', fontSize: 13, fontWeight: 700, textDecoration: 'none', flexShrink: 0, fontFamily: 'inherit' }}>
+            Call or text 988 <ArrowRight2 size={13} color="currentColor" />
+          </a>
         </div>
       </section>
 
@@ -799,7 +795,7 @@ export default function CrisisPage() {
                 color: 'rgba(255,255,255,0.6)', fontSize: '13px', fontWeight: 400,
                 textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px',
               }}>
-                Talk to a CHW navigator
+                Find a community health worker program
               </Link>
             </div>
           </div>

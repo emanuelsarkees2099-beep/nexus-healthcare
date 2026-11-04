@@ -10,7 +10,7 @@ registerGSAP()
  * Stats Section — 5.7 Data Validation Layer
  *
  * Rules:
- * - Dynamic counts (clinics, stories) are ONLY shown when confirmed from DB
+ * - Dynamic counts (clinics) are ONLY shown when confirmed from DB
  * - If DB returns null/0/<threshold, the stat shows "—" with a loading/unavailable state
  * - Static facts (languages: 48, cost: $0) are always shown — they're not DB-sourced
  * - "Last verified" timestamp shows when the DB fetch completed
@@ -33,8 +33,8 @@ interface StatDef {
 }
 
 const STAT_DEFS: StatDef[] = [
-  { key: 'clinics', label: 'Free clinics indexed',  prefix: '',  suffix: '+', value: null, source: 'dynamic', minValid: 10,  fallback: 18900 },
-  { key: 'stories', label: 'Stories & submissions', prefix: '',  suffix: '+', value: null, source: 'dynamic', minValid: 1,   fallback: 2419  },
+  { key: 'clinics', label: 'Clinic sites indexed',  prefix: '',  suffix: '+', value: null, source: 'dynamic', minValid: 10,  fallback: 18900 },
+  { key: 'programs', label: 'Programs checked',     prefix: '',  suffix: '',  value: 8,    source: 'static',  minValid: 0  },
   { key: 'langs',   label: 'Languages supported',  prefix: '',  suffix: '',  value: 4,    source: 'static',  minValid: 0  },
   { key: 'cost',    label: 'Cost to use AXVO',    prefix: '$', suffix: '',  value: 0,    source: 'static',  minValid: 0  },
 ]
@@ -67,7 +67,6 @@ export default function Stats() {
 
     async function fetchCounts() {
       let clinicCount:  number | null = null
-      let storiesCount: number | null = null
       let fetchOk = false
 
       /* Clinics — 'clinics' table not yet in generated types, use explicit cast */
@@ -84,27 +83,8 @@ export default function Stats() {
         /* network error — leave as null */
       }
 
-      /* Submissions / stories — via a count-only RPC, not a direct table
-         read. `submissions` holds real names, free-text personal stories,
-         and emails, so its SELECT policy is admin-only; this function is
-         SECURITY DEFINER and returns nothing but a number. */
-      try {
-        // 'submissions_count' isn't in the generated Supabase types yet
-        // (function created via raw SQL migration, not the type-gen CLI) —
-        // same cast pattern already used above for the 'clinics' table.
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data: count, error } = await (supabase as unknown as any).rpc('submissions_count')
-        if (!error && typeof count === 'number' && count >= STAT_DEFS.find(s => s.key === 'stories')!.minValid) {
-          storiesCount = count
-          fetchOk = true
-        }
-      } catch {
-        /* network error — leave as null */
-      }
-
       setStats(prev => prev.map(s => {
         if (s.key === 'clinics')  return { ...s, value: clinicCount  }
-        if (s.key === 'stories')  return { ...s, value: storiesCount }
         return s
       }))
 

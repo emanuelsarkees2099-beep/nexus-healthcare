@@ -17,24 +17,24 @@ const TEAM_VALUES = [
   {
     Icon: Clock,
     title: 'Radical transparency',
-    body: 'Every stat we show is verified. Every number is sourced. When data is unavailable we show a dash — we would rather show nothing than mislead you. Our open roadmap is public.',
+    body: 'Every statistic on AXVO cites a public source. When we don\'t have data, we say so instead of estimating. AXVO\'s source code is public on GitHub.',
   },
   {
     Icon: People,
-    title: 'Community health workers first',
-    body: 'Real Community Health Workers (CHWs) are embedded in the platform. They know local resources, speak your language, and provide human guidance that no algorithm can replicate.',
+    title: 'Real people, not just software',
+    body: 'AXVO lists community health worker programs at real health centers and nonprofits, so you can reach a person who knows local resources and may speak your language.',
   },
   {
     Icon: Lock,
     title: 'Your privacy is non-negotiable',
-    body: 'Nothing you enter into symptom tools, search, or forms leaves your device in an identifiable form. We do not sell data, we do not share with insurers, and we never will.',
+    body: 'Eligibility checks run entirely in your browser. We do not sell data or share it with insurers. A few features, like the AI symptom guide, send what you type to an AI provider to generate an answer, and the Privacy Policy lists every service we use.',
   },
 ]
 
 const HRSA_FACTS = [
-  { stat: '1,400+',    label: 'HRSA-funded health center organizations' },
+  { stat: '~1,400',    label: 'HRSA-funded health center organizations' },
   { stat: '14,000+',  label: 'service delivery sites across the U.S.' },
-  { stat: '30M',      label: 'patients served annually by FQHCs' },
+  { stat: '30M+',     label: 'patients served annually by health centers' },
   { stat: '$0',       label: 'cost to use AXVO, always' },
 ]
 
@@ -101,7 +101,7 @@ export default function AboutPage() {
           fontFamily: 'var(--font-inter)', fontWeight: 300,
           lineHeight: 1.8, maxWidth: '580px', margin: '0 auto 40px',
         }}>
-          30 million Americans are uninsured. Tens of millions more are underinsured. AXVO exists to close the gap between who needs care and who can find it — using technology to surface the federally-funded, sliding-scale, and free resources that were already there.
+          26.7 million people in the U.S. had no health insurance for all of 2025. Millions more are underinsured. AXVO exists to close the gap between who needs care and who can find it — using technology to surface the federally-funded, sliding-scale, and free resources that were already there.
         </p>
 
         <p style={{ fontSize: '14px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', margin: '-16px auto 32px' }}>
@@ -269,10 +269,10 @@ export default function AboutPage() {
                 icon: <TickCircle size={13} variant="Bold" />,
                 color: 'var(--accent)',
                 items: [
-                  'A directory of verified free & sliding-scale clinics',
+                  'A directory of free & sliding-scale clinics from public health data',
                   'A benefits eligibility navigator (Medicaid, ACA, HRSA)',
                   'A resource matching tool for uninsured patients',
-                  'A connection point to real Community Health Workers',
+                  'A directory of community health worker programs',
                   'A patient rights reference guide',
                   'Always free, with no ads or data sales',
                 ],
@@ -330,11 +330,12 @@ export default function AboutPage() {
         </h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {[
-            { name: 'HRSA Health Center Program', desc: 'All federally-qualified health centers (FQHCs) — the foundation of our clinic directory.', href: 'https://findahealthcenter.hrsa.gov' },
-            { name: 'health.gov / HHS Open Data', desc: 'Federal health program eligibility rules, updated as regulations change.', href: 'https://health.gov' },
-            { name: '211 Network', desc: 'Local social service resources including food, housing, and healthcare.', href: 'https://www.211.org' },
-            { name: 'NeedyMeds', desc: 'Prescription assistance programs and free/low-cost medication resources.', href: 'https://www.needymeds.org' },
-            { name: 'Community submissions', desc: 'Verified additions from CHWs and community members, reviewed before publishing.', href: null },
+            { name: 'HRSA Health Center sites', desc: 'Every HRSA-funded health center and look-alike site in the U.S., imported from HRSA\'s public data file. The foundation of the clinic directory.', href: 'https://data.hrsa.gov/' },
+            { name: 'National Association of Free & Charitable Clinics', desc: 'Free clinics compiled from the NAFC directory and individual clinic websites.', href: 'https://nafcclinics.org' },
+            { name: 'CMS NPI Registry', desc: 'Used to fill gaps with registered health centers, rural health clinics, and mental health clinics.', href: 'https://npiregistry.cms.hhs.gov' },
+            { name: 'OpenStreetMap', desc: 'Additional clinic locations and turning addresses and ZIP codes into map locations.', href: 'https://www.openstreetmap.org' },
+            { name: 'HHS Poverty Guidelines', desc: 'The official income thresholds the eligibility checker uses.', href: 'https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines' },
+            { name: 'Your corrections', desc: 'Every clinic page has a "Report wrong info" link. Reports are reviewed and listings are fixed by hand.', href: null },
           ].map(s => (
             <div key={s.name} style={{
               display: 'flex', gap: '16px', alignItems: 'flex-start',
@@ -376,8 +377,8 @@ export default function AboutPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
             {[
               { n: '01', title: 'Tell us where you are', body: 'Enter your location. AXVO maps free clinics, FQHCs, and sliding-scale providers near you, sourced from HRSA and other public data.' },
-              { n: '02', title: 'Check what you qualify for', body: 'Answer five questions. Our eligibility engine checks 40+ federal and state programs to surface what you\'re owed — Medicaid, ACA subsidies, drug assistance, and more.' },
-              { n: '03', title: 'Get care', body: 'Book directly, get directions, or connect with a Community Health Worker who can navigate the system on your behalf. Everything in one place.' },
+              { n: '02', title: 'Check what you qualify for', body: 'Answer five questions. The eligibility checker looks at 8 programs, including Medicaid, CHIP, ACA subsidies, Medicare, prescription assistance, and SNAP.' },
+              { n: '03', title: 'Get care', body: 'Get the address and phone number, call ahead to confirm hours, or reach a community health worker program for help navigating the system.' },
             ].map(s => (
               <div key={s.n} className="about-card" style={{ position: 'relative' }}>
                 <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.14em', marginBottom: '16px' }}>{s.n}</div>
@@ -394,8 +395,8 @@ export default function AboutPage() {
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
             {[
-              { stat: '18,900+', label: 'Verified clinics indexed', note: 'FQHCs, free clinics, sliding-scale' },
-              { stat: '40+', label: 'Programs checked', note: 'Medicaid, ACA, CHIP, and more' },
+              { stat: '18,900+', label: 'Clinic sites indexed', note: 'From HRSA and other public data' },
+              { stat: '8', label: 'Programs checked', note: 'Medicaid, CHIP, ACA, and more' },
               { stat: '2 min', label: 'Eligibility check time', note: 'No paperwork. No account.' },
               { stat: '$0', label: 'Cost to use AXVO', note: 'Free forever — no ads, no data sales' },
             ].map(s => (

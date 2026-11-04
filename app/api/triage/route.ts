@@ -18,10 +18,13 @@
  *  - 10 req / min per IP rate limit (separate from general AI endpoint)
  *  - Input capped at 500 chars
  *  - JSON parsing with strict field validation
- *  - 503 on missing API key (graceful — page falls back to keyword matching)
+ *  - 503 when no AI provider is configured (page shows general guidance)
+ *
+ * Provider: Anthropic when ANTHROPIC_API_KEY is a real key, otherwise (or if
+ * that call fails) Groq's free tier — the same provider /api/ai already uses.
  */
-
 import Anthropic from '@anthropic-ai/sdk'
+import Groq from 'groq-sdk'
 import { rateLimit } from '@/lib/rate-limit'
 
 const TRIAGE_SYSTEM = `You are a clinical triage assistant for AXVO Health — a free healthcare access platform for uninsured Americans.
@@ -61,9 +64,10 @@ export async function POST(req: Request) {
     )
   }
 
-  // Graceful degradation: if key not configured, page falls back to keyword matching
-  const apiKey = process.env.ANTHROPIC_API_KEY
-  if (!apiKey) {
+  // Graceful degradation: with no provider configured the page shows general guidance
+  const anthropicKey = process.env.ANTHROPIC_API_KEY?.startsWith('sk-ant-') ? process.env.ANTHROPIC_API_KEY : ''
+  const groqKey = process.env.GROQ_API_KEY ?? ''
+  if (!anthropicKey && !groqKey) {
     return new Response(
       JSON.stringify({ error: 'AI service not configured' }),
       { status: 503, headers: { 'Content-Type': 'application/json' } }
@@ -91,16 +95,36 @@ export async function POST(req: Request) {
   const sanitized = query.slice(0, 500)
 
   try {
-    const client = new Anthropic({ apiKey })
+    const userContent = `Patient-reported symptoms: "${sanitized}"`
+    let raw = ''
 
-    const message = await client.messages.create({
-      model:      'claude-haiku-4-5',
-      max_tokens: 700,
-      system:     TRIAGE_SYSTEM,
-      messages:   [{ role: 'user', content: `Patient-reported symptoms: "${sanitized}"` }],
-    })
+    if (anthropicKey) {
+      try {
+        const message = await new Anthropic({ apiKey: anthropicKey }).messages.create({
+          model:      'claude-haiku-4-5',
+          max_tokens: 700,
+          system:     TRIAGE_SYSTEM,
+          messages:   [{ role: 'user', content: userContent }],
+        })
+        raw = message.content[0]?.type === 'text' ? message.content[0].text : ''
+      } catch (err) {
+        console.error('[triage] Anthropic call failed, trying Groq:', err instanceof Error ? err.message : err)
+      }
+    }
 
-    const raw = message.content[0]?.type === 'text' ? message.content[0].text : ''
+    if (!raw && groqKey) {
+      const completion = await new Groq({ apiKey: groqKey }).chat.completions.create({
+        model:           'openai/gpt-oss-120b',
+        max_tokens:      1200,
+        temperature:     0.2,
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'system', content: TRIAGE_SYSTEM },
+          { role: 'user', content: userContent },
+        ],
+      })
+      raw = completion.choices[0]?.message?.content ?? ''
+    }
 
     // Extract JSON — handle any accidental markdown fences
     const jsonMatch = raw.match(/\{[\s\S]*\}/)

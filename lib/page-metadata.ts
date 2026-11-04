@@ -201,7 +201,7 @@ export const PAGE_META = {
   /* ── Meta / info ─────────────────────────────────────────────── */
   about: meta(
     'About AXVO',
-    'AXVO is a free tool connecting 30 million uninsured Americans to federally-funded health centers, free clinics, and assistance programs.',
+    'AXVO is a free tool connecting the 27 million uninsured people in the U.S. to federally-funded health centers, free clinics, and assistance programs.',
     '/about',
     ['about AXVO', 'who we are', 'AXVO mission', 'free healthcare mission'],
     { title: 'About AXVO', sub: 'Free healthcare, found in seconds. No insurance required.' },

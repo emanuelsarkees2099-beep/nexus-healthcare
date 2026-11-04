@@ -112,8 +112,8 @@ describe('PAGE_META — specific entry content', () => {
     expect(PAGE_META.dashboard.title as string).toContain('Dashboard')
   })
 
-  it('about: description mentions "30 million"', () => {
-    expect(PAGE_META.about.description as string).toContain('30 million')
+  it('about: description mentions "27 million"', () => {
+    expect(PAGE_META.about.description as string).toContain('27 million')
   })
 })
 

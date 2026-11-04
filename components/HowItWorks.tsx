@@ -109,7 +109,7 @@ function Panel2() {
             Clinica Adelante
           </div>
           <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>
-            Open now · 1.2 mi · ~20 min wait
+            FQHC · Sliding scale · Example result
           </div>
         </div>
         <div style={{
@@ -117,7 +117,7 @@ function Panel2() {
           background: 'rgba(74,144,217,0.12)', color: 'var(--accent)',
           borderRadius: 'var(--r-sm)', padding: '3px 9px', fontFamily: 'var(--font-inter)',
           flexShrink: 0,
-        }}>Open</div>
+        }}>Call ahead</div>
       </div>
       <button
         onClick={() => router.push('/pathways')}
@@ -128,7 +128,7 @@ function Panel2() {
           fontFamily: 'var(--font-inter)', marginBottom: '10px',
           boxShadow: '0 4px 16px rgba(79,142,240,0.22), 0 2px 10px rgba(106, 166, 255,0.16)',
         }}>
-        Book appointment &rarr;
+        See care options &rarr;
       </button>
       <div style={{ textAlign: 'center', fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>
         Available in 4 languages
