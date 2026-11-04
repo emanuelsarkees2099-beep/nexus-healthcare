@@ -8,7 +8,7 @@
    forces returning visitors off stale HTML / _next chunks.
    ========================================================= */
 
-const CACHE_NAME = 'axvo-v2'
+const CACHE_NAME = 'axvo-v3'
 
 /* Pages to precache on install — these work fully offline.
    Crisis is the priority: it must load with zero signal (life-safety).
@@ -123,6 +123,15 @@ self.addEventListener('fetch', event => {
             ))
           })
         )
+    )
+    return
+  }
+
+  /* Page data for client-side navigation (React Server Component payloads)
+     must never be served stale: network-first, cache only as offline fallback. */
+  if (request.headers.get('RSC') === '1' || url.searchParams.has('_rsc')) {
+    event.respondWith(
+      fetch(request).catch(() => caches.match(request).then(cached => cached || Response.error()))
     )
     return
   }
