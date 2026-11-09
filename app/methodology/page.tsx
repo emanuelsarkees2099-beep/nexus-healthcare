@@ -34,19 +34,9 @@ export default function MethodologyPage() {
     marginBottom: '16px',
   }
   const pill: React.CSSProperties = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '6px',
-    padding: '4px 12px',
-    borderRadius: '100px',
-    fontSize: '11px',
-    fontWeight: 500,
-    letterSpacing: '0.08em',
-    textTransform: 'uppercase' as const,
-    background: 'rgba(74,144,217,0.08)',
-    color: 'var(--accent)',
-    border: '1px solid rgba(74,144,217,0.18)',
-    marginBottom: '20px',
+    // Plain section label — no colored badge
+    display: 'inline-flex', alignItems: 'center', gap: '6px',
+    fontSize: '13px', fontWeight: 600, color: 'var(--text-2)',
   }
   const table: React.CSSProperties = {
     width: '100%',
@@ -71,9 +61,9 @@ export default function MethodologyPage() {
     verticalAlign: 'top' as const,
   }
   const callout: React.CSSProperties = {
-    background: 'rgba(74,144,217,0.05)',
-    border: '1px solid rgba(74,144,217,0.2)',
-    borderLeft: '3px solid rgba(74,144,217,0.5)',
+    background: 'rgba(79,142,240,0.05)',
+    border: '1px solid rgba(79,142,240,0.2)',
+    borderLeft: '3px solid rgba(79,142,240,0.5)',
     borderRadius: '10px',
     padding: '16px 20px',
     fontSize: '14px',
@@ -297,8 +287,8 @@ export default function MethodologyPage() {
         <h3 style={h3}>2.4 Label Thresholds</h3>
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '24px' }}>
           {[
-            { label: 'LIKELY FREE', range: '≥ 70 / 100', color: '#60a5fa', bg: 'rgba(96,165,250,0.08)', desc: 'FQHC, NAFC free clinic, or name strongly indicates $0 care' },
-            { label: 'LOW COST', range: '45–69 / 100', color: '#60a5fa', bg: 'rgba(96,165,250,0.08)', desc: 'Community health, income-based fees, sliding scale available' },
+            { label: 'LIKELY FREE', range: '≥ 70 / 100', color: '#4F8EF0', bg: 'rgba(79,142,240,0.08)', desc: 'FQHC, NAFC free clinic, or name strongly indicates $0 care' },
+            { label: 'LOW COST', range: '45–69 / 100', color: '#4F8EF0', bg: 'rgba(79,142,240,0.08)', desc: 'Community health, income-based fees, sliding scale available' },
             { label: 'STANDARD', range: '< 45 / 100', color: 'rgba(255,255,255,0.3)', bg: 'rgba(255,255,255,0.03)', desc: 'Unknown affordability — may not offer reduced-cost care' },
           ].map(t => (
             <div key={t.label} style={{ background: t.bg, border: `1px solid ${t.color}25`, borderRadius: '12px', padding: '16px 20px', flex: '1', minWidth: '200px' }}>
@@ -444,10 +434,10 @@ export default function MethodologyPage() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px', marginBottom: '28px' }}>
           {[
-            { title: 'Minimal health data', desc: 'Search queries are not saved to AXVO\'s database, and the eligibility checker runs entirely in the browser. Text typed into the symptom guide or AI chat is sent to an AI provider to generate a response and is not stored by AXVO.', color: '#60a5fa' },
-            { title: 'Outcome reports are opt-in', desc: 'Logging an outcome is voluntary. A report stores the type of care, a 1–5 rating, and an optional note — no name, date of birth, or insurance information is required.', color: '#60a5fa' },
-            { title: 'No advertising trackers', desc: 'AXVO uses no ad networks or tracking pixels. Google Analytics and PostHog load only if a visitor accepts analytics on the cookie banner; Vercel Web Analytics is cookieless.', color: '#a78bfa' },
-            { title: 'Clear consent', desc: 'Stories are only published with explicit consent, and anyone can ask for their submissions to be deleted. The Privacy Policy lists every outside service AXVO uses.', color: '#fbbf24' },
+            { title: 'Minimal health data', desc: 'Search queries are not saved to AXVO\'s database, and the eligibility checker runs entirely in the browser. Text typed into the symptom guide or AI chat is sent to an AI provider to generate a response and is not stored by AXVO.', color: '#4F8EF0' },
+            { title: 'Outcome reports are opt-in', desc: 'Logging an outcome is voluntary. A report stores the type of care, a 1–5 rating, and an optional note — no name, date of birth, or insurance information is required.', color: '#4F8EF0' },
+            { title: 'No advertising trackers', desc: 'AXVO uses no ad networks or tracking pixels. Google Analytics and PostHog load only if a visitor accepts analytics on the cookie banner; Vercel Web Analytics is cookieless.', color: '#4F8EF0' },
+            { title: 'Clear consent', desc: 'Stories are only published with explicit consent, and anyone can ask for their submissions to be deleted. The Privacy Policy lists every outside service AXVO uses.', color: '#4F8EF0' },
           ].map(item => (
             <div key={item.title} style={{ background: `${item.color}08`, border: `1px solid ${item.color}20`, borderRadius: '14px', padding: '20px' }}>
               <div style={{ fontSize: '13px', fontWeight: 600, color: item.color, marginBottom: '8px' }}>{item.title}</div>

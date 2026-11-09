@@ -29,8 +29,8 @@ export default function TermsPage() {
   return (
     <div style={{ minHeight: '100vh', background: '#07070F', paddingTop: '100px', paddingBottom: '80px' }}>
       <style>{`
-        .terms-back-link:hover { color: #4a90d9 !important; }
-        .terms-footer-link:hover { color: #4a90d9 !important; }
+        .terms-back-link:hover { color: #4F8EF0 !important; }
+        .terms-footer-link:hover { color: #4F8EF0 !important; }
       `}</style>
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 24px' }}>
 
@@ -46,14 +46,14 @@ export default function TermsPage() {
             Last updated: {LAST_UPDATED}
           </p>
           <div style={{ width: '100%', height: '1px', background: 'rgba(255,255,255,0.07)', margin: '32px 0' }} />
-          <p style={{ fontSize: '15px', lineHeight: '1.75', color: 'rgba(255,255,255,0.6)', padding: '20px 22px', background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.18)', borderRadius: '12px' }}>
+          <p style={{ fontSize: '15px', lineHeight: '1.75', color: 'rgba(255,255,255,0.6)', padding: '20px 22px', background: 'rgba(79,142,240,0.06)', border: '1px solid rgba(79,142,240,0.18)', borderRadius: '12px' }}>
             Please read these Terms of Service carefully before using AXVO. By accessing or using AXVO, you agree to be bound by these terms. If you do not agree, do not use AXVO.
           </p>
         </div>
 
         {/* ── CRITICAL MEDICAL DISCLAIMER — must be first visible section ── */}
         <div style={{ padding: '22px 24px', background: 'rgba(248,113,113,0.06)', border: '1px solid rgba(248,113,113,0.22)', borderRadius: '14px', marginBottom: '48px' }}>
-          <p style={{ fontSize: '13px', fontWeight: 700, color: '#f87171', letterSpacing: '0.08em', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <p style={{ fontSize: '13px', fontWeight: 700, color: '#f87171', letterSpacing: '0', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <Warning2 size={14} color="#f87171" variant="Bold" aria-hidden="true" /> NOT MEDICAL ADVICE
           </p>
           <p style={{ fontSize: '14px', lineHeight: '1.7', color: 'rgba(255,255,255,0.65)' }}>
@@ -120,7 +120,7 @@ export default function TermsPage() {
 
         <Section id="privacy" title="5. Privacy and Data">
           <p>
-            Your use of AXVO is governed by our <Link href="/privacy" style={{ color: '#4a90d9', textDecoration: 'none' }}>Privacy Policy</Link>, which is incorporated into these Terms by reference. We collect account information (name, email), usage data (searches, saved clinics), and optional profile information (location, user type). We do not sell your personal data.
+            Your use of AXVO is governed by our <Link href="/privacy" style={{ color: '#4F8EF0', textDecoration: 'none' }}>Privacy Policy</Link>, which is incorporated into these Terms by reference. We collect account information (name, email), usage data (searches, saved clinics), and optional profile information (location, user type). We do not sell your personal data.
           </p>
           <p>
             AXVO is not a HIPAA-covered entity. Do not enter protected health information (PHI), medical records, or sensitive health data into AXVO. The AI Assistant is designed to help you navigate to care — not to store or process your health records.
@@ -209,8 +209,8 @@ export default function TermsPage() {
           </p>
           <div style={{ padding: '16px 18px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', fontSize: '14px', color: 'rgba(255,255,255,0.6)' }}>
             <p><strong style={{ color: 'rgba(255,255,255,0.85)' }}>AXVO</strong></p>
-            <p>Email: <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: '#4a90d9', textDecoration: 'none' }}>{CONTACT_EMAIL}</a></p>
-            <p>Website: <a href="https://www.axvohealth.com" style={{ color: '#4a90d9', textDecoration: 'none' }}>axvohealth.com</a></p>
+            <p>Email: <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: '#4F8EF0', textDecoration: 'none' }}>{CONTACT_EMAIL}</a></p>
+            <p>Website: <a href="https://www.axvohealth.com" style={{ color: '#4F8EF0', textDecoration: 'none' }}>axvohealth.com</a></p>
           </div>
         </Section>
 

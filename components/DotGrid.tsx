@@ -12,7 +12,7 @@ export default function DotGrid({ opacity = 0.5 }: { opacity?: number }) {
         inset: 0,
         pointerEvents: 'none',
         zIndex: 0,
-        backgroundImage: 'radial-gradient(circle, rgba(74,144,217,0.2) 1px, transparent 1px)',
+        backgroundImage: 'none',
         backgroundSize: '28px 28px',
         backgroundPosition: 'center center',
         opacity,

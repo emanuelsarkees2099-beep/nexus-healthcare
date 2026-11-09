@@ -95,14 +95,14 @@ export default function AuthCallbackPage() {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#07070F', gap: '16px' }}>
         <p style={{ fontSize: '14px', color: '#f87171', fontFamily: 'inherit' }}>Sign-in failed: {errorMsg}</p>
-        <a href="/login" style={{ fontSize: '13px', color: '#4a90d9', textDecoration: 'none' }}>← Back to sign in</a>
+        <a href="/login" style={{ fontSize: '13px', color: '#4F8EF0', textDecoration: 'none' }}>← Back to sign in</a>
       </div>
     )
   }
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#07070F', gap: '16px' }}>
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(74,144,217,0.8)" strokeWidth="2" strokeLinecap="round" style={{ animation: 'spin 0.9s linear infinite' }}>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(79,142,240,0.8)" strokeWidth="2" strokeLinecap="round" style={{ animation: 'spin 0.9s linear infinite' }}>
         <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.1)" />
         <path d="M12 2 A10 10 0 0 1 22 12" />
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>

@@ -6191,3 +6191,43 @@ input, textarea, select {
         a short card into a tall empty box. */
   .bento-card { min-height: unset !important; }
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   CALM DESIGN OVERRIDES
+   AXVO is a healthcare tool. Decorative effects (glows, orbs, auroras,
+   shimmers, floating/pulsing elements, word-by-word reveals) are turned
+   off here so every page reads as calm, plain, and trustworthy. One
+   accent color, neutral grays, and red only for emergencies.
+   ══════════════════════════════════════════════════════════════════ */
+.ambient-orb, .ambient-orb--1, .ambient-orb--2, .ambient-orb--3,
+.ambient-orb--blue, .ambient-orb--indigo, .ambient-orb--teal,
+.aurora, .aurora-bg, .aurora-orb-3, .aurora-orb-amber, .aurora-orb-coral, .aurora-orb-violet,
+.section-glow-amber, .section-glow-coral, .section-glow-emerald, .section-glow-left,
+.section-glow-right, .section-glow-top, .section-glow-violet,
+.glow-separator, .card-depth-overlay, .spotlight-scan, .spotlight-sweep,
+.shimmer-sweep, .search-pulse-ring, .halo-pulse, .halo-pulse-coral, .hero-spotlight {
+  display: none !important;
+}
+
+.border-beam::before, .border-beam::after,
+.glow-border::before, .glow-border::after,
+.btn-shimmer::before, .btn-shimmer::after { display: none !important; content: none !important; }
+
+.float, .float-fast, .float-slow, .hero-float, .orbit, .orbit-reverse,
+.pulse-dot, .pulse-glow, .pulse-glow-coral, .open-pulse, .weight-pulse, .text-shimmer {
+  animation: none !important;
+}
+
+.text-shimmer { background: none !important; -webkit-text-fill-color: currentColor !important; }
+
+.dot-grid, .dot-grid--fade, .dot-grid-bg { background-image: none !important; }
+.dot-grid-bg::before, .dot-grid-bg::after { display: none !important; }
+
+/* Section headings are visible immediately instead of animating word by word */
+.reveal-word-inner { transform: none !important; opacity: 1 !important; transition: none !important; }
+
+/* Homepage sections render in place instead of sliding/fading in on scroll */
+.hiw-header, .hiw-step, .step-num, .stat-item, .cta-rise, .elig-wrap {
+  opacity: 1 !important;
+  transform: none !important;
+}

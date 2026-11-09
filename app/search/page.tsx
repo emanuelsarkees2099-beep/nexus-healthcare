@@ -76,7 +76,7 @@ function IntentBanner({ intent, onApplySpecialty }: { intent: SearchIntent; onAp
     <div style={{
       display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap',
       padding: '10px 14px', borderRadius: '10px',
-      background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.12)',
+      background: 'rgba(79,142,240,0.04)', border: '1px solid rgba(79,142,240,0.12)',
       marginBottom: '12px',
     }}>
       <Flash size={13} color="var(--accent)" />
@@ -148,7 +148,7 @@ function SearchResults() {
   const [bridgeClinic,  setBridgeClinic]  = useState<string | null>(null)   // N5: insurance bridge toast
   const [visiblePage,   setVisiblePage]   = useState(1)                      // pagination
   const [showMatchForm, setShowMatchForm] = useState(false)                  // Phase 2.1: guided match form
-  const [heroWords, setHeroWords] = useState([false, false, false, false])
+  const heroWords = [true, true, true, true]
   const [langFilter, setLangFilter] = useState('')
 
   const PAGE_SIZE = 25
@@ -162,13 +162,6 @@ function SearchResults() {
     language:  languageParam,
     insurance: insuranceParam,
   } : null
-
-  /* Hero word animation */
-  useEffect(() => {
-    const delays = [0, 120, 240, 380]
-    const timers = delays.map((d, i) => setTimeout(() => setHeroWords(w => { const n = [...w]; n[i] = true; return n }), d + 200))
-    return () => timers.forEach(clearTimeout)
-  }, [])
 
   /* Detect intent from query */
   useEffect(() => {
@@ -442,35 +435,35 @@ function SearchResults() {
         icon: <Hospital size={9} color="currentColor" variant="TwoTone" aria-hidden="true" />,
         tooltip: 'Results from HRSA-verified Federally Qualified Health Centers AND NAFC-registered free clinics. FQHCs are required by federal law to accept all patients regardless of ability to pay.',
         color: 'var(--accent)',
-        borderColor: 'rgba(74,144,217,0.25)',
-        bg: 'rgba(74,144,217,0.07)',
+        borderColor: 'rgba(79,142,240,0.25)',
+        bg: 'rgba(79,142,240,0.07)',
       }
     : source === 'hrsa'
     ? {
         label: 'HRSA Verified FQHCs',
         icon: <ShieldTick size={9} color="currentColor" variant="TwoTone" aria-hidden="true" />,
         tooltip: 'Federally Qualified Health Centers listed in HRSA (Health Resources & Services Administration) data. FQHCs receive federal funding and must serve every patient regardless of ability to pay, with fees on a sliding scale based on income.',
-        color: '#60a5fa',
-        borderColor: 'rgba(96,165,250,0.25)',
-        bg: 'rgba(96,165,250,0.07)',
+        color: '#4F8EF0',
+        borderColor: 'rgba(79,142,240,0.25)',
+        bg: 'rgba(79,142,240,0.07)',
       }
     : source === 'nafc'
     ? {
         label: 'NAFC Free Clinics',
         icon: <Heart size={9} color="currentColor" variant="TwoTone" aria-hidden="true" />,
         tooltip: 'Registered members of the National Association of Free & Charitable Clinics (NAFC). These clinics provide free or reduced-cost care to people in financial need.',
-        color: 'var(--green-pulse,#4ade80)',
-        borderColor: 'rgba(74,222,128,0.25)',
-        bg: 'rgba(74,222,128,0.07)',
+        color: 'var(--green-pulse,#4F8EF0)',
+        borderColor: 'rgba(79,142,240,0.25)',
+        bg: 'rgba(79,142,240,0.07)',
       }
     : source === 'osm'
     ? {
         label: 'Community-sourced',
         icon: <Global size={9} color="currentColor" variant="TwoTone" aria-hidden="true" />,
         tooltip: 'These clinics were contributed by the OpenStreetMap community. Data may be less verified — always call ahead to confirm.',
-        color: '#a78bfa',
-        borderColor: 'rgba(167,139,250,0.25)',
-        bg: 'rgba(167,139,250,0.07)',
+        color: '#4F8EF0',
+        borderColor: 'rgba(79,142,240,0.25)',
+        bg: 'rgba(79,142,240,0.07)',
       }
     : null
 
@@ -505,34 +498,12 @@ function SearchResults() {
           alignItems: 'center', justifyContent: 'center',
           padding: '80px 24px 60px', position: 'relative', overflow: 'hidden',
         }}>
-          {/* Background blobs */}
-          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', top: '8%', left: '5%', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(79,142,240,0.065) 0%, transparent 65%)' }} />
-            <div style={{ position: 'absolute', bottom: '10%', right: '3%', width: 420, height: 420, borderRadius: '50%', background: 'radial-gradient(circle, rgba(167,139,250,0.055) 0%, transparent 65%)' }} />
-            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 900, height: 900, borderRadius: '50%', background: 'radial-gradient(circle, rgba(79,142,240,0.025) 0%, transparent 55%)' }} />
-            {/* Subtle grid */}
-            <svg width="100%" height="100%" style={{ position: 'absolute', inset: 0, opacity: 0.035 }}>
-              <defs><pattern id="sg" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="0.5"/></pattern></defs>
-              <rect width="100%" height="100%" fill="url(#sg)" />
-            </svg>
-          </div>
+          <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text-3)', fontFamily: 'var(--font-inter)', margin: '0 0 16px' }}>
+            Clinic finder
+          </p>
 
-          {/* Pill */}
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 14px', borderRadius: '100px', fontSize: '11px', fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', fontFamily: 'var(--font-inter)', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.22)', color: 'var(--accent)', marginBottom: '28px', opacity: heroWords[0] ? 1 : 0, transition: 'opacity 0.5s ease' }}>
-            <Hospital size={14} variant="Linear" style={{ flexShrink: 0 }} /> Clinic Finder
-          </div>
-
-          {/* Animated h1 */}
-          <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, letterSpacing: '-0.04em', textAlign: 'center', margin: '0 0 12px', lineHeight: 1.05 }}>
-            <div style={{ fontSize: 'clamp(46px, 7vw, 88px)', color: 'var(--text)' }}>
-              {['Find', 'free'].map((w, i) => (
-                <span key={w} style={{ display: 'inline-block', marginRight: '0.22em', opacity: heroWords[i] ? 1 : 0, transform: heroWords[i] ? 'translateY(0)' : 'translateY(18px)', transition: 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)', transitionDelay: `${i * 0.1}s` }}>{w}</span>
-              ))}
-              <span style={{ display: 'inline-block', marginRight: '0.22em', color: 'var(--accent)', opacity: heroWords[2] ? 1 : 0, transform: heroWords[2] ? 'translateY(0)' : 'translateY(18px)', transition: 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)', transitionDelay: '0.2s' }}>care</span>
-            </div>
-            <div style={{ fontSize: 'clamp(46px, 7vw, 88px)', color: 'var(--text-2)' }}>
-              <span style={{ display: 'inline-block', opacity: heroWords[3] ? 1 : 0, transform: heroWords[3] ? 'translateY(0)' : 'translateY(18px)', transition: 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)', transitionDelay: '0.3s' }}>near you.</span>
-            </div>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, letterSpacing: '-0.03em', textAlign: 'center', margin: '0 0 14px', lineHeight: 1.1, fontSize: 'clamp(34px, 5vw, 52px)', color: 'var(--text)' }}>
+            Find free and low-cost clinics near you
           </h1>
 
           {/* Subtitle */}
@@ -603,8 +574,8 @@ function SearchResults() {
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '28px', opacity: heroWords[3] ? 1 : 0, transition: 'opacity 0.6s ease 0.7s' }}>
             {[
               { icon: <ShieldTick size={13} color="var(--accent)" variant="TwoTone" />, text: '18,900+ clinic sites' },
-              { icon: <Flash size={13} color="#4ade80" variant="TwoTone" />, text: 'All free or sliding-scale' },
-              { icon: <Global size={13} color="#a78bfa" variant="TwoTone" />, text: '50+ languages served' },
+              { icon: <Flash size={13} color="#4F8EF0" variant="TwoTone" />, text: 'All free or sliding-scale' },
+              { icon: <Global size={13} color="#4F8EF0" variant="TwoTone" />, text: '50+ languages served' },
             ].map(s => (
               <div key={s.text} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>
                 {s.icon} {s.text}
@@ -744,12 +715,12 @@ function SearchResults() {
               padding: '6px 13px', borderRadius: '100px',
               fontSize: '11px', fontFamily: 'var(--font-inter),sans-serif', fontWeight: 600,
               cursor: 'pointer', transition: 'all 0.18s', marginLeft: '4px',
-              background: matchInput ? 'rgba(74,144,217,0.15)' : 'rgba(74,144,217,0.07)',
-              border: `1px solid ${matchInput ? 'rgba(74,144,217,0.40)' : 'rgba(74,144,217,0.22)'}`,
+              background: matchInput ? 'rgba(79,142,240,0.15)' : 'rgba(79,142,240,0.07)',
+              border: `1px solid ${matchInput ? 'rgba(79,142,240,0.40)' : 'rgba(79,142,240,0.22)'}`,
               color: 'var(--accent)',
             }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.18)')}
-            onMouseLeave={e => (e.currentTarget.style.background = matchInput ? 'rgba(74,144,217,0.15)' : 'rgba(74,144,217,0.07)')}
+            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(79,142,240,0.18)')}
+            onMouseLeave={e => (e.currentTarget.style.background = matchInput ? 'rgba(79,142,240,0.15)' : 'rgba(79,142,240,0.07)')}
           >
             <Filter size={12} color="var(--accent)" variant={matchInput ? 'Bold' : 'Linear'} />
             {matchInput ? 'Matched for you' : 'Get matched'}
@@ -761,23 +732,23 @@ function SearchResults() {
           <div style={{
             display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap',
             padding: '8px 12px', borderRadius: '10px', marginBottom: '10px',
-            background: 'rgba(74,144,217,0.05)', border: '1px solid rgba(74,144,217,0.14)',
+            background: 'rgba(79,142,240,0.05)', border: '1px solid rgba(79,142,240,0.14)',
           }}>
             <span style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', fontWeight: 500 }}>
               Sorted by match:
             </span>
             {matchInput.needs.map(n => (
-              <span key={n} style={{ fontSize: '11px', fontFamily: 'var(--font-inter)', fontWeight: 600, padding: '2px 9px', borderRadius: '100px', background: 'rgba(74,144,217,0.10)', border: '1px solid rgba(74,144,217,0.25)', color: 'var(--accent)' }}>
+              <span key={n} style={{ fontSize: '11px', fontFamily: 'var(--font-inter)', fontWeight: 600, padding: '2px 9px', borderRadius: '100px', background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.25)', color: 'var(--accent)' }}>
                 {n}
               </span>
             ))}
             {matchInput.language && matchInput.language !== 'english' && (
-              <span style={{ fontSize: '11px', fontFamily: 'var(--font-inter)', fontWeight: 600, padding: '2px 9px', borderRadius: '100px', background: 'rgba(167,139,250,0.10)', border: '1px solid rgba(167,139,250,0.25)', color: '#A78BFA' }}>
+              <span style={{ fontSize: '11px', fontFamily: 'var(--font-inter)', fontWeight: 600, padding: '2px 9px', borderRadius: '100px', background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.25)', color: '#4F8EF0' }}>
                 {matchInput.language}
               </span>
             )}
             {matchInput.insurance && (
-              <span style={{ fontSize: '11px', fontFamily: 'var(--font-inter)', fontWeight: 600, padding: '2px 9px', borderRadius: '100px', background: 'rgba(52,211,153,0.08)', border: '1px solid rgba(52,211,153,0.22)', color: '#34D399' }}>
+              <span style={{ fontSize: '11px', fontFamily: 'var(--font-inter)', fontWeight: 600, padding: '2px 9px', borderRadius: '100px', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.22)', color: '#4F8EF0' }}>
                 {matchInput.insurance}
               </span>
             )}
@@ -809,8 +780,8 @@ function SearchResults() {
                   padding: '4px 11px', borderRadius: '100px',
                   fontSize: '11px', fontFamily: 'var(--font-inter),sans-serif', cursor: 'pointer',
                   transition: 'all 0.18s',
-                  background: radius === r.value ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.03)',
-                  border: `1px solid ${radius === r.value ? 'rgba(74,144,217,0.28)' : 'rgba(255,255,255,0.07)'}`,
+                  background: radius === r.value ? 'rgba(79,142,240,0.12)' : 'rgba(255,255,255,0.03)',
+                  border: `1px solid ${radius === r.value ? 'rgba(79,142,240,0.28)' : 'rgba(255,255,255,0.07)'}`,
                   color: radius === r.value ? 'var(--accent)' : 'var(--text-3)',
                 }}
               >
@@ -826,8 +797,8 @@ function SearchResults() {
                 padding: '4px 12px', borderRadius: '100px',
                 fontSize: '11px', fontFamily: 'var(--font-inter),sans-serif',
                 cursor: 'pointer', transition: 'all 0.18s', fontWeight: openNowFilter ? 600 : 400,
-                background: openNowFilter ? 'rgba(96,165,250,0.12)' : 'rgba(255,255,255,0.03)',
-                border: `1px solid ${openNowFilter ? 'rgba(96,165,250,0.30)' : 'rgba(255,255,255,0.07)'}`,
+                background: openNowFilter ? 'rgba(79,142,240,0.12)' : 'rgba(255,255,255,0.03)',
+                border: `1px solid ${openNowFilter ? 'rgba(79,142,240,0.30)' : 'rgba(255,255,255,0.07)'}`,
                 color: openNowFilter ? 'var(--green-pulse)' : 'var(--text-3)',
               }}
             >
@@ -864,7 +835,7 @@ function SearchResults() {
                     style={{
                       padding: '5px 11px', fontSize: '11px', fontFamily: 'var(--font-inter),sans-serif',
                       cursor: 'pointer', border: 'none',
-                      background: viewMode === mode ? 'rgba(74,144,217,0.10)' : 'transparent',
+                      background: viewMode === mode ? 'rgba(79,142,240,0.10)' : 'transparent',
                       color: viewMode === mode ? 'var(--accent)' : 'var(--text-3)',
                       display: 'flex', alignItems: 'center', gap: '4px', transition: 'all 0.18s',
                     }}
@@ -923,27 +894,27 @@ function SearchResults() {
               {/* SVG illustration — simplified city + cross */}
               <svg width="160" height="100" viewBox="0 0 160 100" fill="none" aria-hidden="true" style={{ margin: '0 auto 24px', display: 'block', opacity: 0.85 }}>
                 {/* Ground */}
-                <rect x="0" y="82" width="160" height="2" fill="rgba(74,144,217,0.15)" rx="1"/>
+                <rect x="0" y="82" width="160" height="2" fill="rgba(79,142,240,0.15)" rx="1"/>
                 {/* Buildings */}
                 <rect x="8"  y="52" width="18" height="30" rx="3" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" strokeWidth="1"/>
-                <rect x="14" y="46" width="6"  height="6"  rx="1" fill="rgba(74,144,217,0.15)"/>
+                <rect x="14" y="46" width="6"  height="6"  rx="1" fill="rgba(79,142,240,0.15)"/>
                 <rect x="30" y="38" width="24" height="44" rx="3" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.09)" strokeWidth="1"/>
-                <rect x="36" y="32" width="8"  height="6"  rx="1" fill="rgba(74,144,217,0.20)"/>
+                <rect x="36" y="32" width="8"  height="6"  rx="1" fill="rgba(79,142,240,0.20)"/>
                 {/* Center building — clinic */}
-                <rect x="60" y="26" width="40" height="56" rx="4" fill="rgba(74,144,217,0.07)" stroke="rgba(74,144,217,0.25)" strokeWidth="1.2"/>
+                <rect x="60" y="26" width="40" height="56" rx="4" fill="rgba(79,142,240,0.07)" stroke="rgba(79,142,240,0.25)" strokeWidth="1.2"/>
                 {/* Cross on clinic */}
-                <rect x="76" y="36" width="8" height="20" rx="2" fill="rgba(74,144,217,0.60)"/>
-                <rect x="70" y="42" width="20" height="8"  rx="2" fill="rgba(74,144,217,0.60)"/>
+                <rect x="76" y="36" width="8" height="20" rx="2" fill="rgba(79,142,240,0.60)"/>
+                <rect x="70" y="42" width="20" height="8"  rx="2" fill="rgba(79,142,240,0.60)"/>
                 {/* Right buildings */}
                 <rect x="106" y="44" width="20" height="38" rx="3" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" strokeWidth="1"/>
-                <rect x="110" y="38" width="8"  height="6"  rx="1" fill="rgba(167,139,250,0.18)"/>
+                <rect x="110" y="38" width="8"  height="6"  rx="1" fill="rgba(79,142,240,0.18)"/>
                 <rect x="130" y="56" width="16" height="26" rx="3" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.07)" strokeWidth="1"/>
                 {/* Location pin */}
-                <circle cx="80" cy="12" r="7" fill="rgba(74,144,217,0.15)" stroke="rgba(74,144,217,0.50)" strokeWidth="1.4"/>
+                <circle cx="80" cy="12" r="7" fill="rgba(79,142,240,0.15)" stroke="rgba(79,142,240,0.50)" strokeWidth="1.4"/>
                 <circle cx="80" cy="12" r="2.5" fill="var(--accent)"/>
-                <line x1="80" y1="19" x2="80" y2="25" stroke="rgba(74,144,217,0.40)" strokeWidth="1.4" strokeLinecap="round"/>
+                <line x1="80" y1="19" x2="80" y2="25" stroke="rgba(79,142,240,0.40)" strokeWidth="1.4" strokeLinecap="round"/>
                 {/* Glow */}
-                <ellipse cx="80" cy="83" rx="28" ry="4" fill="rgba(74,144,217,0.06)"/>
+                <ellipse cx="80" cy="83" rx="28" ry="4" fill="rgba(79,142,240,0.06)"/>
               </svg>
               <h3 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--text)', marginBottom: '10px', fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>
                 {t('search.findClinic')}
@@ -957,17 +928,17 @@ function SearchResults() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px', maxWidth: '600px', margin: '0 auto 32px' }}>
               {/* Card 0 — Phase 2.1: Get matched */}
               <div style={{
-                background: 'rgba(74,144,217,0.07)', border: '1px solid rgba(74,144,217,0.28)',
+                background: 'rgba(79,142,240,0.07)', border: '1px solid rgba(79,142,240,0.28)',
                 borderRadius: '16px', padding: '20px', cursor: 'pointer',
                 transition: 'border-color 0.2s, background 0.2s',
                 gridColumn: '1 / -1',
               }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(74,144,217,0.12)'; e.currentTarget.style.borderColor = 'rgba(74,144,217,0.40)' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(74,144,217,0.07)'; e.currentTarget.style.borderColor = 'rgba(74,144,217,0.28)' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(79,142,240,0.12)'; e.currentTarget.style.borderColor = 'rgba(79,142,240,0.40)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(79,142,240,0.07)'; e.currentTarget.style.borderColor = 'rgba(79,142,240,0.28)' }}
                 onClick={() => setShowMatchForm(true)}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(74,144,217,0.15)', border: '1px solid rgba(74,144,217,0.30)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(79,142,240,0.15)', border: '1px solid rgba(79,142,240,0.30)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <Filter size={18} color="var(--accent)" variant="TwoTone" />
                   </div>
                   <div style={{ flex: 1 }}>
@@ -984,15 +955,15 @@ function SearchResults() {
 
               {/* Card 1 — sliding scale */}
               <div style={{
-                background: 'rgba(74,144,217,0.05)', border: '1px solid rgba(74,144,217,0.18)',
+                background: 'rgba(79,142,240,0.05)', border: '1px solid rgba(79,142,240,0.18)',
                 borderRadius: '16px', padding: '20px', cursor: 'pointer',
                 transition: 'border-color 0.2s, background 0.2s',
               }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(74,144,217,0.09)'; e.currentTarget.style.borderColor = 'rgba(74,144,217,0.30)' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(74,144,217,0.05)'; e.currentTarget.style.borderColor = 'rgba(74,144,217,0.18)' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(79,142,240,0.09)'; e.currentTarget.style.borderColor = 'rgba(79,142,240,0.30)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(79,142,240,0.05)'; e.currentTarget.style.borderColor = 'rgba(79,142,240,0.18)' }}
                 onClick={() => { document.querySelector<HTMLInputElement>('input[placeholder*="ZIP"]')?.focus() }}
               >
-                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(79,142,240,0.12)', border: '1px solid rgba(79,142,240,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
                   <Location size={16} color="var(--accent)" />
                 </div>
                 <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px', fontFamily: 'var(--font-display)' }}>
@@ -1126,13 +1097,13 @@ function SearchResults() {
                   onClick={() => setVisiblePage(p => p + 1)}
                   style={{
                     padding: '11px 32px', borderRadius: '12px',
-                    background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.22)',
+                    background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.22)',
                     color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
                     cursor: 'pointer', fontFamily: 'var(--font-inter)',
                     transition: 'background 0.2s',
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.15)')}
-                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.08)')}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(79,142,240,0.15)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(79,142,240,0.08)')}
                 >
                   Show more ({results.length - pagedResults.length} remaining)
                 </button>
@@ -1160,7 +1131,7 @@ function SearchResults() {
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '24px' }}>
               <button
                 onClick={() => setRadius('50')}
-                style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.22)', color: 'var(--accent)', fontSize: '12px', fontFamily: 'var(--font-inter)', fontWeight: 600, cursor: 'pointer' }}
+                style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.22)', color: 'var(--accent)', fontSize: '12px', fontFamily: 'var(--font-inter)', fontWeight: 600, cursor: 'pointer' }}
               >
                 Expand to 50 mi
               </button>
@@ -1176,11 +1147,11 @@ function SearchResults() {
             {/* Telehealth fallback */}
             <div style={{
               marginTop: '28px', padding: '18px 20px', borderRadius: '14px',
-              background: 'rgba(167,139,250,0.05)', border: '1px solid rgba(167,139,250,0.18)',
+              background: 'rgba(79,142,240,0.05)', border: '1px solid rgba(79,142,240,0.18)',
               display: 'flex', alignItems: 'center', gap: '14px', textAlign: 'left',
             }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(167,139,250,0.10)', border: '1px solid rgba(167,139,250,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <Global size={16} color="#a78bfa" variant="Linear" />
+              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Global size={16} color="#4F8EF0" variant="Linear" />
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '4px', fontFamily: 'var(--font-display)' }}>
@@ -1192,7 +1163,7 @@ function SearchResults() {
               </div>
               <a
                 href="/telehealth"
-                style={{ padding: '8px 16px', borderRadius: '9px', background: 'rgba(167,139,250,0.12)', border: '1px solid rgba(167,139,250,0.28)', color: '#a78bfa', fontSize: '12px', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}
+                style={{ padding: '8px 16px', borderRadius: '9px', background: 'rgba(79,142,240,0.12)', border: '1px solid rgba(79,142,240,0.28)', color: '#4F8EF0', fontSize: '12px', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}
               >
                 View options <ArrowRight size={12} />
               </a>
@@ -1204,7 +1175,7 @@ function SearchResults() {
         {results.length > 0 && (
           <div style={{
             marginTop: '32px', padding: '14px 18px',
-            background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.12)',
+            background: 'rgba(79,142,240,0.04)', border: '1px solid rgba(79,142,240,0.12)',
             borderRadius: '14px', display: 'flex', alignItems: 'flex-start', gap: '10px',
           }}>
             <Hospital size={15} color="var(--accent)" style={{ marginTop: '2px', flexShrink: 0 }} />
@@ -1254,13 +1225,13 @@ function SearchResults() {
           position: 'fixed', bottom: '24px', left: '50%', transform: 'translateX(-50%)',
           zIndex: 2000, maxWidth: '480px', width: 'calc(100vw - 32px)',
           background: 'rgba(10,10,24,0.97)', backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(74,144,217,0.28)', borderRadius: '16px',
+          border: '1px solid rgba(79,142,240,0.28)', borderRadius: '16px',
           padding: '16px 20px',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(74,144,217,0.08)',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(79,142,240,0.08)',
           animation: 'bridge-in 0.35s cubic-bezier(0.16,1,0.3,1) both',
           display: 'flex', alignItems: 'flex-start', gap: '14px',
         }}>
-          <div style={{ width: '32px', height: '32px', borderRadius: '9px', background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--accent)' }}>
+          <div style={{ width: '32px', height: '32px', borderRadius: '9px', background: 'rgba(79,142,240,0.12)', border: '1px solid rgba(79,142,240,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--accent)' }}>
             <ShieldTick size={14} color="currentColor" variant="TwoTone" />
           </div>
           <div style={{ flex: 1 }}>

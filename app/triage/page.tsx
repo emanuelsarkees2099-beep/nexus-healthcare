@@ -306,7 +306,7 @@ export default function TriagePage() {
       }}>
         <div aria-hidden style={{
           position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(129,140,248,0.08) 0%, transparent 70%)',
+          background: 'transparent',
           pointerEvents: 'none',
         }} />
         <div style={{
@@ -314,19 +314,12 @@ export default function TriagePage() {
           padding: '5px 14px', borderRadius: '100px',
           background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.25)',
           marginBottom: '24px', fontSize: '11px', fontWeight: 600,
-          color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase',
+          color: 'var(--accent)', letterSpacing: '0', textTransform: 'none',
         }}>
           <Hospital size={11} /> Symptom Guide
         </div>
 
-        <h1 style={{
-          fontSize: 'clamp(30px, 5vw, 56px)', fontWeight: 800,
-          letterSpacing: '-0.035em', lineHeight: 1.05,
-          marginBottom: '16px', maxWidth: '640px', margin: '0 auto 16px',
-        }}>
-          Describe what you&apos;re feeling.<br />
-          <span style={{ color: 'var(--accent)' }}>We&apos;ll help you find care.</span>
-        </h1>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.12, margin: '0 0 18px', color: 'var(--text)' }}>What kind of care do you need?</h1>
 
         <p style={{
           fontSize: '15px', color: 'rgba(255,255,255,0.45)',
@@ -358,7 +351,7 @@ export default function TriagePage() {
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {/* Symptom category quick-pick */}
             <div>
-              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', marginBottom: 10, textAlign: 'center', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', marginBottom: 10, textAlign: 'center', letterSpacing: '0', textTransform: 'none' }}>
                 Quick start — select a category
               </p>
               <div className="triage-category-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
@@ -536,7 +529,7 @@ export default function TriagePage() {
               {/* Header row */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                 <Hospital size={14} color="var(--accent)" />
-                <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0', textTransform: 'none' }}>
                   Matching care pathway
                 </span>
                 {phase === 'done' && isRealAI && (
@@ -587,9 +580,9 @@ export default function TriagePage() {
                       position: 'absolute', left: 0, top: 0, bottom: 0,
                       borderRadius: '100px',
                       width: `${(visibleSteps.length / totalSteps) * 100}%`,
-                      background: 'linear-gradient(90deg, var(--accent), var(--accent2))',
+                      background: 'var(--accent)',
                       transition: 'width 0.6s cubic-bezier(0.16,1,0.3,1)',
-                      boxShadow: '0 0 8px rgba(79,142,240,0.5)',
+                      boxShadow: 'none',
                     }} />
                   </div>
                 </div>
@@ -603,9 +596,9 @@ export default function TriagePage() {
                   }}>
                     <div style={{
                       height: '100%', width: '100%',
-                      background: 'linear-gradient(90deg, var(--success), rgba(52,211,153,0.7))',
+                      background: 'var(--accent)',
                       borderRadius: '100px',
-                      boxShadow: '0 0 8px rgba(52,211,153,0.4)',
+                      boxShadow: 'none',
                     }} />
                   </div>
                   <div style={{
@@ -641,7 +634,7 @@ export default function TriagePage() {
                     color: step.type === 'warning' ? '#fb923c'
                       : step.type === 'result' ? 'var(--accent)'
                       : 'rgba(255,255,255,0.6)',
-                    fontFamily: 'var(--font-mono, monospace)',
+                    fontFamily: 'var(--font-inter)',
                   }}>
                     {step.text}
                   </span>
@@ -685,7 +678,7 @@ export default function TriagePage() {
                   background: 'rgba(74,144,217,0.04)',
                   border: '1px solid rgba(74,144,217,0.18)',
                 }}>
-                  <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>
+                  <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0', textTransform: 'none', marginBottom: '12px' }}>
                     {result.clinic ? 'Best match' : 'Find care near you'}
                   </div>
 

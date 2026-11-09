@@ -18,14 +18,14 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
       {/* Aurora glow */}
       <div aria-hidden="true" style={{
         position: 'fixed', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 55% 40% at 50% 0%, rgba(248,113,113,0.06) 0%, transparent 65%)',
+        background: 'transparent',
       }} />
 
       <div style={{ marginBottom: '40px', position: 'relative', zIndex: 1 }}>
         <span style={{
           fontFamily: 'var(--font-display)',
           fontSize: '13px', fontWeight: 400,
-          letterSpacing: '0.45em', color: 'rgba(255,255,255,0.6)',
+          letterSpacing: '0', color: 'rgba(255,255,255,0.6)',
         }}>AXVO</span>
       </div>
 

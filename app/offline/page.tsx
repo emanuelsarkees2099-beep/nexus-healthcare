@@ -32,22 +32,22 @@ export default function OfflinePage() {
     }}>
       <div aria-hidden="true" style={{
         position: 'fixed', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(74,144,217,0.07) 0%, transparent 65%)',
+        background: 'transparent',
       }} />
 
       <div style={{
         width: '72px', height: '72px', borderRadius: '20px',
-        background: 'rgba(74,144,217,0.08)',
-        border: '1px solid rgba(74,144,217,0.18)',
+        background: 'rgba(79,142,240,0.08)',
+        border: '1px solid rgba(79,142,240,0.18)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         marginBottom: '1.75rem', position: 'relative', zIndex: 1,
       }}>
-        <Map1 size={32} color="#4A90D9" variant="TwoTone" aria-hidden="true" />
+        <Map1 size={32} color="#4F8EF0" variant="TwoTone" aria-hidden="true" />
       </div>
 
       <div style={{
-        fontSize: '11px', fontWeight: 400, letterSpacing: '0.5em',
-        textTransform: 'uppercase', color: '#E8E0FF',
+        fontSize: '11px', fontWeight: 400, letterSpacing: '0',
+        textTransform: 'none', color: '#E8E0FF',
         marginBottom: '1.5rem', opacity: 0.7, position: 'relative', zIndex: 1,
       }}>
         AXVO
@@ -77,16 +77,16 @@ export default function OfflinePage() {
         onClick={() => window.location.reload()}
         style={{
           padding: '14px 28px', borderRadius: '12px',
-          background: '#4A90D9', color: '#07070F',
+          background: '#4F8EF0', color: '#07070F',
           border: 'none', cursor: 'pointer',
           fontSize: '15px', fontWeight: 700,
           marginBottom: '1.5rem',
           transition: 'transform 0.2s, box-shadow 0.2s',
-          boxShadow: '0 4px 20px rgba(74,144,217,0.3)',
+          boxShadow: '0 4px 20px rgba(79,142,240,0.3)',
           position: 'relative', zIndex: 1,
         }}
-        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(74,144,217,0.45)' }}
-        onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(74,144,217,0.3)' }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(79,142,240,0.45)' }}
+        onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(79,142,240,0.3)' }}
       >
         Try again
       </button>
@@ -110,7 +110,7 @@ export default function OfflinePage() {
         <div style={{ width: '100%', maxWidth: '500px', position: 'relative', zIndex: 1 }}>
           <p style={{
             fontSize: '11px', color: 'rgba(240,253,248,0.3)',
-            letterSpacing: '0.1em', textTransform: 'uppercase',
+            letterSpacing: '0', textTransform: 'none',
             marginBottom: '12px', fontWeight: 500,
           }}>
             Your last search results
@@ -126,7 +126,7 @@ export default function OfflinePage() {
                 <div style={{ fontSize: '14px', fontWeight: 600, color: '#F4F8FF', marginBottom: '4px' }}>{clinic.name}</div>
                 {clinic.address && <div style={{ fontSize: '12px', color: 'rgba(240,253,248,0.4)', marginBottom: '3px' }}>{clinic.address}</div>}
                 {clinic.phone && (
-                  <a href={`tel:${clinic.phone}`} style={{ fontSize: '12px', color: '#4A90D9', textDecoration: 'none', fontWeight: 500 }}>
+                  <a href={`tel:${clinic.phone}`} style={{ fontSize: '12px', color: '#4F8EF0', textDecoration: 'none', fontWeight: 500 }}>
                     {clinic.phone}
                   </a>
                 )}
@@ -152,16 +152,16 @@ export default function OfflinePage() {
         borderTop: '1px solid rgba(255,255,255,0.06)',
         paddingTop: '1.5rem',
       }}>
-        <p style={{ fontSize: '11px', color: 'rgba(240,253,248,0.3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>
+        <p style={{ fontSize: '11px', color: 'rgba(240,253,248,0.3)', letterSpacing: '0', textTransform: 'none', marginBottom: '12px', fontWeight: 500 }}>
           Emergency contacts (always available)
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {[
             { label: '911 — Emergency services',     tel: '911',          color: '#f87171' },
-            { label: '988 — Mental health crisis',   tel: '988',          color: '#a78bfa' },
-            { label: '211 — Community resources',    tel: '211',          color: '#34d399' },
-            { label: 'Poison Control',               tel: '18002221222',  color: '#fbbf24' },
-            { label: 'RAINN (sexual assault)',        tel: '18006564673',  color: '#60a5fa' },
+            { label: '988 — Mental health crisis',   tel: '988',          color: '#4F8EF0' },
+            { label: '211 — Community resources',    tel: '211',          color: '#4F8EF0' },
+            { label: 'Poison Control',               tel: '18002221222',  color: '#4F8EF0' },
+            { label: 'RAINN (sexual assault)',        tel: '18006564673',  color: '#4F8EF0' },
           ].map(e => (
             <a key={e.tel} href={`tel:${e.tel}`} style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',

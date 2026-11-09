@@ -24,7 +24,7 @@ function BentoIcon({ icon, color = 'var(--accent)' }: {
       className="bento-icon-wrap"
       style={{
         width: '46px', height: '46px',
-        background: `linear-gradient(145deg, color-mix(in srgb, ${color} 30%, transparent), color-mix(in srgb, ${color} 6%, transparent))`,
+        background: 'rgba(255,255,255,0.08)',
         border: `1px solid color-mix(in srgb, ${color} 36%, transparent)`,
         boxShadow: `0 8px 22px color-mix(in srgb, ${color} 18%, transparent), inset 0 1px 0 color-mix(in srgb, ${color} 24%, transparent)`,
         borderRadius: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -42,8 +42,8 @@ function Tag({ children, color = 'rgba(255,255,255,0.30)', bg = 'rgba(255,255,25
   return (
     <div style={{
       display: 'inline-block', marginTop: '1rem',
-      fontSize: '10px', fontWeight: 500, letterSpacing: '0.12em',
-      textTransform: 'uppercase', color, background: bg,
+      fontSize: '10px', fontWeight: 500, letterSpacing: '0',
+      textTransform: 'none', color, background: bg,
       borderRadius: 'var(--r-sm)', padding: '3px 9px',
       fontFamily: 'var(--font-inter)',
     }}>
@@ -70,14 +70,14 @@ function ClinicMapMini() {
     <div style={{
       marginTop: '1.25rem',
       background: 'rgba(0,0,0,0.25)',
-      border: '1px solid rgba(74,144,217,0.08)',
+      border: '1px solid rgba(79,142,240,0.08)',
       borderRadius: 'var(--r-md)', padding: '12px',
       position: 'relative', overflow: 'hidden',
     }}>
       {/* Faint grid lines for map feel */}
       <div aria-hidden="true" style={{
         position: 'absolute', inset: 0,
-        backgroundImage: 'linear-gradient(rgba(74,144,217,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(74,144,217,0.03) 1px, transparent 1px)',
+        backgroundImage: 'rgba(255,255,255,0.08)',
         backgroundSize: '20px 20px',
         borderRadius: 'var(--r-md)',
       }} />
@@ -97,13 +97,13 @@ function ClinicMapMini() {
         <div key={c.name} style={{
           display: 'flex', alignItems: 'center', gap: '8px',
           padding: '7px 9px', borderRadius: 'var(--r-sm)', marginBottom: '4px',
-          background: i === 0 ? 'rgba(74,144,217,0.06)' : 'rgba(255,255,255,0.02)',
-          border: `1px solid ${i === 0 ? 'rgba(74,144,217,0.14)' : 'transparent'}`,
+          background: i === 0 ? 'rgba(79,142,240,0.06)' : 'rgba(255,255,255,0.02)',
+          border: `1px solid ${i === 0 ? 'rgba(79,142,240,0.14)' : 'transparent'}`,
           fontFamily: 'var(--font-inter)', position: 'relative',
         }}>
           <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--accent)', flexShrink: 0 }} />
           <span style={{ color: i === 0 ? 'var(--text)' : 'var(--text-2)', flex: 1, fontSize: '11px', fontWeight: i === 0 ? 500 : 400 }}>{c.name}</span>
-          <span style={{ color: 'var(--text-3)', fontSize: '10px', fontFamily: 'var(--font-mono),monospace' }}>{c.type}</span>
+          <span style={{ color: 'var(--text-3)', fontSize: '10px', fontFamily: 'var(--font-inter)' }}>{c.type}</span>
         </div>
       ))}
     </div>
@@ -119,7 +119,7 @@ function ProgramsCounterMini() {
         fontSize: 'clamp(2.8rem,6vw,4.5rem)',
         fontWeight: 700, color: 'var(--amber)',
         letterSpacing: '-0.04em', lineHeight: 1, marginBottom: '4px',
-        textShadow: '0 0 40px rgba(252,211,77,0.25)',
+        textShadow: 'none',
       }}>
         8
       </div>
@@ -133,7 +133,7 @@ function ProgramsCounterMini() {
         {['Medicaid', 'ACA', 'HRSA', 'CHIP', '340B'].map(p => (
           <div key={p} style={{
             padding: '3px 8px', borderRadius: 'var(--r-sm)',
-            background: 'rgba(252,211,77,0.07)', border: '1px solid rgba(252,211,77,0.15)',
+            background: 'rgba(79,142,240,0.07)', border: '1px solid rgba(79,142,240,0.15)',
             fontSize: '10px', color: 'var(--amber)', fontFamily: 'var(--font-inter)', fontWeight: 500,
           }}>
             {p}
@@ -167,7 +167,7 @@ function TriageChatMini() {
         fontFamily: 'var(--font-inter)',
       }}>
         <span style={{
-          display: 'block', fontSize: '9px', fontWeight: 700, letterSpacing: '0.1em',
+          display: 'block', fontSize: '9px', fontWeight: 700, letterSpacing: '0',
           color: 'var(--accent)', marginBottom: '4px',
         }}>AXVO</span>
         That&apos;s usually a job for a <strong style={{ color: 'var(--text)' }}>dental clinic</strong>, not an ER.
@@ -176,7 +176,7 @@ function TriageChatMini() {
       {/* Handoff card */}
       <div style={{
         alignSelf: 'flex-start', width: '92%',
-        background: 'rgba(52,211,153,0.07)', border: '1px solid rgba(52,211,153,0.2)',
+        background: 'rgba(79,142,240,0.07)', border: '1px solid rgba(79,142,240,0.2)',
         borderRadius: 'var(--r-sm)', padding: '8px 12px',
         fontFamily: 'var(--font-inter)',
       }}>
@@ -199,7 +199,7 @@ function CHWAvatarRow() {
         {['Español', 'Somali', 'Arabic', 'Haitian Creole'].map(lang => (
           <div key={lang} style={{
             padding: '3px 8px', borderRadius: 'var(--r-sm)',
-            background: 'rgba(167,139,250,0.07)', border: '1px solid rgba(167,139,250,0.15)',
+            background: 'rgba(79,142,240,0.07)', border: '1px solid rgba(79,142,240,0.15)',
             fontSize: '10px', color: 'var(--violet)', fontFamily: 'var(--font-inter)', fontWeight: 500,
           }}>
             {lang}
@@ -227,7 +227,7 @@ function CalendarEventMini() {
           background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)',
           fontFamily: 'var(--font-inter)',
         }}>
-          <span style={{ fontSize: '10px', color: 'var(--text-3)', width: '40px', flexShrink: 0, fontFamily: 'var(--font-mono),monospace' }}>{ev.day}</span>
+          <span style={{ fontSize: '10px', color: 'var(--text-3)', width: '40px', flexShrink: 0, fontFamily: 'var(--font-inter)' }}>{ev.day}</span>
           <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: colors[ev.type], flexShrink: 0 }} />
           <span style={{ fontSize: '11px', color: 'var(--text-2)', flex: 1 }}>{ev.event}</span>
           <Clock size={14} color="var(--text-3)" variant="Linear" />
@@ -246,8 +246,8 @@ function PathwaysMini() {
         <div key={step} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <div style={{
             padding: '5px 10px', borderRadius: 'var(--r-sm)',
-            background: i === 2 ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.03)',
-            border: `1px solid ${i === 2 ? 'rgba(74,144,217,0.22)' : 'rgba(255,255,255,0.06)'}`,
+            background: i === 2 ? 'rgba(79,142,240,0.10)' : 'rgba(255,255,255,0.03)',
+            border: `1px solid ${i === 2 ? 'rgba(79,142,240,0.22)' : 'rgba(255,255,255,0.06)'}`,
             fontSize: '10px', fontWeight: i === 2 ? 600 : 400,
             color: i === 2 ? 'var(--accent)' : 'var(--text-2)',
             fontFamily: 'var(--font-inter)',
@@ -356,18 +356,18 @@ export default function Features() {
       style={{ position: 'relative', zIndex: 2, maxWidth: '1200px', margin: '0 auto', padding: '120px 3rem', overflow: 'visible' }}
     >
       {/* Three-source light system */}
-      <div className="section-glow-left"  aria-hidden="true" style={{ top: '5%',  background: 'radial-gradient(circle, rgba(74,144,217,0.06) 0%, transparent 65%)' }} />
-      <div className="section-glow-right" aria-hidden="true" style={{ top: '40%', background: 'radial-gradient(circle, rgba(252,211,77,0.04) 0%, transparent 65%)'  }} />
+      <div className="section-glow-left"  aria-hidden="true" style={{ top: '5%',  background: 'transparent' }} />
+      <div className="section-glow-right" aria-hidden="true" style={{ top: '40%', background: 'transparent'  }} />
       <div className="section-glow-violet" aria-hidden="true" style={{ bottom: '5%', left: '50%', transform: 'translateX(-50%)' }} />
 
       {/* Section header */}
       <div className="section-intro" style={{ marginBottom: '4rem' }}>
         <div className="features-eyebrow" style={{
           display: 'inline-flex', alignItems: 'center', gap: '8px',
-          fontSize: '11px', fontWeight: 500, letterSpacing: '0.14em',
-          textTransform: 'uppercase', color: 'var(--accent)',
+          fontSize: '11px', fontWeight: 500, letterSpacing: '0',
+          textTransform: 'none', color: 'var(--accent)',
           marginBottom: '1.25rem', fontFamily: 'var(--font-inter)',
-          background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.14)',
+          background: 'rgba(79,142,240,0.06)', border: '1px solid rgba(79,142,240,0.14)',
           borderRadius: '100px', padding: '5px 14px',
         }}>
           <Activity size={11} color="var(--accent)" variant="TwoTone" />
@@ -412,8 +412,8 @@ export default function Features() {
             <BentoIcon
               icon={<Location size={18} variant="TwoTone" />}
               color="var(--accent)"
-              bg="rgba(74,144,217,0.10)"
-              border="rgba(74,144,217,0.18)"
+              bg="rgba(79,142,240,0.10)"
+              border="rgba(79,142,240,0.18)"
             />
             <div style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.5rem', fontFamily: 'var(--font-display)' }}>
               Clinic Finder
@@ -421,7 +421,7 @@ export default function Features() {
             <div style={{ fontSize: '13px', color: 'var(--text-2)', lineHeight: 1.75, fontFamily: 'var(--font-inter)', maxWidth: '280px' }}>
               18,900+ community health center sites, free clinics, and sliding-scale providers from public datasets — searchable by location and type of care.
             </div>
-            <Tag color="var(--accent)" bg="rgba(74,144,217,0.07)">Core feature</Tag>
+            <Tag color="var(--accent)" bg="rgba(79,142,240,0.07)">Core feature</Tag>
             <ClinicMapMini />
           </div>
         </Link>
@@ -438,8 +438,8 @@ export default function Features() {
               <BentoIcon
                 icon={<Cpu size={18} variant="TwoTone" />}
                 color="var(--violet)"
-                bg="rgba(167,139,250,0.10)"
-                border="rgba(167,139,250,0.18)"
+                bg="rgba(79,142,240,0.10)"
+                border="rgba(79,142,240,0.18)"
               />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.35rem', fontFamily: 'var(--font-display)' }}>
@@ -450,7 +450,7 @@ export default function Features() {
                 </div>
                 <PathwaysMini />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '0.75rem' }}>
-                  <Tag color="var(--violet)" bg="rgba(167,139,250,0.07)">Smart routing</Tag>
+                  <Tag color="var(--violet)" bg="rgba(79,142,240,0.07)">Smart routing</Tag>
                   <ExploreLink />
                 </div>
               </div>
@@ -469,12 +469,12 @@ export default function Features() {
             <BentoIcon
               icon={<ReceiptText size={18} variant="TwoTone" />}
               color="var(--amber)"
-              bg="rgba(252,211,77,0.10)"
-              border="rgba(252,211,77,0.18)"
+              bg="rgba(79,142,240,0.10)"
+              border="rgba(79,142,240,0.18)"
             />
             <ProgramsCounterMini />
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '0.75rem' }}>
-              <Tag color="var(--amber)" bg="rgba(252,211,77,0.07)">Clearinghouse</Tag>
+              <Tag color="var(--amber)" bg="rgba(79,142,240,0.07)">Clearinghouse</Tag>
               <ExploreLink />
             </div>
           </div>
@@ -512,8 +512,8 @@ export default function Features() {
               <BentoIcon
                 icon={<Profile2User size={18} variant="TwoTone" />}
                 color="var(--violet)"
-                bg="rgba(167,139,250,0.10)"
-                border="rgba(167,139,250,0.18)"
+                bg="rgba(79,142,240,0.10)"
+                border="rgba(79,142,240,0.18)"
               />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.35rem', fontFamily: 'var(--font-display)' }}>
@@ -524,7 +524,7 @@ export default function Features() {
                 </div>
                 <CHWAvatarRow />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '0.75rem' }}>
-                  <Tag color="var(--violet)" bg="rgba(167,139,250,0.07)">Directory</Tag>
+                  <Tag color="var(--violet)" bg="rgba(79,142,240,0.07)">Directory</Tag>
                   <ExploreLink />
                 </div>
               </div>
@@ -544,8 +544,8 @@ export default function Features() {
               <BentoIcon
                 icon={<Calendar1 size={18} variant="TwoTone" />}
                 color="var(--accent)"
-                bg="rgba(74,144,217,0.10)"
-                border="rgba(74,144,217,0.18)"
+                bg="rgba(79,142,240,0.10)"
+                border="rgba(79,142,240,0.18)"
               />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '0.35rem', fontFamily: 'var(--font-display)' }}>
@@ -556,7 +556,7 @@ export default function Features() {
                 </div>
                 <CalendarEventMini />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '0.75rem' }}>
-                  <Tag color="var(--accent)" bg="rgba(74,144,217,0.07)">Events</Tag>
+                  <Tag color="var(--accent)" bg="rgba(79,142,240,0.07)">Events</Tag>
                   <ExploreLink />
                 </div>
               </div>
@@ -570,7 +570,7 @@ export default function Features() {
          vignette (z-index:0), which fades to near-black at the section's
          bottom edge and was darkening these pills like a shadow. */}
       <div style={{ position: 'relative', zIndex: 1, marginTop: '40px', paddingTop: '28px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-        <span style={{ fontSize: '11px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', whiteSpace: 'nowrap', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+        <span style={{ fontSize: '11px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', whiteSpace: 'nowrap', fontWeight: 500, letterSpacing: '0', textTransform: 'none' }}>
           Also included
         </span>
         <div style={{ width: '1px', height: '12px', background: 'rgba(255,255,255,0.12)', flexShrink: 0 }} />

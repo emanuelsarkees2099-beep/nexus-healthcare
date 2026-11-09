@@ -7,7 +7,7 @@ import { Calendar1, Notification, Location, Clock, ArrowRight2, Profile, Activit
 /* ─── reveal hook ─────────────────────────────────── */
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
   useEffect(() => {
     const el = ref.current; if (!el) return
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } }, { threshold })
@@ -32,7 +32,7 @@ function RevealBlock({ children, delay = 0 }: { children: React.ReactNode; delay
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      <label style={{ fontSize: '12px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.38)' }}>{label}</label>
+      <label style={{ fontSize: '12px', fontWeight: 500, letterSpacing: '0', textTransform: 'none', color: 'rgba(255,255,255,0.38)' }}>{label}</label>
       {children}
     </div>
   )
@@ -41,7 +41,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 function InputField({ value, onChange, placeholder, type = 'text' }: { value: string; onChange: (v: string) => void; placeholder: string; type?: string }) {
   const [focused, setFocused] = useState(false)
   return (
-    <div style={{ borderRadius: '12px', padding: '1.5px', background: focused ? 'linear-gradient(135deg, rgba(74,144,217,0.5), rgba(167,210,190,0.2))' : 'rgba(255,255,255,0.07)', transition: 'background 0.3s' }}>
+    <div style={{ borderRadius: '12px', padding: '1.5px', background: focused ? 'linear-gradient(135deg, rgba(79,142,240,0.5), rgba(167,210,190,0.2))' : 'rgba(255,255,255,0.07)', transition: 'background 0.3s' }}>
       <input
         type={type}
         value={value}
@@ -58,7 +58,7 @@ function InputField({ value, onChange, placeholder, type = 'text' }: { value: st
 function SelectField({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: string[] }) {
   const [focused, setFocused] = useState(false)
   return (
-    <div style={{ borderRadius: '12px', padding: '1.5px', background: focused ? 'linear-gradient(135deg, rgba(74,144,217,0.5), rgba(167,210,190,0.2))' : 'rgba(255,255,255,0.07)', transition: 'background 0.3s' }}>
+    <div style={{ borderRadius: '12px', padding: '1.5px', background: focused ? 'linear-gradient(135deg, rgba(79,142,240,0.5), rgba(167,210,190,0.2))' : 'rgba(255,255,255,0.07)', transition: 'background 0.3s' }}>
       <select
         value={value}
         onChange={e => onChange(e.target.value)}
@@ -246,10 +246,9 @@ export default function CalendarPage() {
   }
 
   const pill: React.CSSProperties = {
+    // Plain section label — no colored badge
     display: 'inline-flex', alignItems: 'center', gap: '6px',
-    padding: '4px 12px', borderRadius: '100px',
-    fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-    background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)',
+    fontSize: '13px', fontWeight: 600, color: 'var(--text-2)',
   }
 
   const card: React.CSSProperties = {
@@ -258,8 +257,8 @@ export default function CalendarPage() {
 
   const statusMeta = {
     due:      { label: 'Overdue',  bg: 'rgba(248,113,113,0.1)',  color: '#f87171', border: 'rgba(248,113,113,0.25)' },
-    upcoming: { label: 'Upcoming', bg: 'rgba(251,191,36,0.08)',  color: '#fbbf24', border: 'rgba(251,191,36,0.2)'  },
-    done:     { label: 'Done',     bg: 'rgba(96,165,250,0.08)',  color: '#60a5fa', border: 'rgba(96,165,250,0.2)'  },
+    upcoming: { label: 'Upcoming', bg: 'rgba(79,142,240,0.08)',  color: '#4F8EF0', border: 'rgba(79,142,240,0.2)'  },
+    done:     { label: 'Done',     bg: 'rgba(79,142,240,0.08)',  color: '#4F8EF0', border: 'rgba(79,142,240,0.2)'  },
   }
 
   return (
@@ -267,26 +266,16 @@ export default function CalendarPage() {
 
       {/* ── HERO ─────────────────────────────────────── */}
       <section style={{ minHeight: '85dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '80px 24px 60px', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)', width: '600px', height: '400px', background: 'radial-gradient(ellipse, rgba(74,144,217,0.11) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)', width: '600px', height: '400px', background: 'transparent', pointerEvents: 'none' }} />
 
         <div style={{ maxWidth: '720px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}>
             <span style={pill}><Calendar1 size={14} variant="Linear" /> Preventive care</span>
           </div>
-          <h1 style={{ fontSize: 'clamp(38px, 5.5vw, 68px)', fontWeight: 700, lineHeight: 1.08, letterSpacing: '-0.03em', marginBottom: '22px', animation: 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both' }}>
-            Your health calendar,<br />built around you.
-          </h1>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.12, margin: '0 0 18px', color: 'var(--text)' }}>Your preventive care checklist</h1>
           <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: '500px', margin: '0 auto 40px', animation: 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 120ms both' }}>
-            Most people skip preventive screenings because they don't know what they need or where to go. We fix both.
+            Enter your age and health history to see which screenings are recommended for you and when, plus places to get them free or at low cost.
           </p>
-          <div style={{ display: 'flex', gap: '36px', justifyContent: 'center', flexWrap: 'wrap', animation: 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 200ms both' }}>
-            {[{ v: '100%', l: 'Free to use' }, { v: '18,900+', l: 'Clinic sites indexed' }, { v: '60s', l: 'Setup time' }].map(s => (
-              <div key={s.l} style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '28px', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text)' }}>{s.v}</div>
-                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '4px' }}>{s.l}</div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -344,9 +333,9 @@ export default function CalendarPage() {
                     <button key={c} onClick={() => toggleCondition(c)}
                       style={{
                         padding: '8px 16px', borderRadius: '100px', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit',
-                        background: conditions.includes(c) ? 'rgba(74,144,217,0.14)' : 'rgba(255,255,255,0.04)',
+                        background: conditions.includes(c) ? 'rgba(79,142,240,0.14)' : 'rgba(255,255,255,0.04)',
                         color: conditions.includes(c) ? 'var(--accent2)' : 'rgba(255,255,255,0.5)',
-                        border: `1px solid ${conditions.includes(c) ? 'rgba(74,144,217,0.35)' : 'rgba(255,255,255,0.07)'}`,
+                        border: `1px solid ${conditions.includes(c) ? 'rgba(79,142,240,0.35)' : 'rgba(255,255,255,0.07)'}`,
                         transition: 'all 0.22s cubic-bezier(0.16,1,0.3,1)',
                       }}
                     >{c}</button>
@@ -391,7 +380,7 @@ export default function CalendarPage() {
             {/* summary badges */}
             <RevealBlock delay={50}>
               <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '32px' }}>
-                {[{ count: due.length, label: 'Overdue', color: '#f87171', bg: 'rgba(248,113,113,0.08)' }, { count: upcoming.length, label: 'Upcoming', color: '#fbbf24', bg: 'rgba(251,191,36,0.08)' }, { count: done.length, label: 'Up to date', color: '#60a5fa', bg: 'rgba(96,165,250,0.08)' }].map(b => (
+                {[{ count: due.length, label: 'Overdue', color: '#f87171', bg: 'rgba(248,113,113,0.08)' }, { count: upcoming.length, label: 'Upcoming', color: '#4F8EF0', bg: 'rgba(79,142,240,0.08)' }, { count: done.length, label: 'Up to date', color: '#4F8EF0', bg: 'rgba(79,142,240,0.08)' }].map(b => (
                   <div key={b.label} style={{ padding: '10px 18px', borderRadius: '12px', background: b.bg, border: `1px solid ${b.color}25`, display: 'flex', gap: '8px', alignItems: 'center' }}>
                     <span style={{ fontSize: '20px', fontWeight: 700, color: b.color, letterSpacing: '-0.02em' }}>{b.count}</span>
                     <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>{b.label}</span>
@@ -431,9 +420,9 @@ export default function CalendarPage() {
 
             {/* reminder setup */}
             <RevealBlock>
-              <div style={{ ...card, background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.14)' }}>
+              <div style={{ ...card, background: 'rgba(79,142,240,0.04)', border: '1px solid rgba(79,142,240,0.14)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-                  <div style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}>
+                  <div style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}>
                     <Notification size={15} variant="Linear" />
                   </div>
                   <div>
@@ -450,13 +439,13 @@ export default function CalendarPage() {
                     onClick={downloadReminder}
                     style={{
                       padding: '13px', borderRadius: '12px', border: 'none', fontFamily: 'inherit', fontSize: '14px', fontWeight: 600,
-                      cursor: 'pointer', background: 'rgba(74,144,217,0.9)', color: '#07070F',
+                      cursor: 'pointer', background: 'rgba(79,142,240,0.9)', color: '#07070F',
                       transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
                     }}
                   >Download calendar reminder (.ics)</button>
                   {remSet && (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', animation: 'fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both' }}>
-                      <TickCircle size={16} color="#60a5fa" variant="Linear" />
+                      <TickCircle size={16} color="#4F8EF0" variant="Linear" />
                       <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)' }}>Downloaded. Open the file to add the reminder to your calendar.</span>
                     </div>
                   )}
@@ -505,7 +494,7 @@ export default function CalendarPage() {
       <section style={{ padding: '0 24px 120px' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ borderRadius: '28px', padding: '3px', background: 'linear-gradient(135deg, rgba(74,144,217,0.22), rgba(167,210,190,0.06))' }}>
+            <div style={{ borderRadius: '28px', padding: '3px', background: 'rgba(255,255,255,0.06)' }}>
               <div style={{ borderRadius: '26px', padding: '56px 52px', background: 'rgba(10,9,22,0.97)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '28px', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.04)' }}>
                 <div>
                   <span style={pill}><MagicStar size={14} variant="Linear" /> Stay ahead</span>

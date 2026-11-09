@@ -40,8 +40,8 @@ const DEMO_PASSPORT: Passport = {
 }
 
 const severityColors: Record<string, { color: string; bg: string; border: string }> = {
-  mild: { color: '#fbbf24', bg: 'rgba(251,191,36,0.08)', border: 'rgba(251,191,36,0.2)' },
-  moderate: { color: '#fb923c', bg: 'rgba(251,146,60,0.08)', border: 'rgba(251,146,60,0.25)' },
+  mild: { color: '#4F8EF0', bg: 'rgba(79,142,240,0.08)', border: 'rgba(79,142,240,0.2)' },
+  moderate: { color: '#4F8EF0', bg: 'rgba(79,142,240,0.08)', border: 'rgba(79,142,240,0.25)' },
   severe: { color: '#f87171', bg: 'rgba(248,113,113,0.1)', border: 'rgba(248,113,113,0.35)' },
 }
 
@@ -58,7 +58,7 @@ function Section({ title, icon, children }: { title: string; icon: React.ReactNo
       }}>
         <div style={{
           width: '28px', height: '28px', borderRadius: '8px',
-          background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)',
+          background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.2)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           color: 'var(--accent)',
         }}>
@@ -106,7 +106,7 @@ function AddModal({ onClose, onAdd }: { onClose: () => void; onAdd: (item: strin
           onClick={() => { if (val.trim()) { onAdd(val.trim()); onClose() } }}
           style={{
             width: '100%', padding: '12px', borderRadius: '12px',
-            background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.25)',
+            background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.25)',
             color: 'var(--accent)', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
           }}
         >
@@ -174,14 +174,14 @@ function ShareableSummary({ passport, masked }: { passport: Passport; masked: bo
         style={{
           width: '100%', display: 'flex', alignItems: 'center', gap: 10,
           padding: '14px 18px', borderRadius: 14,
-          background: 'rgba(52,211,153,0.04)', border: '1px solid rgba(52,211,153,0.16)',
+          background: 'rgba(79,142,240,0.04)', border: '1px solid rgba(79,142,240,0.16)',
           cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left',
           transition: 'border-color 0.15s, background 0.15s',
         }}
       >
-        <DocumentDownload size={15} color="rgba(52,211,153,0.8)" />
+        <DocumentDownload size={15} color="rgba(79,142,240,0.8)" />
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: 'rgba(52,211,153,0.9)' }}>Generate Care Summary</div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: 'rgba(79,142,240,0.9)' }}>Generate Care Summary</div>
           <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.35)', marginTop: 1 }}>
             One-page text summary for any new provider · {open ? 'hide' : 'show'}
           </div>
@@ -209,8 +209,8 @@ function ShareableSummary({ passport, masked }: { passport: Passport; masked: bo
               style={{
                 display: 'flex', alignItems: 'center', gap: 6,
                 padding: '8px 16px', borderRadius: 9, border: 'none', cursor: 'pointer',
-                background: copied ? 'rgba(52,211,153,0.10)' : 'rgba(52,211,153,0.08)',
-                color: copied ? '#34d399' : 'rgba(52,211,153,0.8)',
+                background: copied ? 'rgba(79,142,240,0.10)' : 'rgba(79,142,240,0.08)',
+                color: copied ? '#4F8EF0' : 'rgba(79,142,240,0.8)',
                 fontSize: 12, fontWeight: 600, fontFamily: 'inherit', transition: 'all 0.2s',
               }}
             >
@@ -260,8 +260,8 @@ function getRefillStatus(lastFilled: Date, supplyDays: number): { status: Refill
 
 const REFILL_META: Record<RefillStatus, { color: string; bg: string; label: string }> = {
   overdue:   { color: '#f87171', bg: 'rgba(248,113,113,0.08)',  label: 'Overdue' },
-  'due-soon':{ color: '#fbbf24', bg: 'rgba(251,191,36,0.08)',   label: 'Due soon' },
-  ok:        { color: '#34d399', bg: 'rgba(52,211,153,0.06)',   label: 'Refilled' },
+  'due-soon':{ color: '#4F8EF0', bg: 'rgba(79,142,240,0.08)',   label: 'Due soon' },
+  ok:        { color: '#4F8EF0', bg: 'rgba(79,142,240,0.06)',   label: 'Refilled' },
 }
 
 function RefillTracker({ medications, masked }: { medications: Medication[]; masked: boolean }) {
@@ -292,10 +292,10 @@ function RefillTracker({ medications, masked }: { medications: Medication[]; mas
     <div style={{ marginTop: 28 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Timer1 size={14} color="rgba(251,191,36,0.8)" />
+          <Timer1 size={14} color="rgba(79,142,240,0.8)" />
           <span style={{ fontSize: 13, fontWeight: 600 }}>Refill Reminders</span>
           {alertCount > 0 && (
-            <span style={{ fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 100, background: 'rgba(251,191,36,0.1)', color: '#fbbf24', border: '1px solid rgba(251,191,36,0.25)' }}>
+            <span style={{ fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 100, background: 'rgba(79,142,240,0.1)', color: '#4F8EF0', border: '1px solid rgba(79,142,240,0.25)' }}>
               {alertCount} due
             </span>
           )}
@@ -345,7 +345,7 @@ function RefillTracker({ medications, masked }: { medications: Medication[]; mas
                     color: 'rgba(255,255,255,0.5)', fontFamily: 'inherit', cursor: 'pointer',
                     transition: 'all 0.15s',
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(52,211,153,0.3)')}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(79,142,240,0.3)')}
                   onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)')}
                 >
                   Log refill
@@ -374,8 +374,8 @@ const DEFAULT_VACCINES: VaccineEntry[] = [
 ]
 
 const V_COLOR: Record<VStatus, string> = {
-  'up-to-date': '#34d399',
-  'due':        '#fbbf24',
+  'up-to-date': '#4F8EF0',
+  'due':        '#4F8EF0',
   'overdue':    '#f87171',
   'unknown':    'rgba(255,255,255,0.25)',
 }
@@ -412,7 +412,7 @@ function VaccineTracker() {
     <div style={{ padding: '20px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Shield size={14} color="#34d399" />
+          <Shield size={14} color="#4F8EF0" />
           <span style={{ fontSize: '13px', fontWeight: 600 }}>Immunization record</span>
           {overdueCount > 0 && (
             <span style={{
@@ -532,7 +532,7 @@ export default function PassportPage() {
   return (
     <AppShell>
       <style>{`
-        .passport-field:focus { outline: none; border-color: rgba(74,144,217,0.4) !important; }
+        .passport-field:focus { outline: none; border-color: rgba(79,142,240,0.4) !important; }
         @keyframes qr-appear { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
         @keyframes fullscreen-appear { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
         @media print {
@@ -558,7 +558,7 @@ export default function PassportPage() {
             style={{ textAlign: 'center', animation: 'fullscreen-appear 0.35s cubic-bezier(0.16,1,0.3,1) both' }}
             onClick={e => e.stopPropagation()}
           >
-            <div style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '24px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0', textTransform: 'none', color: 'rgba(255,255,255,0.4)', marginBottom: '24px' }}>
               Show to clinic staff
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -606,26 +606,19 @@ export default function PassportPage() {
       }}>
         <div aria-hidden style={{
           position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(74,144,217,0.07) 0%, transparent 70%)',
+          background: 'transparent',
           pointerEvents: 'none',
         }} />
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '8px',
           padding: '5px 14px', borderRadius: '100px',
-          background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)',
+          background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.2)',
           marginBottom: '24px', fontSize: '11px', fontWeight: 600,
-          color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase',
+          color: 'var(--accent)', letterSpacing: '0', textTransform: 'none',
         }}>
           <Shield size={11} /> Health Passport
         </div>
-        <h1 style={{
-          fontSize: 'clamp(28px, 5vw, 50px)', fontWeight: 800,
-          letterSpacing: '-0.035em', lineHeight: 1.05, marginBottom: '16px',
-          maxWidth: '580px', margin: '0 auto 16px',
-        }}>
-          Your health, in your pocket.<br />
-          <span style={{ color: 'var(--accent)' }}>You hold the key.</span>
-        </h1>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.12, margin: '0 0 18px', color: 'var(--text)' }}>Health passport</h1>
         <p style={{
           fontSize: '15px', color: 'rgba(255,255,255,0.45)',
           maxWidth: '440px', lineHeight: 1.7, margin: '0 auto 16px',
@@ -645,21 +638,21 @@ export default function PassportPage() {
         {isExample && (
           <div role="note" style={{
             marginBottom: '14px', padding: '12px 16px', borderRadius: '12px',
-            background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.22)',
+            background: 'rgba(79,142,240,0.06)', border: '1px solid rgba(79,142,240,0.22)',
             fontSize: '13px', color: 'rgba(255,255,255,0.65)', lineHeight: 1.55,
           }}>
-            <strong style={{ color: '#fbbf24' }}>Example passport.</strong> This is sample information, not a real person. Replace it with your own details and click Save.
+            <strong style={{ color: '#4F8EF0' }}>Example passport.</strong> This is sample information, not a real person. Replace it with your own details and click Save.
           </div>
         )}
         {/* Card header */}
         <div style={{
           padding: '20px 24px', borderRadius: '20px 20px 0 0',
-          background: 'linear-gradient(135deg, rgba(74,144,217,0.12), rgba(129,140,248,0.08))',
-          border: '1px solid rgba(74,144,217,0.2)', borderBottom: 'none',
+          background: 'rgba(255,255,255,0.06)',
+          border: '1px solid rgba(79,142,240,0.2)', borderBottom: 'none',
           display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px',
         }}>
           <div>
-            <div style={{ fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '4px' }}>
+            <div style={{ fontSize: '11px', letterSpacing: '0', textTransform: 'none', color: 'rgba(255,255,255,0.35)', marginBottom: '4px' }}>
               Health Passport
             </div>
             <div style={{ fontSize: '20px', fontWeight: 700 }}>{masked ? '••••• •.' : passport.name}</div>
@@ -684,7 +677,7 @@ export default function PassportPage() {
               onClick={() => setShowQR(!showQR)}
               style={{
                 padding: '7px 14px', borderRadius: '100px', cursor: 'pointer',
-                background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.25)',
+                background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.25)',
                 color: 'var(--accent)', fontSize: '12px', fontFamily: 'inherit',
                 display: 'flex', alignItems: 'center', gap: '6px',
               }}
@@ -697,8 +690,8 @@ export default function PassportPage() {
         {/* QR Code panel */}
         {showQR && (
           <div style={{
-            borderLeft: '1px solid rgba(74,144,217,0.2)', borderRight: '1px solid rgba(74,144,217,0.2)',
-            background: 'rgba(74,144,217,0.03)', padding: '28px',
+            borderLeft: '1px solid rgba(79,142,240,0.2)', borderRight: '1px solid rgba(79,142,240,0.2)',
+            background: 'rgba(79,142,240,0.03)', padding: '28px',
             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px',
             animation: 'qr-appear 0.3s ease both',
           }}>
@@ -721,7 +714,7 @@ export default function PassportPage() {
                 onClick={() => setShowFullscreen(true)}
                 style={{
                   padding: '8px 20px', borderRadius: '100px',
-                  background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.25)',
+                  background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.25)',
                   color: 'var(--accent)', fontSize: '12px', fontWeight: 600,
                   cursor: 'pointer', fontFamily: 'inherit',
                   display: 'inline-flex', alignItems: 'center', gap: '6px',
@@ -780,7 +773,7 @@ export default function PassportPage() {
           <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Health size={14} color="#818cf8" />
+                <Health size={14} color="#4F8EF0" />
                 <span style={{ fontSize: '13px', fontWeight: 600 }}>Current medications</span>
               </div>
               <button
@@ -798,7 +791,7 @@ export default function PassportPage() {
               {passport.medications.map(m => (
                 <div key={m.name} style={{
                   padding: '10px 14px', borderRadius: '10px',
-                  background: 'rgba(129,140,248,0.05)', border: '1px solid rgba(129,140,248,0.15)',
+                  background: 'rgba(79,142,240,0.05)', border: '1px solid rgba(79,142,240,0.15)',
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                 }}>
                   <span style={{ fontSize: '14px', fontWeight: 600, color: '#c7d2fe' }}>
@@ -816,7 +809,7 @@ export default function PassportPage() {
           <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Heart size={14} color="#f472b6" />
+                <Heart size={14} color="#4F8EF0" />
                 <span style={{ fontSize: '13px', fontWeight: 600 }}>Medical conditions</span>
               </div>
               <button
@@ -834,7 +827,7 @@ export default function PassportPage() {
               {passport.conditions.map(c => (
                 <div key={c.name} style={{
                   padding: '6px 14px', borderRadius: '100px',
-                  background: 'rgba(244,114,182,0.06)', border: '1px solid rgba(244,114,182,0.2)',
+                  background: 'rgba(79,142,240,0.06)', border: '1px solid rgba(79,142,240,0.2)',
                   fontSize: '13px', color: '#f9a8d4',
                   display: 'flex', alignItems: 'center', gap: '6px',
                 }}>
@@ -848,13 +841,13 @@ export default function PassportPage() {
           {/* Emergency contact */}
           <div style={{ padding: '20px 24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-              <Profile size={14} color="#fbbf24" />
+              <Profile size={14} color="#4F8EF0" />
               <span style={{ fontSize: '13px', fontWeight: 600 }}>Emergency contact</span>
             </div>
             <div style={{
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               padding: '12px 16px', borderRadius: '12px',
-              background: 'rgba(251,191,36,0.05)', border: '1px solid rgba(251,191,36,0.18)',
+              background: 'rgba(79,142,240,0.05)', border: '1px solid rgba(79,142,240,0.18)',
             }}>
               <div>
                 <div style={{ fontSize: '14px', fontWeight: 600 }}>
@@ -880,9 +873,9 @@ export default function PassportPage() {
             onClick={handleSave}
             style={{
               padding: '11px 22px', borderRadius: '100px',
-              background: saved ? 'rgba(96,165,250,0.12)' : 'rgba(74,144,217,0.1)',
-              border: `1px solid ${saved ? 'rgba(96,165,250,0.3)' : 'rgba(74,144,217,0.25)'}`,
-              color: saved ? '#60a5fa' : 'var(--accent)', fontSize: '13px', fontWeight: 600,
+              background: saved ? 'rgba(79,142,240,0.12)' : 'rgba(79,142,240,0.1)',
+              border: `1px solid ${saved ? 'rgba(79,142,240,0.3)' : 'rgba(79,142,240,0.25)'}`,
+              color: saved ? '#4F8EF0' : 'var(--accent)', fontSize: '13px', fontWeight: 600,
               cursor: 'pointer', fontFamily: 'inherit',
               display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s',
             }}
@@ -955,7 +948,7 @@ export default function PassportPage() {
             <div style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16,
             }}>
-              <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>
+              <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0', textTransform: 'none', color: 'rgba(255,255,255,0.3)' }}>
                 Health Timeline
               </span>
             </div>

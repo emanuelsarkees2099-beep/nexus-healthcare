@@ -9,7 +9,7 @@ import { Location, Hospital, Cpu, ArrowRight, TickCircle, ArrowRight2, Wifi, Clo
 /* ─── reveal hook ─────────────────────────────────── */
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
   useEffect(() => {
     const el = ref.current; if (!el) return
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } }, { threshold })
@@ -49,22 +49,13 @@ type ClinicResult = {
   openNow?: boolean | null; rating?: number; type?: string
 }
 
-const TRUST_STATS = [
-  { val: '18,900+', label: 'Clinic sites searched' },
-  { val: '4',       label: 'Languages supported' },
-  { val: '50 + DC', label: 'States covered' },
-  { val: '$0',      label: 'Cost to use AXVO' },
-]
-
 const SYMPTOMS = ['Chest pain', 'Dental pain', 'Anxiety / depression', 'Fever or infection', 'Back pain', "Women's health", 'Diabetes care', 'Vision problems']
 
 /* ─── shared styles ───────────────────────────────── */
 const pill: React.CSSProperties = {
+  // Plain section label — no colored badge
   display: 'inline-flex', alignItems: 'center', gap: '6px',
-  padding: '4px 12px', borderRadius: '100px',
-  fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-  background: 'rgba(74,144,217,0.08)', color: 'var(--accent)',
-  border: '1px solid rgba(74,144,217,0.18)',
+  fontSize: '13px', fontWeight: 600, color: 'var(--text-2)',
 }
 
 /* ─── sub-components ──────────────────────────────── */
@@ -87,11 +78,11 @@ function InputField({ label, placeholder, value, onChange, type = 'text' }: {
   const [focused, setFocused] = useState(false)
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      <label style={{ fontSize: '12px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.38)' }}>{label}</label>
+      <label style={{ fontSize: '12px', fontWeight: 500, letterSpacing: '0', textTransform: 'none', color: 'rgba(255,255,255,0.38)' }}>{label}</label>
       <div style={{
         borderRadius: '12px',
         padding: '1.5px',
-        background: focused ? 'linear-gradient(135deg, rgba(74,144,217,0.5), rgba(167,210,190,0.2))' : 'rgba(255,255,255,0.07)',
+        background: focused ? 'linear-gradient(135deg, rgba(79,142,240,0.5), rgba(167,210,190,0.2))' : 'rgba(255,255,255,0.07)',
         transition: 'background 0.3s cubic-bezier(0.16,1,0.3,1)',
       }}>
         <input
@@ -136,13 +127,13 @@ function FAQSection() {
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
           {FAQ_ITEMS.map((item, i) => (
-            <div key={i} style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid', borderColor: open === i ? 'rgba(74,144,217,0.25)' : 'rgba(255,255,255,0.06)', transition: 'border-color 0.25s, background 0.25s', background: open === i ? 'rgba(74,144,217,0.04)' : 'transparent', marginBottom: '4px' }}>
+            <div key={i} style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid', borderColor: open === i ? 'rgba(79,142,240,0.25)' : 'rgba(255,255,255,0.06)', transition: 'border-color 0.25s, background 0.25s', background: open === i ? 'rgba(79,142,240,0.04)' : 'transparent', marginBottom: '4px' }}>
               <button
                 onClick={() => setOpen(open === i ? null : i)}
                 style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 24px', background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontFamily: 'inherit', textAlign: 'left', gap: '16px' }}
               >
                 <span style={{ fontSize: '15px', fontWeight: 500, lineHeight: 1.4 }}>{item.q}</span>
-                <span style={{ flexShrink: 0, width: '20px', height: '20px', borderRadius: '50%', background: open === i ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.3s, background 0.25s', transform: open === i ? 'rotate(45deg)' : 'none', color: open === i ? 'var(--accent)' : 'rgba(255,255,255,0.4)', fontSize: '16px', lineHeight: 1 }}>+</span>
+                <span style={{ flexShrink: 0, width: '20px', height: '20px', borderRadius: '50%', background: open === i ? 'rgba(79,142,240,0.15)' : 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.3s, background 0.25s', transform: open === i ? 'rotate(45deg)' : 'none', color: open === i ? 'var(--accent)' : 'rgba(255,255,255,0.4)', fontSize: '16px', lineHeight: 1 }}>+</span>
               </button>
               <div style={{ maxHeight: open === i ? '300px' : '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.16,1,0.3,1)' }}>
                 <p style={{ padding: '0 24px 20px', fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.75, margin: 0 }}>{item.a}</p>
@@ -255,18 +246,14 @@ export default function PathwaysPage() {
           <div className="aurora-orb-3" />
         </div>
         {/* ambient glow */}
-        <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: '700px', height: '450px', background: 'radial-gradient(ellipse, rgba(79,142,240,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: '700px', height: '450px', background: 'transparent', pointerEvents: 'none' }} />
 
         <div style={{ maxWidth: '760px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}>
             <span style={pill}><MagicStar size={14} variant="Linear" /> Care Navigation</span>
           </div>
 
-          <h1 ref={heroTitleRef} style={{ fontSize: 'clamp(42px, 7vw, 80px)', fontWeight: 700, lineHeight: 1.08, letterSpacing: '-0.03em', marginBottom: '24px', color: 'var(--text)' }}>
-            {['The', 'right', 'clinic,', 'found', 'in', 'seconds.'].map((w, i) => (
-              <span key={i} className="word" style={{ display: 'inline-block', marginRight: '0.22em' }}>{w}</span>
-            ))}
-          </h1>
+          <h1 ref={heroTitleRef} style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.12, margin: '0 0 18px', color: 'var(--text)' }}>Find a clinic that fits your needs</h1>
 
           <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: '540px', margin: '0 auto 40px', fontWeight: 400 }}>
             Tell AXVO what kind of care you need and where you are. It shows free and sliding-scale clinics that offer that care, closest first.
@@ -294,15 +281,6 @@ export default function PathwaysPage() {
           <p style={{ marginTop: '20px', fontSize: '13px', color: 'rgba(255,255,255,0.28)' }}>No account needed · Results in under 2 minutes</p>
         </div>
 
-        {/* trust stats */}
-        <div style={{ display: 'flex', gap: '48px', marginTop: '72px', flexWrap: 'wrap', justifyContent: 'center' }}>
-          {TRUST_STATS.map(s => (
-            <div key={s.label} style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '26px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em' }}>{s.val}</div>
-              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '4px', letterSpacing: '0.04em' }}>{s.label}</div>
-            </div>
-          ))}
-        </div>
       </section>
 
       {/* ── HOW IT WORKS ─────────────────────────────── */}
@@ -322,8 +300,8 @@ export default function PathwaysPage() {
                 <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '24px', padding: '4px' }}>
                   <div style={{ background: 'rgba(13,11,30,0.8)', borderRadius: '21px', padding: '28px', height: '100%', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.06)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                      <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}>{s.icon}</div>
-                      <span style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.2)', letterSpacing: '0.1em' }}>{s.n}</span>
+                      <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}>{s.icon}</div>
+                      <span style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.2)', letterSpacing: '0' }}>{s.n}</span>
                     </div>
                     <h3 style={{ fontSize: '17px', fontWeight: 600, marginBottom: '10px', color: 'var(--text)' }}>{s.title}</h3>
                     <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.65 }}>{s.body}</p>
@@ -353,7 +331,7 @@ export default function PathwaysPage() {
             {/* Step 1 — symptoms */}
             {step === 1 && (
               <div style={{ animation: 'fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both' }}>
-                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Step 1 of 3</span>
+                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', letterSpacing: '0', textTransform: 'none' }}>Step 1 of 3</span>
                 <h2 style={{ fontSize: 'clamp(22px, 4vw, 34px)', fontWeight: 700, margin: '12px 0 8px', letterSpacing: '-0.02em' }}>What brings you in?</h2>
                 <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '15px', marginBottom: '32px' }}>Select the closest match, or type your own below.</p>
 
@@ -362,9 +340,9 @@ export default function PathwaysPage() {
                     <button key={s} onClick={() => setSymptom(symptom === s ? '' : s)}
                       style={{
                         padding: '10px 18px', borderRadius: '100px', fontSize: '14px',
-                        background: symptom === s ? 'rgba(74,144,217,0.18)' : 'rgba(255,255,255,0.04)',
+                        background: symptom === s ? 'rgba(79,142,240,0.18)' : 'rgba(255,255,255,0.04)',
                         color: symptom === s ? 'var(--accent2)' : 'rgba(255,255,255,0.6)',
-                        border: `1px solid ${symptom === s ? 'rgba(74,144,217,0.4)' : 'rgba(255,255,255,0.08)'}`,
+                        border: `1px solid ${symptom === s ? 'rgba(79,142,240,0.4)' : 'rgba(255,255,255,0.08)'}`,
                         cursor: 'pointer', fontFamily: 'inherit',
                         transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
                       }}
@@ -389,7 +367,7 @@ export default function PathwaysPage() {
             {/* Step 2 — location & insurance */}
             {step === 2 && (
               <div style={{ animation: 'fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both' }}>
-                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Step 2 of 3</span>
+                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', letterSpacing: '0', textTransform: 'none' }}>Step 2 of 3</span>
                 <h2 style={{ fontSize: 'clamp(22px, 4vw, 34px)', fontWeight: 700, margin: '12px 0 8px', letterSpacing: '-0.02em' }}>Location & coverage</h2>
                 <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '15px', marginBottom: '32px' }}>We filter results to what's actually available near you.</p>
 
@@ -397,14 +375,14 @@ export default function PathwaysPage() {
                   <InputField label="Your zip code" placeholder="e.g. 85201" value={location} onChange={setLocation} />
 
                   <div>
-                    <label style={{ fontSize: '12px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.38)', display: 'block', marginBottom: '10px' }}>Insurance status</label>
+                    <label style={{ fontSize: '12px', fontWeight: 500, letterSpacing: '0', textTransform: 'none', color: 'rgba(255,255,255,0.38)', display: 'block', marginBottom: '10px' }}>Insurance status</label>
                     <div className="calendar-week-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                       {INSURANCE_OPTIONS.map(opt => (
                         <button key={opt.id} onClick={() => setInsurance(opt.id)}
                           style={{
                             padding: '14px 16px', borderRadius: '14px', textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit',
-                            background: insurance === opt.id ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.03)',
-                            border: `1px solid ${insurance === opt.id ? 'rgba(74,144,217,0.35)' : 'rgba(255,255,255,0.07)'}`,
+                            background: insurance === opt.id ? 'rgba(79,142,240,0.12)' : 'rgba(255,255,255,0.03)',
+                            border: `1px solid ${insurance === opt.id ? 'rgba(79,142,240,0.35)' : 'rgba(255,255,255,0.07)'}`,
                             transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
                           }}
                         >
@@ -434,7 +412,7 @@ export default function PathwaysPage() {
             {/* Loading */}
             {loading && (
               <div style={{ textAlign: 'center', padding: '60px 0', animation: 'fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both' }}>
-                <div style={{ width: '52px', height: '52px', borderRadius: '50%', border: '2px solid rgba(74,144,217,0.15)', borderTopColor: 'var(--accent)', margin: '0 auto 24px', animation: 'spin 0.9s linear infinite' }} />
+                <div style={{ width: '52px', height: '52px', borderRadius: '50%', border: '2px solid rgba(79,142,240,0.15)', borderTopColor: 'var(--accent)', margin: '0 auto 24px', animation: 'spin 0.9s linear infinite' }} />
                 <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.55)' }}>Finding your best matches…</p>
                 <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.25)', marginTop: '8px' }}>Checking languages · services · distance</p>
               </div>
@@ -451,8 +429,8 @@ export default function PathwaysPage() {
               <h2 style={{ fontSize: '24px', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '6px' }}>Your top matches</h2>
               <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.38)' }}>
                 {clinicResults.length > 0 ? `${clinicResults.length} clinics near ${location}` : `Searching near ${location}…`}
-                {resultsSource === 'google' && <span style={{ marginLeft: '8px', color: '#60a5fa', fontSize: '11px' }}>● Live results</span>}
-                {resultsSource === 'hrsa' && <span style={{ marginLeft: '8px', color: '#60a5fa', fontSize: '11px' }}>● HRSA data</span>}
+                {resultsSource === 'google' && <span style={{ marginLeft: '8px', color: '#4F8EF0', fontSize: '11px' }}>● Live results</span>}
+                {resultsSource === 'hrsa' && <span style={{ marginLeft: '8px', color: '#4F8EF0', fontSize: '11px' }}>● HRSA data</span>}
               </p>
             </div>
 
@@ -495,23 +473,23 @@ export default function PathwaysPage() {
                   <RevealBlock key={c.id} delay={i * 80}>
                     <div style={{ ...card, borderRadius: '20px', position: 'relative', overflow: 'hidden' }}>
                       {i === 0 && (
-                        <div style={{ position: 'absolute', top: '0', left: '0', right: '0', height: '2px', background: 'linear-gradient(90deg, var(--accent), var(--accent2))' }} />
+                        <div style={{ position: 'absolute', top: '0', left: '0', right: '0', height: '2px', background: 'var(--accent)' }} />
                       )}
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px', flexWrap: 'wrap' }}>
                         <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', flex: 1, minWidth: 0 }}>
-                          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '13px', color: 'var(--accent2)', flexShrink: 0 }}>
+                          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '13px', color: 'var(--accent2)', flexShrink: 0 }}>
                             {c.name.split(' ').map((w: string) => w[0]).slice(0, 2).join('')}
                           </div>
                           <div style={{ minWidth: 0 }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
                               <span style={{ fontWeight: 600, fontSize: '16px' }}>{c.name}</span>
                               {i === 0 && <span style={{ ...pill, fontSize: '10px', padding: '2px 8px' }}>Closest match</span>}
-                              {c.type === 'FQHC' && <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '100px', background: 'rgba(96,165,250,0.08)', border: '1px solid rgba(96,165,250,0.2)', color: '#60a5fa' }}>FQHC</span>}
+                              {c.type === 'FQHC' && <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '100px', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.2)', color: '#4F8EF0' }}>FQHC</span>}
                             </div>
                             <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.38)', display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
                               {c.distance && <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Location size={11} variant="Linear" />{c.distance} mi</span>}
                               {c.address && <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>{c.address}{c.city ? `, ${c.city}` : ''}</span>}
-                              {c.hours && <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: c.openNow ? '#60a5fa' : 'rgba(255,255,255,0.38)' }}><Clock size={11} variant="Linear" />{c.hours}</span>}
+                              {c.hours && <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: c.openNow ? '#4F8EF0' : 'rgba(255,255,255,0.38)' }}><Clock size={11} variant="Linear" />{c.hours}</span>}
                             </div>
                             {c.phone && (
                               <a href={`tel:${c.phone}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', marginTop: '6px', fontSize: '13px', color: 'var(--accent)', textDecoration: 'none', fontWeight: 500 }}>
@@ -562,13 +540,13 @@ export default function PathwaysPage() {
                         style={{
                           display: 'inline-flex', alignItems: 'center', gap: '8px',
                           padding: '12px 26px', borderRadius: '100px',
-                          background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.22)',
+                          background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.22)',
                           color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
                           cursor: 'pointer', fontFamily: 'inherit',
                           transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
                         }}
-                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.16)'; (e.currentTarget as HTMLElement).style.transform = 'scale(1.02)' }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.08)'; (e.currentTarget as HTMLElement).style.transform = 'scale(1)' }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(79,142,240,0.16)'; (e.currentTarget as HTMLElement).style.transform = 'scale(1.02)' }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(79,142,240,0.08)'; (e.currentTarget as HTMLElement).style.transform = 'scale(1)' }}
                       >
                         See all {clinicResults.length} clinics
                         <ArrowRight size={13} variant="Linear" />
@@ -599,15 +577,15 @@ export default function PathwaysPage() {
                           )}
                         </div>
                         <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontSize: '20px', fontWeight: 700, color: '#60a5fa' }}>{t.cost}</div>
+                          <div style={{ fontSize: '20px', fontWeight: 700, color: '#4F8EF0' }}>{t.cost}</div>
                           <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>{t.tag}</div>
                         </div>
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '14px', flexWrap: 'wrap', gap: '8px' }}>
                         <a href={t.url} target="_blank" rel="noopener noreferrer"
-                          style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 18px', borderRadius: '100px', background: 'rgba(96,165,250,0.1)', border: '1px solid rgba(96,165,250,0.2)', color: '#60a5fa', fontSize: '13px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'none', transition: 'background 0.2s' }}
-                          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(96,165,250,0.18)')}
-                          onMouseLeave={e => (e.currentTarget.style.background = 'rgba(96,165,250,0.1)')}
+                          style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 18px', borderRadius: '100px', background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.2)', color: '#4F8EF0', fontSize: '13px', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'none', transition: 'background 0.2s' }}
+                          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(79,142,240,0.18)')}
+                          onMouseLeave={e => (e.currentTarget.style.background = 'rgba(79,142,240,0.1)')}
                         >
                           <Wifi size={12} variant="Linear" /> Connect now
                         </a>
@@ -626,9 +604,9 @@ export default function PathwaysPage() {
                 <div style={{ textAlign: 'center', marginTop: '8px' }}>
                   <button
                     onClick={() => router.push('/telehealth')}
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px', borderRadius: '100px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.25)', color: 'var(--accent)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.18)' }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.1)' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px', borderRadius: '100px', background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.25)', color: 'var(--accent)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(79,142,240,0.18)' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(79,142,240,0.1)' }}
                   >
                     See all telehealth options <ArrowRight size={13} variant="Linear" />
                   </button>
@@ -657,7 +635,7 @@ export default function PathwaysPage() {
             ].map((item, i) => (
               <RevealBlock key={item.n} delay={i * 100}>
                 <div style={{ padding: '36px 32px', background: i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent', height: '100%' }}>
-                  <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.12em', marginBottom: '16px' }}>{item.n}</div>
+                  <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0', marginBottom: '16px' }}>{item.n}</div>
                   <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '12px', lineHeight: 1.3 }}>{item.title}</h3>
                   <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.42)', lineHeight: 1.7 }}>{item.body}</p>
                 </div>
@@ -671,7 +649,7 @@ export default function PathwaysPage() {
       <section style={{ padding: '0 24px 120px' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <RevealBlock>
-            <div style={{ borderRadius: '28px', padding: '4px', background: 'linear-gradient(135deg, rgba(74,144,217,0.2), rgba(167,210,190,0.05))' }}>
+            <div style={{ borderRadius: '28px', padding: '4px', background: 'rgba(255,255,255,0.06)' }}>
               <div style={{ borderRadius: '25px', padding: '60px 52px', background: 'rgba(13,11,30,0.95)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '32px', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05)' }}>
                 <div>
                   <div style={{ ...pill, marginBottom: '16px' }}><Hospital size={14} variant="Linear" /> Can't travel?</div>

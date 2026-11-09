@@ -80,13 +80,13 @@ export default function CrisisButton() {
               style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 padding: '12px 16px', borderRadius: '12px', marginBottom: '8px',
-                background: 'rgba(129,140,248,0.08)', border: '1px solid rgba(129,140,248,0.2)',
+                background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.2)',
                 textDecoration: 'none',
               }}
             >
-              <Call size={16} color="#818cf8" variant="Linear" />
+              <Call size={16} color="#4F8EF0" variant="Linear" />
               <div>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: '#818cf8' }}>{t('emergency.crisisText')}</div>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: '#4F8EF0' }}>{t('emergency.crisisText')}</div>
                 <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>{t('emergency.desc.crisisText')}</div>
               </div>
             </a>
@@ -125,7 +125,7 @@ export default function CrisisButton() {
           border: '1px solid rgba(248,113,113,0.4)',
           cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: '0 0 8px rgba(248,113,113,0.2), 0 4px 16px rgba(0,0,0,0.4)',
+          boxShadow: 'none',
           animation: 'crisis-pulse 4s ease-in-out infinite',
           color: '#fff',
         }}

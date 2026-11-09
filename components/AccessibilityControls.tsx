@@ -32,13 +32,13 @@ export default function AccessibilityControls() {
         style={{
           position: 'fixed', bottom: '90px', right: '20px', zIndex: 49,
           width: '44px', height: '44px', borderRadius: '50%',
-          background: 'rgba(8,13,26,0.9)', border: '1px solid rgba(74,144,217,0.2)',
+          background: 'rgba(8,13,26,0.9)', border: '1px solid rgba(79,142,240,0.2)',
           backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center', justifyContent: 'center',
           color: 'var(--accent)', cursor: 'pointer', transition: 'border-color 0.2s, box-shadow 0.2s',
-          boxShadow: open ? '0 0 0 2px rgba(74,144,217,0.3)' : 'none',
+          boxShadow: open ? '0 0 0 2px rgba(79,142,240,0.3)' : 'none',
         }}
-        onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.45)')}
-        onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.2)')}
+        onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(79,142,240,0.45)')}
+        onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(79,142,240,0.2)')}
       >
         <TextBlock size={16} variant="Linear" color="var(--accent)" />
       </button>
@@ -47,12 +47,12 @@ export default function AccessibilityControls() {
       {open && (
         <div style={{
           position: 'fixed', bottom: '144px', right: '16px', zIndex: 49,
-          background: 'rgba(8,13,26,0.96)', border: '1px solid rgba(74,144,217,0.15)',
+          background: 'rgba(8,13,26,0.96)', border: '1px solid rgba(79,142,240,0.15)',
           borderRadius: '18px', padding: '20px', width: '240px',
           backdropFilter: 'blur(24px)', boxShadow: '0 24px 48px rgba(0,0,0,0.5)',
           animation: 'fadeUp 0.3s cubic-bezier(0.16,1,0.3,1) both',
         }}>
-          <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: '14px' }}>Display</div>
+          <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0', textTransform: 'none', color: 'rgba(255,255,255,0.3)', marginBottom: '14px' }}>Display</div>
 
           {([
             { id: 'normal',        label: 'Default',      desc: 'Standard view', icon: <RotateLeft size={14} variant="Linear" color="currentColor" /> },
@@ -65,8 +65,8 @@ export default function AccessibilityControls() {
               style={{
                 width: '100%', display: 'flex', alignItems: 'center', gap: '12px', padding: '11px 14px',
                 borderRadius: '10px', border: '1px solid', cursor: 'pointer', fontFamily: 'inherit',
-                background: mode === opt.id ? 'rgba(74,144,217,0.08)' : 'transparent',
-                borderColor: mode === opt.id ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.06)',
+                background: mode === opt.id ? 'rgba(79,142,240,0.08)' : 'transparent',
+                borderColor: mode === opt.id ? 'rgba(79,142,240,0.3)' : 'rgba(255,255,255,0.06)',
                 color: mode === opt.id ? 'var(--accent)' : 'rgba(255,255,255,0.55)',
                 transition: 'all 0.2s', marginBottom: '6px', textAlign: 'left',
               }}

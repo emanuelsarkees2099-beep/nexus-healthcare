@@ -84,7 +84,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <div style={{
       fontSize: '10px', fontWeight: 600,
-      letterSpacing: '0.09em', textTransform: 'uppercase',
+      letterSpacing: '0', textTransform: 'none',
       color: 'rgba(255,255,255,0.22)', fontFamily: 'var(--font-inter)',
       padding: '0 0 8px',
       marginBottom: '2px',
@@ -128,9 +128,9 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean
       style={{
         width: '38px', height: '21px', borderRadius: '100px',
         border: '1px solid',
-        borderColor: checked ? 'rgba(74,144,217,0.6)' : 'rgba(255,255,255,0.12)',
+        borderColor: checked ? 'rgba(79,142,240,0.6)' : 'rgba(255,255,255,0.12)',
         cursor: 'pointer', flexShrink: 0,
-        background: checked ? 'rgba(74,144,217,0.35)' : 'rgba(255,255,255,0.06)',
+        background: checked ? 'rgba(79,142,240,0.35)' : 'rgba(255,255,255,0.06)',
         position: 'relative', transition: 'background 0.2s, border-color 0.2s',
         outline: 'none',
       }}
@@ -139,9 +139,9 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean
         position: 'absolute', top: '2px',
         left: checked ? '18px' : '2px',
         width: '15px', height: '15px', borderRadius: '50%',
-        background: checked ? '#4A8FD4' : 'rgba(255,255,255,0.4)',
+        background: checked ? '#4F8EF0' : 'rgba(255,255,255,0.4)',
         transition: 'left 0.22s cubic-bezier(0.34,1.56,0.64,1), background 0.2s',
-        boxShadow: checked ? '0 0 8px rgba(74,144,217,0.5)' : 'none',
+        boxShadow: checked ? '0 0 8px rgba(79,142,240,0.5)' : 'none',
       }} />
     </button>
   )
@@ -163,12 +163,12 @@ function SegmentControl({
           onClick={() => onChange(opt)}
           style={{
             padding: '5px 12px', borderRadius: '7px', border: 'none',
-            background: value === opt ? 'rgba(74,144,217,0.18)' : 'transparent',
-            color: value === opt ? 'rgba(74,144,217,0.95)' : 'rgba(255,255,255,0.35)',
+            background: value === opt ? 'rgba(79,142,240,0.18)' : 'transparent',
+            color: value === opt ? 'rgba(79,142,240,0.95)' : 'rgba(255,255,255,0.35)',
             fontSize: '11px', fontWeight: value === opt ? 600 : 400,
             fontFamily: 'var(--font-inter)', cursor: 'pointer',
             transition: 'all 0.15s', outline: 'none',
-            borderColor: value === opt ? 'rgba(74,144,217,0.25)' : 'transparent',
+            borderColor: value === opt ? 'rgba(79,142,240,0.25)' : 'transparent',
           }}
         >
           {opt}
@@ -262,7 +262,7 @@ export default function SettingsSidebar() {
           position: 'fixed', top: 0, right: 0,
           width: '360px', maxWidth: '100vw', height: '100dvh',
           zIndex: 9971,
-          background: 'linear-gradient(180deg, #0d1117 0%, #0a0d11 100%)',
+          background: 'var(--accent)',
           borderLeft: '1px solid rgba(255,255,255,0.07)',
           boxShadow: '-24px 0 80px rgba(0,0,0,0.7), -1px 0 0 rgba(255,255,255,0.04)',
           display: 'flex', flexDirection: 'column',
@@ -316,8 +316,8 @@ export default function SettingsSidebar() {
               style={{
                 display: 'flex', alignItems: 'center', gap: '10px',
                 padding: '8px 10px', borderRadius: 'var(--r-sm)', border: 'none',
-                background: section === item.id ? 'rgba(74,144,217,0.10)' : 'transparent',
-                color: section === item.id ? 'rgba(74,144,217,0.90)' : 'rgba(255,255,255,0.40)',
+                background: section === item.id ? 'rgba(79,142,240,0.10)' : 'transparent',
+                color: section === item.id ? 'rgba(79,142,240,0.90)' : 'rgba(255,255,255,0.40)',
                 cursor: 'pointer', textAlign: 'left', transition: 'all 0.14s',
                 fontFamily: 'var(--font-inter)', fontSize: '12.5px', fontWeight: section === item.id ? 500 : 400,
                 outline: 'none',
@@ -328,7 +328,7 @@ export default function SettingsSidebar() {
               <span style={{ opacity: section === item.id ? 1 : 0.6 }}>{item.icon}</span>
               {item.label}
               {section === item.id && (
-                <span style={{ marginLeft: 'auto', width: '5px', height: '5px', borderRadius: '50%', background: 'rgba(74,144,217,0.7)', flexShrink: 0 }} />
+                <span style={{ marginLeft: 'auto', width: '5px', height: '5px', borderRadius: '50%', background: 'rgba(79,142,240,0.7)', flexShrink: 0 }} />
               )}
             </button>
           ))}
@@ -352,12 +352,12 @@ export default function SettingsSidebar() {
                       onClick={() => { setTheme(t.id); applyTheme(t.id) }}
                       style={{
                         flex: 1, padding: '12px 10px', borderRadius: 'var(--r-sm)', cursor: 'pointer',
-                        border: theme === t.id ? '1px solid rgba(74,144,217,0.40)' : '1px solid rgba(255,255,255,0.07)',
-                        background: theme === t.id ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.02)',
+                        border: theme === t.id ? '1px solid rgba(79,142,240,0.40)' : '1px solid rgba(255,255,255,0.07)',
+                        background: theme === t.id ? 'rgba(79,142,240,0.10)' : 'rgba(255,255,255,0.02)',
                         textAlign: 'left', transition: 'all 0.15s', outline: 'none',
                       }}
                     >
-                      <div style={{ fontSize: '13px', fontWeight: 600, color: theme === t.id ? 'rgba(74,144,217,0.9)' : 'rgba(255,255,255,0.55)', fontFamily: 'var(--font-display)', marginBottom: '2px' }}>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: theme === t.id ? 'rgba(79,142,240,0.9)' : 'rgba(255,255,255,0.55)', fontFamily: 'var(--font-display)', marginBottom: '2px' }}>
                         {t.label}
                       </div>
                       <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-inter)' }}>
@@ -392,7 +392,7 @@ export default function SettingsSidebar() {
                   ].map(([k, v]) => (
                     <div key={k} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)' }}>{k}</span>
-                      <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.55)', fontFamily: 'var(--font-mono, monospace)' }}>{v}</span>
+                      <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.55)', fontFamily: 'var(--font-inter)' }}>{v}</span>
                     </div>
                   ))}
                 </div>
@@ -438,8 +438,8 @@ export default function SettingsSidebar() {
                     style={{
                       display: 'flex', alignItems: 'center', gap: '8px',
                       padding: '9px 11px', borderRadius: 'var(--r-sm)',
-                      border: lang === l.code ? '1px solid rgba(74,144,217,0.40)' : '1px solid rgba(255,255,255,0.06)',
-                      background: lang === l.code ? 'rgba(74,144,217,0.09)' : 'rgba(255,255,255,0.02)',
+                      border: lang === l.code ? '1px solid rgba(79,142,240,0.40)' : '1px solid rgba(255,255,255,0.06)',
+                      background: lang === l.code ? 'rgba(79,142,240,0.09)' : 'rgba(255,255,255,0.02)',
                       cursor: 'pointer', textAlign: 'left', transition: 'all 0.13s', outline: 'none',
                     }}
                     onMouseEnter={e => { if (lang !== l.code) e.currentTarget.style.background = 'rgba(255,255,255,0.04)' }}
@@ -448,14 +448,14 @@ export default function SettingsSidebar() {
                     <span style={{ fontSize: '14px', lineHeight: 1 }}>{l.flag}</span>
                     <span style={{
                       fontSize: '12px', fontWeight: lang === l.code ? 600 : 400,
-                      color: lang === l.code ? 'rgba(74,144,217,0.9)' : 'rgba(255,255,255,0.65)',
+                      color: lang === l.code ? 'rgba(79,142,240,0.9)' : 'rgba(255,255,255,0.65)',
                       fontFamily: 'var(--font-display)', whiteSpace: 'nowrap',
                       overflow: 'hidden', textOverflow: 'ellipsis',
                     }}>
                       {l.native}
                     </span>
                     {lang === l.code && (
-                      <TickCircle size={11} color="rgba(74,144,217,0.8)" variant="TwoTone" style={{ marginLeft: 'auto', flexShrink: 0 }} />
+                      <TickCircle size={11} color="rgba(79,142,240,0.8)" variant="TwoTone" style={{ marginLeft: 'auto', flexShrink: 0 }} />
                     )}
                   </button>
                 ))}
@@ -483,9 +483,9 @@ export default function SettingsSidebar() {
                         onClick={() => updateA11y({ fontSize: i })}
                         style={{
                           flex: 1, padding: '7px 4px', borderRadius: 'var(--r-sm)',
-                          border: a11y.fontSize === i ? '1px solid rgba(74,144,217,0.4)' : '1px solid rgba(255,255,255,0.07)',
-                          background: a11y.fontSize === i ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.02)',
-                          color: a11y.fontSize === i ? 'rgba(74,144,217,0.9)' : 'rgba(255,255,255,0.40)',
+                          border: a11y.fontSize === i ? '1px solid rgba(79,142,240,0.4)' : '1px solid rgba(255,255,255,0.07)',
+                          background: a11y.fontSize === i ? 'rgba(79,142,240,0.10)' : 'rgba(255,255,255,0.02)',
+                          color: a11y.fontSize === i ? 'rgba(79,142,240,0.9)' : 'rgba(255,255,255,0.40)',
                           fontSize: `${11 + i}px`, fontWeight: a11y.fontSize === i ? 600 : 400,
                           fontFamily: 'var(--font-inter)', cursor: 'pointer',
                           transition: 'all 0.13s', outline: 'none',
@@ -514,8 +514,8 @@ export default function SettingsSidebar() {
 
               <div style={{
                 padding: '12px 14px', borderRadius: 'var(--r-sm)',
-                background: 'rgba(74,144,217,0.04)',
-                border: '1px solid rgba(74,144,217,0.10)',
+                background: 'rgba(79,142,240,0.04)',
+                border: '1px solid rgba(79,142,240,0.10)',
               }}>
                 <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.32)', fontFamily: 'var(--font-inter)', lineHeight: 1.65, margin: 0 }}>
                   AXVO is built to WCAG AA standards. All pages support screen readers and keyboard navigation.
@@ -539,8 +539,8 @@ export default function SettingsSidebar() {
               </div>
               <div style={{
                 padding: '12px 14px', borderRadius: 'var(--r-sm)',
-                background: 'rgba(74,144,217,0.04)',
-                border: '1px solid rgba(74,144,217,0.10)',
+                background: 'rgba(79,142,240,0.04)',
+                border: '1px solid rgba(79,142,240,0.10)',
               }}>
                 <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.32)', fontFamily: 'var(--font-inter)', lineHeight: 1.65, margin: 0 }}>
                   AXVO never sends marketing or shares your data with advertisers. Notifications cover free care availability only.
@@ -579,7 +579,7 @@ export default function SettingsSidebar() {
                             background: 'rgba(255,255,255,0.06)',
                             border: '1px solid rgba(255,255,255,0.10)',
                             borderBottom: '2px solid rgba(255,255,255,0.08)',
-                            fontSize: '10px', fontFamily: 'var(--font-mono, monospace)',
+                            fontSize: '10px', fontFamily: 'var(--font-inter)',
                             color: 'rgba(255,255,255,0.50)',
                             fontWeight: 500,
                           }}
@@ -674,7 +674,7 @@ export default function SettingsSidebar() {
         .high-contrast {
           --text-2: rgba(232,240,241,0.85) !important;
           --text-3: rgba(232,240,241,0.65) !important;
-          --border: rgba(109,145,151,0.4) !important;
+          --border: rgba(79,142,240,0.4) !important;
         }
         .reduce-motion *, .reduce-motion *::before, .reduce-motion *::after {
           animation-duration: 0.01ms !important;

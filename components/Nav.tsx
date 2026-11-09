@@ -11,7 +11,7 @@ import MobileDrawer from '@/components/nav/MobileDrawer'
 import MegaMenu from '@/components/nav/MegaMenu'
 import {
   SearchNormal1, Buildings, ReceiptText, Book1,
-  ArrowDown2, SearchStatus, Grid5, Notification as NotifIcon,
+  ArrowDown2, Notification as NotifIcon,
 } from 'iconsax-react'
 
 /* ── Lazy-load the notification bell (heavier component) ── */
@@ -19,32 +19,26 @@ const NotificationBell = dynamic(() => import('@/components/NotificationBell'), 
 
 /* ── Link definitions ─────────────────────────────────────────── */
 const HOME_LINK_DEFS = [
-  { labelKey: 'nav.features'    as const, href: '#features',     fallback: 'Features',   icon: Grid5 },
-  { labelKey: 'nav.howItWorks'  as const, href: '#how',          fallback: 'How it works',icon: SearchStatus },
-  { labelKey: 'nav.eligibility' as const, href: '/eligibility',  fallback: 'Eligibility', icon: ReceiptText },
-  { labelKey: 'nav.stories'     as const, href: '/stories',      fallback: 'Stories',     icon: Book1 },
+  { labelKey: null, href: '/search',      fallback: 'Find care',   icon: SearchNormal1 },
+  { labelKey: 'nav.eligibility' as const, href: '/eligibility', fallback: 'Eligibility', icon: ReceiptText },
+  { labelKey: null, href: '/medications', fallback: 'Medications', icon: Buildings },
+  { labelKey: null, href: '/editorial',   fallback: 'Editorial',   icon: Book1 },
 ]
 
-const APP_LINK_DEFS = [
-  { labelKey: null,            href: '/search',    fallback: 'Search',   icon: SearchNormal1 },
-  { labelKey: 'nav.programs' as const,  href: '/programs',  fallback: 'Programs', icon: ReceiptText   },
-  { labelKey: null,            href: '/clinics',   fallback: 'Clinics',  icon: Buildings     },
-  { labelKey: 'nav.stories' as const,   href: '/stories',   fallback: 'Stories',  icon: Book1         },
-]
+const APP_LINK_DEFS = HOME_LINK_DEFS
 
-/* Feature triage (launch): nav carries only the core patient journey.
-   Institutional/partner pages (Outcomes, CHW, Impact, Equity,
-   Advocacy, Methodology, Editorial, Calendar) stay reachable via Footer. */
+/* The nav carries only the core patient journey. Secondary pages stay
+   reachable through the footer. */
 const ALL_APP_LINK_DEFS = [
-  { labelKey: 'nav.pathways' as const, href: '/pathways',    fallback: 'Pathways' },
-  { labelKey: 'nav.programs' as const, href: '/programs',    fallback: 'Programs' },
-  { labelKey: null,                    href: '/triage',      fallback: 'Symptom Guide' },
-  { labelKey: null,                    href: '/medications', fallback: 'Medications' },
-  { labelKey: null,                    href: '/passport',    fallback: 'Health Passport' },
-  { labelKey: 'nav.rights'   as const, href: '/rights',      fallback: 'Rights' },
-  { labelKey: 'nav.stories'  as const, href: '/stories',     fallback: 'Stories' },
-  { labelKey: null,                    href: '/crisis',      fallback: 'Crisis Help' },
-  { labelKey: null,                    href: '/about',       fallback: 'About AXVO' },
+  { labelKey: null, href: '/search',      fallback: 'Find care' },
+  { labelKey: 'nav.eligibility' as const, href: '/eligibility', fallback: 'Eligibility' },
+  { labelKey: null, href: '/medications', fallback: 'Medications' },
+  { labelKey: null, href: '/triage',      fallback: 'Symptom guide' },
+  { labelKey: 'nav.rights' as const,      href: '/rights',      fallback: 'Know your rights' },
+  { labelKey: null, href: '/chw',         fallback: 'Community health workers' },
+  { labelKey: null, href: '/editorial',   fallback: 'Editorial' },
+  { labelKey: null, href: '/crisis',      fallback: 'Crisis help' },
+  { labelKey: null, href: '/about',       fallback: 'About AXVO' },
 ]
 
 type UserProfile = { full_name?: string | null; email?: string | null; user_type?: string | null }
@@ -365,7 +359,7 @@ export default function Nav({ initialUser }: NavProps = {}) {
               borderRadius: '8px', padding: '5px 9px',
               color: 'rgba(255,255,255,0.40)',
               cursor: 'pointer',
-              fontFamily: 'var(--font-mono)', fontSize: '10px',
+              fontFamily: 'var(--font-inter)', fontSize: '10px',
               transition: 'background 0.2s, border-color 0.2s, color 0.2s',
             }}
           >
@@ -481,7 +475,7 @@ export default function Nav({ initialUser }: NavProps = {}) {
         /* User menu buttons */
         .nav-sign-in:hover { border-color: rgba(255,255,255,0.25) !important; color: #fff !important; }
         .nav-get-started:hover { transform: translateY(-1px) !important; box-shadow: 0 4px 16px rgba(0,0,0,0.35) !important; }
-        .nav-user-btn:hover { background: rgba(74,144,217,0.20) !important; }
+        .nav-user-btn:hover { background: rgba(79,142,240,0.20) !important; }
 
         /* Logo hover */
         .nav-logo { transition: opacity 0.2s; }

@@ -37,7 +37,7 @@ export default function ProgramsShowcase() {
           NOT another grid of cards. */}
       <div className="programs-layout" style={{ display: 'grid', gridTemplateColumns: '0.92fr 1fr', gap: 'clamp(32px, 6vw, 72px)', alignItems: 'center' }}>
         <div style={{ opacity: visible ? 1 : 0, transform: visible ? 'none' : 'translateY(18px)', transition: 'opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)' }}>
-          <p style={{ fontSize: '11px', fontWeight: 650, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '16px', fontFamily: 'var(--font-mono)' }}>
+          <p style={{ fontSize: '11px', fontWeight: 650, letterSpacing: '0', textTransform: 'none', color: 'var(--accent)', marginBottom: '16px', fontFamily: 'var(--font-inter)' }}>
             Coverage &amp; savings
           </p>
           <h2 id="programs-showcase-title" style={{
@@ -45,7 +45,7 @@ export default function ProgramsShowcase() {
             fontWeight: 700, letterSpacing: '-0.04em', lineHeight: 1.05, marginBottom: '20px',
             color: 'var(--text)', textWrap: 'balance',
           }}>
-            Every program,<br />one search
+            See which programs<br />you may qualify for
           </h2>
           <p style={{ fontSize: 'clamp(1rem, 1.35vw, 1.12rem)', color: 'var(--text-2)', lineHeight: 1.72, fontFamily: 'var(--font-inter)', marginBottom: '24px', maxWidth: '30ch' }}>
             Answer a few questions and AXVO scans the major federal and state

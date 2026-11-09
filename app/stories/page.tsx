@@ -10,7 +10,7 @@ import Link from 'next/link'
 
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } }, { threshold })
     if (ref.current) obs.observe(ref.current)
@@ -29,11 +29,9 @@ function RevealBlock({ children, delay = 0 }: { children: React.ReactNode; delay
 }
 
 const pill: React.CSSProperties = {
+  // Plain section label — no colored badge
   display: 'inline-flex', alignItems: 'center', gap: '6px',
-  padding: '4px 12px', borderRadius: '100px',
-  fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-  background: 'rgba(74,144,217,0.08)', color: 'var(--accent)',
-  border: '1px solid rgba(74,144,217,0.18)',
+  fontSize: '13px', fontWeight: 600, color: 'var(--text-2)',
 }
 
 export default function StoriesPage() {
@@ -88,22 +86,11 @@ export default function StoriesPage() {
     <AppShell>
       {/* ── HERO ── */}
       <section style={{ minHeight: '80dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '100px 24px 60px', position: 'relative', overflow: 'hidden' }}>
-        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(74,144,217,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'transparent', pointerEvents: 'none' }} />
 
         <div style={{ ...pill, marginBottom: '24px' }}><Book1 size={14} variant="Linear" /> Stories & Community</div>
 
-        <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.15, marginBottom: '24px', maxWidth: '820px' }}>
-          <div>
-            {TITLE.slice(0, 4).map((w, i) => (
-              <span key={i} style={{ display: 'inline-block', marginRight: '0.25em', opacity: words[i] ? 1 : 0, transform: words[i] ? 'translateY(0)' : 'translateY(18px)', transition: 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)', color: w === 'alone' ? 'var(--accent)' : 'inherit' }}>{w}</span>
-            ))}
-          </div>
-          <div>
-            {TITLE.slice(4).map((w, i) => (
-              <span key={i + 4} style={{ display: 'inline-block', marginRight: '0.25em', opacity: words[i + 4] ? 1 : 0, transform: words[i + 4] ? 'translateY(0)' : 'translateY(18px)', transition: 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)' }}>{w}</span>
-            ))}
-          </div>
-        </h1>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.12, margin: '0 0 18px', color: 'var(--text)' }}>Share how you found care</h1>
 
         <p style={{ fontSize: '17px', color: 'rgba(255,255,255,0.5)', maxWidth: '480px', lineHeight: 1.7, marginBottom: '40px' }}>
           Navigating healthcare without insurance is hard — and lonely. Share how you found care, and help map the way for everyone who comes after you.
@@ -111,7 +98,7 @@ export default function StoriesPage() {
 
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '40px' }}>
           {[['Free', 'to share'], ['First name', 'only'], ['Reviewed', 'before publishing']].map(([v, l]) => (
-            <div key={l} style={{ padding: '10px 20px', background: 'rgba(74,144,217,0.07)', border: '1px solid rgba(74,144,217,0.18)', borderRadius: '100px', textAlign: 'center' }}>
+            <div key={l} style={{ padding: '10px 20px', background: 'rgba(79,142,240,0.07)', border: '1px solid rgba(79,142,240,0.18)', borderRadius: '100px', textAlign: 'center' }}>
               <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.02em' }}>{v}</div>
               <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '2px' }}>{l}</div>
             </div>
@@ -120,9 +107,9 @@ export default function StoriesPage() {
 
         <button
           onClick={() => shareRef.current && smoothScrollTo(shareRef.current)}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 28px', borderRadius: '100px', background: 'var(--accent)', color: '#07070F', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', transition: 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s', boxShadow: '0 4px 20px rgba(74,144,217,0.3)' }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(74,144,217,0.45)' }}
-          onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(74,144,217,0.3)' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 28px', borderRadius: '100px', background: 'var(--accent)', color: '#07070F', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', transition: 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s', boxShadow: '0 4px 20px rgba(79,142,240,0.3)' }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(79,142,240,0.45)' }}
+          onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(79,142,240,0.3)' }}
         >
           <Heart size={14} color="#07070F" variant="Linear" /> Share your story
         </button>
@@ -139,8 +126,8 @@ export default function StoriesPage() {
 
           {submitted ? (
             <RevealBlock>
-              <div style={{ textAlign: 'center', padding: '48px', background: 'rgba(96,165,250,0.04)', border: '1px solid rgba(96,165,250,0.15)', borderRadius: '20px' }}>
-                <TickCircle size={40} variant="Linear" style={{ color: '#60a5fa', marginBottom: '16px' }} />
+              <div style={{ textAlign: 'center', padding: '48px', background: 'rgba(79,142,240,0.04)', border: '1px solid rgba(79,142,240,0.15)', borderRadius: '20px' }}>
+                <TickCircle size={40} variant="Linear" style={{ color: '#4F8EF0', marginBottom: '16px' }} />
                 <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Thank you, {form.name}</h3>
                 <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65 }}>Your story has been submitted for review. We'll reach out with any questions. We read every story before anything is published.</p>
               </div>
@@ -157,7 +144,7 @@ export default function StoriesPage() {
                   <label style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.5)' }}>Category</label>
                   <select value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))}
                     style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '9px', padding: '11px 14px', color: form.category ? '#eef4f5' : 'rgba(255,255,255,0.3)', fontSize: '14px', fontFamily: 'inherit', cursor: 'pointer', outline: 'none', transition: 'border-color 0.2s, box-shadow 0.2s' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(74,144,217,0.45)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.08)' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(79,142,240,0.45)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(79,142,240,0.08)' }}
                     onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'none' }}
                   >
                     <option value="">Select a category…</option>
@@ -171,7 +158,7 @@ export default function StoriesPage() {
                     placeholder="What happened? What did you learn? What do you wish you had known sooner?"
                     rows={6}
                     style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '9px', padding: '11px 14px', color: '#eef4f5', fontSize: '14px', fontFamily: 'inherit', resize: 'vertical', outline: 'none', boxSizing: 'border-box', caretColor: 'var(--accent)', minHeight: '140px', transition: 'border-color 0.2s, box-shadow 0.2s' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(74,144,217,0.45)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.08)' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(79,142,240,0.45)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(79,142,240,0.08)' }}
                     onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'none' }}
                   />
                   <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.22)', textAlign: 'right' }}>{form.story.length}/2000</div>
@@ -187,9 +174,9 @@ export default function StoriesPage() {
                     {submitError}
                   </p>
                 )}
-                <button type="submit" disabled={submitting} style={{ marginTop: '8px', padding: '15px', borderRadius: '12px', background: submitting ? 'rgba(74,144,217,0.5)' : 'var(--accent)', color: '#07070F', border: 'none', cursor: submitting ? 'not-allowed' : 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', transition: 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s', boxShadow: '0 4px 20px rgba(74,144,217,0.3)' }}
-                  onMouseEnter={e => { if (!submitting) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(74,144,217,0.45)' } }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(74,144,217,0.3)' }}
+                <button type="submit" disabled={submitting} style={{ marginTop: '8px', padding: '15px', borderRadius: '12px', background: submitting ? 'rgba(79,142,240,0.5)' : 'var(--accent)', color: '#07070F', border: 'none', cursor: submitting ? 'not-allowed' : 'pointer', fontSize: '14px', fontWeight: 700, fontFamily: 'inherit', transition: 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s', boxShadow: '0 4px 20px rgba(79,142,240,0.3)' }}
+                  onMouseEnter={e => { if (!submitting) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(79,142,240,0.45)' } }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(79,142,240,0.3)' }}
                 >
                   {submitting ? 'Submitting…' : 'Submit story →'}
                 </button>
@@ -215,14 +202,14 @@ export default function StoriesPage() {
               { icon: <LinkIcon size={18} variant="Linear" />, title: 'Community Health Workers', desc: 'Connect with a real person in your community who speaks your language.', action: () => window.location.href = '/chw', label: 'Find a CHW' },
             ].map((r, i) => (
               <RevealBlock key={r.title} delay={i * 80}>
-                <div style={{ padding: '2px', background: 'linear-gradient(135deg, rgba(74,144,217,0.18), rgba(74,144,217,0.04))', borderRadius: '18px' }}>
+                <div style={{ padding: '2px', background: 'rgba(255,255,255,0.06)', borderRadius: '18px' }}>
                   <div style={{ background: '#080D1A', borderRadius: '16px', padding: '24px', height: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}>{r.icon}</div>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}>{r.icon}</div>
                     <h3 style={{ fontSize: '15px', fontWeight: 700, lineHeight: 1.3 }}>{r.title}</h3>
                     <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, flex: 1, margin: 0 }}>{r.desc}</p>
-                    <button onClick={r.action} style={{ padding: '10px 18px', borderRadius: '100px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', color: 'var(--accent)', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '6px', transition: 'background 0.2s', alignSelf: 'flex-start' }}
-                      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.2)')}
-                      onMouseLeave={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.1)')}
+                    <button onClick={r.action} style={{ padding: '10px 18px', borderRadius: '100px', background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.2)', color: 'var(--accent)', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '6px', transition: 'background 0.2s', alignSelf: 'flex-start' }}
+                      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(79,142,240,0.2)')}
+                      onMouseLeave={e => (e.currentTarget.style.background = 'rgba(79,142,240,0.1)')}
                     >
                       {r.label} <ArrowRight size={12} variant="Linear" />
                     </button>
@@ -250,8 +237,8 @@ function StoryField({ label, placeholder, value, onChange }: { label: string; pl
         onBlur={() => setFocused(false)}
         style={{
           width: '100%', background: 'rgba(255,255,255,0.03)',
-          border: `1px solid ${focused ? 'rgba(74,144,217,0.45)' : 'rgba(255,255,255,0.08)'}`,
-          boxShadow: focused ? '0 0 0 3px rgba(74,144,217,0.08)' : 'none',
+          border: `1px solid ${focused ? 'rgba(79,142,240,0.45)' : 'rgba(255,255,255,0.08)'}`,
+          boxShadow: focused ? '0 0 0 3px rgba(79,142,240,0.08)' : 'none',
           borderRadius: '9px', padding: '11px 14px',
           color: '#eef4f5', fontSize: '14px', fontFamily: 'inherit',
           outline: 'none', boxSizing: 'border-box', caretColor: 'var(--accent)',

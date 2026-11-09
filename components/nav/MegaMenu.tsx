@@ -5,8 +5,8 @@ import { usePathname } from 'next/navigation'
 import {
   SearchNormal1, Video, Danger,
   ReceiptText, ShieldTick, Health,
-  TrendUp, Book1, Judge,
-  Global, MagicStar,
+  Book1, Judge,
+  Global,
 } from 'iconsax-react'
 
 interface MegaMenuProps {
@@ -19,31 +19,31 @@ interface MegaMenuProps {
    (Impact, Outcomes, Equity, CHW, Calendar) live in the Footer. */
 const SECTIONS = [
   {
-    title: 'Find Care',
+    title: 'Find care',
     color: '#4F8EF0',
     items: [
-      { label: 'Find Clinics',   href: '/search',    icon: SearchNormal1, desc: 'Search 18,900+ free & low-cost clinics' },
-      { label: 'Telehealth',     href: '/telehealth',icon: Video,         desc: 'Virtual & phone care' },
-      { label: 'Symptom Guide',  href: '/triage',    icon: Health,        desc: 'Not sure where to start?' },
-      { label: 'Crisis Help',    href: '/crisis',    icon: Danger,        desc: '24/7 emergency resources' },
+      { label: 'Find a clinic',  href: '/search',    icon: SearchNormal1, desc: 'Free and sliding-scale clinics near you' },
+      { label: 'Telehealth',     href: '/telehealth',icon: Video,         desc: 'Phone and video care options' },
+      { label: 'Symptom guide',  href: '/triage',    icon: Health,        desc: 'What level of care to seek' },
+      { label: 'Crisis help',    href: '/crisis',    icon: Danger,        desc: 'Hotlines available 24/7' },
     ],
   },
   {
-    title: 'Afford Care',
-    color: '#5F9EF9',
+    title: 'Pay for care',
+    color: '#4F8EF0',
     items: [
-      { label: 'All Programs', href: '/programs',    icon: ReceiptText, desc: 'Medicaid, ACA, HRSA & more' },
-      { label: 'Eligibility',  href: '/eligibility', icon: ShieldTick,  desc: 'Check what you qualify for' },
-      { label: 'Medications',  href: '/medications', icon: Health,      desc: 'Assistance & savings' },
+      { label: 'Eligibility',  href: '/eligibility', icon: ShieldTick,  desc: 'Medicaid, CHIP, ACA and more' },
+      { label: 'How to apply', href: '/programs',    icon: ReceiptText, desc: 'Step-by-step enrollment guides' },
+      { label: 'Medications',  href: '/medications', icon: Health,      desc: 'Lower-cost prescriptions' },
     ],
   },
   {
-    title: 'Your Health',
-    color: '#A78BFA',
+    title: 'Learn',
+    color: '#4F8EF0',
     items: [
-      { label: 'Health Passport', href: '/passport', icon: ShieldTick, desc: 'Your records, your control' },
-      { label: 'Your Rights',     href: '/rights',   icon: Judge,      desc: 'EMTALA, ADA & more' },
-      { label: 'Stories',         href: '/stories',  icon: Book1,      desc: 'Community voices' },
+      { label: 'Know your rights', href: '/rights',    icon: Judge,  desc: 'Emergency care, billing, privacy' },
+      { label: 'Editorial',        href: '/editorial', icon: Book1,  desc: 'Writing on the uninsured' },
+      { label: 'Health workers',   href: '/chw',       icon: Global, desc: 'Community health worker programs' },
     ],
   },
 ]
@@ -100,7 +100,7 @@ export default function MegaMenu({ open, onClose }: MegaMenuProps) {
       {/* Top accent gradient line */}
       <div aria-hidden="true" style={{
         position: 'absolute', top: 0, left: '10%', right: '10%', height: '1px',
-        background: 'linear-gradient(90deg, transparent, rgba(79,142,240,0.5) 40%, rgba(130,180,248,0.5) 60%, transparent)',
+        background: 'rgba(255,255,255,0.08)',
         borderRadius: '1px',
       }} />
 
@@ -115,8 +115,8 @@ export default function MegaMenu({ open, onClose }: MegaMenuProps) {
             <div style={{
               fontSize: '10px',
               fontWeight: 700,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
+              letterSpacing: '0',
+              textTransform: 'none',
               color: section.color,
               marginBottom: '10px',
               paddingLeft: '10px',
@@ -206,9 +206,9 @@ export default function MegaMenu({ open, onClose }: MegaMenuProps) {
           Also:
         </span>
         {[
-          { label: 'Pathways', href: '/pathways', icon: MagicStar },
-          { label: 'Impact',   href: '/impact',   icon: TrendUp },
           { label: 'About',    href: '/about',    icon: Global },
+          { label: 'Founder',  href: '/founder',  icon: Book1 },
+          { label: 'Partners', href: '/partners', icon: Global },
         ].map(q => (
           <Link
             key={q.href}

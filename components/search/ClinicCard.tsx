@@ -79,8 +79,8 @@ function freshnessLabel(verifiedAt?: string): { label: string; color: string } |
   const months = ageMs / (1000 * 60 * 60 * 24 * 30)
   const d      = new Date(verifiedAt)
   const fmt    = d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
-  if (months < 3)  return { label: `Verified ${fmt}`, color: 'var(--green-pulse,#4ade80)' }
-  if (months < 6)  return { label: `Verified ${fmt}`, color: '#fbbf24' }
+  if (months < 3)  return { label: `Verified ${fmt}`, color: 'var(--green-pulse,#4F8EF0)' }
+  if (months < 6)  return { label: `Verified ${fmt}`, color: '#4F8EF0' }
   return           { label: `Checked ${fmt}`, color: '#f87171' }
 }
 
@@ -155,7 +155,7 @@ function ReviewModal({
         {done ? (
           <div style={{ textAlign: 'center', padding: '20px 0' }}>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
-              <TickCircle size={40} color="#4ade80" variant="TwoTone" aria-hidden="true" />
+              <TickCircle size={40} color="#4F8EF0" variant="TwoTone" aria-hidden="true" />
             </div>
             <div style={{ fontSize: '15px', fontWeight: 600, marginBottom: '6px' }}>Thank you!</div>
             <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-inter)' }}>
@@ -175,12 +175,12 @@ function ReviewModal({
                   aria-label={`${s} star${s>1?'s':''}`}
                   style={{
                     background: 'none', border: 'none', cursor: 'pointer', padding: '2px',
-                    color: s <= (hover || stars) ? '#fbbf24' : 'rgba(255,255,255,0.2)',
+                    color: s <= (hover || stars) ? '#4F8EF0' : 'rgba(255,255,255,0.2)',
                     transition: 'color 0.12s, transform 0.12s',
                     transform: s <= (hover || stars) ? 'scale(1.18)' : 'scale(1)',
                   }}
                 >
-                  <Star1 size={28} variant={s <= (hover || stars) ? 'Bold' : 'Linear'} color={s <= (hover || stars) ? '#fbbf24' : 'rgba(255,255,255,0.2)'} />
+                  <Star1 size={28} variant={s <= (hover || stars) ? 'Bold' : 'Linear'} color={s <= (hover || stars) ? '#4F8EF0' : 'rgba(255,255,255,0.2)'} />
                 </button>
               ))}
             </div>
@@ -196,8 +196,8 @@ function ReviewModal({
                     style={{
                       padding: '5px 11px', borderRadius: '100px', cursor: 'pointer',
                       fontSize: '11px', fontFamily: 'var(--font-inter)', fontWeight: 500,
-                      background: sel ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.04)',
-                      border: `1px solid ${sel ? 'rgba(74,144,217,0.35)' : 'rgba(255,255,255,0.08)'}`,
+                      background: sel ? 'rgba(79,142,240,0.12)' : 'rgba(255,255,255,0.04)',
+                      border: `1px solid ${sel ? 'rgba(79,142,240,0.35)' : 'rgba(255,255,255,0.08)'}`,
                       color: sel ? 'var(--accent)' : 'rgba(255,255,255,0.5)',
                       transition: 'all 0.15s',
                     }}
@@ -230,8 +230,8 @@ function ReviewModal({
               disabled={stars === 0}
               style={{
                 width: '100%', padding: '12px', borderRadius: '12px',
-                background: stars > 0 ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.04)',
-                border: `1px solid ${stars > 0 ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)'}`,
+                background: stars > 0 ? 'rgba(79,142,240,0.12)' : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${stars > 0 ? 'rgba(79,142,240,0.3)' : 'rgba(255,255,255,0.08)'}`,
                 color: stars > 0 ? 'var(--accent)' : 'rgba(255,255,255,0.3)',
                 fontSize: '14px', fontWeight: 600, cursor: stars > 0 ? 'pointer' : 'not-allowed',
                 fontFamily: 'inherit', transition: 'all 0.18s',
@@ -341,12 +341,12 @@ export default function ClinicCard({
       {/* Rank badge */}
       <div style={{
         width: 32, height: 32, borderRadius: 8,
-        background: index === 0 ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.04)',
-        border: `1px solid ${index === 0 ? 'rgba(74,144,217,0.20)' : 'rgba(255,255,255,0.07)'}`,
+        background: index === 0 ? 'rgba(79,142,240,0.10)' : 'rgba(255,255,255,0.04)',
+        border: `1px solid ${index === 0 ? 'rgba(79,142,240,0.20)' : 'rgba(255,255,255,0.07)'}`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontSize: 13, fontWeight: 600,
         color: index === 0 ? 'var(--accent)' : 'var(--text-3)',
-        fontFamily: 'var(--font-mono),monospace', flexShrink: 0,
+        fontFamily: 'var(--font-inter)', flexShrink: 0,
       }}>
         {index + 1}
       </div>
@@ -406,8 +406,8 @@ export default function ClinicCard({
               disabled={saving}
               aria-label={isSaved ? t('search.bookmarked') : t('search.bookmark')}
               style={{
-                background: isSaved ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.04)',
-                border: `1px solid ${isSaved ? 'rgba(74,144,217,0.25)' : 'rgba(255,255,255,0.08)'}`,
+                background: isSaved ? 'rgba(79,142,240,0.10)' : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${isSaved ? 'rgba(79,142,240,0.25)' : 'rgba(255,255,255,0.08)'}`,
                 borderRadius: 8, padding: 7, cursor: 'pointer',
                 color: isSaved ? 'var(--accent)' : 'var(--text-3)',
                 display: 'flex', alignItems: 'center',
@@ -429,23 +429,23 @@ export default function ClinicCard({
               aria-label="Share clinic"
               title="Share this clinic"
               style={{
-                background: shareCopied ? 'rgba(74,222,128,0.10)' : 'rgba(255,255,255,0.04)',
-                border: `1px solid ${shareCopied ? 'rgba(74,222,128,0.25)' : 'rgba(255,255,255,0.08)'}`,
+                background: shareCopied ? 'rgba(79,142,240,0.10)' : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${shareCopied ? 'rgba(79,142,240,0.25)' : 'rgba(255,255,255,0.08)'}`,
                 borderRadius: 8, padding: 7, cursor: 'pointer',
-                color: shareCopied ? 'var(--green-pulse,#4ade80)' : 'var(--text-3)',
+                color: shareCopied ? 'var(--green-pulse,#4F8EF0)' : 'var(--text-3)',
                 display: 'flex', alignItems: 'center', transition: 'all 0.18s',
               }}
             >
-              {shareCopied ? <TickCircle size={14} color="var(--green-pulse,#4ade80)" variant="Linear" /> : <ExportSquare size={14} color="rgba(255,255,255,0.45)" variant="Linear" />}
+              {shareCopied ? <TickCircle size={14} color="var(--green-pulse,#4F8EF0)" variant="Linear" /> : <ExportSquare size={14} color="rgba(255,255,255,0.45)" variant="Linear" />}
             </button>
 
             {clinic.phone && (
               /* #31 — Phone ripple: subtle active feedback on click */
               <a
                 href={`tel:${clinic.phone}`}
-                style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(74,144,217,0.07)', border: '1px solid rgba(74,144,217,0.15)', borderRadius: 8, padding: '7px 12px', fontSize: 12, color: 'var(--accent)', textDecoration: 'none', fontWeight: 600, transition: 'background 0.2s, transform 0.1s' }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.14)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(74,144,217,0.07)')}
+                style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(79,142,240,0.07)', border: '1px solid rgba(79,142,240,0.15)', borderRadius: 8, padding: '7px 12px', fontSize: 12, color: 'var(--accent)', textDecoration: 'none', fontWeight: 600, transition: 'background 0.2s, transform 0.1s' }}
+                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(79,142,240,0.14)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(79,142,240,0.07)')}
                 onMouseDown={e => (e.currentTarget.style.transform = 'scale(0.96)')}
                 onMouseUp={e => (e.currentTarget.style.transform = 'scale(1)')}
               >
@@ -461,15 +461,15 @@ export default function ClinicCard({
                 title="Book a free appointment"
                 style={{
                   display: 'flex', alignItems: 'center', gap: 5,
-                  background: 'rgba(74,222,128,0.08)',
-                  border: '1px solid rgba(74,222,128,0.25)',
+                  background: 'rgba(79,142,240,0.08)',
+                  border: '1px solid rgba(79,142,240,0.25)',
                   borderRadius: 8, padding: '7px 12px',
-                  fontSize: 12, color: 'var(--green-pulse,#4ade80)',
+                  fontSize: 12, color: 'var(--green-pulse,#4F8EF0)',
                   fontWeight: 600, cursor: 'pointer',
                   transition: 'background 0.2s',
                 }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(74,222,128,0.14)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(74,222,128,0.08)')}
+                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(79,142,240,0.14)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(79,142,240,0.08)')}
               >
                 <Calendar1 size={12} variant="Linear" /> Book
               </button>
@@ -487,7 +487,7 @@ export default function ClinicCard({
             <a
               href={googleMapsUrl}
               target="_blank" rel="noopener noreferrer"
-              style={{ background: 'var(--grad-vital)', color: '#04121D', borderRadius: 9, padding: '8px 14px', fontSize: 12, fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5, boxShadow: '0 2px 10px rgba(79,142,240,0.20), 0 1px 6px rgba(106, 166, 255,0.14)' }}
+              style={{ background: 'var(--grad-vital)', color: '#04121D', borderRadius: 9, padding: '8px 14px', fontSize: 12, fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5, boxShadow: '0 2px 10px rgba(79,142,240,0.20), 0 1px 6px rgba(79,142,240,0.14)' }}
             >
               <Routing size={12} variant="Linear" /> {t('search.directions')}
             </a>
@@ -519,7 +519,7 @@ export default function ClinicCard({
               style={{
                 display: 'flex', alignItems: 'center', gap: 4, fontSize: 11,
                 color: parseFloat(String(clinic.distance)) < 1 ? 'var(--accent)' : 'var(--text-3)',
-                fontFamily: 'var(--font-mono),monospace',
+                fontFamily: 'var(--font-inter)',
                 animation: parseFloat(String(clinic.distance)) < 1 ? 'distance-nearby-pulse 2s ease-in-out infinite' : 'none',
               }}
             >
@@ -533,7 +533,7 @@ export default function ClinicCard({
           </span>
           {/* E8 — language match badge */}
           {langMatch && (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 600, letterSpacing: '0.04em', color: '#a78bfa', background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.22)', padding: '2px 8px', borderRadius: 5, fontFamily: 'var(--font-inter)', cursor: 'help' }}
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 600, letterSpacing: '0.04em', color: '#4F8EF0', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.22)', padding: '2px 8px', borderRadius: 5, fontFamily: 'var(--font-inter)', cursor: 'help' }}
               title="This clinic offers care in your language"
             >
               <Message size={9} color="currentColor" variant="Linear" />
@@ -546,14 +546,14 @@ export default function ClinicCard({
               title={clinic.type === 'FQHC'
                 ? 'Federally Qualified Health Center listed in HRSA data. Must serve all patients regardless of ability to pay.'
                 : undefined}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, letterSpacing: '0.06em', color: clinic.type === 'FQHC' ? 'var(--accent)' : clinic.type?.includes('Free') ? 'var(--green-pulse)' : 'var(--text-3)', background: clinic.type === 'FQHC' ? 'rgba(74,144,217,0.07)' : 'rgba(255,255,255,0.04)', border: `1px solid ${clinic.type === 'FQHC' ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.08)'}`, padding: '2px 8px', borderRadius: 5, fontFamily: 'var(--font-inter)', fontWeight: 600, cursor: clinic.type === 'FQHC' ? 'help' : 'default' }}>
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, letterSpacing: '0', color: clinic.type === 'FQHC' ? 'var(--accent)' : clinic.type?.includes('Free') ? 'var(--green-pulse)' : 'var(--text-3)', background: clinic.type === 'FQHC' ? 'rgba(79,142,240,0.07)' : 'rgba(255,255,255,0.04)', border: `1px solid ${clinic.type === 'FQHC' ? 'rgba(79,142,240,0.15)' : 'rgba(255,255,255,0.08)'}`, padding: '2px 8px', borderRadius: 5, fontFamily: 'var(--font-inter)', fontWeight: 600, cursor: clinic.type === 'FQHC' ? 'help' : 'default' }}>
               {clinic.type === 'FQHC' && <ShieldTick size={9} color="currentColor" variant="Linear" />}
               {clinic.type === 'FQHC' ? 'FQHC · HRSA Verified' : clinic.type}
             </span>
           )}
           {(clinic.free || clinic.sliding_scale) && (
             <span title="This clinic accepts uninsured patients. No insurance card required."
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 600, color: '#60A5FA', background: 'rgba(96,165,250,0.07)', border: '1px solid rgba(96,165,250,0.2)', padding: '2px 8px', borderRadius: 5, fontFamily: 'var(--font-inter)', cursor: 'help' }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 600, color: '#4F8EF0', background: 'rgba(79,142,240,0.07)', border: '1px solid rgba(79,142,240,0.2)', padding: '2px 8px', borderRadius: 5, fontFamily: 'var(--font-inter)', cursor: 'help' }}
             >
               <TickCircle size={9} color="currentColor" variant="Linear" />
               Accepts uninsured

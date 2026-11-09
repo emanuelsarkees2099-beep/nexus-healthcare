@@ -26,7 +26,7 @@ const GUIDES: Record<string, ProgramGuide> = {
   medicaid: {
     name: 'Medicaid',
     valueLabel: '$0/month',
-    accentColor: '#34D399',
+    accentColor: '#4F8EF0',
     summary: 'Medicaid provides free or low-cost health coverage. Most states use an online portal for enrollment.',
     steps: [
       {
@@ -69,7 +69,7 @@ const GUIDES: Record<string, ProgramGuide> = {
   chip: {
     name: 'CHIP',
     valueLabel: '$0–$35/month',
-    accentColor: '#60A5FA',
+    accentColor: '#4F8EF0',
     summary: 'Children\'s Health Insurance Program covers children and, in some states, pregnant women who earn too much for Medicaid.',
     steps: [
       {
@@ -92,7 +92,7 @@ const GUIDES: Record<string, ProgramGuide> = {
       {
         title: 'Apply through Healthcare.gov or your state agency',
         body: 'CHIP applications are processed by the same state Medicaid agency. You can apply online via Healthcare.gov or directly through your state\'s portal.',
-        link: { label: 'Apply now — Healthcare.gov', url: 'https://www.healthcare.gov/apply-and-enroll/start-enrollment/' },
+        link: { label: 'Apply now — Healthcare.gov', url: 'https://www.healthcare.gov/apply-and-enroll/how-to-apply/' },
         tip: 'If you apply at any time of year, your child may be covered within days of approval.',
       },
       {
@@ -147,7 +147,7 @@ const GUIDES: Record<string, ProgramGuide> = {
   hrsa: {
     name: 'HRSA Health Centers',
     valueLabel: '$0–$40/visit',
-    accentColor: '#A78BFA',
+    accentColor: '#4F8EF0',
     summary: 'HRSA Federally Qualified Health Centers (FQHCs) are required by federal law to serve everyone regardless of ability to pay, on a sliding fee scale.',
     steps: [
       {
@@ -182,13 +182,13 @@ const GUIDES: Record<string, ProgramGuide> = {
   '340b': {
     name: '340B Drug Savings',
     valueLabel: 'Up to 85% off medications',
-    accentColor: '#818CF8',
+    accentColor: '#4F8EF0',
     summary: 'The 340B program requires drug manufacturers to sell medications at deeply discounted prices to HRSA-covered clinics. No separate enrollment needed.',
     steps: [
       {
         title: 'Receive care at a 340B-covered facility',
         body: 'To access 340B pricing, you must be a patient of a 340B-covered health center. Most FQHCs, Ryan White clinics, and federally qualified facilities participate.',
-        link: { label: 'HRSA 340B covered entities', url: 'https://340bopais.hrsa.gov/coveredentities' },
+        link: { label: 'HRSA 340B covered entities', url: 'https://340bopais.hrsa.gov' },
         tip: 'You automatically qualify for 340B pricing if you\'re a patient at a participating clinic — no separate application.',
       },
       {
@@ -207,7 +207,7 @@ const GUIDES: Record<string, ProgramGuide> = {
   ryan_white: {
     name: 'Ryan White HIV/AIDS Program',
     valueLabel: 'Free HIV care',
-    accentColor: '#F472B6',
+    accentColor: '#4F8EF0',
     summary: 'Comprehensive HIV/AIDS care and treatment for low-income uninsured and underinsured patients.',
     steps: [
       {
@@ -295,8 +295,8 @@ export default function EnrollPage({ params }: { params: Promise<{ id: string }>
             display: 'inline-flex', alignItems: 'center', gap: 6,
             padding: '3px 10px', borderRadius: 100,
             background: `${guide.accentColor}12`, border: `1px solid ${guide.accentColor}28`,
-            fontSize: 11, fontWeight: 600, color: guide.accentColor, letterSpacing: '0.07em',
-            textTransform: 'uppercase', marginBottom: 14,
+            fontSize: 11, fontWeight: 600, color: guide.accentColor, letterSpacing: '0',
+            textTransform: 'none', marginBottom: 14,
           }}>
             Enrollment Guide
           </div>
@@ -359,7 +359,7 @@ export default function EnrollPage({ params }: { params: Promise<{ id: string }>
           }}>
             <div style={{ marginBottom: 20 }}>
               <div style={{
-                fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase',
+                fontSize: 11, fontWeight: 600, letterSpacing: '0', textTransform: 'none',
                 color: guide.accentColor, marginBottom: 8,
               }}>
                 Step {step + 1} of {guide.steps.length}
@@ -448,8 +448,8 @@ export default function EnrollPage({ params }: { params: Promise<{ id: string }>
                 <div style={{
                   display: 'flex', alignItems: 'center', gap: 8,
                   padding: '10px 18px', borderRadius: 9,
-                  background: 'rgba(52,211,153,0.08)', border: '1px solid rgba(52,211,153,0.2)',
-                  color: '#34d399', fontSize: 13, fontWeight: 600,
+                  background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.2)',
+                  color: '#4F8EF0', fontSize: 13, fontWeight: 600,
                 }}>
                   <TickCircle size={14} color="currentColor" variant="Bold" />
                   All steps complete!

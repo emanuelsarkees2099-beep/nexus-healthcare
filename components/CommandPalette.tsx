@@ -399,7 +399,7 @@ export default function CommandPalette() {
           <kbd style={{
             background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)',
             borderRadius: 'var(--r-sm)', padding: '2px 7px',
-            fontFamily: 'var(--font-mono),monospace', fontSize: '11px', color: 'var(--text-3)',
+            fontFamily: 'var(--font-inter)', fontSize: '11px', color: 'var(--text-3)',
           }}>ESC</kbd>
         </div>
 
@@ -416,8 +416,8 @@ export default function CommandPalette() {
                 <div key={cat}>
                   <div style={{
                     padding: '6px 12px 2px',
-                    fontSize: '10px', fontWeight: 600, letterSpacing: '0.12em',
-                    textTransform: 'uppercase', color: 'var(--text-3)',
+                    fontSize: '10px', fontWeight: 600, letterSpacing: '0',
+                    textTransform: 'none', color: 'var(--text-3)',
                     fontFamily: 'var(--font-inter),sans-serif',
                   }}>
                     {cat}

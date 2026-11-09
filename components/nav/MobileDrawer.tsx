@@ -55,11 +55,9 @@ const LINK_ICONS: Record<string, React.ElementType<any>> = {
 
 /* Category groupings for drawer links */
 const CATEGORIES = [
-  { title: 'Find Care',  color: '#4F8EF0', hrefs: ['/search', '/clinics', '/triage', '/telehealth', '/crisis'] },
-  { title: 'Programs',   color: '#34D399', hrefs: ['/programs', '/pathways', '/eligibility', '/calendar', '/medications'] },
-  { title: 'Explore',    color: '#A78BFA', hrefs: ['/impact', '/outcomes', '/stories', '/editorial', '/equity'] },
-  { title: 'Community',  color: '#F59E0B', hrefs: ['/chw', '/rights', '/advocacy'] },
-  { title: 'More',       color: '#9CA3AF', hrefs: ['/equity', '/passport', '/about', '/methodology'] },
+  { title: 'Find care',   color: '#4F8EF0', hrefs: ['/search', '/triage', '/crisis'] },
+  { title: 'Pay for care', color: '#4F8EF0', hrefs: ['/eligibility', '/medications'] },
+  { title: 'Learn',       color: '#4F8EF0', hrefs: ['/rights', '/chw', '/editorial', '/about'] },
 ]
 
 export default function MobileDrawer({ open, onClose, links, user, onLogout, onAnchor }: MobileDrawerProps) {
@@ -237,7 +235,7 @@ export default function MobileDrawer({ open, onClose, links, user, onLogout, onA
         }}>
           <span style={{
             fontFamily: 'var(--font-display)', fontSize: '10px',
-            letterSpacing: '0.4em', color: 'rgba(255,255,255,0.55)', paddingRight: '0.4em',
+            letterSpacing: '0', color: 'rgba(255,255,255,0.55)', paddingRight: '0.4em',
           }}>
             AXVO
           </span>
@@ -323,8 +321,8 @@ export default function MobileDrawer({ open, onClose, links, user, onLogout, onA
             {categorizedLinks.map(cat => (
               <div key={cat.title}>
                 <div style={{
-                  fontSize: '9px', fontWeight: 700, letterSpacing: '0.12em',
-                  textTransform: 'uppercase', color: cat.color,
+                  fontSize: '9px', fontWeight: 700, letterSpacing: '0',
+                  textTransform: 'none', color: cat.color,
                   marginBottom: '4px', paddingLeft: '12px',
                   fontFamily: 'var(--font-inter)',
                 }}>

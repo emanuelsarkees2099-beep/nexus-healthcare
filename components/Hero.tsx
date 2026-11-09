@@ -1,34 +1,16 @@
 'use client'
-import { useEffect, useLayoutEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import gsap from 'gsap'
-import { registerGSAP } from '@/lib/gsap-st'
 import { useI18n } from '@/components/I18nContext'
 import SearchBar from '@/components/hero/SearchBar'
 import LivingProof from '@/components/hero/LivingProof'
-import HeroConstellation from '@/components/hero/HeroConstellation'
 
-registerGSAP()
-
-/* ── The signature cycling word — split-flap per-character animation.
-     Crossfade guarantee: outgoing chars flap out WHILE incoming flap in,
-     so the headline is never blank. ── */
-const CYCLE_WORDS = ['found', 'unlocked', 'deserved', 'possible']
-const CYCLE_MS = 3200
-
-const PLACEHOLDERS = [
-  'Symptom, specialty, or clinic name...',
-  'Primary care near me...',
-  'Free dental near me...',
-  'Mental health services...',
-  'Walk-in clinic today...',
-  'Pediatrics · no insurance needed...',
-]
+const PLACEHOLDER = 'Symptom, service, or clinic name'
 
 const SYMPTOM_PATTERNS = [
-  /\b(chest\s*pain|shortness\s*of\s*breath|can['']?t\s*breathe)\b/i,
+  /\b(chest\s*pain|shortness\s*of\s*breath|can['’]?t\s*breathe)\b/i,
   /\b(rash|itching|hives|skin\s+problem|eczema)\b/i,
-  /\b(can['']?t\s+sleep|insomnia|anxiety|depression|mental\s+health)\b/i,
+  /\b(can['’]?t\s+sleep|insomnia|anxiety|depression|mental\s+health)\b/i,
   /\b(headache|migraine|dizziness|fainting)\b/i,
   /\b(fever|cough|cold|flu|sick|nausea|vomiting)\b/i,
   /\b(back\s*pain|joint\s*pain|knee|shoulder)\b/i,
@@ -37,68 +19,17 @@ const SYMPTOM_PATTERNS = [
   /\b(blood|bleeding|wound|swelling)\b/i,
 ]
 
-/* Split-flap word.
-   Incoming: per-character flap with stagger (the split-flap effect).
-   Outgoing: the WHOLE word exits fast as one unit — staggered exits
-   overlapped the incoming word for ~700ms and read as garbled text. */
-/* overlay=true → the OUTGOING word, absolutely stacked over the incoming
-   one so the two crossfade. overlay=false (incoming) stays in normal flow
-   so it sizes the container to the CURRENT word — keeping exactly one space
-   before " in seconds." regardless of word length. */
-function FlapWord({ word, leaving, overlay = false }: { word: string; leaving: boolean; overlay?: boolean }) {
-  return (
-    <span
-      aria-hidden={leaving || undefined}
-      className={leaving ? 'flap-word-out' : undefined}
-      style={{
-        display: 'inline-block', whiteSpace: 'nowrap', color: 'var(--accent)',
-        ...(overlay
-          ? { position: 'absolute', left: 0, top: 0 }
-          : { position: 'relative' }),
-      }}
-    >
-      {word.split('').map((ch, i) => (
-        <span
-          key={`${word}-${i}`}
-          className={leaving ? undefined : 'flap-in'}
-          style={leaving ? undefined : { animationDelay: `${i * 34}ms` }}
-        >
-          {ch}
-        </span>
-      ))}
-    </span>
-  )
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   HERO — original dark identity, transformed
-   • Split-flap cycling accent word (never blank)
-   • Living Proof: real nearby clinics stream in on load
-   • Typewriter placeholder (types once, then gentle cycling)
-   • Honest avatar proof pill (true facts, no invented counts)
-═══════════════════════════════════════════════════════════════════ */
+/* Homepage hero. Deliberately static: the headline and search are visible
+   on first paint, with no entrance animation that could leave the page
+   blank on a slow phone. */
 export default function Hero() {
   const { t } = useI18n()
   const router = useRouter()
+  const inputRef  = useRef<HTMLInputElement>(null)
+  const ctaBtnRef = useRef<HTMLButtonElement>(null)
 
-  /* refs */
-  const sectionRef = useRef<HTMLElement>(null)
-  const bgRef      = useRef<HTMLDivElement>(null)
-  const eyebrowRef = useRef<HTMLDivElement>(null)
-  const h1Ref      = useRef<HTMLHeadingElement>(null)
-  const subRef     = useRef<HTMLParagraphElement>(null)
-  const searchRef  = useRef<HTMLDivElement>(null)
-  const proofRef   = useRef<HTMLDivElement>(null)
-  const livingRef  = useRef<HTMLDivElement>(null)
-  const inputRef   = useRef<HTMLInputElement>(null)
-  const ctaBtnRef  = useRef<HTMLButtonElement>(null)
-
-  /* state */
   const [searchVal, setSearchVal]     = useState('')
   const [locationVal, setLocationVal] = useState('')
-  const [cycleIdx, setCycleIdx]       = useState(0)
-  const [prevIdx, setPrevIdx]         = useState<number | null>(null)
-  const [placeholder, setPlaceholder] = useState('')
 
   /* restore saved location */
   useEffect(() => {
@@ -108,424 +39,79 @@ export default function Hero() {
     } catch { /* private browsing */ }
   }, [])
 
-  /* cycling headline word */
-  useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduced) return
-    const id = setInterval(() => {
-      setCycleIdx(i => {
-        setPrevIdx(i)
-        return (i + 1) % CYCLE_WORDS.length
-      })
-    }, CYCLE_MS)
-    return () => clearInterval(id)
-  }, [])
-
-  /* placeholder: typewrite the first one, then gentle cycling */
-  useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const first = PLACEHOLDERS[0]
-    if (reduced) { setPlaceholder(first) }
-
-    let typeTimer: ReturnType<typeof setInterval> | null = null
-    let cycleTimer: ReturnType<typeof setInterval> | null = null
-    let idx = 0
-
-    const startCycling = () => {
-      let p = 0
-      cycleTimer = setInterval(() => {
-        const input = inputRef.current
-        if (!input || document.activeElement === input) return
-        gsap.to(input, {
-          opacity: 0, duration: 0.2,
-          onComplete: () => {
-            p = (p + 1) % PLACEHOLDERS.length
-            setPlaceholder(PLACEHOLDERS[p])
-            gsap.to(input, { opacity: 1, duration: 0.2 })
-          },
-        })
-      }, 3600)
-    }
-
-    if (reduced) {
-      startCycling()
-    } else {
-      typeTimer = setInterval(() => {
-        idx++
-        setPlaceholder(first.slice(0, idx))
-        if (idx >= first.length) {
-          if (typeTimer) clearInterval(typeTimer)
-          setTimeout(startCycling, 2600)
-        }
-      }, 32)
-    }
-
-    return () => {
-      if (typeTimer) clearInterval(typeTimer)
-      if (cycleTimer) clearInterval(cycleTimer)
-    }
-  }, [])
-
-  /* ── GSAP: set initial states ── */
-  useLayoutEffect(() => {
-    gsap.set([eyebrowRef.current, h1Ref.current, subRef.current,
-              searchRef.current, livingRef.current, proofRef.current], {
-      opacity: 0, y: 20,
-    })
-  }, [])
-
-  /* ── GSAP: one entrance, then stillness ── */
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 0.1 })
-      tl
-        .to(eyebrowRef.current, { opacity: 1, y: 0, duration: 0.6,  ease: 'power3.out' })
-        .to(h1Ref.current,      { opacity: 1, y: 0, duration: 0.85, ease: 'power4.out' }, '-=0.4')
-        .to(subRef.current,     { opacity: 1, y: 0, duration: 0.65, ease: 'power3.out' }, '-=0.55')
-        .to(searchRef.current,  { opacity: 1, y: 0, duration: 0.65, ease: 'power3.out' }, '-=0.45')
-        .to(livingRef.current,  { opacity: 1, y: 0, duration: 0.6,  ease: 'power3.out' }, '-=0.4')
-        .to(proofRef.current,   { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, '-=0.4')
-
-      gsap.to('.hero-content', {
-        y: -60, opacity: 0, ease: 'power2.in',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: '45% top',
-          scrub: 1.2,
-        },
-      })
-    }, sectionRef)
-    return () => ctx.revert()
-  }, [])
-
-  /* ── Slow parallax on the background layer ── */
-  useEffect(() => {
-    const bg = bgRef.current
-    if (!bg) return
-    let rafId = 0
-    const onScroll = () => {
-      cancelAnimationFrame(rafId)
-      rafId = requestAnimationFrame(() => {
-        const y = window.scrollY * 0.12
-        if (bg) bg.style.transform = `translateY(${y}px)`
-      })
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(rafId) }
-  }, [])
-
-  /* ── Cursor spotlight — hero only, GPU-cheap, off on touch ── */
-  useEffect(() => {
-    const section = sectionRef.current
-    if (!section || window.matchMedia('(hover: none)').matches) return
-    const spot = section.querySelector('.hero-spotlight') as HTMLElement | null
-    if (!spot) return
-    let rafId = 0
-    const onMove = (e: MouseEvent) => {
-      cancelAnimationFrame(rafId)
-      rafId = requestAnimationFrame(() => {
-        const r = section.getBoundingClientRect()
-        spot.style.transform =
-          `translate(${e.clientX - r.left - 300}px, ${e.clientY - r.top - 300}px)`
-        spot.style.opacity = '1'
-      })
-    }
-    const onLeave = () => { spot.style.opacity = '0' }
-    section.addEventListener('mousemove', onMove, { passive: true })
-    section.addEventListener('mouseleave', onLeave)
-    return () => {
-      section.removeEventListener('mousemove', onMove)
-      section.removeEventListener('mouseleave', onLeave)
-      cancelAnimationFrame(rafId)
-    }
-  }, [])
-
-  /* ── Search handler ── */
   const handleSearch = useCallback(() => {
     const q = searchVal.trim()
     const loc = locationVal.trim()
-    // Used to `return` early when the "what" box was empty -- so the most
-    // common search (just a ZIP or city, nothing else) silently did nothing.
     if (!q) {
-      setTimeout(() => router.push(loc ? `/search?loc=${encodeURIComponent(loc)}` : '/search'), 280)
+      router.push(loc ? `/search?loc=${encodeURIComponent(loc)}` : '/search')
       return
     }
     const isSymptom = SYMPTOM_PATTERNS.some(rx => rx.test(q))
-    setTimeout(() => router.push(
+    router.push(
       isSymptom
         ? `/triage?symptom=${encodeURIComponent(q)}&loc=${encodeURIComponent(loc)}`
         : `/search?q=${encodeURIComponent(q)}&loc=${encodeURIComponent(loc)}`
-    ), 280)
+    )
   }, [searchVal, locationVal, router])
 
   return (
     <section
-      ref={sectionRef}
       id="hero"
       aria-labelledby="hero-h1"
       style={{
-        position: 'relative',
-        minHeight: '100dvh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        overflow: 'hidden',
-        paddingBottom: '56px',
+        display: 'flex', flexDirection: 'column', alignItems: 'center',
+        padding: 'clamp(112px, 16vh, 160px) clamp(20px, 4vw, 48px) 64px',
+        borderBottom: '1px solid var(--border-subtle)',
       }}
     >
+      <div style={{ maxWidth: '760px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+        <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text-3)', marginBottom: '20px', fontFamily: 'var(--font-inter)' }}>
+          Free to use · No insurance or account needed
+        </p>
 
-      {/* ── Background: aurora + horizon + cursor spotlight ── */}
-      <div ref={bgRef} aria-hidden="true" style={{
-        position: 'absolute', inset: '-20% 0', zIndex: 0, pointerEvents: 'none',
-        willChange: 'transform',
-      }}>
-        <div className="aurora" />
-        {/* Network of care — sparse drifting nodes (desktop only) */}
-        <HeroConstellation />
-        <div style={{
-          position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
-          width: 'min(720px, 90vw)', height: '1px',
-          background: 'linear-gradient(90deg, transparent, rgba(79,142,240,0.55) 35%, rgba(106, 166, 255,0.55) 65%, transparent)',
-        }} />
-      </div>
-      {/* Spotlight — trails the cursor */}
-      <div className="hero-spotlight" aria-hidden="true" style={{
-        position: 'absolute', top: 0, left: 0, zIndex: 1,
-        width: '600px', height: '600px', borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(79,142,240,0.06) 0%, transparent 65%)',
-        opacity: 0, pointerEvents: 'none',
-        transition: 'opacity 0.5s ease',
-        willChange: 'transform',
-      }} />
-
-      {/* ════════════════════════════════════════
-          CENTRED CONTENT
-      ════════════════════════════════════════ */}
-      <div
-        className="hero-content"
-        style={{
-          position: 'relative', zIndex: 2,
-          paddingTop: 'clamp(88px, 11vh, 128px)',
-          paddingLeft: 'clamp(20px, 4vw, 48px)',
-          paddingRight: 'clamp(20px, 4vw, 48px)',
-          /* 1000px (not 860) so the headline's longest line —
-             "deserved in seconds." — has room to stay on ONE line. */
-          maxWidth: '1000px',
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          textAlign: 'center',
-        }}
-      >
-
-        {/* ── Eyebrow ── */}
-        <div ref={eyebrowRef} className="hero-eyebrow" style={{
-          display: 'inline-flex', alignItems: 'center', gap: '10px',
-          marginBottom: '28px',
-        }}>
-          <span aria-hidden="true" className="hero-eyebrow-rule" style={{
-            display: 'inline-block', width: '24px', height: '1px',
-            background: 'var(--accent)', opacity: 0.6,
-          }} />
-          <span className="hero-eyebrow-text" style={{
-            fontSize: '11.5px', fontWeight: 500, letterSpacing: '0.16em',
-            textTransform: 'uppercase', color: 'var(--text-3)',
-            fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap',
-          }}>
-            Free · Private · No insurance required
-          </span>
-          <span aria-hidden="true" className="hero-eyebrow-rule" style={{
-            display: 'inline-block', width: '24px', height: '1px',
-            background: 'var(--accent)', opacity: 0.6,
-          }} />
-        </div>
-
-        {/* ── H1 — split-flap cycling accent word ── */}
         <h1
-          ref={h1Ref}
           id="hero-h1"
           style={{
             fontFamily: 'var(--font-display)',
-            /* Sized so the LONGEST cycling line always fits on one line.
-               Measured: the widest line 2 ("deserved in seconds.") needs
-               ~10.5x the font-size in width, and the available width is
-               1000px minus 2x48px padding = 904px → 904/10.5 ≈ 86px cap.
-               8.1vw keeps the same ratio on narrower screens, so the
-               two-line composition holds at every width without any
-               breakpoint overrides. */
-            fontSize: 'min(8.1vw, 84px)',
-            fontWeight: 800,
-            lineHeight: 1.05,
-            letterSpacing: '-0.04em',
-            marginBottom: '22px',
-            textAlign: 'center',
+            fontSize: 'clamp(36px, 6vw, 60px)',
+            fontWeight: 700,
+            lineHeight: 1.1,
+            letterSpacing: '-0.03em',
+            marginBottom: '20px',
             color: 'var(--text)',
           }}
         >
-          <span style={{ display: 'block', whiteSpace: 'nowrap' }}>Free healthcare,</span>
-          <span style={{ display: 'block', whiteSpace: 'nowrap' }}>
-            {/* Sizes to the CURRENT word (incoming stays in flow); the
-                outgoing word is overlaid so they crossfade without a gap. */}
-            <span style={{
-              display: 'inline-block', position: 'relative',
-              perspective: '600px', verticalAlign: 'bottom',
-            }}>
-              {prevIdx !== null && (
-                <FlapWord key={`out-${prevIdx}`} word={CYCLE_WORDS[prevIdx]} leaving overlay />
-              )}
-              <FlapWord key={`in-${cycleIdx}`} word={CYCLE_WORDS[cycleIdx]} leaving={false} />
-            </span>
-            {' '}in seconds.
-          </span>
+          Find free and low-cost health care near you.
         </h1>
 
-        {/* ── Subtitle ── */}
-        <p
-          ref={subRef}
-          style={{
-            fontSize: 'clamp(0.95rem, 1.35vw, 1.1rem)',
-            color: 'var(--text-2)',
-            maxWidth: '540px',
-            lineHeight: 1.7,
-            fontWeight: 400,
-            marginBottom: '32px',
-            fontFamily: 'var(--font-inter)',
-          }}
-        >
+        <p style={{
+          fontSize: 'clamp(16px, 1.4vw, 18px)', color: 'var(--text-2)', maxWidth: '560px',
+          lineHeight: 1.65, marginBottom: '32px', fontFamily: 'var(--font-inter)',
+        }}>
           {t('home.hero.subheadline')}
         </p>
 
-        {/* ── Search ── */}
-        {/* z-index:30 puts the search + its typeahead dropdowns above the
-            LivingProof card below, whose top was overlapping (and stealing
-            clicks from) the first few location suggestions. */}
-        <div
-          ref={searchRef}
-          style={{ width: '100%', maxWidth: '640px', position: 'relative', zIndex: 30 }}
-        >
+        <div style={{ width: '100%', maxWidth: '640px', position: 'relative', zIndex: 30 }}>
           <SearchBar
             searchVal={searchVal}
             setSearchVal={setSearchVal}
             locationVal={locationVal}
             setLocationVal={setLocationVal}
             onSearch={handleSearch}
-            placeholder={placeholder}
+            placeholder={PLACEHOLDER}
             inputRef={inputRef}
             ctaBtnRef={ctaBtnRef}
           />
         </div>
 
-        {/* ── Living Proof — real clinics near the visitor, on load ── */}
-        <div ref={livingRef} style={{ width: '100%', display: 'flex', justifyContent: 'center', position: 'relative', zIndex: 1 }}>
+        {/* Real clinics near the visitor, loaded from AXVO's data */}
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'center', position: 'relative', zIndex: 1 }}>
           <LivingProof />
-        </div>
-
-        {/* ── Honest proof pill — avatar cluster + true facts ── */}
-        <div
-          ref={proofRef}
-          style={{
-            display: 'flex', alignItems: 'center', gap: '14px',
-            justifyContent: 'center', flexWrap: 'wrap', marginTop: '22px',
-          }}
-        >
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '12px',
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: 'var(--r-lg)',
-            padding: '8px 16px 8px 10px',
-          }}>
-            {/* Avatar cluster (decorative) */}
-            <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }} aria-hidden="true">
-              {(['#4F8EF0', '#5F9EF9', '#82B4F8', '#A8C9FF'] as const).map((bg, i) => (
-                <div key={i} style={{
-                  width: '24px', height: '24px', borderRadius: '50%',
-                  background: `linear-gradient(135deg, ${bg}, ${bg}88)`,
-                  border: '2px solid var(--bg2)',
-                  marginLeft: i === 0 ? 0 : '-8px',
-                  zIndex: 4 - i, position: 'relative',
-                }} />
-              ))}
-            </div>
-            <span style={{
-              fontSize: '12.5px', fontWeight: 600,
-              color: 'var(--text)', fontFamily: 'var(--font-inter)',
-            }}>
-              18,900+ free &amp; low-cost clinics mapped
-            </span>
-          </div>
-
-          <span aria-hidden="true" style={{ width: '3px', height: '3px', borderRadius: '50%', background: 'var(--border)', flexShrink: 0 }} />
-
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '6px',
-            background: 'rgba(52,211,153,0.08)',
-            border: '1px solid rgba(52,211,153,0.20)',
-            borderRadius: 'var(--r-lg)',
-            padding: '6px 12px',
-          }}>
-            <span style={{
-              width: '6px', height: '6px', borderRadius: '50%',
-              background: 'var(--success)', flexShrink: 0,
-            }} aria-hidden="true" />
-            <span style={{
-              fontSize: '11px', color: 'var(--success)',
-              fontFamily: 'var(--font-inter)', fontWeight: 500,
-            }}>
-              Always free
-            </span>
-          </div>
         </div>
       </div>
 
-      {/* ── Styles ── */}
       <style>{`
-        /* Split-flap characters */
-        .flap-in {
-          display: inline-block;
-          backface-visibility: hidden;
-          transform-origin: 50% 100%;
-          opacity: 0;
-          animation: flap-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        .flap-word-out {
-          transform-origin: 50% 100%;
-          animation: flap-word-out 0.22s cubic-bezier(0.4, 0, 1, 1) forwards;
-        }
-        @keyframes flap-in {
-          from { opacity: 0; transform: rotateX(-95deg) translateY(6px); }
-          60%  { opacity: 1; }
-          to   { opacity: 1; transform: rotateX(0deg) translateY(0); }
-        }
-        @keyframes flap-word-out {
-          from { opacity: 1; transform: rotateX(0deg); }
-          to   { opacity: 0; transform: rotateX(70deg) translateY(-8px); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .flap-in       { animation: none; opacity: 1; }
-          .flap-word-out { animation: none; opacity: 0; }
-          .hero-spotlight { display: none; }
-        }
-
-        /* NOTE: no per-breakpoint h1 font-size here. The single
-           min(8.1vw, 84px) above is fluid by design and keeps the headline
-           on exactly two lines at every width; breakpoint overrides were
-           what let the longest cycling word spill onto a third line. */
-        @media (max-width: 768px) {
-          #hero { padding-bottom: 40px !important; }
-        }
-        @media (max-width: 480px) {
-          #hero p  { font-size: 0.92rem !important; }
-          /* Eyebrow: one clean line — smaller type, no side rules */
-          .hero-eyebrow-rule { display: none !important; }
-          .hero-eyebrow-text { font-size: 9.5px !important; letter-spacing: 0.13em !important; }
-          .hero-eyebrow { margin-bottom: 20px !important; }
-        }
-        .search-submit:hover { box-shadow: var(--shadow-glow) !important; }
-        .search-submit:active { transform: scale(0.97) !important; }
+        .search-submit:active { transform: scale(0.98) !important; }
         .geo-btn:hover { opacity: 1 !important; }
       `}</style>
     </section>

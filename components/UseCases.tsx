@@ -30,14 +30,14 @@ export default function UseCases() {
       style={{ position: 'relative', zIndex: 2, maxWidth: '1100px', margin: '0 auto', padding: 'clamp(80px, 12vh, 130px) clamp(20px, 5vw, 40px) 0', textAlign: 'center' }}
     >
       <div style={{ marginBottom: '3rem', opacity: visible ? 1 : 0, transform: visible ? 'none' : 'translateY(18px)', transition: 'opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)' }}>
-        <p style={{ fontSize: '11px', fontWeight: 650, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '14px', fontFamily: 'var(--font-mono)' }}>
+        <p style={{ fontSize: '11px', fontWeight: 650, letterSpacing: '0', textTransform: 'none', color: 'var(--accent)', marginBottom: '14px', fontFamily: 'var(--font-inter)' }}>
           Who it&apos;s for
         </p>
         <h2 id="usecases-title" style={{
           fontFamily: 'var(--font-display)', fontSize: 'clamp(1.9rem, 3.6vw, 2.7rem)',
           fontWeight: 700, letterSpacing: '-0.035em', lineHeight: 1.1, color: 'var(--text)', textWrap: 'balance',
         }}>
-          Whatever brought you here
+          Who AXVO is for
         </h2>
       </div>
 
@@ -59,7 +59,7 @@ export default function UseCases() {
             }}>
               <div style={{
                 width: '40px', height: '40px', borderRadius: '11px',
-                background: 'linear-gradient(140deg, rgba(95,158,249,0.20), rgba(79,142,240,0.06))',
+                background: 'rgba(255,255,255,0.06)',
                 border: '1px solid rgba(95,158,249,0.22)',
                 display: 'grid', placeItems: 'center',
               }}>

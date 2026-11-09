@@ -50,7 +50,7 @@ export default function UserMenu({ user, showUserMenu, setShowUserMenu, onLogout
         aria-haspopup="true"
         style={{
           display: 'flex', alignItems: 'center', gap: '8px',
-          background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.25)',
+          background: 'rgba(79,142,240,0.12)', border: '1px solid rgba(79,142,240,0.25)',
           borderRadius: '9px', padding: '6px 12px 6px 8px',
           cursor: 'pointer', color: '#eef4f5',
           fontFamily: 'var(--font-inter)', fontSize: '12.5px', fontWeight: 500,
@@ -130,7 +130,7 @@ export default function UserMenu({ user, showUserMenu, setShowUserMenu, onLogout
       <style>{`
         .nav-sign-in:hover { border-color: rgba(255,255,255,0.25) !important; color: #fff !important; }
         .nav-get-started:hover { transform: translateY(-1px) !important; box-shadow: 0 4px 16px rgba(0,0,0,0.3) !important; }
-        .nav-user-btn:hover { background: rgba(74,144,217,0.2) !important; }
+        .nav-user-btn:hover { background: rgba(79,142,240,0.2) !important; }
         .user-menu-item:hover { background: rgba(255,255,255,0.06) !important; color: #eef4f5 !important; }
         .user-menu-signout:hover { background: rgba(255,107,107,0.08) !important; }
       `}</style>

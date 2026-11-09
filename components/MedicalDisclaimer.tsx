@@ -28,8 +28,8 @@ export default function MedicalDisclaimer({
         className={className}
         style={{
           display: 'flex', alignItems: 'flex-start', gap: '10px',
-          background: 'rgba(245,158,11,0.06)',
-          border: '1px solid rgba(245,158,11,0.20)',
+          background: 'rgba(79,142,240,0.06)',
+          border: '1px solid rgba(79,142,240,0.20)',
           borderRadius: 'var(--r-md)',
           padding: '12px 14px',
           maxWidth: '640px',

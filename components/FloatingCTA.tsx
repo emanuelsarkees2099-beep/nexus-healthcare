@@ -62,7 +62,7 @@ export default function FloatingCTA() {
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
         boxShadow:
-          '0 4px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(74,144,217,0.10), inset 0 1px 0 rgba(255,255,255,0.05)',
+          '0 4px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(79,142,240,0.10), inset 0 1px 0 rgba(255,255,255,0.05)',
       }}>
         {/* Pulse dot */}
         <span aria-hidden="true" style={{
@@ -95,7 +95,7 @@ export default function FloatingCTA() {
             cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0,
             letterSpacing: '0.01em',
             transition: 'transform 0.25s var(--ease-spring), box-shadow 0.25s',
-            boxShadow: '0 4px 16px rgba(79,142,240,0.25), 0 2px 10px rgba(106, 166, 255,0.18)',
+            boxShadow: '0 4px 16px rgba(79,142,240,0.25), 0 2px 10px rgba(79,142,240,0.18)',
           }}
           onMouseEnter={e => {
             e.currentTarget.style.transform = 'scale(1.05)'

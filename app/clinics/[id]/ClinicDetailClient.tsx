@@ -202,7 +202,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
             position: 'fixed', bottom: 24, right: 24, zIndex: 8000,
             width: 320, borderRadius: 14,
             background: 'rgba(14,14,24,0.97)',
-            border: '1px solid rgba(74,144,217,0.25)',
+            border: '1px solid rgba(79,142,240,0.25)',
             boxShadow: '0 16px 48px rgba(0,0,0,0.5)',
             padding: '16px 18px',
             animation: 'slideInRight 0.25s ease',
@@ -227,7 +227,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
           </p>
           <Link
             href="/eligibility"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.28)', color: 'var(--accent)', fontSize: 12, fontWeight: 600, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, background: 'rgba(79,142,240,0.12)', border: '1px solid rgba(79,142,240,0.28)', color: 'var(--accent)', fontSize: 12, fontWeight: 600, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}
           >
             Check coverage <ArrowRight2 size={12} variant="Linear" />
           </Link>
@@ -263,7 +263,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
           <div aria-hidden="true" style={{
             position: 'absolute', top: '-60px', right: '-60px',
             width: '300px', height: '300px', borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(74,144,217,0.06) 0%, transparent 70%)',
+            background: 'transparent',
             filter: 'blur(60px)', pointerEvents: 'none',
           }} />
 
@@ -272,7 +272,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
             {clinic.free && (
               <div style={{
                 display: 'inline-flex', alignItems: 'center', gap: '5px',
-                background: 'rgba(74,144,217,0.10)', border: '1px solid rgba(74,144,217,0.22)',
+                background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.22)',
                 borderRadius: '100px', padding: '4px 10px',
                 fontSize: '11px', fontWeight: 600, color: 'var(--accent)', fontFamily: 'var(--font-inter)',
               }}>
@@ -282,7 +282,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
             {clinic.sliding_scale && (
               <div style={{
                 display: 'inline-flex', alignItems: 'center', gap: '5px',
-                background: 'rgba(252,211,77,0.10)', border: '1px solid rgba(252,211,77,0.22)',
+                background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.22)',
                 borderRadius: '100px', padding: '4px 10px',
                 fontSize: '11px', fontWeight: 600, color: 'var(--amber)', fontFamily: 'var(--font-inter)',
               }}>
@@ -302,8 +302,8 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
             {openNow !== null && (
               <div style={{
                 display: 'inline-flex', alignItems: 'center', gap: '5px',
-                background: openNow ? 'rgba(74,222,128,0.08)' : 'rgba(248,113,113,0.08)',
-                border: openNow ? '1px solid rgba(74,222,128,0.22)' : '1px solid rgba(248,113,113,0.22)',
+                background: openNow ? 'rgba(79,142,240,0.08)' : 'rgba(248,113,113,0.08)',
+                border: openNow ? '1px solid rgba(79,142,240,0.22)' : '1px solid rgba(248,113,113,0.22)',
                 borderRadius: '100px', padding: '4px 10px',
                 fontSize: '11px', fontWeight: 600,
                 color: openNow ? 'var(--green-pulse)' : 'var(--coral)',
@@ -388,8 +388,8 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
               disabled={bookmarkLoading}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '8px',
-                background: bookmarked ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.04)',
-                border: `1px solid ${bookmarked ? 'rgba(74,144,217,0.25)' : 'rgba(255,255,255,0.08)'}`,
+                background: bookmarked ? 'rgba(79,142,240,0.10)' : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${bookmarked ? 'rgba(79,142,240,0.25)' : 'rgba(255,255,255,0.08)'}`,
                 color: bookmarked ? 'var(--accent)' : 'var(--text-2)',
                 padding: '11px 18px', borderRadius: '10px', cursor: 'pointer',
                 fontWeight: 600, fontSize: '14px', fontFamily: 'var(--font-inter)',
@@ -417,8 +417,8 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
               onClick={handleShare}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '7px',
-                background: copied ? 'rgba(74,144,217,0.08)' : 'rgba(255,255,255,0.03)',
-                border: `1px solid ${copied ? 'rgba(74,144,217,0.22)' : 'rgba(255,255,255,0.07)'}`,
+                background: copied ? 'rgba(79,142,240,0.08)' : 'rgba(255,255,255,0.03)',
+                border: `1px solid ${copied ? 'rgba(79,142,240,0.22)' : 'rgba(255,255,255,0.07)'}`,
                 color: copied ? 'var(--accent)' : 'var(--text-2)', padding: '11px 14px', borderRadius: '10px',
                 cursor: 'pointer', fontWeight: 500, fontSize: '13px', fontFamily: 'var(--font-inter)',
                 transition: 'background 0.2s, color 0.2s, border-color 0.2s',
@@ -450,7 +450,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
 
           {/* Contact info */}
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border2)', borderRadius: '16px', padding: '22px 24px' }}>
-            <h2 style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', marginBottom: '16px' }}>
+            <h2 style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0', textTransform: 'none', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', marginBottom: '16px' }}>
               Contact &amp; Location
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -470,7 +470,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
               {clinic.phone && (
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                   <Call size={15} color="var(--accent)" variant="Linear" style={{ flexShrink: 0 }} />
-                  <a href={`tel:${clinic.phone}`} style={{ fontSize: '13px', color: 'var(--text-2)', textDecoration: 'none', fontFamily: 'var(--font-mono),monospace', transition: 'color 0.2s' }}
+                  <a href={`tel:${clinic.phone}`} style={{ fontSize: '13px', color: 'var(--text-2)', textDecoration: 'none', fontFamily: 'var(--font-inter)', transition: 'color 0.2s' }}
                     onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
                     onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-2)')}>
                     {clinic.phone}
@@ -501,7 +501,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
           {/* Services */}
           {clinic.services?.length > 0 && (
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border2)', borderRadius: '16px', padding: '22px 24px' }}>
-              <h2 style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', marginBottom: '16px' }}>
+              <h2 style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0', textTransform: 'none', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', marginBottom: '16px' }}>
                 Services Offered
               </h2>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -509,7 +509,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
                   <div key={svc} style={{
                     display: 'inline-flex', alignItems: 'center', gap: '5px',
                     padding: '5px 11px', borderRadius: '8px',
-                    background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.12)',
+                    background: 'rgba(79,142,240,0.06)', border: '1px solid rgba(79,142,240,0.12)',
                     fontSize: '12px', color: 'var(--accent)', fontFamily: 'var(--font-inter)', fontWeight: 500,
                   }}>
                     {SERVICE_ICONS[svc] || <Hospital size={12} variant="Linear" />}
@@ -531,7 +531,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border2)', borderRadius: '16px', padding: '22px 24px', marginBottom: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
               <LanguageSquare size={14} color="var(--violet)" variant="Linear" />
-              <h2 style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', margin: 0 }}>
+              <h2 style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0', textTransform: 'none', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', margin: 0 }}>
                 Languages Spoken
               </h2>
             </div>
@@ -540,7 +540,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
                 <div key={lang} style={{
                   display: 'inline-flex', alignItems: 'center', gap: '5px',
                   padding: '5px 12px', borderRadius: '8px',
-                  background: 'rgba(167,139,250,0.06)', border: '1px solid rgba(167,139,250,0.18)',
+                  background: 'rgba(79,142,240,0.06)', border: '1px solid rgba(79,142,240,0.18)',
                   fontSize: '12px', color: 'var(--violet)', fontFamily: 'var(--font-inter)', fontWeight: 500,
                 }}>
                   <Global size={11} variant="Linear" />
@@ -553,7 +553,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
 
         {/* ── What to bring ── */}
         <div style={{ background: 'var(--bg2)', border: '1px solid var(--border2)', borderRadius: '16px', padding: '22px 24px', marginBottom: '16px' }}>
-          <h2 style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', marginBottom: '16px' }}>
+          <h2 style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0', textTransform: 'none', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', marginBottom: '16px' }}>
             What to Bring
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
@@ -568,7 +568,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
           </div>
           <div style={{
             marginTop: '16px', padding: '12px 16px',
-            background: 'rgba(74,144,217,0.05)', border: '1px solid rgba(74,144,217,0.12)',
+            background: 'rgba(79,142,240,0.05)', border: '1px solid rgba(79,142,240,0.12)',
             borderRadius: '10px',
           }}>
             <p style={{ fontSize: '13px', color: 'var(--accent)', fontFamily: 'var(--font-inter)', fontWeight: 500 }}>
@@ -580,10 +580,10 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
         {/* ── N3: Appointment Booking ── */}
         <div style={{ background: 'var(--bg2)', border: '1px solid var(--border2)', borderRadius: '16px', padding: '22px 24px', marginBottom: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-            <div style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Calendar1 size={15} color="var(--accent)" variant="Linear" />
             </div>
-            <h2 style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', margin: 0 }}>
+            <h2 style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0', textTransform: 'none', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', margin: 0 }}>
               Book an Appointment
             </h2>
           </div>
@@ -595,7 +595,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
                 This clinic offers online scheduling. Select a time that works for you:
               </p>
               {/* Inline calendar embed */}
-              <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(74,144,217,0.12)' }}>
+              <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(79,142,240,0.12)' }}>
                 <iframe
                   src={clinic.cal_link}
                   title={`Schedule appointment at ${clinic.name}`}
@@ -621,7 +621,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
                 {clinic.phone && (
                   <a
                     href={`tel:${clinic.phone}`}
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '11px 20px', borderRadius: 10, background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.25)', color: 'var(--accent)', fontSize: 14, fontWeight: 700, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '11px 20px', borderRadius: 10, background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.25)', color: 'var(--accent)', fontSize: 14, fontWeight: 700, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}
                   >
                     <Call size={15} variant="Linear" /> Call to Book
                   </a>
@@ -638,9 +638,9 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
                 )}
               </div>
               {/* Tips for the call */}
-              <div style={{ padding: '12px 16px', borderRadius: 10, background: 'rgba(251,191,36,0.05)', border: '1px solid rgba(251,191,36,0.12)' }}>
-                <p style={{ fontSize: 12, color: 'rgba(251,191,36,0.75)', fontFamily: 'var(--font-inter)', margin: 0, lineHeight: 1.65, fontWeight: 300, display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
-                  <InfoCircle size={13} color="rgba(251,191,36,0.75)" variant="TwoTone" style={{ flexShrink: 0, marginTop: '1px' }} aria-hidden="true" />
+              <div style={{ padding: '12px 16px', borderRadius: 10, background: 'rgba(79,142,240,0.05)', border: '1px solid rgba(79,142,240,0.12)' }}>
+                <p style={{ fontSize: 12, color: 'rgba(79,142,240,0.75)', fontFamily: 'var(--font-inter)', margin: 0, lineHeight: 1.65, fontWeight: 300, display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
+                  <InfoCircle size={13} color="rgba(79,142,240,0.75)" variant="TwoTone" style={{ flexShrink: 0, marginTop: '1px' }} aria-hidden="true" />
                   <span><strong style={{ fontWeight: 600 }}>Tip when calling:</strong> Ask about sliding-scale fees, bring your income information, and confirm they accept uninsured patients. Most clinics are required to say yes.</span>
                 </p>
               </div>
@@ -651,7 +651,7 @@ export default function ClinicDetailClient({ clinic }: { clinic: Clinic }) {
         {/* ── HRSA badge if applicable ── */}
         {(clinic.type?.toLowerCase().includes('fqhc') || clinic.type?.toLowerCase().includes('hrsa')) && (
           <div style={{
-            background: 'rgba(252,211,77,0.05)', border: '1px solid rgba(252,211,77,0.15)',
+            background: 'rgba(79,142,240,0.05)', border: '1px solid rgba(79,142,240,0.15)',
             borderRadius: '16px', padding: '18px 22px', marginBottom: '16px',
             display: 'flex', alignItems: 'flex-start', gap: '14px',
           }}>

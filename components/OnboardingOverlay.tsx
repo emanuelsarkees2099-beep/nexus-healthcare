@@ -17,11 +17,11 @@ interface WizardData {
 
 const INTENTS = [
   { id: 'clinic',     label: 'Find a free clinic',         icon: <Location size={16} variant="Linear" />,      href: '/search',        color: 'var(--accent)' },
-  { id: 'programs',   label: 'Check my eligibility',       icon: <ReceiptText size={16} variant="Linear" />,   href: '/eligibility',   color: '#fbbf24' },
+  { id: 'programs',   label: 'Check my eligibility',       icon: <ReceiptText size={16} variant="Linear" />,   href: '/eligibility',   color: '#4F8EF0' },
   { id: 'crisis',     label: 'Mental health crisis help',  icon: <Heart size={16} variant="Linear" />,         href: '/crisis',        color: '#f87171' },
-  { id: 'chw',        label: 'Talk to a health worker',    icon: <Profile2User size={16} variant="Linear" />,  href: '/chw',           color: '#a78bfa' },
-  { id: 'urgent',     label: 'I need help right now',      icon: <Danger size={16} variant="Linear" />,        href: '/crisis',        color: '#fb923c' },
-  { id: 'meds',       label: 'Free medication help',       icon: <Hospital size={16} variant="Linear" />,      href: '/medications',   color: '#34d399' },
+  { id: 'chw',        label: 'Talk to a health worker',    icon: <Profile2User size={16} variant="Linear" />,  href: '/chw',           color: '#4F8EF0' },
+  { id: 'urgent',     label: 'I need help right now',      icon: <Danger size={16} variant="Linear" />,        href: '/crisis',        color: '#4F8EF0' },
+  { id: 'meds',       label: 'Free medication help',       icon: <Hospital size={16} variant="Linear" />,      href: '/medications',   color: '#4F8EF0' },
 ]
 
 export default function OnboardingOverlay() {
@@ -113,7 +113,7 @@ export default function OnboardingOverlay() {
             )}
             <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
               <Heart size={11} color="var(--accent)" variant="Linear" />
-              <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--accent)', fontFamily: 'var(--font-inter)' }}>
+              <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0', textTransform: 'none', color: 'var(--accent)', fontFamily: 'var(--font-inter)' }}>
                 {step} of 5
               </span>
             </div>
@@ -166,7 +166,7 @@ export default function OnboardingOverlay() {
               <p style={{ fontSize: 13, color: 'var(--text-2)', fontFamily: 'var(--font-inter)', fontWeight: 300, marginBottom: 18, lineHeight: 1.5 }}>
                 We&apos;ll find free clinics and programs near you. Your location is never stored.
               </p>
-              <label htmlFor="ob-zip" style={{ fontSize: 12, color: 'var(--text-3)', fontFamily: 'var(--font-inter)', display: 'block', marginBottom: 8, fontWeight: 500, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              <label htmlFor="ob-zip" style={{ fontSize: 12, color: 'var(--text-3)', fontFamily: 'var(--font-inter)', display: 'block', marginBottom: 8, fontWeight: 500, letterSpacing: '0.04em', textTransform: 'none' }}>
                 ZIP code or city
               </label>
               <input
@@ -178,7 +178,7 @@ export default function OnboardingOverlay() {
                 placeholder="e.g. 85004 or Phoenix, AZ"
                 autoFocus
                 style={{ width: '100%', padding: '12px 16px', borderRadius: 12, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--text)', fontFamily: 'var(--font-inter)', fontSize: 14, outline: 'none', boxSizing: 'border-box', marginBottom: 20 }}
-                onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.4)')}
+                onFocus={e => (e.currentTarget.style.borderColor = 'rgba(79,142,240,0.4)')}
                 onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)')}
               />
               <div style={{ display: 'flex', gap: 10 }}>
@@ -243,15 +243,15 @@ export default function OnboardingOverlay() {
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
                 {getEligibilityHints().map((hint, i) => (
-                  <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'center', padding: '12px 14px', borderRadius: 12, background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.15)' }}>
+                  <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'center', padding: '12px 14px', borderRadius: 12, background: 'rgba(79,142,240,0.06)', border: '1px solid rgba(79,142,240,0.15)' }}>
                     <TickCircle size={14} color="var(--accent)" variant="Linear" style={{ flexShrink: 0 }} />
                     <span style={{ fontSize: 13, color: 'var(--text)', fontFamily: 'var(--font-inter)', lineHeight: 1.4 }}>{hint}</span>
                   </div>
                 ))}
               </div>
-              <div style={{ padding: '12px 14px', borderRadius: 12, background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.15)', marginBottom: 20 }}>
+              <div style={{ padding: '12px 14px', borderRadius: 12, background: 'rgba(79,142,240,0.06)', border: '1px solid rgba(79,142,240,0.15)', marginBottom: 20 }}>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                  <DollarCircle size={14} color="#fbbf24" variant="Linear" style={{ flexShrink: 0 }} />
+                  <DollarCircle size={14} color="#4F8EF0" variant="Linear" style={{ flexShrink: 0 }} />
                   <span style={{ fontSize: 12, color: 'rgba(255,200,60,0.8)', fontFamily: 'var(--font-inter)', lineHeight: 1.5 }}>
                     For a precise eligibility check, enter your income and household size on the next screen.
                   </span>

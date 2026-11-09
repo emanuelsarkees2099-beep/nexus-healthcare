@@ -98,8 +98,8 @@ export default function ProfileSettingsPage() {
         </div>
       )}
       {success && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(52,211,153,0.08)', border: '1px solid rgba(52,211,153,0.2)', borderRadius: '8px', padding: '10px 12px', marginBottom: '16px', color: '#34d399', fontSize: '13px' }}>
-          <TickCircle size={14} color="#34d399" variant="TwoTone" style={{ flexShrink: 0 }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.2)', borderRadius: '8px', padding: '10px 12px', marginBottom: '16px', color: '#4F8EF0', fontSize: '13px' }}>
+          <TickCircle size={14} color="#4F8EF0" variant="TwoTone" style={{ flexShrink: 0 }} />
           {success}
         </div>
       )}

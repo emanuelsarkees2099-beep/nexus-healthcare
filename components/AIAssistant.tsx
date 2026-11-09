@@ -194,8 +194,8 @@ export default function AIAssistant() {
           border-radius: 20px;
           display: flex; flex-direction: column;
           background: rgba(5,6,9,0.96);
-          border: 1px solid rgba(74,144,217,0.22);
-          box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(74,144,217,0.08);
+          border: 1px solid rgba(79,142,240,0.22);
+          box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(79,142,240,0.08);
           backdrop-filter: blur(24px);
           animation: ai-panel-in 0.28s cubic-bezier(0.16,1,0.3,1) both;
           overflow: hidden;
@@ -208,23 +208,23 @@ export default function AIAssistant() {
           position: fixed; bottom: 24px; right: 78px;
           z-index: 9997;
           width: 44px; height: 44px; border-radius: 50%;
-          background: linear-gradient(135deg, var(--accent,#4A8FD4), rgba(74,144,217,0.7));
-          border: 1px solid rgba(74,144,217,0.4);
+          background: linear-gradient(135deg, var(--accent,#4F8EF0), rgba(79,142,240,0.7));
+          border: 1px solid rgba(79,142,240,0.4);
           display: flex; align-items: center; justify-content: center;
           cursor: pointer; color: #fff;
-          box-shadow: 0 4px 20px rgba(74,144,217,0.35), 0 2px 8px rgba(0,0,0,0.4);
+          box-shadow: 0 4px 20px rgba(79,142,240,0.35), 0 2px 8px rgba(0,0,0,0.4);
           transition: transform 0.2s, box-shadow 0.2s;
           animation: ai-fab-pulse 3s ease-in-out infinite;
         }
-        .ai-fab:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(74,144,217,0.5); }
+        .ai-fab:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(79,142,240,0.5); }
         @keyframes ai-fab-pulse {
-          0%,100% { box-shadow: 0 4px 20px rgba(74,144,217,0.35), 0 2px 8px rgba(0,0,0,0.4); }
-          50%     { box-shadow: 0 4px 28px rgba(74,144,217,0.55), 0 2px 8px rgba(0,0,0,0.4); }
+          0%,100% { box-shadow: 0 4px 20px rgba(79,142,240,0.35), 0 2px 8px rgba(0,0,0,0.4); }
+          50%     { box-shadow: 0 4px 28px rgba(79,142,240,0.55), 0 2px 8px rgba(0,0,0,0.4); }
         }
         .ai-msg-user {
           align-self: flex-end; max-width: 82%;
           padding: 10px 14px; border-radius: 14px 14px 4px 14px;
-          background: rgba(74,144,217,0.15); border: 1px solid rgba(74,144,217,0.25);
+          background: rgba(79,142,240,0.15); border: 1px solid rgba(79,142,240,0.25);
           color: var(--text,#e8eaf0); font-size: 14px; line-height: 1.55;
           font-family: var(--font-inter); white-space: pre-wrap; word-break: break-word;
         }
@@ -236,16 +236,16 @@ export default function AIAssistant() {
           font-family: var(--font-inter); white-space: pre-wrap; word-break: break-word;
         }
         .ai-msg-error { border-color: rgba(248,113,113,0.3) !important; color: #f87171 !important; }
-        .ai-cursor { display: inline-block; width: 2px; height: 14px; background: var(--accent,#4A8FD4); animation: ai-blink 0.8s ease-in-out infinite; vertical-align: text-bottom; margin-left: 2px; border-radius: 1px; }
+        .ai-cursor { display: inline-block; width: 2px; height: 14px; background: var(--accent,#4F8EF0); animation: ai-blink 0.8s ease-in-out infinite; vertical-align: text-bottom; margin-left: 2px; border-radius: 1px; }
         @keyframes ai-blink { 0%,100%{opacity:1} 50%{opacity:0} }
         .ai-suggestion-chip {
           padding: 5px 12px; border-radius: 100px;
-          background: rgba(74,144,217,0.06); border: 1px solid rgba(74,144,217,0.18);
+          background: rgba(79,142,240,0.06); border: 1px solid rgba(79,142,240,0.18);
           color: rgba(255,255,255,0.65); font-size: 12px; font-family: var(--font-inter);
           cursor: pointer; white-space: nowrap;
           transition: background 0.15s, color 0.15s, border-color 0.15s;
         }
-        .ai-suggestion-chip:hover { background: rgba(74,144,217,0.14); color: var(--accent,#4A8FD4); border-color: rgba(74,144,217,0.3); }
+        .ai-suggestion-chip:hover { background: rgba(79,142,240,0.14); color: var(--accent,#4F8EF0); border-color: rgba(79,142,240,0.3); }
       `}</style>
 
       {/* FAB toggle button */}
@@ -282,7 +282,7 @@ export default function AIAssistant() {
           }}>
             <div style={{
               width: 32, height: 32, borderRadius: '50%',
-              background: 'linear-gradient(135deg, var(--accent,#4A8FD4), rgba(74,144,217,0.6))',
+              background: 'var(--accent)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0,
             }}>
@@ -292,7 +292,7 @@ export default function AIAssistant() {
               <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>
                 AXVO Navigator
               </div>
-              <div style={{ fontSize: 10, color: 'var(--accent,#4A8FD4)', fontFamily: 'var(--font-inter)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              <div style={{ fontSize: 10, color: 'var(--accent,#4F8EF0)', fontFamily: 'var(--font-inter)', letterSpacing: '0', textTransform: 'none' }}>
                 Healthcare Access Guide
               </div>
             </div>
@@ -312,7 +312,7 @@ export default function AIAssistant() {
             flex: 1, overflowY: 'auto',
             padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px',
             scrollbarWidth: 'thin',
-            scrollbarColor: 'rgba(74,144,217,0.15) transparent',
+            scrollbarColor: 'rgba(79,142,240,0.15) transparent',
           }}>
             {/* Welcome + disclaimer */}
             {messages.length === 0 && (
@@ -379,7 +379,7 @@ export default function AIAssistant() {
                 transition: 'border-color 0.2s',
                 scrollbarWidth: 'none',
               }}
-              onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.35)')}
+              onFocus={e => (e.currentTarget.style.borderColor = 'rgba(79,142,240,0.35)')}
               onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)')}
               onInput={e => {
                 const el = e.currentTarget
@@ -393,7 +393,7 @@ export default function AIAssistant() {
               aria-label="Send message"
               style={{
                 width: 38, height: 38, borderRadius: 10, flexShrink: 0,
-                background: input.trim() && !loading ? 'var(--accent,#4A8FD4)' : 'rgba(255,255,255,0.05)',
+                background: input.trim() && !loading ? 'var(--accent,#4F8EF0)' : 'rgba(255,255,255,0.05)',
                 border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'not-allowed',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 color: input.trim() && !loading ? '#07070F' : 'rgba(255,255,255,0.3)',

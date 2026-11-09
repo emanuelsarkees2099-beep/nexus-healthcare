@@ -17,7 +17,7 @@ const LINKS_TO_CHECK = [
   // Programs page
   { name: 'Medicaid enrollment', url: 'https://www.healthcare.gov/medicaid-chip/getting-medicaid-chip/', page: '/programs' },
   { name: 'HRSA Find a Health Center', url: 'https://findahealthcenter.hrsa.gov', page: '/programs' },
-  { name: 'ACA Marketplace enrollment', url: 'https://www.healthcare.gov/apply-and-enroll/start-enrollment/', page: '/programs' },
+  { name: 'ACA Marketplace enrollment', url: 'https://www.healthcare.gov/apply-and-enroll/how-to-apply/', page: '/programs' },
   { name: 'NeedyMeds PAP', url: 'https://www.needymeds.org/pap', page: '/programs' },
   // Rights page
   { name: 'EMTALA info (CMS)', url: 'https://www.cms.gov/medicare/provider-enrollment-and-certification/surveycertificationgeninfo/policy-and-memos-to-states-and-regions-items/cms1340124', page: '/rights' },

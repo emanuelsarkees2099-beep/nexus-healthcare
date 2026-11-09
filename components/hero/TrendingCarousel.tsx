@@ -29,7 +29,7 @@ export default function TrendingCarousel({ onSelect }: TrendingCarouselProps) {
       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
         <span style={{
           fontSize: '10px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)',
-          letterSpacing: '0.08em', textTransform: 'uppercase', flexShrink: 0,
+          letterSpacing: '0', textTransform: 'none', flexShrink: 0,
         }}>
           Trending
         </span>

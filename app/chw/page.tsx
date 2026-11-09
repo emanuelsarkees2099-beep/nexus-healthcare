@@ -6,7 +6,7 @@ import { Profile2User, Location, Call, Global, TickCircle, SearchNormal1 } from 
 /* ─── reveal hook ─────────────────────────────────── */
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
   useEffect(() => {
     const el = ref.current; if (!el) return
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } }, { threshold })
@@ -68,12 +68,10 @@ export default function CHWPage() {
         {/* ── Hero ── */}
         <section style={{ maxWidth: '900px', margin: '0 auto', padding: 'clamp(48px, 8vh, 96px) clamp(20px, 5vw, 32px) 0', textAlign: 'center' }}>
           <RevealBlock>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', borderRadius: '100px', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.22)', color: 'var(--accent)', fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', marginBottom: '24px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', borderRadius: '100px', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.22)', color: 'var(--accent)', fontSize: '12px', fontWeight: 600, letterSpacing: '0', textTransform: 'none', fontFamily: 'var(--font-inter)', marginBottom: '24px' }}>
               <Profile2User size={14} variant="Bold" /> Community Health Workers
             </div>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.2rem, 5vw, 3.6rem)', fontWeight: 800, letterSpacing: '-0.035em', lineHeight: 1.08, marginBottom: '20px', color: 'var(--text)' }}>
-              A real person to help you<br />navigate care.
-            </h1>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.12, margin: '0 0 18px', color: 'var(--text)' }}>Get help from a community health worker</h1>
             <p style={{ fontSize: 'clamp(1rem, 1.4vw, 1.1rem)', color: 'var(--text-2)', lineHeight: 1.7, maxWidth: '560px', margin: '0 auto', fontFamily: 'var(--font-inter)' }}>
               A community health worker (CHW), or <em>promotor/a de salud</em>, is a trusted member of your
               community trained to help you find and use healthcare — often free, often in your language.

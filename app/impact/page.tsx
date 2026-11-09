@@ -5,7 +5,7 @@ import { TrendUp, Global, ShieldTick, TickCircle, SearchNormal1 } from 'iconsax-
 
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
   useEffect(() => {
     const el = ref.current; if (!el) return
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } }, { threshold })
@@ -48,12 +48,10 @@ export default function ImpactPage() {
         {/* Hero */}
         <section style={{ maxWidth: '820px', margin: '0 auto', padding: 'clamp(48px, 8vh, 96px) clamp(20px, 5vw, 32px) 0', textAlign: 'center' }}>
           <Reveal>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', borderRadius: '100px', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.22)', color: 'var(--accent)', fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', marginBottom: '24px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', borderRadius: '100px', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.22)', color: 'var(--accent)', fontSize: '12px', fontWeight: 600, letterSpacing: '0', textTransform: 'none', fontFamily: 'var(--font-inter)', marginBottom: '24px' }}>
               <TrendUp size={14} variant="Bold" /> Our Impact
             </div>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.2rem, 5vw, 3.6rem)', fontWeight: 800, letterSpacing: '-0.035em', lineHeight: 1.08, marginBottom: '20px', color: 'var(--text)' }}>
-              Built to measure what<br />actually matters.
-            </h1>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.12, margin: '0 0 18px', color: 'var(--text)' }}>Our impact</h1>
             <p style={{ fontSize: 'clamp(1rem, 1.4vw, 1.1rem)', color: 'var(--text-2)', lineHeight: 1.7, maxWidth: '560px', margin: '0 auto', fontFamily: 'var(--font-inter)' }}>
               AXVO is new. Rather than invent numbers, we&apos;ll publish real, transparent outcomes here
               as we grow — and hold ourselves to them. Here is the problem we exist to solve, and what
@@ -65,7 +63,7 @@ export default function ImpactPage() {
         {/* The problem */}
         <section style={{ maxWidth: '1000px', margin: '0 auto', padding: 'clamp(48px, 8vh, 80px) clamp(20px, 5vw, 32px) 0' }}>
           <Reveal>
-            <p style={{ textAlign: 'center', fontSize: '12px', fontWeight: 650, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '28px', fontFamily: 'var(--font-mono)' }}>
+            <p style={{ textAlign: 'center', fontSize: '12px', fontWeight: 650, letterSpacing: '0', textTransform: 'none', color: 'var(--accent)', marginBottom: '28px', fontFamily: 'var(--font-inter)' }}>
               The problem we&apos;re built for
             </p>
           </Reveal>
@@ -75,7 +73,7 @@ export default function ImpactPage() {
                 <div style={{ textAlign: 'center', padding: '28px 20px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--r-card)', height: '100%' }}>
                   <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 2.8rem)', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text)', lineHeight: 1, marginBottom: '10px' }}>{p.stat}</div>
                   <div style={{ fontSize: '13.5px', color: 'var(--text-2)', lineHeight: 1.5, fontFamily: 'var(--font-inter)', marginBottom: '8px' }}>{p.label}</div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-mono)', letterSpacing: '0.04em' }}>Source: {p.src}</div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', letterSpacing: '0.04em' }}>Source: {p.src}</div>
                 </div>
               </Reveal>
             ))}

@@ -143,7 +143,7 @@ const EN: Translations = {
 
   'home.hero.badge':          '27M uninsured Americans deserve better',
   'home.hero.headline':       'Free healthcare.\nFound in seconds.',
-  'home.hero.subheadline':    'AXVO finds free clinics, sliding-scale care, and hidden programs near you — no insurance required.',
+  'home.hero.subheadline':    'Search community health centers and free clinics, check which coverage programs you may qualify for, and find lower-cost prescriptions.',
   'home.hero.cta':            'Find free care near me',
   'home.hero.secondary':      'Learn how it works',
   'home.hero.zipPlaceholder': 'Enter ZIP or city…',

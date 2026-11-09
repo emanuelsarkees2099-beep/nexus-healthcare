@@ -65,7 +65,7 @@ export default function ProductMockup() {
       style={{ position: 'relative', zIndex: 2, maxWidth: '1080px', margin: '0 auto', padding: 'clamp(80px, 12vh, 130px) clamp(20px, 5vw, 40px) 0', textAlign: 'center' }}
     >
       <div style={{ marginBottom: '3rem', opacity: visible ? 1 : 0, transform: visible ? 'none' : 'translateY(18px)', transition: 'opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)' }}>
-        <p style={{ fontSize: '11px', fontWeight: 650, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '14px', fontFamily: 'var(--font-mono)' }}>
+        <p style={{ fontSize: '11px', fontWeight: 650, letterSpacing: '0', textTransform: 'none', color: 'var(--accent)', marginBottom: '14px', fontFamily: 'var(--font-inter)' }}>
           Your care, organized
         </p>
         <h2 id="mockup-title" style={{
@@ -89,7 +89,7 @@ export default function ProductMockup() {
         {/* Ambient glow behind the window */}
         <div aria-hidden="true" style={{
           position: 'absolute', inset: '-6% 4% 8%', borderRadius: '40px',
-          background: 'radial-gradient(ellipse 60% 55% at 50% 40%, rgba(79,142,240,0.28), rgba(79,142,240,0.06) 55%, transparent 72%)',
+          background: 'transparent',
           filter: 'blur(50px)', pointerEvents: 'none',
         }} />
 
@@ -99,7 +99,7 @@ export default function ProductMockup() {
           transition: 'transform 0.5s cubic-bezier(0.16,1,0.3,1)',
           borderRadius: '14px', overflow: 'hidden', textAlign: 'left',
           border: '1px solid rgba(255,255,255,0.10)',
-          background: 'linear-gradient(180deg, #0C1017, #080A0F)',
+          background: 'var(--accent)',
           boxShadow: '0 40px 100px rgba(0,0,0,0.6), 0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)',
         }}>
           {/* Title bar */}
@@ -108,18 +108,18 @@ export default function ProductMockup() {
               {['#FF5F57', '#FEBC2E', '#28C840'].map(c => <span key={c} style={{ width: '11px', height: '11px', borderRadius: '50%', background: c }} />)}
             </div>
             <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '8px', padding: '5px 14px', fontSize: '12px', color: 'var(--text-2)', fontFamily: 'var(--font-mono)' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '8px', padding: '5px 14px', fontSize: '12px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)' }}>
                 <Lock1 size={11} color="var(--text-3)" variant="Bold" /> axvohealth.com/dashboard
               </div>
             </div>
-            <span style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-mono)' }}>v1.0</span>
+            <span style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)' }}>v1.0</span>
           </div>
 
           {/* Body */}
           <div className="mockup-body" style={{ display: 'grid', gridTemplateColumns: '186px 1fr' }}>
             {/* Sidebar */}
             <aside className="mockup-sidebar" style={{ borderRight: '1px solid rgba(255,255,255,0.06)', padding: '22px 14px', display: 'flex', flexDirection: 'column', gap: '4px', background: 'rgba(255,255,255,0.012)' }}>
-              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, letterSpacing: '0.14em', fontSize: '15px', color: 'var(--text)', padding: '0 8px 14px', borderBottom: '1px solid rgba(255,255,255,0.06)', marginBottom: '10px' }}>AXVO</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, letterSpacing: '0', fontSize: '15px', color: 'var(--text)', padding: '0 8px 14px', borderBottom: '1px solid rgba(255,255,255,0.06)', marginBottom: '10px' }}>AXVO</div>
               {NAV.map(({ label, icon: Icon, active }) => (
                 <div key={label} className="mock-nav-item" style={{
                   display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 10px', borderRadius: '9px', fontSize: '13px', fontFamily: 'var(--font-inter)',
@@ -130,7 +130,7 @@ export default function ProductMockup() {
                   <Icon size={16} variant={active ? 'Bulk' : 'Linear'} color={active ? 'var(--accent2)' : 'var(--text-3)'} /> {label}
                 </div>
               ))}
-              <div style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-3)', padding: '18px 10px 8px' }}>My resources</div>
+              <div style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0', textTransform: 'none', color: 'var(--text-3)', padding: '18px 10px 8px' }}>My resources</div>
               {['Saved clinics', 'My care plan'].map(l => (
                 <div key={l} style={{ display: 'flex', alignItems: 'center', gap: '9px', padding: '7px 10px', fontSize: '12.5px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)' }}>
                   <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent)' }} /> {l}
@@ -154,10 +154,10 @@ export default function ProductMockup() {
               {/* Stat cards */}
               <div className="mock-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '22px' }}>
                 {STATS.map(s => (
-                  <div key={s.label} style={{ border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', padding: '16px', background: 'linear-gradient(160deg, rgba(79,142,240,0.06), rgba(255,255,255,0.01))' }}>
+                  <div key={s.label} style={{ border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', padding: '16px', background: 'rgba(255,255,255,0.06)' }}>
                     <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 2.6vw, 27px)', fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.02em', fontVariantNumeric: 'tabular-nums' }}>{s.value}</div>
                     <div style={{ fontSize: '12.5px', color: 'var(--text-2)', marginTop: '4px', fontFamily: 'var(--font-inter)' }}>{s.label}</div>
-                    <div style={{ fontSize: '10.5px', color: 'var(--accent2)', marginTop: '8px', fontFamily: 'var(--font-mono)' }}>{s.delta}</div>
+                    <div style={{ fontSize: '10.5px', color: 'var(--accent2)', marginTop: '8px', fontFamily: 'var(--font-inter)' }}>{s.delta}</div>
                   </div>
                 ))}
               </div>
@@ -170,15 +170,15 @@ export default function ProductMockup() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {CLINICS.map(c => (
                   <div key={c.name} className="mock-clinic-row" style={{ display: 'flex', alignItems: 'center', gap: '12px', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '11px', padding: '11px 14px', background: 'rgba(255,255,255,0.015)' }}>
-                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'linear-gradient(140deg, rgba(95,158,249,0.25), rgba(79,142,240,0.08))', border: '1px solid rgba(95,158,249,0.2)', display: 'grid', placeItems: 'center', fontSize: '11px', fontWeight: 700, color: 'var(--accent2)', fontFamily: 'var(--font-mono)', flexShrink: 0 }}>{c.init}</div>
+                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(95,158,249,0.2)', display: 'grid', placeItems: 'center', fontSize: '11px', fontWeight: 700, color: 'var(--accent2)', fontFamily: 'var(--font-inter)', flexShrink: 0 }}>{c.init}</div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--font-inter)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.name}</div>
-                      <div style={{ fontSize: '11.5px', color: 'var(--text-3)', fontFamily: 'var(--font-mono)', marginTop: '1px' }}>{c.meta}</div>
+                      <div style={{ fontSize: '11.5px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', marginTop: '1px' }}>{c.meta}</div>
                     </div>
                     <span style={{ fontSize: '11px', fontWeight: 600, padding: '4px 10px', borderRadius: '100px', flexShrink: 0,
                       color: c.open ? 'var(--success)' : 'var(--amber)',
-                      background: c.open ? 'rgba(52,211,153,0.10)' : 'rgba(217,119,6,0.10)',
-                      border: `1px solid ${c.open ? 'rgba(52,211,153,0.22)' : 'rgba(217,119,6,0.22)'}` }}>{c.status}</span>
+                      background: c.open ? 'rgba(79,142,240,0.10)' : 'rgba(217,119,6,0.10)',
+                      border: `1px solid ${c.open ? 'rgba(79,142,240,0.22)' : 'rgba(217,119,6,0.22)'}` }}>{c.status}</span>
                   </div>
                 ))}
               </div>

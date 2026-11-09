@@ -78,7 +78,7 @@ export default async function CityHubPage({ params }: PageProps) {
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '56px 24px 80px' }}>
         {/* Hero */}
         <div style={{ marginBottom: '40px' }}>
-          <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '12px' }}>
+          <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0', textTransform: 'none', color: 'var(--accent)', marginBottom: '12px' }}>
             {hub.stateName}
           </div>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '16px', color: 'var(--text)' }}>
@@ -123,7 +123,7 @@ export default async function CityHubPage({ params }: PageProps) {
                       {c.name}
                     </Link>
                     {c.free && (
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 600, color: 'var(--accent)', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', borderRadius: '100px', padding: '3px 10px' }}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 600, color: 'var(--accent)', background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.2)', borderRadius: '100px', padding: '3px 10px' }}>
                         <TickCircle size={11} variant="Bold" /> Free care
                       </span>
                     )}

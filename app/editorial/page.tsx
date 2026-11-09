@@ -9,11 +9,11 @@ import { CITY_HUBS } from '@/lib/city-hubs'
 // tied to a specific city (unlike the removed per-city clinic/population
 // numbers, which were invented and have been replaced with live data on
 // each city's own page).
-const CITY_COLORS = ['#4A90D9', '#a78bfa', '#fb923c', '#60a5fa', '#f472b6', '#fcd34d', '#4ade80', '#f87171', '#34d399', '#38bdf8']
+const CITY_COLORS = ['#4F8EF0', '#4F8EF0', '#4F8EF0', '#4F8EF0', '#4F8EF0', '#4F8EF0', '#4F8EF0', '#f87171', '#4F8EF0', '#38bdf8']
 
 function useReveal(threshold = 0.12) {
   const ref = useRef<HTMLDivElement>(null)
-  const [v, setV] = useState(false)
+  const [v, setV] = useState(true)
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); obs.disconnect() } }, { threshold })
     if (ref.current) obs.observe(ref.current)
@@ -31,11 +31,9 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 }
 
 const pill: React.CSSProperties = {
+  // Plain section label — no colored badge
   display: 'inline-flex', alignItems: 'center', gap: '6px',
-  padding: '4px 12px', borderRadius: '100px',
-  fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-  background: 'rgba(74,144,217,0.08)', color: 'var(--accent)',
-  border: '1px solid rgba(74,144,217,0.18)',
+  fontSize: '13px', fontWeight: 600, color: 'var(--text-2)',
 }
 
 type Article = {
@@ -72,7 +70,7 @@ const ARTICLES: Article[] = [
     author: 'Emanuel Sarkees',
     date: 'October 22, 2026',
     readTime: '8 min read',
-    color: '#A78BFA',
+    color: '#4F8EF0',
     featured: true,
     href: '/editorial/inciteful-med-interview',
     tldr: 'Inciteful Med searches more than 42 million peer-reviewed papers and explains what they say, citing the exact passage for each statement. Erika Warren on why the problem was never patients doing research, but the lack of trustworthy tools.',
@@ -87,7 +85,7 @@ const ARTICLES: Article[] = [
     author: 'Emanuel Sarkees',
     date: 'June 2, 2026',
     readTime: '7 min read',
-    color: '#34D399',
+    color: '#4F8EF0',
     tldr: 'Arizona\'s 10.3% uninsured rate (43rd in the nation) isn\'t random — it clusters in exactly the counties, industries, and communities policy has quietly excluded for decades.',
     body: [
       'Arizona has one of the worst rates of health coverage in the country, and it\'s tempting to treat that as one problem with one fix. It isn\'t. Geography, industry, immigration status, and forty years of specific policy choices all point at the same populations, which is why the gap has been so hard to close.',
@@ -128,7 +126,7 @@ const ARTICLES: Article[] = [
     author: 'Emanuel Sarkees',
     date: 'August 20, 2026',
     readTime: '6 min read',
-    color: '#F472B6',
+    color: '#4F8EF0',
     tldr: 'Physicians spend roughly 13 hours a week — nearly two full workdays — getting insurers to approve care they\'ve already decided their patients need. 95% say it gets in the way of necessary treatment.',
     body: [
       'Prior authorization requires a doctor to get insurance company sign-off before a patient can receive certain treatment, tests, or medication. Almost nobody knows it exists until a denial personally affects them or someone they love — and once it does, the frustration tends to compound, because the process wears down patients, physicians, and even the insurers administering it.',
@@ -149,7 +147,7 @@ const ARTICLES: Article[] = [
     author: 'Emanuel Sarkees',
     date: 'September 14, 2026',
     readTime: '7 min read',
-    color: '#60A5FA',
+    color: '#4F8EF0',
     tldr: 'More than 83 million Americans live where there aren\'t enough clinicians, and federal projections put the physician shortfall above 187,000 by 2037. The causes are a residency cap frozen since 1997, crushing debt, burnout, and falling pay, and each one has a policy fix.',
     body: [
       'More than 83 million Americans live in federally designated Health Professional Shortage Areas, places without enough clinicians to meet basic need. The AAMC projects a shortage of up to 86,000 physicians by 2036, and the National Center for Health Workforce Analysis puts the gap at 124,180 by 2027, growing to 187,130 by 2037.',
@@ -166,7 +164,7 @@ const ARTICLES: Article[] = [
 
 const CATEGORIES = ['All', 'Investigation', 'Data Story', 'Community']
 const CATEGORY_COLORS: Record<string, string> = {
-  Investigation: '#4A90D9', Guide: '#A78BFA', 'Data Story': '#FCD34D', Community: '#60A5FA',
+  Investigation: '#4F8EF0', Guide: '#4F8EF0', 'Data Story': '#4F8EF0', Community: '#4F8EF0',
 }
 
 function ArticleCard({ article, featured = false }: { article: Article; featured?: boolean }) {
@@ -176,7 +174,7 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
     return (
       <div style={{
         padding: '2px', borderRadius: '24px',
-        background: `linear-gradient(135deg, ${article.color}33, ${article.color}08)`,
+        background: 'rgba(255,255,255,0.06)',
         marginBottom: '32px',
       }}>
         <div style={{
@@ -187,14 +185,14 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
             <span style={{
               fontSize: '10px', fontWeight: 700, padding: '4px 12px', borderRadius: '100px',
               background: `${article.color}15`, border: `1px solid ${article.color}33`, color: article.color,
-              fontFamily: 'var(--font-inter)', letterSpacing: '0.08em', textTransform: 'uppercase',
+              fontFamily: 'var(--font-inter)', letterSpacing: '0', textTransform: 'none',
             }}>{article.tag}</span>
             <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)' }}>{article.readTime}</span>
             <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)' }}>{article.date}</span>
             <span style={{
               fontSize: '10px', fontWeight: 600, padding: '3px 10px', borderRadius: '100px',
-              background: 'rgba(252,211,77,0.1)', border: '1px solid rgba(252,211,77,0.25)', color: '#FCD34D',
-              fontFamily: 'var(--font-inter)', letterSpacing: '0.06em',
+              background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.25)', color: '#4F8EF0',
+              fontFamily: 'var(--font-inter)', letterSpacing: '0',
             }}>Featured</span>
           </div>
           <h2 style={{ fontSize: 'clamp(22px, 3.5vw, 36px)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.025em', marginBottom: '12px' }}>
@@ -208,7 +206,7 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
             padding: '14px 18px', borderRadius: '12px', marginBottom: '24px',
             background: `${article.color}08`, border: `1px solid ${article.color}22`,
           }}>
-            <span style={{ fontSize: '10px', fontWeight: 700, color: article.color, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: 'var(--font-inter)', marginRight: '8px' }}>TL;DR</span>
+            <span style={{ fontSize: '10px', fontWeight: 700, color: article.color, letterSpacing: '0', textTransform: 'none', fontFamily: 'var(--font-inter)', marginRight: '8px' }}>TL;DR</span>
             <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)', fontFamily: 'var(--font-inter)', lineHeight: 1.5 }}>{article.tldr}</span>
           </div>
           {article.href ? (
@@ -273,11 +271,11 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
       onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(255,255,255,0.07)'; el.style.background = 'rgba(255,255,255,0.02)'; el.style.transform = 'translateY(0)' }}
     >
       {/* Top accent */}
-      <div style={{ height: '3px', background: `linear-gradient(90deg, ${article.color}, ${article.color}44, transparent)` }} aria-hidden="true" />
+      <div style={{ height: '3px', background: 'rgba(255,255,255,0.08)' }} aria-hidden="true" />
 
       <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontSize: '10px', fontWeight: 700, padding: '3px 10px', borderRadius: '100px', background: `${article.color}15`, border: `1px solid ${article.color}33`, color: article.color, fontFamily: 'var(--font-inter)', letterSpacing: '0.07em', textTransform: 'uppercase' }}>{article.tag}</span>
+          <span style={{ fontSize: '10px', fontWeight: 700, padding: '3px 10px', borderRadius: '100px', background: `${article.color}15`, border: `1px solid ${article.color}33`, color: article.color, fontFamily: 'var(--font-inter)', letterSpacing: '0', textTransform: 'none' }}>{article.tag}</span>
           <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)', display: 'flex', alignItems: 'center', gap: '4px' }}>
             <Clock size={14} color="rgba(255,255,255,0.45)" variant="Linear" /> {article.readTime}
           </span>
@@ -287,7 +285,7 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
         <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.55, margin: 0 }}>{article.subhead}</p>
 
         <div style={{ padding: '12px 14px', borderRadius: '10px', background: `${article.color}08`, border: `1px solid ${article.color}18`, marginTop: 'auto' }}>
-          <span style={{ fontSize: '10px', fontWeight: 700, color: article.color, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: 'var(--font-inter)', marginRight: '6px' }}>TL;DR</span>
+          <span style={{ fontSize: '10px', fontWeight: 700, color: article.color, letterSpacing: '0', textTransform: 'none', fontFamily: 'var(--font-inter)', marginRight: '6px' }}>TL;DR</span>
           <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-inter)', lineHeight: 1.5 }}>{article.tldr}</span>
         </div>
 
@@ -362,15 +360,12 @@ export default function EditorialPage() {
         padding: '100px 24px 60px', textAlign: 'center',
         position: 'relative', overflow: 'hidden',
       }}>
-        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(74,144,217,0.08) 0%, transparent 65%)', pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'transparent', pointerEvents: 'none' }} />
         <Reveal>
           <div style={{ ...pill, marginBottom: '24px' }}><Book1 size={14} variant="Linear" /> Editorial</div>
         </Reveal>
         <Reveal delay={80}>
-          <h1 style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '20px', maxWidth: '700px', margin: '0 auto 20px' }}>
-            Stories that<br />
-            <em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>move the needle</em>
-          </h1>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.12, margin: '0 0 18px', color: 'var(--text)' }}>Editorial</h1>
         </Reveal>
         <Reveal delay={140}>
           <p style={{ fontSize: '17px', color: 'rgba(255,255,255,0.45)', maxWidth: '500px', lineHeight: 1.7, margin: '0 auto 40px' }}>
@@ -401,13 +396,13 @@ export default function EditorialPage() {
                       padding: '8px 18px', borderRadius: '100px', fontSize: '13px', fontWeight: 500,
                       fontFamily: 'inherit', cursor: 'pointer',
                       background: activeCategory === cat
-                        ? (cat === 'All' ? 'rgba(74,144,217,0.15)' : `${CATEGORY_COLORS[cat] || 'var(--accent)'}15`)
+                        ? (cat === 'All' ? 'rgba(79,142,240,0.15)' : `${CATEGORY_COLORS[cat] || 'var(--accent)'}15`)
                         : 'rgba(255,255,255,0.03)',
                       color: activeCategory === cat
                         ? (cat === 'All' ? 'var(--accent)' : CATEGORY_COLORS[cat] || 'var(--accent)')
                         : 'rgba(255,255,255,0.4)',
                       border: `1px solid ${activeCategory === cat
-                        ? (cat === 'All' ? 'rgba(74,144,217,0.35)' : `${CATEGORY_COLORS[cat] || 'var(--accent)'}35`)
+                        ? (cat === 'All' ? 'rgba(79,142,240,0.35)' : `${CATEGORY_COLORS[cat] || 'var(--accent)'}35`)
                         : 'rgba(255,255,255,0.08)'}`,
                       transition: 'all 0.2s',
                     }}
@@ -457,9 +452,9 @@ export default function EditorialPage() {
                   <div style={{ textAlign: 'center', marginTop: '40px' }}>
                     <button
                       onClick={() => setShowAll(true)}
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 32px', borderRadius: '100px', border: '1px solid rgba(74,144,217,0.3)', background: 'rgba(74,144,217,0.06)', color: 'var(--accent)', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.25s' }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.12)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,144,217,0.5)' }}
-                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.06)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,144,217,0.3)' }}
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 32px', borderRadius: '100px', border: '1px solid rgba(79,142,240,0.3)', background: 'rgba(79,142,240,0.06)', color: 'var(--accent)', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.25s' }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(79,142,240,0.12)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(79,142,240,0.5)' }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(79,142,240,0.06)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(79,142,240,0.3)' }}
                     >
                       Show {filtered.length - 3} more {filtered.length - 3 === 1 ? 'story' : 'stories'} <ArrowRight size={14} variant="Linear" />
                     </button>
@@ -510,7 +505,7 @@ export default function EditorialPage() {
                         <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <Buildings2 size={16} color={color} variant="Linear" aria-hidden="true" />
                         </div>
-                        <span style={{ fontSize: '11px', fontWeight: 700, color, letterSpacing: '0.08em', padding: '3px 8px', borderRadius: '6px', background: `${color}10`, border: `1px solid ${color}20` }}>{g.state}</span>
+                        <span style={{ fontSize: '11px', fontWeight: 700, color, letterSpacing: '0', padding: '3px 8px', borderRadius: '6px', background: `${color}10`, border: `1px solid ${color}20` }}>{g.state}</span>
                       </div>
                       <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '4px', color: 'var(--text)', letterSpacing: '-0.01em' }}>{g.city}</div>
                       <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', lineHeight: 1.4 }}>Listings sourced from HRSA &amp; public data</div>
@@ -529,7 +524,7 @@ export default function EditorialPage() {
           <Reveal>
             <div style={{
               marginTop: '48px', padding: '4px', borderRadius: '24px',
-              background: 'linear-gradient(135deg, rgba(74,144,217,0.2), rgba(74,144,217,0.04))',
+              background: 'rgba(255,255,255,0.06)',
             }}>
               <div style={{
                 borderRadius: '21px', padding: '48px',

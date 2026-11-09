@@ -52,7 +52,7 @@ export default function CTA() {
         position: 'absolute', left: '50%', top: '34%',
         width: 'min(760px, 110vw)', height: '420px',
         transform: 'translateX(-50%)',
-        background: 'radial-gradient(ellipse, rgba(79,142,240,0.10) 0%, rgba(79,142,240,0.04) 45%, transparent 70%)',
+        background: 'transparent',
         filter: 'blur(60px)',
         opacity: inView ? 1 : 0,
         transition: 'opacity 1s ease',
@@ -64,7 +64,7 @@ export default function CTA() {
         {/* Separator */}
         <div aria-hidden="true" style={{
           height: '1px',
-          background: 'linear-gradient(90deg, transparent, rgba(79,142,240,0.30) 30%, rgba(79,142,240,0.30) 70%, transparent)',
+          background: 'rgba(255,255,255,0.08)',
           marginBottom: '90px',
         }} />
 
@@ -101,7 +101,7 @@ export default function CTA() {
             textWrap: 'balance',
           }}
         >
-          Your health can&apos;t wait.
+          Find care near you today.
         </h2>
 
         {/* Subline */}
@@ -114,7 +114,7 @@ export default function CTA() {
           maxWidth: '480px',
           margin: '0 auto 2.75rem',
         }}>
-          Free clinics, hidden programs, real care — found in seconds.
+          Search free and sliding-scale clinics, or check which programs you may qualify for.
           No insurance, no signup, no cost.
         </p>
 

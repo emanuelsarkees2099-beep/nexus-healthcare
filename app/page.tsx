@@ -6,25 +6,19 @@ import HomeClientShell from '@/components/HomeClientShell'
 const Nav               = dynamic(() => import('@/components/Nav'))
 const Hero              = dynamic(() => import('@/components/Hero'))
 
-/* ── Content sections — 6 beats, each with one job ──
-   Hero (search) → Stats (live proof) → HowItWorks (3 steps) →
-   Features (product tiles) → Testimonials (voices) → CTA (ask again).
-   LogoMarquee / BeforeAfterBar / MissionFreeze / TrustBadges deleted:
-   implied partnerships and metrics we don't have. */
+/* ── Content sections ──
+   Hero (search) → Stats → Mission → How it works → Programs →
+   Who it's for → Data sources → FAQ → CTA.
+   ProductMockup (a decorative fake dashboard) and Features (a bento grid
+   duplicating the nav) were removed to keep the page focused. */
 const Stats             = dynamic(() => import('@/components/Stats'))
-const Features          = dynamic(() => import('@/components/Features'))
 const HowItWorks        = dynamic(() => import('@/components/HowItWorks'))
 const DataSources       = dynamic(() => import('@/components/DataSources'))
 const CTA               = dynamic(() => import('@/components/CTA'))
 const MissionBand       = dynamic(() => import('@/components/MissionBand'))
-const ProductMockup     = dynamic(() => import('@/components/ProductMockup'))
 const ProgramsShowcase  = dynamic(() => import('@/components/ProgramsShowcase'))
 const UseCases          = dynamic(() => import('@/components/UseCases'))
 const LandingFAQ        = dynamic(() => import('@/components/LandingFAQ'))
-/* Testimonials unmounted: the component contains 16 fabricated patient
-   quotes with invented names, dollar amounts, and medical situations —
-   an FTC/false-advertising liability for a healthcare product. It stays
-   in components/ (unmounted) until real, consented stories exist. */
 
 export default function Home() {
   return (
@@ -34,7 +28,7 @@ export default function Home() {
         Skip to main content
       </a>
 
-      {/* Browser-only components (canvas, scroll, CTA, crisis) in client boundary */}
+      {/* Browser-only components (crisis button) in a client boundary */}
       <HomeClientShell />
 
       {/* Navigation */}
@@ -45,8 +39,6 @@ export default function Home() {
         <Stats />
         <MissionBand />
         <HowItWorks />
-        <ProductMockup />
-        <Features />
         <ProgramsShowcase />
         <UseCases />
         <DataSources />

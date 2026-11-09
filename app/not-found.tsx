@@ -11,15 +11,15 @@ export default function NotFound() {
 
       {/* Logo */}
       <div style={{ marginBottom: '52px' }}>
-        <span style={{ fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 400, letterSpacing: '0.45em', color: 'rgba(255,255,255,0.6)' }}>AXVO</span>
+        <span style={{ fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 400, letterSpacing: '0', color: 'rgba(255,255,255,0.6)' }}>AXVO</span>
       </div>
 
       {/* 404 display */}
       <div style={{ position: 'relative', marginBottom: '36px' }}>
-        <p style={{ fontSize: 'clamp(80px, 18vw, 160px)', fontWeight: 900, color: 'rgba(74,144,217,0.06)', letterSpacing: '-0.05em', lineHeight: 1, margin: 0, userSelect: 'none', fontFamily: 'var(--font-mono, monospace)' }}>404</p>
+        <p style={{ fontSize: 'clamp(80px, 18vw, 160px)', fontWeight: 900, color: 'rgba(79,142,240,0.06)', letterSpacing: '-0.05em', lineHeight: 1, margin: 0, userSelect: 'none', fontFamily: 'var(--font-inter)' }}>404</p>
         <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <SearchNormal1 size={22} variant="Linear" style={{ color: 'var(--accent, #4A90D9)' }} />
+          <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <SearchNormal1 size={22} variant="Linear" style={{ color: 'var(--accent, #4F8EF0)' }} />
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@ export default function NotFound() {
       <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '48px' }}>
         <Link
           href="/search"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '13px 26px', background: 'var(--accent, #4A90D9)', color: '#020409', borderRadius: '100px', textDecoration: 'none', fontWeight: 700, fontSize: '14px', transition: 'opacity 0.2s' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '13px 26px', background: 'var(--accent, #4F8EF0)', color: '#020409', borderRadius: '100px', textDecoration: 'none', fontWeight: 700, fontSize: '14px', transition: 'opacity 0.2s' }}
         >
           <SearchNormal1 size={14} color="#020409" variant="Linear" /> Find a clinic
         </Link>
@@ -48,7 +48,7 @@ export default function NotFound() {
 
       {/* Emergency escalation — always visible on 404 per the vision spec */}
       <div style={{ maxWidth: '420px', width: '100%' }}>
-        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', marginBottom: '12px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Need immediate help?</p>
+        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', marginBottom: '12px', letterSpacing: '0', textTransform: 'none' }}>Need immediate help?</p>
         <EmergencyEscalation compact />
       </div>
     </div>

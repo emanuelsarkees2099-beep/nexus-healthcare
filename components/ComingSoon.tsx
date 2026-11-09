@@ -12,8 +12,8 @@ export default function ComingSoon({ title, description }: { title: string; desc
       <div style={{ maxWidth: 560, margin: '0 auto', padding: '120px 24px', textAlign: 'center' }}>
         <div style={{
           display: 'inline-block', marginBottom: 20, padding: '4px 12px', borderRadius: 100,
-          fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase',
-          color: 'var(--accent)', background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.18)',
+          fontSize: 11, fontWeight: 600, letterSpacing: '0', textTransform: 'none',
+          color: 'var(--accent)', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.18)',
         }}>
           Coming soon
         </div>

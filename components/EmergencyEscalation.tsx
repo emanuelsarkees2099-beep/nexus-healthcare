@@ -19,8 +19,8 @@ const RESOURCES = [
     description: 'Nearest ER, sorted by distance',
     href: '/search?type=emergency&sort=distance',
     color: 'var(--amber)',
-    bg: 'rgba(252,211,77,0.10)',
-    border: 'rgba(252,211,77,0.25)',
+    bg: 'rgba(79,142,240,0.10)',
+    border: 'rgba(79,142,240,0.25)',
     icon: <Location size={16} variant="Linear" color="var(--amber)" />,
   },
   {
@@ -29,8 +29,8 @@ const RESOURCES = [
     description: 'Suicide & Crisis Lifeline — free, 24/7',
     action: () => { window.location.href = 'tel:988' },
     color: 'var(--violet)',
-    bg: 'rgba(167,139,250,0.10)',
-    border: 'rgba(167,139,250,0.25)',
+    bg: 'rgba(79,142,240,0.10)',
+    border: 'rgba(79,142,240,0.25)',
     icon: <Cpu size={16} variant="Linear" color="var(--violet)" />,
   },
   {
@@ -39,8 +39,8 @@ const RESOURCES = [
     description: 'Text HOME to 741741 — free, 24/7',
     action: () => { window.location.href = 'sms:741741?body=HOME' },
     color: 'var(--violet)',
-    bg: 'rgba(167,139,250,0.10)',
-    border: 'rgba(167,139,250,0.25)',
+    bg: 'rgba(79,142,240,0.10)',
+    border: 'rgba(79,142,240,0.25)',
     icon: <MessageText1 size={16} variant="Linear" color="var(--violet)" />,
   },
   {
@@ -49,8 +49,8 @@ const RESOURCES = [
     description: '1-800-222-1222 — free, 24/7',
     action: () => { window.location.href = 'tel:18002221222' },
     color: 'var(--accent)',
-    bg: 'rgba(74,144,217,0.10)',
-    border: 'rgba(74,144,217,0.25)',
+    bg: 'rgba(79,142,240,0.10)',
+    border: 'rgba(79,142,240,0.25)',
     icon: <Health size={16} variant="Linear" color="var(--accent)" />,
   },
 ]

@@ -168,7 +168,7 @@ export default function SearchBar({
       {/* Glow ring — vital gradient halo on focus */}
       <div className="search-glow-ring" style={{
         position: 'absolute', inset: '-2px', borderRadius: '17px',
-        background: 'linear-gradient(135deg, rgba(79,142,240,0.45), rgba(106, 166, 255,0.35))',
+        background: 'rgba(255,255,255,0.06)',
         opacity: 0, transition: 'opacity 0.4s',
         zIndex: 0, pointerEvents: 'none', filter: 'blur(1px)',
       }} />
@@ -190,8 +190,8 @@ export default function SearchBar({
         }}
         onFocusCapture={e => {
           const w = e.currentTarget
-          w.style.borderColor = 'rgba(74,144,217,0.55)'
-          w.style.boxShadow = '0 0 0 1px rgba(74,144,217,0.22), 0 8px 36px rgba(0,0,0,0.40)'
+          w.style.borderColor = 'rgba(79,142,240,0.55)'
+          w.style.boxShadow = '0 0 0 1px rgba(79,142,240,0.22), 0 8px 36px rgba(0,0,0,0.40)'
           const glow = w.previousElementSibling as HTMLElement
           if (glow) {
             glow.style.opacity = '1'
@@ -202,7 +202,7 @@ export default function SearchBar({
         }}
         onBlurCapture={e => {
           const w = e.currentTarget
-          w.style.borderColor = 'rgba(74,144,217,0.22)'
+          w.style.borderColor = 'rgba(79,142,240,0.22)'
           w.style.boxShadow = '0 4px 24px rgba(0,0,0,0.30)'
           const glow = w.previousElementSibling as HTMLElement
           if (glow) {
@@ -340,7 +340,7 @@ export default function SearchBar({
           style={{
             position: 'absolute', top: 'calc(100% + 6px)', left: 0, right: 0, zIndex: 100,
             background: 'rgba(5,6,9,0.98)',
-            border: '1px solid rgba(74,144,217,0.22)',
+            border: '1px solid rgba(79,142,240,0.22)',
             borderRadius: 'var(--r-md)', overflow: 'hidden',
             backdropFilter: 'blur(24px)',
             boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
@@ -365,7 +365,7 @@ export default function SearchBar({
               style={{
                 width: '100%', textAlign: 'left',
                 padding: '10px 18px', display: 'flex', alignItems: 'center', gap: '10px',
-                background: i === suggestionIdx ? 'rgba(74,144,217,0.1)' : 'transparent',
+                background: i === suggestionIdx ? 'rgba(79,142,240,0.1)' : 'transparent',
                 border: 'none',
                 borderBottom: i < suggestions.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
                 color: i === suggestionIdx ? 'var(--accent)' : 'var(--text-2)',
@@ -374,7 +374,7 @@ export default function SearchBar({
               }}
               onMouseEnter={e => {
                 setSuggestionIdx(i)
-                e.currentTarget.style.background = 'rgba(74,144,217,0.1)'
+                e.currentTarget.style.background = 'rgba(79,142,240,0.1)'
                 e.currentTarget.style.color = 'var(--accent)'
               }}
               onMouseLeave={e => {

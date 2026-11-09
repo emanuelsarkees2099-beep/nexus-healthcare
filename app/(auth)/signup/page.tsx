@@ -34,8 +34,8 @@ function pwStrength(pw: string): { score: number; label: string; color: string }
   if (/[0-9]/.test(pw)) s++
   if (/[^A-Za-z0-9]/.test(pw)) s++
   if (s <= 1) return { score: s, label: 'Weak',   color: '#f87171' }
-  if (s <= 3) return { score: s, label: 'Fair',   color: '#fbbf24' }
-  return              { score: s, label: 'Strong', color: '#34d399' }
+  if (s <= 3) return { score: s, label: 'Fair',   color: '#4F8EF0' }
+  return              { score: s, label: 'Strong', color: '#4F8EF0' }
 }
 
 type UserType = 'patient' | 'provider'
@@ -212,12 +212,12 @@ export default function SignupPage() {
       <div aria-hidden="true" style={{
         position: 'absolute', top: '-80px', left: '50%', transform: 'translateX(-50%)',
         width: '700px', height: '400px',
-        background: 'radial-gradient(ellipse at 50% 0%, rgba(79,142,240,0.10) 0%, transparent 65%)',
+        background: 'transparent',
         filter: 'blur(20px)', pointerEvents: 'none',
       }} />
       <div aria-hidden="true" style={{
         position: 'absolute', inset: 0,
-        backgroundImage: 'radial-gradient(rgba(255,255,255,0.055) 1px, transparent 1px)',
+        backgroundImage: 'none',
         backgroundSize: '28px 28px',
         maskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 40%, transparent 100%)',
         WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 40%, transparent 100%)',
@@ -230,7 +230,7 @@ export default function SignupPage() {
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '9px', textDecoration: 'none', marginBottom: '6px' }}>
             <Image src="/axvo-badge.png" alt="" width={22} height={22} style={{ borderRadius: '50%' }} />
-            <span style={{ fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 400, letterSpacing: '0.42em', color: 'var(--text)', opacity: 0.90 }}>AXVO</span>
+            <span style={{ fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 400, letterSpacing: '0', color: 'var(--text)', opacity: 0.90 }}>AXVO</span>
           </Link>
           <p style={{ fontSize: '12px', color: 'var(--text-3)', letterSpacing: '0.02em', margin: 0 }}>
             Free healthcare for everyone
@@ -260,12 +260,12 @@ export default function SignupPage() {
 
         ) : success ? (
           <div className="success-card" style={{
-            background: 'rgba(52,211,153,0.05)', border: '1px solid rgba(52,211,153,0.18)',
+            background: 'rgba(79,142,240,0.05)', border: '1px solid rgba(79,142,240,0.18)',
             borderRadius: '16px', padding: '48px 32px', textAlign: 'center',
             boxShadow: '0 32px 80px rgba(0,0,0,0.50), inset 0 1px 0 rgba(255,255,255,0.07)',
           }}>
-            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(52,211,153,0.1)', border: '1px solid rgba(52,211,153,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
-              <TickCircle size={36} color="#34d399" variant="TwoTone" />
+            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+              <TickCircle size={36} color="#4F8EF0" variant="TwoTone" />
             </div>
             <h2 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px', letterSpacing: '-0.02em', fontFamily: 'var(--font-display)' }}>
               Account created!
@@ -319,7 +319,7 @@ export default function SignupPage() {
             {/* Divider */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
               <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.07)' }} />
-              <span style={{ fontSize: '11px', color: 'var(--text-3)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>or</span>
+              <span style={{ fontSize: '11px', color: 'var(--text-3)', letterSpacing: '0', textTransform: 'none' }}>or</span>
               <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.07)' }} />
             </div>
 
@@ -386,7 +386,7 @@ export default function SignupPage() {
                       borderColor: confirmPass && password !== confirmPass
                         ? 'rgba(248,113,113,0.4)'
                         : confirmPass && password === confirmPass
-                          ? 'rgba(52,211,153,0.4)'
+                          ? 'rgba(79,142,240,0.4)'
                           : focused === 'confirm' ? 'rgba(79,142,240,0.55)' : 'rgba(255,255,255,0.10)',
                     }}
                     disabled={loading} autoComplete="new-password" />
@@ -408,7 +408,7 @@ export default function SignupPage() {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                   {(['patient', 'provider'] as UserType[]).map(type => {
                     const active = userType === type
-                    const color  = type === 'patient' ? '#4F8EF0' : '#34d399'
+                    const color  = type === 'patient' ? '#4F8EF0' : '#4F8EF0'
                     return (
                       <button key={type} type="button" className="role-btn"
                         onClick={() => setUserType(type)}

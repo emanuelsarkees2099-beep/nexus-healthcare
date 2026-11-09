@@ -81,12 +81,12 @@ const TOOLS = [
   {
     href: '/medications', title: 'Medications', sub: 'Track & find savings',
     Icon: DocumentText,
-    bg: 'rgba(251,191,36,0.09)', border: 'rgba(251,191,36,0.18)', color: 'rgba(251,191,36,0.85)',
+    bg: 'rgba(79,142,240,0.09)', border: 'rgba(79,142,240,0.18)', color: 'rgba(79,142,240,0.85)',
   },
   {
     href: '/programs', title: 'Programs', sub: 'Assistance near you',
     Icon: Category,
-    bg: 'rgba(167,139,250,0.09)', border: 'rgba(167,139,250,0.18)', color: 'rgba(167,139,250,0.85)',
+    bg: 'rgba(79,142,240,0.09)', border: 'rgba(79,142,240,0.18)', color: 'rgba(79,142,240,0.85)',
   },
   {
     href: '/eligibility', title: 'Eligibility', sub: 'Check what you qualify for',
@@ -130,7 +130,7 @@ function SectionLabel({
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
       <p style={{
         margin: 0, fontSize: 10, fontWeight: 600,
-        letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--text-4)',
+        letterSpacing: '0', textTransform: 'none', color: 'var(--text-4)',
       }}>{label}</p>
       {action && (
         <Link href={action.href} style={{
@@ -160,15 +160,15 @@ function StepRow({
     }}>
       <div style={{
         width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
-        background: done ? 'rgba(52,211,153,0.12)' : 'transparent',
-        border: `1.5px solid ${done ? 'rgba(52,211,153,0.45)' : 'rgba(255,255,255,0.14)'}`,
+        background: done ? 'rgba(79,142,240,0.12)' : 'transparent',
+        border: `1.5px solid ${done ? 'rgba(79,142,240,0.45)' : 'rgba(255,255,255,0.14)'}`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         transition: 'border-color 0.2s, background 0.2s',
       }}>
         {done && (
           <svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true">
             <path d="M1.5 4.5L3.75 6.75L7.5 2.5"
-              stroke="rgba(52,211,153,0.9)" strokeWidth="1.5"
+              stroke="rgba(79,142,240,0.9)" strokeWidth="1.5"
               strokeLinecap="round" strokeLinejoin="round"
             />
           </svg>
@@ -235,8 +235,8 @@ function EligibilityCard({ p }: { p: ProgramResult }) {
             background: confColor, flexShrink: 0,
           }} />
           <span style={{
-            fontSize: 9.5, fontWeight: 700, letterSpacing: '0.08em',
-            textTransform: 'uppercase', color: confColor,
+            fontSize: 9.5, fontWeight: 700, letterSpacing: '0',
+            textTransform: 'none', color: confColor,
           }}>
             {CONFIDENCE_LABELS[p.confidence]}
           </span>
@@ -387,9 +387,9 @@ function buildFeedItems(
       body: 'Based on your age and health profile. Most are free with Medicaid or ACA coverage.',
       cta: 'View your calendar',
       href: '/calendar',
-      color: '#f59e0b',
-      bg: 'rgba(245,158,11,0.06)',
-      icon: <Calendar1 size={15} color="#f59e0b" variant="TwoTone" />,
+      color: '#4F8EF0',
+      bg: 'rgba(79,142,240,0.06)',
+      icon: <Calendar1 size={15} color="#4F8EF0" variant="TwoTone" />,
     })
   }
 
@@ -403,9 +403,9 @@ function buildFeedItems(
       body: 'A complete passport helps providers understand your needs and speeds up care.',
       cta: 'Complete passport',
       href: '/passport',
-      color: '#34d399',
-      bg: 'rgba(52,211,153,0.06)',
-      icon: <Health size={15} color="#34d399" variant="TwoTone" />,
+      color: '#4F8EF0',
+      bg: 'rgba(79,142,240,0.06)',
+      icon: <Health size={15} color="#4F8EF0" variant="TwoTone" />,
     })
   }
 
@@ -435,9 +435,9 @@ function buildFeedItems(
       body: 'Answer 7 quick questions to unlock personalized program recommendations.',
       cta: 'Check eligibility',
       href: '/onboarding',
-      color: '#60a5fa',
-      bg: 'rgba(96,165,250,0.06)',
-      icon: <MagicStar size={15} color="#60a5fa" variant="TwoTone" />,
+      color: '#4F8EF0',
+      bg: 'rgba(79,142,240,0.06)',
+      icon: <MagicStar size={15} color="#4F8EF0" variant="TwoTone" />,
     })
   }
 
@@ -523,7 +523,7 @@ function WeeklyTodos() {
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'none' }}
           >
             {checked[i]
-              ? <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" fill="rgba(52,211,153,0.15)" stroke="rgba(52,211,153,0.5)" strokeWidth="1.2"/><path d="M5.5 9L7.75 11.25L12.5 6.5" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              ? <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" fill="rgba(79,142,240,0.15)" stroke="rgba(79,142,240,0.5)" strokeWidth="1.2"/><path d="M5.5 9L7.75 11.25L12.5 6.5" stroke="#4F8EF0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               : <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="rgba(255,255,255,0.14)" strokeWidth="1.2"/></svg>
             }
             <span style={{ fontSize: 13, color: checked[i] ? 'var(--text-4)' : 'var(--text-2)', textDecoration: checked[i] ? 'line-through' : 'none', flex: 1, letterSpacing: '-0.01em' }}>
@@ -533,7 +533,7 @@ function WeeklyTodos() {
         ))}
         <div style={{ padding: '10px 20px 12px', display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{ flex: 1, height: 3, background: 'rgba(255,255,255,0.06)', borderRadius: 2, overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: `${(done / WEEKLY_TODOS.length) * 100}%`, background: 'linear-gradient(90deg,rgba(52,211,153,0.5),rgba(52,211,153,0.85))', borderRadius: 2, transition: 'width 0.4s cubic-bezier(0.16,1,0.3,1)' }} />
+            <div style={{ height: '100%', width: `${(done / WEEKLY_TODOS.length) * 100}%`, background: 'var(--accent)', borderRadius: 2, transition: 'width 0.4s cubic-bezier(0.16,1,0.3,1)' }} />
           </div>
           <span style={{ fontSize: 11, color: 'var(--text-4)', fontWeight: 600 }}>{done}/{WEEKLY_TODOS.length}</span>
         </div>
@@ -821,7 +821,7 @@ export default function DashboardPage() {
           <Image src="/axvo-badge.png" alt="" width={17} height={17} style={{ borderRadius: '50%' }} />
           <span style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 11, fontWeight: 400, letterSpacing: '0.44em',
+            fontSize: 11, fontWeight: 400, letterSpacing: '0',
             color: 'rgba(255,255,255,0.65)',
           }}>AXVO</span>
         </Link>
@@ -849,7 +849,7 @@ export default function DashboardPage() {
               aria-label="User menu" aria-expanded={menuOpen}
               style={{
                 width: 32, height: 32, borderRadius: '50%',
-                background: 'linear-gradient(135deg,rgba(79,142,240,0.38) 0%,rgba(79,142,240,0.14) 100%)',
+                background: 'rgba(255,255,255,0.06)',
                 border: `1.5px solid ${menuOpen ? 'rgba(79,142,240,0.55)' : 'rgba(79,142,240,0.22)'}`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 cursor: 'pointer', fontSize: 11, fontWeight: 700,
@@ -880,7 +880,7 @@ export default function DashboardPage() {
                   {profile?.user_type && (
                     <span style={{
                       display: 'inline-block', fontSize: 10, fontWeight: 600,
-                      letterSpacing: '0.07em', textTransform: 'uppercase',
+                      letterSpacing: '0', textTransform: 'none',
                       padding: '2px 7px', borderRadius: 4,
                       background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.20)',
                       color: 'rgba(79,142,240,0.85)',
@@ -949,10 +949,10 @@ export default function DashboardPage() {
                   <p style={{ margin: 0, fontSize: 13, color: 'var(--text-3)' }}>{todayLabel()}</p>
                   {isProvider && (
                     <span style={{
-                      fontSize: 10, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase',
+                      fontSize: 10, fontWeight: 600, letterSpacing: '0', textTransform: 'none',
                       padding: '2px 7px', borderRadius: 4,
-                      background: 'rgba(52,211,153,0.09)', border: '1px solid rgba(52,211,153,0.20)',
-                      color: 'rgba(52,211,153,0.75)',
+                      background: 'rgba(79,142,240,0.09)', border: '1px solid rgba(79,142,240,0.20)',
+                      color: 'rgba(79,142,240,0.75)',
                     }}>Provider</span>
                   )}
                 </div>
@@ -989,7 +989,7 @@ export default function DashboardPage() {
                   </svg>
                 )
               })()}
-              <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: healthScore.color, textAlign: 'center' }}>
+              <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0', textTransform: 'none', color: healthScore.color, textAlign: 'center' }}>
                 {healthScore.label}
               </div>
               <div style={{ fontSize: 9.5, color: 'var(--text-4)', textAlign: 'center' }}>
@@ -1095,10 +1095,10 @@ export default function DashboardPage() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div style={{
                     width: 38, height: 38, borderRadius: 10,
-                    background: 'rgba(52,211,153,0.09)', border: '1px solid rgba(52,211,153,0.18)',
+                    background: 'rgba(79,142,240,0.09)', border: '1px solid rgba(79,142,240,0.18)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
-                    <Health size={17} color="rgba(52,211,153,0.85)" variant="TwoTone" />
+                    <Health size={17} color="rgba(79,142,240,0.85)" variant="TwoTone" />
                   </div>
                   <ArrowRight2 size={13} color="rgba(255,255,255,0.20)" variant="Linear" />
                 </div>
@@ -1113,7 +1113,7 @@ export default function DashboardPage() {
                       <div style={{ height: 3, background: 'rgba(255,255,255,0.07)', borderRadius: 2, overflow: 'hidden', marginBottom: 6 }}>
                         <div style={{
                           height: '100%', width: `${pct}%`,
-                          background: 'linear-gradient(90deg,rgba(52,211,153,0.55),rgba(52,211,153,0.90))',
+                          background: 'var(--accent)',
                           borderRadius: 2, transition: 'width 1.2s cubic-bezier(0.16,1,0.3,1)',
                         }} />
                       </div>
@@ -1128,8 +1128,8 @@ export default function DashboardPage() {
                     <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                       {done
                         ? <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                            <circle cx="7" cy="7" r="6" fill="rgba(52,211,153,0.12)" stroke="rgba(52,211,153,0.40)" strokeWidth="1"/>
-                            <path d="M4.5 7L6.25 8.75L9.5 5" stroke="rgba(52,211,153,0.85)" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                            <circle cx="7" cy="7" r="6" fill="rgba(79,142,240,0.12)" stroke="rgba(79,142,240,0.40)" strokeWidth="1"/>
+                            <path d="M4.5 7L6.25 8.75L9.5 5" stroke="rgba(79,142,240,0.85)" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
                         : <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                             <circle cx="7" cy="7" r="6" stroke="rgba(255,255,255,0.12)" strokeWidth="1"/>
@@ -1185,9 +1185,9 @@ export default function DashboardPage() {
           <div className="qa-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
             {([
               { href: '/triage',      label: 'I need care now',        Icon: Danger,      color: 'rgba(248,113,113,0.85)', bg: 'rgba(248,113,113,0.07)', border: 'rgba(248,113,113,0.18)' },
-              { href: '/medications', label: 'Refill a prescription',  Icon: Activity,    color: 'rgba(251,191,36,0.85)',  bg: 'rgba(251,191,36,0.07)',  border: 'rgba(251,191,36,0.18)'  },
+              { href: '/medications', label: 'Refill a prescription',  Icon: Activity,    color: 'rgba(79,142,240,0.85)',  bg: 'rgba(79,142,240,0.07)',  border: 'rgba(79,142,240,0.18)'  },
               { href: '/calendar',    label: 'Book a screening',       Icon: Calendar1,   color: 'rgba(79,142,240,0.85)',  bg: 'rgba(79,142,240,0.07)',  border: 'rgba(79,142,240,0.18)'  },
-              { href: '/chw',         label: 'Talk to someone',        Icon: MessageCircle, color: 'rgba(52,211,153,0.85)', bg: 'rgba(52,211,153,0.07)', border: 'rgba(52,211,153,0.18)' },
+              { href: '/chw',         label: 'Talk to someone',        Icon: MessageCircle, color: 'rgba(79,142,240,0.85)', bg: 'rgba(79,142,240,0.07)', border: 'rgba(79,142,240,0.18)' },
             ] as const).map(({ href, label, Icon, color, bg, border }) => (
               <Link key={href} href={href} style={{ textDecoration: 'none' }}>
                 <div className="qa-btn" style={{
@@ -1218,15 +1218,15 @@ export default function DashboardPage() {
             <Link href="/programs" style={{ textDecoration: 'none', display: 'block' }}>
               <div style={{
                 padding: '16px 20px', borderRadius: 14,
-                background: 'rgba(167,139,250,0.04)', border: '1px solid rgba(167,139,250,0.14)',
+                background: 'rgba(79,142,240,0.04)', border: '1px solid rgba(79,142,240,0.14)',
                 display: 'flex', alignItems: 'center', gap: 16,
                 transition: 'background 0.15s, border-color 0.15s', cursor: 'pointer',
               }}
-                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(167,139,250,0.07)'; el.style.borderColor = 'rgba(167,139,250,0.24)' }}
-                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(167,139,250,0.04)'; el.style.borderColor = 'rgba(167,139,250,0.14)' }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(79,142,240,0.07)'; el.style.borderColor = 'rgba(79,142,240,0.24)' }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(79,142,240,0.04)'; el.style.borderColor = 'rgba(79,142,240,0.14)' }}
               >
-                <div style={{ width: 34, height: 34, borderRadius: 10, flexShrink: 0, background: 'rgba(167,139,250,0.10)', border: '1px solid rgba(167,139,250,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <ShieldTick size={15} color="#a78bfa" variant="TwoTone" />
+                <div style={{ width: 34, height: 34, borderRadius: 10, flexShrink: 0, background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <ShieldTick size={15} color="#4F8EF0" variant="TwoTone" />
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>Medicaid renewals: re-check annually</div>
@@ -1238,15 +1238,15 @@ export default function DashboardPage() {
             <Link href="/programs" style={{ textDecoration: 'none', display: 'block' }}>
               <div style={{
                 padding: '16px 20px', borderRadius: 14,
-                background: 'rgba(74,222,128,0.03)', border: '1px solid rgba(74,222,128,0.12)',
+                background: 'rgba(79,142,240,0.03)', border: '1px solid rgba(79,142,240,0.12)',
                 display: 'flex', alignItems: 'center', gap: 16,
                 transition: 'background 0.15s, border-color 0.15s', cursor: 'pointer',
               }}
-                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(74,222,128,0.06)'; el.style.borderColor = 'rgba(74,222,128,0.20)' }}
-                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(74,222,128,0.03)'; el.style.borderColor = 'rgba(74,222,128,0.12)' }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(79,142,240,0.06)'; el.style.borderColor = 'rgba(79,142,240,0.20)' }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(79,142,240,0.03)'; el.style.borderColor = 'rgba(79,142,240,0.12)' }}
               >
-                <div style={{ width: 34, height: 34, borderRadius: 10, flexShrink: 0, background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Flash size={15} color="#4ade80" variant="TwoTone" />
+                <div style={{ width: 34, height: 34, borderRadius: 10, flexShrink: 0, background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Flash size={15} color="#4F8EF0" variant="TwoTone" />
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>ACA Open Enrollment: Nov 1 – Jan 15</div>
@@ -1300,19 +1300,19 @@ export default function DashboardPage() {
                   <div
                     style={{
                       padding: '16px 20px', borderRadius: 14,
-                      background: 'rgba(245,158,11,0.05)', border: '1px solid rgba(245,158,11,0.15)',
+                      background: 'rgba(79,142,240,0.05)', border: '1px solid rgba(79,142,240,0.15)',
                       display: 'flex', alignItems: 'center', gap: 16,
                       cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s',
                     }}
-                    onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(245,158,11,0.08)'; el.style.borderColor = 'rgba(245,158,11,0.25)' }}
-                    onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(245,158,11,0.05)'; el.style.borderColor = 'rgba(245,158,11,0.15)' }}
+                    onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(79,142,240,0.08)'; el.style.borderColor = 'rgba(79,142,240,0.25)' }}
+                    onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(79,142,240,0.05)'; el.style.borderColor = 'rgba(79,142,240,0.15)' }}
                   >
                     <div style={{
                       width: 34, height: 34, borderRadius: 10, flexShrink: 0,
-                      background: 'rgba(245,158,11,0.10)', border: '1px solid rgba(245,158,11,0.20)',
+                      background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.20)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                     }}>
-                      <Calendar1 size={15} color="rgba(245,158,11,0.85)" variant="TwoTone" />
+                      <Calendar1 size={15} color="rgba(79,142,240,0.85)" variant="TwoTone" />
                     </div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>
@@ -1357,9 +1357,9 @@ export default function DashboardPage() {
                 </div>
                 <div style={{
                   fontSize: 11, fontWeight: 600, letterSpacing: '0.03em',
-                  color: doneCount === gettingStarted.length ? 'rgba(52,211,153,0.75)' : 'rgba(79,142,240,0.75)',
-                  background: doneCount === gettingStarted.length ? 'rgba(52,211,153,0.09)' : 'rgba(79,142,240,0.09)',
-                  border: `1px solid ${doneCount === gettingStarted.length ? 'rgba(52,211,153,0.18)' : 'rgba(79,142,240,0.18)'}`,
+                  color: doneCount === gettingStarted.length ? 'rgba(79,142,240,0.75)' : 'rgba(79,142,240,0.75)',
+                  background: doneCount === gettingStarted.length ? 'rgba(79,142,240,0.09)' : 'rgba(79,142,240,0.09)',
+                  border: `1px solid ${doneCount === gettingStarted.length ? 'rgba(79,142,240,0.18)' : 'rgba(79,142,240,0.18)'}`,
                   padding: '2px 9px', borderRadius: 100,
                 }}>
                   {doneCount}/{gettingStarted.length}
@@ -1375,10 +1375,10 @@ export default function DashboardPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 16 }}>
                 <div style={{
                   width: 28, height: 28, borderRadius: 8,
-                  background: 'rgba(245,158,11,0.09)', border: '1px solid rgba(245,158,11,0.18)',
+                  background: 'rgba(79,142,240,0.09)', border: '1px solid rgba(79,142,240,0.18)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <Flash size={13} color="rgba(245,158,11,0.85)" variant="TwoTone" />
+                  <Flash size={13} color="rgba(79,142,240,0.85)" variant="TwoTone" />
                 </div>
                 <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text)', letterSpacing: '-0.01em' }}>
                   Today&apos;s Tip
@@ -1389,10 +1389,10 @@ export default function DashboardPage() {
               </p>
               <span style={{
                 display: 'inline-block', alignSelf: 'flex-start',
-                fontSize: 10, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase',
+                fontSize: 10, fontWeight: 600, letterSpacing: '0', textTransform: 'none',
                 padding: '3px 9px', borderRadius: 100,
-                background: 'rgba(245,158,11,0.09)', border: '1px solid rgba(245,158,11,0.18)',
-                color: 'rgba(245,158,11,0.75)',
+                background: 'rgba(79,142,240,0.09)', border: '1px solid rgba(79,142,240,0.18)',
+                color: 'rgba(79,142,240,0.75)',
               }}>
                 {tip.tag}
               </span>

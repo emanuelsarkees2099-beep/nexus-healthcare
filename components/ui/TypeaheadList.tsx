@@ -73,7 +73,7 @@ export default function TypeaheadList({
               {item.label}
             </span>
             {item.kind === 'state' && (
-              <span style={{ fontSize: '10px', color: 'var(--text-4)', letterSpacing: '0.08em', textTransform: 'uppercase', flexShrink: 0 }}>
+              <span style={{ fontSize: '10px', color: 'var(--text-4)', letterSpacing: '0', textTransform: 'none', flexShrink: 0 }}>
                 State
               </span>
             )}

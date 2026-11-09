@@ -106,8 +106,8 @@ function ClinicRow({ clinic }: { clinic: Clinic }) {
         textDecoration: 'none', transition: 'background 0.15s, border-color 0.15s',
       }}
       onMouseEnter={e => {
-        ;(e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.05)'
-        ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,144,217,0.18)'
+        ;(e.currentTarget as HTMLElement).style.background = 'rgba(79,142,240,0.05)'
+        ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(79,142,240,0.18)'
       }}
       onMouseLeave={e => {
         ;(e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)'
@@ -117,7 +117,7 @@ function ClinicRow({ clinic }: { clinic: Clinic }) {
       {/* Icon */}
       <div style={{
         width: 42, height: 42, borderRadius: '12px',
-        background: 'rgba(74,144,217,0.08)',
+        background: 'rgba(79,142,240,0.08)',
         display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
       }}>
         <Buildings2 size={18} color="var(--accent)" variant="Linear" />
@@ -163,7 +163,7 @@ function ClinicRow({ clinic }: { clinic: Clinic }) {
             style={{
               display: 'flex', alignItems: 'center', gap: '4px',
               padding: '4px 10px', borderRadius: '8px',
-              background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.15)',
+              background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.15)',
               color: 'var(--accent)', fontSize: '11px', fontWeight: 600,
               fontFamily: 'var(--font-inter)', textDecoration: 'none',
             }}
@@ -294,7 +294,7 @@ export default function ClinicsPage() {
 
         {/* ── Hero banner ──────────────────────────────────────────────────── */}
         <div style={{
-          background: 'linear-gradient(180deg, rgba(74,144,217,0.06) 0%, transparent 100%)',
+          background: 'transparent',
           borderBottom: '1px solid var(--border)',
           padding: '60px 24px 48px',
           textAlign: 'center',
@@ -303,21 +303,15 @@ export default function ClinicsPage() {
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
               padding: '6px 14px', borderRadius: '20px',
-              background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.18)',
+              background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.18)',
               color: 'var(--accent)', fontSize: '12px', fontWeight: 600,
-              marginBottom: '20px', letterSpacing: '0.04em', textTransform: 'uppercase' as const,
+              marginBottom: '20px', letterSpacing: '0.04em', textTransform: 'none',
             }}>
               <Location size={12} variant="Linear" />
               Clinic Directory
             </div>
 
-            <h1 style={{
-              fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 800, color: 'var(--text)',
-              letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '14px',
-            }}>
-              Find affordable care<br />
-              <span style={{ color: 'var(--accent)' }}>near you</span>
-            </h1>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.12, margin: '0 0 18px', color: 'var(--text)' }}>Clinic directory</h1>
 
             <p style={{ fontSize: '16px', color: 'var(--text-2)', lineHeight: 1.6, marginBottom: '32px' }}>
               Search thousands of federally qualified health centers, rural health
@@ -332,7 +326,7 @@ export default function ClinicsPage() {
                 <span style={{
                   display: 'inline-flex', alignItems: 'center', gap: '6px',
                   padding: '5px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 600,
-                  background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.25)',
+                  background: 'rgba(79,142,240,0.12)', border: '1px solid rgba(79,142,240,0.25)',
                   color: 'var(--accent)', fontFamily: 'var(--font-inter)',
                 }}>
                   Filtering by: {SERVICE_CATEGORIES.find(s => s.keyword === selectedService)?.label}
@@ -411,7 +405,7 @@ export default function ClinicsPage() {
                     cursor: 'pointer', fontFamily: 'var(--font-inter)', transition: 'background 0.15s, color 0.15s',
                   }}
                   onMouseEnter={e => {
-                    ;(e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.08)'
+                    ;(e.currentTarget as HTMLElement).style.background = 'rgba(79,142,240,0.08)'
                     ;(e.currentTarget as HTMLElement).style.color = 'var(--accent)'
                   }}
                   onMouseLeave={e => {
@@ -446,15 +440,15 @@ export default function ClinicsPage() {
                     display: 'flex', flexDirection: 'column', alignItems: 'center',
                     justifyContent: 'center', gap: '10px',
                     padding: '20px 16px', borderRadius: '14px',
-                    background: active ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.02)',
-                    border: active ? '1px solid rgba(74,144,217,0.28)' : '1px solid rgba(255,255,255,0.06)',
+                    background: active ? 'rgba(79,142,240,0.10)' : 'rgba(255,255,255,0.02)',
+                    border: active ? '1px solid rgba(79,142,240,0.28)' : '1px solid rgba(255,255,255,0.06)',
                     cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s',
                     fontFamily: 'var(--font-inter)',
                   }}
                   onMouseEnter={e => {
                     if (!active) {
-                      ;(e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.06)'
-                      ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,144,217,0.18)'
+                      ;(e.currentTarget as HTMLElement).style.background = 'rgba(79,142,240,0.06)'
+                      ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(79,142,240,0.18)'
                     }
                   }}
                   onMouseLeave={e => {
@@ -466,7 +460,7 @@ export default function ClinicsPage() {
                 >
                   <div style={{
                     width: 44, height: 44, borderRadius: '12px',
-                    background: active ? 'rgba(74,144,217,0.18)' : 'rgba(74,144,217,0.08)',
+                    background: active ? 'rgba(79,142,240,0.18)' : 'rgba(79,142,240,0.08)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
                     {icon}
@@ -483,7 +477,7 @@ export default function ClinicsPage() {
           {selectedService && !hasSearched && (
             <div style={{
               marginTop: '16px', padding: '14px 18px', borderRadius: '12px',
-              background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.14)',
+              background: 'rgba(79,142,240,0.06)', border: '1px solid rgba(79,142,240,0.14)',
               fontSize: '13px', color: 'var(--accent)', fontFamily: 'var(--font-inter)',
               display: 'flex', alignItems: 'center', gap: '8px',
             }}>
@@ -497,8 +491,8 @@ export default function ClinicsPage() {
           {!hasSearched && (
             <div style={{
               marginTop: '48px', padding: '32px', borderRadius: '20px',
-              background: 'linear-gradient(135deg, rgba(74,144,217,0.08), rgba(74,144,217,0.03))',
-              border: '1px solid rgba(74,144,217,0.14)',
+              background: 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(79,142,240,0.14)',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               gap: '24px', flexWrap: 'wrap' as const,
             }}>
@@ -561,8 +555,8 @@ export default function ClinicsPage() {
                   style={{
                     display: 'flex', alignItems: 'center', gap: '6px',
                     padding: '7px 14px', borderRadius: '10px',
-                    background: showFilters ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.04)',
-                    border: showFilters ? '1px solid rgba(74,144,217,0.25)' : '1px solid rgba(255,255,255,0.08)',
+                    background: showFilters ? 'rgba(79,142,240,0.12)' : 'rgba(255,255,255,0.04)',
+                    border: showFilters ? '1px solid rgba(79,142,240,0.25)' : '1px solid rgba(255,255,255,0.08)',
                     color: showFilters ? 'var(--accent)' : 'var(--text-2)',
                     fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-inter)',
                   }}
@@ -575,7 +569,7 @@ export default function ClinicsPage() {
                   style={{
                     display: 'flex', alignItems: 'center', gap: '6px',
                     padding: '7px 14px', borderRadius: '10px',
-                    background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.18)',
+                    background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.18)',
                     color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
                     textDecoration: 'none', fontFamily: 'var(--font-inter)',
                   }}
@@ -602,8 +596,8 @@ export default function ClinicsPage() {
                       style={{
                         padding: '5px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 600,
                         cursor: 'pointer', fontFamily: 'var(--font-inter)',
-                        background: filters.type === value ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.04)',
-                        border: filters.type === value ? '1px solid rgba(74,144,217,0.3)' : '1px solid rgba(255,255,255,0.08)',
+                        background: filters.type === value ? 'rgba(79,142,240,0.15)' : 'rgba(255,255,255,0.04)',
+                        border: filters.type === value ? '1px solid rgba(79,142,240,0.3)' : '1px solid rgba(255,255,255,0.08)',
                         color: filters.type === value ? 'var(--accent)' : 'var(--text-2)',
                       }}
                     >
@@ -625,8 +619,8 @@ export default function ClinicsPage() {
                     style={{
                       padding: '5px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 600,
                       cursor: 'pointer', fontFamily: 'var(--font-inter)',
-                      background: filters[key] ? 'rgba(74,222,128,0.10)' : 'rgba(255,255,255,0.04)',
-                      border: filters[key] ? '1px solid rgba(74,222,128,0.25)' : '1px solid rgba(255,255,255,0.08)',
+                      background: filters[key] ? 'rgba(79,142,240,0.10)' : 'rgba(255,255,255,0.04)',
+                      border: filters[key] ? '1px solid rgba(79,142,240,0.25)' : '1px solid rgba(255,255,255,0.08)',
                       color: filters[key] ? 'var(--green-pulse)' : 'var(--text-2)',
                     }}
                   >
@@ -656,7 +650,7 @@ export default function ClinicsPage() {
                     onClick={() => runSearch()}
                     style={{
                       padding: '10px 22px', borderRadius: '10px',
-                      background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)',
+                      background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.2)',
                       color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
                       cursor: 'pointer', fontFamily: 'var(--font-inter)',
                     }}
@@ -697,7 +691,7 @@ export default function ClinicsPage() {
                       href="/search"
                       style={{
                         padding: '10px 22px', borderRadius: '10px',
-                        background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)',
+                        background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.2)',
                         color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
                         fontFamily: 'var(--font-inter)', textDecoration: 'none',
                       }}
@@ -719,7 +713,7 @@ export default function ClinicsPage() {
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: '8px',
                     padding: '12px 28px', borderRadius: '12px',
-                    background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.18)',
+                    background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.18)',
                     color: 'var(--accent)', fontSize: '14px', fontWeight: 700,
                     textDecoration: 'none', fontFamily: 'var(--font-inter)',
                   }}

@@ -67,7 +67,7 @@ export default function LandingFAQ() {
       style={{ position: 'relative', zIndex: 2, maxWidth: '760px', margin: '0 auto', padding: 'clamp(80px, 12vh, 130px) clamp(20px, 5vw, 40px) 0' }}
     >
       <div style={{ textAlign: 'center', marginBottom: '2.5rem', opacity: visible ? 1 : 0, transform: visible ? 'none' : 'translateY(18px)', transition: 'opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)' }}>
-        <p style={{ fontSize: '11px', fontWeight: 650, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '14px', fontFamily: 'var(--font-mono)' }}>
+        <p style={{ fontSize: '11px', fontWeight: 650, letterSpacing: '0', textTransform: 'none', color: 'var(--accent)', marginBottom: '14px', fontFamily: 'var(--font-inter)' }}>
           Questions
         </p>
         <h2 id="faq-title" style={{

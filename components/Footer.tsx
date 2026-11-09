@@ -40,7 +40,7 @@ export default function Footer() {
       {/* Full-width gradient separator — dramatic top rule */}
       <div aria-hidden="true" style={{
         height: '1px',
-        background: 'linear-gradient(90deg, transparent 0%, rgba(79,142,240,0.22) 15%, rgba(79,142,240,0.45) 50%, rgba(79,142,240,0.22) 85%, transparent 100%)',
+        background: 'rgba(255,255,255,0.08)',
         marginBottom: '0',
       }} />
       {/* Glow bloom on separator */}
@@ -48,7 +48,7 @@ export default function Footer() {
         position: 'absolute', top: '-1px', left: '50%',
         transform: 'translateX(-50%)',
         width: '700px', height: '180px',
-        background: 'radial-gradient(ellipse at 50% 0%, rgba(79,142,240,0.09) 0%, transparent 65%)',
+        background: 'transparent',
         filter: 'blur(20px)', pointerEvents: 'none',
       }} />
 
@@ -58,8 +58,8 @@ export default function Footer() {
           marginBottom: '2.5rem',
           padding: '24px 28px',
           borderRadius: 'var(--r-md)',
-          background: 'rgba(74,144,217,0.04)',
-          border: '1px solid rgba(74,144,217,0.12)',
+          background: 'rgba(79,142,240,0.04)',
+          border: '1px solid rgba(79,142,240,0.12)',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           flexWrap: 'wrap', gap: '16px',
         }}>
@@ -72,7 +72,7 @@ export default function Footer() {
             </div>
           </div>
           {subState === 'done' ? (
-            <div style={{ fontSize: '13px', color: '#34d399', fontFamily: 'var(--font-inter)', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ fontSize: '13px', color: '#4F8EF0', fontFamily: 'var(--font-inter)', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '6px' }}>
               <TickCircle size={14} color="currentColor" variant="TwoTone" />
               You&apos;re subscribed!
             </div>
@@ -94,7 +94,7 @@ export default function Footer() {
                   color: 'var(--text)', fontFamily: 'var(--font-inter)', fontSize: '13px',
                   outline: 'none',
                 }}
-                onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.4)')}
+                onFocus={e => (e.currentTarget.style.borderColor = 'rgba(79,142,240,0.4)')}
                 onBlur={e => (e.currentTarget.style.borderColor = subState === 'error' ? 'rgba(248,113,113,0.4)' : 'rgba(255,255,255,0.09)')}
               />
               <button
@@ -135,14 +135,14 @@ export default function Footer() {
                 {/* Top accent line */}
                 <div aria-hidden="true" style={{
                   width: '100%', height: '1px',
-                  background: 'linear-gradient(90deg, rgba(74,144,217,0.55), rgba(138,181,188,0.4), transparent)',
+                  background: 'rgba(255,255,255,0.08)',
                 }} />
                 <span style={{
                   fontFamily: 'var(--font-display)',
                   fontSize: '11px', fontWeight: 400,
-                  letterSpacing: '0.5em', textTransform: 'uppercase',
+                  letterSpacing: '0', textTransform: 'none',
                   color: '#E8E0FF',
-                  textShadow: '0 0 10px rgba(74,144,217,0.5), 0 0 24px rgba(74,144,217,0.2)',
+                  textShadow: 'none',
                   paddingRight: '0.5em',
                 }}>
                   AXVO
@@ -150,7 +150,7 @@ export default function Footer() {
                 {/* Bottom accent line */}
                 <div aria-hidden="true" style={{
                   width: '100%', height: '1px',
-                  background: 'linear-gradient(90deg, rgba(74,144,217,0.55), rgba(138,181,188,0.4), transparent)',
+                  background: 'rgba(255,255,255,0.08)',
                 }} />
               </div>
             </div>
@@ -168,15 +168,15 @@ export default function Footer() {
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: '7px',
               marginTop: '1.25rem',
-              background: 'rgba(74,144,217,0.06)',
-              border: '1px solid rgba(74,144,217,0.12)',
+              background: 'rgba(79,142,240,0.06)',
+              border: '1px solid rgba(79,142,240,0.12)',
               borderRadius: 'var(--r-sm)',
               padding: '6px 12px',
             }}>
               <span aria-hidden="true" style={{
                 width: '5px', height: '5px', borderRadius: '50%',
-                background: '#60a5fa',
-                boxShadow: '0 0 6px rgba(96,165,250,0.5)',
+                background: '#4F8EF0',
+                boxShadow: 'none',
                 flexShrink: 0,
               }} />
               <span style={{
@@ -191,56 +191,49 @@ export default function Footer() {
           {/* Link columns */}
           {[
             {
-              title: 'Product',
+              title: 'Find care',
               links: [
-                { label: 'Clinic Finder',         href: '/search' },
-                { label: 'AI Care Pathways',       href: '/pathways' },
-                { label: 'Programs & Benefits',    href: '/programs' },
-                { label: 'Preventive Calendar',    href: '/calendar' },
+                { label: 'Find a clinic',  href: '/search' },
+                { label: 'Symptom guide',  href: '/triage' },
+                { label: 'Telehealth',     href: '/telehealth' },
+                { label: 'Crisis help',    href: '/crisis' },
               ],
             },
             {
-              title: 'Community',
+              title: 'Pay for care',
               links: [
-                { label: 'CHW Network',   href: '/chw' },
-                { label: 'Stories',       href: '/stories' },
-                { label: 'Rights & Legal',href: '/rights' },
-                { label: 'Advocacy Hub',  href: '/advocacy' },
+                { label: 'Eligibility',      href: '/eligibility' },
+                { label: 'How to apply',     href: '/programs' },
+                { label: 'Medications',      href: '/medications' },
+                { label: 'Know your rights', href: '/rights' },
               ],
             },
             {
-              title: 'Tools',
+              title: 'Learn',
               links: [
-                { label: 'Symptom Guide',  href: '/triage' },
-                { label: 'Health Passport',href: '/passport' },
-                { label: 'Crisis Support', href: '/crisis' },
+                { label: 'Editorial',          href: '/editorial' },
+                { label: 'Health workers',     href: '/chw' },
+                { label: 'Health equity data', href: '/equity' },
+                { label: 'Advocacy',           href: '/advocacy' },
+                { label: 'Share your story',   href: '/stories' },
               ],
             },
             {
-              title: 'Platform',
+              title: 'AXVO',
               links: [
-                { label: 'Impact Dashboard', href: '/impact' },
-                { label: 'Equity Lab',       href: '/equity' },
-                { label: 'Editorial',        href: '/editorial' },
-                { label: 'Partners',         href: '/partners' },
-                { label: 'Inciteful Med',    href: '/partners/inciteful-med' },
-              ],
-            },
-            {
-              title: 'Company',
-              links: [
-                { label: 'Medication Finder',           href: '/medications',                      external: false },
-                { label: 'About AXVO',                 href: '/about',                            external: false },
-                { label: 'Founder',                     href: '/founder',                          external: false },
-                { label: 'Privacy',                     href: '/privacy',                          external: false },
-                { label: 'Accessibility',               href: '/accessibility',                    external: false },
+                { label: 'About',         href: '/about',         external: false },
+                { label: 'Founder',       href: '/founder',       external: false },
+                { label: 'Partners',      href: '/partners',      external: false },
+                { label: 'Methodology',   href: '/methodology',   external: false },
+                { label: 'Privacy',       href: '/privacy',       external: false },
+                { label: 'Accessibility', href: '/accessibility', external: false },
               ],
             },
           ].map(col => (
             <div key={col.title}>
               <div style={{
                 fontSize: '10px', fontWeight: 500, color: 'var(--text-3)',
-                letterSpacing: '0.12em', textTransform: 'uppercase',
+                letterSpacing: '0', textTransform: 'none',
                 marginBottom: '1rem', fontFamily: 'var(--font-inter)',
               }}>
                 {col.title}
@@ -311,7 +304,7 @@ export default function Footer() {
             }}>
               <span aria-hidden="true" style={{
                 display: 'inline-block', width: '5px', height: '5px', borderRadius: '50%',
-                background: 'var(--success)', boxShadow: '0 0 6px rgba(52,211,153,0.6)',
+                background: 'var(--success)', boxShadow: 'none',
               }} />
               All systems operational
             </div>

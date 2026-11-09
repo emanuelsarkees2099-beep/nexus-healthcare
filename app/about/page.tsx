@@ -49,10 +49,10 @@ export default function AboutPage() {
           padding: 28px;
           transition: border-color 0.2s ease;
         }
-        .about-card:hover { border-color: rgba(74,144,217,0.25); }
+        .about-card:hover { border-color: rgba(79,142,240,0.25); }
         .about-cta-primary { transition: transform 0.2s, box-shadow 0.2s; }
-        .about-cta-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(74,144,217,0.4) !important; }
-        .about-cta-secondary:hover { color: var(--text) !important; border-color: rgba(74,144,217,0.3) !important; }
+        .about-cta-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(79,142,240,0.4) !important; }
+        .about-cta-secondary:hover { color: var(--text) !important; border-color: rgba(79,142,240,0.3) !important; }
         .about-source-link:hover { color: var(--accent) !important; }
         @media (max-width: 600px) {
           .about-facts-grid { grid-template-columns: repeat(2, 1fr) !important; }
@@ -70,31 +70,23 @@ export default function AboutPage() {
       }}>
         <div aria-hidden style={{
           position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(74,144,217,0.08) 0%, transparent 70%)',
+          background: 'transparent',
           pointerEvents: 'none',
         }} />
 
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '7px',
           padding: '5px 14px', borderRadius: '100px',
-          background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)',
+          background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.2)',
           marginBottom: '28px', fontSize: '11px', fontWeight: 600,
-          color: 'var(--accent)', letterSpacing: '0.12em', textTransform: 'uppercase',
+          color: 'var(--accent)', letterSpacing: '0', textTransform: 'none',
           fontFamily: 'var(--font-inter)',
         }}>
           <span aria-hidden style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--accent)', flexShrink: 0 }} />
           Our mission
         </div>
 
-        <h1 style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(2.2rem, 6vw, 4rem)',
-          fontWeight: 800, lineHeight: 1.1,
-          letterSpacing: '-0.035em', marginBottom: '24px',
-        }}>
-          Care finds<br />
-          <em style={{ fontStyle: 'normal', color: 'var(--accent)' }}>everyone.</em>
-        </h1>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.12, margin: '0 0 18px', color: 'var(--text)' }}>About AXVO</h1>
 
         <p style={{
           fontSize: '17px', color: 'var(--text-2)',
@@ -119,7 +111,7 @@ export default function AboutPage() {
               border: 'none', borderRadius: '12px', padding: '14px 28px',
               fontFamily: 'var(--font-inter)', fontSize: '14px', fontWeight: 600,
               textDecoration: 'none', letterSpacing: '0.01em',
-              boxShadow: '0 4px 20px rgba(74,144,217,0.3)',
+              boxShadow: '0 4px 20px rgba(79,142,240,0.3)',
             }}
           >
             Find free care near you
@@ -188,8 +180,8 @@ export default function AboutPage() {
         <div style={{ textAlign: 'center', marginBottom: '56px' }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: '8px',
-            fontSize: '11px', fontWeight: 400, letterSpacing: '0.14em',
-            textTransform: 'uppercase', color: 'var(--accent)',
+            fontSize: '11px', fontWeight: 400, letterSpacing: '0',
+            textTransform: 'none', color: 'var(--accent)',
             marginBottom: '1rem', fontFamily: 'var(--font-inter)',
           }}>
             <span aria-hidden style={{ display: 'inline-block', width: '16px', height: '1px', background: 'var(--accent)' }} />
@@ -218,7 +210,7 @@ export default function AboutPage() {
             <div key={v.title} className="about-card">
               <div style={{
                 width: '40px', height: '40px', borderRadius: '10px', flexShrink: 0,
-                background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)',
+                background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.2)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 color: 'var(--accent)', marginBottom: '18px',
               }}>
@@ -249,8 +241,8 @@ export default function AboutPage() {
         padding: '0 24px 80px', maxWidth: '800px', margin: '0 auto',
       }}>
         <div style={{
-          background: 'rgba(74,144,217,0.04)',
-          border: '1px solid rgba(74,144,217,0.15)',
+          background: 'rgba(79,142,240,0.04)',
+          border: '1px solid rgba(79,142,240,0.15)',
           borderRadius: '24px', padding: '40px',
         }}>
           <h2 style={{
@@ -293,8 +285,8 @@ export default function AboutPage() {
               <div key={col.label}>
                 <div style={{
                   fontSize: '11px', fontWeight: 600, color: col.color,
-                  fontFamily: 'var(--font-inter)', letterSpacing: '0.08em',
-                  textTransform: 'uppercase', marginBottom: '16px',
+                  fontFamily: 'var(--font-inter)', letterSpacing: '0',
+                  textTransform: 'none', marginBottom: '16px',
                   display: 'flex', alignItems: 'center', gap: '5px',
                 }}>
                   {col.icon} {col.label}
@@ -381,7 +373,7 @@ export default function AboutPage() {
               { n: '03', title: 'Get care', body: 'Get the address and phone number, call ahead to confirm hours, or reach a community health worker program for help navigating the system.' },
             ].map(s => (
               <div key={s.n} className="about-card" style={{ position: 'relative' }}>
-                <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.14em', marginBottom: '16px' }}>{s.n}</div>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '0', marginBottom: '16px' }}>{s.n}</div>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '18px', fontWeight: 600, letterSpacing: '-0.01em', marginBottom: '10px' }}>{s.title}</h3>
                 <p style={{ fontSize: '13px', color: 'var(--text-2)', fontFamily: 'var(--font-inter)', fontWeight: 300, lineHeight: 1.75, margin: 0 }}>{s.body}</p>
               </div>
@@ -438,7 +430,7 @@ export default function AboutPage() {
               background: 'var(--accent)', color: '#07070F',
               border: 'none', borderRadius: '12px', padding: '13px 24px',
               fontFamily: 'var(--font-inter)', fontSize: '14px', fontWeight: 600,
-              textDecoration: 'none', boxShadow: '0 4px 20px rgba(74,144,217,0.3)',
+              textDecoration: 'none', boxShadow: '0 4px 20px rgba(79,142,240,0.3)',
             }}
           >
             Find a free clinic

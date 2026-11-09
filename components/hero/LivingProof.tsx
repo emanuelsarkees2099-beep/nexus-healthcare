@@ -124,12 +124,12 @@ export default function LivingProof() {
         <span aria-hidden="true" style={{
           width: '6px', height: '6px', borderRadius: '50%',
           background: 'var(--success)',
-          boxShadow: '0 0 0 3px rgba(52,211,153,0.15)',
+          boxShadow: '0 0 0 3px rgba(79,142,240,0.15)',
           animation: 'lp-pulse 2.2s ease-in-out infinite',
         }} />
         <span style={{
-          fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase',
-          color: 'var(--text-3)', fontFamily: 'var(--font-mono)',
+          fontSize: '11px', letterSpacing: '0', textTransform: 'none',
+          color: 'var(--text-3)', fontFamily: 'var(--font-inter)',
         }}>
           {state.status === 'loading'
             ? 'Finding free care near you…'
@@ -212,8 +212,8 @@ export default function LivingProof() {
           margin-top: 2px;
           font-size: 10px; font-weight: 700;
           color: var(--success);
-          background: rgba(52,211,153,0.10);
-          border: 1px solid rgba(52,211,153,0.22);
+          background: rgba(79,142,240,0.10);
+          border: 1px solid rgba(79,142,240,0.22);
           border-radius: var(--r-xs);
           padding: 1px 7px;
         }

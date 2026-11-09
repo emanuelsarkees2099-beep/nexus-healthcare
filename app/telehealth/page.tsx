@@ -138,7 +138,7 @@ const SCRIPTS = [
     id: 'cobra',
     title: 'When you\'re on COBRA (too expensive)',
     badge: 'Recently uninsured',
-    badgeColor: '#60a5fa',
+    badgeColor: '#4F8EF0',
     steps: [
       { prompt: 'Mention your recent coverage loss:', script: '"I recently lost my employer coverage and I\'m on COBRA, but I can\'t afford the premiums. I have a 60-day Special Enrollment Period — can you see me as self-pay while I sort out a marketplace plan?"' },
       { prompt: 'Ask about ACA options:', script: '"Can you refer me to an enrollment navigator who can help me find a marketplace plan with premium tax credits? My income may qualify me for subsidized coverage."' },
@@ -148,7 +148,7 @@ const SCRIPTS = [
     id: 'medicaid-gap',
     title: 'If you\'re in the Medicaid coverage gap',
     badge: 'Non-expansion states',
-    badgeColor: '#fbbf24',
+    badgeColor: '#4F8EF0',
     steps: [
       { prompt: 'Explain your situation:', script: '"I earn too much for Medicaid in my state, but not enough for an ACA subsidy. I\'m in what\'s called the \'coverage gap.\' What options do I have for affordable care?"' },
       { prompt: 'Ask about FQHC sliding scale:', script: '"Do you operate on a sliding-scale fee schedule? I understand federally funded health centers are required to serve patients at reduced rates based on income."' },
@@ -166,8 +166,8 @@ const HOW_IT_WORKS = [
 
 const EMERGENCY = {
   crisis: { label: 'Mental Health Crisis', action: 'Call or text 988', href: 'tel:988', color: '#f87171' },
-  emergency: { label: 'Medical Emergency', action: 'Call 911', href: 'tel:911', color: '#fb923c' },
-  poison: { label: 'Poison Control', action: 'Call 1-800-222-1222', href: 'tel:18002221222', color: '#facc15' },
+  emergency: { label: 'Medical Emergency', action: 'Call 911', href: 'tel:911', color: '#4F8EF0' },
+  poison: { label: 'Poison Control', action: 'Call 1-800-222-1222', href: 'tel:18002221222', color: '#4F8EF0' },
 }
 
 /* #29 — Language filter options */
@@ -208,13 +208,10 @@ export default function TelehealthPage() {
         {/* ── HERO ─────────────────────────────── */}
         <section style={{ padding: '60px 24px 40px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
           <div style={{ maxWidth: '700px', margin: '0 auto' }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', borderRadius: '100px', fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.06em', marginBottom: '24px' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.2)', borderRadius: '100px', fontSize: '11px', color: 'var(--accent)', letterSpacing: '0', marginBottom: '24px' }}>
               <Video size={14} variant="Linear" /> TELEHEALTH ACCESS
             </span>
-            <h1 style={{ fontSize: 'clamp(34px, 6vw, 64px)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '20px', color: '#fff' }}>
-              See a doctor.<br />
-              <span style={{ color: 'var(--accent)' }}>From anywhere.</span>
-            </h1>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.12, margin: '0 0 18px', color: 'var(--text)' }}>See a clinician by phone or video</h1>
             <p style={{ fontSize: '17px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, marginBottom: '36px' }}>
               Real telehealth services that accept uninsured and low-income patients. No insurance required. Many are free or sliding-scale.
             </p>
@@ -238,7 +235,7 @@ export default function TelehealthPage() {
               {HOW_IT_WORKS.map((step) => (
                 <div key={step.step} style={{ padding: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-                    <span style={{ fontSize: '11px', color: 'rgba(74,144,217,0.5)', fontWeight: 700 }}>{step.step}</span>
+                    <span style={{ fontSize: '11px', color: 'rgba(79,142,240,0.5)', fontWeight: 700 }}>{step.step}</span>
                     <span style={{ color: 'var(--accent)' }}>{step.icon}</span>
                   </div>
                   <div style={{ fontSize: '15px', fontWeight: 600, color: '#eef4f5', marginBottom: '8px' }}>{step.title}</div>
@@ -275,9 +272,9 @@ export default function TelehealthPage() {
                     style={{
                       padding: '4px 11px', borderRadius: '100px', fontSize: '11px', fontWeight: 500,
                       cursor: 'pointer', fontFamily: 'inherit', border: '1px solid', transition: 'all 0.15s',
-                      background: langFilter === l ? 'rgba(167,139,250,0.12)' : 'transparent',
-                      color: langFilter === l ? '#a78bfa' : 'rgba(255,255,255,0.4)',
-                      borderColor: langFilter === l ? 'rgba(167,139,250,0.3)' : 'rgba(255,255,255,0.1)',
+                      background: langFilter === l ? 'rgba(79,142,240,0.12)' : 'transparent',
+                      color: langFilter === l ? '#4F8EF0' : 'rgba(255,255,255,0.4)',
+                      borderColor: langFilter === l ? 'rgba(79,142,240,0.3)' : 'rgba(255,255,255,0.1)',
                     }}
                   >
                     {l}
@@ -288,11 +285,11 @@ export default function TelehealthPage() {
 
             {/* Cost guide */}
             <div style={{ marginBottom: '20px', padding: '16px 20px', borderRadius: '14px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
-              <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.06em', textTransform: 'uppercase', flexShrink: 0 }}>What you'll pay</span>
+              <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', letterSpacing: '0', textTransform: 'none', flexShrink: 0 }}>What you'll pay</span>
               {([
-                { range: '$0 or low', label: 'With Medicaid / CHIP', color: '#34d399' },
-                { range: 'Sliding scale', label: 'Community health centers', color: '#60a5fa' },
-                { range: 'Varies', label: 'Self-pay services — check first', color: '#fbbf24' },
+                { range: '$0 or low', label: 'With Medicaid / CHIP', color: '#4F8EF0' },
+                { range: 'Sliding scale', label: 'Community health centers', color: '#4F8EF0' },
+                { range: 'Varies', label: 'Self-pay services — check first', color: '#4F8EF0' },
               ] as const).map(tier => (
                 <div key={tier.label} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ fontSize: '16px', fontWeight: 800, color: tier.color, fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>{tier.range}</span>
@@ -305,13 +302,13 @@ export default function TelehealthPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {filtered.map((p, i) => (
                 <div key={p.name} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', overflow: 'hidden', transition: 'border-color 0.2s' }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.25)')}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(79,142,240,0.25)')}
                   onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)')}>
 
                   {/* Header row */}
                   <div style={{ padding: '20px 24px', display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer' }}
                     onClick={() => setExpanded(expanded === i ? null : i)}>
-                    <span style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', flexShrink: 0 }}>{p.logo}</span>
+                    <span style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', flexShrink: 0 }}>{p.logo}</span>
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
                         <span style={{ fontSize: '16px', fontWeight: 700, color: '#eef4f5' }}>{p.name}</span>
@@ -319,7 +316,7 @@ export default function TelehealthPage() {
                       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
                         <span style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 600 }}>{p.cost}</span>
                         {p.wait && (
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '2px 8px', borderRadius: '100px', fontSize: '11px', fontWeight: 700, background: 'rgba(52,211,153,0.12)', color: '#34d399', border: '1px solid rgba(52,211,153,0.30)' }}>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '2px 8px', borderRadius: '100px', fontSize: '11px', fontWeight: 700, background: 'rgba(79,142,240,0.12)', color: '#4F8EF0', border: '1px solid rgba(79,142,240,0.30)' }}>
                             <Clock size={9} variant="Linear" /> {p.wait}
                           </span>
                         )}
@@ -334,21 +331,21 @@ export default function TelehealthPage() {
                     <div style={{ padding: '0 24px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
                       <div style={{ paddingTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '20px' }}>
                         <div>
-                          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginBottom: '8px', letterSpacing: '0.05em' }}>ACCEPTS</div>
+                          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginBottom: '8px', letterSpacing: '0' }}>ACCEPTS</div>
                           {p.accepts.map(a => <div key={a} style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', marginBottom: '4px' }}>• {a}</div>)}
                         </div>
                         <div>
-                          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginBottom: '8px', letterSpacing: '0.05em' }}>SPECIALTIES</div>
+                          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginBottom: '8px', letterSpacing: '0' }}>SPECIALTIES</div>
                           {p.specialties.map(s => <div key={s} style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', marginBottom: '4px' }}>• {s}</div>)}
                         </div>
                         <div>
-                          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginBottom: '8px', letterSpacing: '0.05em' }}>LANGUAGES</div>
+                          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginBottom: '8px', letterSpacing: '0' }}>LANGUAGES</div>
                           {p.languages.map(l => <div key={l} style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', marginBottom: '4px' }}>• {l}</div>)}
                         </div>
                       </div>
 
                       {p.note && (
-                        <div style={{ padding: '10px 14px', background: 'rgba(74,144,217,0.06)', borderRadius: '8px', fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginBottom: '16px', borderLeft: '2px solid rgba(74,144,217,0.3)' }}>
+                        <div style={{ padding: '10px 14px', background: 'rgba(79,142,240,0.06)', borderRadius: '8px', fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginBottom: '16px', borderLeft: '2px solid rgba(79,142,240,0.3)' }}>
                           <span style={{ color: 'var(--accent)', fontWeight: 600 }}>Note: </span>{p.note}
                         </div>
                       )}
@@ -381,7 +378,7 @@ export default function TelehealthPage() {
         <section style={{ padding: '60px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
           <div style={{ maxWidth: '960px', margin: '0 auto' }}>
             <div style={{ marginBottom: '36px' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.2)', borderRadius: '100px', fontSize: '11px', color: '#fbbf24', letterSpacing: '0.06em', marginBottom: '20px' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.2)', borderRadius: '100px', fontSize: '11px', color: '#4F8EF0', letterSpacing: '0', marginBottom: '20px' }}>
                 <MagicStar size={14} variant="Linear" /> WHAT TO SAY
               </span>
               <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#fff', marginBottom: '8px' }}>
@@ -395,7 +392,7 @@ export default function TelehealthPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {SCRIPTS.map(script => (
                 <div key={script.id} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '18px', overflow: 'hidden', transition: 'border-color 0.2s' }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(251,191,36,0.2)')}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(79,142,240,0.2)')}
                   onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)')}>
                   <div style={{ padding: '20px 24px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}
                     onClick={() => setExpandedScript(expandedScript === script.id ? null : script.id)}>
@@ -415,7 +412,7 @@ export default function TelehealthPage() {
                         {script.steps.map((step, si) => (
                           <div key={si} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px', overflow: 'hidden' }}>
                             <div style={{ padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(251,191,36,0.15)', border: '1px solid rgba(251,191,36,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, color: '#fbbf24', flexShrink: 0 }}>{si + 1}</span>
+                              <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(79,142,240,0.15)', border: '1px solid rgba(79,142,240,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, color: '#4F8EF0', flexShrink: 0 }}>{si + 1}</span>
                               <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.5 }}>{step.prompt}</span>
                             </div>
                             <div style={{ padding: '14px 16px', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
@@ -423,15 +420,15 @@ export default function TelehealthPage() {
                               <button
                                 onClick={() => copyScript(`${script.id}-${si}`, step.script)}
                                 title="Copy to clipboard"
-                                style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid', background: copiedScript === `${script.id}-${si}` ? 'rgba(74,144,217,0.1)' : 'rgba(255,255,255,0.03)', color: copiedScript === `${script.id}-${si}` ? 'var(--accent)' : 'rgba(255,255,255,0.35)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', borderColor: copiedScript === `${script.id}-${si}` ? 'rgba(74,144,217,0.3)' : 'rgba(255,255,255,0.08)', flexShrink: 0, fontFamily: 'inherit' }}>
+                                style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid', background: copiedScript === `${script.id}-${si}` ? 'rgba(79,142,240,0.1)' : 'rgba(255,255,255,0.03)', color: copiedScript === `${script.id}-${si}` ? 'var(--accent)' : 'rgba(255,255,255,0.35)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s', borderColor: copiedScript === `${script.id}-${si}` ? 'rgba(79,142,240,0.3)' : 'rgba(255,255,255,0.08)', flexShrink: 0, fontFamily: 'inherit' }}>
                                 {copiedScript === `${script.id}-${si}` ? <TickCircle size={13} color="var(--accent)" variant="Linear" /> : <Copy size={13} color="rgba(255,255,255,0.45)" variant="Linear" />}
                               </button>
                             </div>
                           </div>
                         ))}
                       </div>
-                      <div style={{ marginTop: '14px', padding: '10px 14px', background: 'rgba(251,191,36,0.04)', border: '1px solid rgba(251,191,36,0.12)', borderRadius: '10px', fontSize: '12px', color: 'rgba(255,255,255,0.4)', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-                        <Book1 size={13} style={{ color: '#fbbf24', marginTop: '1px', flexShrink: 0 }} variant="Linear" />
+                      <div style={{ marginTop: '14px', padding: '10px 14px', background: 'rgba(79,142,240,0.04)', border: '1px solid rgba(79,142,240,0.12)', borderRadius: '10px', fontSize: '12px', color: 'rgba(255,255,255,0.4)', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                        <Book1 size={13} style={{ color: '#4F8EF0', marginTop: '1px', flexShrink: 0 }} variant="Linear" />
                         <span>These scripts are based on patient rights under federal law. FQHCs are required to offer sliding-scale fees under Section 330 of the Public Health Service Act.</span>
                       </div>
                     </div>
@@ -450,11 +447,11 @@ export default function TelehealthPage() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
               {[
                 { label: 'Suicide & Crisis Lifeline', number: '988', href: 'tel:988', color: '#f87171' },
-                { label: 'Crisis Text Line', number: 'Text HOME to 741741', href: 'sms:741741?body=HOME', color: '#fb923c' },
-                { label: 'SAMHSA Substance Use', number: '1-800-662-4357', href: 'tel:18006624357', color: '#facc15' },
-                { label: 'National Domestic Violence', number: '1-800-799-7233', href: 'tel:18007997233', color: '#a78bfa' },
+                { label: 'Crisis Text Line', number: 'Text HOME to 741741', href: 'sms:741741?body=HOME', color: '#4F8EF0' },
+                { label: 'SAMHSA Substance Use', number: '1-800-662-4357', href: 'tel:18006624357', color: '#4F8EF0' },
+                { label: 'National Domestic Violence', number: '1-800-799-7233', href: 'tel:18007997233', color: '#4F8EF0' },
                 { label: 'FQHC Health Center Finder', number: 'findahealthcenter.hrsa.gov', href: 'https://findahealthcenter.hrsa.gov', color: 'var(--accent)' },
-                { label: 'HealthCare.gov Marketplace call center', number: '1-800-318-2596', href: 'tel:18003182596', color: '#60a5fa' },
+                { label: 'HealthCare.gov Marketplace call center', number: '1-800-318-2596', href: 'tel:18003182596', color: '#4F8EF0' },
               ].map(c => (
                 <a key={c.label} href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer"
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', textDecoration: 'none', transition: 'all 0.2s' }}

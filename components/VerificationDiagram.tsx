@@ -10,11 +10,11 @@ type Source = {
 }
 
 const SOURCES: Source[] = [
-  { id: 'hrsa', label: 'HRSA API',          sublabel: 'Federal FQHC registry',    color: '#60a5fa',  angle: 0 },
-  { id: 'nafc', label: 'NAFC Database',      sublabel: 'Free clinic network',      color: '#818cf8',  angle: 60 },
-  { id: 'chw',  label: 'CHW Confirmation',   sublabel: 'On-ground verification',   color: '#fbbf24',  angle: 120 },
-  { id: 'user', label: 'User Reports',       sublabel: 'Community-sourced data',   color: '#f472b6',  angle: 180 },
-  { id: 'call', label: 'Phone Verification', sublabel: 'Direct clinic calls',      color: '#fb923c',  angle: 240 },
+  { id: 'hrsa', label: 'HRSA API',          sublabel: 'Federal FQHC registry',    color: '#4F8EF0',  angle: 0 },
+  { id: 'nafc', label: 'NAFC Database',      sublabel: 'Free clinic network',      color: '#4F8EF0',  angle: 60 },
+  { id: 'chw',  label: 'CHW Confirmation',   sublabel: 'On-ground verification',   color: '#4F8EF0',  angle: 120 },
+  { id: 'user', label: 'User Reports',       sublabel: 'Community-sourced data',   color: '#4F8EF0',  angle: 180 },
+  { id: 'call', label: 'Phone Verification', sublabel: 'Direct clinic calls',      color: '#4F8EF0',  angle: 240 },
   { id: 'map',  label: 'Mapping Data',       sublabel: 'Location & hours',         color: '#38bdf8',  angle: 300 },
 ]
 
@@ -46,12 +46,12 @@ export default function VerificationDiagram() {
       <svg viewBox={`0 0 ${cx * 2} ${cy * 2}`} style={{ width: '280px', height: '200px', overflow: 'visible' }}>
         {/* Orbit ring */}
         <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(74,144,217,0.2)" strokeWidth="1" strokeDasharray="8 12"
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(79,142,240,0.2)" strokeWidth="1" strokeDasharray="8 12"
           style={{ animation: 'vd-spin 6s linear infinite' }} />
 
         {/* Center AXVO node */}
-        <circle cx={cx} cy={cy} r="24" fill="rgba(74,144,217,0.1)" stroke="rgba(74,144,217,0.3)" strokeWidth="1.5" />
-        <text x={cx} y={cy - 2} textAnchor="middle" fontSize="8" fontWeight="700" fill="rgba(74,144,217,0.9)" fontFamily="var(--font-display)">AXVO</text>
+        <circle cx={cx} cy={cy} r="24" fill="rgba(79,142,240,0.1)" stroke="rgba(79,142,240,0.3)" strokeWidth="1.5" />
+        <text x={cx} y={cy - 2} textAnchor="middle" fontSize="8" fontWeight="700" fill="rgba(79,142,240,0.9)" fontFamily="var(--font-display)">AXVO</text>
         <text x={cx} y={cy + 9} textAnchor="middle" fontSize="7" fill="rgba(255,255,255,0.4)" fontFamily="var(--font-inter,sans-serif)">Verified</text>
 
         {SOURCES.map((src, i) => {
@@ -92,7 +92,7 @@ export default function VerificationDiagram() {
 
       {/* Legend */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <div style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>
+        <div style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.4)', letterSpacing: '0', textTransform: 'none', marginBottom: '4px' }}>
           Verification sources
         </div>
         {SOURCES.map((src, i) => (

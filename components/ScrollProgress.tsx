@@ -38,7 +38,7 @@ export default function ScrollProgress() {
         style={{
           position: 'absolute', top: 0, left: 0,
           height: '100%', width: '0%',
-          background: 'linear-gradient(90deg, var(--accent), var(--accent2))',
+          background: 'var(--accent)',
           filter: 'blur(3px)',
           opacity: 0.7,
           transition: 'width 0.1s linear',
@@ -50,8 +50,8 @@ export default function ScrollProgress() {
         style={{
           position: 'relative',
           height: '100%', width: '0%',
-          background: 'linear-gradient(90deg, var(--accent), var(--accent2))',
-          boxShadow: '0 0 6px rgba(74,144,217,0.7)',
+          background: 'var(--accent)',
+          boxShadow: 'none',
           transition: 'width 0.1s linear',
         }}
       />

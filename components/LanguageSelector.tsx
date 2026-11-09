@@ -147,11 +147,11 @@ export default function LanguageSelector() {
           maxWidth: '560px',
           maxHeight: '90vh',
           overflowY: 'auto',
-          background: 'linear-gradient(160deg, #0d1315, #0a0d10)',
-          border: '1px solid rgba(74,144,217,0.18)',
+          background: 'rgba(255,255,255,0.06)',
+          border: '1px solid rgba(79,142,240,0.18)',
           borderRadius: '24px',
           padding: '2.5rem',
-          boxShadow: '0 48px 96px rgba(0,0,0,0.7), 0 0 0 1px rgba(74,144,217,0.06)',
+          boxShadow: '0 48px 96px rgba(0,0,0,0.7), 0 0 0 1px rgba(79,142,240,0.06)',
           animation: closing
             ? 'lang-slide-out 0.38s cubic-bezier(0.4,0,1,1) forwards'
             : 'lang-slide-in 0.5s cubic-bezier(0.16,1,0.3,1) forwards',
@@ -160,7 +160,7 @@ export default function LanguageSelector() {
         {/* Top glow line */}
         <div aria-hidden="true" style={{
           position: 'absolute', top: 0, left: '20%', right: '20%', height: '1px',
-          background: 'linear-gradient(90deg, transparent, rgba(74,144,217,0.55), transparent)',
+          background: 'rgba(255,255,255,0.08)',
         }} />
 
         {/* Close */}
@@ -184,12 +184,12 @@ export default function LanguageSelector() {
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: '6px',
             padding: '4px 12px', borderRadius: '100px',
-            background: 'rgba(74,144,217,0.08)',
-            border: '1px solid rgba(74,144,217,0.14)',
+            background: 'rgba(79,142,240,0.08)',
+            border: '1px solid rgba(79,142,240,0.14)',
             marginBottom: '16px',
           }}>
             <Global size={14} color="var(--accent)" variant="Linear" />
-            <span style={{ fontSize: '11px', color: 'var(--accent)', letterSpacing: '0.08em', fontFamily: 'var(--font-inter)' }}>AXVO · 12 languages</span>
+            <span style={{ fontSize: '11px', color: 'var(--accent)', letterSpacing: '0', fontFamily: 'var(--font-inter)' }}>AXVO · 12 languages</span>
           </div>
 
           <h2 style={{
@@ -287,12 +287,12 @@ function LangButton({
         padding: '10px 12px',
         borderRadius: '12px',
         border: selected
-          ? '1px solid rgba(74,144,217,0.55)'
+          ? '1px solid rgba(79,142,240,0.55)'
           : hovered
-            ? '1px solid rgba(74,144,217,0.25)'
+            ? '1px solid rgba(79,142,240,0.25)'
             : '1px solid rgba(255,255,255,0.07)',
         background: selected
-          ? 'rgba(74,144,217,0.12)'
+          ? 'rgba(79,142,240,0.12)'
           : hovered
             ? 'rgba(255,255,255,0.04)'
             : 'rgba(255,255,255,0.02)',
@@ -300,7 +300,7 @@ function LangButton({
         textAlign: 'left',
         transition: 'all 0.18s ease',
         animation: `lang-btn-in 0.4s ${delay}ms both`,
-        boxShadow: selected ? '0 0 0 3px rgba(74,144,217,0.08)' : 'none',
+        boxShadow: selected ? '0 0 0 3px rgba(79,142,240,0.08)' : 'none',
       }}
     >
       <span style={{ fontSize: '18px', lineHeight: 1, flexShrink: 0 }}>{lang.flag}</span>
@@ -308,7 +308,7 @@ function LangButton({
         <div style={{
           fontSize: '13px',
           fontWeight: 600,
-          color: selected ? '#8ab5bc' : hovered ? 'rgba(232,240,241,0.9)' : 'rgba(232,240,241,0.75)',
+          color: selected ? '#4F8EF0' : hovered ? 'rgba(232,240,241,0.9)' : 'rgba(232,240,241,0.75)',
           fontFamily: 'var(--font-display)',
           lineHeight: 1.2,
           whiteSpace: 'nowrap',

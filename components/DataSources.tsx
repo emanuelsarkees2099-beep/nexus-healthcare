@@ -34,7 +34,7 @@ export default function DataSources() {
       aria-labelledby="sources-title"
       style={{ position: 'relative', zIndex: 2, maxWidth: '1000px', margin: '0 auto', padding: 'clamp(72px, 11vh, 120px) clamp(20px, 5vw, 32px) 0', textAlign: 'center' }}
     >
-      <p style={{ fontSize: '12px', fontWeight: 650, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '14px', fontFamily: 'var(--font-mono)', opacity: visible ? 1 : 0, transition: 'opacity 0.6s ease' }}>
+      <p style={{ fontSize: '12px', fontWeight: 650, letterSpacing: '0', textTransform: 'none', color: 'var(--accent)', marginBottom: '14px', fontFamily: 'var(--font-inter)', opacity: visible ? 1 : 0, transition: 'opacity 0.6s ease' }}>
         Built on public data
       </p>
       <h2 id="sources-title" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.7rem, 3.4vw, 2.5rem)', fontWeight: 700, letterSpacing: '-0.035em', lineHeight: 1.12, marginBottom: '14px', color: 'var(--text)', opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(20px)', transition: 'opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)' }}>
@@ -58,7 +58,7 @@ export default function DataSources() {
               <ShieldTick size={15} variant="Bold" color="var(--accent)" aria-hidden="true" />
               <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-display)', letterSpacing: '-0.01em' }}>{s.name}</span>
             </div>
-            <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-mono)', marginBottom: '10px', lineHeight: 1.4 }}>{s.full}</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', marginBottom: '10px', lineHeight: 1.4 }}>{s.full}</div>
             <div style={{ fontSize: '12.5px', color: 'var(--text-2)', lineHeight: 1.5, fontFamily: 'var(--font-inter)' }}>{s.what}</div>
           </div>
         ))}

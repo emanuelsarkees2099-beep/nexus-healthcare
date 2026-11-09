@@ -107,10 +107,10 @@ function SavingsBar({ savings, maxSavings }: { savings: number; maxSavings: numb
     <div style={{ height: '8px', background: 'rgba(255,255,255,0.06)', borderRadius: '100px', overflow: 'hidden', marginTop: '8px' }}>
       <div style={{
         height: '100%', width: `${w}%`,
-        background: 'linear-gradient(90deg, #4A90D9, #60a5fa)',
+        background: 'var(--accent)',
         borderRadius: '100px',
         transition: 'width 1s cubic-bezier(0.16,1,0.3,1)',
-        boxShadow: '0 0 12px rgba(74,144,217,0.5)',
+        boxShadow: 'none',
       }} />
     </div>
   )
@@ -151,11 +151,11 @@ export default function CostCalculator() {
       <div style={{ textAlign: 'center', marginBottom: '56px' }}>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '7px',
-          background: 'rgba(252,211,77,0.08)', border: '1px solid rgba(252,211,77,0.2)',
+          background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.2)',
           borderRadius: '100px', padding: '5px 14px',
-          fontSize: '11px', fontWeight: 500, color: '#FCD34D',
-          fontFamily: 'var(--font-inter)', letterSpacing: '0.06em',
-          textTransform: 'uppercase', marginBottom: '24px',
+          fontSize: '11px', fontWeight: 500, color: '#4F8EF0',
+          fontFamily: 'var(--font-inter)', letterSpacing: '0',
+          textTransform: 'none', marginBottom: '24px',
         }}>
           <DollarSquare size={14} color="currentColor" variant="Linear" />
           Cost Calculator
@@ -167,7 +167,7 @@ export default function CostCalculator() {
           marginBottom: '16px',
         }}>
           The ER vs. the{' '}
-          <em style={{ fontStyle: 'normal', color: '#4A90D9' }}>free clinic</em>
+          <em style={{ fontStyle: 'normal', color: '#4F8EF0' }}>free clinic</em>
         </h2>
         <p style={{
           fontSize: '16px', color: 'rgba(255,255,255,0.45)',
@@ -191,11 +191,11 @@ export default function CostCalculator() {
               padding: '9px 20px', borderRadius: '100px',
               fontSize: '13px', fontWeight: 500, fontFamily: 'inherit',
               cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.16,1,0.3,1)',
-              background: selected === c.id ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.04)',
-              color: selected === c.id ? '#4A90D9' : 'rgba(255,255,255,0.55)',
-              border: `1px solid ${selected === c.id ? 'rgba(74,144,217,0.4)' : 'rgba(255,255,255,0.08)'}`,
+              background: selected === c.id ? 'rgba(79,142,240,0.15)' : 'rgba(255,255,255,0.04)',
+              color: selected === c.id ? '#4F8EF0' : 'rgba(255,255,255,0.55)',
+              border: `1px solid ${selected === c.id ? 'rgba(79,142,240,0.4)' : 'rgba(255,255,255,0.08)'}`,
               transform: selected === c.id ? 'translateY(-1px)' : 'none',
-              boxShadow: selected === c.id ? '0 4px 16px rgba(74,144,217,0.15)' : 'none',
+              boxShadow: selected === c.id ? '0 4px 16px rgba(79,142,240,0.15)' : 'none',
             }}
           >
             {c.label}
@@ -212,7 +212,7 @@ export default function CostCalculator() {
         {/* ER card */}
         <div style={{
           padding: '2px', borderRadius: '22px',
-          background: 'linear-gradient(135deg, rgba(248,113,113,0.25), rgba(248,113,113,0.05))',
+          background: 'rgba(255,255,255,0.06)',
         }}>
           <div style={{
             background: 'rgba(8,13,26,0.98)', borderRadius: '20px',
@@ -228,7 +228,7 @@ export default function CostCalculator() {
                   <Building size={16} color="#f87171" variant="TwoTone" />
                 </div>
               </div>
-              <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.08em', color: '#f87171', textTransform: 'uppercase', fontFamily: 'var(--font-inter)' }}>Emergency Room</span>
+              <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0', color: '#f87171', textTransform: 'none', fontFamily: 'var(--font-inter)' }}>Emergency Room</span>
             </div>
 
             <div style={{
@@ -257,7 +257,7 @@ export default function CostCalculator() {
         {/* Free clinic card */}
         <div style={{
           padding: '2px', borderRadius: '22px',
-          background: 'linear-gradient(135deg, rgba(74,144,217,0.25), rgba(74,144,217,0.05))',
+          background: 'rgba(255,255,255,0.06)',
         }}>
           <div style={{
             background: 'rgba(8,13,26,0.98)', borderRadius: '20px',
@@ -266,24 +266,24 @@ export default function CostCalculator() {
             {/* Best value badge */}
             <div style={{
               position: 'absolute', top: '-10px', right: '20px',
-              background: 'linear-gradient(135deg, #4A90D9, #60a5fa)',
+              background: 'rgba(255,255,255,0.06)',
               color: '#07070F', fontSize: '10px', fontWeight: 700,
               padding: '4px 12px', borderRadius: '100px',
-              fontFamily: 'var(--font-inter)', letterSpacing: '0.06em', textTransform: 'uppercase',
+              fontFamily: 'var(--font-inter)', letterSpacing: '0', textTransform: 'none',
             }}>
               Best choice
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Activity size={16} color="#4A90D9" variant="Linear" />
+              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(79,142,240,0.12)', border: '1px solid rgba(79,142,240,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Activity size={16} color="#4F8EF0" variant="Linear" />
               </div>
-              <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.08em', color: '#4A90D9', textTransform: 'uppercase', fontFamily: 'var(--font-inter)' }}>Free Clinic / FQHC</span>
+              <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0', color: '#4F8EF0', textTransform: 'none', fontFamily: 'var(--font-inter)' }}>Free Clinic / FQHC</span>
             </div>
 
             <div style={{
               fontSize: 'clamp(36px, 5vw, 56px)', fontWeight: 800,
-              color: '#4A90D9', letterSpacing: '-0.04em', lineHeight: 1,
+              color: '#4F8EF0', letterSpacing: '-0.04em', lineHeight: 1,
               marginBottom: '6px', fontFamily: 'var(--font-display)',
             }}>
               $0
@@ -294,10 +294,10 @@ export default function CostCalculator() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)' }}>
-                <Clock size={14} color="#4A90D9" variant="Linear" />
+                <Clock size={14} color="#4F8EF0" variant="Linear" />
                 Wait time: <strong style={{ color: 'var(--text)' }}>{condition.freeTime}</strong>
               </div>
-              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', lineHeight: 1.55, padding: '10px 12px', background: 'rgba(74,144,217,0.05)', borderRadius: '10px', borderLeft: '2px solid rgba(74,144,217,0.3)' }}>
+              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', lineHeight: 1.55, padding: '10px 12px', background: 'rgba(79,142,240,0.05)', borderRadius: '10px', borderLeft: '2px solid rgba(79,142,240,0.3)' }}>
                 {condition.freeNote}
               </div>
             </div>
@@ -309,11 +309,11 @@ export default function CostCalculator() {
                 padding: '13px', borderRadius: '12px',
                 background: 'var(--accent)', color: 'var(--bg)',
                 border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: 600,
-                fontFamily: 'inherit', boxShadow: '0 4px 20px rgba(74,144,217,0.3)',
+                fontFamily: 'inherit', boxShadow: '0 4px 20px rgba(79,142,240,0.3)',
                 transition: 'all 0.3s',
               }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(74,144,217,0.4)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 20px rgba(74,144,217,0.3)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(79,142,240,0.4)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 20px rgba(79,142,240,0.3)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)' }}
             >
               Find this near me →
             </button>
@@ -324,7 +324,7 @@ export default function CostCalculator() {
       {/* Savings banner */}
       <div style={{
         padding: '24px 28px', borderRadius: '18px',
-        background: 'rgba(74,144,217,0.06)', border: '1px solid rgba(74,144,217,0.18)',
+        background: 'rgba(79,142,240,0.06)', border: '1px solid rgba(79,142,240,0.18)',
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '12px' }}>
           <div>
@@ -333,7 +333,7 @@ export default function CostCalculator() {
             </div>
             <div style={{
               fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 800,
-              color: '#4A90D9', letterSpacing: '-0.03em', fontFamily: 'var(--font-display)',
+              color: '#4F8EF0', letterSpacing: '-0.03em', fontFamily: 'var(--font-display)',
               lineHeight: 1,
             }}>
               <Counter target={savings} prefix="$" />

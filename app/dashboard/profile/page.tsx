@@ -10,7 +10,7 @@ import { ArrowLeft, InfoCircle, TickCircle, Save2, Lock, Logout } from 'iconsax-
 type UserType = 'patient' | 'provider' | 'admin'
 
 const USER_TYPE_META: Record<UserType, { label: string; desc: string; color: string; bg: string; border: string }> = {
-  patient:  { label: 'Patient',  desc: 'Finding care',      color: 'rgba(74,144,217,0.9)',  bg: 'rgba(74,144,217,0.08)',  border: 'rgba(74,144,217,0.25)'  },
+  patient:  { label: 'Patient',  desc: 'Finding care',      color: 'rgba(79,142,240,0.9)',  bg: 'rgba(79,142,240,0.08)',  border: 'rgba(79,142,240,0.25)'  },
   provider: { label: 'Provider', desc: 'Offering care',     color: 'rgba(74,217,144,0.9)',  bg: 'rgba(74,217,144,0.08)',  border: 'rgba(74,217,144,0.25)'  },
   admin:    { label: 'Admin',    desc: 'Managing platform', color: 'rgba(217,144,74,0.9)',  bg: 'rgba(217,144,74,0.08)',  border: 'rgba(217,144,74,0.25)'  },
 }
@@ -23,8 +23,8 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   return (
     <div>
       <div style={{
-        fontSize: '10px', fontWeight: 600, letterSpacing: '0.10em',
-        textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)',
+        fontSize: '10px', fontWeight: 600, letterSpacing: '0',
+        textTransform: 'none', color: 'rgba(255,255,255,0.22)',
         fontFamily: 'var(--font-inter)', marginBottom: '10px',
         paddingBottom: '10px', borderBottom: '1px solid rgba(255,255,255,0.05)',
         display: 'flex', alignItems: 'center', gap: '8px',
@@ -170,7 +170,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: 28, height: 28, borderRadius: '50%', border: '2px solid rgba(74,144,217,0.2)', borderTopColor: '#4A8FD4', animation: 'spin 0.8s linear infinite' }} />
+        <div style={{ width: 28, height: 28, borderRadius: '50%', border: '2px solid rgba(79,142,240,0.2)', borderTopColor: '#4F8EF0', animation: 'spin 0.8s linear infinite' }} />
         <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
       </div>
     )
@@ -201,7 +201,7 @@ export default function ProfilePage() {
           <ArrowLeft size={14} color="rgba(255,255,255,0.5)" variant="Linear" />
           AXVO
         </Link>
-        <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-mono, monospace)' }}>
+        <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-inter)' }}>
           Account settings
         </span>
       </div>
@@ -229,26 +229,26 @@ export default function ProfilePage() {
         <div style={{
           display: 'flex', alignItems: 'center', gap: '20px',
           padding: '28px', marginBottom: '32px', borderRadius: '16px',
-          background: 'linear-gradient(135deg, rgba(74,144,217,0.06) 0%, rgba(255,255,255,0.02) 100%)',
-          border: '1px solid rgba(74,144,217,0.14)',
+          background: 'rgba(255,255,255,0.06)',
+          border: '1px solid rgba(79,142,240,0.14)',
           position: 'relative', overflow: 'hidden',
         }}>
           {/* Ambient glow */}
           <div style={{
             position: 'absolute', top: -40, right: -40, width: 180, height: 180, borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(74,144,217,0.12) 0%, transparent 70%)',
+            background: 'transparent',
             pointerEvents: 'none',
           }} />
 
           {/* Avatar */}
           <div style={{
             width: 64, height: 64, borderRadius: '50%', flexShrink: 0,
-            background: 'linear-gradient(135deg, rgba(74,144,217,0.5) 0%, rgba(74,144,217,0.2) 100%)',
-            border: '1.5px solid rgba(74,144,217,0.35)',
+            background: 'rgba(255,255,255,0.06)',
+            border: '1.5px solid rgba(79,142,240,0.35)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700,
-            color: 'rgba(74,144,217,0.95)', letterSpacing: '-0.02em',
-            boxShadow: '0 0 24px rgba(74,144,217,0.15)',
+            color: 'rgba(79,142,240,0.95)', letterSpacing: '-0.02em',
+            boxShadow: 'none',
           }}>
             {initials(displayName)}
           </div>
@@ -294,7 +294,7 @@ export default function ProfilePage() {
                   placeholder="Your full name"
                   disabled={saving}
                   style={inputStyle}
-                  onFocus={e => e.target.style.borderColor = 'rgba(74,144,217,0.45)'}
+                  onFocus={e => e.target.style.borderColor = 'rgba(79,142,240,0.45)'}
                   onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.08)'}
                 />
               </Field>
@@ -309,7 +309,7 @@ export default function ProfilePage() {
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 }}>
                   {user?.email}
-                  <span style={{ fontSize: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '4px', padding: '2px 6px', color: 'rgba(255,255,255,0.2)', fontFamily: 'var(--font-mono, monospace)' }}>
+                  <span style={{ fontSize: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '4px', padding: '2px 6px', color: 'rgba(255,255,255,0.2)', fontFamily: 'var(--font-inter)' }}>
                     read-only
                   </span>
                 </div>
@@ -324,7 +324,7 @@ export default function ProfilePage() {
                   placeholder="+1 (555) 000-0000"
                   disabled={saving}
                   style={inputStyle}
-                  onFocus={e => e.target.style.borderColor = 'rgba(74,144,217,0.45)'}
+                  onFocus={e => e.target.style.borderColor = 'rgba(79,142,240,0.45)'}
                   onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.08)'}
                 />
               </Field>
@@ -363,19 +363,19 @@ export default function ProfilePage() {
             style={{
               display: 'flex', alignItems: 'center', gap: '7px',
               padding: '10px 18px', borderRadius: '9px',
-              background: saving ? 'rgba(74,144,217,0.25)' : 'rgba(74,144,217,0.18)',
-              color: saving ? 'rgba(74,144,217,0.5)' : 'rgba(74,144,217,0.95)',
-              borderWidth: '1px', borderStyle: 'solid', borderColor: 'rgba(74,144,217,0.25)',
+              background: saving ? 'rgba(79,142,240,0.25)' : 'rgba(79,142,240,0.18)',
+              color: saving ? 'rgba(79,142,240,0.5)' : 'rgba(79,142,240,0.95)',
+              borderWidth: '1px', borderStyle: 'solid', borderColor: 'rgba(79,142,240,0.25)',
               fontSize: '13px', fontWeight: 600, fontFamily: 'var(--font-inter)',
               cursor: saving ? 'not-allowed' : 'pointer',
               transition: 'all 0.15s',
               marginBottom: '40px',
             } as React.CSSProperties}
-            onMouseEnter={e => { if (!saving) { e.currentTarget.style.background = 'rgba(74,144,217,0.25)'; e.currentTarget.style.borderColor = 'rgba(74,144,217,0.4)' } }}
-            onMouseLeave={e => { if (!saving) { e.currentTarget.style.background = 'rgba(74,144,217,0.18)'; e.currentTarget.style.borderColor = 'rgba(74,144,217,0.25)' } }}
+            onMouseEnter={e => { if (!saving) { e.currentTarget.style.background = 'rgba(79,142,240,0.25)'; e.currentTarget.style.borderColor = 'rgba(79,142,240,0.4)' } }}
+            onMouseLeave={e => { if (!saving) { e.currentTarget.style.background = 'rgba(79,142,240,0.18)'; e.currentTarget.style.borderColor = 'rgba(79,142,240,0.25)' } }}
           >
             {saving ? (
-              <><div style={{ width: 12, height: 12, borderRadius: '50%', border: '1.5px solid rgba(74,144,217,0.3)', borderTopColor: 'rgba(74,144,217,0.7)', animation: 'spin 0.7s linear infinite' }} />Saving…</>
+              <><div style={{ width: 12, height: 12, borderRadius: '50%', border: '1.5px solid rgba(79,142,240,0.3)', borderTopColor: 'rgba(79,142,240,0.7)', animation: 'spin 0.7s linear infinite' }} />Saving…</>
             ) : (
               <><Save2 size={13} color="currentColor" variant="TwoTone" />Save changes</>
             )}
@@ -393,7 +393,7 @@ export default function ProfilePage() {
                 placeholder="New password"
                 disabled={savingPw}
                 style={inputStyle}
-                onFocus={e => e.target.style.borderColor = 'rgba(74,144,217,0.45)'}
+                onFocus={e => e.target.style.borderColor = 'rgba(79,142,240,0.45)'}
                 onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.08)'}
               />
             </Field>
@@ -405,7 +405,7 @@ export default function ProfilePage() {
                 placeholder="Confirm new password"
                 disabled={savingPw}
                 style={{ ...inputStyle, marginBottom: '14px' }}
-                onFocus={e => e.target.style.borderColor = 'rgba(74,144,217,0.45)'}
+                onFocus={e => e.target.style.borderColor = 'rgba(79,142,240,0.45)'}
                 onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.08)'}
               />
             </Field>

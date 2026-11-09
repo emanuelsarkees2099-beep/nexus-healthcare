@@ -47,14 +47,14 @@ export default function Eligibility() {
         {/* Top gradient line */}
         <div aria-hidden="true" style={{
           position: 'absolute', top: '-1px', left: '15%', right: '15%', height: '1px',
-          background: 'linear-gradient(90deg, transparent, rgba(74,144,217,0.5), transparent)',
+          background: 'rgba(255,255,255,0.08)',
         }} />
 
         {/* Depth overlay */}
         <div className="card-depth-overlay" aria-hidden="true" />
 
         <div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontWeight: 400, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '1.25rem', fontFamily: 'var(--font-inter)' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontWeight: 400, letterSpacing: '0', textTransform: 'none', color: 'var(--accent)', marginBottom: '1.25rem', fontFamily: 'var(--font-inter)' }}>
             <span style={{ display: 'inline-block', width: '16px', height: '1px', background: 'var(--accent)' }} aria-hidden="true" />
             Eligibility navigator
           </div>
@@ -82,7 +82,7 @@ export default function Eligibility() {
             }}
             onMouseEnter={e => {
               e.currentTarget.style.transform = 'translateY(-2px)'
-              e.currentTarget.style.boxShadow = '0 14px 36px rgba(74,144,217,0.35)'
+              e.currentTarget.style.boxShadow = '0 14px 36px rgba(79,142,240,0.35)'
             }}
             onMouseLeave={e => {
               e.currentTarget.style.transform = ''
@@ -109,9 +109,9 @@ export default function Eligibility() {
                 textDecoration: 'none', color: 'inherit',
               }}
               onMouseEnter={e => {
-                e.currentTarget.style.borderColor = 'rgba(74,144,217,0.22)'
+                e.currentTarget.style.borderColor = 'rgba(79,142,240,0.22)'
                 e.currentTarget.style.transform = 'translateX(4px)'
-                e.currentTarget.style.background = 'rgba(74,144,217,0.04)'
+                e.currentTarget.style.background = 'rgba(79,142,240,0.04)'
                 const arrow = e.currentTarget.querySelector<HTMLElement>('[data-arrow]')
                 if (arrow) { arrow.style.color = 'var(--accent)'; arrow.style.transform = 'translateX(3px)' }
               }}

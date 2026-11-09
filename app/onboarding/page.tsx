@@ -259,8 +259,8 @@ function ProgressRing({ step, total, unlocked }: { step: number; total: number; 
       </svg>
       {unlocked > 0 && (
         <span style={{
-          fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase',
-          color: 'rgba(52,211,153,0.75)',
+          fontSize: 9, fontWeight: 600, letterSpacing: '0', textTransform: 'none',
+          color: 'rgba(79,142,240,0.75)',
           whiteSpace: 'nowrap',
         }}>
           {unlocked} ready
@@ -275,16 +275,16 @@ function UnlockPill({ label, visible }: { label: string; visible: boolean }) {
     <div style={{
       display: 'flex', alignItems: 'center', gap: 5,
       padding: '3px 10px', borderRadius: 100,
-      background: visible ? 'rgba(52,211,153,0.07)' : 'rgba(255,255,255,0.03)',
-      border: `1px solid ${visible ? 'rgba(52,211,153,0.22)' : 'rgba(255,255,255,0.07)'}`,
+      background: visible ? 'rgba(79,142,240,0.07)' : 'rgba(255,255,255,0.03)',
+      border: `1px solid ${visible ? 'rgba(79,142,240,0.22)' : 'rgba(255,255,255,0.07)'}`,
       fontSize: 11, fontWeight: 500,
-      color: visible ? 'rgba(52,211,153,0.8)' : 'rgba(255,255,255,0.2)',
+      color: visible ? 'rgba(79,142,240,0.8)' : 'rgba(255,255,255,0.2)',
       transition: 'all 0.4s cubic-bezier(0.16,1,0.3,1)',
       whiteSpace: 'nowrap',
     }}>
       {visible && (
         <svg width="7" height="7" viewBox="0 0 7 7" fill="none" aria-hidden="true">
-          <circle cx="3.5" cy="3.5" r="3.5" fill="rgba(52,211,153,0.6)" />
+          <circle cx="3.5" cy="3.5" r="3.5" fill="rgba(79,142,240,0.6)" />
         </svg>
       )}
       {label}
@@ -463,7 +463,7 @@ function CompletionScreen({
     }}>
       <div aria-hidden style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 70% 50% at 50% 40%, rgba(52,211,153,0.06) 0%, rgba(74,144,217,0.04) 40%, transparent 70%)',
+        background: 'transparent',
         pointerEvents: 'none',
       }} />
 
@@ -479,10 +479,10 @@ function CompletionScreen({
       <div className="ob-done-card" style={{ marginBottom: 24, animationDelay: '0ms' }}>
         <div style={{
           width: 64, height: 64, borderRadius: '50%',
-          background: 'rgba(52,211,153,0.10)', border: '1px solid rgba(52,211,153,0.25)',
+          background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.25)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto',
         }}>
-          <TickCircle size={28} color="rgba(52,211,153,0.9)" variant="TwoTone" />
+          <TickCircle size={28} color="rgba(79,142,240,0.9)" variant="TwoTone" />
         </div>
       </div>
 
@@ -527,7 +527,7 @@ function CompletionScreen({
                   width: 7, height: 7, borderRadius: '50%',
                   background: CONFIDENCE_COLORS[p.confidence], flexShrink: 0,
                 }} />
-                <span style={{ fontSize: 10, fontWeight: 600, color: CONFIDENCE_COLORS[p.confidence], letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                <span style={{ fontSize: 10, fontWeight: 600, color: CONFIDENCE_COLORS[p.confidence], letterSpacing: '0', textTransform: 'none' }}>
                   {CONFIDENCE_LABELS[p.confidence]}
                 </span>
               </div>
@@ -753,15 +753,15 @@ export default function OnboardingPage() {
 
         .ob-option { transition: background 0.15s, border-color 0.15s, transform 0.15s; }
         .ob-option:hover:not([aria-pressed="true"]) {
-          border-color: rgba(74,144,217,0.30) !important;
-          background: rgba(74,144,217,0.04) !important;
+          border-color: rgba(79,142,240,0.30) !important;
+          background: rgba(79,142,240,0.04) !important;
         }
         .ob-option:active { transform: scale(0.98); }
 
         .ob-text-btn { transition: background 0.15s, border-color 0.15s, color 0.15s; }
         .ob-text-btn:hover:not(:disabled) {
-          background: rgba(74,144,217,0.14) !important;
-          border-color: rgba(74,144,217,0.40) !important;
+          background: rgba(79,142,240,0.14) !important;
+          border-color: rgba(79,142,240,0.40) !important;
         }
         .ob-text-btn:disabled { cursor: not-allowed; }
 
@@ -775,7 +775,7 @@ export default function OnboardingPage() {
       {/* Ambient glow that drifts with step */}
       <div aria-hidden style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
-        background: `radial-gradient(ellipse 70% 60% at 50% ${(step / TOTAL) * 70 + 15}%, rgba(74,144,217,0.05) 0%, transparent 70%)`,
+        background: 'transparent',
         transition: 'background 0.8s ease',
       }} />
 
@@ -828,12 +828,12 @@ export default function OnboardingPage() {
           {activeInsight && (
             <div style={{
               padding: '13px 17px', borderRadius: 12, marginBottom: 20,
-              background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.22)',
-              fontSize: 13, color: 'rgba(74,144,217,0.9)', lineHeight: 1.65,
+              background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.22)',
+              fontSize: 13, color: 'rgba(79,142,240,0.9)', lineHeight: 1.65,
               animation: 'fadeIn 0.4s ease both',
             }}>
               <span style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                <InfoCircle size={14} color="rgba(74,144,217,0.9)" variant="TwoTone" style={{ flexShrink: 0, marginTop: 2 }} />
+                <InfoCircle size={14} color="rgba(79,142,240,0.9)" variant="TwoTone" style={{ flexShrink: 0, marginTop: 2 }} />
                 {activeInsight}
               </span>
             </div>
@@ -857,7 +857,7 @@ export default function OnboardingPage() {
                 className="ob-input"
                 style={{
                   width: '100%', padding: '14px 18px', fontSize: 20, fontWeight: 600,
-                  letterSpacing: '0.08em', textAlign: 'center',
+                  letterSpacing: '0', textAlign: 'center',
                   background: 'rgba(255,255,255,0.04)',
                   border: `1px solid ${textError ? 'rgba(248,113,113,0.45)' : 'rgba(255,255,255,0.12)'}`,
                   borderRadius: 12, color: 'var(--text)', fontFamily: 'inherit',
@@ -876,7 +876,7 @@ export default function OnboardingPage() {
                   className="ob-text-btn"
                   style={{
                     padding: '12px 26px', borderRadius: 100,
-                    background: 'rgba(74,144,217,0.10)', border: '1px solid rgba(74,144,217,0.28)',
+                    background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.28)',
                     color: 'var(--accent)', fontSize: 14, fontWeight: 600,
                     cursor: 'pointer', fontFamily: 'inherit',
                     display: 'flex', alignItems: 'center', gap: 7,
@@ -919,8 +919,8 @@ export default function OnboardingPage() {
                       style={{
                         display: 'flex', alignItems: 'center', gap: 14,
                         padding: '13px 17px', borderRadius: 13, textAlign: 'left',
-                        background: selected ? 'rgba(74,144,217,0.08)' : 'rgba(255,255,255,0.03)',
-                        border: `1px solid ${selected ? 'rgba(74,144,217,0.38)' : 'rgba(255,255,255,0.09)'}`,
+                        background: selected ? 'rgba(79,142,240,0.08)' : 'rgba(255,255,255,0.03)',
+                        border: `1px solid ${selected ? 'rgba(79,142,240,0.38)' : 'rgba(255,255,255,0.09)'}`,
                         cursor: 'pointer', fontFamily: 'inherit', color: 'inherit', width: '100%',
                       }}
                     >
@@ -964,8 +964,8 @@ export default function OnboardingPage() {
                   className="ob-text-btn"
                   style={{
                     padding: '12px 26px', borderRadius: 100,
-                    background: multiReady ? 'rgba(74,144,217,0.10)' : 'rgba(255,255,255,0.04)',
-                    border: `1px solid ${multiReady ? 'rgba(74,144,217,0.28)' : 'rgba(255,255,255,0.07)'}`,
+                    background: multiReady ? 'rgba(79,142,240,0.10)' : 'rgba(255,255,255,0.04)',
+                    border: `1px solid ${multiReady ? 'rgba(79,142,240,0.28)' : 'rgba(255,255,255,0.07)'}`,
                     color: multiReady ? 'var(--accent)' : 'var(--text-4)',
                     fontSize: 14, fontWeight: 600, cursor: multiReady ? 'pointer' : 'not-allowed',
                     fontFamily: 'inherit',

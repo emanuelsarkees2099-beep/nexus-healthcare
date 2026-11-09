@@ -51,7 +51,7 @@ export default function AccessibilityPage() {
     <AppShell>
       <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
         <div style={{ maxWidth: '760px', margin: '0 auto', padding: 'clamp(56px, 9vh, 104px) clamp(20px, 5vw, 32px) clamp(64px, 10vh, 112px)' }}>
-          <p style={{ fontSize: '12px', fontWeight: 650, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '16px', fontFamily: 'var(--font-mono)' }}>
+          <p style={{ fontSize: '12px', fontWeight: 650, letterSpacing: '0', textTransform: 'none', color: 'var(--accent)', marginBottom: '16px', fontFamily: 'var(--font-inter)' }}>
             Accessibility
           </p>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4.5vw, 3rem)', fontWeight: 800, letterSpacing: '-0.035em', lineHeight: 1.1, marginBottom: '16px', color: 'var(--text)' }}>

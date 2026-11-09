@@ -31,18 +31,18 @@ const CRISIS_RESOURCES = [
     number: '988',
     desc: 'Call or text 988. Available 24/7, free, confidential.',
     type: 'mental',
-    color: '#818cf8',
-    bg: 'rgba(129,140,248,0.08)',
-    border: 'rgba(129,140,248,0.25)',
+    color: '#4F8EF0',
+    bg: 'rgba(79,142,240,0.08)',
+    border: 'rgba(79,142,240,0.25)',
   },
   {
     name: 'Crisis Text Line',
     number: 'Text HOME to 741741',
     desc: 'Text HOME to 741741. Real crisis counselors, 24/7.',
     type: 'mental',
-    color: '#818cf8',
-    bg: 'rgba(129,140,248,0.08)',
-    border: 'rgba(129,140,248,0.25)',
+    color: '#4F8EF0',
+    bg: 'rgba(79,142,240,0.08)',
+    border: 'rgba(79,142,240,0.25)',
   },
   {
     name: '911 Emergency',
@@ -58,27 +58,27 @@ const CRISIS_RESOURCES = [
     number: '1-800-222-1222',
     desc: 'Poisoning, overdose, drug reactions. Free, 24/7.',
     type: 'medical',
-    color: '#fb923c',
-    bg: 'rgba(251,146,60,0.08)',
-    border: 'rgba(251,146,60,0.25)',
+    color: '#4F8EF0',
+    bg: 'rgba(79,142,240,0.08)',
+    border: 'rgba(79,142,240,0.25)',
   },
   {
     name: 'Domestic Violence Hotline',
     number: '1-800-799-7233',
     desc: 'Call or text. Chat at thehotline.org. 24/7.',
     type: 'safety',
-    color: '#f472b6',
-    bg: 'rgba(244,114,182,0.08)',
-    border: 'rgba(244,114,182,0.25)',
+    color: '#4F8EF0',
+    bg: 'rgba(79,142,240,0.08)',
+    border: 'rgba(79,142,240,0.25)',
   },
   {
     name: 'SAMHSA Treatment Locator',
     number: '1-800-662-4357',
     desc: 'Substance use treatment. Free, confidential, 24/7.',
     type: 'substance',
-    color: '#60a5fa',
-    bg: 'rgba(96,165,250,0.08)',
-    border: 'rgba(96,165,250,0.25)',
+    color: '#4F8EF0',
+    bg: 'rgba(79,142,240,0.08)',
+    border: 'rgba(79,142,240,0.25)',
   },
 ]
 
@@ -219,7 +219,7 @@ export default function CrisisPage() {
         minHeight: '100dvh', display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'center', textAlign: 'center',
         padding: '80px 24px 60px', position: 'relative', overflow: 'hidden',
-        background: 'radial-gradient(ellipse 80% 60% at 50% 10%, rgba(248,113,113,0.06) 0%, transparent 70%)',
+        background: 'transparent',
       }}>
         <DotGrid opacity={0.35} />
         {/* Ambient red ring */}
@@ -241,20 +241,13 @@ export default function CrisisPage() {
           padding: '6px 14px', borderRadius: '100px',
           background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.3)',
           marginBottom: '32px', fontSize: '12px', fontWeight: 600,
-          color: '#f87171', letterSpacing: '0.08em', textTransform: 'uppercase',
+          color: '#f87171', letterSpacing: '0', textTransform: 'none',
         }}>
           <PulsingDot color="#f87171" />
           Crisis Support
         </div>
 
-        <h1 style={{
-          fontSize: 'clamp(38px, 7vw, 76px)', fontWeight: 900,
-          letterSpacing: '-0.04em', lineHeight: 1.05, marginBottom: '24px',
-          maxWidth: '680px',
-        }}>
-          Real help,<br />
-          <span style={{ color: '#f87171' }}>right now.</span>
-        </h1>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.12, margin: '0 0 18px', color: 'var(--text)' }}>Help is available right now</h1>
 
         <p style={{
           fontSize: 'clamp(15px, 2vw, 18px)', color: 'rgba(255,255,255,0.55)',
@@ -271,10 +264,10 @@ export default function CrisisPage() {
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '14px',
             width: 'auto', maxWidth: '100%',
             padding: '22px 44px', borderRadius: '20px',
-            background: 'linear-gradient(135deg, #dc2626, #f87171)',
+            background: 'rgba(255,255,255,0.06)',
             color: '#fff', fontSize: '22px', fontWeight: 800,
             textDecoration: 'none', letterSpacing: '-0.01em',
-            boxShadow: '0 0 60px rgba(248,113,113,0.35), 0 20px 40px rgba(0,0,0,0.4)',
+            boxShadow: 'none',
             transition: 'transform 0.2s cubic-bezier(0.16,1,0.3,1)',
           }}
           aria-label="Call 988 Crisis Lifeline"
@@ -308,13 +301,13 @@ export default function CrisisPage() {
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
               <div style={{
                 width: '120px', height: '120px', borderRadius: '50%',
-                background: 'radial-gradient(circle, rgba(129,140,248,0.3), rgba(129,140,248,0.05))',
-                border: '2px solid rgba(129,140,248,0.4)',
+                background: 'transparent',
+                border: '2px solid rgba(79,142,240,0.4)',
                 transform: `scale(${circleScale})`,
                 transition: `transform ${breathePhase === 'inhale' ? 4 : breathePhase === 'hold' ? 0.1 : 6}s ease-in-out`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                <span style={{ fontSize: '13px', color: 'rgba(129,140,248,0.9)', fontWeight: 500 }}>
+                <span style={{ fontSize: '13px', color: 'rgba(79,142,240,0.9)', fontWeight: 500 }}>
                   {breathePhase === 'inhale' ? 'Breathe in…' : breathePhase === 'hold' ? 'Hold…' : 'Breathe out…'}
                 </span>
               </div>
@@ -389,9 +382,9 @@ export default function CrisisPage() {
             background: geo.loading
               ? 'rgba(255,255,255,0.03)'
               : geo.location
-              ? 'rgba(74,144,217,0.05)'
+              ? 'rgba(79,142,240,0.05)'
               : 'rgba(255,255,255,0.02)',
-            border: `1px solid ${geo.location ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.07)'}`,
+            border: `1px solid ${geo.location ? 'rgba(79,142,240,0.15)' : 'rgba(255,255,255,0.07)'}`,
           }}>
             {geo.loading ? (
               <>
@@ -410,14 +403,14 @@ export default function CrisisPage() {
                   <a
                     href={`https://findtreatment.gov/locator?lat=${geo.lat}&lng=${geo.lon}&sType=4&distance=25`}
                     target="_blank" rel="noopener noreferrer"
-                    style={{ padding: '5px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 600, background: 'rgba(129,140,248,0.1)', border: '1px solid rgba(129,140,248,0.25)', color: '#818cf8', textDecoration: 'none', whiteSpace: 'nowrap' }}
+                    style={{ padding: '5px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 600, background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.25)', color: '#4F8EF0', textDecoration: 'none', whiteSpace: 'nowrap' }}
                   >
                     SAMHSA Treatment Locator →
                   </a>
                   <a
                     href={`https://www.google.com/maps/search/mental+health+crisis+center/@${geo.lat},${geo.lon},13z`}
                     target="_blank" rel="noopener noreferrer"
-                    style={{ padding: '5px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 600, background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)', color: 'var(--accent)', textDecoration: 'none', whiteSpace: 'nowrap' }}
+                    style={{ padding: '5px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 600, background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.2)', color: 'var(--accent)', textDecoration: 'none', whiteSpace: 'nowrap' }}
                   >
                     Maps: Crisis centers →
                   </a>
@@ -513,10 +506,10 @@ export default function CrisisPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                 <div style={{
                   width: '32px', height: '32px', borderRadius: '8px',
-                  background: 'rgba(129,140,248,0.1)', border: '1px solid rgba(129,140,248,0.25)',
+                  background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <Heart size={15} color="#818cf8" />
+                  <Heart size={15} color="#4F8EF0" />
                 </div>
                 <h3 style={{ fontSize: '16px', fontWeight: 700 }}>Mental Health Walk-ins</h3>
               </div>
@@ -529,12 +522,12 @@ export default function CrisisPage() {
                       target="_blank" rel="noopener noreferrer"
                       style={{
                         padding: '18px 20px', borderRadius: '14px',
-                        background: 'rgba(129,140,248,0.04)', border: '1px solid rgba(129,140,248,0.18)',
+                        background: 'rgba(79,142,240,0.04)', border: '1px solid rgba(79,142,240,0.18)',
                         textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '14px',
                       }}
                     >
-                      <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(129,140,248,0.1)', border: '1px solid rgba(129,140,248,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        <Heart size={16} color="#818cf8" />
+                      <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <Heart size={16} color="#4F8EF0" />
                       </div>
                       <div>
                         <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5', marginBottom: '3px' }}>SAMHSA Mental Health Locator</div>
@@ -548,12 +541,12 @@ export default function CrisisPage() {
                       target="_blank" rel="noopener noreferrer"
                       style={{
                         padding: '14px 18px', borderRadius: '12px',
-                        background: 'rgba(129,140,248,0.02)', border: '1px solid rgba(129,140,248,0.12)',
+                        background: 'rgba(79,142,240,0.02)', border: '1px solid rgba(79,142,240,0.12)',
                         textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px',
                         fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.6)',
                       }}
                     >
-                      <Location size={13} color="#818cf8" />
+                      <Location size={13} color="#4F8EF0" />
                       Also search Google Maps for crisis centers near you →
                     </a>
                   </>
@@ -564,12 +557,12 @@ export default function CrisisPage() {
                       target="_blank" rel="noopener noreferrer"
                       style={{
                         padding: '18px 20px', borderRadius: '14px',
-                        background: 'rgba(129,140,248,0.04)', border: '1px solid rgba(129,140,248,0.18)',
+                        background: 'rgba(79,142,240,0.04)', border: '1px solid rgba(79,142,240,0.18)',
                         textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '14px',
                       }}
                     >
-                      <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(129,140,248,0.1)', border: '1px solid rgba(129,140,248,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        <Heart size={16} color="#818cf8" />
+                      <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <Heart size={16} color="#4F8EF0" />
                       </div>
                       <div>
                         <div style={{ fontSize: '14px', fontWeight: 600, color: '#f5f5f5', marginBottom: '3px' }}>FindTreatment.gov (SAMHSA)</div>
@@ -580,12 +573,12 @@ export default function CrisisPage() {
                       href="tel:988"
                       style={{
                         padding: '14px 18px', borderRadius: '12px',
-                        background: 'rgba(129,140,248,0.02)', border: '1px solid rgba(129,140,248,0.12)',
+                        background: 'rgba(79,142,240,0.02)', border: '1px solid rgba(79,142,240,0.12)',
                         textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px',
                         fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.6)',
                       }}
                     >
-                      <Call size={13} color="#818cf8" />
+                      <Call size={13} color="#4F8EF0" />
                       Call or text 988 — they can connect you to local crisis services
                     </a>
                   </>
@@ -604,7 +597,7 @@ export default function CrisisPage() {
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <div style={{
             borderRadius: 20,
-            background: 'rgba(129,140,248,0.04)', border: '1px solid rgba(129,140,248,0.16)',
+            background: 'rgba(79,142,240,0.04)', border: '1px solid rgba(79,142,240,0.16)',
             overflow: 'hidden',
           }}>
             {/* Header — toggle */}
@@ -618,10 +611,10 @@ export default function CrisisPage() {
             >
               <div style={{
                 width: 40, height: 40, borderRadius: 12, flexShrink: 0,
-                background: 'rgba(129,140,248,0.10)', border: '1px solid rgba(129,140,248,0.25)',
+                background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.25)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                <Shield size={18} color="#818cf8" />
+                <Shield size={18} color="#4F8EF0" />
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)', marginBottom: 3 }}>
@@ -650,7 +643,7 @@ export default function CrisisPage() {
                       background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)',
                       padding: '18px 20px',
                     }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: 'rgba(129,140,248,0.9)', marginBottom: 12 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: 'rgba(79,142,240,0.9)', marginBottom: 12 }}>
                         {section.title}
                       </div>
 
@@ -661,9 +654,9 @@ export default function CrisisPage() {
                             <div key={idx} style={{
                               display: 'flex', alignItems: 'center', gap: 10,
                               padding: '8px 12px', borderRadius: 8,
-                              background: 'rgba(129,140,248,0.06)', border: '1px solid rgba(129,140,248,0.14)',
+                              background: 'rgba(79,142,240,0.06)', border: '1px solid rgba(79,142,240,0.14)',
                             }}>
-                              <TickCircle size={13} color="rgba(129,140,248,0.7)" variant="Bold" style={{ flexShrink: 0 }} />
+                              <TickCircle size={13} color="rgba(79,142,240,0.7)" variant="Bold" style={{ flexShrink: 0 }} />
                               <span style={{ flex: 1, fontSize: 13, color: 'var(--text-2)' }}>{item}</span>
                               <button
                                 onClick={() => removeItem(section.id, idx)}
@@ -693,7 +686,7 @@ export default function CrisisPage() {
                           onClick={() => addItem(section.id)}
                           style={{
                             padding: '9px 12px', borderRadius: 8, border: 'none', cursor: 'pointer',
-                            background: 'rgba(129,140,248,0.12)', color: 'rgba(129,140,248,0.9)',
+                            background: 'rgba(79,142,240,0.12)', color: 'rgba(79,142,240,0.9)',
                             display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600,
                             fontFamily: 'inherit',
                           }}
@@ -712,8 +705,8 @@ export default function CrisisPage() {
                     style={{
                       display: 'flex', alignItems: 'center', gap: 7,
                       padding: '11px 20px', borderRadius: 10, border: 'none', cursor: 'pointer',
-                      background: planSaved ? 'rgba(52,211,153,0.12)' : 'rgba(129,140,248,0.15)',
-                      color: planSaved ? '#34d399' : 'rgba(129,140,248,0.95)',
+                      background: planSaved ? 'rgba(79,142,240,0.12)' : 'rgba(79,142,240,0.15)',
+                      color: planSaved ? '#4F8EF0' : 'rgba(79,142,240,0.95)',
                       fontSize: 13, fontWeight: 600, fontFamily: 'inherit',
                       transition: 'all 0.2s',
                     }}
@@ -727,13 +720,13 @@ export default function CrisisPage() {
                     onClick={() => window.print()}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 7,
-                      padding: '11px 20px', borderRadius: 10, border: '1px solid rgba(129,140,248,0.2)', cursor: 'pointer',
-                      background: 'transparent', color: 'rgba(129,140,248,0.7)',
+                      padding: '11px 20px', borderRadius: 10, border: '1px solid rgba(79,142,240,0.2)', cursor: 'pointer',
+                      background: 'transparent', color: 'rgba(79,142,240,0.7)',
                       fontSize: 13, fontWeight: 600, fontFamily: 'inherit',
                       transition: 'all 0.2s',
                     }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(129,140,248,0.08)'; (e.currentTarget as HTMLElement).style.color = 'rgba(129,140,248,0.95)' }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = 'rgba(129,140,248,0.7)' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(79,142,240,0.08)'; (e.currentTarget as HTMLElement).style.color = 'rgba(79,142,240,0.95)' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = 'rgba(79,142,240,0.7)' }}
                   >
                     <DocumentDownload size={14} color="currentColor" /> Print / Save PDF
                   </button>
@@ -749,9 +742,9 @@ export default function CrisisPage() {
 
       {/* 24-hour check-in */}
       <section style={{ padding: '0 24px 48px' }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto', padding: '24px 28px', borderRadius: 20, background: 'rgba(129,140,248,0.04)', border: '1px solid rgba(129,140,248,0.18)', display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
-          <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(129,140,248,0.10)', border: '1px solid rgba(129,140,248,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <Clock size={20} color="#818cf8" />
+        <div style={{ maxWidth: '900px', margin: '0 auto', padding: '24px 28px', borderRadius: 20, background: 'rgba(79,142,240,0.04)', border: '1px solid rgba(79,142,240,0.18)', display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Clock size={20} color="#4F8EF0" />
           </div>
           <div style={{ flex: 1, minWidth: '240px' }}>
             <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>Plan to check in within 24 hours</div>
@@ -759,7 +752,7 @@ export default function CrisisPage() {
               Staying in contact after a crisis is linked to lower risk. Reach out to a trusted person or your therapist, or call or text 988 again. It&apos;s free and no insurance is needed.
             </div>
           </div>
-          <a href="tel:988" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 18px', borderRadius: 10, background: 'rgba(129,140,248,0.12)', border: '1px solid rgba(129,140,248,0.28)', color: '#818cf8', fontSize: 13, fontWeight: 700, textDecoration: 'none', flexShrink: 0, fontFamily: 'inherit' }}>
+          <a href="tel:988" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 18px', borderRadius: 10, background: 'rgba(79,142,240,0.12)', border: '1px solid rgba(79,142,240,0.28)', color: '#4F8EF0', fontSize: 13, fontWeight: 700, textDecoration: 'none', flexShrink: 0, fontFamily: 'inherit' }}>
             Call or text 988 <ArrowRight2 size={13} color="currentColor" />
           </a>
         </div>
@@ -775,15 +768,15 @@ export default function CrisisPage() {
           }}>
             <Heart size={24} color="#f87171" style={{ marginBottom: '16px' }} />
             <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-              You deserve care. You always have.
+              You don’t have to handle this alone.
             </h3>
             <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, marginBottom: '24px' }}>
-              The fact that you&apos;re looking for help is an act of courage. AXVO exists because healthcare should be available to everyone, in their hardest moments, without barriers.
+              Reaching out is a good step. If you’re not in immediate danger, a free or sliding-scale clinic can help with ongoing care, whether or not you have insurance.
             </p>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link href="/search" style={{
                 padding: '10px 22px', borderRadius: '100px',
-                background: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.25)',
+                background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.25)',
                 color: 'var(--accent)', fontSize: '13px', fontWeight: 600,
                 textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px',
               }}>

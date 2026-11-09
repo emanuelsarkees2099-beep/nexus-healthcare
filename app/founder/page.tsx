@@ -33,7 +33,7 @@ const PERSON_SCHEMA = {
 }
 
 const label: React.CSSProperties = {
-  fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase',
+  fontSize: 11, fontWeight: 600, letterSpacing: '0', textTransform: 'none',
   color: 'var(--accent)', marginBottom: 14,
 }
 

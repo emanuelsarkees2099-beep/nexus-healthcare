@@ -1,432 +1,184 @@
 'use client'
-import React, { useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import AppShell from '@/components/AppShell'
 import Link from 'next/link'
-import { Health, SearchNormal1, ExportSquare, ArrowRight2, InfoCircle, DollarCircle, Heart, Flash, TickCircle, Hospital, ShieldTick, Map1 } from 'iconsax-react'
-import DotGrid from '@/components/DotGrid'
 
-/* ── Medication assistance programs ─────────────────────────── */
-type ProgramIconType = React.ComponentType<{ size?: number; color?: string; variant?: 'Bold' | 'Linear' | 'Outline' | 'Broken' | 'Bulk' | 'TwoTone' }>
-
-const PROGRAMS: Array<{ name: string; url: string; desc: string; tags: string[]; color: string; Icon: ProgramIconType }> = [
-  {
-    name: 'NeedyMeds',
-    url: 'https://www.needymeds.org',
-    desc: 'Largest database of patient assistance programs. Search by drug name to find free or low-cost options from manufacturers.',
-    tags: ['Free to search', 'All drugs', 'Programs set their own rules'],
-    color: '#4A8FD4',
-    Icon: Health,
-  },
-  {
-    name: 'RxAssist',
-    url: 'https://www.rxassist.org',
-    desc: 'Directory of pharmaceutical company patient assistance programs. Many brand-name drugs available free with proof of financial need.',
-    tags: ['Free', 'Brand-name', 'Apply directly'],
-    color: '#34d399',
-    Icon: Hospital,
-  },
-  {
-    name: 'GoodRx',
-    url: 'https://www.goodrx.com',
-    desc: 'Compare cash prices at nearby pharmacies and use free discount coupons. No sign-up required.',
-    tags: ['Discounted', 'Instant coupon', 'No enrollment'],
-    color: '#60a5fa',
-    Icon: DollarCircle,
-  },
-  {
-    name: 'Medicare Extra Help (Low Income Subsidy)',
-    url: 'https://www.ssa.gov/medicare/part-d-extra-help',
-    desc: 'For Medicare beneficiaries who need help paying for Part D prescription drug costs.',
-    tags: ['Medicare', 'Income-based', 'Federal program'],
-    color: '#fbbf24',
-    Icon: ShieldTick,
-  },
-  {
-    name: 'State Pharmaceutical Assistance Programs',
-    url: 'https://www.medicare.gov/pharmaceutical-assistance-program',
-    desc: 'Many states offer additional prescription assistance beyond federal programs. Search your state\'s offerings.',
-    tags: ['State-specific', 'Variable', 'Income-based'],
-    color: '#f87171',
-    Icon: Map1,
-  },
+/* ── Where to look ──────────────────────────────────────────── */
+const RESOURCES = [
+  { name: 'NeedyMeds', url: 'https://www.needymeds.org', desc: 'A free database of manufacturer assistance programs, coupons, and low-cost clinics. Search by drug name.' },
+  { name: 'RxAssist', url: 'https://www.rxassist.org', desc: 'A directory of drug company assistance programs. Many brand-name drugs are free for people who qualify by income.' },
+  { name: 'GoodRx', url: 'https://www.goodrx.com', desc: 'Compares cash prices at nearby pharmacies and offers free discount coupons. No sign-up needed.' },
+  { name: 'Cost Plus Drugs', url: 'https://costplusdrugs.com/medications/', desc: 'An online pharmacy that sells many generics at a fixed markup over cost, often for a few dollars a month.' },
+  { name: 'Medicare Extra Help', url: 'https://www.ssa.gov/medicare/part-d-extra-help', desc: 'Federal help with Medicare Part D premiums and copays for people with limited income.' },
+  { name: 'State pharmacy assistance programs', url: 'https://www.medicare.gov/basics/costs/help/drug-costs', desc: 'Some states run their own prescription assistance programs on top of federal help.' },
 ]
+
+/* ── Common medications ─────────────────────────────────────────
+   `program` entries link to the manufacturer's assistance program,
+   which sets its own income limits. Generics link to price comparison. */
+type Drug = {
+  name: string
+  detail: string
+  category: string
+  how: string
+  program?: { name: string; url: string }
+  priceUrl: string
+}
+
+const GENERIC_HOW = 'Generic. Usually inexpensive with a discount coupon or from Cost Plus Drugs.'
+
+const DRUGS: Drug[] = [
+  { name: 'Insulin', detail: 'Humalog, Novolog, Lantus', category: 'Diabetes', how: 'Lilly, Novo Nordisk, and Sanofi each offer programs that cap many insulins at $35 a month.', program: { name: 'Lilly Insulin Value Program', url: 'https://www.lillyinsulinvalue.com' }, priceUrl: 'https://www.goodrx.com/insulin' },
+  { name: 'Metformin', detail: 'Generic Glucophage', category: 'Diabetes', how: GENERIC_HOW, priceUrl: 'https://www.goodrx.com/metformin' },
+  { name: 'Ozempic', detail: 'Semaglutide', category: 'Diabetes', how: 'Novo Nordisk’s assistance program covers Ozempic for people who qualify by income. Wegovy is not included.', program: { name: 'Novo Nordisk PAP', url: 'https://www.novocare.com/psp/PAP.html' }, priceUrl: 'https://www.goodrx.com/ozempic' },
+  { name: 'Trulicity', detail: 'Dulaglutide', category: 'Diabetes', how: 'Lilly Cares provides it free to people who qualify by income.', program: { name: 'Lilly Cares', url: 'https://www.lillycares.com' }, priceUrl: 'https://www.goodrx.com/trulicity' },
+  { name: 'Atorvastatin', detail: 'Generic Lipitor', category: 'Heart', how: GENERIC_HOW, priceUrl: 'https://www.goodrx.com/atorvastatin' },
+  { name: 'Lisinopril', detail: 'Generic Zestril', category: 'Heart', how: GENERIC_HOW, priceUrl: 'https://www.goodrx.com/lisinopril' },
+  { name: 'Amlodipine', detail: 'Generic Norvasc', category: 'Heart', how: GENERIC_HOW, priceUrl: 'https://www.goodrx.com/amlodipine' },
+  { name: 'Eliquis', detail: 'Apixaban', category: 'Heart', how: 'The Bristol Myers Squibb Patient Assistance Foundation provides it free to people who qualify.', program: { name: 'BMS Patient Assistance Foundation', url: 'https://www.bmspaf.org' }, priceUrl: 'https://www.goodrx.com/eliquis' },
+  { name: 'Xarelto', detail: 'Rivaroxaban', category: 'Heart', how: 'Johnson & Johnson’s patient assistance foundation provides it free to people who qualify.', program: { name: 'J&J Patient Assistance Foundation', url: 'https://www.janssenprescriptionassistance.com' }, priceUrl: 'https://www.goodrx.com/xarelto' },
+  { name: 'Sertraline', detail: 'Generic Zoloft', category: 'Mental health', how: GENERIC_HOW, priceUrl: 'https://www.goodrx.com/sertraline' },
+  { name: 'Escitalopram', detail: 'Generic Lexapro', category: 'Mental health', how: GENERIC_HOW, priceUrl: 'https://www.goodrx.com/escitalopram' },
+  { name: 'Lisdexamfetamine', detail: 'Generic Vyvanse', category: 'Mental health', how: 'A generic version has been available since 2023 and costs far less than the brand.', priceUrl: 'https://www.goodrx.com/vyvanse' },
+  { name: 'Albuterol inhaler', detail: 'Generic ProAir, Ventolin', category: 'Breathing', how: GENERIC_HOW, priceUrl: 'https://www.goodrx.com/albuterol' },
+  { name: 'Advair or Symbicort', detail: 'Inhaled steroid combinations', category: 'Breathing', how: 'GSK (Advair) and AstraZeneca (Symbicort, through AZ&Me) run assistance programs for people who qualify.', program: { name: 'AZ&Me', url: 'https://www.azandmeassistance.com' }, priceUrl: 'https://www.goodrx.com/advair' },
+  { name: 'Levothyroxine', detail: 'Generic Synthroid', category: 'Other', how: GENERIC_HOW, priceUrl: 'https://www.goodrx.com/levothyroxine' },
+  { name: 'Omeprazole', detail: 'Generic Prilosec', category: 'Other', how: 'Generic, and also sold over the counter.', priceUrl: 'https://www.goodrx.com/omeprazole' },
+  { name: 'Humira', detail: 'Adalimumab', category: 'Other', how: 'myAbbVie Assist provides it free to people who qualify. Lower-cost biosimilars are also available.', program: { name: 'myAbbVie Assist', url: 'https://www.abbvie.com/patients/patient-assistance.html' }, priceUrl: 'https://www.goodrx.com/humira' },
+  { name: 'Dupixent', detail: 'Dupilumab', category: 'Other', how: 'Sanofi and Regeneron offer patient support, including free medication for people who qualify.', program: { name: 'Dupixent MyWay', url: 'https://www.dupixentmyway.com' }, priceUrl: 'https://www.goodrx.com/dupixent' },
+  { name: 'Keytruda', detail: 'Pembrolizumab', category: 'Other', how: 'Merck offers financial support programs. Ask the treating clinic’s financial counselor.', program: { name: 'Merck support', url: 'https://www.keytruda.com/financial-support.html' }, priceUrl: 'https://www.goodrx.com/keytruda' },
+  { name: 'PrEP (Truvada)', detail: 'Emtricitabine / tenofovir', category: 'Other', how: 'A generic is available, and Gilead’s Advancing Access program helps people who qualify.', program: { name: 'Gilead Advancing Access', url: 'https://www.gileadadvancingaccess.com' }, priceUrl: 'https://www.goodrx.com/truvada' },
+]
+
+const CATEGORIES = ['All', 'Diabetes', 'Heart', 'Mental health', 'Breathing', 'Other']
 
 const TIPS = [
-  { icon: '1', text: 'Ask your doctor about generics. They have the same active ingredient as the brand name and, according to the FDA, usually cost 80–85% less.' },
-  { icon: '2', text: 'Search the drug name on NeedyMeds AND RxAssist — programs differ by manufacturer.' },
-  { icon: '3', text: 'Manufacturer assistance programs set their own income limits and paperwork. Some ship a 90-day supply at a time to people who qualify.' },
-  { icon: '4', text: 'FQHCs (federally-qualified health centers) dispense medications at deep discounts through the 340B drug program.' },
-  { icon: '5', text: 'GoodRx and similar coupons can\'t be combined with insurance — use whichever is cheaper per fill.' },
-  { icon: '6', text: 'Some pharmacies, such as Walmart, have low-price lists for common generics — ask your pharmacist.' },
+  'Ask your doctor whether a generic exists. Generics have the same active ingredient as the brand and, according to the FDA, usually cost 80–85% less.',
+  'Check both NeedyMeds and RxAssist. Each drug maker runs its own program with its own rules.',
+  'Assistance programs ask for proof of income, and your doctor usually has to sign the application. Some ship a 90-day supply at a time.',
+  'Discount coupons such as GoodRx can’t be combined with insurance. Use whichever is cheaper for each fill.',
+  'Some pharmacies, such as Walmart, keep a low-price list of common generics. Ask the pharmacist.',
 ]
-
-const FQHC_LINK = '/search?type=fqhc'
-
-/* ── N1: PAP Drug Database ────────────────────────────────────────
-   Curated list of the most-sought drugs by uninsured Americans.
-   Each entry links directly to the manufacturer assistance program.
-   ─────────────────────────────────────────────────────────────── */
-const PAP_DRUGS = [
-  // Diabetes
-  { name: 'Insulin (all types)', brand: 'Humalog / Novolog / Lantus', category: 'Diabetes', manufacturer: 'Lilly, Novo Nordisk & Sanofi $35/month insulin programs', incomeLimit: 'See program', papUrl: 'https://www.lillyinsulinvalue.com', pricingUrl: 'https://costplusdrugs.com/medications/search/?q=insulin', color: '#60a5fa' },
-  { name: 'Metformin', brand: 'Glucophage (generic)', category: 'Diabetes', manufacturer: 'Generic — no PAP needed', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=metformin', pricingUrl: 'https://www.goodrx.com/metformin', color: '#60a5fa' },
-  { name: 'Ozempic', brand: 'Semaglutide (Wegovy is not covered by this program)', category: 'Diabetes', manufacturer: 'Novo Nordisk Patient Assistance Program', incomeLimit: 'See program', papUrl: 'https://www.novocare.com/psp/PAP.html', pricingUrl: 'https://www.goodrx.com/ozempic', color: '#60a5fa' },
-  { name: 'Trulicity', brand: 'Dulaglutide', category: 'Diabetes', manufacturer: 'Lilly Cares Foundation', incomeLimit: 'See program', papUrl: 'https://www.trulicity.com/savings-resources.html', pricingUrl: 'https://www.goodrx.com/trulicity', color: '#60a5fa' },
-  // Cardiovascular
-  { name: 'Atorvastatin', brand: 'Lipitor (generic)', category: 'Cardiovascular', manufacturer: 'Generic — Cost Plus / GoodRx', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=atorvastatin', pricingUrl: 'https://www.goodrx.com/atorvastatin', color: '#f472b6' },
-  { name: 'Lisinopril', brand: 'Prinivil / Zestril (generic)', category: 'Cardiovascular', manufacturer: 'Generic — no PAP needed', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=lisinopril', pricingUrl: 'https://www.goodrx.com/lisinopril', color: '#f472b6' },
-  { name: 'Eliquis', brand: 'Apixaban', category: 'Cardiovascular', manufacturer: 'Bristol Myers Squibb Patient Assistance Foundation', incomeLimit: 'See program', papUrl: 'https://www.bmspaf.org', pricingUrl: 'https://www.goodrx.com/eliquis', color: '#f472b6' },
-  { name: 'Xarelto', brand: 'Rivaroxaban', category: 'Cardiovascular', manufacturer: 'Johnson & Johnson Patient Assistance Foundation', incomeLimit: 'See program', papUrl: 'https://www.janssenprescriptionassistance.com', pricingUrl: 'https://www.goodrx.com/xarelto', color: '#f472b6' },
-  // Mental health
-  { name: 'Sertraline', brand: 'Zoloft (generic)', category: 'Mental Health', manufacturer: 'Generic — Cost Plus', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=sertraline', pricingUrl: 'https://www.goodrx.com/sertraline', color: '#a78bfa' },
-  { name: 'Escitalopram', brand: 'Lexapro (generic)', category: 'Mental Health', manufacturer: 'Generic — no PAP needed', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=escitalopram', pricingUrl: 'https://www.goodrx.com/escitalopram', color: '#a78bfa' },
-  { name: 'Vyvanse', brand: 'Lisdexamfetamine (generic available)', category: 'ADHD', manufacturer: 'Generic now available — no PAP needed', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=lisdexamfetamine', pricingUrl: 'https://www.goodrx.com/vyvanse', color: '#a78bfa' },
-  // Respiratory
-  { name: 'Albuterol inhaler', brand: 'ProAir / Ventolin (generic)', category: 'Respiratory', manufacturer: 'Generic available — no PAP needed', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=albuterol', pricingUrl: 'https://costplusdrugs.com/medications/search/?q=albuterol', color: '#34d399' },
-  { name: 'Advair / Symbicort', brand: 'Fluticasone / Budesonide combo', category: 'Respiratory', manufacturer: 'GSK & AstraZeneca (AZ&Me) assistance programs', incomeLimit: 'See program', papUrl: 'https://www.azandmeassistance.com', pricingUrl: 'https://www.goodrx.com/advair', color: '#34d399' },
-  // Specialty / Biologics
-  { name: 'Humira', brand: 'Adalimumab', category: 'Autoimmune', manufacturer: 'myAbbVie Assist', incomeLimit: 'See program', papUrl: 'https://www.abbvie.com/patients/patient-assistance.html', pricingUrl: 'https://www.goodrx.com/humira', color: '#fbbf24' },
-  { name: 'Dupixent', brand: 'Dupilumab', category: 'Autoimmune / Eczema', manufacturer: 'Sanofi & Regeneron patient support', incomeLimit: 'See program', papUrl: 'https://www.dupixent.com/support-and-savings.html', pricingUrl: 'https://www.goodrx.com/dupixent', color: '#fbbf24' },
-  { name: 'Keytruda', brand: 'Pembrolizumab', category: 'Oncology', manufacturer: 'Merck patient support programs', incomeLimit: 'See program', papUrl: 'https://www.keytruda.com/financial-support.html', pricingUrl: 'https://www.goodrx.com/keytruda', color: '#fbbf24' },
-  // Thyroid / Common
-  { name: 'Levothyroxine', brand: 'Synthroid (generic)', category: 'Thyroid', manufacturer: 'Generic — Cost Plus', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=levothyroxine', pricingUrl: 'https://www.goodrx.com/levothyroxine', color: '#6ee7b7' },
-  { name: 'Omeprazole', brand: 'Prilosec (generic)', category: 'Gastro', manufacturer: 'Generic — $4 at major pharmacies', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=omeprazole', pricingUrl: 'https://www.goodrx.com/omeprazole', color: '#6ee7b7' },
-  { name: 'Amlodipine', brand: 'Norvasc (generic)', category: 'Cardiovascular', manufacturer: 'Generic — Cost Plus', incomeLimit: 'Any', papUrl: 'https://costplusdrugs.com/medications/search/?q=amlodipine', pricingUrl: 'https://www.goodrx.com/amlodipine', color: '#f472b6' },
-  { name: 'HIV / PrEP (Truvada)', brand: 'Emtricitabine/TDF', category: 'HIV / Infectious', manufacturer: 'Gilead Advancing Access', incomeLimit: 'See program', papUrl: 'https://www.gileadadvancingaccess.com', pricingUrl: 'https://www.goodrx.com/truvada', color: '#f87171' },
-]
-
-const PAP_CATEGORIES = ['All', ...Array.from(new Set(PAP_DRUGS.map(d => d.category)))]
 
 export default function MedicationsPage() {
-  const [search, setSearch] = useState('')
-  const [papSearch, setPapSearch] = useState('')
-  const [papCategory, setPapCategory] = useState('All')
+  const [query, setQuery] = useState('')
+  const [category, setCategory] = useState('All')
 
-  const filtered = PROGRAMS.filter(p =>
-    !search || p.name.toLowerCase().includes(search.toLowerCase()) ||
-    p.desc.toLowerCase().includes(search.toLowerCase()) ||
-    p.tags.some(t => t.toLowerCase().includes(search.toLowerCase()))
-  )
-
-  const filteredDrugs = useMemo(() => {
-    const q = papSearch.toLowerCase().trim()
-    return PAP_DRUGS.filter(d => {
-      const matchesCat = papCategory === 'All' || d.category === papCategory
-      const matchesQ = !q ||
-        d.name.toLowerCase().includes(q) ||
-        d.brand.toLowerCase().includes(q) ||
-        d.category.toLowerCase().includes(q) ||
-        d.manufacturer.toLowerCase().includes(q)
-      return matchesCat && matchesQ
-    })
-  }, [papSearch, papCategory])
+  const drugs = useMemo(() => {
+    const q = query.toLowerCase().trim()
+    return DRUGS.filter(d =>
+      (category === 'All' || d.category === category) &&
+      (!q || `${d.name} ${d.detail} ${d.category}`.toLowerCase().includes(q))
+    )
+  }, [query, category])
 
   return (
     <AppShell>
       <style>{`
-        .med-card { transition: border-color 0.2s, transform 0.2s; }
-        .med-card:hover { border-color: rgba(74,144,217,0.3) !important; transform: translateY(-2px); }
-        .med-tip { transition: background 0.15s; }
-        .med-tip:hover { background: rgba(255,255,255,0.03) !important; }
-        @media (max-width: 600px) {
-          .med-filter-row { flex-wrap: wrap !important; gap: 6px !important; }
-          .med-filter-row button { font-size: 11px !important; padding: 6px 12px !important; }
+        .meds { max-width: 880px; margin: 0 auto; padding: 112px 24px 96px; font-family: var(--font-inter); }
+        .meds h1 { font-family: var(--font-display); font-size: clamp(32px, 5vw, 44px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; color: var(--text); margin: 0 0 16px; }
+        .meds h2 { font-family: var(--font-display); font-size: 22px; font-weight: 700; letter-spacing: -0.01em; color: var(--text); margin: 0 0 8px; }
+        .meds .lead { font-size: 17px; line-height: 1.65; color: var(--text-2); margin: 0 0 12px; max-width: 640px; }
+        .meds .note { font-size: 14px; color: var(--text-3); margin: 0; }
+        .meds section { margin-top: 64px; }
+        .meds .sub { font-size: 15px; color: var(--text-2); margin: 0 0 20px; line-height: 1.6; }
+        .meds a { color: var(--accent); text-decoration: none; }
+        .meds a:hover { text-decoration: underline; text-underline-offset: 3px; }
+        .meds .list { border-top: 1px solid var(--border-subtle); }
+        .meds .row { padding: 18px 0; border-bottom: 1px solid var(--border-subtle); }
+        .meds .row-title { font-size: 16px; font-weight: 600; color: var(--text); }
+        .meds .row-desc { font-size: 15px; color: var(--text-2); line-height: 1.6; margin-top: 4px; }
+        .meds .drug { display: grid; grid-template-columns: 200px 1fr auto; gap: 20px; align-items: start; }
+        .meds .drug-detail { font-size: 14px; color: var(--text-3); margin-top: 2px; }
+        .meds .drug-links { display: flex; flex-direction: column; gap: 6px; font-size: 14px; white-space: nowrap; text-align: right; }
+        .meds .controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 8px; }
+        .meds input[type=search] { flex: 1 1 240px; padding: 11px 14px; border-radius: 8px; background: var(--bg2); border: 1px solid var(--border); color: var(--text); font-size: 15px; font-family: inherit; outline: none; }
+        .meds input[type=search]:focus { border-color: var(--accent); }
+        .meds .tabs { display: flex; flex-wrap: wrap; gap: 4px; }
+        .meds .tab { padding: 7px 12px; border-radius: 6px; border: none; background: none; color: var(--text-3); font-size: 14px; font-family: inherit; cursor: pointer; }
+        .meds .tab[aria-pressed=true] { background: var(--bg3); color: var(--text); font-weight: 600; }
+        .meds ol { margin: 0; padding-left: 20px; color: var(--text-2); font-size: 15px; line-height: 1.7; }
+        .meds ol li { margin-bottom: 10px; }
+        @media (max-width: 640px) {
+          .meds .drug { grid-template-columns: 1fr; gap: 6px; }
+          .meds .drug-links { flex-direction: row; gap: 16px; text-align: left; }
         }
       `}</style>
 
-      {/* Hero */}
-      <section style={{ position: 'relative', overflow: 'hidden', padding: '100px 24px 60px', textAlign: 'center', background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(74,144,217,0.08) 0%, transparent 70%)' }}>
-        <DotGrid opacity={0.3} />
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: 720, margin: '0 auto' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '5px 14px', borderRadius: 100, background: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.2)', fontSize: 11, fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 24 }}>
-            <Health size={12} color="var(--accent)" />
-            Medication Access
-          </div>
-          <h1 style={{ fontSize: 'clamp(32px,6vw,56px)', fontWeight: 800, fontFamily: 'var(--font-display)', letterSpacing: '-0.03em', color: 'var(--text)', marginBottom: 16, lineHeight: 1.1 }}>
-            Get Your Medications<br />
-            <span style={{ color: 'var(--accent)' }}>Free or Deeply Discounted</span>
-          </h1>
-          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, fontFamily: 'var(--font-inter)', fontWeight: 300, maxWidth: 560, margin: '0 auto 32px' }}>
-            Many drug makers run assistance programs that give medications free or at low cost to people who qualify. Most people don&apos;t know they exist. Here&apos;s where to find them.
-          </p>
+      <div className="meds">
+        <p className="note" style={{ marginBottom: 12 }}>Medications</p>
+        <h1>Lower-cost prescriptions</h1>
+        <p className="lead">
+          Many generics cost a few dollars a month with a discount coupon, and most drug makers run assistance
+          programs that provide brand-name medications free to people with lower incomes. Here is where to look.
+        </p>
+        <p className="note">This is a resource guide, not medical advice. Talk with your doctor or pharmacist before changing a medication.</p>
 
-          {/* Disclaimer */}
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '12px 16px', borderRadius: 12, background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.2)', maxWidth: 520, margin: '0 auto 24px', textAlign: 'left' }}>
-            <InfoCircle size={15} color="#fbbf24" style={{ flexShrink: 0, marginTop: 1 }} />
-            <p style={{ fontSize: 12, color: 'rgba(255,200,60,0.8)', fontFamily: 'var(--font-inter)', margin: 0, lineHeight: 1.6 }}>
-              Always consult your healthcare provider before changing medications. This is a resource guide, not medical advice.
-            </p>
+        <section aria-labelledby="where">
+          <h2 id="where">Where to look</h2>
+          <div className="list">
+            {RESOURCES.map(r => (
+              <div key={r.name} className="row">
+                <a className="row-title" href={r.url} target="_blank" rel="noopener noreferrer">{r.name} ↗</a>
+                <div className="row-desc">{r.desc}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section aria-labelledby="common">
+          <h2 id="common">Common medications</h2>
+          <p className="sub">The cheapest route for {DRUGS.length} commonly prescribed drugs. Assistance programs set their own income limits.</p>
+
+          <div className="controls">
+            <label htmlFor="med-search" className="sr-only">Search medications</label>
+            <input id="med-search" type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search by drug name" />
+          </div>
+          <div className="tabs" role="group" aria-label="Filter by category" style={{ marginBottom: 12 }}>
+            {CATEGORIES.map(c => (
+              <button key={c} className="tab" aria-pressed={category === c} onClick={() => setCategory(c)}>{c}</button>
+            ))}
           </div>
 
-          {/* Search */}
-          <div style={{ position: 'relative', maxWidth: 440, margin: '0 auto' }}>
-            <SearchNormal1 size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--accent)', opacity: 0.6 }} />
-            <label htmlFor="med-search" className="sr-only">Search medication programs</label>
-            <input
-              id="med-search"
-              type="search"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="Search programs or drug type…"
-              style={{ width: '100%', padding: '12px 16px 12px 42px', borderRadius: 12, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(74,144,217,0.2)', color: 'var(--text)', fontFamily: 'var(--font-inter)', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
-              onFocus={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.4)')}
-              onBlur={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.2)')}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Programs grid */}
-      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px 60px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 20, marginBottom: 60 }}>
-          {filtered.map(p => {
-            const PIcon = p.Icon
-            return (
-            <a
-              key={p.name}
-              href={p.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="med-card"
-              style={{ display: 'block', padding: '24px', borderRadius: 16, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', textDecoration: 'none', position: 'relative', overflow: 'hidden' }}
-            >
-              <div style={{ position: 'absolute', top: 0, left: 0, width: 3, height: '100%', background: p.color, borderRadius: '16px 0 0 16px' }} />
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', flexShrink: 0 }}>
-                    <PIcon size={24} color={p.color} variant="TwoTone" aria-hidden="true" />
-                  </span>
-                  <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>{p.name}</span>
+          <div className="list">
+            {drugs.map(d => (
+              <div key={d.name} className="row drug">
+                <div>
+                  <div className="row-title">{d.name}</div>
+                  <div className="drug-detail">{d.detail}</div>
                 </div>
-                <ExportSquare size={14} color="rgba(255,255,255,0.45)" style={{ flexShrink: 0 }} />
+                <div className="row-desc" style={{ marginTop: 0 }}>{d.how}</div>
+                <div className="drug-links">
+                  {d.program && <a href={d.program.url} target="_blank" rel="noopener noreferrer">{d.program.name} ↗</a>}
+                  <a href={d.priceUrl} target="_blank" rel="noopener noreferrer">Compare prices ↗</a>
+                </div>
               </div>
-              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)', lineHeight: 1.6, marginBottom: 14, fontWeight: 300 }}>{p.desc}</p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                {p.tags.map(tag => (
-                  <span key={tag} style={{ padding: '3px 10px', borderRadius: 100, fontSize: 11, fontWeight: 500, background: `${p.color}14`, color: p.color, border: `1px solid ${p.color}30`, fontFamily: 'var(--font-inter)' }}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </a>
-            )
-          })}
-          {filtered.length === 0 && (
-            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '48px 24px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>
-              No programs match your search. Try a different term.
-            </div>
-          )}
-        </div>
-
-        {/* ── N1: Drug Assistance Finder ─────────────────────────────── */}
-        <div style={{ marginBottom: 60 }}>
-          {/* Section header */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(96,165,250,0.12)', border: '1px solid rgba(96,165,250,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Flash size={16} color="#60a5fa" />
-            </div>
-            <div>
-              <h2 style={{ fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', color: 'var(--text)', margin: 0 }}>
-                Prescription Assistance Finder
-              </h2>
-              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)', margin: 0, marginTop: 2 }}>
-                Search {PAP_DRUGS.length} drugs — direct links to manufacturer PAP programs &amp; price comparison
+            ))}
+            {drugs.length === 0 && (
+              <p className="row-desc" style={{ padding: '18px 0' }}>
+                No match. Search the full <a href="https://www.needymeds.org" target="_blank" rel="noopener noreferrer">NeedyMeds database</a>.
               </p>
-            </div>
-          </div>
-
-          {/* Search + category filter row */}
-          <div style={{ display: 'flex', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
-            <div style={{ position: 'relative', flex: '1 1 260px' }}>
-              <SearchNormal1 size={14} color="rgba(255,255,255,0.45)" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }} />
-              <label htmlFor="pap-search" className="sr-only">Search drug name or brand</label>
-              <input
-                id="pap-search"
-                type="search"
-                value={papSearch}
-                onChange={e => setPapSearch(e.target.value)}
-                placeholder="Search drug name, brand, or condition…"
-                style={{ width: '100%', padding: '10px 14px 10px 36px', borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--text)', fontFamily: 'var(--font-inter)', fontSize: 13, outline: 'none', boxSizing: 'border-box' }}
-                onFocus={e => (e.currentTarget.style.borderColor = 'rgba(96,165,250,0.4)')}
-                onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)')}
-              />
-            </div>
-          </div>
-
-          {/* Category pills */}
-          <div className="med-filter-row" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 20 }}>
-            {PAP_CATEGORIES.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setPapCategory(cat)}
-                style={{ padding: '5px 14px', borderRadius: 100, fontSize: 12, fontWeight: 500, fontFamily: 'var(--font-inter)', cursor: 'pointer', border: '1px solid', transition: 'all 0.15s', background: papCategory === cat ? 'rgba(96,165,250,0.15)' : 'transparent', borderColor: papCategory === cat ? 'rgba(96,165,250,0.4)' : 'rgba(255,255,255,0.1)', color: papCategory === cat ? '#60a5fa' : 'rgba(255,255,255,0.45)' }}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {/* #28 — Savings snapshot bar */}
-          <div style={{
-            display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '20px',
-            padding: '14px 18px', borderRadius: '12px',
-            background: 'rgba(52,211,153,0.04)', border: '1px solid rgba(52,211,153,0.15)',
-          }}>
-            {[
-              { val: filteredDrugs.filter(d => d.incomeLimit === 'Any').length.toString(), label: 'No income limit', color: '#34d399' },
-              { val: `${filteredDrugs.length}`, label: `drugs in ${papCategory === 'All' ? 'database' : papCategory}`, color: '#60a5fa' },
-              { val: '$35/mo', label: 'insulin cap programs from manufacturers', color: '#fbbf24' },
-            ].map(s => (
-              <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '14px', fontWeight: 800, color: s.color, fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>{s.val}</span>
-                <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)' }}>{s.label}</span>
-                <span style={{ color: 'rgba(255,255,255,0.1)' }}>·</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Drug cards grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
-            {filteredDrugs.map(drug => (
-              <div
-                key={drug.name}
-                style={{ borderRadius: 14, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', padding: '20px 20px 16px', position: 'relative', overflow: 'hidden' }}
-              >
-                {/* Left accent bar */}
-                <div style={{ position: 'absolute', top: 0, left: 0, width: 3, height: '100%', background: drug.color, borderRadius: '14px 0 0 14px' }} />
-
-                {/* Drug name + category */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
-                  <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)', fontFamily: 'var(--font-inter)', lineHeight: 1.3 }}>{drug.name}</div>
-                  <span style={{ padding: '2px 9px', borderRadius: 100, fontSize: 10, fontWeight: 600, background: `${drug.color}18`, color: drug.color, border: `1px solid ${drug.color}30`, flexShrink: 0, marginLeft: 8 }}>
-                    {drug.category}
-                  </span>
-                </div>
-
-                {/* Brand name */}
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-inter)', marginBottom: 6 }}>{drug.brand}</div>
-
-                {/* Savings badge */}
-                {drug.manufacturer.toLowerCase().includes('no pap') ? (
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 10px', borderRadius: 100, fontSize: 10, fontWeight: 700, background: 'rgba(52,211,153,0.10)', color: '#34d399', border: '1px solid rgba(52,211,153,0.25)', marginBottom: 8, fontFamily: 'var(--font-inter)' }}>
-                    ✓ Save up to 90% — generic available
-                  </div>
-                ) : drug.incomeLimit !== 'Any' ? (
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 10px', borderRadius: 100, fontSize: 10, fontWeight: 700, background: 'rgba(96,165,250,0.10)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.25)', marginBottom: 8, fontFamily: 'var(--font-inter)' }}>
-                    ★ Free or low-cost if you qualify
-                  </div>
-                ) : (
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 10px', borderRadius: 100, fontSize: 10, fontWeight: 700, background: 'rgba(251,191,36,0.08)', color: '#fbbf24', border: '1px solid rgba(251,191,36,0.25)', marginBottom: 8, fontFamily: 'var(--font-inter)' }}>
-                    $ Low-cost generic — compare prices
-                  </div>
-                )}
-
-                {/* Manufacturer row */}
-                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-inter)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <TickCircle size={11} color="rgba(255,255,255,0.45)" style={{ flexShrink: 0 }} />
-                  {drug.manufacturer}
-                </div>
-
-                {/* Income limit badge */}
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 100, fontSize: 11, fontWeight: 500, background: drug.incomeLimit === 'Any' ? 'rgba(52,211,153,0.1)' : 'rgba(251,191,36,0.08)', color: drug.incomeLimit === 'Any' ? '#34d399' : '#fbbf24', border: `1px solid ${drug.incomeLimit === 'Any' ? 'rgba(52,211,153,0.25)' : 'rgba(251,191,36,0.2)'}`, marginBottom: 14, fontFamily: 'var(--font-inter)' }}>
-                  {drug.incomeLimit === 'Any' ? '✓ No income limit' : 'Income limits apply — see program'}
-                </div>
-
-                {/* Action buttons */}
-                <div style={{ display: 'flex', gap: 8 }}>
-                  <a
-                    href={drug.papUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, padding: '8px 12px', borderRadius: 8, background: 'rgba(96,165,250,0.1)', border: '1px solid rgba(96,165,250,0.25)', color: '#60a5fa', fontSize: 12, fontWeight: 600, fontFamily: 'var(--font-inter)', textDecoration: 'none', transition: 'background 0.15s' }}
-                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(96,165,250,0.18)')}
-                    onMouseLeave={e => (e.currentTarget.style.background = 'rgba(96,165,250,0.1)')}
-                  >
-                    <Flash size={12} color="#60a5fa" />
-                    {drug.incomeLimit === 'Any' ? 'Low-cost option' : 'Assistance program'}
-                  </a>
-                  <a
-                    href={drug.pricingUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)', fontSize: 12, fontWeight: 500, fontFamily: 'var(--font-inter)', textDecoration: 'none', transition: 'background 0.15s' }}
-                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
-                    onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
-                  >
-                    <DollarCircle size={12} color="rgba(255,255,255,0.5)" />
-                    Compare prices
-                  </a>
-                </div>
-              </div>
-            ))}
-
-            {filteredDrugs.length === 0 && (
-              <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px 24px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)', fontSize: 14 }}>
-                No drugs match your search. Try a different term or clear the category filter.
-              </div>
             )}
           </div>
+        </section>
 
-          {/* Link to full NeedyMeds search */}
-          <div style={{ marginTop: 16, textAlign: 'center' }}>
-            <a href="https://www.needymeds.org/pap" target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: 'var(--accent)', textDecoration: 'none', fontFamily: 'var(--font-inter)', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-              <InfoCircle size={13} color="var(--accent)" />
-              Search full NeedyMeds database for any drug not listed here
-              <ExportSquare size={12} color="var(--accent)" />
-            </a>
-          </div>
-        </div>
-
-        {/* 340B tip */}
-        <div style={{ padding: '24px 28px', borderRadius: 16, background: 'linear-gradient(135deg, rgba(74,144,217,0.07), rgba(96,165,250,0.03))', border: '1px solid rgba(74,144,217,0.22)', marginBottom: 48, display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-          <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <DollarCircle size={22} color="var(--accent)" />
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-              <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-inter)' }}>
-                Ask about discounted prescriptions at health centers
-              </div>
-              <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 100, background: 'rgba(74,144,217,0.15)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.3)' }}>340B program</span>
-            </div>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)', lineHeight: 1.7, margin: '0 0 16px' }}>
-              Many community health centers take part in the federal 340B program, which lets them buy medications at a discount, and many pass savings on to uninsured patients through their pharmacy or sliding fee. Prices vary by center, so ask what your prescription would cost there.
-            </p>
-            <Link href={FQHC_LINK} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 700, color: '#07070F', background: 'var(--accent)', padding: '9px 18px', borderRadius: 9, textDecoration: 'none', fontFamily: 'var(--font-inter)' }}>
-              Find FQHCs near me <ArrowRight2 size={14} color="#07070F" />
-            </Link>
-          </div>
-        </div>
-
-        {/* Tips section */}
-        <h2 style={{ fontSize: 24, fontWeight: 700, fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', color: 'var(--text)', marginBottom: 20 }}>
-          Tips for reducing prescription costs
-        </h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {TIPS.map((tip, i) => (
-            <div key={i} className="med-tip" style={{ display: 'flex', gap: 16, alignItems: 'flex-start', padding: '14px 18px', borderRadius: 12, background: 'rgba(255,255,255,0.02)' }}>
-              <div style={{ width: 26, height: 26, borderRadius: '50%', background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-mono, monospace)', flexShrink: 0 }}>
-                {tip.icon}
-              </div>
-              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', fontFamily: 'var(--font-inter)', lineHeight: 1.65, margin: 0, fontWeight: 300 }}>{tip.text}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* CTA to search */}
-        <div style={{ marginTop: 60, textAlign: 'center', padding: '48px 24px', borderRadius: 20, background: 'rgba(74,144,217,0.04)', border: '1px solid rgba(74,144,217,0.12)' }}>
-          <Heart size={28} color="var(--accent)" style={{ marginBottom: 16 }} />
-          <h2 style={{ fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', color: 'var(--text)', marginBottom: 10 }}>
-            Also need free clinic care?
-          </h2>
-          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-inter)', marginBottom: 24, fontWeight: 300 }}>
-            Find free and sliding-scale clinics near you for ongoing care alongside free medications.
+        <section aria-labelledby="centers">
+          <h2 id="centers">Ask at a community health center</h2>
+          <p className="sub" style={{ marginBottom: 12 }}>
+            Many community health centers take part in the federal 340B program, which lets them buy medications at a
+            discount, and many pass the savings on to uninsured patients through their pharmacy or sliding fee. Prices
+            vary by center, so ask what your prescription would cost there.
           </p>
-          <Link href="/search" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '13px 28px', borderRadius: 12, background: 'var(--accent)', color: '#07070F', fontSize: 14, fontWeight: 600, fontFamily: 'var(--font-inter)', textDecoration: 'none' }}>
-            Find Free Clinics Near Me <ArrowRight2 size={16} color="#07070F" />
-          </Link>
-        </div>
-      </section>
+          <Link href="/search?type=fqhc">Find a health center near you →</Link>
+        </section>
+
+        <section aria-labelledby="tips">
+          <h2 id="tips">Ways to pay less</h2>
+          <ol>
+            {TIPS.map(t => <li key={t}>{t}</li>)}
+          </ol>
+        </section>
+      </div>
     </AppShell>
   )
 }

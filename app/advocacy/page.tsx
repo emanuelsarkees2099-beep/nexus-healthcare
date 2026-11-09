@@ -6,7 +6,7 @@ import { Speaker, TickCircle, Location, ArrowDown2, ExportSquare, Book1, Flash, 
 
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
   useEffect(() => {
     const el = ref.current; if (!el) return
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } }, { threshold })
@@ -54,7 +54,7 @@ const ISSUES = [
     id: 'medicaid-gap',
     title: 'The Medicaid coverage gap',
     status: 'Ongoing',
-    statusColor: '#fbbf24',
+    statusColor: '#4F8EF0',
     summary: 'Ten states have not adopted the ACA Medicaid expansion: Alabama, Florida, Georgia, Kansas, Mississippi, South Carolina, Tennessee, Texas, Wisconsin, and Wyoming. In most of them, adults can earn too much for Medicaid but too little to get Marketplace subsidies. Expansion is decided by each state’s legislature or, in some states, by ballot measure.',
     url: 'https://www.kff.org/medicaid/issue-brief/status-of-state-medicaid-expansion-decisions/',
     linkLabel: 'KFF expansion tracker',
@@ -63,7 +63,7 @@ const ISSUES = [
     id: 'drug-negotiation',
     title: 'Medicare drug price negotiation',
     status: 'In effect',
-    statusColor: '#60a5fa',
+    statusColor: '#4F8EF0',
     summary: 'The Inflation Reduction Act of 2022 let Medicare negotiate prices on some high-cost drugs for the first time. Negotiated prices for the first 10 drugs took effect January 1, 2026, and 15 more drugs were selected for prices starting in 2027.',
     url: 'https://www.cms.gov/inflation-reduction-act-and-medicare/medicare-drug-price-negotiation',
     linkLabel: 'CMS program page',
@@ -72,7 +72,7 @@ const ISSUES = [
     id: 'health-centers',
     title: 'Community health center funding',
     status: 'Needs renewal',
-    statusColor: '#a78bfa',
+    statusColor: '#4F8EF0',
     summary: 'Most federal funding for community health centers comes from the Community Health Center Fund, which Congress has to extend periodically. These centers must serve patients regardless of ability to pay, so lapses in that funding directly affect uninsured patients.',
     url: 'https://bphc.hrsa.gov/',
     linkLabel: 'HRSA Health Center Program',
@@ -81,12 +81,12 @@ const ISSUES = [
 
 /* Real, documented state expansions of coverage. */
 const POLICY_WINS = [
-  { state: 'ME', name: 'Maine', win: 'First state to expand Medicaid by ballot measure', year: '2017', color: '#60a5fa' },
+  { state: 'ME', name: 'Maine', win: 'First state to expand Medicaid by ballot measure', year: '2017', color: '#4F8EF0' },
   { state: 'UT', name: 'Utah, Idaho & Nebraska', win: 'Voters approved Medicaid expansion ballot measures', year: '2018', color: 'var(--accent)' },
-  { state: 'MO', name: 'Missouri & Oklahoma', win: 'Voters wrote Medicaid expansion into their state constitutions', year: '2020', color: '#a78bfa' },
-  { state: 'SD', name: 'South Dakota', win: 'Voters approved a constitutional amendment expanding Medicaid', year: '2022', color: '#60a5fa' },
-  { state: 'NC', name: 'North Carolina', win: 'Legislature passed Medicaid expansion; coverage began Dec 1, 2023', year: '2023', color: '#fbbf24' },
-  { state: 'CA', name: 'California', win: 'Full Medi-Cal opened to income-eligible adults regardless of immigration status', year: '2024', color: '#f472b6' },
+  { state: 'MO', name: 'Missouri & Oklahoma', win: 'Voters wrote Medicaid expansion into their state constitutions', year: '2020', color: '#4F8EF0' },
+  { state: 'SD', name: 'South Dakota', win: 'Voters approved a constitutional amendment expanding Medicaid', year: '2022', color: '#4F8EF0' },
+  { state: 'NC', name: 'North Carolina', win: 'Legislature passed Medicaid expansion; coverage began Dec 1, 2023', year: '2023', color: '#4F8EF0' },
+  { state: 'CA', name: 'California', win: 'Full Medi-Cal opened to income-eligible adults regardless of immigration status', year: '2024', color: '#4F8EF0' },
 ]
 
 const FAQ = [
@@ -102,23 +102,20 @@ export default function AdvocacyPage() {
   const [expandedIssue, setExpandedIssue] = useState<string | null>(null)
 
   const pill: React.CSSProperties = {
+    // Plain section label — no colored badge
     display: 'inline-flex', alignItems: 'center', gap: '6px',
-    padding: '4px 12px', borderRadius: '100px',
-    fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase' as const,
-    background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)',
+    fontSize: '13px', fontWeight: 600, color: 'var(--text-2)',
   }
 
   return (
     <AppShell>
       {/* ── HERO ─────────────────────────────────────── */}
       <section style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '120px 24px 72px', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: '800px', maxWidth: '100%', height: '500px', background: 'radial-gradient(ellipse, rgba(74,144,217,0.10) 0%, rgba(96,165,250,0.05) 45%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: '800px', maxWidth: '100%', height: '500px', background: 'transparent', pointerEvents: 'none' }} />
 
         <div style={{ maxWidth: '760px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}><span style={pill}><Speaker size={14} variant="Linear" /> Advocacy</span></div>
-          <h1 style={{ fontSize: 'clamp(40px, 7vw, 76px)', fontWeight: 800, lineHeight: 1.02, letterSpacing: '-0.035em', marginBottom: '24px', animation: 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both' }}>
-            Health policy is<br /><span style={{ color: 'var(--accent)' }}>decided by people.</span>
-          </h1>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.12, margin: '0 0 18px', color: 'var(--text)' }}>Make your voice heard on health policy</h1>
           <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: '540px', margin: '0 auto', animation: 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 100ms both' }}>
             Whether you can get Medicaid, what a Marketplace plan costs, and how much funding your local health center gets all come down to decisions by elected officials. Here&apos;s how to reach yours, and what&apos;s worth paying attention to.
           </p>
@@ -141,7 +138,7 @@ export default function AdvocacyPage() {
               <RevealBlock key={a.title} delay={i * 70}>
                 <a href={a.url} target="_blank" rel="noopener noreferrer"
                   style={{ display: 'flex', flexDirection: 'column', gap: '10px', height: '100%', boxSizing: 'border-box', padding: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '18px', textDecoration: 'none', color: 'inherit', transition: 'border-color 0.2s' }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(74,144,217,0.3)')}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(79,142,240,0.3)')}
                   onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}>
                   <h3 style={{ fontSize: '16px', fontWeight: 700, lineHeight: 1.3 }}>{a.title}</h3>
                   <p style={{ fontSize: '13.5px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.6, flex: 1 }}>{a.desc}</p>
@@ -214,7 +211,7 @@ export default function AdvocacyPage() {
             {POLICY_WINS.map((w, i) => (
               <RevealBlock key={w.state} delay={i * 70}>
                 <div style={{ padding: '22px 24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', display: 'flex', gap: '16px', alignItems: 'flex-start', height: '100%', boxSizing: 'border-box' }}>
-                  <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: `${w.color}15`, border: `1px solid ${w.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '13px', color: w.color, flexShrink: 0, fontFamily: 'var(--font-mono, monospace)' }}>{w.state}</div>
+                  <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: `${w.color}15`, border: `1px solid ${w.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '13px', color: w.color, flexShrink: 0, fontFamily: 'var(--font-inter)' }}>{w.state}</div>
                   <div>
                     <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '4px' }}>{w.name}</div>
                     <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.5, marginBottom: '6px' }}>{w.win}</div>
@@ -238,7 +235,7 @@ export default function AdvocacyPage() {
           </RevealBlock>
           {FAQ.map((f, i) => (
             <RevealBlock key={f.q} delay={i * 50}>
-              <div style={{ borderRadius: '14px', overflow: 'hidden', border: '1px solid', marginBottom: '6px', borderColor: openFaq === i ? 'rgba(74,144,217,0.2)' : 'rgba(255,255,255,0.06)', background: openFaq === i ? 'rgba(74,144,217,0.03)' : 'transparent', transition: 'all 0.25s' }}>
+              <div style={{ borderRadius: '14px', overflow: 'hidden', border: '1px solid', marginBottom: '6px', borderColor: openFaq === i ? 'rgba(79,142,240,0.2)' : 'rgba(255,255,255,0.06)', background: openFaq === i ? 'rgba(79,142,240,0.03)' : 'transparent', transition: 'all 0.25s' }}>
                 <button onClick={() => setOpenFaq(openFaq === i ? null : i)} aria-expanded={openFaq === i}
                   style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 22px', background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontFamily: 'inherit', textAlign: 'left', gap: '16px' }}>
                   <span style={{ fontSize: '15px', fontWeight: 500, lineHeight: 1.4 }}>{f.q}</span>

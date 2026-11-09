@@ -124,7 +124,7 @@ export default function Cursor() {
           pointerEvents: 'none',
           zIndex: 9999,
           transform: 'translate(-50%,-50%)',
-          boxShadow: '0 0 10px rgba(79,142,240,0.9), 0 0 24px rgba(79,142,240,0.45)',
+          boxShadow: 'none',
           transition: 'width 0.2s var(--ease-spring), height 0.2s var(--ease-spring), background 0.2s, box-shadow 0.2s',
         }}
       />
@@ -152,7 +152,7 @@ export default function Cursor() {
           position: 'fixed',
           width: '420px', height: '420px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(79,142,240,0.055) 0%, rgba(79,142,240,0.015) 40%, transparent 70%)',
+          background: 'transparent',
           pointerEvents: 'none',
           zIndex: 1,
           transform: 'translate(-50%,-50%)',

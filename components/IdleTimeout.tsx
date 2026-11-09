@@ -90,16 +90,16 @@ export function IdleTimeout() {
     }}>
       <div style={{
         background: 'rgba(10,11,20,0.95)',
-        border: '1px solid rgba(251,191,36,0.25)',
+        border: '1px solid rgba(79,142,240,0.25)',
         borderRadius: '16px', padding: '32px',
         maxWidth: '380px', width: '100%',
-        boxShadow: '0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(251,191,36,0.08)',
+        boxShadow: '0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(79,142,240,0.08)',
         textAlign: 'center',
         animation: 'fadeUp 0.3s cubic-bezier(0.16,1,0.3,1) both',
       }}>
         <div style={{
           width: '52px', height: '52px', borderRadius: '50%',
-          background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.25)',
+          background: 'rgba(79,142,240,0.1)', border: '1px solid rgba(79,142,240,0.25)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           margin: '0 auto 16px',
           fontSize: '22px',
@@ -113,7 +113,7 @@ export function IdleTimeout() {
           For your security, you&apos;ll be signed out in
         </p>
         <div style={{
-          fontSize: '32px', fontWeight: 700, color: '#fbbf24',
+          fontSize: '32px', fontWeight: 700, color: '#4F8EF0',
           fontVariantNumeric: 'tabular-nums', marginBottom: '20px',
           fontFamily: 'var(--font-display)',
         }}>

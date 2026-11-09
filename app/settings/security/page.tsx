@@ -194,18 +194,18 @@ export default function SecuritySettingsPage() {
       )}
 
       {success && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(52,211,153,0.08)', border: '1px solid rgba(52,211,153,0.22)', borderRadius: '8px', padding: '10px 12px', marginBottom: '20px', color: '#34d399', fontSize: '13px', animation: 'fadeUp 0.3s ease both' }}>
-          <TickCircle size={14} color="#34d399" variant="TwoTone" style={{ flexShrink: 0 }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.22)', borderRadius: '8px', padding: '10px 12px', marginBottom: '20px', color: '#4F8EF0', fontSize: '13px', animation: 'fadeUp 0.3s ease both' }}>
+          <TickCircle size={14} color="#4F8EF0" variant="TwoTone" style={{ flexShrink: 0 }} />
           {success}
-          <button onClick={() => setSuccess('')} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#34d399', cursor: 'pointer', fontSize: '16px', lineHeight: 1, padding: '0 2px' }}>×</button>
+          <button onClick={() => setSuccess('')} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#4F8EF0', cursor: 'pointer', fontSize: '16px', lineHeight: 1, padding: '0 2px' }}>×</button>
         </div>
       )}
 
       {/* 2FA Section */}
       <section style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '20px', marginBottom: '16px' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: has2FA || enrolling ? '20px' : '0' }}>
-          <div style={{ width: '36px', height: '36px', borderRadius: '9px', background: has2FA ? 'rgba(52,211,153,0.1)' : 'rgba(255,255,255,0.05)', border: `1px solid ${has2FA ? 'rgba(52,211,153,0.25)' : 'rgba(255,255,255,0.1)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <ShieldTick size={18} color={has2FA ? '#34d399' : 'rgba(255,255,255,0.4)'} variant="TwoTone" />
+          <div style={{ width: '36px', height: '36px', borderRadius: '9px', background: has2FA ? 'rgba(79,142,240,0.1)' : 'rgba(255,255,255,0.05)', border: `1px solid ${has2FA ? 'rgba(79,142,240,0.25)' : 'rgba(255,255,255,0.1)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <ShieldTick size={18} color={has2FA ? '#4F8EF0' : 'rgba(255,255,255,0.4)'} variant="TwoTone" />
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -246,7 +246,7 @@ export default function SecuritySettingsPage() {
                 style={{ borderRadius: '8px', background: '#fff', padding: '8px' }} />
             </div>
             {totpSecret && (
-              <p style={{ fontSize: '11px', color: 'var(--text-3, #6b7280)', textAlign: 'center', marginBottom: '20px', fontFamily: 'monospace', letterSpacing: '0.05em' }}>
+              <p style={{ fontSize: '11px', color: 'var(--text-3, #6b7280)', textAlign: 'center', marginBottom: '20px', fontFamily: 'monospace', letterSpacing: '0' }}>
                 Manual code: {totpSecret}
               </p>
             )}
@@ -257,7 +257,7 @@ export default function SecuritySettingsPage() {
               <input type="text" inputMode="numeric" pattern="[0-9]*" maxLength={6}
                 value={verifyCode} onChange={e => { setVerifyCode(e.target.value.replace(/\D/g, '')); setError('') }}
                 placeholder="000000"
-                style={{ flex: 1, padding: '11px 14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '9px', color: 'var(--text, #e8eaf0)', fontSize: '18px', fontFamily: 'monospace', outline: 'none', letterSpacing: '0.2em', caretColor: '#4F8EF0' }} />
+                style={{ flex: 1, padding: '11px 14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '9px', color: 'var(--text, #e8eaf0)', fontSize: '18px', fontFamily: 'monospace', outline: 'none', letterSpacing: '0', caretColor: '#4F8EF0' }} />
               <button onClick={verifyEnrollment} disabled={verifying || verifyCode.length !== 6}
                 style={{ padding: '11px 20px', background: 'var(--accent, #4F8EF0)', color: '#fff', border: 'none', borderRadius: '9px', fontWeight: 600, fontSize: '13px', fontFamily: 'inherit', cursor: verifying || verifyCode.length !== 6 ? 'not-allowed' : 'pointer', opacity: verifying || verifyCode.length !== 6 ? 0.6 : 1, display: 'flex', alignItems: 'center', gap: '6px' }}>
                 {verifying && <Spinner />}
@@ -275,7 +275,7 @@ export default function SecuritySettingsPage() {
         {showCodes && recoveryCodes.length > 0 && (
           <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-              <Key size={14} color="#fbbf24" variant="TwoTone" />
+              <Key size={14} color="#4F8EF0" variant="TwoTone" />
               <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text, #e8eaf0)' }}>Recovery codes</span>
             </div>
             <p style={{ fontSize: '12px', color: 'var(--text-3, #6b7280)', marginBottom: '14px', lineHeight: 1.5 }}>
@@ -283,15 +283,15 @@ export default function SecuritySettingsPage() {
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginBottom: '14px' }}>
               {recoveryCodes.map((code, i) => (
-                <div key={i} style={{ padding: '7px 10px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '6px', fontFamily: 'monospace', fontSize: '12px', color: 'var(--text-2, #c9d1d9)', letterSpacing: '0.05em', textAlign: 'center' }}>
+                <div key={i} style={{ padding: '7px 10px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '6px', fontFamily: 'monospace', fontSize: '12px', color: 'var(--text-2, #c9d1d9)', letterSpacing: '0', textAlign: 'center' }}>
                   {code}
                 </div>
               ))}
             </div>
             <div style={{ display: 'flex', gap: '8px' }}>
               <button onClick={copyCodes}
-                style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '8px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '7px', color: copiedCodes ? '#34d399' : 'var(--text-2, #c9d1d9)', fontSize: '12px', fontWeight: 500, fontFamily: 'inherit', cursor: 'pointer', transition: 'all 0.15s' }}>
-                <Copy size={13} color={copiedCodes ? '#34d399' : 'rgba(255,255,255,0.5)'} variant="Linear" />
+                style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '8px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '7px', color: copiedCodes ? '#4F8EF0' : 'var(--text-2, #c9d1d9)', fontSize: '12px', fontWeight: 500, fontFamily: 'inherit', cursor: 'pointer', transition: 'all 0.15s' }}>
+                <Copy size={13} color={copiedCodes ? '#4F8EF0' : 'rgba(255,255,255,0.5)'} variant="Linear" />
                 {copiedCodes ? 'Copied!' : 'Copy all'}
               </button>
               <button onClick={() => setShowCodes(false)}

@@ -67,14 +67,14 @@ export default function VerifyPage() {
       <div aria-hidden="true" style={{
         position: 'absolute', top: '-80px', left: '50%', transform: 'translateX(-50%)',
         width: '700px', height: '400px',
-        background: 'radial-gradient(ellipse at 50% 0%, rgba(79,142,240,0.10) 0%, transparent 65%)',
+        background: 'transparent',
         filter: 'blur(20px)', pointerEvents: 'none',
       }} />
 
       {/* Dot grid */}
       <div aria-hidden="true" style={{
         position: 'absolute', inset: 0,
-        backgroundImage: 'radial-gradient(rgba(255,255,255,0.055) 1px, transparent 1px)',
+        backgroundImage: 'none',
         backgroundSize: '28px 28px',
         maskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 40%, transparent 100%)',
         WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 40%, transparent 100%)',
@@ -87,7 +87,7 @@ export default function VerifyPage() {
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '9px', textDecoration: 'none', marginBottom: '6px' }}>
             <Image src="/axvo-badge.png" alt="" width={22} height={22} style={{ borderRadius: '50%' }} />
-            <span style={{ fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 400, letterSpacing: '0.42em', color: 'var(--text)', opacity: 0.90 }}>AXVO</span>
+            <span style={{ fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 400, letterSpacing: '0', color: 'var(--text)', opacity: 0.90 }}>AXVO</span>
           </Link>
           <p style={{ fontSize: '12px', color: 'var(--text-3)', letterSpacing: '0.02em', margin: 0 }}>
             Free healthcare for everyone
@@ -97,20 +97,20 @@ export default function VerifyPage() {
         {/* ── Verified ── */}
         {status === 'verified' ? (
           <div className="success-card" style={{
-            background: 'rgba(52,211,153,0.05)',
+            background: 'rgba(79,142,240,0.05)',
             backdropFilter: 'blur(24px) saturate(160%)',
             WebkitBackdropFilter: 'blur(24px) saturate(160%)',
-            border: '1px solid rgba(52,211,153,0.18)',
+            border: '1px solid rgba(79,142,240,0.18)',
             borderRadius: '16px', padding: '48px 32px', textAlign: 'center',
             boxShadow: '0 32px 80px rgba(0,0,0,0.50), inset 0 1px 0 rgba(255,255,255,0.07)',
           }}>
             <div style={{
               width: '64px', height: '64px', borderRadius: '50%',
-              background: 'rgba(52,211,153,0.10)', border: '1px solid rgba(52,211,153,0.25)',
+              background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.25)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               margin: '0 auto 20px',
             }}>
-              <TickCircle size={36} color="#34d399" variant="TwoTone" />
+              <TickCircle size={36} color="#4F8EF0" variant="TwoTone" />
             </div>
             <h2 style={{ fontSize: '22px', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text)', marginBottom: '10px', fontFamily: 'var(--font-display)' }}>
               Email verified!

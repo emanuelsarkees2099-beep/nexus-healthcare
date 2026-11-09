@@ -16,15 +16,15 @@ const LABEL_CONFIG = {
     text:    'Likely Free',
     cls:     'aff-free',
     color:   'var(--accent)',
-    bg:      'rgba(74,144,217,0.10)',
-    border:  'rgba(74,144,217,0.22)',
+    bg:      'rgba(79,142,240,0.10)',
+    border:  'rgba(79,142,240,0.22)',
   },
   'low-cost': {
     text:    'Low Cost',
     cls:     'aff-low',
     color:   'var(--amber)',
-    bg:      'rgba(252,211,77,0.10)',
-    border:  'rgba(252,211,77,0.22)',
+    bg:      'rgba(79,142,240,0.10)',
+    border:  'rgba(79,142,240,0.22)',
   },
   'standard': {
     text:    'Standard Cost',
@@ -95,7 +95,7 @@ export default function AffordabilityBar({ score, label, reasons, compact = fals
           </div>
         </div>
         {/* Score mono */}
-        <span style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-mono),monospace', whiteSpace: 'nowrap' }}>
+        <span style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'var(--font-inter)', whiteSpace: 'nowrap' }}>
           {score}/100
         </span>
       </div>
@@ -113,7 +113,7 @@ export default function AffordabilityBar({ score, label, reasons, compact = fals
               background: cfg.bg, border: `1px solid ${cfg.border}`,
               borderRadius: '100px', padding: '4px 12px', cursor: 'default',
             }}>
-              <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: cfg.color, boxShadow: `0 0 6px ${cfg.color}` }} />
+              <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: cfg.color, boxShadow: 'none' }} />
               <span style={{ fontSize: '12px', fontWeight: 600, color: cfg.color, fontFamily: 'var(--font-inter),sans-serif' }}>
                 {cfg.text}
               </span>
@@ -126,7 +126,7 @@ export default function AffordabilityBar({ score, label, reasons, compact = fals
             </div>
           </div>
           <span style={{
-            fontFamily: 'var(--font-mono),monospace',
+            fontFamily: 'var(--font-inter)',
             fontSize: '13px', fontWeight: 600, color: cfg.color,
           }}>
             {score}<span style={{ color: 'var(--text-3)', fontWeight: 400 }}>/100</span>
@@ -167,8 +167,8 @@ export default function AffordabilityBar({ score, label, reasons, compact = fals
           animation: 'cmd-slide-in 0.2s ease',
         }}>
           <div style={{
-            fontSize: '10px', fontWeight: 600, letterSpacing: '0.10em',
-            textTransform: 'uppercase', color: 'var(--text-3)',
+            fontSize: '10px', fontWeight: 600, letterSpacing: '0',
+            textTransform: 'none', color: 'var(--text-3)',
             fontFamily: 'var(--font-inter),sans-serif', marginBottom: '8px',
           }}>
             Affordability Score Breakdown
@@ -196,7 +196,7 @@ export default function AffordabilityBar({ score, label, reasons, compact = fals
               Total Affordability Score
             </span>
             <span style={{
-              fontFamily: 'var(--font-mono),monospace',
+              fontFamily: 'var(--font-inter)',
               fontSize: '12px', fontWeight: 600, color: cfg.color,
             }}>
               {score} / 100

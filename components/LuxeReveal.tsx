@@ -93,7 +93,7 @@ export default function LuxeReveal({
             bottom: '-0.05em',
             left: '-90%',
             width: '70%',
-            background: 'linear-gradient(105deg, transparent 10%, rgba(255,255,255,0.22) 38%, rgba(255,255,255,0.14) 50%, rgba(255,255,255,0.05) 62%, transparent 78%)',
+            background: 'rgba(255,255,255,0.08)',
             mixBlendMode: 'overlay',
             animation: 'luxe-gleam 1.15s cubic-bezier(0.4,0,0.2,1) forwards',
             pointerEvents: 'none',

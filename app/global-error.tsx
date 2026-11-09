@@ -23,7 +23,7 @@ export default function GlobalError({
     <html lang="en">
       <body style={{ margin: 0, background: '#050609', color: '#F8F9FF', fontFamily: 'system-ui, -apple-system, sans-serif', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
         <div style={{ textAlign: 'center', maxWidth: '440px' }}>
-          <div style={{ fontSize: '13px', letterSpacing: '0.42em', color: 'rgba(248,249,255,0.6)', marginBottom: '28px' }}>AXVO</div>
+          <div style={{ fontSize: '13px', letterSpacing: '0', color: 'rgba(248,249,255,0.6)', marginBottom: '28px' }}>AXVO</div>
           <h1 style={{ fontSize: '24px', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '12px' }}>Something went wrong.</h1>
           <p style={{ fontSize: '15px', lineHeight: 1.6, color: 'rgba(248,249,255,0.62)', marginBottom: '28px' }}>
             The page failed to load. You can try again — and if you need care right now,
@@ -41,8 +41,8 @@ export default function GlobalError({
             </a>
           </div>
           <p style={{ fontSize: '13px', color: 'rgba(248,249,255,0.42)', lineHeight: 1.7 }}>
-            Medical emergency? Call <a href="tel:911" style={{ color: '#F59E0B', fontWeight: 600, textDecoration: 'none' }}>911</a>.
-            Mental-health crisis? Call or text <a href="tel:988" style={{ color: '#F59E0B', fontWeight: 600, textDecoration: 'none' }}>988</a>.
+            Medical emergency? Call <a href="tel:911" style={{ color: '#4F8EF0', fontWeight: 600, textDecoration: 'none' }}>911</a>.
+            Mental-health crisis? Call or text <a href="tel:988" style={{ color: '#4F8EF0', fontWeight: 600, textDecoration: 'none' }}>988</a>.
           </p>
         </div>
       </body>

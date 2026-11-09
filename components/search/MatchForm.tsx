@@ -48,9 +48,9 @@ const LANGUAGE_OPTIONS = [
 
 const INSURANCE_OPTIONS = [
   { id: 'none',     label: 'Uninsured',         desc: 'I have no coverage',            color: '#F87171' },
-  { id: 'medicaid', label: 'Medicaid / CHIP',   desc: 'Government insurance',          color: '#34D399' },
-  { id: 'aca',      label: 'Marketplace plan',  desc: 'Healthcare.gov plan',           color: '#60A5FA' },
-  { id: 'private',  label: 'Private insurance', desc: 'Through employer or self-pay',  color: '#A78BFA' },
+  { id: 'medicaid', label: 'Medicaid / CHIP',   desc: 'Government insurance',          color: '#4F8EF0' },
+  { id: 'aca',      label: 'Marketplace plan',  desc: 'Healthcare.gov plan',           color: '#4F8EF0' },
+  { id: 'private',  label: 'Private insurance', desc: 'Through employer or self-pay',  color: '#4F8EF0' },
 ]
 
 const STEP_TITLES = [
@@ -146,8 +146,8 @@ export default function MatchForm({ onClose, initialZip = '' }: Props) {
             transition: all 0.15s;
             text-align: left;
           }
-          .mf-option:hover { background: rgba(74,144,217,0.07); border-color: rgba(74,144,217,0.22); }
-          .mf-option.selected { background: rgba(74,144,217,0.10); border-color: rgba(74,144,217,0.35); }
+          .mf-option:hover { background: rgba(79,142,240,0.07); border-color: rgba(79,142,240,0.22); }
+          .mf-option.selected { background: rgba(79,142,240,0.10); border-color: rgba(79,142,240,0.35); }
         `}</style>
 
         {/* Header */}
@@ -163,7 +163,7 @@ export default function MatchForm({ onClose, initialZip = '' }: Props) {
               </button>
             )}
             <div>
-              <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.08em', color: 'var(--accent)', fontFamily: 'var(--font-inter)', marginBottom: '3px' }}>
+              <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0', color: 'var(--accent)', fontFamily: 'var(--font-inter)', marginBottom: '3px' }}>
                 STEP {step + 1} OF {TOTAL_STEPS}
               </div>
               <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text)', margin: 0, fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', lineHeight: 1.25 }}>
@@ -317,12 +317,12 @@ export default function MatchForm({ onClose, initialZip = '' }: Props) {
                     style={{
                       flex: 1, background: 'none', border: 'none', outline: 'none',
                       color: 'var(--text)', fontSize: '20px', fontWeight: 600,
-                      fontFamily: 'var(--font-mono),monospace', letterSpacing: '0.06em',
+                      fontFamily: 'var(--font-inter)', letterSpacing: '0',
                       caretColor: 'var(--accent)',
                     }}
                   />
                   {zip.length === 5 && (
-                    <TickCircle size={18} color="var(--success,#34D399)" variant="TwoTone" />
+                    <TickCircle size={18} color="var(--success,#4F8EF0)" variant="TwoTone" />
                   )}
                 </div>
                 {zipError && (
@@ -332,23 +332,23 @@ export default function MatchForm({ onClose, initialZip = '' }: Props) {
                 )}
 
                 {/* Summary of selections */}
-                <div style={{ marginTop: '20px', padding: '14px 16px', background: 'rgba(74,144,217,0.05)', border: '1px solid rgba(74,144,217,0.14)', borderRadius: '12px' }}>
-                  <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.07em', color: 'var(--accent)', fontFamily: 'var(--font-inter)', marginBottom: '10px' }}>
+                <div style={{ marginTop: '20px', padding: '14px 16px', background: 'rgba(79,142,240,0.05)', border: '1px solid rgba(79,142,240,0.14)', borderRadius: '12px' }}>
+                  <div style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0', color: 'var(--accent)', fontFamily: 'var(--font-inter)', marginBottom: '10px' }}>
                     YOUR MATCH PREFERENCES
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                     {needs.map(n => (
-                      <span key={n} style={{ fontSize: '11px', fontFamily: 'var(--font-inter)', fontWeight: 500, padding: '3px 9px', borderRadius: '100px', background: 'rgba(74,144,217,0.10)', border: '1px solid rgba(74,144,217,0.25)', color: 'var(--accent)' }}>
+                      <span key={n} style={{ fontSize: '11px', fontFamily: 'var(--font-inter)', fontWeight: 500, padding: '3px 9px', borderRadius: '100px', background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.25)', color: 'var(--accent)' }}>
                         {NEEDS_OPTIONS.find(o => o.id === n)?.label}
                       </span>
                     ))}
                     {language && (
-                      <span style={{ fontSize: '11px', fontFamily: 'var(--font-inter)', fontWeight: 500, padding: '3px 9px', borderRadius: '100px', background: 'rgba(167,139,250,0.10)', border: '1px solid rgba(167,139,250,0.25)', color: '#A78BFA' }}>
+                      <span style={{ fontSize: '11px', fontFamily: 'var(--font-inter)', fontWeight: 500, padding: '3px 9px', borderRadius: '100px', background: 'rgba(79,142,240,0.10)', border: '1px solid rgba(79,142,240,0.25)', color: '#4F8EF0' }}>
                         {LANGUAGE_OPTIONS.find(o => o.id === language)?.label}
                       </span>
                     )}
                     {insurance && (
-                      <span style={{ fontSize: '11px', fontFamily: 'var(--font-inter)', fontWeight: 500, padding: '3px 9px', borderRadius: '100px', background: 'rgba(52,211,153,0.08)', border: '1px solid rgba(52,211,153,0.22)', color: '#34D399' }}>
+                      <span style={{ fontSize: '11px', fontFamily: 'var(--font-inter)', fontWeight: 500, padding: '3px 9px', borderRadius: '100px', background: 'rgba(79,142,240,0.08)', border: '1px solid rgba(79,142,240,0.22)', color: '#4F8EF0' }}>
                         {INSURANCE_OPTIONS.find(o => o.id === insurance)?.label}
                       </span>
                     )}

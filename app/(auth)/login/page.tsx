@@ -212,8 +212,8 @@ function LoginPageInner() {
       `}</style>
 
       <div className="aurora-bg" aria-hidden="true"><div className="aurora-orb-3" /></div>
-      <div aria-hidden="true" style={{ position: 'absolute', top: '-80px', left: '50%', transform: 'translateX(-50%)', width: '700px', height: '400px', background: 'radial-gradient(ellipse at 50% 0%, rgba(79,142,240,0.10) 0%, transparent 65%)', filter: 'blur(20px)', pointerEvents: 'none' }} />
-      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(255,255,255,0.055) 1px, transparent 1px)', backgroundSize: '28px 28px', maskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 40%, transparent 100%)', WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 40%, transparent 100%)', pointerEvents: 'none' }} />
+      <div aria-hidden="true" style={{ position: 'absolute', top: '-80px', left: '50%', transform: 'translateX(-50%)', width: '700px', height: '400px', background: 'transparent', filter: 'blur(20px)', pointerEvents: 'none' }} />
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, backgroundImage: 'none', backgroundSize: '28px 28px', maskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 40%, transparent 100%)', WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, black 40%, transparent 100%)', pointerEvents: 'none' }} />
 
       <div className="auth-card" style={{ width: '100%', maxWidth: '420px', position: 'relative', zIndex: 10 }}>
 
@@ -221,7 +221,7 @@ function LoginPageInner() {
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '9px', textDecoration: 'none', marginBottom: '6px' }}>
             <Image src="/axvo-badge.png" alt="" width={22} height={22} style={{ borderRadius: '50%' }} />
-            <span style={{ fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 400, letterSpacing: '0.42em', color: 'var(--text)', opacity: 0.90 }}>AXVO</span>
+            <span style={{ fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 400, letterSpacing: '0', color: 'var(--text)', opacity: 0.90 }}>AXVO</span>
           </Link>
           <p style={{ fontSize: '12px', color: 'var(--text-3)', letterSpacing: '0.02em', margin: 0 }}>
             Free healthcare for everyone
@@ -232,11 +232,11 @@ function LoginPageInner() {
         {sessionReasonMsg && (
           <div style={{
             display: 'flex', alignItems: 'flex-start', gap: '9px',
-            background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.18)',
+            background: 'rgba(79,142,240,0.06)', border: '1px solid rgba(79,142,240,0.18)',
             borderRadius: '9px', padding: '11px 13px', marginBottom: '16px',
-            color: '#fbbf24', fontSize: '12px', lineHeight: '1.45',
+            color: '#4F8EF0', fontSize: '12px', lineHeight: '1.45',
           }}>
-            <ShieldTick size={14} color="#fbbf24" variant="TwoTone" style={{ flexShrink: 0, marginTop: '1px' }} />
+            <ShieldTick size={14} color="#4F8EF0" variant="TwoTone" style={{ flexShrink: 0, marginTop: '1px' }} />
             {sessionReasonMsg}
           </div>
         )}
@@ -300,7 +300,7 @@ function LoginPageInner() {
             {/* Divider */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
               <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.07)' }} />
-              <span style={{ fontSize: '11px', color: 'var(--text-3)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>or</span>
+              <span style={{ fontSize: '11px', color: 'var(--text-3)', letterSpacing: '0', textTransform: 'none' }}>or</span>
               <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.07)' }} />
             </div>
 

@@ -130,8 +130,8 @@ export default function PushNotificationToggle() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{
             width: '32px', height: '32px', borderRadius: '8px', flexShrink: 0,
-            background: isSubscribed ? 'rgba(74,144,217,0.12)' : 'rgba(255,255,255,0.05)',
-            border: `1px solid ${isSubscribed ? 'rgba(74,144,217,0.25)' : 'rgba(255,255,255,0.08)'}`,
+            background: isSubscribed ? 'rgba(79,142,240,0.12)' : 'rgba(255,255,255,0.05)',
+            border: `1px solid ${isSubscribed ? 'rgba(79,142,240,0.25)' : 'rgba(255,255,255,0.08)'}`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             transition: 'background 0.2s',
           }}>

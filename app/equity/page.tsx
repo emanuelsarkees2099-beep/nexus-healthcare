@@ -6,7 +6,7 @@ import { Global, TrendUp, Chart2, Danger, ArrowRight, ArrowDown2 } from 'iconsax
 /* ── reveal helper ── */
 function useReveal(threshold = 0.12) {
   const ref = useRef<HTMLDivElement>(null)
-  const [v, setV] = useState(false)
+  const [v, setV] = useState(true)
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); obs.disconnect() } }, { threshold })
     if (ref.current) obs.observe(ref.current)
@@ -42,10 +42,10 @@ function Bar({ pct, color, label, value }: { pct: number; color: string; label: 
       <div style={{ height: '7px', background: 'rgba(255,255,255,0.06)', borderRadius: '100px', overflow: 'hidden' }}>
         <div style={{
           height: '100%', width: `${w}%`,
-          background: `linear-gradient(90deg, ${color}, ${color}88)`,
+          background: 'var(--accent)',
           borderRadius: '100px',
           transition: 'width 1.2s cubic-bezier(0.16,1,0.3,1)',
-          boxShadow: `0 0 10px ${color}44`,
+          boxShadow: 'none',
         }} />
       </div>
     </div>
@@ -57,7 +57,7 @@ function HeatGrid({ title, data }: { title: string; data: { label: string; value
   const max = Math.max(...data.map(d => d.value))
   return (
     <div>
-      <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: 'var(--font-inter)', marginBottom: '16px' }}>{title}</div>
+      <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0', textTransform: 'none', fontFamily: 'var(--font-inter)', marginBottom: '16px' }}>{title}</div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
         {data.map((d, i) => {
           const intensity = d.value / max
@@ -118,9 +118,9 @@ const STATE_DATA_UNINSURED = [
 
 /* Uninsured rates for people ages 0–64, 2024 — KFF analysis of the ACS. */
 const DISPARITIES = [
-  { label: 'Black people vs. white people', white: 6.8, poc: 10.1, color: '#A78BFA' },
-  { label: 'Hispanic people vs. white people', white: 6.8, poc: 18.4, color: '#FB923C' },
-  { label: 'American Indian & Alaska Native people vs. white people', white: 6.8, poc: 18.9, color: '#F472B6' },
+  { label: 'Black people vs. white people', white: 6.8, poc: 10.1, color: '#4F8EF0' },
+  { label: 'Hispanic people vs. white people', white: 6.8, poc: 18.4, color: '#4F8EF0' },
+  { label: 'American Indian & Alaska Native people vs. white people', white: 6.8, poc: 18.9, color: '#4F8EF0' },
 ]
 
 const STORIES = [
@@ -129,7 +129,7 @@ const STORIES = [
     subhead: 'Who goes without coverage, and why',
     readTime: '7 min read',
     tag: 'Investigation',
-    color: '#4A90D9',
+    color: '#4F8EF0',
     body: "Arizona's 10.3% uninsured rate isn't random. It clusters in the counties, industries, and communities that policy has excluded for decades.",
   },
   {
@@ -145,34 +145,32 @@ const STORIES = [
     subhead: 'GLP-1s and who can afford them',
     readTime: '6 min read',
     tag: 'Data Story',
-    color: '#60A5FA',
+    color: '#4F8EF0',
     body: "The same GLP-1 prescription can cost $50 or $1,300 a month depending on what coverage, if any, you have. The people who'd benefit most often can't get it.",
   },
 ]
 
 const FACT_CARDS = [
   { stat: '26.7M', label: 'Uninsured all year', context: 'People in the U.S. with no health insurance for all of 2025 (7.9%). Source: U.S. Census Bureau', color: '#F87171' },
-  { stat: '20+ yrs', label: 'Life expectancy gap', context: 'Between U.S. counties with the highest and lowest life expectancy. Source: JAMA Internal Medicine, 2017', color: '#FCD34D' },
-  { stat: '41%', label: 'Have health care debt', context: 'Share of U.S. adults with debt from medical or dental bills — about 100 million people. Source: KFF, 2022', color: '#A78BFA' },
-  { stat: '16.8%', label: 'Uninsured in Texas', context: 'The highest rate of any state in 2024, compared with 2.8% in Massachusetts. Source: KFF analysis of Census data', color: '#4A90D9' },
+  { stat: '20+ yrs', label: 'Life expectancy gap', context: 'Between U.S. counties with the highest and lowest life expectancy. Source: JAMA Internal Medicine, 2017', color: '#4F8EF0' },
+  { stat: '41%', label: 'Have health care debt', context: 'Share of U.S. adults with debt from medical or dental bills — about 100 million people. Source: KFF, 2022', color: '#4F8EF0' },
+  { stat: '16.8%', label: 'Uninsured in Texas', context: 'The highest rate of any state in 2024, compared with 2.8% in Massachusetts. Source: KFF analysis of Census data', color: '#4F8EF0' },
 ]
 
 const POLICY_TIMELINE = [
-  { year: '1965', event: 'Medicare & Medicaid established', impact: 'First federal healthcare safety net', color: '#4A90D9' },
-  { year: '1986', event: 'EMTALA enacted', impact: 'Hospital ERs must screen and stabilize anyone, regardless of ability to pay', color: '#A78BFA' },
-  { year: '2010', event: 'Affordable Care Act signed', impact: 'Medicaid expansion, pre-existing conditions banned', color: '#60A5FA' },
-  { year: '2014', event: 'ACA marketplaces open and Medicaid expansion begins', impact: 'About 8 million people signed up during the first open enrollment', color: '#FCD34D' },
-  { year: '2021', event: 'American Rescue Plan', impact: 'Enlarged premium tax credits and removed the 400% FPL cutoff', color: '#FB923C' },
-  { year: '2022', event: 'Inflation Reduction Act', impact: 'Extended enhanced subsidies through 2025', color: '#F472B6' },
+  { year: '1965', event: 'Medicare & Medicaid established', impact: 'First federal healthcare safety net', color: '#4F8EF0' },
+  { year: '1986', event: 'EMTALA enacted', impact: 'Hospital ERs must screen and stabilize anyone, regardless of ability to pay', color: '#4F8EF0' },
+  { year: '2010', event: 'Affordable Care Act signed', impact: 'Medicaid expansion, pre-existing conditions banned', color: '#4F8EF0' },
+  { year: '2014', event: 'ACA marketplaces open and Medicaid expansion begins', impact: 'About 8 million people signed up during the first open enrollment', color: '#4F8EF0' },
+  { year: '2021', event: 'American Rescue Plan', impact: 'Enlarged premium tax credits and removed the 400% FPL cutoff', color: '#4F8EF0' },
+  { year: '2022', event: 'Inflation Reduction Act', impact: 'Extended enhanced subsidies through 2025', color: '#4F8EF0' },
   { year: '2025', event: 'Enhanced subsidies expire', impact: 'The larger tax credits ended Dec 31, 2025, raising premiums for many enrollees in 2026', color: '#F87171' },
 ]
 
 const pill: React.CSSProperties = {
+  // Plain section label — no colored badge
   display: 'inline-flex', alignItems: 'center', gap: '6px',
-  padding: '4px 12px', borderRadius: '100px',
-  fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-  background: 'rgba(74,144,217,0.08)', color: 'var(--accent)',
-  border: '1px solid rgba(74,144,217,0.18)',
+  fontSize: '13px', fontWeight: 600, color: 'var(--text-2)',
 }
 
 export default function EquityPage() {
@@ -188,7 +186,7 @@ export default function EquityPage() {
       }}>
         <div aria-hidden="true" style={{
           position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(248,113,113,0.08) 0%, transparent 65%)',
+          background: 'transparent',
           pointerEvents: 'none',
         }} />
 
@@ -199,14 +197,7 @@ export default function EquityPage() {
         </Reveal>
 
         <Reveal delay={80}>
-          <h1 style={{
-            fontSize: 'clamp(36px, 6.5vw, 76px)', fontWeight: 800,
-            letterSpacing: '-0.03em', lineHeight: 1.08, marginBottom: '24px',
-            maxWidth: '760px',
-          }}>
-            The data behind{' '}
-            <em style={{ fontStyle: 'normal', color: '#f87171' }}>the inequality</em>
-          </h1>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.12, margin: '0 0 18px', color: 'var(--text)' }}>Gaps in health coverage across the U.S.</h1>
         </Reveal>
 
         <Reveal delay={160}>
@@ -234,7 +225,7 @@ export default function EquityPage() {
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = `${f.color}44`; (e.currentTarget as HTMLElement).style.background = `${f.color}06` }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = `${f.color}22`; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)' }}
               >
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '2px', background: `linear-gradient(90deg, transparent, ${f.color}55, transparent)` }} />
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '2px', background: 'rgba(255,255,255,0.08)' }} />
                 <div style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 800, color: f.color, letterSpacing: '-0.04em', lineHeight: 1, marginBottom: '10px', fontFamily: 'var(--font-display)' }}>{f.stat}</div>
                 <div style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px' }}>{f.label}</div>
                 <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.38)', lineHeight: 1.6 }}>{f.context}</div>
@@ -304,7 +295,7 @@ export default function EquityPage() {
                   <div className="equity-bar-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
                     <div>
                       <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', marginBottom: '8px', fontFamily: 'var(--font-inter)' }}>White Americans</div>
-                      <Bar pct={d.white * 5} color="#60a5fa" label={`${d.white}% uninsured`} value={`${d.white}%`} />
+                      <Bar pct={d.white * 5} color="#4F8EF0" label={`${d.white}% uninsured`} value={`${d.white}%`} />
                     </div>
                     <div>
                       <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', marginBottom: '8px', fontFamily: 'var(--font-inter)' }}>{d.label.split(' ').slice(0, 2).join(' ')}</div>
@@ -349,7 +340,7 @@ export default function EquityPage() {
               <Reveal key={s.headline} delay={i * 100}>
                 <div style={{
                   padding: '2px', borderRadius: '20px',
-                  background: `linear-gradient(135deg, ${s.color}22, ${s.color}06)`,
+                  background: 'rgba(255,255,255,0.06)',
                   height: '100%',
                 }}>
                   <div style={{
@@ -362,7 +353,7 @@ export default function EquityPage() {
                     onMouseLeave={e => (e.currentTarget.style.background = 'rgba(8,13,26,0.95)')}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: '10px', fontWeight: 600, color: s.color, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: 'var(--font-inter)' }}>{s.tag}</span>
+                      <span style={{ fontSize: '10px', fontWeight: 600, color: s.color, letterSpacing: '0', textTransform: 'none', fontFamily: 'var(--font-inter)' }}>{s.tag}</span>
                       <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-inter)' }}>{s.readTime}</span>
                     </div>
                     <div>
@@ -411,7 +402,7 @@ export default function EquityPage() {
                   <div style={{
                     width: '116px', flexShrink: 0, paddingTop: '2px',
                     fontSize: '13px', fontWeight: 700, color: item.color,
-                    fontFamily: 'var(--font-mono)', letterSpacing: '0.04em',
+                    fontFamily: 'var(--font-inter)', letterSpacing: '0.04em',
                     textAlign: 'right',
                   }}>{item.year}</div>
                   {/* Dot */}
@@ -419,7 +410,7 @@ export default function EquityPage() {
                     width: '10px', height: '10px', borderRadius: '50%',
                     background: item.color, flexShrink: 0,
                     marginTop: '5px', position: 'relative', zIndex: 1,
-                    boxShadow: `0 0 12px ${item.color}66`,
+                    boxShadow: 'none',
                   }} />
                   {/* Content */}
                   <div style={{ flex: 1 }}>
@@ -439,7 +430,7 @@ export default function EquityPage() {
           <Reveal>
             <div style={{
               padding: '4px', borderRadius: '28px',
-              background: 'linear-gradient(135deg, rgba(248,113,113,0.25), rgba(167,139,250,0.1))',
+              background: 'rgba(255,255,255,0.06)',
             }}>
               <div style={{
                 borderRadius: '25px', padding: '56px 48px',
@@ -458,10 +449,10 @@ export default function EquityPage() {
                   background: 'rgba(255,255,255,0.94)', color: '#07070F',
                   fontSize: '14px', fontWeight: 600, textDecoration: 'none',
                   transition: 'transform 0.3s, box-shadow 0.3s',
-                  boxShadow: '0 0 40px rgba(74,144,217,0.15)',
+                  boxShadow: 'none',
                 }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.03)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 40px rgba(74,144,217,0.3)' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 0 40px rgba(74,144,217,0.15)' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.03)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 40px rgba(79,142,240,0.3)' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 0 40px rgba(79,142,240,0.15)' }}
                 >
                   Find free care now <ArrowRight size={14} color="#07070F" variant="Linear" />
                 </a>

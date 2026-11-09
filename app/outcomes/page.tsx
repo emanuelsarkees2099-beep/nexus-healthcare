@@ -7,7 +7,7 @@ import { submitForm } from '@/utils/submitForm'
 /* ─── reveal hook ─────────────────────────────────── */
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
   useEffect(() => {
     const el = ref.current; if (!el) return
     const obs = new IntersectionObserver(([e]) => {
@@ -46,14 +46,14 @@ const RESEARCH = [
     date: 'Uniform Data System',
     headline: 'Community health centers serve more than 30 million patients a year',
     method: 'HRSA-funded health centers must offer a sliding fee scale and cannot turn patients away because they are unable to pay.',
-    color: '#8ab5bc',
+    color: '#4F8EF0',
   },
   {
     institution: 'KFF — Health Care Debt Survey',
     date: '2022',
     headline: 'About 100 million people in the U.S. carry some form of health care debt',
     method: 'Finding free and sliding-scale care before a bill arrives is one way to avoid that debt.',
-    color: '#5a8a90',
+    color: '#4F8EF0',
   },
 ]
 
@@ -77,7 +77,7 @@ function OutcomeForm() {
 
   if (submitted) return (
     <div style={{ textAlign: 'center', padding: '40px 0', animation: 'fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both' }}>
-      <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(96,165,250,0.12)', border: '1px solid rgba(96,165,250,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#60a5fa' }}>
+      <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(79,142,240,0.12)', border: '1px solid rgba(79,142,240,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#4F8EF0' }}>
         <Star1 size={20} variant="Linear" />
       </div>
       <p style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px' }}>Thank you for logging your outcome</p>
@@ -89,15 +89,15 @@ function OutcomeForm() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {/* care type */}
       <div>
-        <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.38)', marginBottom: '10px' }}>Type of care received</label>
+        <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, letterSpacing: '0', textTransform: 'none', color: 'rgba(255,255,255,0.38)', marginBottom: '10px' }}>Type of care received</label>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
           {['Primary care', 'Dental', 'Mental health', 'Specialist', 'Prescriptions', 'Telehealth'].map(c => (
             <button key={c} onClick={() => setCare(c)}
               style={{
                 padding: '8px 16px', borderRadius: '100px', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit',
-                background: care === c ? 'rgba(74,144,217,0.15)' : 'rgba(255,255,255,0.04)',
+                background: care === c ? 'rgba(79,142,240,0.15)' : 'rgba(255,255,255,0.04)',
                 color: care === c ? 'var(--accent2)' : 'rgba(255,255,255,0.5)',
-                border: `1px solid ${care === c ? 'rgba(74,144,217,0.35)' : 'rgba(255,255,255,0.07)'}`,
+                border: `1px solid ${care === c ? 'rgba(79,142,240,0.35)' : 'rgba(255,255,255,0.07)'}`,
                 transition: 'all 0.22s cubic-bezier(0.16,1,0.3,1)',
               }}
             >{c}</button>
@@ -107,7 +107,7 @@ function OutcomeForm() {
 
       {/* star rating */}
       <div>
-        <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.38)', marginBottom: '10px' }}>Overall experience</label>
+        <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, letterSpacing: '0', textTransform: 'none', color: 'rgba(255,255,255,0.38)', marginBottom: '10px' }}>Overall experience</label>
         <div style={{ display: 'flex', gap: '8px' }}>
           {[1,2,3,4,5].map(n => (
             <button key={n}
@@ -116,7 +116,7 @@ function OutcomeForm() {
               onMouseLeave={() => setHovered(0)}
               style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '2px', lineHeight: 1, transition: 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1)', transform: (hovered || rating) >= n ? 'scale(1.18)' : 'scale(1)', display: 'flex', alignItems: 'center' }}
             >
-              <Star1 size={28} color={(hovered || rating) >= n ? '#fbbf24' : 'rgba(255,255,255,0.2)'} variant={(hovered || rating) >= n ? 'Bold' : 'Linear'} aria-hidden="true" />
+              <Star1 size={28} color={(hovered || rating) >= n ? '#4F8EF0' : 'rgba(255,255,255,0.2)'} variant={(hovered || rating) >= n ? 'Bold' : 'Linear'} aria-hidden="true" />
             </button>
           ))}
         </div>
@@ -124,10 +124,10 @@ function OutcomeForm() {
 
       {/* notes */}
       <div>
-        <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.38)', marginBottom: '10px' }}>What resolved or didn't resolve?</label>
+        <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, letterSpacing: '0', textTransform: 'none', color: 'rgba(255,255,255,0.38)', marginBottom: '10px' }}>What resolved or didn't resolve?</label>
         <div style={{
           borderRadius: '12px', padding: '1.5px',
-          background: focused ? 'linear-gradient(135deg, rgba(74,144,217,0.5), rgba(167,210,190,0.15))' : 'rgba(255,255,255,0.07)',
+          background: focused ? 'linear-gradient(135deg, rgba(79,142,240,0.5), rgba(167,210,190,0.15))' : 'rgba(255,255,255,0.07)',
           transition: 'background 0.3s',
         }}>
           <textarea
@@ -176,10 +176,9 @@ function OutcomeForm() {
 /* ─── page ────────────────────────────────────────── */
 export default function OutcomesPage() {
   const pill: React.CSSProperties = {
+    // Plain section label — no colored badge
     display: 'inline-flex', alignItems: 'center', gap: '6px',
-    padding: '4px 12px', borderRadius: '100px',
-    fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase',
-    background: 'rgba(74,144,217,0.08)', color: 'var(--accent)', border: '1px solid rgba(74,144,217,0.18)',
+    fontSize: '13px', fontWeight: 600, color: 'var(--text-2)',
   }
 
   const card: React.CSSProperties = {
@@ -190,7 +189,7 @@ export default function OutcomesPage() {
     <AppShell>
       {/* ── HERO ─────────────────────────────────────── */}
       <section style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '120px 24px 72px', position: 'relative' }}>
-        <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: '700px', maxWidth: '100%', height: '400px', background: 'radial-gradient(ellipse, rgba(74,144,217,0.10) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: '700px', maxWidth: '100%', height: '400px', background: 'transparent', pointerEvents: 'none' }} />
 
         <div style={{ maxWidth: '680px', position: 'relative' }}>
           <div style={{ marginBottom: '28px' }}>
@@ -246,7 +245,7 @@ export default function OutcomesPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {RESEARCH.map((r, i) => (
               <RevealBlock key={r.institution} delay={i * 80}>
-                <div style={{ borderRadius: '22px', padding: '2px', background: `linear-gradient(135deg, ${r.color}25, transparent)` }}>
+                <div style={{ borderRadius: '22px', padding: '2px', background: 'rgba(255,255,255,0.08)' }}>
                   <div style={{ borderRadius: '21px', padding: '28px 32px', background: 'rgba(10,9,22,0.96)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.04)' }}>
                     <div style={{ fontSize: '12px', color: r.color, fontWeight: 600, letterSpacing: '0.04em', marginBottom: '6px' }}>{r.institution} · {r.date}</div>
                     <h3 style={{ fontSize: 'clamp(15px, 2vw, 18px)', fontWeight: 600, lineHeight: 1.35, color: 'var(--text)', maxWidth: '620px', marginBottom: '14px' }}>{r.headline}</h3>
